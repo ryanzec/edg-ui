@@ -1,0 +1,93 @@
+export default {
+  plugins: [],
+  safelist: [],
+  theme: {
+    colors: {
+      transparent: 'transparent',
+      // outline
+      outline: 'var(--color-outline)',
+      'outline-active': 'var(--color-outline-active)',
+      // surface
+      'surface-pure': 'var(--color-surface-pure)',
+      'surface-base': 'var(--color-surface-base)',
+      'surface-secondary': 'var(--color-surface-secondary)',
+      'surface-tertiary': 'var(--color-surface-tertiary)',
+      'surface-on-base': 'var(--color-surface-on-base)',
+      'surface-on-secondary': 'var(--color-surface-on-secondary)',
+      'surface-on-tertiary': 'var(--color-surface-on-tertiary)',
+      'surface-on-inverse': 'var(--color-surface-on-inverse)',
+      // text
+      base: 'var(--color-text-base)',
+      secondary: 'var(--color-text-secondary)',
+      disabled: 'var(--color-text-disabled)',
+      'inverse-base': 'var(--color-text-inverse-base)',
+      'inverse-secondary': 'var(--color-text-inverse-secondary)',
+      'inverse-disabled': 'var(--color-text-inverse-disabled)',
+      // brand
+      brand: 'var(--color-brand)',
+      brand2: 'var(--color-brand2)',
+      brand3: 'var(--color-brand3)',
+      'brand-subtle': 'var(--color-brand-subtle)',
+      'brand-subtle2': 'var(--color-brand-subtle2)',
+      'brand-subtle3': 'var(--color-brand-subtle3)',
+      'brand-bold': 'var(--color-brand-bold)',
+      'on-brand': 'var(--color-on-brand)',
+      // neutral
+      neutral: 'var(--color-neutral)',
+      neutral2: 'var(--color-neutral2)',
+      neutral3: 'var(--color-neutral3)',
+      'neutral-subtle': 'var(--color-neutral-subtle)',
+      'neutral-subtle2': 'var(--color-neutral-subtle2)',
+      'neutral-subtle3': 'var(--color-neutral-subtle3)',
+      'neutral-bold': 'var(--color-neutral-bold)',
+      'on-neutral': 'var(--color-on-neutral)',
+      // success
+      success: 'var(--color-success)',
+      success2: 'var(--color-success2)',
+      success3: 'var(--color-success3)',
+      'success-subtle': 'var(--color-success-subtle)',
+      'success-subtle2': 'var(--color-success-subtle2)',
+      'success-subtle3': 'var(--color-success-subtle3)',
+      'success-bold': 'var(--color-success-bold)',
+      'on-success': 'var(--color-on-success)',
+      // info
+      info: 'var(--color-info)',
+      info2: 'var(--color-info2)',
+      info3: 'var(--color-info3)',
+      'info-subtle': 'var(--color-info-subtle)',
+      'info-subtle2': 'var(--color-info-subtle2)',
+      'info-subtle3': 'var(--color-info-subtle3)',
+      'info-bold': 'var(--color-info-bold)',
+      'on-info': 'var(--color-on-info)',
+      // warning
+      warning: 'var(--color-warning)',
+      warning2: 'var(--color-warning2)',
+      warning3: 'var(--color-warning3)',
+      'warning-subtle': 'var(--color-warning-subtle)',
+      'warning-subtle2': 'var(--color-warning-subtle2)',
+      'warning-subtle3': 'var(--color-warning-subtle3)',
+      'warning-bold': 'var(--color-warning-bold)',
+      'on-warning': 'var(--color-on-warning)',
+      // danger
+      danger: 'var(--color-danger)',
+      danger2: 'var(--color-danger2)',
+      danger3: 'var(--color-danger3)',
+      'danger-subtle': 'var(--color-danger-subtle)',
+      'danger-subtle2': 'var(--color-danger-subtle2)',
+      'danger-subtle3': 'var(--color-danger-subtle3)',
+      'danger-bold': 'var(--color-danger-bold)',
+      'on-danger': 'var(--color-on-danger)',
+      // application
+      'dialog-background': 'var(--color-dialog-background)',
+      'input-background': 'var(--color-input-background)',
+      'input-placeholder': 'var(--color-input-placeholder)',
+      'overlay-background': 'var(--color-overlay-background)',
+
+      // scroll area
+      'scroll-area-bar': 'var(--color-surface-on-tertiary)',
+    },
+    extend: { zIndex: { dialog: '50' } },
+  },
+  content: ['./src/**/*.{html,js,svelte,ts}'], // for unused CSS
+  variants: { extend: {} },
+};
