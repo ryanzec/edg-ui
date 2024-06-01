@@ -4,10 +4,14 @@
   import Typography from '$lib/components/core/typography/typography.svelte';
   import { page } from '$app/stores';
   import { goto } from '$app/navigation';
+  import { twMerge } from 'tailwind-merge';
 
   export let isNested: boolean = false;
   export let items: DevNavigationItem[] = [];
   export let parent: string = '';
+
+  let extraClass: string = '';
+  export { extraClass as class };
 
   const handleDisplayComponent = (item: DevNavigationItem) => {
     devNavigationStore.setActiveComponent(item.component);
@@ -19,7 +23,7 @@
 </script>
 
 <div
-  class="flex h-full flex-col border-outline"
+  class={twMerge('flex flex-col border-outline', extraClass)}
   class:ml-2={isNested}
   class:w-48={isNested === false}
   class:border-r={isNested === false}

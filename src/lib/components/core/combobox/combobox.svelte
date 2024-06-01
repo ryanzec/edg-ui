@@ -1,4 +1,6 @@
 <script lang="ts" generics="TOptionValue extends { display: string; }">
+  import Badge from '$lib/components/core/badge/badge.svelte';
+
   /* global TOptionValue */
   import debounce from 'debounce';
   import { loggerUtils } from '$lib/utils/logger';
@@ -180,23 +182,23 @@
     <Label for={id} use={labelAction}>{label}</Label>
     <div
       use:optionsAttachedAction
-      class="flex w-full rounded-lg border border-outline bg-surface-pure px-3 text-surface-on-base focus:border-outline-active data-[state=open]:rounded-b-none"
+      class="flex w-full rounded-lg border border-outline bg-surface-pure px-2 py-1 text-surface-on-base focus:border-outline-active data-[state=open]:rounded-b-none"
     >
       <div class="relative flex flex-1 flex-wrap items-center gap-2">
         <!-- the data-state should be provided by mely automatically but seems like that might be a bug -->
         {#if isMultiple && $selected.length > 0}
           {#each $selected as selectedOption}
-            <div data-id="selected-indicator" class="flex-shrink-0">
+            <Badge data-id="selected-indicator">
               {selectedOption.display}
               <button data-id="remove-trigger" on:click={() => comboboxUtils.removeOption(selectedOption)}>X</button>
-            </div>
+            </Badge>
           {/each}
         {/if}
         <input
           use:inputAction
           {id}
           type="text"
-          class="min-h-10 flex-1 items-center justify-between outline-0"
+          class="flex-1 items-center justify-between outline-0"
           {placeholder}
           data-skip-input-event
           bind:value={$inputValue}

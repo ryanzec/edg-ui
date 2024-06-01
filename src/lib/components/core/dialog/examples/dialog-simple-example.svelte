@@ -3,11 +3,10 @@
   import DialogHeader from '$lib/components/core/dialog/dialog-header.svelte';
   import DialogContent from '$lib/components/core/dialog/dialog-content.svelte';
   import DialogFooter from '$lib/components/core/dialog/dialog-footer.svelte';
-  import DialogFooterCloseAction from '$lib/components/core/dialog/dialog-footer-close-action.svelte';
-  import DialogFooterAction from '$lib/components/core/dialog/dialog-footer-action.svelte';
   import { writable, type Writable } from 'svelte/store';
   import { dialogUtils } from '$lib/components/core/dialog/utils';
   import Dialog from '$lib/components/core/dialog/dialog.svelte';
+  import Button, { ButtonColor, ButtonVariant } from '$lib/components/core/button/button.svelte';
 
   export let isOpened: Writable<boolean> = writable(false);
 
@@ -16,7 +15,7 @@
   } = createDialog(dialogUtils.buildCreateOptions(isOpened));
 
   const handleAction = () => {
-    isOpened.set(false);
+    $isOpened = false;
   };
 </script>
 
@@ -41,7 +40,7 @@
     </fieldset>
   </DialogContent>
   <DialogFooter>
-    <DialogFooterCloseAction meltClose={close} />
-    <DialogFooterAction on:click={handleAction} title="Action" />
+    <Button on:click={handleAction} color={ButtonColor.NEUTRAL} variant={ButtonVariant.GHOST}>Close</Button>
+    <Button on:click={handleAction}>Action</Button>
   </DialogFooter></Dialog
 >

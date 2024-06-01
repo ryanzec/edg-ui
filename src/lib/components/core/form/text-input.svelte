@@ -9,7 +9,7 @@
   {...$$restProps}
   {id}
   {name}
-  class="p-input rounded border border-outline bg-input-background px-2 outline-none hover:border-outline-active focus:border-outline-active"
+  class="p-input rounded border border-outline bg-input-background px-2 py-1 outline-none hover:border-outline-active focus:border-outline-active"
   bind:value
   type="text"
 />

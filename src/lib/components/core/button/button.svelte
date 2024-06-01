@@ -28,6 +28,8 @@
   export let variant: ButtonVariant = ButtonVariant.FILLED;
   export let color: ButtonColor = ButtonColor.BRAND;
   export let shape: ButtonShape = ButtonShape.ROUNDED;
+  export let action: Function = () => {};
+  export let actionOptions: any = undefined;
 
   let extraClass: string = '';
   export { extraClass as class };
@@ -99,12 +101,13 @@
 </script>
 
 <button
+  use:action={actionOptions}
   data-id="button"
   type="button"
   {...$$restProps}
   disabled={isDisabled}
   on:click
-  class={twMerge('flex gap-2 border border-transparent', colorsCss[variant][color], extraClass)}
+  class={twMerge('flex items-center gap-2 border border-transparent', colorsCss[variant][color], extraClass)}
   class:opacity-45={isDisabled}
   class:rounded-lg={shape === ButtonShape.ROUNDED}
   class:rounded-full={shape === ButtonShape.PILL || shape === ButtonShape.CIRCLE}

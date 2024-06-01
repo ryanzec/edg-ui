@@ -1,5 +1,6 @@
 <script lang="ts">
   import { usersTableExampleItems } from '$lib/components/application/users-table/examples/utils';
+  import { badgeExampleItems } from '$lib/components/core/badge/examples/utils';
   import { buttonExampleItems } from '$lib/components/core/button/examples/utils';
   import { collapsibleExampleItems } from '$lib/components/core/collapsible/examples/utils';
   import { comboboxExampleItems } from '$lib/components/core/combobox/examples/utils';
@@ -46,6 +47,7 @@
     formExampleItems,
     comboboxExampleItems,
     usersTableExampleItems,
+    badgeExampleItems,
   ];
 
   sortItems(items);

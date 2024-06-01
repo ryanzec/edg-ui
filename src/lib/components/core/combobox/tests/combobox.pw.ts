@@ -29,7 +29,7 @@ export class ComboboxPage {
 
   readonly selectedIndicator: Locator;
 
-  constructor(page: Page) {
+  constructor (page: Page) {
     this.page = page;
     this.input = page.locator('[data-id="combobox"] input');
     this.typeToSearchOption = page.locator('[data-id="combobox"] [data-id="type-to-search-option"]');
@@ -45,55 +45,53 @@ export class ComboboxPage {
     this.selectedIndicator = page.locator('[data-id="combobox"] [data-id="selected-indicator"]');
   }
 
-  async goto(url: string) {
+  async goto (url: string) {
     return await playwrightUtils.goto(this.page, url);
   }
 
-  optionLocator(index: number) {
+  optionLocator (index: number) {
     return this.page.locator(`[data-id="combobox"] [data-id="option"]:nth-of-type(${index + 1})`);
   }
 
-  selectedIndicatorLocator(index: number) {
+  selectedIndicatorLocator (index: number) {
     return this.page.locator(`[data-id="combobox"] [data-id="selected-indicator"]:nth-of-type(${index + 1})`);
   }
 
-  async clickRemoveTrigger(index: number) {
+  async clickRemoveTrigger (index: number) {
     await this.page
-      .locator(
-        `[data-id="combobox"] [data-id="selected-indicator"]:nth-of-type(${index + 1}) [data-id="remove-trigger"]`,
-      )
+      .locator(`[data-id="combobox"] [data-id="selected-indicator"]:nth-of-type(${index + 1}) [data-id="remove-trigger"]`)
       .click();
   }
 
-  async expectSelectedValue(value: string) {
+  async expectSelectedValue (value: string) {
     await expect(this.selectedValue).toHaveText(value);
   }
 
-  async expectInputValue(value: string) {
+  async expectInputValue (value: string) {
     await expect(this.input).toHaveValue(value);
   }
 
-  async expectHighlightedOptionDisplay(display: string) {
+  async expectHighlightedOptionDisplay (display: string) {
     await expect(this.highlightedOption).toHaveText(display);
   }
 
-  async expectSelectedIndicatorDisplay(index: number, display: string) {
+  async expectSelectedIndicatorDisplay (index: number, display: string) {
     await expect(this.selectedIndicatorLocator(index)).toContainText(display);
   }
 
-  async expectSelectedIndicatorCount(count: number) {
+  async expectSelectedIndicatorCount (count: number) {
     await expect(this.selectedIndicator).toHaveCount(count);
   }
 
-  async expectOptionCount(count: number) {
+  async expectOptionCount (count: number) {
     await expect(this.option).toHaveCount(count);
   }
 
-  async expectOptionDisplay(index: number, display: string) {
+  async expectOptionDisplay (index: number, display: string) {
     await expect(this.optionLocator(index)).toHaveText(display);
   }
 
-  async expectOptionsToBeVisible() {
+  async expectOptionsToBeVisible () {
     await expect(this.options).toBeVisible();
   }
 }
@@ -109,9 +107,7 @@ test.describe('combobox', () => {
       await componentPage.expectSelectedIndicatorCount(2);
       await componentPage.expectSelectedIndicatorDisplay(0, 'Option 2');
       await componentPage.expectSelectedIndicatorDisplay(1, 'Option 3');
-      await componentPage.expectSelectedValue(
-        '[{"value":"2","display":"Option 2","meta":{"testing":"testing"}},{"value":"3","display":"Option 3","meta":{"testing":"testing"}}]',
-      );
+      await componentPage.expectSelectedValue('[{"value":"2","display":"Option 2","meta":{"testing":"testing"}},{"value":"3","display":"Option 3","meta":{"testing":"testing"}}]');
     });
 
     test('the remove trigger from the selected indicator works', async ({ page }) => {
@@ -243,9 +239,8 @@ test.describe('combobox', () => {
         await expect(componentPage.option).toHaveCount(3);
       });
 
-      test('display type to show option when removing all data in the input after showing options', async ({
-        page,
-      }) => {
+
+      test('display type to show option when removing all data in the input after showing options', async ({ page }) => {
         await playwrightMockerUtils.mockGetUsersEndpoint(page, { delay: 500 });
 
         const componentPage = new ComboboxPage(page);
