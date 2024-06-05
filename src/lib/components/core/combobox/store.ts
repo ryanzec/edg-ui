@@ -228,6 +228,10 @@ export const createComboboxStore = <TOptionValue extends BaseComboboxOptionValue
       isOpened.set(!!highlightedElement);
 
       get(inputElement)?.removeAttribute(dataAttributes.INPUT_FOCUSED);
+
+      if (isMultiple) {
+        inputValue.set('');
+      }
     });
 
     inputValue.subscribe((value) => {
@@ -339,9 +343,7 @@ export const createComboboxStore = <TOptionValue extends BaseComboboxOptionValue
       return;
     }
 
-    const matchingElement = $optionsElement.querySelector(
-      `[${dataAttributes.OPTION}]:nth-child(${newActiveOptionIndex + 1})`,
-    ) as HTMLElement;
+    const matchingElement = $optionsElement.querySelector(`[${dataAttributes.OPTION}]:nth-child(${newActiveOptionIndex + 1})`) as HTMLElement;
 
     if (!matchingElement) {
       return;

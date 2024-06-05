@@ -23,7 +23,7 @@
   <ScrollArea class="h-full">
     <DevNavigationMenu class="p-3" {items} />
   </ScrollArea>
-  <div class="flex-1 p-3">
+  <div data-id="component-container" class="flex-1 p-3">
     {#if $devNavigationStore.activeComponent}
       <svelte:component this={$devNavigationStore.activeComponent} />
     {/if}

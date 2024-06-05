@@ -29,6 +29,8 @@ export class ComboboxPage {
 
   readonly selectedIndicator: Locator;
 
+  readonly componentContainer: Locator;
+
   constructor (page: Page) {
     this.page = page;
     this.input = page.locator('[data-id="combobox"] input');
@@ -43,6 +45,7 @@ export class ComboboxPage {
     this.selectedValue = page.locator('[data-id="selected-value"]');
     this.selectedChangeCount = page.locator('[data-id="selected-change-count"]');
     this.selectedIndicator = page.locator('[data-id="combobox"] [data-id="selected-indicator"]');
+    this.componentContainer = page.locator('[data-id="component-container"]');
   }
 
   async goto (url: string) {
@@ -200,6 +203,17 @@ test.describe('combobox', () => {
       await componentPage.expectSelectedIndicatorCount(0);
       await componentPage.expectOptionCount(0);
       await componentPage.expectSelectedValue('[]');
+    });
+
+    test('clicking outside with a value typed in is cleared', async ({ page }) => {
+      const componentPage = new ComboboxPage(page);
+
+      await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Multiple.Simple');
+
+      await componentPage.input.fill('a');
+      await componentPage.componentContainer.click();
+
+      await componentPage.expectInputValue('');
     });
   });
 

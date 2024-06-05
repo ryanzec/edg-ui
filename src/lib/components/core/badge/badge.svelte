@@ -21,12 +21,12 @@
   export let shape: BadgeShape = BadgeShape.ROUNDED;
 
   const colorCss: Record<BadgeColor, string> = {
-    [BadgeColor.BRAND]: 'border-brand-bold bg-brand-subtle text-brand-bold',
-    [BadgeColor.NEUTRAL]: 'border-neutral-bold bg-neutral-subtle text-neutral-bold',
-    [BadgeColor.SUCCESS]: 'border-success-bold bg-success-subtle text-success-bold',
-    [BadgeColor.INFO]: 'border-info-bold bg-info-subtle text-info-bold',
-    [BadgeColor.WARNING]: 'border-warning-bold bg-warning-subtle text-warning-bold',
-    [BadgeColor.DANGER]: 'border-danger-bold bg-danger-subtle text-danger-bold',
+    [BadgeColor.BRAND]: 'border-brand-bold bg-brand-subtle2 text-brand-bold',
+    [BadgeColor.NEUTRAL]: 'border-neutral-bold bg-neutral-subtle2 text-neutral-bold',
+    [BadgeColor.SUCCESS]: 'border-success-bold bg-success-subtle2 text-success-bold',
+    [BadgeColor.INFO]: 'border-info-bold bg-info-subtle2 text-info-bold',
+    [BadgeColor.WARNING]: 'border-warning-bold bg-warning-subtle2 text-warning-bold',
+    [BadgeColor.DANGER]: 'border-danger-bold bg-danger-subtle2 text-danger-bold',
   };
 
   export const shapeCss: Record<BadgeShape, string> = {
