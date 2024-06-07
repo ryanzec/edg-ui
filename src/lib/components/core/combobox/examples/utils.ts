@@ -9,6 +9,9 @@ import ComboboxSelectedChangedExample from '$lib/components/core/combobox/exampl
 import ComboboxSimpleExample from '$lib/components/core/combobox/examples/combobox-simple-example.svelte';
 import { type DevNavigationItem } from '$lib/components/core/dev-navigation/dev-navigation.svelte';
 import ComboboxMultipleClearOnEscapeExample from '$lib/components/core/combobox/examples/multiple/combobox-multiple-clear-on-escape-example.svelte';
+import ComboboxNoSelectedInlineExample from '$lib/components/core/combobox/examples/multiple/combobox-no-selected-inline-example.svelte';
+import ComboboxGroupedFilteringExample from '$lib/components/core/combobox/examples/combobox-grouped-filtering-example.svelte';
+import ComboboxGroupedAsyncExample from '$lib/components/core/combobox/examples/grouped/combobox-grouped-async-example.svelte';
 
 export const comboboxExampleItems: DevNavigationItem = {
   display: 'Combobox',
@@ -38,6 +41,19 @@ export const comboboxExampleItems: DevNavigationItem = {
       component: ComboboxSimpleExample,
     },
     {
+      display: 'Grouped',
+      items: [
+        {
+          display: 'Filtering',
+          component: ComboboxGroupedFilteringExample,
+        },
+        {
+          display: 'Async',
+          component: ComboboxGroupedAsyncExample,
+        },
+      ],
+    },
+    {
       display: 'Multiple',
       items: [
         {
@@ -55,6 +71,10 @@ export const comboboxExampleItems: DevNavigationItem = {
         {
           display: 'Clear on Escape',
           component: ComboboxMultipleClearOnEscapeExample,
+        },
+        {
+          display: 'No Selected Inline',
+          component: ComboboxNoSelectedInlineExample,
         },
       ],
     },

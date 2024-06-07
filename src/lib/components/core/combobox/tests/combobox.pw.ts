@@ -31,6 +31,8 @@ export class ComboboxPage {
 
   readonly componentContainer: Locator;
 
+  readonly groupHeader: Locator;
+
   constructor (page: Page) {
     this.page = page;
     this.input = page.locator('[data-id="combobox"] input');
@@ -39,33 +41,65 @@ export class ComboboxPage {
     this.loadingOption = page.locator('[data-id="combobox"] [data-id="loading-option"]');
     this.clickOutsideTester = page.locator('[data-id="click-outside-tester"]');
     this.options = page.locator('[data-id="combobox"] [data-id="options"]');
-    this.option = page.locator('[data-id="combobox"] [data-id="option"]');
+    this.option = page.locator('[data-id="combobox"] [data-combobox-option]');
     this.highlightedOption = page.locator('[data-id="combobox"] [data-combobox-highlighted]');
     this.dropDownSelectedOption = page.locator('[data-id="combobox"] [data-combobox-drop-down-selected]');
     this.selectedValue = page.locator('[data-id="selected-value"]');
     this.selectedChangeCount = page.locator('[data-id="selected-change-count"]');
     this.selectedIndicator = page.locator('[data-id="combobox"] [data-id="selected-indicator"]');
     this.componentContainer = page.locator('[data-id="component-container"]');
+    this.groupHeader = page.locator('[data-id="group-header"]');
   }
 
   async goto (url: string) {
     return await playwrightUtils.goto(this.page, url);
   }
 
+  // selectors
   optionLocator (index: number) {
-    return this.page.locator(`[data-id="combobox"] [data-id="option"]:nth-of-type(${index + 1})`);
+    return this.page.locator('[data-id="combobox"] [data-combobox-option]').nth(index);
+  }
+
+  groupHeaderLocator (index: number) {
+    return this.page.locator('[data-id="group-header"]').nth(index);
   }
 
   selectedIndicatorLocator (index: number) {
     return this.page.locator(`[data-id="combobox"] [data-id="selected-indicator"]:nth-of-type(${index + 1})`);
   }
 
+  // actions
   async clickRemoveTrigger (index: number) {
     await this.page
       .locator(`[data-id="combobox"] [data-id="selected-indicator"]:nth-of-type(${index + 1}) [data-id="remove-trigger"]`)
       .click();
   }
 
+  async clickOption (index: number) {
+    await this.optionLocator(index).click();
+  }
+
+  async clickInput () {
+    await this.input.click();
+  }
+
+  async clickComponentContainer () {
+    await this.componentContainer.click();
+  }
+
+  async fillInput (value: string) {
+    await this.input.fill(value);
+  }
+
+  async pressInput (value: string) {
+    await this.input.press(value);
+  }
+
+  async hoverOption (index: number) {
+    await this.optionLocator(index).hover();
+  }
+
+  // validations
   async expectSelectedValue (value: string) {
     await expect(this.selectedValue).toHaveText(value);
   }
@@ -78,6 +112,10 @@ export class ComboboxPage {
     await expect(this.highlightedOption).toHaveText(display);
   }
 
+  async expectHighlightedOptionCount (count: number) {
+    await expect(this.highlightedOption).toHaveCount(count);
+  }
+
   async expectSelectedIndicatorDisplay (index: number, display: string) {
     await expect(this.selectedIndicatorLocator(index)).toContainText(display);
   }
@@ -88,6 +126,10 @@ export class ComboboxPage {
 
   async expectOptionCount (count: number) {
     await expect(this.option).toHaveCount(count);
+  }
+
+  async expectGroupHeaderCount (count: number) {
+    await expect(this.groupHeader).toHaveCount(count);
   }
 
   async expectOptionDisplay (index: number, display: string) {
@@ -130,8 +172,8 @@ test.describe('combobox', () => {
 
       await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Multiple.Simple');
 
-      await componentPage.input.click();
-      await componentPage.optionLocator(0).click();
+      await componentPage.clickInput();
+      await componentPage.clickOption(0);
 
       await componentPage.expectSelectedIndicatorCount(1);
       await componentPage.expectSelectedIndicatorDisplay(0, 'Option 1');
@@ -143,8 +185,8 @@ test.describe('combobox', () => {
 
       await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Multiple.Preselected');
 
-      await componentPage.input.click();
-      await componentPage.optionLocator(1).click();
+      await componentPage.clickInput();
+      await componentPage.clickOption(1);
 
       await componentPage.expectSelectedIndicatorCount(1);
       await componentPage.expectSelectedIndicatorDisplay(0, 'Option 3');
@@ -156,11 +198,11 @@ test.describe('combobox', () => {
 
       await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Multiple.Filtering');
 
-      await componentPage.input.click();
+      await componentPage.clickInput();
 
       await componentPage.expectOptionCount(4);
 
-      await componentPage.input.fill('4');
+      await componentPage.fillInput('4');
 
       await componentPage.expectOptionCount(1);
       await componentPage.expectOptionDisplay(0, 'Option 4');
@@ -171,8 +213,8 @@ test.describe('combobox', () => {
 
       await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Multiple.Simple');
 
-      await componentPage.input.click();
-      await componentPage.optionLocator(0).click();
+      await componentPage.clickInput();
+      await componentPage.clickOption(0);
 
       await componentPage.expectOptionsToBeVisible();
     });
@@ -182,9 +224,9 @@ test.describe('combobox', () => {
 
       await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Multiple.Simple');
 
-      await componentPage.input.click();
-      await componentPage.input.press('ArrowDown');
-      await componentPage.input.press('Enter');
+      await componentPage.clickInput();
+      await componentPage.pressInput('ArrowDown');
+      await componentPage.pressInput('Enter');
 
       await componentPage.expectOptionsToBeVisible();
     });
@@ -195,10 +237,10 @@ test.describe('combobox', () => {
       await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Multiple.Clear+on+Escape');
 
       // focusing the input to be able to press this shows the drop down so this closes it
-      await componentPage.input.press('Escape');
+      await componentPage.pressInput('Escape');
 
       // this trigger the real functionalitry
-      await componentPage.input.press('Escape');
+      await componentPage.pressInput('Escape');
 
       await componentPage.expectSelectedIndicatorCount(0);
       await componentPage.expectOptionCount(0);
@@ -210,86 +252,30 @@ test.describe('combobox', () => {
 
       await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Multiple.Simple');
 
-      await componentPage.input.fill('a');
-      await componentPage.componentContainer.click();
+      await componentPage.fillInput('a');
+      await componentPage.clickComponentContainer();
 
       await componentPage.expectInputValue('');
+    });
+    test('can disable inline selected options', async ({ page }) => {
+      const componentPage = new ComboboxPage(page);
+
+      await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Multiple.No+Selected+Inline');
+
+      await componentPage.expectInputValue('');
+      await componentPage.expectSelectedIndicatorCount(0);
+      await componentPage.expectSelectedValue('[{"value":"2","display":"Option 2","meta":{"testing":"testing"}},{"value":"3","display":"Option 3","meta":{"testing":"testing"}}]');
     });
   });
 
   test.describe('single select', () => {
-    test.describe('async options', () => {
-      test('displays loading indicator', async ({ page }) => {
-        const componentPage = new ComboboxPage(page);
-
-        await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Async');
-
-        await componentPage.input.click();
-
-        await expect(componentPage.typeToSearchOption).toBeVisible();
-      });
-
-      test('typing shows the load indicator', async ({ page }) => {
-        await playwrightMockerUtils.mockGetUsersEndpoint(page, { delay: 3000 });
-
-        const componentPage = new ComboboxPage(page);
-
-        await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Async');
-
-        await componentPage.input.fill('a');
-
-        await expect(componentPage.loadingOption).toBeVisible();
-      });
-
-      test('options show after loading', async ({ page }) => {
-        await playwrightMockerUtils.mockGetUsersEndpoint(page, { delay: 500 });
-
-        const componentPage = new ComboboxPage(page);
-
-        await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Async');
-
-        await componentPage.input.fill('a');
-
-        await expect(componentPage.option).toHaveCount(3);
-      });
-
-
-      test('display type to show option when removing all data in the input after showing options', async ({ page }) => {
-        await playwrightMockerUtils.mockGetUsersEndpoint(page, { delay: 500 });
-
-        const componentPage = new ComboboxPage(page);
-
-        await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Async');
-
-        await componentPage.input.fill('a');
-
-        await expect(componentPage.option).toHaveCount(3);
-
-        await componentPage.input.fill('');
-
-        await expect(componentPage.typeToSearchOption).toBeVisible();
-      });
-
-      test('display no results option when there are no results returned', async ({ page }) => {
-        await playwrightMockerUtils.mockGetUsersNoResultsEndpoint(page);
-
-        const componentPage = new ComboboxPage(page);
-
-        await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Async');
-
-        await componentPage.input.fill('a');
-
-        await expect(componentPage.noResultsOption).toBeVisible();
-      });
-    });
-
     test('clicking an option works', async ({ page }) => {
       const componentPage = new ComboboxPage(page);
 
       await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Simple');
 
-      await componentPage.input.click();
-      await componentPage.optionLocator(0).click();
+      await componentPage.clickInput();
+      await componentPage.clickOption(0);
 
       await componentPage.expectInputValue('Option 1');
       await componentPage.expectSelectedValue('[{"value":"1","display":"Option 1","meta":{"testing":"testing"}}]');
@@ -300,12 +286,12 @@ test.describe('combobox', () => {
 
       await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Clear+on+Escape');
 
-      await componentPage.input.click();
-      await componentPage.optionLocator(0).click();
+      await componentPage.clickInput();
+      await componentPage.clickOption(0);
       // this triggers the close of the combobox drop dow
-      await componentPage.input.press('Escape');
+      await componentPage.pressInput('Escape');
       // this triggers the clear on escape functionality
-      await componentPage.input.press('Escape');
+      await componentPage.pressInput('Escape');
 
       await componentPage.expectInputValue('');
       await componentPage.expectSelectedValue('[]');
@@ -317,20 +303,20 @@ test.describe('combobox', () => {
       await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Simple');
 
       // starts at the bottom
-      await componentPage.input.click();
-      await componentPage.input.press('ArrowUp');
+      await componentPage.clickInput();
+      await componentPage.pressInput('ArrowUp');
 
       await componentPage.expectHighlightedOptionDisplay('Option 4');
 
       // moves up one
-      await componentPage.input.press('ArrowUp');
+      await componentPage.pressInput('ArrowUp');
 
       await componentPage.expectHighlightedOptionDisplay('Option 3');
 
       // should loop to the last item
-      await componentPage.input.press('ArrowUp');
-      await componentPage.input.press('ArrowUp');
-      await componentPage.input.press('ArrowUp');
+      await componentPage.pressInput('ArrowUp');
+      await componentPage.pressInput('ArrowUp');
+      await componentPage.pressInput('ArrowUp');
 
       await componentPage.expectHighlightedOptionDisplay('Option 4');
     });
@@ -341,22 +327,33 @@ test.describe('combobox', () => {
       await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Simple');
 
       // starts at the top
-      await componentPage.input.click();
-      await componentPage.input.press('ArrowDown');
+      await componentPage.clickInput();
+      await componentPage.pressInput('ArrowDown');
 
       await componentPage.expectHighlightedOptionDisplay('Option 1');
 
       // moves down one
-      await componentPage.input.press('ArrowDown');
+      await componentPage.pressInput('ArrowDown');
 
       await componentPage.expectHighlightedOptionDisplay('Option 2');
 
       // should loop to the first item
-      await componentPage.input.press('ArrowDown');
-      await componentPage.input.press('ArrowDown');
-      await componentPage.input.press('ArrowDown');
+      await componentPage.pressInput('ArrowDown');
+      await componentPage.pressInput('ArrowDown');
+      await componentPage.pressInput('ArrowDown');
 
       await componentPage.expectHighlightedOptionDisplay('Option 1');
+    });
+
+    test('mouse hover works', async ({ page }) => {
+      const componentPage = new ComboboxPage(page);
+
+      await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Simple');
+
+      await componentPage.clickInput();
+      await componentPage.hoverOption(2);
+
+      await componentPage.expectHighlightedOptionDisplay('Option 3');
     });
 
     test('enter select highlighted option', async ({ page }) => {
@@ -364,9 +361,9 @@ test.describe('combobox', () => {
 
       await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Simple');
 
-      await componentPage.input.click();
-      await componentPage.input.press('ArrowDown');
-      await componentPage.input.press('Enter');
+      await componentPage.clickInput();
+      await componentPage.pressInput('ArrowDown');
+      await componentPage.pressInput('Enter');
 
       await componentPage.expectInputValue('Option 1');
       await componentPage.expectSelectedValue('[{"value":"1","display":"Option 1","meta":{"testing":"testing"}}]');
@@ -377,7 +374,7 @@ test.describe('combobox', () => {
 
       await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Simple');
 
-      await componentPage.input.click();
+      await componentPage.clickInput();
 
       await expect(componentPage.options).toBeVisible();
 
@@ -391,8 +388,8 @@ test.describe('combobox', () => {
 
       await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Simple');
 
-      await componentPage.input.click();
-      await componentPage.input.fill('1');
+      await componentPage.clickInput();
+      await componentPage.fillInput('1');
 
       await expect(componentPage.options).toHaveCount(1);
       await expect(componentPage.optionLocator(0)).toHaveText('Option 1');
@@ -416,16 +413,179 @@ test.describe('combobox', () => {
       await expect(componentPage.selectedChangeCount).toHaveText('1');
 
       // selecting a new value should trigger the change
-      await componentPage.input.click();
-      await componentPage.optionLocator(0).click();
+      await componentPage.clickInput();
+      await componentPage.clickOption(0);
 
       await expect(componentPage.selectedChangeCount).toHaveText('2');
 
       // selecting the same value should not trigger the change
-      await componentPage.input.click();
-      await componentPage.optionLocator(0).click();
+      await componentPage.clickInput();
+      await componentPage.clickOption(0);
 
       await expect(componentPage.selectedChangeCount).toHaveText('2');
+    });
+
+    test('blurring the input without selected should empty the input', async ({ page }) => {
+      const componentPage = new ComboboxPage(page);
+
+      await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Filtering');
+
+      await componentPage.fillInput('test');
+      await componentPage.clickComponentContainer();
+
+      await componentPage.expectInputValue('');
+    });
+  });
+
+  test.describe('async options', () => {
+    test('displays type to search indicator', async ({ page }) => {
+      const componentPage = new ComboboxPage(page);
+
+      await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Async');
+
+      await componentPage.clickInput();
+
+      await expect(componentPage.typeToSearchOption).toBeVisible();
+    });
+
+    test('typing shows the load indicator', async ({ page }) => {
+      await playwrightMockerUtils.mockGetUsersEndpoint(page, { delay: 3000 });
+
+      const componentPage = new ComboboxPage(page);
+
+      await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Async');
+
+      await componentPage.fillInput('tes');
+
+      await expect(componentPage.loadingOption).toBeVisible();
+    });
+
+    test('options show after loading', async ({ page }) => {
+      await playwrightMockerUtils.mockGetUsersEndpoint(page, { delay: 100 });
+
+      const componentPage = new ComboboxPage(page);
+
+      await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Async');
+
+      await componentPage.fillInput('tes');
+
+      await expect(componentPage.option).toHaveCount(3);
+    });
+
+
+    test('display type to show option when removing all data in the input after showing options', async ({ page }) => {
+      await playwrightMockerUtils.mockGetUsersEndpoint(page, { delay: 100 });
+
+      const componentPage = new ComboboxPage(page);
+
+      await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Async');
+
+      await componentPage.fillInput('tes');
+
+      await expect(componentPage.option).toHaveCount(3);
+
+      await componentPage.input.fill('');
+
+      await expect(componentPage.typeToSearchOption).toBeVisible();
+    });
+
+    test('display no results option when there are no results returned', async ({ page }) => {
+      await playwrightMockerUtils.mockGetUsersNoResultsEndpoint(page);
+
+      const componentPage = new ComboboxPage(page);
+
+      await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Async');
+
+      await componentPage.fillInput('tes');
+
+      await expect(componentPage.noResultsOption).toBeVisible();
+    });
+
+    test('menu goes back to typing indicator when the input value goes from above to below the character threshold', async ({ page }) => {
+      await playwrightMockerUtils.mockGetUsersEndpoint(page, { delay: 100 });
+      const componentPage = new ComboboxPage(page);
+
+      await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Async');
+
+      await componentPage.fillInput('tes');
+
+      await expect(componentPage.option).toHaveCount(3);
+
+      await componentPage.pressInput('Backspace');
+
+      await expect(componentPage.typeToSearchOption).toBeVisible();
+    });
+  });
+
+  test.describe('grouped options', () => {
+    test('up arrow works', async ({ page }) => {
+      const componentPage = new ComboboxPage(page);
+
+      await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Grouped.Filtering');
+
+      await componentPage.clickInput();
+      await componentPage.pressInput('ArrowUp');
+
+      await componentPage.expectHighlightedOptionDisplay('Option 2-4');
+    });
+
+    test('down arrow works', async ({ page }) => {
+      const componentPage = new ComboboxPage(page);
+
+      await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Grouped.Filtering');
+
+      await componentPage.clickInput();
+      await componentPage.hoverOption(7);
+      await componentPage.pressInput('ArrowDown');
+
+      await componentPage.expectHighlightedOptionDisplay('Option 1-1');
+    });
+
+    test('filtering works', async ({ page }) => {
+      const componentPage = new ComboboxPage(page);
+
+      await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Grouped.Filtering');
+
+      await componentPage.clickInput();
+      await componentPage.fillInput('3');
+
+      await componentPage.expectOptionCount(2);
+      await componentPage.expectOptionDisplay(0, 'Option 1-3');
+      await componentPage.expectOptionDisplay(1, 'Option 2-3');
+    });
+
+    test('filtering removes groups that have no options', async ({ page }) => {
+      const componentPage = new ComboboxPage(page);
+
+      await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Grouped.Filtering');
+
+      await componentPage.clickInput();
+      await componentPage.fillInput('1-4');
+
+      await componentPage.expectGroupHeaderCount(1);
+    });
+
+    test('mouse hover works', async ({ page }) => {
+      const componentPage = new ComboboxPage(page);
+
+      await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Grouped.Filtering');
+
+      await componentPage.clickInput();
+      await componentPage.hoverOption(4);
+
+      await componentPage.expectHighlightedOptionDisplay('Option 2-1');
+    });
+
+    test('async works', async ({ page }) => {
+      await playwrightMockerUtils.mockGetUsersEndpoint(page, { delay: 500 });
+      const componentPage = new ComboboxPage(page);
+
+      await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Grouped.Async');
+
+      await componentPage.fillInput('tes');
+
+      await componentPage.expectGroupHeaderCount(2);
+      await componentPage.expectOptionCount(6);
     });
   });
 
@@ -435,19 +595,37 @@ test.describe('combobox', () => {
 
       await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Clear+on+Escape');
 
-      await componentPage.input.click();
-      await componentPage.optionLocator(0).click();
+      await componentPage.clickInput();
+      await componentPage.clickOption(0);
 
       // this triggers the close of the combobox drop dow
-      await componentPage.input.press('Escape');
+      await componentPage.pressInput('Escape');
       // this triggers the clear on escape functionality
-      await componentPage.input.press('Escape');
+      await componentPage.pressInput('Escape');
 
-      await componentPage.input.click();
-      await componentPage.optionLocator(0).click();
+      await componentPage.clickInput();
+      await componentPage.clickOption(0);
 
       await componentPage.expectInputValue('Option 1');
       await componentPage.expectSelectedValue('[{"value":"1","display":"Option 1","meta":{"testing":"testing"}}]');
+    });
+
+    test('the previously highlighted option is not longer highlighted if input goes below the character threshold and then back above it', async ({ page }) => {
+      await playwrightMockerUtils.mockGetUsersEndpoint(page, { delay: 100 });
+
+      const componentPage = new ComboboxPage(page);
+
+      await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Async');
+
+      await componentPage.fillInput('tes');
+      await componentPage.hoverOption(1);
+
+      await componentPage.expectHighlightedOptionDisplay('Test User2');
+
+      await componentPage.pressInput('Backspace');
+      await componentPage.fillInput('tes');
+
+      await componentPage.expectHighlightedOptionCount(0);
     });
   });
 });

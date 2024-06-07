@@ -32,7 +32,18 @@ const removeSelectedOptions = <TOptionValue extends BaseComboboxOptionValue>(
   });
 };
 
+const removeGroupedSelectedOptions = <TOptionValue extends BaseComboboxOptionValue>(
+  options: Record<string, TOptionValue[]>,
+  selected: TOptionValue[],
+) => {
+  return Object.keys(options).reduce<Record<string, TOptionValue[]>>((collector, groupName) => {
+    collector[groupName] = removeSelectedOptions(options[groupName], selected);
+    return collector;
+  }, {});
+};
+
 export const comboboxComponentUtils = {
   defaultFilter,
   removeSelectedOptions,
+  removeGroupedSelectedOptions,
 };

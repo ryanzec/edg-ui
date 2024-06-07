@@ -2,6 +2,7 @@ import { flip, computePosition } from '@floating-ui/dom';
 import type { BaseComboboxOptionValue } from '$lib/components/core/combobox/utils';
 import { get, writable, type Writable } from 'svelte/store';
 import * as _ from 'lodash-es';
+import { domUtils } from '$lib/utils/dom';
 
 const dataAttributes = {
   HIGHLIGHTED: 'data-combobox-highlighted',
@@ -21,6 +22,7 @@ export type ComboboxUtils<TOptionValue extends BaseComboboxOptionValue> = {
   increaseActiveOption: () => void;
   decreaseActiveOption: () => void;
   setActiveOption: (index: number) => void;
+  clearActiveOption: () => void;
   selectActiveOption: () => void;
   openMenu: () => void;
   closeMenu: () => void;
@@ -35,6 +37,7 @@ export type ComboboxUtils<TOptionValue extends BaseComboboxOptionValue> = {
 export type ComboboxStore<TOptionValue extends BaseComboboxOptionValue> = {
   isOpened: Writable<boolean>;
   inputValue: Writable<string>;
+  inputIsDirty: Writable<boolean>;
   inputElement: Writable<HTMLInputElement | undefined>;
   optionsElement: Writable<HTMLElement | undefined>;
   labelAction: (element: HTMLLabelElement) => void;
@@ -51,14 +54,15 @@ export type CreateComboboxStoreOptions<TOptionValue extends BaseComboboxOptionVa
 };
 
 export const createComboboxStore = <TOptionValue extends BaseComboboxOptionValue>(
-  options: CreateComboboxStoreOptions<TOptionValue>,
+  storeOptions: CreateComboboxStoreOptions<TOptionValue>,
 ): ComboboxStore<TOptionValue> => {
-  const { selected, isMultiple = false } = options;
+  const { selected, isMultiple = false } = storeOptions;
   const selectedValue = get(selected);
 
   // external state
   const isOpened = writable(false);
   const inputValue = writable(selectedValue.length === 0 || isMultiple ? '' : selectedValue[0].display);
+  const inputIsDirty = writable(false);
   const labelElement: Writable<HTMLLabelElement | undefined> = writable(undefined);
   const inputElement: Writable<HTMLInputElement | undefined> = writable(undefined);
   const optionsElement: Writable<HTMLElement | undefined> = writable(undefined);
@@ -90,6 +94,10 @@ export const createComboboxStore = <TOptionValue extends BaseComboboxOptionValue
 
   const setActiveOption = (index: number) => {
     activeOptionIndex.set(index);
+  };
+
+  const clearActiveOption = () => {
+    activeOptionIndex.set(undefined);
   };
 
   const clearHighlightedOptionDataAttributes = () => {
@@ -233,10 +241,6 @@ export const createComboboxStore = <TOptionValue extends BaseComboboxOptionValue
         inputValue.set('');
       }
     });
-
-    inputValue.subscribe((value) => {
-      element.value = value;
-    });
   };
 
   const optionsAttachedAction = (element: HTMLElement) => {
@@ -272,7 +276,7 @@ export const createComboboxStore = <TOptionValue extends BaseComboboxOptionValue
     let elementIndex = options.optionIndex;
     let option = options.option;
 
-    element.setAttribute(dataAttributes.OPTION, elementIndex.toString());
+    element.setAttribute(dataAttributes.OPTION, '');
 
     if (isOptionSelected(option)) {
       element.setAttribute(dataAttributes.DROP_DOWN_SELECTED, '');
@@ -322,6 +326,18 @@ export const createComboboxStore = <TOptionValue extends BaseComboboxOptionValue
     };
   };
 
+  inputValue.subscribe((value) => {
+    if (isMultiple) {
+      inputIsDirty.set(value !== '');
+
+      return;
+    }
+
+    const selectedValue = get(selected);
+
+    inputIsDirty.set(selectedValue.length > 0 ? value !== selectedValue[0].display : value !== '');
+  });
+
   isOpened.subscribe((newIsOpened) => {
     const $inputElement = get(inputElement);
 
@@ -334,6 +350,18 @@ export const createComboboxStore = <TOptionValue extends BaseComboboxOptionValue
     activeOptionIndex.set(undefined);
     $inputElement?.removeAttribute(dataAttributes.SKIP_BLUR);
     optionsElement.set(undefined);
+
+    if (isMultiple) {
+      return;
+    }
+
+    const selectedValue = get(selected);
+
+    if (selectedValue.length !== 0) {
+      return;
+    }
+
+    inputValue.set('');
   });
 
   activeOptionIndex.subscribe((newActiveOptionIndex) => {
@@ -343,7 +371,8 @@ export const createComboboxStore = <TOptionValue extends BaseComboboxOptionValue
       return;
     }
 
-    const matchingElement = $optionsElement.querySelector(`[${dataAttributes.OPTION}]:nth-child(${newActiveOptionIndex + 1})`) as HTMLElement;
+    const allOptionElements = $optionsElement.querySelectorAll(`[${dataAttributes.OPTION}]`) as NodeListOf<HTMLElement>;
+    const matchingElement = allOptionElements[newActiveOptionIndex];
 
     if (!matchingElement) {
       return;
@@ -351,6 +380,7 @@ export const createComboboxStore = <TOptionValue extends BaseComboboxOptionValue
 
     clearHighlightedOptionDataAttributes();
     matchingElement.setAttribute(dataAttributes.HIGHLIGHTED, '');
+    domUtils.scrollToElement(matchingElement);
   });
 
   optionsElement.subscribe((newOptionsElement) => {
@@ -369,7 +399,7 @@ export const createComboboxStore = <TOptionValue extends BaseComboboxOptionValue
     }
 
     if (newSelected.length === 0) {
-      $inputElement.value = '';
+      inputValue.set('');
     }
 
     // since management of the value of this component is unique, we want to manally trigger the change event
@@ -381,6 +411,7 @@ export const createComboboxStore = <TOptionValue extends BaseComboboxOptionValue
     // state
     isOpened,
     inputValue,
+    inputIsDirty,
 
     // elements
     inputElement,
@@ -397,6 +428,7 @@ export const createComboboxStore = <TOptionValue extends BaseComboboxOptionValue
       increaseActiveOption,
       decreaseActiveOption,
       setActiveOption,
+      clearActiveOption,
       selectActiveOption,
       openMenu,
       closeMenu,
