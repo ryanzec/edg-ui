@@ -1,55 +1,55 @@
-import ComboboxAsyncExample from '$lib/components/core/combobox/examples/combobox-async-example.svelte';
-import ComboboxClearOnEscapeExample from '$lib/components/core/combobox/examples/combobox-clear-on-escape-example.svelte';
-import ComboboxFilteringExample from '$lib/components/core/combobox/examples/combobox-filtering-example.svelte';
-import ComboboxMultipleFilteringExample from '$lib/components/core/combobox/examples/multiple/combobox-multiple-filtering-example.svelte';
-import ComboboxMultiplePreselectedExample from '$lib/components/core/combobox/examples/multiple/combobox-multiple-preselected-example.svelte';
-import ComboboxMultipleSimpleExample from '$lib/components/core/combobox/examples/multiple/combobox-multiple-simple-example.svelte';
-import ComboboxPreselectedExample from '$lib/components/core/combobox/examples/combobox-preselected-example.svelte';
-import ComboboxSelectedChangedExample from '$lib/components/core/combobox/examples/combobox-selected-changed-example.svelte';
-import ComboboxSimpleExample from '$lib/components/core/combobox/examples/combobox-simple-example.svelte';
+import DevAsyncExample from '$lib/components/core/combobox/examples/dev-async-example.svelte';
+import DevClearOnEscapeExample from '$lib/components/core/combobox/examples/dev-clear-on-escape-example.svelte';
+import DevFilteringExample from '$lib/components/core/combobox/examples/dev-filtering-example.svelte';
+import DevMultipleFilteringExample from '$lib/components/core/combobox/examples/multiple/dev-multiple-filtering-example.svelte';
+import DevMultiplePreselectedExample from '$lib/components/core/combobox/examples/multiple/dev-multiple-preselected-example.svelte';
+import DevMultipleSimpleExample from '$lib/components/core/combobox/examples/multiple/dev-multiple-simple-example.svelte';
+import DevPreselectedExample from '$lib/components/core/combobox/examples/dev-preselected-example.svelte';
+import DevSelectedChangedExample from '$lib/components/core/combobox/examples/dev-selected-changed-example.svelte';
+import DevSimpleExample from '$lib/components/core/combobox/examples/dev-simple-example.svelte';
 import { type DevNavigationItem } from '$lib/components/core/dev-navigation/dev-navigation.svelte';
-import ComboboxMultipleClearOnEscapeExample from '$lib/components/core/combobox/examples/multiple/combobox-multiple-clear-on-escape-example.svelte';
-import ComboboxNoSelectedInlineExample from '$lib/components/core/combobox/examples/multiple/combobox-no-selected-inline-example.svelte';
-import ComboboxGroupedFilteringExample from '$lib/components/core/combobox/examples/grouped/combobox-grouped-filtering-example.svelte';
-import ComboboxGroupedAsyncExample from '$lib/components/core/combobox/examples/grouped/combobox-grouped-async-example.svelte';
+import DevMultipleClearOnEscapeExample from '$lib/components/core/combobox/examples/multiple/dev-multiple-clear-on-escape-example.svelte';
+import DevNoSelectedInlineExample from '$lib/components/core/combobox/examples/multiple/dev-no-selected-inline-example.svelte';
+import DevGroupedFilteringExample from '$lib/components/core/combobox/examples/grouped/dev-grouped-filtering-example.svelte';
+import DevGroupedAsyncExample from '$lib/components/core/combobox/examples/grouped/dev-grouped-async-example.svelte';
 
 export const comboboxExampleItems: DevNavigationItem = {
   display: 'Combobox',
   items: [
     {
       display: 'Async',
-      component: ComboboxAsyncExample,
+      component: DevAsyncExample,
     },
     {
       display: 'Clear on Escape',
-      component: ComboboxClearOnEscapeExample,
+      component: DevClearOnEscapeExample,
     },
     {
       display: 'Filtering',
-      component: ComboboxFilteringExample,
+      component: DevFilteringExample,
     },
     {
       display: 'Preselected',
-      component: ComboboxPreselectedExample,
+      component: DevPreselectedExample,
     },
     {
       display: 'Selected Change',
-      component: ComboboxSelectedChangedExample,
+      component: DevSelectedChangedExample,
     },
     {
       display: 'Simple',
-      component: ComboboxSimpleExample,
+      component: DevSimpleExample,
     },
     {
       display: 'Grouped',
       items: [
         {
           display: 'Filtering',
-          component: ComboboxGroupedFilteringExample,
+          component: DevGroupedFilteringExample,
         },
         {
           display: 'Async',
-          component: ComboboxGroupedAsyncExample,
+          component: DevGroupedAsyncExample,
         },
       ],
     },
@@ -58,23 +58,23 @@ export const comboboxExampleItems: DevNavigationItem = {
       items: [
         {
           display: 'Simple',
-          component: ComboboxMultipleSimpleExample,
+          component: DevMultipleSimpleExample,
         },
         {
           display: 'Filtering',
-          component: ComboboxMultipleFilteringExample,
+          component: DevMultipleFilteringExample,
         },
         {
           display: 'Preselected',
-          component: ComboboxMultiplePreselectedExample,
+          component: DevMultiplePreselectedExample,
         },
         {
           display: 'Clear on Escape',
-          component: ComboboxMultipleClearOnEscapeExample,
+          component: DevMultipleClearOnEscapeExample,
         },
         {
           display: 'No Selected Inline',
-          component: ComboboxNoSelectedInlineExample,
+          component: DevNoSelectedInlineExample,
         },
       ],
     },

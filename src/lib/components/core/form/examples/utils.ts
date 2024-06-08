@@ -1,75 +1,75 @@
 import { type DevNavigationItem } from '$lib/components/core/dev-navigation/dev-navigation.svelte';
-import FormArrayExample from '$lib/components/core/form/examples/form-array-example.svelte';
-import FormCheckboxExample from '$lib/components/core/form/examples/form-checkbox-example.svelte';
-import FormComboboxMultipleExample from '$lib/components/core/form/examples/form-combobox-multiple-example.svelte';
-import FormComboboxSingleExample from '$lib/components/core/form/examples/form-combobox-single-example.svelte';
-import FormCompleteExample from '$lib/components/core/form/examples/form-complete-example.svelte';
-import FormCompletePrepopulatedExample from '$lib/components/core/form/examples/form-complete-prepopulated-example.svelte';
-import FormNestedExample from '$lib/components/core/form/examples/form-nested-example.svelte';
-import FormObjectExample from '$lib/components/core/form/examples/form-object-example.svelte';
-import FormRadioExample from '$lib/components/core/form/examples/form-radio-example.svelte';
-import FormSelectExample from '$lib/components/core/form/examples/form-select-example.svelte';
-import FormTextExample from '$lib/components/core/form/examples/form-text-example.svelte';
-import FormTextareaExample from '$lib/components/core/form/examples/form-textarea-example.svelte';
-import FormValidateOnBlurExample from '$lib/components/core/form/examples/form-validate-on-blur-example.svelte';
+import DevArrayExample from '$lib/components/core/form/examples/dev-array-example.svelte';
+import DevCheckboxExample from '$lib/components/core/form/examples/dev-checkbox-example.svelte';
+import DevComboboxMultipleExample from '$lib/components/core/form/examples/dev-combobox-multiple-example.svelte';
+import DevComboboxSingleExample from '$lib/components/core/form/examples/dev-combobox-single-example.svelte';
+import DevCompleteExample from '$lib/components/core/form/examples/dev-complete-example.svelte';
+import DevCompletePrepopulatedExample from '$lib/components/core/form/examples/dev-complete-prepopulated-example.svelte';
+import DevNestedExample from '$lib/components/core/form/examples/dev-nested-example.svelte';
+import DevObjectExample from '$lib/components/core/form/examples/dev-object-example.svelte';
+import DevRadioExample from '$lib/components/core/form/examples/dev-radio-example.svelte';
+import DevSelectExample from '$lib/components/core/form/examples/dev-select-example.svelte';
+import DevTextExample from '$lib/components/core/form/examples/dev-text-example.svelte';
+import DevTextareaExample from '$lib/components/core/form/examples/dev-textarea-example.svelte';
+import DevValidateOnBlurExample from '$lib/components/core/form/examples/dev-validate-on-blur-example.svelte';
 
 export const formExampleItems: DevNavigationItem = {
   display: 'Form',
   items: [
     {
       display: 'Complete',
-      component: FormCompleteExample,
+      component: DevCompleteExample,
     },
     {
       display: 'Complete Prepopulated',
-      component: FormCompletePrepopulatedExample,
+      component: DevCompletePrepopulatedExample,
     },
     {
       display: 'Validate on Blur',
-      component: FormValidateOnBlurExample,
+      component: DevValidateOnBlurExample,
     },
     {
       display: 'Input Types',
       items: [
         {
           display: 'Array',
-          component: FormArrayExample,
+          component: DevArrayExample,
         },
         {
           display: 'Checkbox',
-          component: FormCheckboxExample,
+          component: DevCheckboxExample,
         },
         {
           display: 'Combobox Multiple',
-          component: FormComboboxMultipleExample,
+          component: DevComboboxMultipleExample,
         },
         {
           display: 'Combobox Single',
-          component: FormComboboxSingleExample,
+          component: DevComboboxSingleExample,
         },
         {
           display: 'Nested',
-          component: FormNestedExample,
+          component: DevNestedExample,
         },
         {
           display: 'Object',
-          component: FormObjectExample,
+          component: DevObjectExample,
         },
         {
           display: 'Radio',
-          component: FormRadioExample,
+          component: DevRadioExample,
         },
         {
           display: 'Select',
-          component: FormSelectExample,
+          component: DevSelectExample,
         },
         {
           display: 'Text',
-          component: FormTextExample,
+          component: DevTextExample,
         },
         {
           display: 'Textarea',
-          component: FormTextareaExample,
+          component: DevTextareaExample,
         },
       ],
     },

@@ -1,12 +1,12 @@
-import ButtonCircleExample from '$lib/components/core/button/examples/button-circle-example.svelte';
-import ButtonDisabledExample from '$lib/components/core/button/examples/button-disabled-example.svelte';
-import ButtonGhostExample from '$lib/components/core/button/examples/button-ghost-example.svelte';
-import ButtonLoadingExample from '$lib/components/core/button/examples/button-loading-example.svelte';
-import ButtonOutlinedExample from '$lib/components/core/button/examples/button-outlined-example.svelte';
-import ButtonPillExample from '$lib/components/core/button/examples/button-pill-example.svelte';
-import ButtonPrePostItemsExample from '$lib/components/core/button/examples/button-pre-post-items-example.svelte';
-import ButtonWeakExample from '$lib/components/core/button/examples/button-weak-example.svelte';
-import ButtonFilledExample from '$lib/components/core/button/examples/button-filled-example.svelte';
+import DevCircleExample from '$lib/components/core/button/examples/dev-circle-example.svelte';
+import DevDisabledExample from '$lib/components/core/button/examples/dev-disabled-example.svelte';
+import DevGhostExample from '$lib/components/core/button/examples/dev-ghost-example.svelte';
+import DevLoadingExample from '$lib/components/core/button/examples/dev-loading-example.svelte';
+import DevOutlinedExample from '$lib/components/core/button/examples/dev-outlined-example.svelte';
+import DevPillExample from '$lib/components/core/button/examples/dev-pill-example.svelte';
+import DevPrePostItemsExample from '$lib/components/core/button/examples/dev-pre-post-items-example.svelte';
+import DevWeakExample from '$lib/components/core/button/examples/dev-weak-example.svelte';
+import DevFilledExample from '$lib/components/core/button/examples/dev-filled-example.svelte';
 import { type DevNavigationItem } from '$lib/components/core/dev-navigation/dev-navigation.svelte';
 
 export const buttonExampleItems: DevNavigationItem = {
@@ -14,39 +14,39 @@ export const buttonExampleItems: DevNavigationItem = {
   items: [
     {
       display: 'Circle',
-      component: ButtonCircleExample,
+      component: DevCircleExample,
     },
     {
       display: 'Disabled',
-      component: ButtonDisabledExample,
+      component: DevDisabledExample,
     },
     {
       display: 'Filled',
-      component: ButtonFilledExample,
+      component: DevFilledExample,
     },
     {
       display: 'Ghost',
-      component: ButtonGhostExample,
+      component: DevGhostExample,
     },
     {
       display: 'Loading',
-      component: ButtonLoadingExample,
+      component: DevLoadingExample,
     },
     {
       display: 'Outlined',
-      component: ButtonOutlinedExample,
+      component: DevOutlinedExample,
     },
     {
       display: 'Pill',
-      component: ButtonPillExample,
+      component: DevPillExample,
     },
     {
       display: 'Pre / Post Items',
-      component: ButtonPrePostItemsExample,
+      component: DevPrePostItemsExample,
     },
     {
       display: 'Weak',
-      component: ButtonWeakExample,
+      component: DevWeakExample,
     },
   ],
 };

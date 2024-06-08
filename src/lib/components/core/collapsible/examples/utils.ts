@@ -1,4 +1,4 @@
-import CollapsibleSimpleExamples from '$lib/components/core/collapsible/examples/collapsible-simple-examples.svelte';
+import DevSimpleExamples from '$lib/components/core/collapsible/examples/dev-simple-examples.svelte';
 import { type DevNavigationItem } from '$lib/components/core/dev-navigation/dev-navigation.svelte';
 
 export const collapsibleExampleItems: DevNavigationItem = {
@@ -6,7 +6,7 @@ export const collapsibleExampleItems: DevNavigationItem = {
   items: [
     {
       display: 'Simple',
-      component: CollapsibleSimpleExamples,
+      component: DevSimpleExamples,
     },
   ],
 };
