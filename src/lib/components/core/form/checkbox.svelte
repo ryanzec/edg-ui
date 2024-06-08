@@ -14,7 +14,7 @@
   export let label: string = value;
 </script>
 
-<label class="flex items-center" for={id} id="{value}-label">
+<label class="flex cursor-pointer items-center" for={id} id="{value}-label">
   <div class="pr-1">
     {#if checked}
       <SquareCheckIcon />
@@ -22,6 +22,6 @@
       <SquareIcon />
     {/if}
   </div>
-  <input {id} {name} type="checkbox" {value} {checked} class="appearance-none" />
+  <input {id} {name} type="checkbox" {value} bind:checked class="appearance-none" />
   {stringUtils.toTitleCase(label)}
 </label>
