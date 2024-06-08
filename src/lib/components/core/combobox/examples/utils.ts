@@ -10,7 +10,7 @@ import ComboboxSimpleExample from '$lib/components/core/combobox/examples/combob
 import { type DevNavigationItem } from '$lib/components/core/dev-navigation/dev-navigation.svelte';
 import ComboboxMultipleClearOnEscapeExample from '$lib/components/core/combobox/examples/multiple/combobox-multiple-clear-on-escape-example.svelte';
 import ComboboxNoSelectedInlineExample from '$lib/components/core/combobox/examples/multiple/combobox-no-selected-inline-example.svelte';
-import ComboboxGroupedFilteringExample from '$lib/components/core/combobox/examples/combobox-grouped-filtering-example.svelte';
+import ComboboxGroupedFilteringExample from '$lib/components/core/combobox/examples/grouped/combobox-grouped-filtering-example.svelte';
 import ComboboxGroupedAsyncExample from '$lib/components/core/combobox/examples/grouped/combobox-grouped-async-example.svelte';
 
 export const comboboxExampleItems: DevNavigationItem = {

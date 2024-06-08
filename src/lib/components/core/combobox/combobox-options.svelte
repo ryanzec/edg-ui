@@ -44,10 +44,10 @@
 <div
   data-id="options"
   use:optionsAction
-  class="absolute z-10 flex max-h-[300px] flex-col overflow-hidden rounded-b-lg border"
+  class="absolute z-10 flex max-h-[300px] flex-col overflow-hidden rounded-b-lg border bg-surface-pure"
 >
   <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-  <div class="flex max-h-full flex-col gap-0 overflow-y-auto bg-surface-pure" tabindex="0">
+  <div class="flex max-h-full flex-col gap-0 overflow-y-auto" tabindex="0">
     {#if isLoading}
       <!-- the rotating icon can cause scrolling so just hidding the overflow to avoid that -->
       <div data-id="loading-option" class="oferflow relative flex items-center gap-2 overflow-hidden px-2 py-1">
