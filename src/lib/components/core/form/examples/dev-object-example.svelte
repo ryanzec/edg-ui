@@ -3,6 +3,7 @@
     firstName: string;
     lastName: string;
     checkbox: string[];
+    toggle: string[];
     radio: string;
   };
   export type FormData = {
@@ -13,6 +14,7 @@
     firstName: zod.string().min(1, 'Required'),
     lastName: zod.string(),
     checkbox: zod.array(zod.string()).min(1, 'Required'),
+    toggle: zod.array(zod.string()).min(1, 'Required'),
     radio: zod.string().min(1, 'Required'),
   });
 
@@ -36,6 +38,7 @@
   import Checkbox from '$lib/components/core/form/checkbox.svelte';
   import { stringUtils } from '$lib/utils/string';
   import Radio from '$lib/components/core/form/radio.svelte';
+  import Toggle from '$lib/components/core/form/toggle.svelte';
 
   let submittedData: FormData | undefined = undefined;
   const {
@@ -48,6 +51,7 @@
         firstName: '',
         lastName: '',
         checkbox: [],
+        toggle: [],
         radio: '',
       },
     },
@@ -74,22 +78,37 @@
           <Label for="complex.lastName">Last Name</Label>
           <TextInput bind:value={$complex.lastName} name="complex.lastName" />
         </FormField>
-        <FormField data-id="checkbox" error={$complexError?.checkbox}>
+        <FormField data-id="checkbox-group" error={$complexError?.checkbox}>
           <Fieldset>
             <Legend>Checkbox</Legend>
-            {#each checkboxOptions as checkboxOption}
+            {#each checkboxOptions as option}
               <Checkbox
-                id="checkbox-{checkboxOption}"
+                id="checkbox-{option}"
                 name="complex.checkbox"
-                value={checkboxOption}
-                checked={$complex.checkbox.includes(checkboxOption)}
+                value={option}
+                checked={$complex.checkbox.includes(option)}
               >
-                {stringUtils.toTitleCase(checkboxOption)}
+                {stringUtils.toTitleCase(option)}
               </Checkbox>
             {/each}
           </Fieldset>
         </FormField>
-        <FormField data-id="radio" error={$complexError?.radio}>
+        <FormField data-id="toggle-group" error={$complexError?.toggle}>
+          <Fieldset>
+            <Legend>Toggle</Legend>
+            {#each checkboxOptions as option}
+              <Toggle
+                id="toggle-{option}"
+                name="complex.toggle"
+                value={option}
+                checked={$complex.toggle.includes(option)}
+              >
+                {stringUtils.toTitleCase(option)}
+              </Toggle>
+            {/each}
+          </Fieldset>
+        </FormField>
+        <FormField data-id="radio-group" error={$complexError?.radio}>
           <Fieldset>
             <Legend>Radio</Legend>
             {#each radioOptions as radioOption}

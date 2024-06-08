@@ -14,8 +14,8 @@
   export let label: string = value;
 </script>
 
-<label class="flex cursor-pointer items-center" for={id} id="{value}-label">
-  <div class="pr-1">
+<label data-id="checkbox" class="flex cursor-pointer items-center" for={id} id="{value}-label">
+  <div class="mr-1">
     {#if checked}
       <SquareCheckIcon />
     {:else}

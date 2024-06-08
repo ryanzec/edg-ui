@@ -40,7 +40,7 @@
   <h1>Forms</h1>
   <form use:formAction>
     <FormFields>
-      <FormField data-id="radio" error={$radioError}>
+      <FormField data-id="radio-group" error={$radioError}>
         <Fieldset>
           <Legend>Radio</Legend>
           {#each radioOptions as radioOption}

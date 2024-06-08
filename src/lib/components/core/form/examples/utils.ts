@@ -11,6 +11,7 @@ import DevRadioExample from '$lib/components/core/form/examples/dev-radio-exampl
 import DevSelectExample from '$lib/components/core/form/examples/dev-select-example.svelte';
 import DevTextExample from '$lib/components/core/form/examples/dev-text-example.svelte';
 import DevTextareaExample from '$lib/components/core/form/examples/dev-textarea-example.svelte';
+import DevToggleExample from '$lib/components/core/form/examples/dev-toggle-example.svelte';
 import DevValidateOnBlurExample from '$lib/components/core/form/examples/dev-validate-on-blur-example.svelte';
 
 export const formExampleItems: DevNavigationItem = {
@@ -70,6 +71,10 @@ export const formExampleItems: DevNavigationItem = {
         {
           display: 'Textarea',
           component: DevTextareaExample,
+        },
+        {
+          display: 'Toggle',
+          component: DevToggleExample,
         },
       ],
     },

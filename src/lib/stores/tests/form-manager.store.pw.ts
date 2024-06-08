@@ -18,6 +18,8 @@ export class FormComponentPage {
 
   readonly checkboxValidationMessages: Locator;
 
+  readonly toggleValidationMessages: Locator;
+
   readonly radioValidationMessages: Locator;
 
   readonly objectFirstNameInput: Locator;
@@ -64,13 +66,13 @@ export class FormComponentPage {
     this.submittedData = page.locator('[data-id="submitted-data"]');
     this.arrayValidationMessages = page.locator('[data-id="array-container"] > [data-id="validation-messages"]');
     this.nestedValidationMessages = page.locator('[data-id="nested-container"] > [data-id="validation-messages"]');
-    this.checkboxValidationMessages = page.locator('[data-id="checkbox"] > [data-id="validation-messages"]');
-    this.radioValidationMessages = page.locator('[data-id="radio"] > [data-id="validation-messages"]');
+    this.checkboxValidationMessages = page.locator('[data-id="checkbox-group"] > [data-id="validation-messages"]');
+    this.radioValidationMessages = page.locator('[data-id="radio-group"] > [data-id="validation-messages"]');
     this.objectFirstNameInput = page.locator('[data-id="object"] [data-id="first-name"] input');
     this.objectLastNameInput = page.locator('[data-id="object"] [data-id="last-name"] input');
     this.objectFirstNameValidationMessages = page.locator('[data-id="object"] [data-id="first-name"] > [data-id="validation-messages"]');
-    this.objectCheckboxValidationMessages = page.locator('[data-id="object"] [data-id="checkbox"] > [data-id="validation-messages"]');
-    this.objectRadioValidationMessages = page.locator('[data-id="object"] [data-id="radio"] > [data-id="validation-messages"]');
+    this.objectCheckboxValidationMessages = page.locator('[data-id="object"] [data-id="checkbox-group"] > [data-id="validation-messages"]');
+    this.objectRadioValidationMessages = page.locator('[data-id="object"] [data-id="radio-group"] > [data-id="validation-messages"]');
     this.selectInput = page.locator('[data-id="select"] select');
     this.selectValidationMessages = page.locator('[data-id="select"] > [data-id="validation-messages"]');
     this.textInput = page.locator('[data-id="text"] input');
@@ -84,6 +86,7 @@ export class FormComponentPage {
     this.comboboxMultipleInput = page.locator('[data-id="combobox-multiple"] input');
     this.comboboxMultipleOptions = page.locator('[data-id="combobox-multiple"] [data-id="options"]');
     this.comboboxMultipleValidationMessages = page.locator('[data-id="combobox-multiple"] > [data-id="validation-messages"]');
+    this.toggleValidationMessages = page.locator('[data-id="toggle-group"] > [data-id="validation-messages"]');
   }
 
   async goto (url: string) {
@@ -107,19 +110,27 @@ export class FormComponentPage {
   }
 
   checkboxLocator (index: number) {
-    return this.page.locator(`[data-id="checkbox"] label:nth-of-type(${index + 1}) svg`);
+    return this.page.locator(`[data-id="checkbox-group"] label:nth-of-type(${index + 1}) svg`);
+  }
+
+  toggleLocator (index: number) {
+    return this.page.locator(`[data-id="toggle-group"] label:nth-of-type(${index + 1}) [data-id="bar"]`);
   }
 
   radioLocator (index: number) {
-    return this.page.locator(`[data-id="radio"] label:nth-of-type(${index + 1}) svg`);
+    return this.page.locator(`[data-id="radio-group"] label:nth-of-type(${index + 1}) svg`);
   }
 
   objectCheckboxLocator (index: number) {
-    return this.page.locator(`[data-id="object"] [data-id="checkbox"] label:nth-of-type(${index + 1}) svg`);
+    return this.page.locator(`[data-id="object"] [data-id="checkbox-group"] label:nth-of-type(${index + 1}) svg`);
+  }
+
+  objectToggleLocator (index: number) {
+    return this.page.locator(`[data-id="object"] [data-id="toggle-group"] label:nth-of-type(${index + 1}) [data-id="bar"]`);
   }
 
   objectRadioLocator (index: number) {
-    return this.page.locator(`[data-id="object"] [data-id="radio"] label:nth-of-type(${index + 1}) svg`);
+    return this.page.locator(`[data-id="object"] [data-id="radio-group"] label:nth-of-type(${index + 1}) svg`);
   }
 
   comboboxSingleOptionLocator (index: number) {
@@ -398,6 +409,55 @@ test.describe('form manager', () => {
       });
     });
 
+    test.describe('toggle', () => {
+      test('displays validation message', async ({ page }) => {
+        const formPage = new FormComponentPage(page);
+
+        await formPage.goto('/sandbox?component=Form.Input+Types.Toggle');
+
+        await expect(formPage.toggleValidationMessages).toHaveCount(0);
+
+        await formPage.submitTrigger.click();
+
+        await expect(formPage.toggleValidationMessages).toHaveCount(1);
+      });
+
+      test('validation message goes away after adding value', async ({ page }) => {
+        const formPage = new FormComponentPage(page);
+
+        await formPage.goto('/sandbox?component=Form.Input+Types.Toggle');
+
+        await formPage.submitTrigger.click();
+        await formPage.toggleLocator(0).click();
+        await formPage.submitTrigger.click();
+
+        await expect(formPage.toggleValidationMessages).toHaveCount(0);
+      });
+
+      test('submitted value properly formatted for single value', async ({ page }) => {
+        const formPage = new FormComponentPage(page);
+
+        await formPage.goto('/sandbox?component=Form.Input+Types.Toggle');
+
+        await formPage.toggleLocator(0).click();
+        await formPage.submitTrigger.click();
+
+        await formPage.expectSubmittedData('{"toggle":["one"]}');
+      });
+
+      test('submitted value properly formatted for multiple values', async ({ page }) => {
+        const formPage = new FormComponentPage(page);
+
+        await formPage.goto('/sandbox?component=Form.Input+Types.Toggle');
+
+        await formPage.toggleLocator(0).click();
+        await formPage.toggleLocator(1).click();
+        await formPage.submitTrigger.click();
+
+        await formPage.expectSubmittedData('{"toggle":["one","two"]}');
+      });
+    });
+
     test.describe('radio', () => {
       test('displays validation message', async ({ page }) => {
         const formPage = new FormComponentPage(page);
@@ -484,10 +544,11 @@ test.describe('form manager', () => {
         await formPage.objectFirstNameInput.fill('first');
         await formPage.objectLastNameInput.fill('last');
         await formPage.objectCheckboxLocator(0).click();
+        await formPage.objectToggleLocator(1).click();
         await formPage.objectRadioLocator(0).click();
         await formPage.submitTrigger.click();
 
-        await formPage.expectSubmittedData('{"complex":{"firstName":"first","lastName":"last","checkbox":["one"],"radio":"one"}}');
+        await formPage.expectSubmittedData('{"complex":{"firstName":"first","lastName":"last","checkbox":["one"],"toggle":["two"],"radio":"one"}}');
       });
     });
 
@@ -723,7 +784,7 @@ test.describe('form manager', () => {
 
       formPage.submitTrigger.click();
 
-      await formPage.expectSubmittedData('{"text":"test","checkbox":["two"],"radio":"one","textarea":"3","select":"two","userRole":[{"value":"admin","display":"Admin"}],"userRoles":[{"value":"admin","display":"Admin"},{"value":"user","display":"User"}],"simpleArray":["test"],"complexArray":[{"firstName":"test","lastName":"test","simpleArray":["test","test2"]}],"complex":{"firstName":"first name","lastName":"last name"}}');
+      await formPage.expectSubmittedData('{"text":"test","checkbox":["two"],"toggle":["one","two"],"radio":"one","textarea":"3","select":"two","userRole":[{"value":"admin","display":"Admin"}],"userRoles":[{"value":"admin","display":"Admin"},{"value":"user","display":"User"}],"simpleArray":["test"],"complexArray":[{"firstName":"test","lastName":"test","simpleArray":["test","test2"]}],"complex":{"firstName":"first name","lastName":"last name"}}');
     });
   });
 });

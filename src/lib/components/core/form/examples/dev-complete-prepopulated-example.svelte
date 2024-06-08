@@ -6,6 +6,7 @@
   export type FormData = {
     text: string;
     checkbox: string[];
+    toggle: string[];
     radio: string;
     textarea: string;
     select: string;
@@ -35,6 +36,7 @@
           { message: "must be 'test'" },
         ),
       checkbox: zod.array(zod.string()).min(1, 'Required'),
+      toggle: zod.array(zod.string()).min(1, 'Required'),
       radio: zod.string().min(1, 'Required'),
       textarea: zod.string().refine(
         (data) => {
@@ -81,6 +83,7 @@
   import { stringUtils } from '$lib/utils/string';
   import Radio from '$lib/components/core/form/radio.svelte';
   import FormFields from '$lib/components/core/form/form-fields.svelte';
+  import Toggle from '$lib/components/core/form/toggle.svelte';
 
   let selectOptions: SelectOption[] = [
     {
@@ -100,6 +103,7 @@
     formErrors: {
       text: textError,
       checkbox: checkboxError,
+      toggle: toggleError,
       radio: radioError,
       textarea: textareaError,
       select: selectError,
@@ -109,11 +113,24 @@
       complex: complexError,
       complexArray: complexArrayError,
     },
-    formData: { text, checkbox, radio, textarea, select, userRole, userRoles, simpleArray, complex, complexArray },
+    formData: {
+      text,
+      checkbox,
+      toggle,
+      radio,
+      textarea,
+      select,
+      userRole,
+      userRoles,
+      simpleArray,
+      complex,
+      complexArray,
+    },
   } = createFormManagerStore<FormData, typeof formDataSchema.shape>({
     defaultData: {
       text: 'test',
       checkbox: ['two'],
+      toggle: ['one', 'two'],
       radio: 'one',
       textarea: '3',
       select: 'two',
@@ -167,15 +184,16 @@
       <FormField data-id="checkbox" error={$checkboxError}>
         <Fieldset>
           <Legend>Checkbox</Legend>
-          {#each checkboxOptions as checkboxOption}
-            <Checkbox
-              id="checkbox-{checkboxOption}"
-              name="checkbox"
-              value={checkboxOption}
-              checked={$checkbox.includes(checkboxOption)}
-            >
-              {stringUtils.toTitleCase(checkboxOption)}
-            </Checkbox>
+          {#each checkboxOptions as option}
+            <Checkbox id="checkbox-{option}" name="checkbox" value={option} checked={$checkbox.includes(option)} />
+          {/each}
+        </Fieldset>
+      </FormField>
+      <FormField data-id="toggle" error={$toggleError}>
+        <Fieldset>
+          <Legend>Toggle</Legend>
+          {#each checkboxOptions as option}
+            <Toggle id="toggle-{option}" name="toggle" value={option} checked={$toggle.includes(option)} />
           {/each}
         </Fieldset>
       </FormField>
