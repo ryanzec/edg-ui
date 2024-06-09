@@ -12,6 +12,7 @@ import DevMultipleClearOnEscapeExample from '$lib/components/core/combobox/examp
 import DevNoSelectedInlineExample from '$lib/components/core/combobox/examples/multiple/dev-no-selected-inline-example.svelte';
 import DevGroupedFilteringExample from '$lib/components/core/combobox/examples/grouped/dev-grouped-filtering-example.svelte';
 import DevGroupedAsyncExample from '$lib/components/core/combobox/examples/grouped/dev-grouped-async-example.svelte';
+import DevCustomOptionExample from '$lib/components/core/combobox/examples/dev-custom-option-example.svelte';
 
 export const comboboxExampleItems: DevNavigationItem = {
   display: 'Combobox',
@@ -39,6 +40,10 @@ export const comboboxExampleItems: DevNavigationItem = {
     {
       display: 'Simple',
       component: DevSimpleExample,
+    },
+    {
+      display: 'Custom Option Rendered',
+      component: DevCustomOptionExample,
     },
     {
       display: 'Grouped',
