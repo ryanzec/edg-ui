@@ -139,6 +139,10 @@ export class ComboboxPage {
   async expectOptionsToBeVisible () {
     await expect(this.options).toBeVisible();
   }
+
+  async expectOptionsNotToBeVisible () {
+    await expect(this.options).not.toBeVisible();
+  }
 }
 
 test.describe('combobox', () => {
@@ -434,6 +438,30 @@ test.describe('combobox', () => {
       await componentPage.clickComponentContainer();
 
       await componentPage.expectInputValue('');
+    });
+
+    test('tabbing to element within the combobox with highlighted element keeps menu opened', async ({ page }) => {
+      const componentPage = new ComboboxPage(page);
+
+      await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Custom+Option+Rendered');
+
+      await componentPage.clickInput();
+      await componentPage.pressInput('ArrowDown');
+      await componentPage.pressInput('Tab');
+
+      await componentPage.expectOptionsToBeVisible();
+    });
+
+    test('tabbing to element outside the combobox with highlighted element closed menu', async ({ page }) => {
+      const componentPage = new ComboboxPage(page);
+
+      await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Custom+Option+Rendered');
+
+      await componentPage.clickInput();
+      await componentPage.pressInput('ArrowDown');
+      await componentPage.pressInput('Shift+Tab');
+
+      await componentPage.expectOptionsNotToBeVisible();
     });
   });
 

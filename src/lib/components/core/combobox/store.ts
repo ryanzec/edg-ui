@@ -3,6 +3,7 @@ import type { BaseComboboxOptionValue } from '$lib/components/core/combobox/util
 import { get, writable, type Writable } from 'svelte/store';
 import * as _ from 'lodash-es';
 import { domUtils } from '$lib/utils/dom';
+import type { Action, ActionReturn } from 'svelte/action';
 
 const dataAttributes = {
   HIGHLIGHTED: 'data-combobox-highlighted',
@@ -38,12 +39,14 @@ export type ComboboxStore<TOptionValue extends BaseComboboxOptionValue> = {
   isOpened: Writable<boolean>;
   inputValue: Writable<string>;
   inputIsDirty: Writable<boolean>;
+  containerElement: Writable<HTMLElement | undefined>;
   inputElement: Writable<HTMLInputElement | undefined>;
   optionsElement: Writable<HTMLElement | undefined>;
+  containerAction: Action<HTMLElement>;
   labelAction: (element: HTMLLabelElement) => void;
   inputAction: (element: HTMLInputElement) => void;
   optionsAttachedAction: (element: HTMLElement) => void;
-  optionsAction: (element: HTMLElement) => void;
+  optionsAction: Action<HTMLElement>;
   optionAction: (element: HTMLLIElement, options: OptionActionOptions<TOptionValue>) => void;
   comboboxUtils: ComboboxUtils<TOptionValue>;
 };
@@ -60,12 +63,13 @@ export const createComboboxStore = <TOptionValue extends BaseComboboxOptionValue
   const selectedValue = get(selected);
 
   // external state
-  const isOpened = writable(false);
-  const inputValue = writable(selectedValue.length === 0 || isMultiple ? '' : selectedValue[0].display);
-  const inputIsDirty = writable(false);
-  const labelElement: Writable<HTMLLabelElement | undefined> = writable(undefined);
-  const inputElement: Writable<HTMLInputElement | undefined> = writable(undefined);
-  const optionsElement: Writable<HTMLElement | undefined> = writable(undefined);
+  const isOpened = writable<boolean>(false);
+  const inputValue = writable<string>(selectedValue.length === 0 || isMultiple ? '' : selectedValue[0].display);
+  const inputIsDirty = writable<boolean>(false);
+  const containerElement = writable<HTMLElement | undefined>(undefined);
+  const labelElement = writable<HTMLLabelElement | undefined>(undefined);
+  const inputElement = writable<HTMLInputElement | undefined>(undefined);
+  const optionsElement = writable<HTMLElement | undefined>(undefined);
 
   // internal state
   const optionsAttachedElement: Writable<HTMLElement | undefined> = writable(undefined);
@@ -204,6 +208,10 @@ export const createComboboxStore = <TOptionValue extends BaseComboboxOptionValue
     );
   };
 
+  const containerAction = (element: HTMLElement) => {
+    containerElement.set(element);
+  };
+
   const labelAction = (element: HTMLLabelElement) => {
     labelElement.set(element);
   };
@@ -247,13 +255,35 @@ export const createComboboxStore = <TOptionValue extends BaseComboboxOptionValue
     optionsAttachedElement.set(element);
   };
 
-  const optionsAction = (element: HTMLElement) => {
+  const optionsAction: Action<HTMLElement> = (element) => {
+    // we want to make sure we close the menu if the user tabs to an element that is outside of the combobox
+    // otherwise is might block content below that is should not
+    const handleDocumentFocusin = () => {
+      const $containerElement = get(containerElement);
+
+      if (
+        !$containerElement
+        || !document.activeElement
+        || !domUtils.isElementChildOf(document.activeElement as HTMLElement, $containerElement)
+      ) {
+        closeMenu();
+      }
+    };
+
+    document.addEventListener('focusin', handleDocumentFocusin);
+
+    const actionReturn: ActionReturn = {
+      destroy: () => {
+        document.removeEventListener('focusin', handleDocumentFocusin);
+      },
+    };
+
     optionsElement.set(element);
 
     const $attachedElement = get(optionsAttachedElement);
 
     if (!$attachedElement) {
-      return;
+      return actionReturn;
     }
 
     const updateTooltipPosition = async () => {
@@ -270,6 +300,8 @@ export const createComboboxStore = <TOptionValue extends BaseComboboxOptionValue
     };
 
     updateTooltipPosition();
+
+    return actionReturn;
   };
 
   const optionAction = (element: HTMLElement, options: OptionActionOptions<TOptionValue>) => {
@@ -414,10 +446,12 @@ export const createComboboxStore = <TOptionValue extends BaseComboboxOptionValue
     inputIsDirty,
 
     // elements
+    containerElement,
     inputElement,
     optionsElement,
 
     // actions
+    containerAction,
     labelAction,
     inputAction,
     optionsAttachedAction,

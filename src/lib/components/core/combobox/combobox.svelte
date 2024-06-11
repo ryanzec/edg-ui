@@ -59,6 +59,7 @@
     optionsAttachedAction,
     optionsAction,
     optionAction,
+    containerAction,
     comboboxUtils,
   } = createComboboxStore({
     selected,
@@ -194,6 +195,7 @@
 
 <div
   data-id="combobox"
+  use:containerAction
   use:clickOutsideAction={{ callback: handleClickOutside }}
   use:keyPressedAction={{
     key: 'Escape',

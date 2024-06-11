@@ -37,6 +37,7 @@
 </script>
 
 <Combobox name="value" label="custom option" {options} {selected} optionComponent={DevCustomOptionComponent} />
+<a href="#">link to test tabbing closing</a>
 <!-- for manaul testing -->
 <pre>{JSON.stringify($selected, null, 2)}</pre>
 <!-- for automated testing -->
