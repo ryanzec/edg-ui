@@ -9,6 +9,7 @@ const dataAttributes = {
   HIGHLIGHTED: 'data-combobox-highlighted',
   DROP_DOWN_SELECTED: 'data-combobox-drop-down-selected',
   OPTION: 'data-combobox-option',
+  CLEAR_OPTION: 'data-combobox-clear-option',
   SKIP_BLUR: 'data-skip-blur',
   INPUT: 'data-combobox-input',
   INPUT_FOCUSED: 'data-combobox-input-focused',
@@ -49,6 +50,7 @@ export type ComboboxStore<TOptionValue extends BaseComboboxOptionValue> = {
   optionsAttachedAction: (element: HTMLElement) => void;
   optionsAction: Action<HTMLElement, ComboboxOptionsActionOptions>;
   optionAction: (element: HTMLLIElement, options: OptionActionOptions<TOptionValue>) => void;
+  clearOptionAction: Action<HTMLElement>;
   comboboxUtils: ComboboxUtils<TOptionValue>;
 };
 
@@ -210,7 +212,6 @@ export const createComboboxStore = <TOptionValue extends BaseComboboxOptionValue
     }
 
     for (const optionElement of allOptionElements) {
-      console.log(optionElement.getAttribute(dataAttributes.OPTION));
       const foundIndex = $selected.findIndex((selectedOption) => {
         return selectedOption.display === optionElement.getAttribute(dataAttributes.OPTION);
       });
@@ -391,6 +392,36 @@ export const createComboboxStore = <TOptionValue extends BaseComboboxOptionValue
     };
   };
 
+  const clearOptionAction: Action<HTMLElement> = (element) => {
+    element.setAttribute(dataAttributes.CLEAR_OPTION, '');
+
+    element.addEventListener('mouseenter', () => {
+      clearHighlightedOptionDataAttributes();
+      element.setAttribute(dataAttributes.HIGHLIGHTED, '');
+    });
+
+    element.addEventListener('click', () => {
+      clearSelected();
+      closeMenu();
+    });
+
+    if (get(selected).length === 0) {
+      element.setAttribute(dataAttributes.HIGHLIGHTED, '');
+    }
+
+    return {
+      update: () => {
+        if (get(selected).length === 0) {
+          element.setAttribute(dataAttributes.HIGHLIGHTED, '');
+
+          return;
+        }
+
+        element.removeAttribute(dataAttributes.HIGHLIGHTED);
+      },
+    };
+  };
+
   inputValue.subscribe((value) => {
     if (isMultiple) {
       inputIsDirty.set(value !== '');
@@ -493,6 +524,7 @@ export const createComboboxStore = <TOptionValue extends BaseComboboxOptionValue
     optionsAttachedAction,
     optionsAction,
     optionAction,
+    clearOptionAction: clearOptionAction,
 
     comboboxUtils: {
       increaseActiveOption,

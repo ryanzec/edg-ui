@@ -57,8 +57,6 @@
     ],
   };
   const selected = writable<MyComboboxValue[]>([]);
-
-  $: console.log(groupedOptions);
 </script>
 
 <Combobox name="value" label="grouped filtering" {groupedOptions} {selected} useFiltering isMultiple />

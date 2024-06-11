@@ -33,6 +33,8 @@ export class ComboboxPage {
 
   readonly groupHeader: Locator;
 
+  readonly clearOption: Locator;
+
   constructor (page: Page) {
     this.page = page;
     this.input = page.locator('[data-id="combobox"] input');
@@ -49,6 +51,7 @@ export class ComboboxPage {
     this.selectedIndicator = page.locator('[data-id="combobox"] [data-id="selected-indicator"]');
     this.componentContainer = page.locator('[data-id="component-container"]');
     this.groupHeader = page.locator('[data-id="group-header"]');
+    this.clearOption = page.locator('[data-id="combobox"] [data-id="clear-option"]');
   }
 
   async goto (url: string) {
@@ -97,6 +100,10 @@ export class ComboboxPage {
 
   async hoverOption (index: number) {
     await this.optionLocator(index).hover();
+  }
+
+  async clickClearOption () {
+    await this.clearOption.click();
   }
 
   // validations
@@ -492,6 +499,20 @@ test.describe('combobox', () => {
       await componentPage.pressInput('Shift+Tab');
 
       await componentPage.expectOptionsNotToBeVisible();
+    });
+
+    test('clear option works', async ({ page }) => {
+      const componentPage = new ComboboxPage(page);
+
+      await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Simple');
+
+      await componentPage.clickInput();
+      await componentPage.clickOption(0);
+      await componentPage.clickInput();
+      await componentPage.clickClearOption();
+
+      await componentPage.expectInputValue('');
+      await componentPage.expectSelectedValue('[]');
     });
   });
 

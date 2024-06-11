@@ -1,10 +1,12 @@
 <script lang="ts" generics="TOptionValue extends { display: string; }">
+  import ComboboxClearOption from '$lib/components/core/combobox/combobox-clear-option.svelte';
   import ComboboxOptionsGroup from '$lib/components/core/combobox/combobox-options-group.svelte';
+  import Combobox from '$lib/components/core/combobox/combobox.svelte';
 
   import type { ComboboxStore } from '$lib/components/core/combobox/store';
 
   /* global TOptionValue */
-  import type { ComboboxOptionComponent } from '$lib/components/core/combobox/utils';
+  import type { ComboboxOptionComponent, ComboboxOptionsActionOptions } from '$lib/components/core/combobox/utils';
   import LoaderIcon from '$lib/components/core/icons/loader-icon.svelte';
 
   export let options: TOptionValue[];
@@ -16,6 +18,8 @@
   export let inputValue: string = '';
   export let showCharacterThreshold: number;
   export let optionsActionOptions: ComboboxOptionsActionOptions = {};
+  export let clearOptionDisplay: string = '';
+  export let clearOptionAction: ComboboxStore<TOptionValue>['clearOptionAction'] | undefined = undefined;
 
   let indexOffsets: Record<string, number> = {};
 
@@ -62,10 +66,16 @@
         </div>
       {/if}
     {:else if groupedOptions && isGrouped}
+      {#if clearOptionDisplay && clearOptionAction}
+        <ComboboxClearOption display={clearOptionDisplay} {clearOptionAction} />
+      {/if}
       {#each Object.entries(groupedOptions) as [header, options]}
         <ComboboxOptionsGroup {header} {optionComponent} {options} {optionAction} indexOffset={indexOffsets[header]} />
       {/each}
     {:else}
+      {#if clearOptionDisplay && clearOptionAction}
+        <ComboboxClearOption display={clearOptionDisplay} {clearOptionAction} />
+      {/if}
       <ComboboxOptionsGroup {optionComponent} {options} {optionAction} />
     {/if}
   </div>

@@ -59,7 +59,7 @@
   const selected = writable<MyComboboxValue[]>([]);
 </script>
 
-<Combobox name="value" label="grouped filtering" {groupedOptions} {selected} useFiltering />
+<Combobox name="value" label="grouped filtering" {groupedOptions} {selected} useFiltering clearOptionDisplay="None" />
 <!-- for manaul testing -->
 <pre>{JSON.stringify($selected, null, 2)}</pre>
 <!-- for automated testing -->

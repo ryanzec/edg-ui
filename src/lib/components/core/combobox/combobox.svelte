@@ -41,6 +41,7 @@
   export let showInlineSelectedOptions: boolean = true;
   export let showCharacterThreshold: number = getOptions || getGroupedOptions ? 3 : 0;
   export let optionsActionOptions: ComboboxOptionsActionOptions = {};
+  export let clearOptionDisplay: string = '';
 
   // @todo(feature) character threshold
   // @todo(feature) allow new value
@@ -57,12 +58,13 @@
     inputIsDirty,
     inputElement,
     optionsElement,
+    containerAction,
     labelAction,
     inputAction,
     optionsAttachedAction,
     optionsAction,
     optionAction,
-    containerAction,
+    clearOptionAction,
     comboboxUtils,
   } = createComboboxStore({
     selected,
@@ -300,6 +302,8 @@
       inputValue={activeInputValue}
       {showCharacterThreshold}
       {optionsActionOptions}
+      clearOptionDisplay={isMultiple ? '' : clearOptionDisplay}
+      {clearOptionAction}
     />
   {/if}
 </div>
