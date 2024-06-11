@@ -13,6 +13,7 @@ import DevNoSelectedInlineExample from '$lib/components/core/combobox/examples/m
 import DevGroupedFilteringExample from '$lib/components/core/combobox/examples/grouped/dev-grouped-filtering-example.svelte';
 import DevGroupedAsyncExample from '$lib/components/core/combobox/examples/grouped/dev-grouped-async-example.svelte';
 import DevCustomOptionExample from '$lib/components/core/combobox/examples/dev-custom-option-example.svelte';
+import DevGroupedMultipleFilteringExample from '$lib/components/core/combobox/examples/grouped/dev-grouped-multiple-filtering-example.svelte';
 
 export const comboboxExampleItems: DevNavigationItem = {
   display: 'Combobox',
@@ -55,6 +56,10 @@ export const comboboxExampleItems: DevNavigationItem = {
         {
           display: 'Async',
           component: DevGroupedAsyncExample,
+        },
+        {
+          display: 'Filtering Multiple',
+          component: DevGroupedMultipleFilteringExample,
         },
       ],
     },

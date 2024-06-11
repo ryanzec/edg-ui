@@ -1,5 +1,5 @@
-import { flip, computePosition } from '@floating-ui/dom';
-import type { BaseComboboxOptionValue } from '$lib/components/core/combobox/utils';
+import { flip, offset, computePosition } from '@floating-ui/dom';
+import type { BaseComboboxOptionValue, ComboboxOptionsActionOptions } from '$lib/components/core/combobox/utils';
 import { get, writable, type Writable } from 'svelte/store';
 import * as _ from 'lodash-es';
 import { domUtils } from '$lib/utils/dom';
@@ -39,6 +39,7 @@ export type ComboboxStore<TOptionValue extends BaseComboboxOptionValue> = {
   isOpened: Writable<boolean>;
   inputValue: Writable<string>;
   inputIsDirty: Writable<boolean>;
+  inputIsFocused: Writable<boolean>;
   containerElement: Writable<HTMLElement | undefined>;
   inputElement: Writable<HTMLInputElement | undefined>;
   optionsElement: Writable<HTMLElement | undefined>;
@@ -46,7 +47,7 @@ export type ComboboxStore<TOptionValue extends BaseComboboxOptionValue> = {
   labelAction: (element: HTMLLabelElement) => void;
   inputAction: (element: HTMLInputElement) => void;
   optionsAttachedAction: (element: HTMLElement) => void;
-  optionsAction: Action<HTMLElement>;
+  optionsAction: Action<HTMLElement, ComboboxOptionsActionOptions>;
   optionAction: (element: HTMLLIElement, options: OptionActionOptions<TOptionValue>) => void;
   comboboxUtils: ComboboxUtils<TOptionValue>;
 };
@@ -66,6 +67,7 @@ export const createComboboxStore = <TOptionValue extends BaseComboboxOptionValue
   const isOpened = writable<boolean>(false);
   const inputValue = writable<string>(selectedValue.length === 0 || isMultiple ? '' : selectedValue[0].display);
   const inputIsDirty = writable<boolean>(false);
+  const inputIsFocused = writable<boolean>(false);
   const containerElement = writable<HTMLElement | undefined>(undefined);
   const labelElement = writable<HTMLLabelElement | undefined>(undefined);
   const inputElement = writable<HTMLInputElement | undefined>(undefined);
@@ -199,6 +201,30 @@ export const createComboboxStore = <TOptionValue extends BaseComboboxOptionValue
     return wasAdded;
   };
 
+  const resetSelectedAttributes = () => {
+    const $selected = get(selected);
+    const allOptionElements = get(optionsElement)?.querySelectorAll(`[${dataAttributes.OPTION}]`) as NodeListOf<HTMLElement>;
+
+    if (!allOptionElements) {
+      return;
+    }
+
+    for (const optionElement of allOptionElements) {
+      console.log(optionElement.getAttribute(dataAttributes.OPTION));
+      const foundIndex = $selected.findIndex((selectedOption) => {
+        return selectedOption.display === optionElement.getAttribute(dataAttributes.OPTION);
+      });
+
+      if (foundIndex === -1) {
+        optionElement.removeAttribute(dataAttributes.DROP_DOWN_SELECTED);
+
+        continue;
+      }
+
+      optionElement.setAttribute(dataAttributes.DROP_DOWN_SELECTED, '');
+    }
+  };
+
   const isOptionSelected = (option: TOptionValue) => {
     const $selected = get(selected);
     return (
@@ -222,6 +248,7 @@ export const createComboboxStore = <TOptionValue extends BaseComboboxOptionValue
     element.setAttribute(dataAttributes.INPUT, '');
 
     element.addEventListener('focus', () => {
+      inputIsFocused.set(true);
       isOpened.set(true);
 
       get(inputElement)?.setAttribute(dataAttributes.INPUT_FOCUSED, '');
@@ -239,6 +266,8 @@ export const createComboboxStore = <TOptionValue extends BaseComboboxOptionValue
     element.addEventListener('blur', () => {
       const highlightedElement = get(optionsElement)?.querySelector(`[${dataAttributes.HIGHLIGHTED}]`);
 
+      inputIsFocused.set(false);
+
       // if the user click on an element, we don't want to close as we want to allow the user to select that value
       // so this conditional of setting the opened state handles that issue
       isOpened.set(!!highlightedElement);
@@ -255,7 +284,7 @@ export const createComboboxStore = <TOptionValue extends BaseComboboxOptionValue
     optionsAttachedElement.set(element);
   };
 
-  const optionsAction: Action<HTMLElement> = (element) => {
+  const optionsAction: Action<HTMLElement, ComboboxOptionsActionOptions> = (element, options) => {
     // we want to make sure we close the menu if the user tabs to an element that is outside of the combobox
     // otherwise is might block content below that is should not
     const handleDocumentFocusin = () => {
@@ -272,7 +301,7 @@ export const createComboboxStore = <TOptionValue extends BaseComboboxOptionValue
 
     document.addEventListener('focusin', handleDocumentFocusin);
 
-    const actionReturn: ActionReturn = {
+    const actionReturn: ActionReturn<ComboboxOptionsActionOptions> = {
       destroy: () => {
         document.removeEventListener('focusin', handleDocumentFocusin);
       },
@@ -287,10 +316,16 @@ export const createComboboxStore = <TOptionValue extends BaseComboboxOptionValue
     }
 
     const updateTooltipPosition = async () => {
-      const computedPosition = await computePosition($attachedElement, element, {
-        placement: 'bottom-start',
+      const floatingUiOptions = {
+        placement: options.placement || 'bottom-start',
         middleware: [flip()],
-      });
+      };
+
+      if (options.offset) {
+        floatingUiOptions.middleware.push(offset(options.offset));
+      }
+
+      const computedPosition = await computePosition($attachedElement, element, floatingUiOptions);
 
       Object.assign(element.style, {
         left: `${computedPosition.x}px`,
@@ -308,7 +343,7 @@ export const createComboboxStore = <TOptionValue extends BaseComboboxOptionValue
     let elementIndex = options.optionIndex;
     let option = options.option;
 
-    element.setAttribute(dataAttributes.OPTION, '');
+    element.setAttribute(dataAttributes.OPTION, option.display);
 
     if (isOptionSelected(option)) {
       element.setAttribute(dataAttributes.DROP_DOWN_SELECTED, '');
@@ -327,8 +362,6 @@ export const createComboboxStore = <TOptionValue extends BaseComboboxOptionValue
 
       // to make it easier to select multiple options, we want to keep the options visible after selection of one
       if (isMultiple) {
-        activeOptionIndex.set(0);
-
         return;
       }
 
@@ -434,6 +467,8 @@ export const createComboboxStore = <TOptionValue extends BaseComboboxOptionValue
       inputValue.set('');
     }
 
+    resetSelectedAttributes();
+
     // since management of the value of this component is unique, we want to manally trigger the change event
     // to allow code outside to be able to hook into native dom events (for things like validation)
     $inputElement.dispatchEvent(new Event('change', { bubbles: true }));
@@ -444,6 +479,7 @@ export const createComboboxStore = <TOptionValue extends BaseComboboxOptionValue
     isOpened,
     inputValue,
     inputIsDirty,
+    inputIsFocused,
 
     // elements
     containerElement,

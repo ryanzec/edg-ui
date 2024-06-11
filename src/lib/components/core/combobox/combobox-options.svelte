@@ -15,6 +15,7 @@
   export let optionComponent: ComboboxOptionComponent<TOptionValue> | undefined = undefined;
   export let inputValue: string = '';
   export let showCharacterThreshold: number;
+  export let optionsActionOptions: ComboboxOptionsActionOptions = {};
 
   let indexOffsets: Record<string, number> = {};
 
@@ -43,7 +44,7 @@
 
 <div
   data-id="options"
-  use:optionsAction
+  use:optionsAction={optionsActionOptions}
   class="absolute z-10 flex max-h-[300px] flex-col overflow-hidden rounded-b-lg border bg-surface-pure"
 >
   <div class="flex max-h-full flex-col gap-0 overflow-y-auto">

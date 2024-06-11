@@ -1,4 +1,5 @@
 import type { ComboboxStore } from '$lib/components/core/combobox/store';
+import type { ComputePositionConfig, OffsetOptions } from '@floating-ui/dom';
 import type { ComponentType, SvelteComponent } from 'svelte';
 
 export type BaseComboboxOptionValue = {
@@ -12,6 +13,11 @@ export type ComboboxOptionComponent<TOptionValue extends BaseComboboxOptionValue
     optionAction: ComboboxStore<TOptionValue>['optionAction'];
   }>
 >;
+
+export type ComboboxOptionsActionOptions = {
+  placement?: ComputePositionConfig['placement'];
+  offset?: OffsetOptions;
+};
 
 export const COMBOBOX_DEFAULT_DELAY = 300;
 

@@ -136,12 +136,20 @@ export class ComboboxPage {
     await expect(this.optionLocator(index)).toHaveText(display);
   }
 
+  async expectNotOptionDisplay (index: number, display: string) {
+    await expect(this.optionLocator(index)).not.toHaveText(display);
+  }
+
   async expectOptionsToBeVisible () {
     await expect(this.options).toBeVisible();
   }
 
   async expectOptionsNotToBeVisible () {
     await expect(this.options).not.toBeVisible();
+  }
+
+  async expectDropDownSelectedOptionCount (count: number) {
+    await expect(this.dropDownSelectedOption).toHaveCount(count);
   }
 }
 
@@ -157,6 +165,16 @@ test.describe('combobox', () => {
       await componentPage.expectSelectedIndicatorDisplay(0, 'Option 2');
       await componentPage.expectSelectedIndicatorDisplay(1, 'Option 3');
       await componentPage.expectSelectedValue('[{"value":"2","display":"Option 2","meta":{"testing":"testing"}},{"value":"3","display":"Option 3","meta":{"testing":"testing"}}]');
+    });
+
+    test('remove items should not open the menu', async ({ page }) => {
+      const componentPage = new ComboboxPage(page);
+
+      await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Multiple.Preselected');
+
+      await componentPage.clickRemoveTrigger(0);
+
+      await componentPage.expectOptionsNotToBeVisible();
     });
 
     test('the remove trigger from the selected indicator works', async ({ page }) => {
@@ -197,7 +215,7 @@ test.describe('combobox', () => {
       await componentPage.expectSelectedValue('[{"value":"3","display":"Option 3","meta":{"testing":"testing"}}]');
     });
 
-    test('filters works', async ({ page }) => {
+    test('input filters works', async ({ page }) => {
       const componentPage = new ComboboxPage(page);
 
       await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Multiple.Filtering');
@@ -210,6 +228,18 @@ test.describe('combobox', () => {
 
       await componentPage.expectOptionCount(1);
       await componentPage.expectOptionDisplay(0, 'Option 4');
+    });
+
+    test('selected filters works', async ({ page }) => {
+      const componentPage = new ComboboxPage(page);
+
+      await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Multiple.Filtering');
+
+      await componentPage.clickInput();
+      await componentPage.clickOption(0);
+
+      await componentPage.expectOptionCount(3);
+      await componentPage.expectNotOptionDisplay(0, 'Option 1');
     });
 
     test('drop down remains opened after clicking an option', async ({ page }) => {
@@ -387,16 +417,16 @@ test.describe('combobox', () => {
       await expect(componentPage.options).not.toBeVisible();
     });
 
-    test('filtering works', async ({ page }) => {
+    test('input filtering works', async ({ page }) => {
       const componentPage = new ComboboxPage(page);
 
-      await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Simple');
+      await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Filtering');
 
       await componentPage.clickInput();
       await componentPage.fillInput('1');
 
-      await expect(componentPage.options).toHaveCount(1);
-      await expect(componentPage.optionLocator(0)).toHaveText('Option 1');
+      await componentPage.expectOptionCount(1);
+      await componentPage.expectOptionDisplay(0, 'Option 1');
     });
 
     test('preselected works', async ({ page }) => {
@@ -569,7 +599,7 @@ test.describe('combobox', () => {
       await componentPage.expectHighlightedOptionDisplay('Option 1-1');
     });
 
-    test('filtering works', async ({ page }) => {
+    test('input filtering works', async ({ page }) => {
       const componentPage = new ComboboxPage(page);
 
       await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Grouped.Filtering');
@@ -580,6 +610,18 @@ test.describe('combobox', () => {
       await componentPage.expectOptionCount(2);
       await componentPage.expectOptionDisplay(0, 'Option 1-3');
       await componentPage.expectOptionDisplay(1, 'Option 2-3');
+    });
+
+    test('selected filtering works', async ({ page }) => {
+      const componentPage = new ComboboxPage(page);
+
+      await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Grouped.Filtering+Multiple');
+
+      await componentPage.clickInput();
+      await componentPage.clickOption(0);
+
+      await componentPage.expectOptionCount(7);
+      await componentPage.expectNotOptionDisplay(0, 'Option 1-1');
     });
 
     test('filtering removes groups that have no options', async ({ page }) => {
@@ -654,6 +696,17 @@ test.describe('combobox', () => {
       await componentPage.fillInput('tes');
 
       await componentPage.expectHighlightedOptionCount(0);
+    });
+
+    test('clicking an option for multiple select updates selected immediately', async ({ page }) => {
+      const componentPage = new ComboboxPage(page);
+
+      await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Multiple.Simple');
+
+      await componentPage.clickInput();
+      await componentPage.clickOption(0);
+
+      await componentPage.expectDropDownSelectedOptionCount(1);
     });
   });
 });

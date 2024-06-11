@@ -14,6 +14,7 @@
     COMBOBOX_DEFAULT_DELAY,
     comboboxComponentUtils,
     type ComboboxOptionComponent,
+    type ComboboxOptionsActionOptions,
   } from '$lib/components/core/combobox/utils';
   import { type Writable } from 'svelte/store';
   import ComboboxOptions from '$lib/components/core/combobox/combobox-options.svelte';
@@ -37,8 +38,9 @@
   export let useFiltering: boolean = false;
   export let filter: (inputValue: string, options: TOptionValue[]) => TOptionValue[] =
     comboboxComponentUtils.defaultFilter;
-  export let inlineSelectedOptions: boolean = true;
+  export let showInlineSelectedOptions: boolean = true;
   export let showCharacterThreshold: number = getOptions || getGroupedOptions ? 3 : 0;
+  export let optionsActionOptions: ComboboxOptionsActionOptions = {};
 
   // @todo(feature) character threshold
   // @todo(feature) allow new value
@@ -53,6 +55,7 @@
     isOpened,
     inputValue,
     inputIsDirty,
+    inputElement,
     optionsElement,
     labelAction,
     inputAction,
@@ -67,7 +70,7 @@
   });
 
   const filterOptions = (inputValue: string): TOptionValue[] => {
-    if (!useFiltering || !$inputIsDirty) {
+    if (!useFiltering || (!isMultiple && !$inputIsDirty)) {
       return options;
     }
 
@@ -81,7 +84,7 @@
   };
 
   const filterGroupedOptions = (inputValue: string): Record<string, TOptionValue[]> | undefined => {
-    if (!useFiltering || !groupedOptions || !$inputIsDirty) {
+    if (!useFiltering || !groupedOptions || (!isMultiple && !$inputIsDirty)) {
       return groupedOptions;
     }
 
@@ -239,16 +242,29 @@
 >
   <div class="flex-col gap-1 {extraClass}">
     <Label for={id} use={labelAction}>{label}</Label>
+    <!--
+      while it is generally better / easier to just use a button for an element you want clickable, since this
+      element can have also have buttons inside it, we use a div and add the required a11y attributes otherwise
+      svelte weird out and causing weird rendering issue is this is part of the initial page load of the application
+      aswell as a weird svelte warning
+    -->
     <div
       use:optionsAttachedAction
+      role="button"
+      tabindex="-1"
+      on:keypress={() => {}}
+      on:click={() => $inputElement?.focus()}
       class="flex w-full rounded-lg border border-outline bg-surface-pure px-2 py-1 text-surface-on-base focus:border-outline-active data-[state=open]:rounded-b-none"
     >
       <div class="relative flex flex-1 flex-wrap items-center gap-2">
-        {#if isMultiple && inlineSelectedOptions && $selected.length > 0}
+        {#if isMultiple && showInlineSelectedOptions && $selected.length > 0}
           {#each $selected as selectedOption}
             <Badge data-id="selected-indicator">
               {selectedOption.display}
-              <button data-id="remove-trigger" on:click={() => comboboxUtils.removeOption(selectedOption)}>X</button>
+              <button
+                data-id="remove-trigger"
+                on:click|stopPropagation={() => comboboxUtils.removeOption(selectedOption)}>X</button
+              >
             </Badge>
           {/each}
         {/if}
@@ -283,6 +299,7 @@
       {optionAction}
       inputValue={activeInputValue}
       {showCharacterThreshold}
+      {optionsActionOptions}
     />
   {/if}
 </div>

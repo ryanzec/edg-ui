@@ -35,7 +35,7 @@
   const selected = writable<MyComboboxValue[]>([options[1], options[2]]);
 </script>
 
-<Combobox name="value" label="Simple Test" {options} {selected} isMultiple inlineSelectedOptions={false} />
+<Combobox name="value" label="Simple Test" {options} {selected} isMultiple showInlineSelectedOptions={false} />
 <!-- for manaul testing -->
 <pre>{JSON.stringify($selected, null, 2)}</pre>
 <!-- for automated testing -->
