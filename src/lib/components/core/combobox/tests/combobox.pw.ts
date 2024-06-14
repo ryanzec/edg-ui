@@ -1,6 +1,7 @@
 import { test, expect, type Page, type Locator } from '@playwright/test';
 import { playwrightMockerUtils } from '$lib/utils/playwright-mocker';
 import { playwrightUtils } from '$lib/utils/playwright';
+import type { Placement } from '@floating-ui/dom';
 
 export class ComboboxPage {
   readonly page: Page;
@@ -35,6 +36,8 @@ export class ComboboxPage {
 
   readonly clearOption: Locator;
 
+  readonly externalEscapeTrigger: Locator;
+
   constructor (page: Page) {
     this.page = page;
     this.input = page.locator('[data-id="combobox"] input');
@@ -52,6 +55,7 @@ export class ComboboxPage {
     this.componentContainer = page.locator('[data-id="component-container"]');
     this.groupHeader = page.locator('[data-id="group-header"]');
     this.clearOption = page.locator('[data-id="combobox"] [data-id="clear-option"]');
+    this.externalEscapeTrigger = page.locator('[data-id="external-escape-trigger"]');
   }
 
   async goto (url: string) {
@@ -78,8 +82,12 @@ export class ComboboxPage {
       .click();
   }
 
+  // because of the way the combobox handle mouse event, we need to simulate the mouse down and up manaully to
+  // properly simulate the user as it would in the browser instead of the .click() api
   async clickOption (index: number) {
-    await this.optionLocator(index).click();
+    await this.optionLocator(index).hover();
+    await this.page.mouse.down();
+    await this.page.mouse.up();
   }
 
   async clickInput () {
@@ -157,6 +165,24 @@ export class ComboboxPage {
 
   async expectDropDownSelectedOptionCount (count: number) {
     await expect(this.dropDownSelectedOption).toHaveCount(count);
+  }
+
+  async expectPlacement (placement: Placement) {
+    const currentPlacement = await this.options.getAttribute('data-options-placement');
+
+    expect(currentPlacement).toBe(placement);
+  }
+
+  async expectExternalEscapeNotTriggered () {
+    await expect(this.externalEscapeTrigger).toHaveText('false');
+  }
+
+  async expectInputFocused (state: boolean) {
+    if (state) {
+      await expect(this.input).toBeFocused();
+    }
+
+    await expect(this.input).not.toBeFocused();
   }
 }
 
@@ -237,6 +263,19 @@ test.describe('combobox', () => {
       await componentPage.expectOptionDisplay(0, 'Option 4');
     });
 
+    test('making selection after filtering works', async ({ page }) => {
+      const componentPage = new ComboboxPage(page);
+
+      await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Multiple.Filtering');
+
+      await componentPage.clickInput();
+      await componentPage.fillInput('4');
+      await componentPage.clickOption(0);
+
+      await componentPage.expectInputValue('');
+      await componentPage.expectSelectedIndicatorDisplay(0, 'Option 4');
+    });
+
     test('selected filters works', async ({ page }) => {
       const componentPage = new ComboboxPage(page);
 
@@ -288,6 +327,19 @@ test.describe('combobox', () => {
       await componentPage.expectSelectedValue('[]');
     });
 
+    test('escape works', async ({ page }) => {
+      const componentPage = new ComboboxPage(page);
+
+      await componentPage.goto('http://localhost:3000/sandbox?component=Multiple.Simple');
+
+      await componentPage.clickInput();
+      await componentPage.clickOption(0);
+      await componentPage.pressInput('Escape');
+
+      await componentPage.expectOptionsNotToBeVisible();
+      await componentPage.expectInputFocused(false);
+    });
+
     test('clicking outside with a value typed in is cleared', async ({ page }) => {
       const componentPage = new ComboboxPage(page);
 
@@ -298,6 +350,7 @@ test.describe('combobox', () => {
 
       await componentPage.expectInputValue('');
     });
+
     test('can disable inline selected options', async ({ page }) => {
       const componentPage = new ComboboxPage(page);
 
@@ -306,6 +359,19 @@ test.describe('combobox', () => {
       await componentPage.expectInputValue('');
       await componentPage.expectSelectedIndicatorCount(0);
       await componentPage.expectSelectedValue('[{"value":"2","display":"Option 2","meta":{"testing":"testing"}},{"value":"3","display":"Option 3","meta":{"testing":"testing"}}]');
+    });
+
+    test('selecting with keyboard should reset the highlighted  ', async ({ page }) => {
+      const componentPage = new ComboboxPage(page);
+
+      await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Multiple.Filtering');
+
+      await componentPage.clickInput();
+      await componentPage.pressInput('ArrowDown');
+      await componentPage.pressInput('ArrowDown');
+      await componentPage.pressInput('Enter');
+
+      await componentPage.expectHighlightedOptionCount(0);
     });
   });
 
@@ -336,6 +402,18 @@ test.describe('combobox', () => {
 
       await componentPage.expectInputValue('');
       await componentPage.expectSelectedValue('[]');
+    });
+
+    test('escape works', async ({ page }) => {
+      const componentPage = new ComboboxPage(page);
+
+      await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Simple');
+
+      await componentPage.clickInput();
+      await componentPage.pressInput('Escape');
+
+      await componentPage.expectOptionsNotToBeVisible();
+      await componentPage.expectInputFocused(false);
     });
 
     test('up arrow works', async ({ page }) => {
@@ -514,6 +592,73 @@ test.describe('combobox', () => {
       await componentPage.expectInputValue('');
       await componentPage.expectSelectedValue('[]');
     });
+
+    test('clicking option should still work when combobox is in a focusable element', async ({ page }) => {
+      const componentPage = new ComboboxPage(page);
+
+      await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.For+Tests.In+Focusable');
+
+      await componentPage.clickInput();
+      await componentPage.clickOption(0);
+
+      await componentPage.expectInputValue('Option 1');
+      await componentPage.expectSelectedValue('[{"value":"1","display":"Option 1","meta":{"testing":"testing"}}]');
+    });
+
+    test('changing the input value should reset the highlighted option', async ({ page }) => {
+      const componentPage = new ComboboxPage(page);
+
+      await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Large+Options');
+
+      await componentPage.clickInput();
+      await componentPage.fillInput('te');
+      await componentPage.pressInput('ArrowDown');
+      await componentPage.pressInput('ArrowDown');
+
+      await componentPage.expectHighlightedOptionDisplay('test 4');
+
+      await componentPage.pressInput('Backspace');
+
+      await componentPage.expectHighlightedOptionCount(0);
+    });
+
+    test('arrow keys should still work after text filtering eliminates some options', async ({ page }) => {
+      const componentPage = new ComboboxPage(page);
+
+      await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Large+Options');
+
+      await componentPage.clickInput();
+      await componentPage.fillInput('te');
+      await componentPage.pressInput('ArrowUp');
+
+      await componentPage.expectHighlightedOptionDisplay('test 49');
+    });
+
+    test('the menu should not flip once opened', async ({ page }) => {
+      const componentPage = new ComboboxPage(page);
+
+      // this specifically start place at the top-start
+      await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.For+Tests.Menu+Flipping');
+
+      await componentPage.clickInput();
+
+      await componentPage.expectPlacement('top-start');
+
+      await componentPage.fillInput('10');
+
+      await componentPage.expectPlacement('top-start');
+    });
+
+    test('escape should not bubble outisde the combox component when active', async ({ page }) => {
+      const componentPage = new ComboboxPage(page);
+
+      await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.For+Tests.Escape+Bubble');
+
+      await componentPage.clickInput();
+      await componentPage.pressInput('Escape');
+
+      await componentPage.expectExternalEscapeNotTriggered();
+    });
   });
 
   test.describe('async options', () => {
@@ -678,6 +823,21 @@ test.describe('combobox', () => {
       await componentPage.expectGroupHeaderCount(2);
       await componentPage.expectOptionCount(6);
     });
+
+    test('static + dynamic options hovering works', async ({ page }) => {
+      await playwrightMockerUtils.mockGetUsersEndpoint(page, {
+        delay: 500,
+        objectCount: 6,
+      });
+      const componentPage = new ComboboxPage(page);
+
+      await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Grouped.Async');
+
+      await componentPage.fillInput('tes');
+      await componentPage.hoverOption(3);
+
+      await componentPage.expectHighlightedOptionDisplay('Test Admin1');
+    });
   });
 
   test.describe('edge case bugs', { tag: ['@edge-case'] }, () => {
@@ -728,6 +888,28 @@ test.describe('combobox', () => {
       await componentPage.clickOption(0);
 
       await componentPage.expectDropDownSelectedOptionCount(1);
+    });
+
+    test.fixme('add data attribute to options to be able to test to make sure the placement on the options does not change when the height of the options change while text filtering', async ({ page }) => {
+      const componentPage = new ComboboxPage(page);
+
+      await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Multiple.Simple');
+    });
+
+    test('make a select in filtering multiple mode, typing, then clearing the type still filters select options', async ({ page }) => {
+      const componentPage = new ComboboxPage(page);
+
+      await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Multiple.Filtering');
+
+      await componentPage.clickInput();
+      await componentPage.clickOption(0);
+      await componentPage.fillInput('o');
+
+      await componentPage.expectOptionDisplay(0, 'Option 2');
+
+      await componentPage.pressInput('Backspace');
+
+      await componentPage.expectOptionDisplay(0, 'Option 2');
     });
   });
 });

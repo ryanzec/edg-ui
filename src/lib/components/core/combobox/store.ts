@@ -265,6 +265,8 @@ export const createComboboxStore = <TOptionValue extends BaseComboboxOptionValue
     });
 
     element.addEventListener('blur', () => {
+      const $activeOptionIndex = get(activeOptionIndex);
+      // @todo(refactor) I think we should use the internal active option index instead of querying the dom
       const highlightedElement = get(optionsElement)?.querySelector(`[${dataAttributes.HIGHLIGHTED}]`);
 
       inputIsFocused.set(false);
@@ -275,7 +277,7 @@ export const createComboboxStore = <TOptionValue extends BaseComboboxOptionValue
 
       get(inputElement)?.removeAttribute(dataAttributes.INPUT_FOCUSED);
 
-      if (isMultiple) {
+      if (isMultiple && $activeOptionIndex === undefined) {
         inputValue.set('');
       }
     });

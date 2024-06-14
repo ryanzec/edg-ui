@@ -39,7 +39,7 @@
   export let filter: (inputValue: string, options: TOptionValue[]) => TOptionValue[] =
     comboboxComponentUtils.defaultFilter;
   export let showInlineSelectedOptions: boolean = true;
-  export let showCharacterThreshold: number = getOptions || getGroupedOptions ? 3 : 0;
+  export let showMenuCharacterThreshold: number = getOptions || getGroupedOptions ? 3 : 0;
   export let optionsActionOptions: ComboboxOptionsActionOptions = {};
   export let clearOptionDisplay: string = '';
 
@@ -124,7 +124,7 @@
   let getOptionsDebounced = debounce(async (inputValue: string) => {
     activeInputValue = inputValue;
 
-    if (inputValue.length < showCharacterThreshold) {
+    if (inputValue.length < showMenuCharacterThreshold) {
       return;
     }
 
@@ -187,7 +187,7 @@
 
   // when using async options, if the input is cleared, we don't want the options to show up since the values seems
   // wierd when nothing has been typed (to get relevant options, something probably needed to be typed)
-  $: if (isAsync && $inputValue.length < showCharacterThreshold) {
+  $: if (isAsync && $inputValue.length < showMenuCharacterThreshold) {
     finalOptions = [];
     finalGroupedOptions = undefined;
     comboboxUtils.clearActiveOption();
@@ -300,7 +300,7 @@
       {optionsAction}
       {optionAction}
       inputValue={activeInputValue}
-      {showCharacterThreshold}
+      {showMenuCharacterThreshold}
       {optionsActionOptions}
       clearOptionDisplay={isMultiple ? '' : clearOptionDisplay}
       {clearOptionAction}

@@ -34,7 +34,7 @@ export type User = {
   role: UserRole;
   createdAt: string;
   updatedAt: string;
-  deletedAt: string;
+  deletedAt?: string;
 };
 
 export type UserComboboxOption = {

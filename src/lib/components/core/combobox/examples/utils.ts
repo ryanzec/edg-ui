@@ -14,6 +14,10 @@ import DevGroupedFilteringExample from '$lib/components/core/combobox/examples/g
 import DevGroupedAsyncExample from '$lib/components/core/combobox/examples/grouped/dev-grouped-async-example.svelte';
 import DevCustomOptionExample from '$lib/components/core/combobox/examples/dev-custom-option-example.svelte';
 import DevGroupedMultipleFilteringExample from '$lib/components/core/combobox/examples/grouped/dev-grouped-multiple-filtering-example.svelte';
+import DevInFocusableExample from '$lib/components/core/combobox/examples/for-tests/dev-in-focusable-example.svelte';
+import DevLargeOptionsExample from '$lib/components/core/combobox/examples/dev-large-options-example.svelte';
+import DevMenuFlippingExample from '$lib/components/core/combobox/examples/for-tests/dev-menu-flipping-example.svelte';
+import DevEscapeBubbleExample from '$lib/components/core/combobox/examples/for-tests/dev-escape-bubble-example.svelte';
 
 export const comboboxExampleItems: DevNavigationItem = {
   display: 'Combobox',
@@ -45,6 +49,27 @@ export const comboboxExampleItems: DevNavigationItem = {
     {
       display: 'Custom Option Rendered',
       component: DevCustomOptionExample,
+    },
+    {
+      display: 'Large Options',
+      component: DevLargeOptionsExample,
+    },
+    {
+      display: 'For Tests',
+      items: [
+        {
+          display: 'In Focusable',
+          component: DevInFocusableExample,
+        },
+        {
+          display: 'Menu Flipping',
+          component: DevMenuFlippingExample,
+        },
+        {
+          display: 'Escape Bubble',
+          component: DevEscapeBubbleExample,
+        },
+      ],
     },
     {
       display: 'Grouped',

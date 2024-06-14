@@ -16,7 +16,7 @@
   export let isLoading: boolean = false;
   export let optionComponent: ComboboxOptionComponent<TOptionValue> | undefined = undefined;
   export let inputValue: string = '';
-  export let showCharacterThreshold: number;
+  export let showMenuCharacterThreshold: number;
   export let optionsActionOptions: ComboboxOptionsActionOptions = {};
   export let clearOptionDisplay: string = '';
   export let clearOptionAction: ComboboxStore<TOptionValue>['clearOptionAction'] | undefined = undefined;
@@ -43,7 +43,7 @@
     groupedOptions && isGrouped
       ? Object.values(groupedOptions).reduce((collector, groupOptions) => collector + groupOptions.length, 0)
       : options.length;
-  $: passesThresholdCheck = inputValue.length >= showCharacterThreshold;
+  $: passesThresholdCheck = inputValue.length >= showMenuCharacterThreshold;
 </script>
 
 <div
@@ -62,7 +62,7 @@
         <div data-id="no-results-option" class="relative px-2 py-1">No results found</div>
       {:else}
         <div data-id="type-to-search-option" class="relative px-2 py-1">
-          Type at least {showCharacterThreshold} characters for results...
+          Type at least {showMenuCharacterThreshold} characters for results...
         </div>
       {/if}
     {:else if groupedOptions && isGrouped}
