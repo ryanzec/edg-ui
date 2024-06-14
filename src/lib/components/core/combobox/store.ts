@@ -308,6 +308,8 @@ export const createComboboxStore = <TOptionValue extends BaseComboboxOptionValue
 
       get(inputElement)?.removeAttribute(dataAttributes.INPUT_FOCUSED);
 
+      // we need to keep the input value if there is an active option so that filtering and therefore selecting
+      // works properly, the selection will handle resetting the input value is needed
       if (isMultiple && $activeOptionIndex === undefined) {
         inputValue.set('');
       }
