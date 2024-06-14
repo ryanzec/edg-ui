@@ -854,13 +854,7 @@ test.describe('combobox', () => {
       await componentPage.expectDropDownSelectedOptionCount(1);
     });
 
-    test('add data attribute to options to be able to test to make sure the placement on the options does not change when the height of the options change while text filtering', async ({ page }) => {
-      const componentPage = new ComboboxPage(page);
-
-      await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Multiple.Simple');
-    });
-
-    test('make a select in filtering multiple mode, typing, then clearing the type still filters select options', async ({ page }) => {
+    test('make a selection in filtering multiple mode, typing, then clearing the type still filters select options', async ({ page }) => {
       const componentPage = new ComboboxPage(page);
 
       await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Multiple.Filtering');
