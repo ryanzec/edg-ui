@@ -17,15 +17,18 @@
   const staticOptions: UserComboboxOption[] = [
     {
       display: 'Option 1',
-      value: user,
+      value: '1',
+      meta: user,
     },
     {
       display: 'Option 2',
-      value: user,
+      value: '2',
+      meta: user,
     },
     {
       display: 'Option 3',
-      value: user,
+      value: '3',
+      meta: user,
     },
   ];
 
@@ -41,7 +44,8 @@
       Dynamic: response.data.map((user: User) => {
         return {
           display: `${user.firstName} ${user.lastName}`,
-          value: user,
+          value: user.id,
+          meta: user,
         };
       }),
     };

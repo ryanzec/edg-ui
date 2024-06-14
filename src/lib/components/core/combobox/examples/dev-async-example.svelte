@@ -14,7 +14,8 @@
     return response.data.map((user: User) => {
       return {
         display: `${user.firstName} ${user.lastName}`,
-        value: user,
+        value: user.id,
+        meta: user,
       };
     });
   };

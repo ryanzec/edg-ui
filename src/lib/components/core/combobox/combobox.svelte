@@ -1,4 +1,4 @@
-<script lang="ts" generics="TOptionValue extends { display: string; }">
+<script lang="ts" generics="TOptionValue extends { display: string; value: string; }">
   import Badge from '$lib/components/core/badge/badge.svelte';
 
   /* global TOptionValue */
@@ -16,13 +16,13 @@
     type ComboboxOptionComponent,
     type ComboboxOptionsActionOptions,
   } from '$lib/components/core/combobox/utils';
-  import { type Writable } from 'svelte/store';
+  import { writable, type Writable } from 'svelte/store';
   import ComboboxOptions from '$lib/components/core/combobox/combobox-options.svelte';
   import { clickOutsideAction } from '$lib/actions/click-outside-action';
 
   export let label: string;
   export let placeholder: string = 'Select...';
-  // the `display` for each option must be unique for this to work properly
+  // the `value` for each option must be unique for this to work properly
   export let options: TOptionValue[] = [];
   export let groupedOptions: Record<string, TOptionValue[]> | undefined = undefined;
   export let selected: Writable<TOptionValue[]>;
@@ -34,7 +34,6 @@
   export let getGroupedOptions: ((inputValue: string) => Promise<Record<string, TOptionValue[]>>) | undefined =
     undefined;
   export let resultsDelay: number = getOptions || getGroupedOptions ? COMBOBOX_DEFAULT_DELAY : 0;
-  export let clearOnEscape: boolean = false;
   export let useFiltering: boolean = false;
   export let filter: (inputValue: string, options: TOptionValue[]) => TOptionValue[] =
     comboboxComponentUtils.defaultFilter;
@@ -42,6 +41,7 @@
   export let showMenuCharacterThreshold: number = getOptions || getGroupedOptions ? 3 : 0;
   export let optionsActionOptions: ComboboxOptionsActionOptions = {};
   export let clearOptionDisplay: string = '';
+  export let onSelectedChanged: ((selected: TOptionValue[]) => void) | undefined = undefined;
 
   // @todo(feature) character threshold
   // @todo(feature) allow new value
@@ -51,6 +51,7 @@
 
   // this holds the input value that is actively being used (since there can be a delay in getting option asyncly)
   let activeInputValue = '';
+  let optionCount: Writable<number> = writable(0);
 
   const {
     isOpened,
@@ -68,6 +69,7 @@
     comboboxUtils,
   } = createComboboxStore({
     selected,
+    optionCount,
     isMultiple,
   });
 
@@ -129,8 +131,9 @@
     }
 
     if (!inputValue) {
-      finalOptions = options;
-      finalGroupedOptions = groupedOptions;
+      // multiple mode can filter out selected option so in that case, we need to run the filter
+      finalOptions = isMultiple ? filterOptions(inputValue) : options;
+      finalGroupedOptions = isMultiple ? filterGroupedOptions(inputValue) : groupedOptions;
 
       return;
     }
@@ -165,9 +168,19 @@
   }
 
   // the selected options could effect the results of the filter so we need to make sure they are kept in sync
-  selected.subscribe(() => {
+  selected.subscribe((selected) => {
     finalOptions = filterOptions($inputValue);
     finalGroupedOptions = filterGroupedOptions($inputValue);
+
+    // since the input for multiple mode does not persist any selected value in it, we need to clear it here
+    if (isMultiple) {
+      $inputValue = '';
+      activeInputValue = '';
+    }
+
+    if (onSelectedChanged) {
+      onSelectedChanged(selected);
+    }
   });
 
   // make sure only one option is selected when not in multiple selection mode
@@ -196,6 +209,13 @@
     // content since the callback to get the async options, that also sets this, runs on a delay
     activeInputValue = '';
   }
+
+  $: {
+    $optionCount =
+      groupedOptions && finalGroupedOptions
+        ? Object.values(finalGroupedOptions).reduce((collector, options) => collector + options.length, 0)
+        : finalOptions.length;
+  }
 </script>
 
 <div
@@ -204,17 +224,11 @@
   use:clickOutsideAction={{ callback: handleClickOutside }}
   use:keyPressedAction={{
     key: 'Escape',
+    stopPropagation: true,
     callback: () => {
       if ($isOpened) {
         comboboxUtils.closeMenu();
-
-        return;
-      }
-
-      if (clearOnEscape) {
-        $selected = [];
-        $inputValue = '';
-        activeInputValue = '';
+        $inputElement?.blur();
 
         return;
       }
@@ -230,12 +244,18 @@
         return;
       }
 
-      comboboxUtils.increaseActiveOption();
+      const newActiveOptionIndex = comboboxUtils.increaseActiveOption();
+
+      comboboxUtils.scrollToOption(newActiveOptionIndex);
     },
   }}
   use:keyPressedAction={{
     key: 'ArrowUp',
-    callback: comboboxUtils.decreaseActiveOption,
+    callback: () => {
+      const newActiveOptionIndex = comboboxUtils.decreaseActiveOption();
+
+      comboboxUtils.scrollToOption(newActiveOptionIndex);
+    },
   }}
   use:keyPressedAction={{
     key: 'Enter',

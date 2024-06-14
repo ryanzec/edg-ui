@@ -311,26 +311,10 @@ test.describe('combobox', () => {
       await componentPage.expectOptionsToBeVisible();
     });
 
-    test('clear on escape works', async ({ page }) => {
-      const componentPage = new ComboboxPage(page);
-
-      await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Multiple.Clear+on+Escape');
-
-      // focusing the input to be able to press this shows the drop down so this closes it
-      await componentPage.pressInput('Escape');
-
-      // this trigger the real functionalitry
-      await componentPage.pressInput('Escape');
-
-      await componentPage.expectSelectedIndicatorCount(0);
-      await componentPage.expectOptionCount(0);
-      await componentPage.expectSelectedValue('[]');
-    });
-
     test('escape works', async ({ page }) => {
       const componentPage = new ComboboxPage(page);
 
-      await componentPage.goto('http://localhost:3000/sandbox?component=Multiple.Simple');
+      await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Multiple.Simple');
 
       await componentPage.clickInput();
       await componentPage.clickOption(0);
@@ -386,22 +370,6 @@ test.describe('combobox', () => {
 
       await componentPage.expectInputValue('Option 1');
       await componentPage.expectSelectedValue('[{"value":"1","display":"Option 1","meta":{"testing":"testing"}}]');
-    });
-
-    test('clear on escape works', async ({ page }) => {
-      const componentPage = new ComboboxPage(page);
-
-      await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Clear+on+Escape');
-
-      await componentPage.clickInput();
-      await componentPage.clickOption(0);
-      // this triggers the close of the combobox drop dow
-      await componentPage.pressInput('Escape');
-      // this triggers the clear on escape functionality
-      await componentPage.pressInput('Escape');
-
-      await componentPage.expectInputValue('');
-      await componentPage.expectSelectedValue('[]');
     });
 
     test('escape works', async ({ page }) => {
@@ -844,16 +812,12 @@ test.describe('combobox', () => {
     test('selecting a value, clearing that select and selecting the same value works', async ({ page }) => {
       const componentPage = new ComboboxPage(page);
 
-      await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Clear+on+Escape');
+      await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Simple');
 
       await componentPage.clickInput();
       await componentPage.clickOption(0);
-
-      // this triggers the close of the combobox drop dow
-      await componentPage.pressInput('Escape');
-      // this triggers the clear on escape functionality
-      await componentPage.pressInput('Escape');
-
+      await componentPage.clickInput();
+      await componentPage.clickClearOption();
       await componentPage.clickInput();
       await componentPage.clickOption(0);
 
@@ -890,7 +854,7 @@ test.describe('combobox', () => {
       await componentPage.expectDropDownSelectedOptionCount(1);
     });
 
-    test.fixme('add data attribute to options to be able to test to make sure the placement on the options does not change when the height of the options change while text filtering', async ({ page }) => {
+    test('add data attribute to options to be able to test to make sure the placement on the options does not change when the height of the options change while text filtering', async ({ page }) => {
       const componentPage = new ComboboxPage(page);
 
       await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Multiple.Simple');

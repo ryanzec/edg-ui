@@ -1,4 +1,4 @@
-<script lang="ts" generics="TOptionValue extends { display: string; }">
+<script lang="ts" generics="TOptionValue extends { display: string; value: string; }">
   /* global TOptionValue */
   import type { ComboboxStore } from '$lib/components/core/combobox/store';
 

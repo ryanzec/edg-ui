@@ -1,4 +1,5 @@
 import type { ResponseStructure } from '$lib/api/utils';
+import type { BaseComboboxOptionValue } from '$lib/components/core/combobox/utils';
 import * as zod from 'zod';
 
 export enum UserRole {
@@ -37,9 +38,8 @@ export type User = {
   deletedAt?: string;
 };
 
-export type UserComboboxOption = {
-  display: string;
-  value: User;
+export type UserComboboxOption = BaseComboboxOptionValue & {
+  meta: User;
 };
 
 export type GetUsersResponse = ResponseStructure<User[]>;

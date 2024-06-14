@@ -4,6 +4,9 @@ import type { ComponentType, SvelteComponent } from 'svelte';
 
 export type BaseComboboxOptionValue = {
   display: string;
+
+  // must be unique for combobox to work
+  value: string;
 };
 
 export type ComboboxOptionComponent<TOptionValue extends BaseComboboxOptionValue> = ComponentType<
