@@ -787,4 +787,14 @@ test.describe('form manager', () => {
       await formPage.expectSubmittedData('{"text":"test","checkbox":["two"],"toggle":["one","two"],"radio":"one","textarea":"3","select":"two","userRole":[{"value":"admin","display":"Admin"}],"userRoles":[{"value":"admin","display":"Admin"},{"value":"user","display":"User"}],"simpleArray":["test"],"complexArray":[{"firstName":"test","lastName":"test","simpleArray":["test","test2"]}],"complex":{"firstName":"first name","lastName":"last name"}}');
     });
   });
+
+  test.describe('dynamic validation', () => {
+    test.fixme('validation is reset when schema changes', async ({ page }) => {
+
+    });
+
+    test.fixme('validation works after updating the validation', async ({ page }) => {
+
+    });
+  });
 });

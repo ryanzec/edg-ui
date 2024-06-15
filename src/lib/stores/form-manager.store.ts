@@ -65,7 +65,7 @@ const parseError = (
   if (fieldFormattedErrors.length > 0) {
     // @ts-expect-error see FormFieldError type for explination of the expected error
     newFormat = {
-      ...(currentErrors || {}),
+      ...currentErrors || {},
       errors: fieldFormattedErrors,
     };
   }
@@ -171,6 +171,7 @@ export type FormManagerUtils<TFormData, TSchemaObject extends ZodRawShape> = {
   submit: () => Promise<void>;
   validate: () => Promise<boolean>;
   validateProperty: (propertyName: keyof TFormData) => Promise<boolean>;
+  setValidationSchema: (newValidationSchema: ZodObject<TSchemaObject>) => void;
   getFormData: () => TFormData;
   getFormErrors: () => FormErrorsObject<TFormData>;
   clearFormErrors: () => void;
@@ -392,6 +393,11 @@ export const createFormManagerStore = <TFormData extends object, TSchemaObject e
     }
   };
 
+  const setValidationSchema = (newValidationSchema: ZodObject<TSchemaObject>) => {
+    validationSchema = newValidationSchema;
+    clearFormErrors();
+  };
+
   const updateTouched = (propertyName: string) => {
     if (get(isTouched).includes(propertyName)) {
       return;
@@ -605,6 +611,7 @@ export const createFormManagerStore = <TFormData extends object, TSchemaObject e
     submit,
     validate,
     validateProperty,
+    setValidationSchema,
     getFormData,
     getFormErrors,
     clearFormErrors,
