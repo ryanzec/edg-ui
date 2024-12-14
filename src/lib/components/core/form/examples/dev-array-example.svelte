@@ -22,6 +22,7 @@
   import FormFields from '$lib/components/core/form/form-fields.svelte';
 
   let submittedData: FormData | undefined = $state(undefined);
+
   const {
     formAction,
     formErrors: { simpleArray: simpleArrayError },
@@ -51,10 +52,10 @@
         >
           Add
         </Button>
-        {#each $simpleArray as simpleArrayValue, index}
+        {#each $simpleArray as _, index}
           <FormField data-id="array-value-{index}" error={$simpleArrayError?.[index]}>
             <Label for="simpleArray.{index}">Text {index + 1}</Label>
-            <TextInput bind:value={simpleArrayValue} name="simpleArray.{index}" />
+            <TextInput bind:value={$simpleArray[index]} name="simpleArray.{index}" />
           </FormField>
         {/each}
       </FormField>

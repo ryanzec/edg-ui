@@ -173,8 +173,8 @@
       <FormField data-id="select" error={$selectError}>
         <Select name="select" defaultDisplay="Select..." options={selectOptions} bind:value={$select}>
           {#snippet label()}
-                    <SelectLabel >Select</SelectLabel>
-                  {/snippet}
+            <SelectLabel>Select</SelectLabel>
+          {/snippet}
         </Select>
       </FormField>
       <FormField data-id="combobox-single" error={$userRoleError}>
@@ -193,10 +193,10 @@
               return [...data, ''];
             })}>Add</Button
         >
-        {#each $simpleArray as simpleArrayValue, index}
+        {#each $simpleArray as _, index}
           <FormField data-id="array-value-{index}" error={$simpleArrayError?.[index]}>
             <Label for="simpleArray.{index}">Text {index + 1}</Label>
-            <TextInput bind:value={simpleArrayValue} name="simpleArray.{index}" />
+            <TextInput bind:value={$simpleArray[index]} name="simpleArray.{index}" />
           </FormField>
         {/each}
       </FormField>

@@ -30,16 +30,20 @@
     meltOverlay,
     meltPortalled,
     meltContent,
-    children
+    children,
   }: Props = $props();
 
-  let peekElement: HTMLElement = $state();
+  let peekElement: HTMLElement | undefined = $state();
   let xResizeLeft = 0;
   let isDragging = false;
   let dragXStart = 0;
   let dragWidthStart = 0;
 
   const handleWindowMouseMove = (event: MouseEvent) => {
+    if (!peekElement) {
+      return;
+    }
+
     const moveDiff = event.pageX - dragXStart;
 
     peekElement.style.width = `${dragWidthStart + moveDiff * -1}px`;
@@ -55,6 +59,10 @@
   };
 
   const handlePeekMouseDown = (event: MouseEvent) => {
+    if (!peekElement) {
+      return;
+    }
+
     const peekBoundingRect = peekElement.getBoundingClientRect();
 
     xResizeLeft = peekBoundingRect.x;
@@ -74,6 +82,10 @@
   };
 
   const handlePeekMouseMove = (event: MouseEvent) => {
+    if (!peekElement) {
+      return;
+    }
+
     xResizeLeft = peekElement.getBoundingClientRect().x;
 
     let isDraggingArea = event.pageX >= xResizeLeft && event.pageX <= xResizeLeft + 5;

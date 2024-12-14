@@ -13,7 +13,7 @@ export type UserRoleComboboxOption = {
   value: UserRole;
 };
 
-export const validUserRoleValues = Object.values(UserRole).filter((value) => value !== UserRole.NONE);
+export const validUserRoleValues: UserRole[] = Object.values(UserRole).filter((value) => value !== UserRole.NONE);
 
 export const userRoleZodSchema = zod.object({
   value: zod.nativeEnum(UserRole),
@@ -22,7 +22,7 @@ export const userRoleZodSchema = zod.object({
 
 export const userRoleSelectSchema = zod.object(userRoleZodSchema.shape).refine(
   (data) => {
-    return validUserRoleValues.includes(data.value as UserRole);
+    return validUserRoleValues.includes(data.value);
   },
   { message: 'Required' },
 );

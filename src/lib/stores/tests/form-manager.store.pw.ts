@@ -250,20 +250,20 @@ test.describe('form manager', () => {
 
         await formPage.submitTrigger.click();
 
-        await formPage.expectSubmittedData('undefined');
+        await formPage.expectSubmittedData('');
 
         await formPage.addArrayValue(0);
         await formPage.addArrayValue(1);
 
         await formPage.submitTrigger.click();
 
-        await formPage.expectSubmittedData('undefined');
+        await formPage.expectSubmittedData('');
 
         await formPage.fillArrayValue(0, 'value');
 
         await formPage.submitTrigger.click();
 
-        await formPage.expectSubmittedData('undefined');
+        await formPage.expectSubmittedData('');
       });
 
       test('submitted data is formatted properly', async ({ page }) => {
@@ -326,17 +326,17 @@ test.describe('form manager', () => {
         await formPage.addObjectArrayValue(0, 0);
         await formPage.submitTrigger.click();
 
-        await formPage.expectSubmittedData('undefined');
+        await formPage.expectSubmittedData('');
 
         await formPage.fillObjectValue(0, 'first-name', 'first');
         await formPage.submitTrigger.click();
 
-        await formPage.expectSubmittedData('undefined');
+        await formPage.expectSubmittedData('');
 
         await formPage.fillObjectArrayValue(0, 0, 'string1');
         await formPage.submitTrigger.click();
 
-        await formPage.expectSubmittedDataNot('undefined');
+        await formPage.expectSubmittedDataNot('');
       });
 
       test('submitted data is formatted properly for single object', async ({ page }) => {

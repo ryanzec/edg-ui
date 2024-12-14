@@ -11,7 +11,7 @@
   const dispatchEvent = createEventDispatcher<CustomerEvents>();
 
   // @todo need to figure out if there is a proper way to type this
-  
+
   interface Props {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     meltItem: any;
@@ -20,7 +20,9 @@
     rightContent?: import('svelte').Snippet;
     leftContent?: import('svelte').Snippet;
     children?: import('svelte').Snippet;
-    [key: string]: any
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    [key: string]: any;
   }
 
   let {
@@ -33,7 +35,7 @@
     ...rest
   }: Props = $props();
 
-  let selfElement: HTMLElement = $state();
+  let selfElement: HTMLElement | undefined = $state();
 
   const onClick = (event: MouseEvent) => {
     if (closeOnClick === false) {

@@ -22,6 +22,6 @@
   <PeekContent><div use:melt={$description} class="mb-5 mt-2">I am resizable</div></PeekContent>
   <PeekFooter>
     <PeekFooterCloseAction meltClose={close} />
-    <PeekFooterAction on:click title="Action" />
+    <PeekFooterAction onclick={() => console.log('clicked action')} title="Action" />
   </PeekFooter>
 </Peek>

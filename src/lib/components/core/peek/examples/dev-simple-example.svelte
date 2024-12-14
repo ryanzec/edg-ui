@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { dialogUtils } from '$lib/components/core/dialog/utils';
   import PeekContent from '$lib/components/core/peek/peek-content.svelte';
   import PeekFooterAction from '$lib/components/core/peek/peek-footer-action.svelte';
@@ -22,6 +22,6 @@
   <PeekContent><div use:melt={$description} class="mb-5 mt-2">Default peek</div></PeekContent>
   <PeekFooter>
     <PeekFooterCloseAction meltClose={close} />
-    <PeekFooterAction on:click title="Action" />
+    <PeekFooterAction onclick={() => console.log('clicked action')} title="Action" />
   </PeekFooter>
 </Peek>
