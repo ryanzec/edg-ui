@@ -15,14 +15,15 @@
 </script>
 
 <script lang="ts">
+  import type { HTMLAttributes } from 'svelte/elements';
+
   import { twMerge } from 'tailwind-merge';
 
-  interface Props {
+  type Props = HTMLAttributes<HTMLDivElement> & {
     color?: BadgeColor;
     shape?: BadgeShape;
     children?: import('svelte').Snippet;
-    [key: string]: any
-  }
+  };
 
   let { color = BadgeColor.NEUTRAL, shape = BadgeShape.ROUNDED, children, ...rest }: Props = $props();
 

@@ -29,7 +29,7 @@ export class HttpError extends Error {
 
   context: HttpErrorContext;
 
-  constructor(statusCode: HttpStatusCode, options: HttpErrorOptions = {}) {
+  constructor (statusCode: HttpStatusCode, options: HttpErrorOptions = {}) {
     super(options.message ?? httpStatusCodeMessage[statusCode]);
 
     this.statusCode = statusCode;

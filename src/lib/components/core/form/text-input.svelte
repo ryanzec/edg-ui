@@ -1,10 +1,11 @@
 <script lang="ts">
-  interface Props {
+  import type { HTMLAttributes } from 'svelte/elements';
+
+  type Props = HTMLAttributes<HTMLInputElement> & {
     value: string;
     name: string;
     id?: string;
-    [key: string]: any
-  }
+  };
 
   let { value = $bindable(), name, id = name as string, ...rest }: Props = $props();
 </script>

@@ -7,7 +7,7 @@
   <h1>Tooltip</h1>
   <Tooltip>
     {#snippet handle()}
-        <button  type="button" aria-label="Add">
+        <button type="button" aria-label="Add">
         <PlusIcon />
       </button>
       {/snippet}

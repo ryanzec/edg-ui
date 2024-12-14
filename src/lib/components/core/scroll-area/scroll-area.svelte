@@ -10,7 +10,7 @@
   }
 
   let { options = {}, class: extraClass = '', children }: Props = $props();
-  
+
 
   const defaultOptions: PartialOptions = { scrollbars: { autoHideDelay: 100 } };
 </script>

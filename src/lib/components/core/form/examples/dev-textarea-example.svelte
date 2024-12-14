@@ -3,19 +3,17 @@
     textarea: string;
   };
 
-  export const formDataSchema = zodUtils.schemaForType<FormData>()(
-    zod.object({
-      textarea: zod
-        .string()
-        .min(1, 'Required')
-        .refine(
-          (data) => {
-            return isNaN(Number(data)) === false;
-          },
-          { message: 'must be numeric' },
-        ),
-    }),
-  );
+  export const formDataSchema = zodUtils.schemaForType<FormData>()(zod.object({
+    textarea: zod
+      .string()
+      .min(1, 'Required')
+      .refine(
+        (data) => {
+          return isNaN(Number(data)) === false;
+        },
+        { message: 'must be numeric' },
+      ),
+  }));
 
   export type FormDataSchema = typeof formDataSchema.shape;
 </script>

@@ -63,8 +63,8 @@
       {/each}
     </tbody>
   </table>
-  <Button data-id="refresh-trigger" on:click={() => getUsersQuery.query()}>Refresh</Button>
-  <Button data-id="show-form-trigger" on:click={() => showForm()}>Show Form</Button>
+  <Button data-id="refresh-trigger" onclick={() => getUsersQuery.query()}>Refresh</Button>
+  <Button data-id="show-form-trigger" onclick={() => showForm()}>Show Form</Button>
   {#if formIsVisible}
     <UserForm onUserSaved={handleUserSaved} initialUser={selectedUser} />
   {/if}

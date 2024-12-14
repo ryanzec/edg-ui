@@ -9,7 +9,7 @@
   }
 
   let { meltTrigger, class: extraClass = '', children }: Props = $props();
-  
+
 </script>
 
 <div data-id="trigger" class="inline-block {extraClass}" use:melt={$meltTrigger} aria-label="Update dimensions">

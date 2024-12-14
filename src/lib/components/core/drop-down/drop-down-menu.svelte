@@ -10,24 +10,24 @@
   import { fly, type FlyParams } from 'svelte/transition';
   import { type Writable } from 'svelte/store';
   import type { WithGet } from '@melt-ui/svelte/internal/helpers';
+  import type { HTMLAttributes } from 'svelte/elements';
 
-  interface Props {
+  type Props = HTMLAttributes<HTMLDivElement> & {
     meltMenu: AnyMeltElement;
     isOpened: WithGet<Writable<boolean>>;
     type?: DropDownMenuType;
     flyOptions?: FlyParams;
     children?: import('svelte').Snippet;
-    [key: string]: any
-  }
+  };
 
   let {
     meltMenu,
     isOpened,
     type = DropDownMenuType.MAIN,
     flyOptions = {
-    duration: 150,
-    y: -10,
-  },
+      duration: 150,
+      y: -10,
+    },
     children,
     ...rest
   }: Props = $props();

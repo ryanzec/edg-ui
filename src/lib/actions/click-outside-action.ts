@@ -10,7 +10,7 @@ export const clickOutsideAction = (element: HTMLElement, options: ClickOutsideAc
     return;
   }
 
-  const onClick = (event: MouseEvent) => {
+  const handleClick = (event: MouseEvent) => {
     const targetElement = event.target as HTMLElement;
 
     if (domUtils.isElementChildOf(targetElement, element)) {
@@ -20,11 +20,11 @@ export const clickOutsideAction = (element: HTMLElement, options: ClickOutsideAc
     options.callback(targetElement);
   };
 
-  window.addEventListener('mousedown', onClick);
+  window.addEventListener('mousedown', handleClick);
 
   return {
     destroy: () => {
-      window.removeEventListener('mousedown', onClick);
+      window.removeEventListener('mousedown', handleClick);
     },
   };
 };

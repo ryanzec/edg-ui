@@ -8,8 +8,6 @@
 </script>
 
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-
   import { usersApi } from '$lib/api/users';
   import type { ResponseStructure } from '$lib/api/utils';
 
@@ -35,11 +33,10 @@
 
   interface Props {
     initialUser?: Pick<User, 'firstName' | 'lastName' | 'email' | 'role' | 'id'> | undefined;
-    formIsProcessing?: boolean;
     onUserSaved?: ((user: User) => void) | undefined;
   }
 
-  let { initialUser = undefined, formIsProcessing = $bindable(false), onUserSaved = undefined }: Props = $props();
+  let { initialUser = undefined, onUserSaved = undefined }: Props = $props();
 
   const createUserMutation = createMutateManagerStore({
     mutateQuery: async (input: CreateUserRequest) => {
@@ -69,14 +66,15 @@
     },
   });
 
-  const userFormDataSchema = zodUtils.schemaForType<UserFormData>()(
-    zod.object({
-      firstName: zod.string().min(1, 'Required'),
-      lastName: zod.string().min(1, 'Required'),
-      email: zod.string().min(1, 'Required'),
-      role: zod.array(userRoleZodSchema).min(1, 'Required'),
-    }),
-  );
+  let formIsProcessing = $derived($createUserMutation.fetchingState === MutateFetchingState.PROCESSING
+    || $updateUserMutation.fetchingState === MutateFetchingState.PROCESSING);
+
+  const userFormDataSchema = zodUtils.schemaForType<UserFormData>()(zod.object({
+    firstName: zod.string().min(1, 'Required'),
+    lastName: zod.string().min(1, 'Required'),
+    email: zod.string().min(1, 'Required'),
+    role: zod.array(userRoleZodSchema).min(1, 'Required'),
+  }));
 
   const userRoleOptions = userDataUtils.getRolesAsComboboxOptions();
 
@@ -109,12 +107,6 @@
         await createUserMutation.mutate(requestData);
       }
     },
-  });
-
-  run(() => {
-    formIsProcessing =
-      $createUserMutation.fetchingState === MutateFetchingState.PROCESSING ||
-      $updateUserMutation.fetchingState === MutateFetchingState.PROCESSING;
   });
 </script>
 

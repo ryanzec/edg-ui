@@ -14,9 +14,7 @@
 
   let { isOpened = writable(false) }: Props = $props();
 
-  const {
-    elements: { trigger, overlay, content, title, description, close, portalled },
-  } = createDialog(dialogUtils.buildCreateOptions(isOpened));
+  const { elements: { trigger, overlay, content, title, description, close, portalled } } = createDialog(dialogUtils.buildCreateOptions(isOpened));
 
   const handleAction = () => {
     $isOpened = false;
@@ -44,7 +42,7 @@
     </fieldset>
   </DialogContent>
   <DialogFooter>
-    <Button on:click={handleAction} color={ButtonColor.NEUTRAL} variant={ButtonVariant.GHOST}>Close</Button>
-    <Button on:click={handleAction}>Action</Button>
+    <Button onclick={handleAction} color={ButtonColor.NEUTRAL} variant={ButtonVariant.GHOST}>Close</Button>
+    <Button onclick={handleAction}>Action</Button>
   </DialogFooter></Dialog
 >

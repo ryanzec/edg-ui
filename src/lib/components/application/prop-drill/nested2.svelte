@@ -8,4 +8,4 @@
 
 <div>Deeply nested component</div>
 <div>Value: {componentContext?.value}</div>
-<Button on:click={() => componentContext?.callback()}>Callback</Button>
+<Button onclick={() => componentContext?.callback()}>Callback</Button>

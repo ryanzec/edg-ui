@@ -19,9 +19,9 @@
     isNested = false,
     items = [],
     parent = '',
-    class: extraClass = ''
+    class: extraClass = '',
   }: Props = $props();
-  
+
 
   const handleDisplayComponent = (item: DevNavigationItem) => {
     devNavigationStore.setActiveComponent(item.component);

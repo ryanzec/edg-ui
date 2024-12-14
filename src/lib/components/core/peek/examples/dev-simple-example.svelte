@@ -11,9 +11,7 @@
 
   let peekIsOpened = writable(false);
 
-  const {
-    elements: { overlay, content, title, description, close, portalled },
-  } = createDialog(dialogUtils.buildCreateOptions(peekIsOpened));
+  const { elements: { overlay, content, title, description, close, portalled } } = createDialog(dialogUtils.buildCreateOptions(peekIsOpened));
 </script>
 
 <button type="button" onclick={() => peekIsOpened.set(true)}>default</button>

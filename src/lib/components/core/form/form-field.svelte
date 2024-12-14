@@ -1,12 +1,12 @@
 <script lang="ts">
   import ValidationMessages from '$lib/components/core/form/validation-messages.svelte';
   import type { WithFormFieldErrors } from '$lib/stores/form-manager.store';
+  import type { HTMLAttributes } from 'svelte/elements';
 
-  interface Props {
+  type Props = HTMLAttributes<HTMLDivElement> & {
     error?: WithFormFieldErrors | undefined;
     children?: import('svelte').Snippet;
-    [key: string]: any
-  }
+  };
 
   let { error = undefined, children, ...rest }: Props = $props();
 </script>

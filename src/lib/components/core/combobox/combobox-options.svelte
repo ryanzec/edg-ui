@@ -1,6 +1,4 @@
 <script lang="ts" generics="TOptionValue extends { display: string; value: string; }">
-  import { run } from 'svelte/legacy';
-
   import ComboboxClearOption from '$lib/components/core/combobox/combobox-clear-option.svelte';
   import ComboboxOptionsGroup from '$lib/components/core/combobox/combobox-options-group.svelte';
 
@@ -35,31 +33,30 @@
     showMenuCharacterThreshold,
     optionsActionOptions = {},
     clearOptionDisplay = '',
-    clearOptionAction = undefined
+    clearOptionAction = undefined,
   }: Props = $props();
-
-  let indexOffsets: Record<string, number> = $state({});
 
   // we need the correct element index in order for the combobox options to work properly so this handle
   // tracking the offsets when groups are used since there are extra elements that does count
-  run(() => {
+  let indexOffsets: Record<string, number> = $derived.by(() => {
     if (!groupedOptions) {
-      return;
+      return {};
     }
 
     const objectKeys = Object.keys(groupedOptions);
-    indexOffsets = { [objectKeys[0]]: 0 };
+    const newValue: Record<string, number> = { [objectKeys[0]]: 0 };
 
     for (let i = 1; i < objectKeys.length; i++) {
-      indexOffsets[objectKeys[i]] = indexOffsets[objectKeys[i - 1]] + groupedOptions[objectKeys[i - 1]].length;
+      newValue[objectKeys[i]] = newValue[objectKeys[i - 1]] + groupedOptions[objectKeys[i - 1]].length;
     }
+
+    return newValue;
   });
 
   let isGrouped = $derived(groupedOptions && Object.keys(groupedOptions).length > 0);
-  let totalOptionsCount =
-    $derived(groupedOptions && isGrouped
-      ? Object.values(groupedOptions).reduce((collector, groupOptions) => collector + groupOptions.length, 0)
-      : options.length);
+  let totalOptionsCount = $derived(groupedOptions && isGrouped
+    ? Object.values(groupedOptions).reduce((collector, groupOptions) => collector + groupOptions.length, 0)
+    : options.length);
   let passesThresholdCheck = $derived(inputValue.length >= showMenuCharacterThreshold);
 </script>
 

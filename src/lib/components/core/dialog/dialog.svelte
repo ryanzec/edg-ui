@@ -1,37 +1,22 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-
   import { melt, type AnyMeltElement } from '@melt-ui/svelte';
   import type { Writable } from 'svelte/store';
   import Overlay from '$lib/components/core/overlay/overlay.svelte';
-  import { createEventDispatcher } from 'svelte';
-
-  type CustomEvents = {
-    close: void;
-  };
-
-  const dispatchEvent = createEventDispatcher<CustomEvents>();
 
   interface Props {
     isOpened: Writable<boolean>;
     meltPortalled: AnyMeltElement;
     meltOverlay: AnyMeltElement;
     meltContent: AnyMeltElement;
+    onOpened?: () => void;
+    onClosed?: () => void;
     children?: import('svelte').Snippet;
   }
 
-  let {
-    isOpened,
-    meltPortalled,
-    meltOverlay,
-    meltContent,
-    children
-  }: Props = $props();
+  let { isOpened, meltPortalled, meltOverlay, meltContent, onOpened, onClosed, children }: Props = $props();
 
-  run(() => {
-    if ($isOpened === false) {
-      dispatchEvent('close');
-    }
+  isOpened.subscribe((newIsOpened) => {
+    newIsOpened ? onOpened?.() : onClosed?.();
   });
 </script>
 

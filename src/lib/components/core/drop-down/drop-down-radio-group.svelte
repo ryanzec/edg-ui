@@ -4,7 +4,7 @@
   import DropDownRadioItem from '$lib/components/core/drop-down/drop-down-radio-item.svelte';
 
   // @todo need to figure out if there is a proper way to type this
-  
+
   interface Props {
     meltRadioGroup: AnyMeltElement;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -19,7 +19,7 @@
     meltRadioItem,
     isChecked,
     options,
-    value
+    value,
   }: Props = $props();
 </script>
 

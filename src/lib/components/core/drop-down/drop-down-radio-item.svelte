@@ -5,7 +5,7 @@
   import CircleCheckIcon from '../icons/circle-check-icon.svelte';
 
   // @todo need to figure out if there is a proper way to type this
-  
+
   interface Props {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     item: any;
@@ -17,40 +17,32 @@
     rightContent?: import('svelte').Snippet;
   }
 
-  let {
-    item,
-    isChecked,
-    option,
-    closeOnClick = false,
-    value,
-    children,
-    rightContent
-  }: Props = $props();
+  let { item, isChecked, option, closeOnClick = false, value, children, rightContent }: Props = $props();
 
   // because the default behaviour for radio drop down elements include setting the checked state, in order to
   // be able to make the drop down not close on click, we need to manually apply that functionality
-  const onClick = (event: CustomEvent<MouseEvent>) => {
+  const handleClick = (event: MouseEvent) => {
     if (closeOnClick) {
       return;
     }
 
-    const element = event.detail.target as HTMLElement;
+    const element = event.target as HTMLElement;
     const dataValue = element.dataset.value;
 
     if (!dataValue) {
       return;
     }
 
-    event.detail.preventDefault();
+    event.preventDefault();
     value.set(dataValue);
   };
 
   const rightContent_render = $derived(rightContent);
 </script>
 
-<DropDownItem data-id="radio-item" meltItem={item} on:click={onClick}>
+<DropDownItem data-id="radio-item" meltItem={item} onclick={handleClick}>
   {#snippet leftContent()}
-    <div >
+    <div>
       {#if $isChecked(option)}
         <CircleCheckIcon class="size-4" />
       {:else}

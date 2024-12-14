@@ -33,13 +33,9 @@
     helpers: { isChecked },
   } = createMenuRadioGroup({ value: radioValue });
 
-  const {
-    elements: { checkboxItem },
-  } = createCheckboxItem({ checked: settingsSync });
+  const { elements: { checkboxItem } } = createCheckboxItem({ checked: settingsSync });
 
-  const {
-    elements: { checkboxItem: checkboxItemA },
-  } = createCheckboxItem({ checked: hideMeltUI });
+  const { elements: { checkboxItem: checkboxItemA } } = createCheckboxItem({ checked: hideMeltUI });
 
   const personsArr = ['Hunter Johnston', 'Thomas G. Lopes', 'Adrian Gonz', 'Franck Poingt'];
 </script>
@@ -49,7 +45,7 @@
   <AlignJustifiedIcon class="m-2 size-4" />
 </DropDownTrigger>
 <DropDownMenu isOpened={open} meltMenu={menu}>
-  <DropDownItem meltItem={$item} on:click={() => console.log('about melt ui')}>About Melt UI</DropDownItem>
+  <DropDownItem meltItem={$item} onclick={() => console.log('about melt ui')}>About Melt UI</DropDownItem>
   <DropDownItem meltItem={$item}>Check for Updates..</DropDownItem>
   <DropDownSeparator meltSeparator={separator} />
   <DropDownCheckboxItem item={$checkboxItem} checked={settingsSync}>Settings Sync is On</DropDownCheckboxItem>
@@ -68,20 +64,20 @@
   <DropDownCheckboxItem item={$checkboxItemA} checked={hideMeltUI}>
     Hide Melt UI
     {#snippet rightContent()}
-        ⌘H
-      {/snippet}
+      ⌘H
+    {/snippet}
   </DropDownCheckboxItem>
-  <DropDownItem meltItem={$item} isDisabled
-    >Show All Components
+  <DropDownItem meltItem={$item} disabled>
+    Show All Components
     {#snippet rightContent()}
-        ⇧⌘N
-      {/snippet}</DropDownItem
-  >
+      ⇧⌘N
+    {/snippet}
+  </DropDownItem>
   <DropDownSeparator meltSeparator={separator} />
   <DropDownItem meltItem={$item}>
     Quit Melt UI
     {#snippet rightContent()}
-        ⌘Q
-      {/snippet}
+      ⌘Q
+    {/snippet}
   </DropDownItem>
 </DropDownMenu>

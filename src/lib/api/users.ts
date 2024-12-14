@@ -37,9 +37,7 @@ const users: User[] = [
 ];
 
 const getList = async (): Promise<ResponseStructure<User[]>> => {
-  const response = await httpUtils.http<ResponseStructure<User[]>>('http://localhost:3001/api/users', {
-    method: HttpMethod.GET,
-  });
+  const response = await httpUtils.http<ResponseStructure<User[]>>('http://localhost:3001/api/users', { method: HttpMethod.GET });
 
   return response;
 };

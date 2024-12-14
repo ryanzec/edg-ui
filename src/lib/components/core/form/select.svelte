@@ -21,7 +21,7 @@
     name,
     value = $bindable(),
     id = name,
-    label
+    label,
   }: Props = $props();
 </script>
 

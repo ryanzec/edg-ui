@@ -3,19 +3,17 @@
     text: string;
   };
 
-  export const formDataSchema = zodUtils.schemaForType<FormData>()(
-    zod.object({
-      text: zod
-        .string()
-        .min(1, 'Required')
-        .refine(
-          (data) => {
-            return data === 'test';
-          },
-          { message: "must be 'test'" },
-        ),
-    }),
-  );
+  export const formDataSchema = zodUtils.schemaForType<FormData>()(zod.object({
+    text: zod
+      .string()
+      .min(1, 'Required')
+      .refine(
+        (data) => {
+          return data === 'test';
+        },
+        { message: "must be 'test'" },
+      ),
+  }));
 
   export type FormDataSchema = typeof formDataSchema.shape;
 </script>

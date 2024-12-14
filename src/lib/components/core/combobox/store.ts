@@ -218,9 +218,7 @@ export const createComboboxStore = <TOptionValue extends BaseComboboxOptionValue
 
   const resetSelectedAttributes = () => {
     const $selected = get(selected);
-    const allOptionElements = get(optionsElement)?.querySelectorAll(
-      `[${dataAttributes.OPTION}]`,
-    ) as NodeListOf<HTMLElement>;
+    const allOptionElements = get(optionsElement)?.querySelectorAll(`[${dataAttributes.OPTION}]`) as NodeListOf<HTMLElement>;
 
     if (!allOptionElements) {
       return;
@@ -335,9 +333,9 @@ export const createComboboxStore = <TOptionValue extends BaseComboboxOptionValue
       const $containerElement = get(containerElement);
 
       if (
-        !$containerElement ||
-        !document.activeElement ||
-        !domUtils.isElementChildOf(document.activeElement as HTMLElement, $containerElement)
+        !$containerElement
+        || !document.activeElement
+        || !domUtils.isElementChildOf(document.activeElement as HTMLElement, $containerElement)
       ) {
         closeMenu();
       }

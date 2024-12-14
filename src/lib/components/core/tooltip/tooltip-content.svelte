@@ -5,7 +5,7 @@
   }
 
   let { class: extraClass = '', children }: Props = $props();
-  
+
 </script>
 
 <div

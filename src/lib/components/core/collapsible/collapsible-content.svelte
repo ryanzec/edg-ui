@@ -14,7 +14,7 @@
     meltRoot,
     meltContent,
     isOpened,
-    children
+    children,
   }: Props = $props();
 </script>
 

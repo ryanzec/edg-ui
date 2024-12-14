@@ -1,17 +1,8 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-
   import { melt, type AnyMeltElement } from '@melt-ui/svelte';
   import type { Writable } from 'svelte/store';
   import { fly } from 'svelte/transition';
   import Overlay from '../overlay/overlay.svelte';
-  import { createEventDispatcher } from 'svelte';
-
-  type CustomEvents = {
-    closed: void;
-  };
-
-  const dispatchEvent = createEventDispatcher<CustomEvents>();
 
   interface Props {
     hasOverlay?: boolean;
@@ -20,6 +11,8 @@
     meltOverlay: AnyMeltElement;
     meltPortalled: AnyMeltElement;
     meltContent: AnyMeltElement;
+    onOpened?: () => void;
+    onClosed?: () => void;
     children?: import('svelte').Snippet;
   }
 
@@ -30,6 +23,8 @@
     meltOverlay,
     meltPortalled,
     meltContent,
+    onOpened,
+    onClosed,
     children,
   }: Props = $props();
 
@@ -99,19 +94,18 @@
     document.body.style.cursor = 'ew-resize';
   };
 
-  run(() => {
+  isOpened.subscribe((newIsOpened) => {
+    newIsOpened ? onOpened?.() : onClosed?.();
+  });
+
+  // since we have to wait for the peek element to be available, we need to use $effect
+  $effect(() => {
     if (!peekElement || !isResizable) {
       return;
     }
 
     peekElement.addEventListener('mousemove', handlePeekMouseMove);
     peekElement.addEventListener('mousedown', handlePeekMouseDown);
-  });
-
-  run(() => {
-    if ($isOpened === false) {
-      dispatchEvent('closed');
-    }
   });
 </script>
 

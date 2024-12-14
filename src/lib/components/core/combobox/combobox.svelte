@@ -1,11 +1,8 @@
 <script lang="ts" generics="TOptionValue extends { display: string; value: string; }">
-  import { run, stopPropagation } from 'svelte/legacy';
-
   import Badge from '$lib/components/core/badge/badge.svelte';
 
   /* global TOptionValue */
   import debounce from 'debounce';
-  import { loggerUtils } from '$lib/utils/logger';
   import { keyPressedAction } from '$lib/actions/key-pressed-action';
   import { domUtils } from '$lib/utils/dom';
   import { createComboboxStore } from '$lib/components/core/combobox/store';
@@ -21,8 +18,6 @@
   import { writable, type Writable } from 'svelte/store';
   import ComboboxOptions from '$lib/components/core/combobox/combobox-options.svelte';
   import { clickOutsideAction } from '$lib/actions/click-outside-action';
-
-  
 
   // @todo(feature) character threshold
   // @todo(feature) allow new value
@@ -71,9 +66,8 @@
     optionsActionOptions = {},
     clearOptionDisplay = '',
     onSelectedChanged = undefined,
-    class: extraClass = ''
+    class: extraClass = '',
   }: Props = $props();
-  
 
   // this holds the input value that is actively being used (since there can be a delay in getting option asyncly)
   let activeInputValue = $state('');
@@ -100,7 +94,7 @@
   });
 
   const filterOptions = (inputValue: string): TOptionValue[] => {
-    if (!useFiltering || (!isMultiple && !$inputIsDirty)) {
+    if (!useFiltering || !isMultiple && !$inputIsDirty) {
       return options;
     }
 
@@ -114,7 +108,7 @@
   };
 
   const filterGroupedOptions = (inputValue: string): Record<string, TOptionValue[]> | undefined => {
-    if (!useFiltering || !groupedOptions || (!isMultiple && !$inputIsDirty)) {
+    if (!useFiltering || !groupedOptions || !isMultiple && !$inputIsDirty) {
       return groupedOptions;
     }
 
@@ -134,8 +128,6 @@
   let isLoading = $state(false);
   let finalOptions = $state(useFiltering ? filterOptions($inputValue) : options);
   let finalGroupedOptions = $state(useFiltering ? filterGroupedOptions($inputValue) : groupedOptions);
-
-  let isAsync = $derived(!!(getOptions || getGroupedOptions));
 
   const handleClickOutside = (clickedElement: HTMLElement) => {
     if (!$isOpened || !$optionsElement) {
@@ -188,13 +180,8 @@
     finalGroupedOptions = filterGroupedOptions(inputValue);
   }, resultsDelay);
 
-  // keep options up to date with what is typed in the input
-  run(() => {
-    getOptionsDebounced($inputValue);
-  });
-
   // the selected options could effect the results of the filter so we need to make sure they are kept in sync
-  selected.subscribe((selected) => {
+  selected.subscribe((newSelected) => {
     finalOptions = filterOptions($inputValue);
     finalGroupedOptions = filterGroupedOptions($inputValue);
 
@@ -204,47 +191,34 @@
       activeInputValue = '';
     }
 
-    if (onSelectedChanged) {
-      onSelectedChanged(selected);
+    if (isMultiple === false && newSelected.length > 1) {
+      selected.set([newSelected[0]]);
     }
-  });
 
-  // make sure only one option is selected when not in multiple selection mode
-  run(() => {
-    if (isMultiple === false && $selected.length > 1) {
-      loggerUtils.warn(
-        'combobox compoenent: attempt to set multiple values for a single select combobox, only using the first passed in value',
-      );
-
-      $selected = [$selected[0]];
+    if (onSelectedChanged) {
+      onSelectedChanged(newSelected);
     }
   });
 
   // make sure the input value is updated properly when the options menu is closed
-  run(() => {
-    if (isMultiple === false && $isOpened === false && $selected.length > 0) {
-      $inputValue = $selected[0].display;
-      activeInputValue = $inputValue;
+  isOpened.subscribe((isOpened) => {
+    if (isMultiple || isOpened || $selected.length === 0) {
+      return;
     }
+
+    $inputValue = $selected[0].display;
+    activeInputValue = $inputValue;
   });
 
-  // when using async options, if the input is cleared, we don't want the options to show up since the values seems
-  // wierd when nothing has been typed (to get relevant options, something probably needed to be typed)
-  run(() => {
-    if (isAsync && $inputValue.length < showMenuCharacterThreshold) {
-      finalOptions = [];
-      finalGroupedOptions = undefined;
-      comboboxUtils.clearActiveOption();
-
-      // this need to update immediately otherwise component of use the data above will have a slight delay of old
-      // content since the callback to get the async options, that also sets this, runs on a delay
-      activeInputValue = '';
-    }
+  inputValue.subscribe((newInputValue) => {
+    getOptionsDebounced(newInputValue);
   });
 
-  run(() => {
-    $optionCount =
-      groupedOptions && finalGroupedOptions
+  // @todo(refactor?) not sure if it is possible to refactor this $effect away as this is a value that needs to be
+  // @todo(refactor?) passed to the combpobox store
+  $effect(() => {
+    $optionCount
+      = groupedOptions && finalGroupedOptions
         ? Object.values(finalGroupedOptions).reduce((collector, options) => collector + options.length, 0)
         : finalOptions.length;
   });
@@ -317,8 +291,13 @@
               {selectedOption.display}
               <button
                 data-id="remove-trigger"
-                onclick={stopPropagation(() => comboboxUtils.removeOption(selectedOption))}>X</button
+                onclick={(event: Event) => {
+                  event.stopPropagation();
+                  comboboxUtils.removeOption(selectedOption);
+                }}
               >
+                X
+              </button>
             </Badge>
           {/each}
         {/if}

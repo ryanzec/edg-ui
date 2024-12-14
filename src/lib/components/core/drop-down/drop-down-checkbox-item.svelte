@@ -5,7 +5,7 @@
   import DropDownItem from '$lib/components/core/drop-down/drop-down-item.svelte';
 
   // @todo need to figure out if there is a proper way to type this
-  
+
   interface Props {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     item: any;
@@ -15,31 +15,25 @@
     rightContent?: import('svelte').Snippet;
   }
 
-  let {
-    item,
-    checked,
-    closeOnClick = false,
-    children,
-    rightContent
-  }: Props = $props();
+  let { item, checked, closeOnClick = false, children, rightContent }: Props = $props();
 
   // because the default behaviour for checkbox drop down elements includ setting the checked state, in order to
   // be able to make the drop down not close on click, we need to manually apply that functionality
-  const onClick = (event: CustomEvent<MouseEvent>) => {
+  const handleClick = (event: MouseEvent) => {
     if (closeOnClick) {
       return;
     }
 
-    event.detail.preventDefault();
+    event.preventDefault();
     checked.set(!$checked);
   };
 
   const rightContent_render = $derived(rightContent);
 </script>
 
-<DropDownItem data-id="checkbox-item" meltItem={item} on:click={onClick}>
+<DropDownItem data-id="checkbox-item" meltItem={item} onclick={handleClick}>
   {#snippet leftContent()}
-    <div >
+    <div>
       {#if $checked}
         <SquareCheckIcon class="size-4" />
       {:else}

@@ -1,19 +1,17 @@
 <script lang="ts" generics="TActionOptions">
+  import type { HTMLAttributes } from 'svelte/elements';
+    /* global TActionOptions */
+
   import { twMerge } from 'tailwind-merge';
 
-  
 
-  
-
-  interface Props {
-    /* global TActionOptions */
+  type Props = HTMLAttributes<HTMLLabelElement> & {
     use?: (element: HTMLLabelElement, options?: TActionOptions) => void;
     useOptions?: TActionOptions | undefined;
     for?: string | undefined;
     class?: string;
     children?: import('svelte').Snippet;
-    [key: string]: any
-  }
+  };
 
   let {
     use = () => {},
@@ -23,9 +21,9 @@
     children,
     ...rest
   }: Props = $props();
-  
+
 </script>
 
-<label use:use={useOptions} for={forName} class={twMerge('inline-block w-full', extraClass)} {...rest}
-  >{@render children?.()}</label
->
+<label use:use={useOptions} for={forName} class={twMerge('inline-block w-full', extraClass)} {...rest}>
+  {@render children?.()}
+</label>

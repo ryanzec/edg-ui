@@ -1,7 +1,4 @@
 <script lang="ts" generics="TOptionValue extends { display: string; value: string; }">
-  import { createBubbler, stopPropagation } from 'svelte/legacy';
-
-  const bubble = createBubbler();
   /* global TOptionValue */
   import type { ComboboxStore } from '$lib/components/core/combobox/store';
 
@@ -9,9 +6,10 @@
     option: TOptionValue;
     optionIndex: number;
     optionAction: ComboboxStore<TOptionValue>['optionAction'];
+    onclick?: (event: Event) => void;
   }
 
-  let { option, optionIndex, optionAction }: Props = $props();
+  let { option, optionIndex, optionAction, onclick }: Props = $props();
 </script>
 
 <li
@@ -24,6 +22,16 @@
 >
   <div>
     <span class="font-medium">{option.display}</span>
-    <a href="http://www.goggle.com" target="_blank" rel="noreferrer" onclick={stopPropagation(bubble('click'))}>Link</a>
+    <a
+      href="http://www.goggle.com"
+      target="_blank"
+      rel="noreferrer"
+      onclick={(event: Event) => {
+        event.stopPropagation();
+        onclick?.(event);
+      }}
+    >
+      Link
+    </a>
   </div>
 </li>

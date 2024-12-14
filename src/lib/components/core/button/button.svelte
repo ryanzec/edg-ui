@@ -21,31 +21,29 @@
 </script>
 
 <script lang="ts">
-  import { createBubbler } from 'svelte/legacy';
-
-  const bubble = createBubbler();
   import { twMerge } from 'tailwind-merge';
   import LoaderIcon from '$lib/components/core/icons/loader-icon.svelte';
+  import type { HTMLAttributes } from 'svelte/elements';
 
-
-  /* eslint-disable */
-  
-  /* eslint-enable */
-
-  interface Props {
+  type Props = HTMLAttributes<HTMLButtonElement> & {
     isLoading?: boolean;
     variant?: ButtonVariant;
     color?: ButtonColor;
     shape?: ButtonShape;
+    /* eslint-disable */
     // since action can really be anything, we are going to ignore eslint issue for these
     action?: Function;
     actionOptions?: any;
+    /* eslint-enable */
     class?: string;
     preItem?: import('svelte').Snippet;
     children?: import('svelte').Snippet;
     postItem?: import('svelte').Snippet;
-    [key: string]: any
-  }
+
+    // these should be standard but apparent not
+    disabled?: boolean;
+    type?: 'button' | 'submit' | 'reset';
+  };
 
   let {
     isLoading = false,
@@ -60,9 +58,8 @@
     postItem,
     ...rest
   }: Props = $props();
-  
 
-  let isDisabled = $derived(isLoading || rest.disabled);
+  let isDisabled = $derived(isLoading || !!rest.disabled);
 
   const filledColorsCss = {
     [ButtonColor.BRAND]:
@@ -133,8 +130,6 @@
   data-id="button"
   type="button"
   {...rest}
-  disabled={isDisabled}
-  onclick={bubble('click')}
   class={twMerge('flex items-center gap-2 border border-transparent', colorsCss[variant][color], extraClass)}
   class:opacity-45={isDisabled}
   class:rounded-lg={shape === ButtonShape.ROUNDED}

@@ -25,7 +25,7 @@ export const keyPressedAction = (element: HTMLElement, options: KeyPressedAction
     return;
   }
 
-  const onClick = (event: KeyboardEvent) => {
+  const handleClick = (event: KeyboardEvent) => {
     if (event.key !== finalOptions.key) {
       return;
     }
@@ -41,11 +41,11 @@ export const keyPressedAction = (element: HTMLElement, options: KeyPressedAction
     callback();
   };
 
-  element.addEventListener('keydown', onClick);
+  element.addEventListener('keydown', handleClick);
 
   return {
     destroy: () => {
-      element.removeEventListener('keydown', onClick);
+      element.removeEventListener('keydown', handleClick);
     },
   };
 };

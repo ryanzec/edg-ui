@@ -5,18 +5,18 @@
 </script>
 
 <Button>{#snippet preItem()}
-    <XIcon  />
+    <XIcon />
   {/snippet}Pre Item</Button>
 <Button>Post Item{#snippet postItem()}
-    <XIcon  />
+    <XIcon />
   {/snippet}</Button>
 <Button>{#snippet preItem()}
-    <XIcon  />
+    <XIcon />
   {/snippet}Pre and Post Item{#snippet postItem()}
-    <XIcon  />
+    <XIcon />
   {/snippet}</Button>
 <Button isLoading>{#snippet preItem()}
-    <XIcon  />
+    <XIcon />
   {/snippet}Is Loading Hides Items{#snippet postItem()}
-    <XIcon  />
+    <XIcon />
   {/snippet}</Button>

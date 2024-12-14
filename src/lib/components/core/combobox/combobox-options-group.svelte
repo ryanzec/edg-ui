@@ -17,7 +17,7 @@
     optionAction,
     optionComponent = undefined,
     header = '',
-    indexOffset = 0
+    indexOffset = 0,
   }: Props = $props();
 </script>
 

@@ -18,9 +18,7 @@
     radio: zod.string().min(1, 'Required'),
   });
 
-  export const formDataSchema = zodUtils.schemaForType<FormData>()(
-    zod.object({ complex: zod.object(complexSchema.shape) }),
-  );
+  export const formDataSchema = zodUtils.schemaForType<FormData>()(zod.object({ complex: zod.object(complexSchema.shape) }));
 
   export type FormDataSchema = typeof formDataSchema.shape;
 </script>

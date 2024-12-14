@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-
   import DynamicFormSection1 from '$lib/components/application/dynamic-form-sections/dynamic-form-section1.svelte';
   import DynamicFormSection2 from '$lib/components/application/dynamic-form-sections/dynamic-form-section2.svelte';
   import {
@@ -48,8 +46,8 @@
     },
   });
 
-  // keep the form validation in sync with what form sections are enabled
-  run(() => {
+  // keep the form validation in sync with what form sections are enabled so we need the $effect
+  $effect(() => {
     const enabledSections: DynamicFormSection[] = [];
 
     if (toggledSection1) {

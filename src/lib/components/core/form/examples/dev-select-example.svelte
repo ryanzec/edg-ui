@@ -3,9 +3,7 @@
     select: string;
   };
 
-  export const formDataSchema = zodUtils.schemaForType<FormData>()(
-    zod.object({ select: zod.string().min(1, 'Required') }),
-  );
+  export const formDataSchema = zodUtils.schemaForType<FormData>()(zod.object({ select: zod.string().min(1, 'Required') }));
 
   export type FormDataSchema = typeof formDataSchema.shape;
 </script>

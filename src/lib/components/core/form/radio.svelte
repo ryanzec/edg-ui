@@ -14,7 +14,7 @@
     group = $bindable(),
     name,
     id = name,
-    value
+    value,
   }: Props = $props();
 </script>
 

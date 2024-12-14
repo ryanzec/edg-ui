@@ -1,12 +1,12 @@
 <script lang="ts">
   import { melt, type AnyMeltElement } from '@melt-ui/svelte';
+  import type { HTMLAttributes } from 'svelte/elements';
   import { fade } from 'svelte/transition';
 
-  interface Props {
+  type Props = HTMLAttributes<HTMLDivElement> & {
     meltOverlay: AnyMeltElement;
     children?: import('svelte').Snippet;
-    [key: string]: any
-  }
+  };
 
   let { meltOverlay, children, ...rest }: Props = $props();
 </script>

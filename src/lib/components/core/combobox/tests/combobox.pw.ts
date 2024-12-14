@@ -38,7 +38,7 @@ export class ComboboxPage {
 
   readonly externalEscapeTrigger: Locator;
 
-  constructor(page: Page) {
+  constructor (page: Page) {
     this.page = page;
     this.input = page.locator('[data-id="combobox"] input');
     this.typeToSearchOption = page.locator('[data-id="combobox"] [data-id="type-to-search-option"]');
@@ -58,128 +58,126 @@ export class ComboboxPage {
     this.externalEscapeTrigger = page.locator('[data-id="external-escape-trigger"]');
   }
 
-  async goto(url: string) {
+  async goto (url: string) {
     return await playwrightUtils.goto(this.page, url);
   }
 
   // selectors
-  optionLocator(index: number) {
+  optionLocator (index: number) {
     return this.page.locator('[data-id="combobox"] [data-combobox-option]').nth(index);
   }
 
-  groupHeaderLocator(index: number) {
+  groupHeaderLocator (index: number) {
     return this.page.locator('[data-id="group-header"]').nth(index);
   }
 
-  selectedIndicatorLocator(index: number) {
+  selectedIndicatorLocator (index: number) {
     return this.page.locator(`[data-id="combobox"] [data-id="selected-indicator"]:nth-of-type(${index + 1})`);
   }
 
   // actions
-  async clickRemoveTrigger(index: number) {
+  async clickRemoveTrigger (index: number) {
     await this.page
-      .locator(
-        `[data-id="combobox"] [data-id="selected-indicator"]:nth-of-type(${index + 1}) [data-id="remove-trigger"]`,
-      )
+      .locator(`[data-id="combobox"] [data-id="selected-indicator"]:nth-of-type(${index + 1}) [data-id="remove-trigger"]`)
       .click();
   }
 
   // because of the way the combobox handle mouse event, we need to simulate the mouse down and up manaully to
   // properly simulate the user as it would in the browser instead of the .click() api
-  async clickOption(index: number) {
+  async clickOption (index: number) {
     await this.optionLocator(index).hover();
     await this.page.mouse.down();
     await this.page.mouse.up();
   }
 
-  async clickInput() {
+  async clickInput () {
     await this.input.click();
   }
 
-  async clickComponentContainer() {
+  async clickComponentContainer () {
     await this.componentContainer.click();
   }
 
-  async fillInput(value: string) {
+  async fillInput (value: string) {
     await this.input.fill(value);
   }
 
-  async pressInput(value: string) {
+  async pressInput (value: string) {
     await this.input.press(value);
   }
 
-  async hoverOption(index: number) {
+  async hoverOption (index: number) {
     await this.optionLocator(index).hover();
   }
 
-  async clickClearOption() {
+  async clickClearOption () {
     await this.clearOption.click();
   }
 
   // validations
-  async expectSelectedValue(value: string) {
+  async expectSelectedValue (value: string) {
     await expect(this.selectedValue).toHaveText(value);
   }
 
-  async expectInputValue(value: string) {
+  async expectInputValue (value: string) {
     await expect(this.input).toHaveValue(value);
   }
 
-  async expectHighlightedOptionDisplay(display: string) {
+  async expectHighlightedOptionDisplay (display: string) {
     await expect(this.highlightedOption).toHaveText(display);
   }
 
-  async expectHighlightedOptionCount(count: number) {
+  async expectHighlightedOptionCount (count: number) {
     await expect(this.highlightedOption).toHaveCount(count);
   }
 
-  async expectSelectedIndicatorDisplay(index: number, display: string) {
+  async expectSelectedIndicatorDisplay (index: number, display: string) {
     await expect(this.selectedIndicatorLocator(index)).toContainText(display);
   }
 
-  async expectSelectedIndicatorCount(count: number) {
+  async expectSelectedIndicatorCount (count: number) {
     await expect(this.selectedIndicator).toHaveCount(count);
   }
 
-  async expectOptionCount(count: number) {
+  async expectOptionCount (count: number) {
     await expect(this.option).toHaveCount(count);
   }
 
-  async expectGroupHeaderCount(count: number) {
+  async expectGroupHeaderCount (count: number) {
     await expect(this.groupHeader).toHaveCount(count);
   }
 
-  async expectOptionDisplay(index: number, display: string) {
+  async expectOptionDisplay (index: number, display: string) {
     await expect(this.optionLocator(index)).toHaveText(display);
   }
 
-  async expectNotOptionDisplay(index: number, display: string) {
+  async expectNotOptionDisplay (index: number, display: string) {
     await expect(this.optionLocator(index)).not.toHaveText(display);
   }
 
-  async expectOptionsToBeVisible() {
+  async expectOptionsToBeVisible () {
     await expect(this.options).toBeVisible();
   }
 
-  async expectOptionsNotToBeVisible() {
+  async expectOptionsNotToBeVisible () {
     await expect(this.options).not.toBeVisible();
   }
 
-  async expectDropDownSelectedOptionCount(count: number) {
+  async expectDropDownSelectedOptionCount (count: number) {
     await expect(this.dropDownSelectedOption).toHaveCount(count);
   }
 
-  async expectPlacement(placement: Placement) {
+  async expectPlacement (placement: Placement) {
     const currentPlacement = await this.options.getAttribute('data-options-placement');
 
     expect(currentPlacement).toBe(placement);
   }
 
-  async expectExternalEscapeNotTriggered() {
+  async expectExternalEscapeNotTriggered () {
     await expect(this.externalEscapeTrigger).toHaveText('false');
   }
 
-  async expectInputFocused(state: boolean) {
+  async expectInputFocused (state: boolean) {
     if (state) {
       await expect(this.input).toBeFocused();
     }
@@ -199,9 +197,7 @@ test.describe('combobox', () => {
       await componentPage.expectSelectedIndicatorCount(2);
       await componentPage.expectSelectedIndicatorDisplay(0, 'Option 2');
       await componentPage.expectSelectedIndicatorDisplay(1, 'Option 3');
-      await componentPage.expectSelectedValue(
-        '[{"value":"2","display":"Option 2","meta":{"testing":"testing"}},{"value":"3","display":"Option 3","meta":{"testing":"testing"}}]',
-      );
+      await componentPage.expectSelectedValue('[{"value":"2","display":"Option 2","meta":{"testing":"testing"}},{"value":"3","display":"Option 3","meta":{"testing":"testing"}}]');
     });
 
     test('remove items should not open the menu', async ({ page }) => {
@@ -346,9 +342,7 @@ test.describe('combobox', () => {
 
       await componentPage.expectInputValue('');
       await componentPage.expectSelectedIndicatorCount(0);
-      await componentPage.expectSelectedValue(
-        '[{"value":"2","display":"Option 2","meta":{"testing":"testing"}},{"value":"3","display":"Option 3","meta":{"testing":"testing"}}]',
-      );
+      await componentPage.expectSelectedValue('[{"value":"2","display":"Option 2","meta":{"testing":"testing"}},{"value":"3","display":"Option 3","meta":{"testing":"testing"}}]');
     });
 
     test('selecting with keyboard should reset the highlighted  ', async ({ page }) => {
@@ -698,9 +692,7 @@ test.describe('combobox', () => {
       await expect(componentPage.noResultsOption).toBeVisible();
     });
 
-    test('menu goes back to typing indicator when the input value goes from above to below the character threshold', async ({
-      page,
-    }) => {
+    test('menu goes back to typing indicator when the input value goes from above to below the character threshold', async ({ page }) => {
       await playwrightMockerUtils.mockGetUsersEndpoint(page, { delay: 100 });
       const componentPage = new ComboboxPage(page);
 
@@ -832,9 +824,7 @@ test.describe('combobox', () => {
       await componentPage.expectSelectedValue('[{"value":"1","display":"Option 1","meta":{"testing":"testing"}}]');
     });
 
-    test('the previously highlighted option is not longer highlighted if input goes below the character threshold and then back above it', async ({
-      page,
-    }) => {
+    test('the previously highlighted option is not longer highlighted if input goes below the character threshold and then back above it', async ({ page }) => {
       await playwrightMockerUtils.mockGetUsersEndpoint(page, { delay: 100 });
 
       const componentPage = new ComboboxPage(page);
@@ -863,9 +853,7 @@ test.describe('combobox', () => {
       await componentPage.expectDropDownSelectedOptionCount(1);
     });
 
-    test('make a selection in filtering multiple mode, typing, then clearing the type still filters select options', async ({
-      page,
-    }) => {
+    test('make a selection in filtering multiple mode, typing, then clearing the type still filters select options', async ({ page }) => {
       const componentPage = new ComboboxPage(page);
 
       await componentPage.goto('http://localhost:3000/sandbox?component=Combobox.Multiple.Filtering');

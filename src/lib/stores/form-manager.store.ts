@@ -65,7 +65,7 @@ const parseError = (
   if (fieldFormattedErrors.length > 0) {
     // @ts-expect-error see FormFieldError type for explination of the expected error
     newFormat = {
-      ...(currentErrors || {}),
+      ...currentErrors || {},
       errors: fieldFormattedErrors,
     };
   }
@@ -423,7 +423,7 @@ export const createFormManagerStore = <TFormData extends object, TSchemaObject e
   };
 
   const formAction = (element: HTMLFormElement) => {
-    const onBlur = (event: Event) => {
+    const handleBlur = (event: Event) => {
       const inputElement = event.target as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
       const skipBlur = inputElement.dataset.skipBlur !== undefined;
 
@@ -441,7 +441,7 @@ export const createFormManagerStore = <TFormData extends object, TSchemaObject e
       }
     };
 
-    const onTextChange = (event: Event) => {
+    const handleTextChange = (event: Event) => {
       const inputElement = event.target as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
       const propertyName = inputElement.name as keyof TFormData;
 
@@ -453,7 +453,7 @@ export const createFormManagerStore = <TFormData extends object, TSchemaObject e
       }
     };
 
-    const onTextInput = (event: Event) => {
+    const handleTextInput = (event: Event) => {
       const inputElement = event.target as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
       const skipInputEvent = inputElement.dataset.skipInputEvent !== undefined;
 
@@ -472,7 +472,7 @@ export const createFormManagerStore = <TFormData extends object, TSchemaObject e
       }
     };
 
-    const onCheckboxChange = (event: Event) => {
+    const handleCheckboxChange = (event: Event) => {
       const inputElement = event.target as HTMLInputElement;
       const propertyName = inputElement.name;
       const checked = inputElement.checked;
@@ -507,7 +507,7 @@ export const createFormManagerStore = <TFormData extends object, TSchemaObject e
       }
     };
 
-    const onRadioChange = (event: Event) => {
+    const handleRadioChange = (event: Event) => {
       const inputElement = event.target as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
       const propertyName = inputElement.name as keyof TFormData;
 
@@ -519,7 +519,7 @@ export const createFormManagerStore = <TFormData extends object, TSchemaObject e
       }
     };
 
-    const onSelectChange = (event: Event) => {
+    const handleSelectChange = (event: Event) => {
       const inputElement = event.target as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
       const propertyName = inputElement.name as keyof TFormData;
 
@@ -544,26 +544,26 @@ export const createFormManagerStore = <TFormData extends object, TSchemaObject e
       const inputType = domUtils.getInputType(element);
 
       if (inputType === InputType.CHECKBOX) {
-        element.addEventListener('change', onCheckboxChange);
+        element.addEventListener('change', handleCheckboxChange);
 
         return;
       }
 
       if (inputType === InputType.RADIO) {
-        element.addEventListener('change', onRadioChange);
+        element.addEventListener('change', handleRadioChange);
 
         return;
       }
 
       if (inputType === InputType.SELECT) {
-        element.addEventListener('change', onSelectChange);
+        element.addEventListener('change', handleSelectChange);
 
         return;
       }
 
-      element.addEventListener('input', onTextInput);
-      element.addEventListener('change', onTextChange);
-      element.addEventListener('blur', onBlur);
+      element.addEventListener('input', handleTextInput);
+      element.addEventListener('change', handleTextChange);
+      element.addEventListener('blur', handleBlur);
     };
 
     const checkForInputElements = (mutation: MutationRecord) => {

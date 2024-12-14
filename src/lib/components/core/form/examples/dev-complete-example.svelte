@@ -24,41 +24,37 @@
     lastName: zod.string(),
   });
 
-  export const formDataSchema = zodUtils.schemaForType<FormData>()(
-    zod.object({
-      text: zod
-        .string()
-        .min(1, 'Required')
-        .refine(
-          (data) => {
-            return data === 'test';
-          },
-          { message: "must be 'test'" },
-        ),
-      checkbox: zod.array(zod.string()).min(1, 'Required'),
-      toggle: zod.array(zod.string()).min(1, 'Required'),
-      radio: zod.string().min(1, 'Required'),
-      textarea: zod.string().refine(
+  export const formDataSchema = zodUtils.schemaForType<FormData>()(zod.object({
+    text: zod
+      .string()
+      .min(1, 'Required')
+      .refine(
         (data) => {
-          return isNaN(Number(data)) === false;
+          return data === 'test';
         },
-        { message: 'must be numeric' },
+        { message: "must be 'test'" },
       ),
-      select: zod.string().min(1, 'Required'),
-      userRole: zod.array(userRoleSelectSchema).min(1, 'Required'),
-      userRoles: zod.array(userRoleSelectSchema).min(2, 'Required'),
-      simpleArray: zod.array(zod.string().min(1, 'Required')).min(1, 'Required'),
-      complex: zod.object(complexSchema.shape),
-      complexArray: zod
-        .array(
-          zod.object({
-            ...complexSchema.shape,
-            simpleArray: zod.array(zod.string().min(1, 'Required')).min(1, 'Required'),
-          }),
-        )
-        .min(1, 'Required'),
-    }),
-  );
+    checkbox: zod.array(zod.string()).min(1, 'Required'),
+    toggle: zod.array(zod.string()).min(1, 'Required'),
+    radio: zod.string().min(1, 'Required'),
+    textarea: zod.string().refine(
+      (data) => {
+        return isNaN(Number(data)) === false;
+      },
+      { message: 'must be numeric' },
+    ),
+    select: zod.string().min(1, 'Required'),
+    userRole: zod.array(userRoleSelectSchema).min(1, 'Required'),
+    userRoles: zod.array(userRoleSelectSchema).min(2, 'Required'),
+    simpleArray: zod.array(zod.string().min(1, 'Required')).min(1, 'Required'),
+    complex: zod.object(complexSchema.shape),
+    complexArray: zod
+      .array(zod.object({
+        ...complexSchema.shape,
+        simpleArray: zod.array(zod.string().min(1, 'Required')).min(1, 'Required'),
+      }))
+      .min(1, 'Required'),
+  }));
 
   export type FormDataSchema = typeof formDataSchema.shape;
 </script>
@@ -205,10 +201,9 @@
         <Button
           data-id="add-array-value-trigger"
           class="self-start"
-          on:click={() =>
-            simpleArray.update((data) => {
-              return [...data, ''];
-            })}>Add</Button
+          onclick={() => simpleArray.update((data) => {
+            return [...data, ''];
+          })}>Add</Button
         >
         {#each $simpleArray as _, index}
           <FormField data-id="array-value-{index}" error={$simpleArrayError?.[index]}>
@@ -233,17 +228,16 @@
         <Button
           data-id="add-object-value-trigger"
           class="self-start"
-          on:click={() =>
-            complexArray.update((data) => {
-              return [
-                ...data,
-                {
-                  firstName: '',
-                  lastName: '',
-                  simpleArray: [],
-                },
-              ];
-            })}>Add</Button
+          onclick={() => complexArray.update((data) => {
+            return [
+              ...data,
+              {
+                firstName: '',
+                lastName: '',
+                simpleArray: [],
+              },
+            ];
+          })}>Add</Button
         >
         {#each $complexArray as _, index}
           <FormField data-id="object-value-{index}" error={$complexArrayError?.[index]}>
@@ -260,16 +254,15 @@
               <Button
                 data-id="add-array-value-trigger"
                 class="self-start"
-                on:click={() =>
-                  complexArray.update((data) => {
-                    const selfItem = data.slice(index, index + 1)[0];
+                onclick={() => complexArray.update((data) => {
+                  const selfItem = data.slice(index, index + 1)[0];
 
-                    selfItem.simpleArray = [...selfItem.simpleArray, ''];
+                  selfItem.simpleArray = [...selfItem.simpleArray, ''];
 
-                    data.splice(index, 1, selfItem);
+                  data.splice(index, 1, selfItem);
 
-                    return data;
-                  })}>Add</Button
+                  return data;
+                })}>Add</Button
               >
               {#each $complexArray[index].simpleArray as _, arrayIndex}
                 <FormField

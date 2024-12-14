@@ -3,9 +3,7 @@
     userRole: UserRoleComboboxOption[];
   };
 
-  export const formDataSchema = zodUtils.schemaForType<FormData>()(
-    zod.object({ userRole: zod.array(userRoleSelectSchema).min(1, 'Required') }),
-  );
+  export const formDataSchema = zodUtils.schemaForType<FormData>()(zod.object({ userRole: zod.array(userRoleSelectSchema).min(1, 'Required') }));
 
   export type FormDataSchema = typeof formDataSchema.shape;
 </script>

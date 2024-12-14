@@ -20,7 +20,7 @@
     name,
     id = name,
     value,
-    label = value
+    label = value,
   }: Props = $props();
 </script>
 
