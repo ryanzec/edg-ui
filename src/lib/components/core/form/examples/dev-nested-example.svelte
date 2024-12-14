@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
   export type Complex = {
     firstName: string;
     lastName: string;
@@ -41,7 +41,7 @@
   import Button from '$lib/components/core/button/button.svelte';
   import FormFields from '$lib/components/core/form/form-fields.svelte';
 
-  let submittedData: FormData | undefined = undefined;
+  let submittedData: FormData | undefined = $state(undefined);
   const {
     formAction,
     formErrors: { complexArray: complexArrayError },

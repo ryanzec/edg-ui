@@ -2,10 +2,15 @@
   import type { PartialOptions } from 'overlayscrollbars';
   import { OverlayScrollbarsComponent } from 'overlayscrollbars-svelte';
 
-  export let options: PartialOptions = {};
 
-  let extraClass: string = '';
-  export { extraClass as class };
+  interface Props {
+    options?: PartialOptions;
+    class?: string;
+    children?: import('svelte').Snippet;
+  }
+
+  let { options = {}, class: extraClass = '', children }: Props = $props();
+  
 
   const defaultOptions: PartialOptions = { scrollbars: { autoHideDelay: 100 } };
 </script>
@@ -18,5 +23,5 @@
   })}
   defer
 >
-  <slot />
+  {@render children?.()}
 </OverlayScrollbarsComponent>

@@ -1,7 +1,11 @@
 <script lang="ts" generics="TFormData">
   import type { WithFormFieldErrors } from '$lib/stores/form-manager.store';
 
-  export let error: WithFormFieldErrors | undefined;
+  interface Props {
+    error: WithFormFieldErrors | undefined;
+  }
+
+  let { error }: Props = $props();
 </script>
 
 {#if error?.errors && error.errors.length > 0}

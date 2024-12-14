@@ -1,4 +1,4 @@
-<script context="module" lang="ts">
+<script module lang="ts">
   export type UserFormData = {
     firstName: string;
     lastName: string;
@@ -8,6 +8,8 @@
 </script>
 
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import { usersApi } from '$lib/api/users';
   import type { ResponseStructure } from '$lib/api/utils';
 
@@ -31,9 +33,13 @@
   import { zodUtils } from '$lib/utils/zod';
   import * as zod from 'zod';
 
-  export let initialUser: Pick<User, 'firstName' | 'lastName' | 'email' | 'role' | 'id'> | undefined = undefined;
-  export let formIsProcessing: boolean = false;
-  export let onUserSaved: ((user: User) => void) | undefined = undefined;
+  interface Props {
+    initialUser?: Pick<User, 'firstName' | 'lastName' | 'email' | 'role' | 'id'> | undefined;
+    formIsProcessing?: boolean;
+    onUserSaved?: ((user: User) => void) | undefined;
+  }
+
+  let { initialUser = undefined, formIsProcessing = $bindable(false), onUserSaved = undefined }: Props = $props();
 
   const createUserMutation = createMutateManagerStore({
     mutateQuery: async (input: CreateUserRequest) => {
@@ -105,9 +111,11 @@
     },
   });
 
-  $: formIsProcessing =
-    $createUserMutation.fetchingState === MutateFetchingState.PROCESSING ||
-    $updateUserMutation.fetchingState === MutateFetchingState.PROCESSING;
+  run(() => {
+    formIsProcessing =
+      $createUserMutation.fetchingState === MutateFetchingState.PROCESSING ||
+      $updateUserMutation.fetchingState === MutateFetchingState.PROCESSING;
+  });
 </script>
 
 <form use:formAction>

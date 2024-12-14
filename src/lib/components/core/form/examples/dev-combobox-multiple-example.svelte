@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
   export type FormData = {
     userRoles: UserRoleComboboxOption[];
   };
@@ -21,7 +21,7 @@
 
   let userRoleOptions = userDataUtils.getRolesAsComboboxOptions();
 
-  let submittedData: FormData | undefined = undefined;
+  let submittedData: FormData | undefined = $state(undefined);
   const {
     formAction,
     formErrors: { userRoles: userRolesError },

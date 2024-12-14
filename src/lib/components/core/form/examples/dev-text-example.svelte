@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
   export type FormData = {
     text: string;
   };
@@ -29,7 +29,7 @@
   import TextInput from '$lib/components/core/form/text-input.svelte';
   import FormFields from '$lib/components/core/form/form-fields.svelte';
 
-  let submittedData: FormData | undefined = undefined;
+  let submittedData: FormData | undefined = $state(undefined);
   const {
     formAction,
     formErrors: { text: textError },

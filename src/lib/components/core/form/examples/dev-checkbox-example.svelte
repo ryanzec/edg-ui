@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
   export type FormData = {
     checkbox: string[];
   };
@@ -20,7 +20,7 @@
   import Checkbox from '$lib/components/core/form/checkbox.svelte';
   import FormFields from '$lib/components/core/form/form-fields.svelte';
 
-  let submittedData: FormData | undefined = undefined;
+  let submittedData: FormData | undefined = $state(undefined);
   const {
     formAction,
     formErrors: { checkbox: checkboxError },

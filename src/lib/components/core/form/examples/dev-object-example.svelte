@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
   export type Complex = {
     firstName: string;
     lastName: string;
@@ -39,7 +39,7 @@
   import Radio from '$lib/components/core/form/radio.svelte';
   import Toggle from '$lib/components/core/form/toggle.svelte';
 
-  let submittedData: FormData | undefined = undefined;
+  let submittedData: FormData | undefined = $state(undefined);
   const {
     formAction,
     formErrors: { complex: complexError },

@@ -1,1 +1,9 @@
-<div class="flex flex-col gap-1"><slot /></div>
+<script lang="ts">
+	interface Props {
+		children?: import('svelte').Snippet;
+	}
+
+	let { children }: Props = $props();
+</script>
+
+<div class="flex flex-col gap-1">{@render children?.()}</div>

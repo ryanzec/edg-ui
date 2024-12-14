@@ -2,9 +2,13 @@
   import { melt, type AnyMeltElement } from '@melt-ui/svelte';
   import XIcon from '../icons/x-icon.svelte';
 
-  export let meltTitle: AnyMeltElement;
-  export let meltClose: AnyMeltElement;
-  export let title: string;
+  interface Props {
+    meltTitle: AnyMeltElement;
+    meltClose: AnyMeltElement;
+    title: string;
+  }
+
+  let { meltTitle, meltClose, title }: Props = $props();
 </script>
 
 <h2 data-id="header" use:melt={$meltTitle} class="flex justify-between">

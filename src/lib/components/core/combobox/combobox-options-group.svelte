@@ -4,18 +4,28 @@
   import type { ComboboxOptionComponent } from '$lib/components/core/combobox/utils';
   import ComboboxOption from '$lib/components/core/combobox/combobox-option.svelte';
 
-  export let options: TOptionValue[];
-  export let optionAction: ComboboxStore<TOptionValue>['optionAction'];
-  export let optionComponent: ComboboxOptionComponent<TOptionValue> | undefined = undefined;
-  export let header: string = '';
-  export let indexOffset: number = 0;
+  interface Props {
+    options: TOptionValue[];
+    optionAction: ComboboxStore<TOptionValue>['optionAction'];
+    optionComponent?: ComboboxOptionComponent<TOptionValue> | undefined;
+    header?: string;
+    indexOffset?: number;
+  }
+
+  let {
+    options,
+    optionAction,
+    optionComponent = undefined,
+    header = '',
+    indexOffset = 0
+  }: Props = $props();
 </script>
 
 {#if options.length > 0}
   {#if header}<div data-id="group-header" class="p-1 font-semibold">{header}</div>{/if}
   {#each options as option, index (option.value)}
-    <svelte:component
-      this={optionComponent || ComboboxOption}
+    {@const SvelteComponent = optionComponent || ComboboxOption}
+    <SvelteComponent
       {option}
       optionIndex={index + indexOffset}
       {optionAction}

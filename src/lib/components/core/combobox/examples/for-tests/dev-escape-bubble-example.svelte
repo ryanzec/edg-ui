@@ -3,7 +3,7 @@
   import Combobox from '$lib/components/core/combobox/combobox.svelte';
   import { writable } from 'svelte/store';
 
-  let escapeTriggered = false;
+  let escapeTriggered = $state(false);
 
   const handleEscape = () => {
     escapeTriggered = true;

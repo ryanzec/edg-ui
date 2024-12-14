@@ -1,4 +1,6 @@
 <script lang="ts" generics="TOptionValue extends { display: string; value: string; }">
+  import { run } from 'svelte/legacy';
+
   import ComboboxClearOption from '$lib/components/core/combobox/combobox-clear-option.svelte';
   import ComboboxOptionsGroup from '$lib/components/core/combobox/combobox-options-group.svelte';
 
@@ -8,25 +10,41 @@
   import type { ComboboxOptionComponent, ComboboxOptionsActionOptions } from '$lib/components/core/combobox/utils';
   import LoaderIcon from '$lib/components/core/icons/loader-icon.svelte';
 
-  export let options: TOptionValue[];
-  export let groupedOptions: Record<string, TOptionValue[]> | undefined = undefined;
-  export let optionsAction: ComboboxStore<TOptionValue>['optionsAction'];
-  export let optionAction: ComboboxStore<TOptionValue>['optionAction'];
-  export let isLoading: boolean = false;
-  export let optionComponent: ComboboxOptionComponent<TOptionValue> | undefined = undefined;
-  export let inputValue: string = '';
-  export let showMenuCharacterThreshold: number;
-  export let optionsActionOptions: ComboboxOptionsActionOptions = {};
-  export let clearOptionDisplay: string = '';
-  export let clearOptionAction: ComboboxStore<TOptionValue>['clearOptionAction'] | undefined = undefined;
+  interface Props {
+    options: TOptionValue[];
+    groupedOptions?: Record<string, TOptionValue[]> | undefined;
+    optionsAction: ComboboxStore<TOptionValue>['optionsAction'];
+    optionAction: ComboboxStore<TOptionValue>['optionAction'];
+    isLoading?: boolean;
+    optionComponent?: ComboboxOptionComponent<TOptionValue> | undefined;
+    inputValue?: string;
+    showMenuCharacterThreshold: number;
+    optionsActionOptions?: ComboboxOptionsActionOptions;
+    clearOptionDisplay?: string;
+    clearOptionAction?: ComboboxStore<TOptionValue>['clearOptionAction'] | undefined;
+  }
 
-  let indexOffsets: Record<string, number> = {};
+  let {
+    options,
+    groupedOptions = undefined,
+    optionsAction,
+    optionAction,
+    isLoading = false,
+    optionComponent = undefined,
+    inputValue = '',
+    showMenuCharacterThreshold,
+    optionsActionOptions = {},
+    clearOptionDisplay = '',
+    clearOptionAction = undefined
+  }: Props = $props();
+
+  let indexOffsets: Record<string, number> = $state({});
 
   // we need the correct element index in order for the combobox options to work properly so this handle
   // tracking the offsets when groups are used since there are extra elements that does count
-  $: {
+  run(() => {
     if (!groupedOptions) {
-      break $;
+      return;
     }
 
     const objectKeys = Object.keys(groupedOptions);
@@ -35,14 +53,14 @@
     for (let i = 1; i < objectKeys.length; i++) {
       indexOffsets[objectKeys[i]] = indexOffsets[objectKeys[i - 1]] + groupedOptions[objectKeys[i - 1]].length;
     }
-  }
+  });
 
-  $: isGrouped = groupedOptions && Object.keys(groupedOptions).length > 0;
-  $: totalOptionsCount =
-    groupedOptions && isGrouped
+  let isGrouped = $derived(groupedOptions && Object.keys(groupedOptions).length > 0);
+  let totalOptionsCount =
+    $derived(groupedOptions && isGrouped
       ? Object.values(groupedOptions).reduce((collector, groupOptions) => collector + groupOptions.length, 0)
-      : options.length;
-  $: passesThresholdCheck = inputValue.length >= showMenuCharacterThreshold;
+      : options.length);
+  let passesThresholdCheck = $derived(inputValue.length >= showMenuCharacterThreshold);
 </script>
 
 <!--

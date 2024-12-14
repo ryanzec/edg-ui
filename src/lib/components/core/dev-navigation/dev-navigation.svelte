@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
   import type { Component } from 'svelte';
 
   export type DevNavigationItem = {
@@ -14,7 +14,11 @@
   import { page } from '$app/stores';
   import ScrollArea from '$lib/components/core/scroll-area/scroll-area.svelte';
 
-  export let items: DevNavigationItem[] = [];
+  interface Props {
+    items?: DevNavigationItem[];
+  }
+
+  let { items = [] }: Props = $props();
 
   devNavigationStore.parseForComponent($page.url.searchParams.get('component'), items);
 </script>
@@ -25,7 +29,8 @@
   </ScrollArea>
   <div data-id="component-container" class="flex-1 p-3">
     {#if $devNavigationStore.activeComponent}
-      <svelte:component this={$devNavigationStore.activeComponent} />
+      {@const SvelteComponent = $devNavigationStore.activeComponent}
+      <SvelteComponent />
     {/if}
   </div>
 </div>

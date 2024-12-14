@@ -16,7 +16,7 @@
   } = createDialog(dialogUtils.buildCreateOptions(peekIsOpened));
 </script>
 
-<button type="button" on:click={() => peekIsOpened.set(true)}>default</button>
+<button type="button" onclick={() => peekIsOpened.set(true)}>default</button>
 <Peek isOpened={peekIsOpened} meltOverlay={overlay} meltPortalled={portalled} meltContent={content}>
   <PeekHeader meltTitle={title} title="My title" meltClose={close} />
   <PeekContent><div use:melt={$description} class="mb-5 mt-2">Default peek</div></PeekContent>

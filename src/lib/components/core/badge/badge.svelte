@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
   export enum BadgeColor {
     BRAND = 'brand',
     NEUTRAL = 'neutral',
@@ -17,8 +17,14 @@
 <script lang="ts">
   import { twMerge } from 'tailwind-merge';
 
-  export let color: BadgeColor = BadgeColor.NEUTRAL;
-  export let shape: BadgeShape = BadgeShape.ROUNDED;
+  interface Props {
+    color?: BadgeColor;
+    shape?: BadgeShape;
+    children?: import('svelte').Snippet;
+    [key: string]: any
+  }
+
+  let { color = BadgeColor.NEUTRAL, shape = BadgeShape.ROUNDED, children, ...rest }: Props = $props();
 
   const colorCss: Record<BadgeColor, string> = {
     [BadgeColor.BRAND]: 'border-brand-bold bg-brand-subtle2 text-brand-bold',
@@ -35,6 +41,6 @@
   };
 </script>
 
-<div class={twMerge('inline-block border px-1 py-0.5 text-xs', colorCss[color], shapeCss[shape])} {...$$restProps}>
-  <slot />
+<div class={twMerge('inline-block border px-1 py-0.5 text-xs', colorCss[color], shapeCss[shape])} {...rest}>
+  {@render children?.()}
 </div>

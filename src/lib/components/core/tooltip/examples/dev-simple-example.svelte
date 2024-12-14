@@ -6,9 +6,13 @@
 <div>
   <h1>Tooltip</h1>
   <Tooltip>
-    <button slot="handle" type="button" aria-label="Add">
-      <PlusIcon />
-    </button>
-    <div slot="content">My tooltip content</div>
+    {#snippet handle()}
+        <button  type="button" aria-label="Add">
+        <PlusIcon />
+      </button>
+      {/snippet}
+    {#snippet content()}
+        <div >My tooltip content</div>
+      {/snippet}
   </Tooltip>
 </div>

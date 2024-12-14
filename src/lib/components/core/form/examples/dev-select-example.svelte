@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
   export type FormData = {
     select: string;
   };
@@ -31,7 +31,7 @@
     },
   ];
 
-  let submittedData: FormData | undefined = undefined;
+  let submittedData: FormData | undefined = $state(undefined);
   const {
     formAction,
     formErrors: { select: selectError },
@@ -51,7 +51,9 @@
     <FormFields>
       <FormField data-id="select" error={$selectError}>
         <Select name="select" defaultDisplay="Select..." options={selectOptions} bind:value={$select}>
-          <SelectLabel slot="label">Select</SelectLabel>
+          {#snippet label()}
+                    <SelectLabel >Select</SelectLabel>
+                  {/snippet}
         </Select>
       </FormField>
     </FormFields>

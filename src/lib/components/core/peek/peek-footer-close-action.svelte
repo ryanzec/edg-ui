@@ -1,8 +1,12 @@
 <script lang="ts">
   import { melt, type AnyMeltElement } from '@melt-ui/svelte';
 
-  export let meltClose: AnyMeltElement;
-  export let title: string = 'Cancel';
+  interface Props {
+    meltClose: AnyMeltElement;
+    title?: string;
+  }
+
+  let { meltClose, title = 'Cancel' }: Props = $props();
 </script>
 
 <button data-id="close-action" type="button" use:melt={$meltClose}>

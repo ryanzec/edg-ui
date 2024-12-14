@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import { melt } from '@melt-ui/svelte';
   import { createEventDispatcher } from 'svelte';
 
@@ -9,12 +11,29 @@
   const dispatchEvent = createEventDispatcher<CustomerEvents>();
 
   // @todo need to figure out if there is a proper way to type this
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  export let meltItem: any;
-  export let isDisabled: boolean = false;
-  export let closeOnClick: boolean = true;
+  
+  interface Props {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    meltItem: any;
+    isDisabled?: boolean;
+    closeOnClick?: boolean;
+    rightContent?: import('svelte').Snippet;
+    leftContent?: import('svelte').Snippet;
+    children?: import('svelte').Snippet;
+    [key: string]: any
+  }
 
-  let selfElement: HTMLElement;
+  let {
+    meltItem,
+    isDisabled = false,
+    closeOnClick = true,
+    rightContent,
+    leftContent,
+    children,
+    ...rest
+  }: Props = $props();
+
+  let selfElement: HTMLElement = $state();
 
   const onClick = (event: MouseEvent) => {
     if (closeOnClick === false) {
@@ -25,9 +44,9 @@
     // click to be configurable
     dispatchEvent('click', event);
   };
-  $: {
+  run(() => {
     if (!selfElement) {
-      break $;
+      return;
     }
 
     if (isDisabled) {
@@ -35,7 +54,7 @@
     } else {
       delete selfElement.dataset.disabled;
     }
-  }
+  });
 </script>
 
 <button
@@ -43,11 +62,11 @@
   use:melt={meltItem}
   bind:this={selfElement}
   class="data-[disabled]:text-neutral-300 z-40 flex min-h-[24px] select-none items-center rounded-sm px-2 text-sm leading-none outline-none ring-0 data-[highlighted]:bg-neutral-subtle"
-  on:m-click={onClick}
-  {...$$restProps}
+  onm-click={onClick}
+  {...rest}
   type="button"
 >
-  {#if $$slots.rightContent}<div class="mr-1"><slot name="leftContent" /></div>{/if}
-  <slot />
-  {#if $$slots.rightContent}<div class="ml-auto"><slot name="rightContent" /></div>{/if}
+  {#if rightContent}<div class="mr-1">{@render leftContent?.()}</div>{/if}
+  {@render children?.()}
+  {#if rightContent}<div class="ml-auto">{@render rightContent?.()}</div>{/if}
 </button>

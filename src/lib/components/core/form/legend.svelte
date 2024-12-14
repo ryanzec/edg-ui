@@ -1,1 +1,9 @@
-<legend><slot /></legend>
+<script lang="ts">
+	interface Props {
+		children?: import('svelte').Snippet;
+	}
+
+	let { children }: Props = $props();
+</script>
+
+<legend>{@render children?.()}</legend>

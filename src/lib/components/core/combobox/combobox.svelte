@@ -1,4 +1,6 @@
 <script lang="ts" generics="TOptionValue extends { display: string; value: string; }">
+  import { run, stopPropagation } from 'svelte/legacy';
+
   import Badge from '$lib/components/core/badge/badge.svelte';
 
   /* global TOptionValue */
@@ -20,37 +22,61 @@
   import ComboboxOptions from '$lib/components/core/combobox/combobox-options.svelte';
   import { clickOutsideAction } from '$lib/actions/click-outside-action';
 
-  export let label: string;
-  export let placeholder: string = 'Select...';
-  // the `value` for each option must be unique for this to work properly
-  export let options: TOptionValue[] = [];
-  export let groupedOptions: Record<string, TOptionValue[]> | undefined = undefined;
-  export let selected: Writable<TOptionValue[]>;
-  export let optionComponent: ComboboxOptionComponent<TOptionValue> | undefined = undefined;
-  export let name: string;
-  export let id: string = name;
-  export let isMultiple: boolean = false;
-  export let getOptions: ((inputValue: string) => Promise<TOptionValue[]>) | undefined = undefined;
-  export let getGroupedOptions: ((inputValue: string) => Promise<Record<string, TOptionValue[]>>) | undefined =
-    undefined;
-  export let resultsDelay: number = getOptions || getGroupedOptions ? COMBOBOX_DEFAULT_DELAY : 0;
-  export let useFiltering: boolean = false;
-  export let filter: (inputValue: string, options: TOptionValue[]) => TOptionValue[] =
-    comboboxComponentUtils.defaultFilter;
-  export let showInlineSelectedOptions: boolean = true;
-  export let showMenuCharacterThreshold: number = getOptions || getGroupedOptions ? 3 : 0;
-  export let optionsActionOptions: ComboboxOptionsActionOptions = {};
-  export let clearOptionDisplay: string = '';
-  export let onSelectedChanged: ((selected: TOptionValue[]) => void) | undefined = undefined;
+  
 
   // @todo(feature) character threshold
   // @todo(feature) allow new value
 
-  let extraClass: string = '';
-  export { extraClass as class };
+  interface Props {
+    label: string;
+    placeholder?: string;
+    // the `value` for each option must be unique for this to work properly
+    options?: TOptionValue[];
+    groupedOptions?: Record<string, TOptionValue[]> | undefined;
+    selected: Writable<TOptionValue[]>;
+    optionComponent?: ComboboxOptionComponent<TOptionValue> | undefined;
+    name: string;
+    id?: string;
+    isMultiple?: boolean;
+    getOptions?: ((inputValue: string) => Promise<TOptionValue[]>) | undefined;
+    getGroupedOptions?: ((inputValue: string) => Promise<Record<string, TOptionValue[]>>) | undefined;
+    resultsDelay?: number;
+    useFiltering?: boolean;
+    filter?: (inputValue: string, options: TOptionValue[]) => TOptionValue[];
+    showInlineSelectedOptions?: boolean;
+    showMenuCharacterThreshold?: number;
+    optionsActionOptions?: ComboboxOptionsActionOptions;
+    clearOptionDisplay?: string;
+    onSelectedChanged?: ((selected: TOptionValue[]) => void) | undefined;
+    class?: string;
+  }
+
+  let {
+    label,
+    placeholder = 'Select...',
+    options = [],
+    groupedOptions = undefined,
+    selected,
+    optionComponent = undefined,
+    name,
+    id = name,
+    isMultiple = false,
+    getOptions = undefined,
+    getGroupedOptions = undefined,
+    resultsDelay = getOptions || getGroupedOptions ? COMBOBOX_DEFAULT_DELAY : 0,
+    useFiltering = false,
+    filter = comboboxComponentUtils.defaultFilter,
+    showInlineSelectedOptions = true,
+    showMenuCharacterThreshold = getOptions || getGroupedOptions ? 3 : 0,
+    optionsActionOptions = {},
+    clearOptionDisplay = '',
+    onSelectedChanged = undefined,
+    class: extraClass = ''
+  }: Props = $props();
+  
 
   // this holds the input value that is actively being used (since there can be a delay in getting option asyncly)
-  let activeInputValue = '';
+  let activeInputValue = $state('');
   let optionCount: Writable<number> = writable(0);
 
   const {
@@ -105,11 +131,11 @@
     return filteredGroupedOptions;
   };
 
-  let isLoading = false;
-  let finalOptions = useFiltering ? filterOptions($inputValue) : options;
-  let finalGroupedOptions = useFiltering ? filterGroupedOptions($inputValue) : groupedOptions;
+  let isLoading = $state(false);
+  let finalOptions = $state(useFiltering ? filterOptions($inputValue) : options);
+  let finalGroupedOptions = $state(useFiltering ? filterGroupedOptions($inputValue) : groupedOptions);
 
-  $: isAsync = !!(getOptions || getGroupedOptions);
+  let isAsync = $derived(!!(getOptions || getGroupedOptions));
 
   const handleClickOutside = (clickedElement: HTMLElement) => {
     if (!$isOpened || !$optionsElement) {
@@ -163,9 +189,9 @@
   }, resultsDelay);
 
   // keep options up to date with what is typed in the input
-  $: {
+  run(() => {
     getOptionsDebounced($inputValue);
-  }
+  });
 
   // the selected options could effect the results of the filter so we need to make sure they are kept in sync
   selected.subscribe((selected) => {
@@ -184,38 +210,44 @@
   });
 
   // make sure only one option is selected when not in multiple selection mode
-  $: if (isMultiple === false && $selected.length > 1) {
-    loggerUtils.warn(
-      'combobox compoenent: attempt to set multiple values for a single select combobox, only using the first passed in value',
-    );
+  run(() => {
+    if (isMultiple === false && $selected.length > 1) {
+      loggerUtils.warn(
+        'combobox compoenent: attempt to set multiple values for a single select combobox, only using the first passed in value',
+      );
 
-    $selected = [$selected[0]];
-  }
+      $selected = [$selected[0]];
+    }
+  });
 
   // make sure the input value is updated properly when the options menu is closed
-  $: if (isMultiple === false && $isOpened === false && $selected.length > 0) {
-    $inputValue = $selected[0].display;
-    activeInputValue = $inputValue;
-  }
+  run(() => {
+    if (isMultiple === false && $isOpened === false && $selected.length > 0) {
+      $inputValue = $selected[0].display;
+      activeInputValue = $inputValue;
+    }
+  });
 
   // when using async options, if the input is cleared, we don't want the options to show up since the values seems
   // wierd when nothing has been typed (to get relevant options, something probably needed to be typed)
-  $: if (isAsync && $inputValue.length < showMenuCharacterThreshold) {
-    finalOptions = [];
-    finalGroupedOptions = undefined;
-    comboboxUtils.clearActiveOption();
+  run(() => {
+    if (isAsync && $inputValue.length < showMenuCharacterThreshold) {
+      finalOptions = [];
+      finalGroupedOptions = undefined;
+      comboboxUtils.clearActiveOption();
 
-    // this need to update immediately otherwise component of use the data above will have a slight delay of old
-    // content since the callback to get the async options, that also sets this, runs on a delay
-    activeInputValue = '';
-  }
+      // this need to update immediately otherwise component of use the data above will have a slight delay of old
+      // content since the callback to get the async options, that also sets this, runs on a delay
+      activeInputValue = '';
+    }
+  });
 
-  $: {
+  run(() => {
     $optionCount =
       groupedOptions && finalGroupedOptions
         ? Object.values(finalGroupedOptions).reduce((collector, options) => collector + options.length, 0)
         : finalOptions.length;
-  }
+  });
 </script>
 
 <div
@@ -274,8 +306,8 @@
       use:optionsAttachedAction
       role="button"
       tabindex="-1"
-      on:keypress={() => {}}
-      on:click={() => $inputElement?.focus()}
+      onkeypress={() => {}}
+      onclick={() => $inputElement?.focus()}
       class="flex w-full rounded-lg border border-outline bg-surface-pure px-2 py-1 text-surface-on-base focus:border-outline-active data-[state=open]:rounded-b-none"
     >
       <div class="relative flex flex-1 flex-wrap items-center gap-2">
@@ -285,7 +317,7 @@
               {selectedOption.display}
               <button
                 data-id="remove-trigger"
-                on:click|stopPropagation={() => comboboxUtils.removeOption(selectedOption)}>X</button
+                onclick={stopPropagation(() => comboboxUtils.removeOption(selectedOption))}>X</button
               >
             </Badge>
           {/each}

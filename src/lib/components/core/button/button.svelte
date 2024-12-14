@@ -1,4 +1,4 @@
-<script context="module" lang="ts">
+<script module lang="ts">
   export enum ButtonVariant {
     FILLED = 'filled',
     WEAK = 'weak',
@@ -21,24 +21,48 @@
 </script>
 
 <script lang="ts">
+  import { createBubbler } from 'svelte/legacy';
+
+  const bubble = createBubbler();
   import { twMerge } from 'tailwind-merge';
   import LoaderIcon from '$lib/components/core/icons/loader-icon.svelte';
 
-  export let isLoading: boolean = false;
-  export let variant: ButtonVariant = ButtonVariant.FILLED;
-  export let color: ButtonColor = ButtonColor.BRAND;
-  export let shape: ButtonShape = ButtonShape.ROUNDED;
 
   /* eslint-disable */
-  // since action can really be anything, we are going to ignore eslint issue for these
-  export let action: Function = () => {};
-  export let actionOptions: any = undefined;
+  
   /* eslint-enable */
 
-  let extraClass: string = '';
-  export { extraClass as class };
+  interface Props {
+    isLoading?: boolean;
+    variant?: ButtonVariant;
+    color?: ButtonColor;
+    shape?: ButtonShape;
+    // since action can really be anything, we are going to ignore eslint issue for these
+    action?: Function;
+    actionOptions?: any;
+    class?: string;
+    preItem?: import('svelte').Snippet;
+    children?: import('svelte').Snippet;
+    postItem?: import('svelte').Snippet;
+    [key: string]: any
+  }
 
-  $: isDisabled = isLoading || $$restProps.disabled;
+  let {
+    isLoading = false,
+    variant = ButtonVariant.FILLED,
+    color = ButtonColor.BRAND,
+    shape = ButtonShape.ROUNDED,
+    action = () => {},
+    actionOptions = undefined,
+    class: extraClass = '',
+    preItem,
+    children,
+    postItem,
+    ...rest
+  }: Props = $props();
+  
+
+  let isDisabled = $derived(isLoading || rest.disabled);
 
   const filledColorsCss = {
     [ButtonColor.BRAND]:
@@ -108,9 +132,9 @@
   use:action={actionOptions}
   data-id="button"
   type="button"
-  {...$$restProps}
+  {...rest}
   disabled={isDisabled}
-  on:click
+  onclick={bubble('click')}
   class={twMerge('flex items-center gap-2 border border-transparent', colorsCss[variant][color], extraClass)}
   class:opacity-45={isDisabled}
   class:rounded-lg={shape === ButtonShape.ROUNDED}
@@ -120,7 +144,7 @@
   class:px-1={shape === ButtonShape.CIRCLE}
   class:py-1={shape === ButtonShape.CIRCLE}
 >
-  {#if !isLoading}<slot name="preItem" />{/if}
-  {#if isLoading}<LoaderIcon class="animate-spin" />{/if}<slot />
-  {#if !isLoading}<slot name="postItem" />{/if}
+  {#if !isLoading}{@render preItem?.()}{/if}
+  {#if isLoading}<LoaderIcon class="animate-spin" />{/if}{@render children?.()}
+  {#if !isLoading}{@render postItem?.()}{/if}
 </button>

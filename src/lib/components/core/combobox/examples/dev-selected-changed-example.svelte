@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import Combobox from '$lib/components/core/combobox/combobox.svelte';
   import { writable } from 'svelte/store';
 
@@ -36,10 +38,10 @@
   const selectedChanged = writable(0);
 
   // to handle a change in the selected value, just use a reactive statement, just note that is will run on time on load
-  $: {
+  run(() => {
     console.log('selected changed to:', $selected);
     $selectedChanged += 1;
-  }
+  });
 </script>
 
 <Combobox name="value" label="selected change" {options} {selected} />

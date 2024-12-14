@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Dev_navigation_menu from './dev-navigation-menu.svelte';
   import type { DevNavigationItem } from '$lib/components/core/dev-navigation/dev-navigation.svelte';
   import { devNavigationStore } from '$lib/components/core/dev-navigation/store';
   import Typography from '$lib/components/core/typography/typography.svelte';
@@ -6,12 +7,21 @@
   import { goto } from '$app/navigation';
   import { twMerge } from 'tailwind-merge';
 
-  export let isNested: boolean = false;
-  export let items: DevNavigationItem[] = [];
-  export let parent: string = '';
 
-  let extraClass: string = '';
-  export { extraClass as class };
+  interface Props {
+    isNested?: boolean;
+    items?: DevNavigationItem[];
+    parent?: string;
+    class?: string;
+  }
+
+  let {
+    isNested = false,
+    items = [],
+    parent = '',
+    class: extraClass = ''
+  }: Props = $props();
+  
 
   const handleDisplayComponent = (item: DevNavigationItem) => {
     devNavigationStore.setActiveComponent(item.component);
@@ -32,11 +42,11 @@
     {#each items as item}
       {#if item.items && item.items.length > 0}
         <Typography>{item.display}</Typography>
-        <svelte:self items={item.items} isNested parent={`${parent}${item.display}.`} />
+        <Dev_navigation_menu items={item.items} isNested parent={`${parent}${item.display}.`} />
       {:else}
         <button
           type="button"
-          on:click={() => {
+          onclick={() => {
             handleDisplayComponent(item);
           }}
         >

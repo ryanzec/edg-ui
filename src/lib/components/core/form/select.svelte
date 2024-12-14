@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
   export type SelectOption = {
     value: string;
     display: string;
@@ -6,14 +6,26 @@
 </script>
 
 <script lang="ts">
-  export let options: SelectOption[];
-  export let defaultDisplay: 'Select...';
-  export let name: string;
-  export let value: string;
-  export let id: string = name;
+  interface Props {
+    options: SelectOption[];
+    defaultDisplay: 'Select...';
+    name: string;
+    value: string;
+    id?: string;
+    label?: import('svelte').Snippet;
+  }
+
+  let {
+    options,
+    defaultDisplay,
+    name,
+    value = $bindable(),
+    id = name,
+    label
+  }: Props = $props();
 </script>
 
-<slot name="label" />
+{@render label?.()}
 
 <!-- setting the selected for the option works around a ssr issue with sveltekit -->
 <!-- https://github.com/sveltejs/svelte/issues/7160 -->

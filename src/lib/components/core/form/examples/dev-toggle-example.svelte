@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
   export type FormData = {
     toggle: string[];
   };
@@ -20,7 +20,7 @@
   import FormFields from '$lib/components/core/form/form-fields.svelte';
   import Toggle from '$lib/components/core/form/toggle.svelte';
 
-  let submittedData: FormData | undefined = undefined;
+  let submittedData: FormData | undefined = $state(undefined);
   const {
     formAction,
     formErrors: { toggle: toggleError },

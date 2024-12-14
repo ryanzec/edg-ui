@@ -6,7 +6,7 @@
   import UserForm from '$lib/components/application/user-form/user-form.svelte';
   import { onMount } from 'svelte';
 
-  let selectedUser: User | undefined = undefined;
+  let selectedUser: User | undefined = $state(undefined);
 
   const getUsersQuery = createQueryManagerStore({
     doInitialFetch: false,
@@ -15,7 +15,7 @@
     },
   });
 
-  let formIsVisible = false;
+  let formIsVisible = $state(false);
 
   const showForm = (user?: User) => {
     selectedUser = user;
@@ -36,7 +36,7 @@
     getUsersQuery.query();
   });
 
-  $: users = $getUsersQuery.response?.data || [];
+  let users = $derived($getUsersQuery.response?.data || []);
 </script>
 
 {#if $getUsersQuery.fetchingState === QueryFetchingState.INITIAL_LOADING || $getUsersQuery.dataState === QueryDataState.NOT_LOADED}
@@ -56,7 +56,7 @@
     <tbody>
       {#each users as user}
         <tr data-id="user">
-          <td><button type="button" on:click={() => showForm(user)}>{user.firstName} {users[0]?.lastName}</button></td>
+          <td><button type="button" onclick={() => showForm(user)}>{user.firstName} {users[0]?.lastName}</button></td>
           <td>{user.email}</td>
           <td>{user.role}</td>
         </tr>

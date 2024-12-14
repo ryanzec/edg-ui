@@ -11,6 +11,11 @@
   import { peekExampleItems } from '$lib/components/core/peek/examples/utils';
   import { scrollAreaExampleItems } from '$lib/components/core/scroll-area/examples/utils';
   import { tooltipExampleItems } from '$lib/components/core/tooltip/examples/utils';
+  interface Props {
+    children?: import('svelte').Snippet;
+  }
+
+  let { children }: Props = $props();
 
   const sortMenu = (a: DevNavigationItem, b: DevNavigationItem) => {
     if (a.display < b.display) {
@@ -55,5 +60,5 @@
 
 <div class="flex h-full w-full">
   <DevNavigation {items} />
-  <slot />
+  {@render children?.()}
 </div>

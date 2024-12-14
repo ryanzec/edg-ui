@@ -1,12 +1,17 @@
 <script lang="ts">
-  export let value: string;
-  export let name: string;
-  export let id: string = name as string;
+  interface Props {
+    value: string;
+    name: string;
+    id?: string;
+    [key: string]: any
+  }
+
+  let { value = $bindable(), name, id = name as string, ...rest }: Props = $props();
 </script>
 
 <input
   autocomplete="off"
-  {...$$restProps}
+  {...rest}
   {id}
   {name}
   class="p-input rounded border border-outline bg-input-background px-2 py-1 outline-none hover:border-outline-active focus:border-outline-active"

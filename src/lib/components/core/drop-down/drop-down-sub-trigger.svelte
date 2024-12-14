@@ -3,12 +3,19 @@
   import DropDownItem from '$lib/components/core/drop-down/drop-down-item.svelte';
   import ChevronRightIcon from '../icons/chevron-right-icon.svelte';
 
-  export let subTrigger: AnyMeltElement;
+  interface Props {
+    subTrigger: AnyMeltElement;
+    children?: import('svelte').Snippet;
+  }
+
+  let { subTrigger, children }: Props = $props();
 </script>
 
 <DropDownItem data-id="sub-trigger" meltItem={$subTrigger}>
-  <slot />
-  <div slot="rightContent">
-    <ChevronRightIcon class="size-4" />
-  </div>
+  {@render children?.()}
+  {#snippet rightContent()}
+    <div >
+      <ChevronRightIcon class="size-4" />
+    </div>
+  {/snippet}
 </DropDownItem>

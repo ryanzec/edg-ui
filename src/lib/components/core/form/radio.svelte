@@ -3,10 +3,19 @@
   import CircleCheckIcon from '$lib/components/core/icons/circle-check-icon.svelte';
   import CircleIcon from '$lib/components/core/icons/circle-icon.svelte';
 
-  export let group: string;
-  export let name: string;
-  export let id: string = name;
-  export let value: string;
+  interface Props {
+    group: string;
+    name: string;
+    id?: string;
+    value: string;
+  }
+
+  let {
+    group = $bindable(),
+    name,
+    id = name,
+    value
+  }: Props = $props();
 </script>
 
 <label class="flex items-center" for={id} id="{value}-label">

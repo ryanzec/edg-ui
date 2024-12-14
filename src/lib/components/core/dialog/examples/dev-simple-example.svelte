@@ -8,7 +8,11 @@
   import Dialog from '$lib/components/core/dialog/dialog.svelte';
   import Button, { ButtonColor, ButtonVariant } from '$lib/components/core/button/button.svelte';
 
-  export let isOpened: Writable<boolean> = writable(false);
+  interface Props {
+    isOpened?: Writable<boolean>;
+  }
+
+  let { isOpened = writable(false) }: Props = $props();
 
   const {
     elements: { trigger, overlay, content, title, description, close, portalled },

@@ -16,7 +16,7 @@
   } = createDialog(dialogUtils.buildCreateOptions(peekIsOpened));
 </script>
 
-<button type="button" on:click={() => peekIsOpened.set(true)}>resizable</button>
+<button type="button" onclick={() => peekIsOpened.set(true)}>resizable</button>
 <Peek isOpened={peekIsOpened} isResizable meltOverlay={overlay} meltPortalled={portalled} meltContent={content}>
   <PeekHeader meltTitle={title} title="My resizable title" meltClose={close} />
   <PeekContent><div use:melt={$description} class="mb-5 mt-2">I am resizable</div></PeekContent>

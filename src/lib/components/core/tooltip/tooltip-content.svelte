@@ -1,6 +1,11 @@
 <script lang="ts">
-  let extraClass = '';
-  export { extraClass as class };
+  interface Props {
+    class?: string;
+    children?: import('svelte').Snippet;
+  }
+
+  let { class: extraClass = '', children }: Props = $props();
+  
 </script>
 
 <div
@@ -8,6 +13,6 @@
   class="absolute rounded bg-surface-on-base px-2 py-1 text-inverse-base opacity-0 transition-opacity duration-[250ms] {extraClass}"
   data-tooltip-content
 >
-  <slot />
+  {@render children?.()}
 </div>
 <div>Other Content</div>

@@ -1,4 +1,4 @@
-<script context="module" lang="ts">
+<script module lang="ts">
   export type CheckboxValue = boolean | 'indeterminate';
 </script>
 
@@ -6,16 +6,26 @@
   import { stringUtils } from '$lib/utils/string';
   import { twMerge } from 'tailwind-merge';
 
-  export let checked: boolean;
-  export let name: string;
-  export let id: string = name;
-  export let value: string;
-  export let label: string = value;
+  interface Props {
+    checked: boolean;
+    name: string;
+    id?: string;
+    value: string;
+    label?: string;
+  }
+
+  let {
+    checked = $bindable(),
+    name,
+    id = name,
+    value,
+    label = value
+  }: Props = $props();
 
   const buttonCss = '';
 
-  $: checkedBarCss = checked ? 'bg-brand' : 'bg-neutral';
-  $: checkedButtonCss = checked ? 'translate-x-4' : '';
+  let checkedBarCss = $derived(checked ? 'bg-brand' : 'bg-neutral');
+  let checkedButtonCss = $derived(checked ? 'translate-x-4' : '');
 </script>
 
 <label data-id="toggle" class="flex cursor-pointer items-center" for={id} id="{value}-label">

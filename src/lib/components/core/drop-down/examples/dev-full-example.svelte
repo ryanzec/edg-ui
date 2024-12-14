@@ -67,15 +67,21 @@
   <DropDownSeparator meltSeparator={separator} />
   <DropDownCheckboxItem item={$checkboxItemA} checked={hideMeltUI}>
     Hide Melt UI
-    <svelte:fragment slot="rightContent">⌘H</svelte:fragment>
+    {#snippet rightContent()}
+        ⌘H
+      {/snippet}
   </DropDownCheckboxItem>
   <DropDownItem meltItem={$item} isDisabled
     >Show All Components
-    <svelte:fragment slot="rightContent">⇧⌘N</svelte:fragment></DropDownItem
+    {#snippet rightContent()}
+        ⇧⌘N
+      {/snippet}</DropDownItem
   >
   <DropDownSeparator meltSeparator={separator} />
   <DropDownItem meltItem={$item}>
     Quit Melt UI
-    <svelte:fragment slot="rightContent">⌘Q</svelte:fragment>
+    {#snippet rightContent()}
+        ⌘Q
+      {/snippet}
   </DropDownItem>
 </DropDownMenu>

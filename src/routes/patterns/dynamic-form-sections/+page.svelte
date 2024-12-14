@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import DynamicFormSection1 from '$lib/components/application/dynamic-form-sections/dynamic-form-section1.svelte';
   import DynamicFormSection2 from '$lib/components/application/dynamic-form-sections/dynamic-form-section2.svelte';
   import {
@@ -14,9 +16,9 @@
   import { createFormManagerStore } from '$lib/stores/form-manager.store';
   import { setContext } from 'svelte';
 
-  let submittedData: DynamicFormSectionsFormData | undefined = undefined;
-  let toggledSection1: boolean = false;
-  let toggledSection2: boolean = false;
+  let submittedData: DynamicFormSectionsFormData | undefined = $state(undefined);
+  let toggledSection1: boolean = $state(false);
+  let toggledSection2: boolean = $state(false);
 
   const validationSchema = dynamicFormSectionsComponentUtils.buildFormValidationSchema([]);
   const {
@@ -47,7 +49,7 @@
   });
 
   // keep the form validation in sync with what form sections are enabled
-  $: {
+  run(() => {
     const enabledSections: DynamicFormSection[] = [];
 
     if (toggledSection1) {
@@ -59,7 +61,7 @@
     }
 
     formManagerUtils.setValidationSchema(dynamicFormSectionsComponentUtils.buildFormValidationSchema(enabledSections));
-  }
+  });
 </script>
 
 <Toggle bind:checked={toggledSection1} value="1" name="enabled-section1" label="Toggle Section One" />

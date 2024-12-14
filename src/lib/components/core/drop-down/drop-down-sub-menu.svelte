@@ -4,8 +4,13 @@
   import { type Writable } from 'svelte/store';
   import type { WithGet } from '@melt-ui/svelte/internal/helpers';
 
-  export let subMenu: AnyMeltElement;
-  export let isOpened: WithGet<Writable<boolean>>;
+  interface Props {
+    subMenu: AnyMeltElement;
+    isOpened: WithGet<Writable<boolean>>;
+    children?: import('svelte').Snippet;
+  }
+
+  let { subMenu, isOpened, children }: Props = $props();
 </script>
 
 <DropDownMenu
@@ -18,5 +23,5 @@
     duration: 150,
   }}
 >
-  <slot />
+  {@render children?.()}
 </DropDownMenu>

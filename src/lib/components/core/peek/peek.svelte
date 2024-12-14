@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import { melt, type AnyMeltElement } from '@melt-ui/svelte';
   import type { Writable } from 'svelte/store';
   import { fly } from 'svelte/transition';
@@ -11,14 +13,27 @@
 
   const dispatchEvent = createEventDispatcher<CustomEvents>();
 
-  export let hasOverlay: boolean = true;
-  export let isOpened: Writable<boolean>;
-  export let isResizable: boolean = false;
-  export let meltOverlay: AnyMeltElement;
-  export let meltPortalled: AnyMeltElement;
-  export let meltContent: AnyMeltElement;
+  interface Props {
+    hasOverlay?: boolean;
+    isOpened: Writable<boolean>;
+    isResizable?: boolean;
+    meltOverlay: AnyMeltElement;
+    meltPortalled: AnyMeltElement;
+    meltContent: AnyMeltElement;
+    children?: import('svelte').Snippet;
+  }
 
-  let peekElement: HTMLElement;
+  let {
+    hasOverlay = true,
+    isOpened,
+    isResizable = false,
+    meltOverlay,
+    meltPortalled,
+    meltContent,
+    children
+  }: Props = $props();
+
+  let peekElement: HTMLElement = $state();
   let xResizeLeft = 0;
   let isDragging = false;
   let dragXStart = 0;
@@ -72,18 +87,20 @@
     document.body.style.cursor = 'ew-resize';
   };
 
-  $: {
+  run(() => {
     if (!peekElement || !isResizable) {
-      break $;
+      return;
     }
 
     peekElement.addEventListener('mousemove', handlePeekMouseMove);
     peekElement.addEventListener('mousedown', handlePeekMouseDown);
-  }
+  });
 
-  $: if ($isOpened === false) {
-    dispatchEvent('closed');
-  }
+  run(() => {
+    if ($isOpened === false) {
+      dispatchEvent('closed');
+    }
+  });
 </script>
 
 {#if $isOpened}
@@ -99,7 +116,7 @@
         opacity: 1,
       }}
     >
-      <slot />
+      {@render children?.()}
     </div>
   </div>
 {/if}

@@ -3,13 +3,24 @@
   import type { Readable, Writable } from 'svelte/store';
   import DropDownRadioItem from '$lib/components/core/drop-down/drop-down-radio-item.svelte';
 
-  export let meltRadioGroup: AnyMeltElement;
   // @todo need to figure out if there is a proper way to type this
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  export let meltRadioItem: any;
-  export let isChecked: Readable<(option: string) => boolean>;
-  export let options: string[];
-  export let value: Writable<string>;
+  
+  interface Props {
+    meltRadioGroup: AnyMeltElement;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    meltRadioItem: any;
+    isChecked: Readable<(option: string) => boolean>;
+    options: string[];
+    value: Writable<string>;
+  }
+
+  let {
+    meltRadioGroup,
+    meltRadioItem,
+    isChecked,
+    options,
+    value
+  }: Props = $props();
 </script>
 
 <div data-id="radio-group" use:melt={$meltRadioGroup} class="flex flex-col">
