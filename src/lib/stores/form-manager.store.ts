@@ -16,7 +16,7 @@
 // while there might be a better way to handle these things that I am not aware of with typescript, the casting seems
 // like the sanest solution for the time being and this can be refactored later if other pattern are learned
 // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { InputType, domUtils } from '$lib/utils/dom';
 import { loggerUtils } from '$lib/utils/logger';
 import { zodUtils } from '$lib/utils/zod';
@@ -32,9 +32,7 @@ type FormGeneralError = {
   sourceError?: any;
 };
 
-export type WithFormFieldErrors = {
-  errors: string[];
-};
+export type WithFormFieldErrors = { errors: string[] };
 
 export type FormFieldError = {
   [key: number]: FormFieldError | undefined;
@@ -54,7 +52,10 @@ type ValidateReturns<TFormData> = {
   errors?: FormFieldErrors<TFormData>;
 };
 
-type ZodFormatterErrors = { _errors: string[]; [key: string]: any };
+type ZodFormatterErrors = {
+  _errors: string[];
+  [key: string]: any;
+};
 
 const parseError = (
   fieldFormattedErrors: ZodFormatterErrors['_errors'],
@@ -65,7 +66,7 @@ const parseError = (
   if (fieldFormattedErrors.length > 0) {
     // @ts-expect-error see FormFieldError type for explination of the expected error
     newFormat = {
-      ...currentErrors || {},
+      ...(currentErrors || {}),
       errors: fieldFormattedErrors,
     };
   }
@@ -152,7 +153,10 @@ export const internalValidateProperty = <TFormData, TSchemaObject extends ZodRaw
     return { isValid: true };
   }
 
-  const formattedErrors = validationResults?.error.format() as { _errors: string[]; [key: string]: any };
+  const formattedErrors = validationResults?.error.format() as {
+    _errors: string[];
+    [key: string]: any;
+  };
 
   return {
     isValid: false,

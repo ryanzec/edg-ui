@@ -24,11 +24,10 @@ const getErrorPaths = <TSchemaData>(zodError: ZodError) => {
 
 // because this method is using is use a string as a path to get a zod type from any zod shape, not sure how to
 // do that other than using any
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 const getNestedSchema = (path: string, shape: any): ZodType => {
   const pathParts = path.split('.');
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let currentSchema: any = shape;
 
   for (let i = 0; i < pathParts.length; i++) {

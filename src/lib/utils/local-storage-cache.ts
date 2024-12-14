@@ -1,6 +1,6 @@
 export interface LocalStorageCacheData {
   // any is being used as we do want to be able to store any kind of data here
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   value: any;
   expires: number | boolean;
 }
@@ -28,7 +28,7 @@ const get = (key: string) => {
 };
 
 // any is being used as we do want to be able to store any kind of data here
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 const set = (key: string, value: any, expireIn = 0) => {
   const expires = new Date().getTime();
 

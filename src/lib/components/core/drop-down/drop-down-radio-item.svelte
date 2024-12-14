@@ -7,7 +7,6 @@
   // @todo need to figure out if there is a proper way to type this
 
   interface Props {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     item: any;
     isChecked: Readable<(option: string) => boolean>;
     option: string;

@@ -30,11 +30,11 @@
     variant?: ButtonVariant;
     color?: ButtonColor;
     shape?: ButtonShape;
-    /* eslint-disable */
+
     // since action can really be anything, we are going to ignore eslint issue for these
     action?: Function;
     actionOptions?: any;
-    /* eslint-enable */
+
     class?: string;
     preItem?: import('svelte').Snippet;
     children?: import('svelte').Snippet;

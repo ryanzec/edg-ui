@@ -14,7 +14,9 @@
 
   let { isOpened = writable(false) }: Props = $props();
 
-  const { elements: { trigger, overlay, content, title, description, close, portalled } } = createDialog(dialogUtils.buildCreateOptions(isOpened));
+  const {
+    elements: { trigger, overlay, content, title, description, close, portalled },
+  } = createDialog(dialogUtils.buildCreateOptions(isOpened));
 
   const handleAction = () => {
     $isOpened = false;

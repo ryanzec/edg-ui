@@ -2,9 +2,7 @@ import { type DevNavigationItem } from '$lib/components/core/dev-navigation/dev-
 import { writable } from 'svelte/store';
 import * as _ from 'lodash-es';
 
-export type DevNavigationStore = {
-  activeComponent?: DevNavigationItem['component'];
-};
+export type DevNavigationStore = { activeComponent?: DevNavigationItem['component'] };
 
 const store = writable<DevNavigationStore>({});
 

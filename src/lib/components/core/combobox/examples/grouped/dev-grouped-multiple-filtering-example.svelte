@@ -5,9 +5,7 @@
   type MyComboboxValue = {
     value: string;
     display: string;
-    meta: {
-      testing: string;
-    };
+    meta: { testing: string };
   };
 
   const groupedOptions: Record<string, MyComboboxValue[]> = {

@@ -7,20 +7,14 @@
 
   interface Props {
     meltRadioGroup: AnyMeltElement;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     meltRadioItem: any;
     isChecked: Readable<(option: string) => boolean>;
     options: string[];
     value: Writable<string>;
   }
 
-  let {
-    meltRadioGroup,
-    meltRadioItem,
-    isChecked,
-    options,
-    value,
-  }: Props = $props();
+  let { meltRadioGroup, meltRadioItem, isChecked, options, value }: Props = $props();
 </script>
 
 <div data-id="radio-group" use:melt={$meltRadioGroup} class="flex flex-col">

@@ -38,9 +38,7 @@ export type User = {
   deletedAt?: string;
 };
 
-export type UserComboboxOption = BaseComboboxOptionValue & {
-  meta: User;
-};
+export type UserComboboxOption = BaseComboboxOptionValue & { meta: User };
 
 export type GetUsersResponse = ResponseStructure<User[]>;
 

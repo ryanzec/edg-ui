@@ -1,9 +1,9 @@
 <script lang="ts" module>
-  export type FormData = {
-    toggle: string[];
-  };
+  export type FormData = { toggle: string[] };
 
-  export const formDataSchema = zodUtils.schemaForType<FormData>()(zod.object({ toggle: zod.array(zod.string()).min(1, 'Required') }));
+  export const formDataSchema = zodUtils.schemaForType<FormData>()(
+    zod.object({ toggle: zod.array(zod.string()).min(1, 'Required') }),
+  );
 
   export type FormDataSchema = typeof formDataSchema.shape;
 </script>

@@ -3,25 +3,25 @@
     firstName: string;
     lastName: string;
   };
-  export type FormData = {
-    complexArray: (Complex & {
-      simpleArray: string[];
-    })[];
-  };
+  export type FormData = { complexArray: (Complex & { simpleArray: string[] })[] };
 
   export const complexSchema = zod.object({
     firstName: zod.string().min(1, 'Required'),
     lastName: zod.string(),
   });
 
-  export const formDataSchema = zodUtils.schemaForType<FormData>()(zod.object({
-    complexArray: zod
-      .array(zod.object({
-        ...complexSchema.shape,
-        simpleArray: zod.array(zod.string().min(1, 'Required')).min(1, 'Required'),
-      }))
-      .min(1, 'Required'),
-  }));
+  export const formDataSchema = zodUtils.schemaForType<FormData>()(
+    zod.object({
+      complexArray: zod
+        .array(
+          zod.object({
+            ...complexSchema.shape,
+            simpleArray: zod.array(zod.string().min(1, 'Required')).min(1, 'Required'),
+          }),
+        )
+        .min(1, 'Required'),
+    }),
+  );
 
   export type FormDataSchema = typeof formDataSchema.shape;
 </script>
@@ -60,16 +60,17 @@
         <Button
           data-id="add-object-value-trigger"
           class="self-start"
-          onclick={() => complexArray.update((data) => {
-            return [
-              ...data,
-              {
-                firstName: '',
-                lastName: '',
-                simpleArray: [],
-              },
-            ];
-          })}
+          onclick={() =>
+            complexArray.update((data) => {
+              return [
+                ...data,
+                {
+                  firstName: '',
+                  lastName: '',
+                  simpleArray: [],
+                },
+              ];
+            })}
         >
           Add
         </Button>
@@ -88,15 +89,16 @@
               <Button
                 data-id="add-array-value-trigger"
                 class="self-start"
-                onclick={() => complexArray.update((data) => {
-                  const selfItem = data.slice(index, index + 1)[0];
+                onclick={() =>
+                  complexArray.update((data) => {
+                    const selfItem = data.slice(index, index + 1)[0];
 
-                  selfItem.simpleArray = [...selfItem.simpleArray, ''];
+                    selfItem.simpleArray = [...selfItem.simpleArray, ''];
 
-                  data.splice(index, 1, selfItem);
+                    data.splice(index, 1, selfItem);
 
-                  return data;
-                })}>Add</Button
+                    return data;
+                  })}>Add</Button
               >
               {#each $complexArray[index].simpleArray as _, arrayIndex}
                 <FormField

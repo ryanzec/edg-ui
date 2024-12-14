@@ -1,9 +1,7 @@
 import { browser } from '$app/environment';
 import { domUtils } from '$lib/utils/dom';
 
-export type ClickOutsideActionOptions = {
-  callback: (clickedElement: HTMLElement) => void;
-};
+export type ClickOutsideActionOptions = { callback: (clickedElement: HTMLElement) => void };
 
 export const clickOutsideAction = (element: HTMLElement, options: ClickOutsideActionOptions) => {
   if (!browser) {

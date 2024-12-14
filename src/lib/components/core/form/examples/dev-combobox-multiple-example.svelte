@@ -1,9 +1,9 @@
 <script lang="ts" module>
-  export type FormData = {
-    userRoles: UserRoleComboboxOption[];
-  };
+  export type FormData = { userRoles: UserRoleComboboxOption[] };
 
-  export const formDataSchema = zodUtils.schemaForType<FormData>()(zod.object({ userRoles: zod.array(userRoleSelectSchema).min(2, 'Required') }));
+  export const formDataSchema = zodUtils.schemaForType<FormData>()(
+    zod.object({ userRoles: zod.array(userRoleSelectSchema).min(2, 'Required') }),
+  );
 
   export type FormDataSchema = typeof formDataSchema.shape;
 </script>

@@ -1,7 +1,7 @@
 import * as _ from 'lodash-es';
 
 // we need to allow any here as this is used to deeping get all keys for an object that can have any values
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 const collectKeysForValue = (value: any, keys: string[] = [], parent: string = '') => {
   if (Array.isArray(value)) {
     for (let i = 0; i < value.length; i++) {
@@ -17,7 +17,7 @@ const collectKeysForValue = (value: any, keys: string[] = [], parent: string = '
   if (_.isObject(value)) {
     Object.keys(value).forEach((key) => {
       // we need to allow any here as this is used to deeping get all keys for an object that can have any values
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
       const currentValue = (value as Record<string, any>)[key];
 
       collectKeysForValue(currentValue, keys, parent ? `${parent}.${key}` : key);

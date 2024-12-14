@@ -1,9 +1,9 @@
 <script lang="ts" module>
-  export type FormData = {
-    simpleArray: string[];
-  };
+  export type FormData = { simpleArray: string[] };
 
-  export const formDataSchema = zodUtils.schemaForType<FormData>()(zod.object({ simpleArray: zod.array(zod.string().min(1, 'Required')).min(2, 'Required') }));
+  export const formDataSchema = zodUtils.schemaForType<FormData>()(
+    zod.object({ simpleArray: zod.array(zod.string().min(1, 'Required')).min(2, 'Required') }),
+  );
 
   export type FormDataSchema = typeof formDataSchema.shape;
 </script>
@@ -43,9 +43,10 @@
         <Button
           class="self-start"
           data-id="add-array-value-trigger"
-          onclick={() => simpleArray.update((data) => {
-            return [...data, ''];
-          })}
+          onclick={() =>
+            simpleArray.update((data) => {
+              return [...data, ''];
+            })}
         >
           Add
         </Button>

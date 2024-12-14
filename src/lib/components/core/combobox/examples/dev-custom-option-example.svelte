@@ -6,9 +6,7 @@
   type MyComboboxValue = {
     value: string;
     display: string;
-    meta: {
-      testing: string;
-    };
+    meta: { testing: string };
   };
 
   const options: MyComboboxValue[] = [

@@ -5,7 +5,6 @@
   // @todo need to figure out if there is a proper way to type this
 
   type Props = HTMLAttributes<HTMLButtonElement> & {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     meltItem: any;
     disabled?: boolean;
     closeOnClick?: boolean;

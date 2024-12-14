@@ -6,9 +6,7 @@
     toggle: string[];
     radio: string;
   };
-  export type FormData = {
-    complex: Complex;
-  };
+  export type FormData = { complex: Complex };
 
   export const complexSchema = zod.object({
     firstName: zod.string().min(1, 'Required'),
@@ -18,7 +16,9 @@
     radio: zod.string().min(1, 'Required'),
   });
 
-  export const formDataSchema = zodUtils.schemaForType<FormData>()(zod.object({ complex: zod.object(complexSchema.shape) }));
+  export const formDataSchema = zodUtils.schemaForType<FormData>()(
+    zod.object({ complex: zod.object(complexSchema.shape) }),
+  );
 
   export type FormDataSchema = typeof formDataSchema.shape;
 </script>
