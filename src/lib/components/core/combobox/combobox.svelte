@@ -22,7 +22,7 @@
   // @todo(feature) character threshold
   // @todo(feature) allow new value
 
-  interface Props {
+  type Props = {
     label: string;
     placeholder?: string;
     // the `value` for each option must be unique for this to work properly
@@ -44,7 +44,7 @@
     clearOptionDisplay?: string;
     onSelectedChanged?: ((selected: TOptionValue[]) => void) | undefined;
     class?: string;
-  }
+  };
 
   let {
     label,
@@ -94,7 +94,7 @@
   });
 
   const filterOptions = (inputValue: string): TOptionValue[] => {
-    if (!useFiltering || !isMultiple && !$inputIsDirty) {
+    if (!useFiltering || (!isMultiple && !$inputIsDirty)) {
       return options;
     }
 
@@ -108,7 +108,7 @@
   };
 
   const filterGroupedOptions = (inputValue: string): Record<string, TOptionValue[]> | undefined => {
-    if (!useFiltering || !groupedOptions || !isMultiple && !$inputIsDirty) {
+    if (!useFiltering || !groupedOptions || (!isMultiple && !$inputIsDirty)) {
       return groupedOptions;
     }
 
@@ -217,8 +217,8 @@
   // @todo(refactor?) not sure if it is possible to refactor this $effect away as this is a value that needs to be
   // @todo(refactor?) passed to the combpobox store
   $effect(() => {
-    $optionCount
-      = groupedOptions && finalGroupedOptions
+    $optionCount =
+      groupedOptions && finalGroupedOptions
         ? Object.values(finalGroupedOptions).reduce((collector, options) => collector + options.length, 0)
         : finalOptions.length;
   });

@@ -1,6 +1,6 @@
 import { HttpError } from '$lib/utils/error';
 
-export interface HttpRequest<TResponse> extends Omit<RequestInit, 'credentials'> {
+export type HttpRequest<TResponse> = Omit<RequestInit, 'credentials'> & {
   withCredentials?: boolean;
   // since this for an api request which can basically have any data, any is valid in this case
 
@@ -10,16 +10,16 @@ export interface HttpRequest<TResponse> extends Omit<RequestInit, 'credentials'>
 
   // should return false to prevent further processing of the error
   onError?: (response: Response, responseJson: TResponse) => Promise<boolean>;
-}
+};
 
-export interface GraphqlRequest<T, K = undefined> extends Omit<RequestInit, 'credentials'> {
+export type GraphqlRequest<T, K = undefined> = Omit<RequestInit, 'credentials'> & {
   query: string;
   variables?: K;
   withCredentials?: boolean;
 
   // should return false to prevent further processing of the error
   onError?: (response: Response, responseJson: T) => Promise<boolean>;
-}
+};
 
 export enum GraphqlErrorCode {
   AUTH_NOT_AUTHORIZED = 'AUTH_NOT_AUTHORIZED',

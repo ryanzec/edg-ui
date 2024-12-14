@@ -2,10 +2,10 @@
   /* global TOptionValue */
   import type { ComboboxStore } from '$lib/components/core/combobox/store';
 
-  interface Props {
+  type Props = {
     display?: string;
     clearOptionAction: ComboboxStore<TOptionValue>['clearOptionAction'];
-  }
+  };
 
   let { display = '', clearOptionAction }: Props = $props();
 </script>

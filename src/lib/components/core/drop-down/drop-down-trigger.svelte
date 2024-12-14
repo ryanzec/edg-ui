@@ -1,15 +1,13 @@
 <script lang="ts">
   import { melt, type AnyMeltElement } from '@melt-ui/svelte';
 
-
-  interface Props {
+  type Props = {
     meltTrigger: AnyMeltElement;
     class?: string;
     children?: import('svelte').Snippet;
-  }
+  };
 
   let { meltTrigger, class: extraClass = '', children }: Props = $props();
-
 </script>
 
 <div data-id="trigger" class="inline-block {extraClass}" use:melt={$meltTrigger} aria-label="Update dimensions">

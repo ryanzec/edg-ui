@@ -2,11 +2,11 @@
   import { melt, type AnyMeltElement } from '@melt-ui/svelte';
   import XIcon from '$lib/components/core/icons/x-icon.svelte';
 
-  interface Props {
+  type Props = {
     meltTitle: AnyMeltElement;
     meltClose: AnyMeltElement;
     title: string;
-  }
+  };
 
   let { meltTitle, meltClose, title }: Props = $props();
 </script>

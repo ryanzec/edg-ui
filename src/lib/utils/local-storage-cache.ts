@@ -1,9 +1,8 @@
-export interface LocalStorageCacheData {
+export type LocalStorageCacheData = {
   // any is being used as we do want to be able to store any kind of data here
-
   value: any;
   expires: number | boolean;
-}
+};
 
 const get = (key: string) => {
   const now = new Date().getTime();

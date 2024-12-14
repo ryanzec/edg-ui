@@ -1,10 +1,10 @@
 <script lang="ts">
   import { melt, type AnyMeltElement } from '@melt-ui/svelte';
 
-  interface Props {
+  type Props = {
     meltClose: AnyMeltElement;
     title?: string;
-  }
+  };
 
   let { meltClose, title = 'Cancel' }: Props = $props();
 </script>

@@ -31,10 +31,10 @@
   import { zodUtils } from '$lib/utils/zod';
   import * as zod from 'zod';
 
-  interface Props {
+  type Props = {
     initialUser?: Pick<User, 'firstName' | 'lastName' | 'email' | 'role' | 'id'> | undefined;
     onUserSaved?: ((user: User) => void) | undefined;
-  }
+  };
 
   let { initialUser = undefined, onUserSaved = undefined }: Props = $props();
 
@@ -66,15 +66,19 @@
     },
   });
 
-  let formIsProcessing = $derived($createUserMutation.fetchingState === MutateFetchingState.PROCESSING
-    || $updateUserMutation.fetchingState === MutateFetchingState.PROCESSING);
+  let formIsProcessing = $derived(
+    $createUserMutation.fetchingState === MutateFetchingState.PROCESSING ||
+      $updateUserMutation.fetchingState === MutateFetchingState.PROCESSING,
+  );
 
-  const userFormDataSchema = zodUtils.schemaForType<UserFormData>()(zod.object({
-    firstName: zod.string().min(1, 'Required'),
-    lastName: zod.string().min(1, 'Required'),
-    email: zod.string().min(1, 'Required'),
-    role: zod.array(userRoleZodSchema).min(1, 'Required'),
-  }));
+  const userFormDataSchema = zodUtils.schemaForType<UserFormData>()(
+    zod.object({
+      firstName: zod.string().min(1, 'Required'),
+      lastName: zod.string().min(1, 'Required'),
+      email: zod.string().min(1, 'Required'),
+      role: zod.array(userRoleZodSchema).min(1, 'Required'),
+    }),
+  );
 
   const userRoleOptions = userDataUtils.getRolesAsComboboxOptions();
 

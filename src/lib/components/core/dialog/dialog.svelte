@@ -3,7 +3,7 @@
   import type { Writable } from 'svelte/store';
   import Overlay from '$lib/components/core/overlay/overlay.svelte';
 
-  interface Props {
+  type Props = {
     isOpened: Writable<boolean>;
     meltPortalled: AnyMeltElement;
     meltOverlay: AnyMeltElement;
@@ -11,7 +11,7 @@
     onOpened?: () => void;
     onClosed?: () => void;
     children?: import('svelte').Snippet;
-  }
+  };
 
   let { isOpened, meltPortalled, meltOverlay, meltContent, onOpened, onClosed, children }: Props = $props();
 

@@ -11,9 +11,7 @@
   import { peekExampleItems } from '$lib/components/core/peek/examples/utils';
   import { scrollAreaExampleItems } from '$lib/components/core/scroll-area/examples/utils';
   import { tooltipExampleItems } from '$lib/components/core/tooltip/examples/utils';
-  interface Props {
-    children?: import('svelte').Snippet;
-  }
+  type Props = { children?: import('svelte').Snippet };
 
   let { children }: Props = $props();
 

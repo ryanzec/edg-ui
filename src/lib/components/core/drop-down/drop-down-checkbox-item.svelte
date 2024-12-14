@@ -6,13 +6,13 @@
 
   // @todo need to figure out if there is a proper way to type this
 
-  interface Props {
+  type Props = {
     item: any;
     checked: Writable<boolean>;
     closeOnClick?: boolean;
     children?: import('svelte').Snippet;
     rightContent?: import('svelte').Snippet;
-  }
+  };
 
   let { item, checked, closeOnClick = false, children, rightContent }: Props = $props();
 

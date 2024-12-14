@@ -6,7 +6,7 @@
 
   // @todo need to figure out if there is a proper way to type this
 
-  interface Props {
+  type Props = {
     item: any;
     isChecked: Readable<(option: string) => boolean>;
     option: string;
@@ -14,7 +14,7 @@
     value: Writable<string>;
     children?: import('svelte').Snippet;
     rightContent?: import('svelte').Snippet;
-  }
+  };
 
   let { item, isChecked, option, closeOnClick = false, value, children, rightContent }: Props = $props();
 

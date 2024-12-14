@@ -1,8 +1,8 @@
 <script lang="ts">
-  interface Props {
+  type Props = {
     title: string;
     onclick: (event: Event) => void;
-  }
+  };
 
   let { title, onclick }: Props = $props();
 </script>

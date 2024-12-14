@@ -7,21 +7,14 @@
   import { goto } from '$app/navigation';
   import { twMerge } from 'tailwind-merge';
 
-
-  interface Props {
+  type Props = {
     isNested?: boolean;
     items?: DevNavigationItem[];
     parent?: string;
     class?: string;
-  }
+  };
 
-  let {
-    isNested = false,
-    items = [],
-    parent = '',
-    class: extraClass = '',
-  }: Props = $props();
-
+  let { isNested = false, items = [], parent = '', class: extraClass = '' }: Props = $props();
 
   const handleDisplayComponent = (item: DevNavigationItem) => {
     devNavigationStore.setActiveComponent(item.component);

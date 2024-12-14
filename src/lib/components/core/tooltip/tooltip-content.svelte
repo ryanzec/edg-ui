@@ -1,11 +1,10 @@
 <script lang="ts">
-  interface Props {
+  type Props = {
     class?: string;
     children?: import('svelte').Snippet;
-  }
+  };
 
   let { class: extraClass = '', children }: Props = $props();
-
 </script>
 
 <div

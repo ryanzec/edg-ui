@@ -4,11 +4,11 @@
   import { type Writable } from 'svelte/store';
   import type { WithGet } from '@melt-ui/svelte/internal/helpers';
 
-  interface Props {
+  type Props = {
     subMenu: AnyMeltElement;
     isOpened: WithGet<Writable<boolean>>;
     children?: import('svelte').Snippet;
-  }
+  };
 
   let { subMenu, isOpened, children }: Props = $props();
 </script>

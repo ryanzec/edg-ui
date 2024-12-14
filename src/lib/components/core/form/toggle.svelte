@@ -6,21 +6,15 @@
   import { stringUtils } from '$lib/utils/string';
   import { twMerge } from 'tailwind-merge';
 
-  interface Props {
+  type Props = {
     checked: boolean;
     name: string;
     id?: string;
     value: string;
     label?: string;
-  }
+  };
 
-  let {
-    checked = $bindable(),
-    name,
-    id = name,
-    value,
-    label = value,
-  }: Props = $props();
+  let { checked = $bindable(), name, id = name, value, label = value }: Props = $props();
 
   const buttonCss = '';
 

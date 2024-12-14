@@ -14,9 +14,7 @@
   import { page } from '$app/stores';
   import ScrollArea from '$lib/components/core/scroll-area/scroll-area.svelte';
 
-  interface Props {
-    items?: DevNavigationItem[];
-  }
+  type Props = { items?: DevNavigationItem[] };
 
   let { items = [] }: Props = $props();
 

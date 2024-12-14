@@ -2,11 +2,11 @@
   /* global TOptionValue */
   import type { ComboboxStore } from '$lib/components/core/combobox/store';
 
-  interface Props {
+  type Props = {
     option: TOptionValue;
     optionIndex: number;
     optionAction: ComboboxStore<TOptionValue>['optionAction'];
-  }
+  };
 
   let { option, optionIndex, optionAction }: Props = $props();
 </script>

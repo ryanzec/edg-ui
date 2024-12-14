@@ -4,7 +4,7 @@
   import { fly } from 'svelte/transition';
   import Overlay from '../overlay/overlay.svelte';
 
-  interface Props {
+  type Props = {
     hasOverlay?: boolean;
     isOpened: Writable<boolean>;
     isResizable?: boolean;
@@ -14,7 +14,7 @@
     onOpened?: () => void;
     onClosed?: () => void;
     children?: import('svelte').Snippet;
-  }
+  };
 
   let {
     hasOverlay = true,

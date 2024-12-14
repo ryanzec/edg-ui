@@ -1,9 +1,7 @@
 <script lang="ts">
   import { melt, type AnyMeltElement } from '@melt-ui/svelte';
 
-  interface Props {
-    meltSeparator: AnyMeltElement;
-  }
+  type Props = { meltSeparator: AnyMeltElement };
 
   let { meltSeparator }: Props = $props();
 </script>

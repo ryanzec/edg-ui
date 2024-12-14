@@ -8,7 +8,7 @@
   import type { ComboboxOptionComponent, ComboboxOptionsActionOptions } from '$lib/components/core/combobox/utils';
   import LoaderIcon from '$lib/components/core/icons/loader-icon.svelte';
 
-  interface Props {
+  type Props = {
     options: TOptionValue[];
     groupedOptions?: Record<string, TOptionValue[]> | undefined;
     optionsAction: ComboboxStore<TOptionValue>['optionsAction'];
@@ -20,7 +20,7 @@
     optionsActionOptions?: ComboboxOptionsActionOptions;
     clearOptionDisplay?: string;
     clearOptionAction?: ComboboxStore<TOptionValue>['clearOptionAction'] | undefined;
-  }
+  };
 
   let {
     options,
@@ -54,9 +54,11 @@
   });
 
   let isGrouped = $derived(groupedOptions && Object.keys(groupedOptions).length > 0);
-  let totalOptionsCount = $derived(groupedOptions && isGrouped
-    ? Object.values(groupedOptions).reduce((collector, groupOptions) => collector + groupOptions.length, 0)
-    : options.length);
+  let totalOptionsCount = $derived(
+    groupedOptions && isGrouped
+      ? Object.values(groupedOptions).reduce((collector, groupOptions) => collector + groupOptions.length, 0)
+      : options.length,
+  );
   let passesThresholdCheck = $derived(inputValue.length >= showMenuCharacterThreshold);
 </script>
 

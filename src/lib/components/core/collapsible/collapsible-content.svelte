@@ -3,19 +3,14 @@
   import type { Writable } from 'svelte/store';
   import { slide } from 'svelte/transition';
 
-  interface Props {
+  type Props = {
     meltRoot: AnyMeltElement;
     meltContent: AnyMeltElement;
     isOpened: Writable<boolean>;
     children?: import('svelte').Snippet;
-  }
+  };
 
-  let {
-    meltRoot,
-    meltContent,
-    isOpened,
-    children,
-  }: Props = $props();
+  let { meltRoot, meltContent, isOpened, children }: Props = $props();
 </script>
 
 <div data-id="collapsible-content" use:melt={$meltRoot} class="relative">

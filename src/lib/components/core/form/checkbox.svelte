@@ -7,21 +7,15 @@
   import SquareIcon from '$lib/components/core/icons/square-icon.svelte';
   import SquareCheckIcon from '$lib/components/core/icons/square-check-icon.svelte';
 
-  interface Props {
+  type Props = {
     checked: boolean;
     name: string;
     id?: string;
     value: string;
     label?: string;
-  }
+  };
 
-  let {
-    checked = $bindable(),
-    name,
-    id = name,
-    value,
-    label = value,
-  }: Props = $props();
+  let { checked = $bindable(), name, id = name, value, label = value }: Props = $props();
 </script>
 
 <label data-id="checkbox" class="flex cursor-pointer items-center" for={id} id="{value}-label">

@@ -5,14 +5,14 @@
 
   // @todo need to figure out if there is a proper way to type this
 
-  interface Props {
+  type Props = {
     meltRadioGroup: AnyMeltElement;
 
     meltRadioItem: any;
     isChecked: Readable<(option: string) => boolean>;
     options: string[];
     value: Writable<string>;
-  }
+  };
 
   let { meltRadioGroup, meltRadioItem, isChecked, options, value }: Props = $props();
 </script>
