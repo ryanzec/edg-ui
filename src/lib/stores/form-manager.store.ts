@@ -65,7 +65,7 @@ const parseError = (
   if (fieldFormattedErrors.length > 0) {
     // @ts-expect-error see FormFieldError type for explination of the expected error
     newFormat = {
-      ...currentErrors || {},
+      ...(currentErrors || {}),
       errors: fieldFormattedErrors,
     };
   }

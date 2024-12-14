@@ -36,7 +36,6 @@
   import FormFields from '$lib/components/core/form/form-fields.svelte';
   import Fieldset from '$lib/components/core/form/fieldset.svelte';
   import Checkbox from '$lib/components/core/form/checkbox.svelte';
-  import { stringUtils } from '$lib/utils/string';
   import Radio from '$lib/components/core/form/radio.svelte';
   import Toggle from '$lib/components/core/form/toggle.svelte';
 
@@ -87,9 +86,8 @@
                 name="complex.checkbox"
                 value={option}
                 checked={$complex.checkbox.includes(option)}
-              >
-                {stringUtils.toTitleCase(option)}
-              </Checkbox>
+                label={option}
+              />
             {/each}
           </Fieldset>
         </FormField>
@@ -102,9 +100,8 @@
                 name="complex.toggle"
                 value={option}
                 checked={$complex.toggle.includes(option)}
-              >
-                {stringUtils.toTitleCase(option)}
-              </Toggle>
+                label={option}
+              />
             {/each}
           </Fieldset>
         </FormField>

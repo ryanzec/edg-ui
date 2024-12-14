@@ -18,7 +18,6 @@
   import Fieldset from '$lib/components/core/form/fieldset.svelte';
   import Legend from '$lib/components/core/form/legend.svelte';
   import Checkbox from '$lib/components/core/form/checkbox.svelte';
-  import { stringUtils } from '$lib/utils/string';
   import FormFields from '$lib/components/core/form/form-fields.svelte';
 
   let submittedData: FormData | undefined = undefined;
@@ -50,9 +49,8 @@
               name="checkbox"
               value={checkboxOption}
               checked={$checkbox.includes(checkboxOption)}
-            >
-              {stringUtils.toTitleCase(checkboxOption)}
-            </Checkbox>
+              label={checkboxOption}
+            />
           {/each}
         </Fieldset>
       </FormField>

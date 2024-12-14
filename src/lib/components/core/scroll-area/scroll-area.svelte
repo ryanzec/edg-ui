@@ -7,13 +7,16 @@
   let extraClass: string = '';
   export { extraClass as class };
 
-  const defaultOptions: PartialOptions = {
-    scrollbars: {
-      autoHideDelay: 100,
-    },
-  };
+  const defaultOptions: PartialOptions = { scrollbars: { autoHideDelay: 100 } };
 </script>
 
-<OverlayScrollbarsComponent class={extraClass} options={structuredClone({ ...defaultOptions, ...options })} defer>
+<OverlayScrollbarsComponent
+  class={extraClass}
+  options={structuredClone({
+    ...defaultOptions,
+    ...options,
+  })}
+  defer
+>
   <slot />
 </OverlayScrollbarsComponent>

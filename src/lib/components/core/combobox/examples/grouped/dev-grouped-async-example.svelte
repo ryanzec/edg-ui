@@ -36,7 +36,10 @@
     const response = await usersApi.getList();
 
     if (!response.data) {
-      return { Static: staticOptions, Dynamic: [] };
+      return {
+        Static: staticOptions,
+        Dynamic: [],
+      };
     }
 
     return {

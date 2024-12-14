@@ -10,6 +10,6 @@
     <div class="text-sm">
       {flavor}
     </div>
-    <div role="separator" class="my-2 h-px w-full bg-outline" />
+    <div role="separator" class="my-2 h-px w-full bg-outline"></div>
   {/each}
 </ScrollArea>

@@ -17,7 +17,6 @@
   import FormField from '$lib/components/core/form/form-field.svelte';
   import Fieldset from '$lib/components/core/form/fieldset.svelte';
   import Legend from '$lib/components/core/form/legend.svelte';
-  import { stringUtils } from '$lib/utils/string';
   import FormFields from '$lib/components/core/form/form-fields.svelte';
   import Toggle from '$lib/components/core/form/toggle.svelte';
 
@@ -45,9 +44,13 @@
         <Fieldset>
           <Legend>Checkbox</Legend>
           {#each toggleOptions as option}
-            <Toggle id="toggle-{option}" name="toggle" value={option} checked={$toggle.includes(option)}>
-              {stringUtils.toTitleCase(option)}
-            </Toggle>
+            <Toggle
+              id="toggle-{option}"
+              name="toggle"
+              value={option}
+              checked={$toggle.includes(option)}
+              label={option}
+            />
           {/each}
         </Fieldset>
       </FormField>

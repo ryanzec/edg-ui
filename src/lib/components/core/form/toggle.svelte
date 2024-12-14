@@ -27,7 +27,7 @@
       buttonCss,
     )}
   >
-    <div class={twMerge('mx-0.5 block h-3 w-3 rounded-full bg-surface-base duration-150', checkedButtonCss)} />
+    <div class={twMerge('mx-0.5 block h-3 w-3 rounded-full bg-surface-base duration-150', checkedButtonCss)}></div>
   </div>
   <input {id} {name} type="checkbox" {value} bind:checked class="appearance-none" />
   {stringUtils.toTitleCase(label)}

@@ -36,8 +36,14 @@
   });
 
   setContext<DynamicFormSectionsContext>(DYNAMIC_FORM_SECTIONS_CONTEXT_KEY, {
-    formData: { firstName, lastName },
-    formErrors: { firstName: firstNameError, lastName: lastNameError },
+    formData: {
+      firstName,
+      lastName,
+    },
+    formErrors: {
+      firstName: firstNameError,
+      lastName: lastNameError,
+    },
   });
 
   // keep the form validation in sync with what form sections are enabled

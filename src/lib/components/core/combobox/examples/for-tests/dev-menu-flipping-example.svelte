@@ -1,6 +1,5 @@
 <script lang="ts">
   import Combobox from '$lib/components/core/combobox/combobox.svelte';
-  import test from 'node:test';
   import { writable } from 'svelte/store';
 
   type MyComboboxValue = {

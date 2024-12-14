@@ -1,10 +1,10 @@
 <script lang="ts" context="module">
-  import type { ComponentType, SvelteComponent } from 'svelte';
+  import type { Component } from 'svelte';
 
   export type DevNavigationItem = {
     display: string;
     items?: DevNavigationItem[];
-    component?: ComponentType<SvelteComponent>;
+    component?: Component;
   };
 </script>
 

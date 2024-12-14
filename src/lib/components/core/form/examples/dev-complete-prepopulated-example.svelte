@@ -80,7 +80,6 @@
   import SelectLabel from '$lib/components/core/form/select-label.svelte';
   import Combobox from '$lib/components/core/combobox/combobox.svelte';
   import Button from '$lib/components/core/button/button.svelte';
-  import { stringUtils } from '$lib/utils/string';
   import Radio from '$lib/components/core/form/radio.svelte';
   import FormFields from '$lib/components/core/form/form-fields.svelte';
   import Toggle from '$lib/components/core/form/toggle.svelte';

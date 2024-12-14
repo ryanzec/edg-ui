@@ -159,7 +159,7 @@
     }
 
     finalOptions = filterOptions(inputValue);
-    finalGroupedOptions = filterGroupedOptions($inputValue);
+    finalGroupedOptions = filterGroupedOptions(inputValue);
   }, resultsDelay);
 
   // keep options up to date with what is typed in the input

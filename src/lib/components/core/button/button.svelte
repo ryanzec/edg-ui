@@ -28,8 +28,12 @@
   export let variant: ButtonVariant = ButtonVariant.FILLED;
   export let color: ButtonColor = ButtonColor.BRAND;
   export let shape: ButtonShape = ButtonShape.ROUNDED;
+
+  /* eslint-disable */
+  // since action can really be anything, we are going to ignore eslint issue for these
   export let action: Function = () => {};
   export let actionOptions: any = undefined;
+  /* eslint-enable */
 
   let extraClass: string = '';
   export { extraClass as class };
