@@ -7,6 +7,9 @@
   import { dialogUtils } from '$lib/components/core/dialog/utils';
   import Dialog from '$lib/components/core/dialog/dialog.svelte';
   import Button, { ButtonColor, ButtonVariant } from '$lib/components/core/button/button.svelte';
+  import TextInput from '$lib/components/core/form/text-input.svelte';
+  import FormField from '$lib/components/core/form/form-field.svelte';
+  import Label from '$lib/components/core/form/label.svelte';
 
   type Props = { isOpened?: Writable<boolean> };
 
@@ -19,11 +22,14 @@
   const handleAction = () => {
     $isOpened = false;
   };
+
+  let value1: Writable<string> = writable('Thomas G. Lopes');
+  let value2: Writable<string> = writable('@thomasglopes');
 </script>
 
 <button
   use:melt={$trigger}
-  class="inline-flex items-center justify-center rounded-xl px-4 py-3 font-medium leading-none shadow"
+  class="inline-flex items-center justify-center rounded-xl px-4 py-3 leading-none font-medium shadow-sm"
 >
   Open Dialog
 </button>
@@ -32,17 +38,17 @@
   <DialogHeader meltTitle={title} title="Edit profile" meltClose={close} />
   <DialogContent>
     <p use:melt={$description} class="">Make changes to your profile here. Click save when you're done.</p>
-    <fieldset>
-      <label for="name">Name</label>
-      <input id="name" value="Thomas G. Lopes" />
-    </fieldset>
-    <fieldset>
-      <label for="username">Username</label>
-      <input id="username" value="@thomasglopes" />
-    </fieldset>
+    <FormField data-id="text">
+      <Label for="text">Name</Label>
+      <TextInput bind:value={$value1} name="text" />
+    </FormField>
+    <FormField data-id="text">
+      <Label for="text">Username</Label>
+      <TextInput bind:value={$value2} name="text" />
+    </FormField>
   </DialogContent>
   <DialogFooter>
     <Button onclick={handleAction} color={ButtonColor.NEUTRAL} variant={ButtonVariant.GHOST}>Close</Button>
     <Button onclick={handleAction}>Action</Button>
-  </DialogFooter></Dialog
->
+  </DialogFooter>
+</Dialog>

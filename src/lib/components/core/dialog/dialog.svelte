@@ -24,7 +24,7 @@
   <div data-id="dialog" use:melt={$meltPortalled}>
     <Overlay {meltOverlay} />
     <div
-      class="fixed left-1/2 top-1/2 z-dialog max-h-[85vh] w-[90vw] max-w-[450px] -translate-x-1/2 -translate-y-1/2 rounded-xl bg-surface-pure p-4 shadow-lg"
+      class="z-dialog bg-surface-pure fixed top-1/2 left-1/2 flex max-h-[85vh] w-[90vw] max-w-[450px] -translate-x-1/2 -translate-y-1/2 flex-col gap-3 rounded-xl p-4 shadow-lg"
       use:melt={$meltContent}
     >
       {@render children?.()}

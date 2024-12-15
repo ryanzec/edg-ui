@@ -71,7 +71,7 @@
   tabindex="-1"
   data-id="options"
   use:optionsAction={optionsActionOptions}
-  class="absolute z-10 flex max-h-[300px] flex-col overflow-hidden overflow-y-auto rounded-b-lg border bg-surface-pure"
+  class="bg-surface-pure absolute z-10 mt-0.5 flex max-h-[300px] flex-col overflow-hidden overflow-y-auto rounded-lg border"
 >
   <div class="flex max-h-full flex-col gap-0">
     {#if isLoading}

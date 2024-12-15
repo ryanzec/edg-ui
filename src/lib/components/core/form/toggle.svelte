@@ -26,12 +26,12 @@
   <div
     data-id="bar"
     class={twMerge(
-      'mr-1 inline-flex h-4 w-8 items-center rounded-3xl outline-none transition-colors duration-150',
+      'mr-1 inline-flex h-4 w-8 items-center rounded-3xl outline-hidden transition-colors duration-150',
       checkedBarCss,
       buttonCss,
     )}
   >
-    <div class={twMerge('mx-0.5 block h-3 w-3 rounded-full bg-surface-base duration-150', checkedButtonCss)}></div>
+    <div class={twMerge('bg-surface-base mx-0.5 block h-3 w-3 rounded-full duration-150', checkedButtonCss)}></div>
   </div>
   <input {id} {name} type="checkbox" {value} bind:checked class="appearance-none" />
   {stringUtils.toTitleCase(label)}

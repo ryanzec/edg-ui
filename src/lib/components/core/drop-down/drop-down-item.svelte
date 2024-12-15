@@ -39,7 +39,7 @@
 <button
   data-id="item"
   use:melt={meltItem}
-  class="z-40 flex min-h-[24px] select-none items-center rounded-sm px-2 text-sm leading-none outline-none ring-0 data-[highlighted]:bg-neutral-subtle"
+  class="data-highlighted:bg-neutral-subtle z-40 flex min-h-[24px] items-center rounded-xs px-2 text-sm leading-none ring-0 outline-hidden select-none"
   class:opacity-45={disabled}
   onm-click={handleClick}
   {...rest}

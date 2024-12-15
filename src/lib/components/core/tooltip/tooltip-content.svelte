@@ -9,7 +9,7 @@
 
 <div
   data-id="content"
-  class="absolute rounded bg-surface-on-base px-2 py-1 text-inverse-base opacity-0 transition-opacity duration-[250ms] {extraClass}"
+  class="bg-surface-on-base text-inverse-base absolute rounded-sm px-2 py-1 opacity-0 transition-opacity duration-[250ms] {extraClass}"
   data-tooltip-content
 >
   {@render children?.()}

@@ -36,7 +36,7 @@
 {#if $isOpened}
   <div
     data-id="menu"
-    class="z-40 flex min-w-[220px] flex-col rounded-md border border-outline bg-surface-pure shadow ring-0"
+    class="border-outline bg-surface-pure z-40 flex min-w-[220px] flex-col rounded-md border ring-0 shadow-sm"
     class:shadow-lg={type === DropDownMenuType.MAIN}
     class:shadow-md={type === DropDownMenuType.SUB}
     use:melt={$meltMenu}

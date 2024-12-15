@@ -17,7 +17,7 @@
     option,
     optionIndex,
   }}
-  class="relative flex cursor-pointer scroll-my-2 items-center gap-2 px-2 py-1 last:rounded-b-none data-[combobox-drop-down-selected]:bg-brand-subtle data-[combobox-highlighted]:bg-surface-tertiary data-[disabled]:opacity-50"
+  class="data-combobox-drop-down-selected:bg-brand-subtle data-combobox-highlighted:bg-surface-tertiary relative flex cursor-pointer scroll-my-2 items-center gap-2 px-2 py-1 last:rounded-b-none data-disabled:opacity-50"
 >
   <div>
     <span class="font-medium">{option.display}</span>
