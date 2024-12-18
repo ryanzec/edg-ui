@@ -11,6 +11,9 @@ importers:
       '@floating-ui/dom':
         specifier: ^1.6.5
         version: 1.6.12
+      dayjs:
+        specifier: 1.11.13
+        version: 1.11.13
       debounce:
         specifier: 2.2.0
         version: 2.2.0
@@ -1070,6 +1073,9 @@ packages:
     resolution: {integrity: sha512-/Tb/JcjK111nNScGob5MNtsntNM1aCNUDipB/TkwZFhyDrrE47SOx/18wF2bbjgc3ZzCSKW1T5nt5EbFoAz/Vg==}
     engines: {node: '>=4'}
     hasBin: true
+
+  dayjs@1.11.13:
+    resolution: {integrity: sha512-oaMBel6gjolK862uaPQOVTA7q3TZhuSvuMQAAglQDOWYO9A91IrAOUJEyKVlqJlHE0vq5p5UXxzdPfMH/x6xNg==}
 
   debounce@2.2.0:
     resolution: {integrity: sha512-Xks6RUDLZFdz8LIdR6q0MTH44k7FikOmnh5xkSjMig6ch45afc8sjTjRQf3P6ax8dMgcQrYO/AR2RGWURrruqw==}
@@ -3747,6 +3753,8 @@ snapshots:
   crypto-random-string@2.0.0: {}
 
   cssesc@3.0.0: {}
+
+  dayjs@1.11.13: {}
 
   debounce@2.2.0: {}
 

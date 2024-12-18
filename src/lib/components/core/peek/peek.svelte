@@ -1,4 +1,5 @@
 <script lang="ts">
+  // @todo(feature) support passing in width (as a class name probably)
   import { melt, type AnyMeltElement } from '@melt-ui/svelte';
   import type { Writable } from 'svelte/store';
   import { fly } from 'svelte/transition';
@@ -115,7 +116,7 @@
     <div
       use:melt={$meltContent}
       bind:this={peekElement}
-      class="fixed right-0 top-0 z-50 flex h-screen w-[350px] flex-col border-l border-outline bg-surface-pure p-4"
+      class="border-outline bg-surface-pure fixed top-0 right-0 z-50 flex h-screen w-[350px] flex-col border-l p-4"
       transition:fly={{
         x: 350,
         duration: 300,
