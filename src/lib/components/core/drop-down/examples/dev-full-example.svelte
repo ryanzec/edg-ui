@@ -33,15 +33,24 @@
     helpers: { isChecked },
   } = createMenuRadioGroup({ value: radioValue });
 
-  const { elements: { checkboxItem } } = createCheckboxItem({ checked: settingsSync });
+  const {
+    elements: { checkboxItem },
+  } = createCheckboxItem({ checked: settingsSync });
 
-  const { elements: { checkboxItem: checkboxItemA } } = createCheckboxItem({ checked: hideMeltUI });
+  const {
+    elements: { checkboxItem: checkboxItemA },
+  } = createCheckboxItem({ checked: hideMeltUI });
 
   const personsArr = ['Hunter Johnston', 'Thomas G. Lopes', 'Adrian Gonz', 'Franck Poingt'];
+
+  const {
+    elements: { trigger: trigger2, menu: menu2, item: item2 },
+    states: { open: open2 },
+  } = createDropdownMenu(dropDownUtils.buildCreateOptions());
 </script>
 
 <h1>Drop Downs</h1>
-<DropDownTrigger class="absolute left-[400px] top-[400px] cursor-pointer" meltTrigger={trigger}>
+<DropDownTrigger class="absolute top-[400px] left-[400px] cursor-pointer" meltTrigger={trigger} isOpened={open}>
   <AlignJustifiedIcon class="m-2 size-4" />
 </DropDownTrigger>
 <DropDownMenu isOpened={open} meltMenu={menu}>
@@ -80,4 +89,12 @@
       ⌘Q
     {/snippet}
   </DropDownItem>
+</DropDownMenu>
+
+<DropDownTrigger class="absolute top-[440px] left-[400px] cursor-pointer" meltTrigger={trigger2} isOpened={open2}>
+  <AlignJustifiedIcon class="m-2 size-4" />
+</DropDownTrigger>
+<DropDownMenu isOpened={open2} meltMenu={menu2}>
+  <DropDownItem meltItem={$item2} onclick={() => console.log('about melt ui')}>About Melt UI</DropDownItem>
+  <DropDownItem meltItem={$item2}>Check for Updates..</DropDownItem>
 </DropDownMenu>
