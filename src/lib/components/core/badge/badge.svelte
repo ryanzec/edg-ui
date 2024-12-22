@@ -17,7 +17,7 @@
 <script lang="ts">
   import type { HTMLAttributes } from 'svelte/elements';
 
-  import { twMerge } from 'tailwind-merge';
+  import { tailwindUtils } from '$lib/utils/tailwind';
 
   type Props = HTMLAttributes<HTMLDivElement> & {
     color?: BadgeColor;
@@ -42,6 +42,6 @@
   };
 </script>
 
-<div class={twMerge('inline-block border px-1 py-0.5 text-xs', colorCss[color], shapeCss[shape])} {...rest}>
+<div class={tailwindUtils.merge('inline-block border px-1 py-0.5 text-xs', colorCss[color], shapeCss[shape])} {...rest}>
   {@render children?.()}
 </div>

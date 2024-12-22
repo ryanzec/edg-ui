@@ -2,7 +2,7 @@
   import type { HTMLAttributes } from 'svelte/elements';
   /* global TActionOptions */
 
-  import { twMerge } from 'tailwind-merge';
+  import { tailwindUtils } from '$lib/utils/tailwind';
 
   type Props = HTMLAttributes<HTMLLabelElement> & {
     use?: (element: HTMLLabelElement, options?: TActionOptions) => void;
@@ -22,6 +22,6 @@
   }: Props = $props();
 </script>
 
-<label use:use={useOptions} for={forName} class={twMerge('inline-block w-full', extraClass)} {...rest}>
+<label use:use={useOptions} for={forName} class={tailwindUtils.merge('inline-block w-full', extraClass)} {...rest}>
   {@render children?.()}
 </label>

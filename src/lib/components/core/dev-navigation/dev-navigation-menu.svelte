@@ -3,8 +3,8 @@
   import { devNavigationStore } from '$lib/components/core/dev-navigation/store';
   import { page } from '$app/stores';
   import { goto } from '$app/navigation';
-  import { twMerge } from 'tailwind-merge';
   import DevNavigationMenuGroup from './dev-navigation-menu-group.svelte';
+  import { tailwindUtils } from '$lib/utils/tailwind';
 
   type Props = {
     isNested?: boolean;
@@ -25,7 +25,7 @@
 </script>
 
 <div
-  class={twMerge('border-outline flex flex-1 flex-col', extraClass)}
+  class={tailwindUtils.merge('border-outline flex flex-1 flex-col', extraClass)}
   class:ml-2={isNested}
   class:w-48={isNested === false}
   class:border-r={isNested === false}

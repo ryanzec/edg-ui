@@ -21,9 +21,9 @@
 </script>
 
 <script lang="ts">
-  import { twMerge } from 'tailwind-merge';
   import LoaderIcon from '$lib/components/core/icons/loader-icon.svelte';
   import type { HTMLAttributes } from 'svelte/elements';
+  import { tailwindUtils } from '$lib/utils/tailwind';
 
   type Props = HTMLAttributes<HTMLButtonElement> & {
     isLoading?: boolean;
@@ -130,7 +130,7 @@
   data-id="button"
   type="button"
   {...rest}
-  class={twMerge(
+  class={tailwindUtils.merge(
     'flex items-center justify-center gap-2 border border-transparent',
     colorsCss[variant][color],
     extraClass,
