@@ -4,19 +4,33 @@
   import Button from '$lib/components/core/button/button.svelte';
 </script>
 
-<Button>{#snippet preItem()}
+<Button>
+  {#snippet preItem()}
     <XIcon />
-  {/snippet}Pre Item</Button>
-<Button>Post Item{#snippet postItem()}
+  {/snippet}
+  Pre Item
+</Button>
+<Button>
+  Post Item
+  {#snippet postItem()}
     <XIcon />
-  {/snippet}</Button>
-<Button>{#snippet preItem()}
+  {/snippet}
+</Button>
+<Button>
+  {#snippet preItem()}
     <XIcon />
-  {/snippet}Pre and Post Item{#snippet postItem()}
+  {/snippet}
+  Pre and Post Item
+  {#snippet postItem()}
     <XIcon />
-  {/snippet}</Button>
-<Button isLoading>{#snippet preItem()}
+  {/snippet}
+</Button>
+<Button isLoading>
+  {#snippet preItem()}
     <XIcon />
-  {/snippet}Is Loading Hides Items{#snippet postItem()}
+  {/snippet}
+  Is Loading Hides Items
+  {#snippet postItem()}
     <XIcon />
-  {/snippet}</Button>
+  {/snippet}
+</Button>

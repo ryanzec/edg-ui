@@ -6,4 +6,4 @@
   let { meltSeparator }: Props = $props();
 </script>
 
-<div data-id="separator" use:melt={$meltSeparator} class="m-1 h-[1px] bg-outline"></div>
+<div data-id="separator" use:melt={$meltSeparator} class="bg-outline m-1 h-[1px]"></div>

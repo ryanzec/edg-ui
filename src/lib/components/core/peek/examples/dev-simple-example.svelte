@@ -11,13 +11,15 @@
 
   let peekIsOpened = writable(false);
 
-  const { elements: { overlay, content, title, description, close, portalled } } = createDialog(dialogUtils.buildCreateOptions(peekIsOpened));
+  const {
+    elements: { overlay, content, title, description, close, portalled },
+  } = createDialog(dialogUtils.buildCreateOptions(peekIsOpened));
 </script>
 
 <button type="button" onclick={() => peekIsOpened.set(true)}>default</button>
 <Peek isOpened={peekIsOpened} meltOverlay={overlay} meltPortalled={portalled} meltContent={content}>
   <PeekHeader meltTitle={title} title="My title" meltClose={close} />
-  <PeekContent><div use:melt={$description} class="mb-5 mt-2">Default peek</div></PeekContent>
+  <PeekContent><div use:melt={$description} class="mt-2 mb-5">Default peek</div></PeekContent>
   <PeekFooter>
     <PeekFooterCloseAction meltClose={close} />
     <PeekFooterAction onclick={() => console.log('clicked action')} title="Action" />

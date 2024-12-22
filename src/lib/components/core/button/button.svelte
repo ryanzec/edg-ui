@@ -130,7 +130,11 @@
   data-id="button"
   type="button"
   {...rest}
-  class={twMerge('flex items-center gap-2 border border-transparent', colorsCss[variant][color], extraClass)}
+  class={twMerge(
+    'flex items-center justify-center gap-2 border border-transparent',
+    colorsCss[variant][color],
+    extraClass,
+  )}
   class:opacity-45={isDisabled}
   class:rounded-lg={shape === ButtonShape.ROUNDED}
   class:rounded-full={shape === ButtonShape.PILL || shape === ButtonShape.CIRCLE}

@@ -13,17 +13,30 @@
   import { devNavigationStore } from '$lib/components/core/dev-navigation/store';
   import { page } from '$app/stores';
   import ScrollArea from '$lib/components/core/scroll-area/scroll-area.svelte';
+  import Button from '../button/button.svelte';
+  import { applicationStore, ApplicationThemeMode } from '$lib/stores/application.store';
 
   type Props = { items?: DevNavigationItem[] };
 
   let { items = [] }: Props = $props();
 
   devNavigationStore.parseForComponent($page.url.searchParams.get('component'), items);
+
+  const handleToggleThemeMode = () => {
+    applicationStore.setThemeMode(
+      $applicationStore.themeMode === ApplicationThemeMode.LIGHT
+        ? ApplicationThemeMode.DARK
+        : ApplicationThemeMode.LIGHT,
+    );
+  };
 </script>
 
 <div class="flex h-full w-full">
   <ScrollArea class="h-full">
-    <DevNavigationMenu class="p-3" {items} />
+    <div class="flex h-full flex-col">
+      <Button onclick={handleToggleThemeMode}>Toggle Theme Mode</Button>
+      <DevNavigationMenu class="p-3" {items} />
+    </div>
   </ScrollArea>
   <div data-id="component-container" class="flex-1 p-3">
     {#if $devNavigationStore.activeComponent}

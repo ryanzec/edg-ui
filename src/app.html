@@ -4,9 +4,19 @@
     <meta charset="utf-8" />
     <link rel="icon" href="%sveltekit.assets%/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      const osDefaultThemeMode = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      const storedTheme = JSON.parse(localStorage.getItem('themeMode'))?.value || osDefaultThemeMode;
+
+      // this should make sure the initial rendering of the page has the correct theme and not flasht he default
+      // theme if it does not match the selected one (either from the user selecting it or default from the OS theme)
+      document.addEventListener('DOMContentLoaded', () => {
+        document.body.dataset.theme = storedTheme;
+      });
+    </script>
     %sveltekit.head%
   </head>
-  <body data-sveltekit-preload-data="hover" class="h-screen w-screen bg-surface-base text-sm text-surface-on-base">
+  <body data-sveltekit-preload-data="hover" class="bg-surface-base text-surface-on-base h-screen w-screen text-sm">
     <div class="h-full">%sveltekit.body%</div>
   </body>
 </html>

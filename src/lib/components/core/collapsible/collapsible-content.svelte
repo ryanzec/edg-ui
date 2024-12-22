@@ -2,18 +2,20 @@
   import { melt, type AnyMeltElement } from '@melt-ui/svelte';
   import type { Writable } from 'svelte/store';
   import { slide } from 'svelte/transition';
+  import { twMerge } from 'tailwind-merge';
 
   type Props = {
     meltRoot: AnyMeltElement;
     meltContent: AnyMeltElement;
     isOpened: Writable<boolean>;
     children?: import('svelte').Snippet;
+    class?: string;
   };
 
-  let { meltRoot, meltContent, isOpened, children }: Props = $props();
+  let { meltRoot, meltContent, isOpened, children, class: extraClass = '' }: Props = $props();
 </script>
 
-<div data-id="collapsible-content" use:melt={$meltRoot} class="relative">
+<div data-id="collapsible-content" use:melt={$meltRoot} class={twMerge('relative', extraClass)}>
   {#if $isOpened}
     <div use:melt={$meltContent} transition:slide>
       {@render children?.()}

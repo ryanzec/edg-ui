@@ -1,11 +1,12 @@
 <script lang="ts">
   import type { HTMLAttributes } from 'svelte/elements';
 
-  type Props<TElementType extends keyof HTMLElementTagNameMap = 'div'> =
-    HTMLAttributes<HTMLElementTagNameMap[TElementType]> & {
-      tag?: TElementType;
-      children?: import('svelte').Snippet;
-    };
+  type Props<TElementType extends keyof HTMLElementTagNameMap = 'div'> = HTMLAttributes<
+    HTMLElementTagNameMap[TElementType]
+  > & {
+    tag?: TElementType;
+    children?: import('svelte').Snippet;
+  };
 
   let { tag = 'div', children, ...rest }: Props = $props();
 </script>

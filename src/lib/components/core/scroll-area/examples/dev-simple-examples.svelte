@@ -5,11 +5,11 @@
 </script>
 
 <ScrollArea class="h-[200px] w-[50px]">
-  <h4 class="mb-4 font-semibold leading-none">Endless Flavors</h4>
+  <h4 class="mb-4 leading-none font-semibold">Endless Flavors</h4>
   {#each flavors as flavor (flavor)}
     <div class="text-sm">
       {flavor}
     </div>
-    <div role="separator" class="my-2 h-px w-full bg-outline"></div>
+    <div role="separator" class="bg-outline my-2 h-px w-full"></div>
   {/each}
 </ScrollArea>

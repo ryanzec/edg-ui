@@ -282,7 +282,7 @@
       tabindex="-1"
       onkeypress={() => {}}
       onclick={() => $inputElement?.focus()}
-      class="flex w-full rounded-lg border border-outline bg-surface-pure px-2 py-1 text-surface-on-base focus:border-outline-active data-[state=open]:rounded-b-none"
+      class="border-outline bg-surface-pure text-surface-on-base focus:border-outline-active flex w-full rounded-lg border px-2 py-1 data-[state=open]:rounded-b-none"
     >
       <div class="relative flex flex-1 flex-wrap items-center gap-2">
         {#if isMultiple && showInlineSelectedOptions && $selected.length > 0}

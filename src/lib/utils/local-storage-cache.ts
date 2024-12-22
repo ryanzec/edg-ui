@@ -1,3 +1,5 @@
+import { browser } from '$app/environment';
+
 export type LocalStorageCacheData = {
   // any is being used as we do want to be able to store any kind of data here
   value: any;
@@ -5,6 +7,10 @@ export type LocalStorageCacheData = {
 };
 
 const get = (key: string) => {
+  if (!browser) {
+    return null;
+  }
+
   const now = new Date().getTime();
   const rawData = localStorage.getItem(key);
 
@@ -29,6 +35,10 @@ const get = (key: string) => {
 // any is being used as we do want to be able to store any kind of data here
 
 const set = (key: string, value: any, expireIn = 0) => {
+  if (!browser) {
+    return;
+  }
+
   const expires = new Date().getTime();
 
   const data: LocalStorageCacheData = {
@@ -40,10 +50,18 @@ const set = (key: string, value: any, expireIn = 0) => {
 };
 
 const remove = (key: string) => {
+  if (!browser) {
+    return;
+  }
+
   localStorage.removeItem(key);
 };
 
 const clear = () => {
+  if (!browser) {
+    return;
+  }
+
   localStorage.clear();
 };
 

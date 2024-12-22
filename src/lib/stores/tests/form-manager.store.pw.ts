@@ -58,7 +58,7 @@ export class FormComponentPage {
 
   readonly comboboxMultipleValidationMessages: Locator;
 
-  constructor (page: Page) {
+  constructor(page: Page) {
     this.page = page;
     this.addArrayValueTrigger = page.locator('[data-id="add-array-value-trigger"]');
     this.addObjectValueTrigger = page.locator('[data-id="add-object-value-trigger"]');
@@ -70,90 +70,106 @@ export class FormComponentPage {
     this.radioValidationMessages = page.locator('[data-id="radio-group"] > [data-id="validation-messages"]');
     this.objectFirstNameInput = page.locator('[data-id="object"] [data-id="first-name"] input');
     this.objectLastNameInput = page.locator('[data-id="object"] [data-id="last-name"] input');
-    this.objectFirstNameValidationMessages = page.locator('[data-id="object"] [data-id="first-name"] > [data-id="validation-messages"]');
-    this.objectCheckboxValidationMessages = page.locator('[data-id="object"] [data-id="checkbox-group"] > [data-id="validation-messages"]');
-    this.objectRadioValidationMessages = page.locator('[data-id="object"] [data-id="radio-group"] > [data-id="validation-messages"]');
+    this.objectFirstNameValidationMessages = page.locator(
+      '[data-id="object"] [data-id="first-name"] > [data-id="validation-messages"]',
+    );
+    this.objectCheckboxValidationMessages = page.locator(
+      '[data-id="object"] [data-id="checkbox-group"] > [data-id="validation-messages"]',
+    );
+    this.objectRadioValidationMessages = page.locator(
+      '[data-id="object"] [data-id="radio-group"] > [data-id="validation-messages"]',
+    );
     this.selectInput = page.locator('[data-id="select"] select');
     this.selectValidationMessages = page.locator('[data-id="select"] > [data-id="validation-messages"]');
     this.textInput = page.locator('[data-id="text"] input');
     this.textValidationMessages = page.locator('[data-id="text"] > [data-id="validation-messages"]');
-    this.textValidationMessagesMessage = page.locator('[data-id="text"] > [data-id="validation-messages"] [data-id="message"]');
+    this.textValidationMessagesMessage = page.locator(
+      '[data-id="text"] > [data-id="validation-messages"] [data-id="message"]',
+    );
     this.textareaInput = page.locator('[data-id="textarea"] textarea');
     this.textareaValidationMessages = page.locator('[data-id="textarea"] > [data-id="validation-messages"]');
     this.comboboxSingleInput = page.locator('[data-id="combobox-single"] input');
     this.comboboxSingleOptions = page.locator('[data-id="combobox-single"] [data-id="options"]');
-    this.comboboxSingleValidationMessages = page.locator('[data-id="combobox-single"] > [data-id="validation-messages"]');
+    this.comboboxSingleValidationMessages = page.locator(
+      '[data-id="combobox-single"] > [data-id="validation-messages"]',
+    );
     this.comboboxMultipleInput = page.locator('[data-id="combobox-multiple"] input');
     this.comboboxMultipleOptions = page.locator('[data-id="combobox-multiple"] [data-id="options"]');
-    this.comboboxMultipleValidationMessages = page.locator('[data-id="combobox-multiple"] > [data-id="validation-messages"]');
+    this.comboboxMultipleValidationMessages = page.locator(
+      '[data-id="combobox-multiple"] > [data-id="validation-messages"]',
+    );
     this.toggleValidationMessages = page.locator('[data-id="toggle-group"] > [data-id="validation-messages"]');
   }
 
-  async goto (url: string) {
+  async goto(url: string) {
     return await playwrightUtils.goto(this.page, url);
   }
 
-  arrayLocator (index: number, appendLocator: string) {
+  arrayLocator(index: number, appendLocator: string) {
     return this.page.locator(`[data-id="array-value-${index}"] ${appendLocator}`);
   }
 
-  nestedObjectLocator (objectIndex: number, appendLocator: string = '', arrayIndex?: number) {
+  nestedObjectLocator(objectIndex: number, appendLocator: string = '', arrayIndex?: number) {
     if (arrayIndex !== undefined) {
-      return this.page.locator(`[data-id="object-value-${objectIndex}"] [data-id="array-value-${arrayIndex}"] ${appendLocator}`);
+      return this.page.locator(
+        `[data-id="object-value-${objectIndex}"] [data-id="array-value-${arrayIndex}"] ${appendLocator}`,
+      );
     }
 
     return this.page.locator(`[data-id="object-value-${objectIndex}"] ${appendLocator}`);
   }
 
-  arrayValidationMessagesLocator (index: number) {
+  arrayValidationMessagesLocator(index: number) {
     return this.page.locator(`[data-id="array-value-${index}"] [data-id="validation-messages"]`);
   }
 
-  checkboxLocator (index: number) {
+  checkboxLocator(index: number) {
     return this.page.locator(`[data-id="checkbox-group"] label:nth-of-type(${index + 1}) svg`);
   }
 
-  toggleLocator (index: number) {
+  toggleLocator(index: number) {
     return this.page.locator(`[data-id="toggle-group"] label:nth-of-type(${index + 1}) [data-id="bar"]`);
   }
 
-  radioLocator (index: number) {
+  radioLocator(index: number) {
     return this.page.locator(`[data-id="radio-group"] label:nth-of-type(${index + 1}) svg`);
   }
 
-  objectCheckboxLocator (index: number) {
+  objectCheckboxLocator(index: number) {
     return this.page.locator(`[data-id="object"] [data-id="checkbox-group"] label:nth-of-type(${index + 1}) svg`);
   }
 
-  objectToggleLocator (index: number) {
-    return this.page.locator(`[data-id="object"] [data-id="toggle-group"] label:nth-of-type(${index + 1}) [data-id="bar"]`);
+  objectToggleLocator(index: number) {
+    return this.page.locator(
+      `[data-id="object"] [data-id="toggle-group"] label:nth-of-type(${index + 1}) [data-id="bar"]`,
+    );
   }
 
-  objectRadioLocator (index: number) {
+  objectRadioLocator(index: number) {
     return this.page.locator(`[data-id="object"] [data-id="radio-group"] label:nth-of-type(${index + 1}) svg`);
   }
 
-  comboboxSingleOptionLocator (index: number) {
+  comboboxSingleOptionLocator(index: number) {
     return this.page.locator(`[data-id="combobox-single"] [data-id="option"]:nth-of-type(${index + 1})`);
   }
 
-  comboboxMultipleOptionLocator (index: number) {
+  comboboxMultipleOptionLocator(index: number) {
     return this.page.locator(`[data-id="combobox-multiple"] [data-id="option"]:nth-of-type(${index + 1})`);
   }
 
-  async openComboboxSingle () {
+  async openComboboxSingle() {
     await this.comboboxSingleInput.click();
 
     return this.comboboxSingleOptions.waitFor();
   }
 
-  async openComboboxMultiple () {
+  async openComboboxMultiple() {
     await this.comboboxMultipleInput.click();
 
     return this.comboboxMultipleOptions.waitFor();
   }
 
-  async addArrayValue (index: number, value?: string) {
+  async addArrayValue(index: number, value?: string) {
     await this.page.locator('[data-id="add-array-value-trigger"]').click();
 
     if (value) {
@@ -164,35 +180,35 @@ export class FormComponentPage {
     return await this.page.waitForSelector(`[data-id="array-value-${index}"] input`);
   }
 
-  async addObjectValue (index: number) {
+  async addObjectValue(index: number) {
     await this.page.locator('[data-id="add-object-value-trigger"]').click();
 
     return await this.nestedObjectLocator(index, '[data-id="first-name"] input').waitFor();
   }
 
-  async addObjectArrayValue (objectIndex: number, arrayIndex: number) {
+  async addObjectArrayValue(objectIndex: number, arrayIndex: number) {
     await this.nestedObjectLocator(objectIndex, '[data-id="add-array-value-trigger"]').click();
 
     return this.nestedObjectLocator(objectIndex, 'input', arrayIndex).waitFor();
   }
 
-  async fillArrayValue (index: number, value: string) {
+  async fillArrayValue(index: number, value: string) {
     return await this.arrayLocator(index, 'input').fill(value);
   }
 
-  async fillObjectValue (index: number, dataId: string, value: string) {
+  async fillObjectValue(index: number, dataId: string, value: string) {
     return await this.nestedObjectLocator(index, `[data-id="${dataId}"] input`).fill(value);
   }
 
-  async fillObjectArrayValue (objectIndex: number, arrayIndex: number, value: string) {
+  async fillObjectArrayValue(objectIndex: number, arrayIndex: number, value: string) {
     return await this.nestedObjectLocator(objectIndex, 'input', arrayIndex).fill(value);
   }
 
-  async expectSubmittedData (value: string) {
+  async expectSubmittedData(value: string) {
     return await expect(this.submittedData).toHaveText(value);
   }
 
-  async expectSubmittedDataNot (value: string) {
+  async expectSubmittedDataNot(value: string) {
     return await expect(this.submittedData).not.toHaveText(value);
   }
 }
@@ -285,13 +301,19 @@ test.describe('form manager', () => {
         await formPage.addObjectValue(0);
         await formPage.submitTrigger.click();
 
-        await expect(formPage.nestedObjectLocator(0, '> [data-id="first-name"] > [data-id="validation-messages"]')).toHaveCount(1);
-        await expect(formPage.nestedObjectLocator(0, '> [data-id="array-container"] > [data-id="validation-messages"]')).toHaveCount(1);
+        await expect(
+          formPage.nestedObjectLocator(0, '> [data-id="first-name"] > [data-id="validation-messages"]'),
+        ).toHaveCount(1);
+        await expect(
+          formPage.nestedObjectLocator(0, '> [data-id="array-container"] > [data-id="validation-messages"]'),
+        ).toHaveCount(1);
 
         await formPage.addObjectArrayValue(0, 0);
         await formPage.submitTrigger.click();
 
-        await expect(formPage.nestedObjectLocator(0, '> [data-id="array-container"] > [data-id="validation-messages"]')).toHaveCount(0);
+        await expect(
+          formPage.nestedObjectLocator(0, '> [data-id="array-container"] > [data-id="validation-messages"]'),
+        ).toHaveCount(0);
         await expect(formPage.nestedObjectLocator(0, '> [data-id="validation-messages"]', 0)).toHaveCount(1);
       });
 
@@ -332,7 +354,9 @@ test.describe('form manager', () => {
 
         await formPage.submitTrigger.click();
 
-        await formPage.expectSubmittedData('{"complexArray":[{"firstName":"first","lastName":"","simpleArray":["string1","string2"]}]}');
+        await formPage.expectSubmittedData(
+          '{"complexArray":[{"firstName":"first","lastName":"","simpleArray":["string1","string2"]}]}',
+        );
       });
 
       test('submitted data is formatted properly for multiple object', async ({ page }) => {
@@ -356,7 +380,9 @@ test.describe('form manager', () => {
 
         await formPage.submitTrigger.click();
 
-        await formPage.expectSubmittedData('{"complexArray":[{"firstName":"first","lastName":"","simpleArray":["string1","string2"]},{"firstName":"first-2","lastName":"","simpleArray":["string1-2","string2-2"]}]}');
+        await formPage.expectSubmittedData(
+          '{"complexArray":[{"firstName":"first","lastName":"","simpleArray":["string1","string2"]},{"firstName":"first-2","lastName":"","simpleArray":["string1-2","string2-2"]}]}',
+        );
       });
     });
 
@@ -548,7 +574,9 @@ test.describe('form manager', () => {
         await formPage.objectRadioLocator(0).click();
         await formPage.submitTrigger.click();
 
-        await formPage.expectSubmittedData('{"complex":{"firstName":"first","lastName":"last","checkbox":["one"],"toggle":["two"],"radio":"one"}}');
+        await formPage.expectSubmittedData(
+          '{"complex":{"firstName":"first","lastName":"last","checkbox":["one"],"toggle":["two"],"radio":"one"}}',
+        );
       });
     });
 
@@ -752,7 +780,9 @@ test.describe('form manager', () => {
           await formPage.comboboxMultipleInput.press('Escape');
           await formPage.submitTrigger.click();
 
-          await formPage.expectSubmittedData('{"userRoles":[{"display":"Admin","value":"admin"},{"display":"User","value":"user"}]}');
+          await formPage.expectSubmittedData(
+            '{"userRoles":[{"display":"Admin","value":"admin"},{"display":"User","value":"user"}]}',
+          );
         });
       });
     });
@@ -784,7 +814,9 @@ test.describe('form manager', () => {
 
       formPage.submitTrigger.click();
 
-      await formPage.expectSubmittedData('{"text":"test","checkbox":["two"],"toggle":["one","two"],"radio":"one","textarea":"3","select":"two","userRole":[{"value":"admin","display":"Admin"}],"userRoles":[{"value":"admin","display":"Admin"},{"value":"user","display":"User"}],"simpleArray":["test"],"complexArray":[{"firstName":"test","lastName":"test","simpleArray":["test","test2"]}],"complex":{"firstName":"first name","lastName":"last name"}}');
+      await formPage.expectSubmittedData(
+        '{"text":"test","checkbox":["two"],"toggle":["one","two"],"radio":"one","textarea":"3","select":"two","userRole":[{"value":"admin","display":"Admin"}],"userRoles":[{"value":"admin","display":"Admin"},{"value":"user","display":"User"}],"simpleArray":["test"],"complexArray":[{"firstName":"test","lastName":"test","simpleArray":["test","test2"]}],"complex":{"firstName":"first name","lastName":"last name"}}',
+      );
     });
   });
 
