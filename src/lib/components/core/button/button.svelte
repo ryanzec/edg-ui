@@ -131,7 +131,7 @@
   type="button"
   {...rest}
   class={tailwindUtils.merge(
-    'flex items-center justify-center gap-2 border border-transparent',
+    'flex cursor-pointer items-center justify-center gap-2 border border-transparent',
     colorsCss[variant][color],
     extraClass,
   )}

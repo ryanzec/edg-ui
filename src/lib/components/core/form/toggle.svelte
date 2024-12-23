@@ -24,7 +24,7 @@
 
 <label data-id="toggle" class="flex cursor-pointer items-center" for={id} id="{value}-label">
   <div
-    data-id="bar"
+    data-id="inner"
     class={tailwindUtils.merge(
       'mr-1 inline-flex h-4 w-8 items-center rounded-3xl outline-hidden transition-colors duration-150',
       checkedBarCss,
@@ -32,7 +32,7 @@
     )}
   >
     <div
-      class={tailwindUtils.merge('bg-surface-base mx-0.5 block h-3 w-3 rounded-full duration-150', checkedButtonCss)}
+      class={tailwindUtils.merge('bg-surface mx-0.5 block h-3 w-3 rounded-full duration-150', checkedButtonCss)}
     ></div>
   </div>
   <input {id} {name} type="checkbox" {value} bind:checked class="appearance-none" />
