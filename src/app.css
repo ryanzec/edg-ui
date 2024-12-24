@@ -21,6 +21,7 @@
 }
 
 @theme {
+  --color-*: initial;
   --color-outline: #BDCBCE;
   --color-outline-active: #687173;
   --color-surface-pure: #FFFFFF;
@@ -84,6 +85,7 @@
   --color-input-placeholder: #6A6A6A;
   --color-overlay-background: #000000;
 
+  --spacing-*: initial;
   --spacing-none: 0rem;
   --spacing-3xs: 0.125rem;
   --spacing-2xs: 0.25rem;
@@ -94,6 +96,7 @@
   --spacing-xl: 1.75rem;
   --spacing-2xl: 2.25rem;
 
+  --text-*: initial;
   --text-xs: 0.75rem;
   --text-sm: 0.875rem;
   --text-base: 1rem;
@@ -101,6 +104,7 @@
   --text-xl: 1.5rem;
   --text-2xl: 2rem;
 
+  --radius-*: initial;
   --radius-none: 0rem;
   --radius-xs: 0.1875rem;
   --radius-sm: 0.3125rem;
@@ -109,6 +113,7 @@
   --radius-xl: 0.875rem;
   --radius-full: 624.9375rem;
 
+  --line-height-*: initial;
   --line-height-none: 0rem;
   --line-height-sm: 1rem;
   --line-height-base: 1.25rem;
@@ -116,12 +121,14 @@
   --line-height-xl: 1.875rem;
   --line-height-2xl: 2.5rem;
 
+  --z-index-*: initial;
   --z-index-overlay: 5;
   --z-index-combobox-options: 10;
   --z-index-drop-down: 40;
   --z-index-dialog: 50;
   --z-index-tooltip: 100;
 
+  --opacity-*: initial;
   --opacity-none: 0;
   --opacity-disabled: 0.45;
   --opacity-full: 1;
