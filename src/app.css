@@ -130,7 +130,9 @@
 
   --opacity-*: initial;
   --opacity-none: 0;
+  --opacity-overlay-weak: 0.4;
   --opacity-disabled: 0.45;
+  --opacity-overlay-strong: 0.7;
   --opacity-full: 1;
 }
 

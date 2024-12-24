@@ -1022,10 +1022,22 @@
               "value": 0
             },
             {
+              "name": "overlay-weak",
+              "type": "number",
+              "isAlias": false,
+              "value": 40
+            },
+            {
               "name": "disabled",
               "type": "number",
               "isAlias": false,
               "value": 45
+            },
+            {
+              "name": "overlay-strong",
+              "type": "number",
+              "isAlias": false,
+              "value": 70
             },
             {
               "name": "full",
