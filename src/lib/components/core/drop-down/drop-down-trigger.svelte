@@ -5,13 +5,14 @@
   import { type Writable } from 'svelte/store';
 
   type Props = {
+    id?: string;
     meltTrigger: AnyMeltElement;
     class?: string;
     isOpened: WithGet<Writable<boolean>>;
     children?: import('svelte').Snippet;
   };
 
-  let { meltTrigger, class: extraClass = '', children, isOpened }: Props = $props();
+  let { id, meltTrigger, class: extraClass = '', children, isOpened }: Props = $props();
 
   const handleClickOutside = () => {
     // while melt-ui is supposed to close the drop down on clicking outside of one, when you open a drop down
@@ -23,7 +24,10 @@
 
 <div
   use:melt={$meltTrigger}
-  use:clickOutsideAction={{ callback: handleClickOutside }}
+  use:clickOutsideAction={{
+    id,
+    callback: handleClickOutside,
+  }}
   data-id="trigger"
   class="inline-block {extraClass}"
 >

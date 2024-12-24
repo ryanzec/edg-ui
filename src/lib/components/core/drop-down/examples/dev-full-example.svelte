@@ -12,6 +12,7 @@
   import DropDownMenu from '$lib/components/core/drop-down/drop-down-menu.svelte';
   import AlignJustifiedIcon from '$lib/components/core/icons/align-justified-icon.svelte';
   import { dropDownUtils } from '$lib/components/core/drop-down/utils';
+  import { IGNORE_DATA_ATTRIBUTE_NAME } from '$lib/actions/click-outside-action';
 
   const settingsSync = writable(true);
   const hideMeltUI = writable(false);
@@ -47,13 +48,24 @@
     elements: { trigger: trigger2, menu: menu2, item: item2 },
     states: { open: open2 },
   } = createDropdownMenu(dropDownUtils.buildCreateOptions());
+
+  const dropDown1Id = 'drop-down-1';
+  const dropDown1Attributes = { [IGNORE_DATA_ATTRIBUTE_NAME]: dropDown1Id };
+
+  const dropDown2Id = 'drop-down-2';
+  const dropDown2Attributes = { [IGNORE_DATA_ATTRIBUTE_NAME]: dropDown2Id };
 </script>
 
 <h1>Drop Downs</h1>
-<DropDownTrigger class="absolute top-[400px] left-[400px] cursor-pointer" meltTrigger={trigger} isOpened={open}>
+<DropDownTrigger
+  class="absolute top-[400px] left-[400px] cursor-pointer"
+  meltTrigger={trigger}
+  isOpened={open}
+  id={dropDown1Id}
+>
   <AlignJustifiedIcon class="m-xs size-base" />
 </DropDownTrigger>
-<DropDownMenu isOpened={open} meltMenu={menu}>
+<DropDownMenu isOpened={open} meltMenu={menu} {...dropDown1Attributes}>
   <DropDownItem meltItem={$item} onclick={() => console.log('about melt ui')}>About Melt UI</DropDownItem>
   <DropDownItem meltItem={$item}>Check for Updates..</DropDownItem>
   <DropDownSeparator meltSeparator={separator} />
@@ -91,10 +103,15 @@
   </DropDownItem>
 </DropDownMenu>
 
-<DropDownTrigger class="absolute top-[440px] left-[400px] cursor-pointer" meltTrigger={trigger2} isOpened={open2}>
+<DropDownTrigger
+  class="absolute top-[440px] left-[400px] cursor-pointer"
+  meltTrigger={trigger2}
+  isOpened={open2}
+  id={dropDown2Id}
+>
   <AlignJustifiedIcon class="m-xs size-base" />
 </DropDownTrigger>
-<DropDownMenu isOpened={open2} meltMenu={menu2}>
+<DropDownMenu isOpened={open2} meltMenu={menu2} {...dropDown2Attributes}>
   <DropDownItem meltItem={$item2} onclick={() => console.log('about melt ui')}>About Melt UI</DropDownItem>
   <DropDownItem meltItem={$item2}>Check for Updates..</DropDownItem>
 </DropDownMenu>
