@@ -71,19 +71,19 @@
   tabindex="-1"
   data-id="options"
   use:optionsAction={optionsActionOptions}
-  class="bg-surface-pure absolute z-10 mt-0.5 flex max-h-[300px] flex-col overflow-hidden overflow-y-auto rounded-lg border"
+  class="bg-surface-pure z-combobox-options mt-3xs rounded-base absolute flex max-h-[300px] flex-col overflow-hidden overflow-y-auto border"
 >
-  <div class="flex max-h-full flex-col gap-0">
+  <div class="gap-none flex max-h-full flex-col">
     {#if isLoading}
       <!-- the rotating icon can cause scrolling so just hidding the overflow to avoid that -->
-      <div data-id="loading-option" class="oferflow relative flex items-center gap-2 overflow-hidden px-2 py-1">
+      <div data-id="loading-option" class="overflow gap-xs px-xs py-2xs relative flex items-center overflow-hidden">
         <LoaderIcon class="animate-spin" /> Loading...
       </div>
     {:else if totalOptionsCount === 0 || !passesThresholdCheck}
       {#if inputValue && passesThresholdCheck}
-        <div data-id="no-results-option" class="relative px-2 py-1">No results found</div>
+        <div data-id="no-results-option" class="px-xs py-2xs relative">No results found</div>
       {:else}
-        <div data-id="type-to-search-option" class="relative px-2 py-1">
+        <div data-id="type-to-search-option" class="px-xs py-2xs relative">
           Type at least {showMenuCharacterThreshold} characters for results...
         </div>
       {/if}

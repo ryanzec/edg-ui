@@ -131,17 +131,19 @@
   type="button"
   {...rest}
   class={tailwindUtils.merge(
-    'flex cursor-pointer items-center justify-center gap-2 border border-transparent',
+    'gap-xs flex items-center justify-center border border-transparent',
     colorsCss[variant][color],
     extraClass,
   )}
-  class:opacity-45={isDisabled}
-  class:rounded-lg={shape === ButtonShape.ROUNDED}
-  class:rounded-full={shape === ButtonShape.PILL || shape === ButtonShape.CIRCLE}
-  class:px-2.5={shape !== ButtonShape.CIRCLE}
-  class:py-0.5={shape !== ButtonShape.CIRCLE}
-  class:px-1={shape === ButtonShape.CIRCLE}
-  class:py-1={shape === ButtonShape.CIRCLE}
+  class:opacity-disabled={isDisabled}
+  class:cursor-pointer={isDisabled === false}
+  class:cursor-not-allowed={isDisabled}
+  class:rounded-base={shape === ButtonShape.ROUNDED}
+  class:rounded-round={shape === ButtonShape.PILL || shape === ButtonShape.CIRCLE}
+  class:px-xs={shape !== ButtonShape.CIRCLE}
+  class:py-3xs={shape !== ButtonShape.CIRCLE}
+  class:px-small3={shape === ButtonShape.CIRCLE}
+  class:py-small3={shape === ButtonShape.CIRCLE}
 >
   {#if !isLoading}{@render preItem?.()}{/if}
   {#if isLoading}<LoaderIcon class="animate-spin" />{/if}{@render children?.()}

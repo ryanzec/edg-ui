@@ -37,11 +37,14 @@
   };
 
   export const shapeCss: Record<BadgeShape, string> = {
-    [BadgeShape.ROUNDED]: 'rounded-lg',
-    [BadgeShape.PILL]: 'rounded-full',
+    [BadgeShape.ROUNDED]: 'rounded-base',
+    [BadgeShape.PILL]: 'rounded-round',
   };
 </script>
 
-<div class={tailwindUtils.merge('inline-block border px-1 py-0.5 text-xs', colorCss[color], shapeCss[shape])} {...rest}>
+<div
+  class={tailwindUtils.merge('px-2xs py-3xs inline-block border text-xs', colorCss[color], shapeCss[shape])}
+  {...rest}
+>
   {@render children?.()}
 </div>

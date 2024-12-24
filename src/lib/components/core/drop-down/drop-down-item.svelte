@@ -39,14 +39,14 @@
 <button
   data-id="item"
   use:melt={meltItem}
-  class="data-highlighted:bg-neutral-subtle z-40 flex min-h-[24px] items-center rounded-xs px-2 text-sm leading-none ring-0 outline-hidden select-none"
-  class:opacity-45={disabled}
+  class="data-highlighted:bg-neutral-subtle z-drop-down px-xs flex min-h-[24px] items-center text-sm leading-none ring-0 outline-hidden select-none"
+  class:opacity-disabled={disabled}
   onm-click={handleClick}
   {...rest}
   type="button"
   {disabled}
 >
-  {#if rightContent}<div class="mr-1">{@render leftContent?.()}</div>{/if}
+  {#if rightContent}<div class="mr-2xs">{@render leftContent?.()}</div>{/if}
   {@render children?.()}
   {#if rightContent}<div class="ml-auto">{@render rightContent?.()}</div>{/if}
 </button>

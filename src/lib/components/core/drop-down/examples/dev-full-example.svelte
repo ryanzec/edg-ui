@@ -51,7 +51,7 @@
 
 <h1>Drop Downs</h1>
 <DropDownTrigger class="absolute top-[400px] left-[400px] cursor-pointer" meltTrigger={trigger} isOpened={open}>
-  <AlignJustifiedIcon class="m-2 size-4" />
+  <AlignJustifiedIcon class="m-xs size-base" />
 </DropDownTrigger>
 <DropDownMenu isOpened={open} meltMenu={menu}>
   <DropDownItem meltItem={$item} onclick={() => console.log('about melt ui')}>About Melt UI</DropDownItem>
@@ -92,7 +92,7 @@
 </DropDownMenu>
 
 <DropDownTrigger class="absolute top-[440px] left-[400px] cursor-pointer" meltTrigger={trigger2} isOpened={open2}>
-  <AlignJustifiedIcon class="m-2 size-4" />
+  <AlignJustifiedIcon class="m-xs size-base" />
 </DropDownTrigger>
 <DropDownMenu isOpened={open2} meltMenu={menu2}>
   <DropDownItem meltItem={$item2} onclick={() => console.log('about melt ui')}>About Melt UI</DropDownItem>

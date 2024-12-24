@@ -116,7 +116,7 @@
     <div
       use:melt={$meltContent}
       bind:this={peekElement}
-      class="border-outline bg-surface-pure fixed top-0 right-0 z-50 flex h-screen w-[350px] flex-col border-l p-4"
+      class="border-outline bg-surface-pure top-none right-none z-dialog p-base fixed flex h-screen w-[350px] flex-col border-l"
       transition:fly={{
         x: 350,
         duration: 300,

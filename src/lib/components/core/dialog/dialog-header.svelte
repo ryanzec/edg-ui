@@ -12,10 +12,10 @@
 </script>
 
 <div data-id="header" class="flex items-center">
-  <h2 use:melt={$meltTitle} class="m-0 text-lg font-medium">
+  <h2 use:melt={$meltTitle} class="m-none text-lg font-medium">
     {title}
   </h2>
   <button use:melt={$meltClose} aria-label="close" class="ml-auto">
-    <XIcon class="size-4" />
+    <XIcon class="size-base" />
   </button>
 </div>

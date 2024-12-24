@@ -22,7 +22,12 @@
 
 <!-- setting the selected for the option works around a ssr issue with sveltekit -->
 <!-- https://github.com/sveltejs/svelte/issues/7160 -->
-<select bind:value {name} {id} class="p-2">
+<select
+  bind:value
+  {name}
+  {id}
+  class="border-outline bg-input-background hover:border-outline-active focus:border-outline-active px-xs py-2xs rounded-sm border outline-hidden"
+>
   {#if defaultDisplay}
     <option value selected={!value}>{defaultDisplay}</option>
   {/if}

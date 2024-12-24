@@ -11,7 +11,7 @@
   let { error = undefined, children, ...rest }: Props = $props();
 </script>
 
-<div data-id="form-field" {...rest} class="gap-label flex flex-col">
+<div data-id="form-field" {...rest} class="gap-xs flex flex-col">
   {@render children?.()}
   <ValidationMessages {error} />
 </div>

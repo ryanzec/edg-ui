@@ -26,4 +26,4 @@
 <pre>{JSON.stringify($selected, null, 2)}</pre>
 <!-- for automated testing -->
 <pre data-id="selected-value" class="hidden">{JSON.stringify($selected)}</pre>
-<div data-id="click-outside-tester" class="p-36">click outside tester</div>
+<div data-id="click-outside-tester" class="p-[150px]">click outside tester</div>

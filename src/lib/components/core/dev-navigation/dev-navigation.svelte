@@ -35,10 +35,10 @@
   <ScrollArea class="h-full">
     <div class="flex h-full flex-col">
       <Button onclick={handleToggleThemeMode}>Toggle Theme Mode</Button>
-      <DevNavigationMenu class="p-3" {items} />
+      <DevNavigationMenu class="p-sm" {items} />
     </div>
   </ScrollArea>
-  <div data-id="component-container" class="flex-1 p-3">
+  <div data-id="component-container" class="p-sm flex-1">
     {#if $devNavigationStore.activeComponent}
       {@const SvelteComponent = $devNavigationStore.activeComponent}
       <SvelteComponent />

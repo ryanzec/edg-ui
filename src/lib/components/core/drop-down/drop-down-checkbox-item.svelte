@@ -34,9 +34,9 @@
   {#snippet leftContent()}
     <div>
       {#if $checked}
-        <SquareCheckIcon class="size-4" />
+        <SquareCheckIcon class="size-base" />
       {:else}
-        <SquareIcon class="size-4" />
+        <SquareIcon class="size-base" />
       {/if}
     </div>
   {/snippet}

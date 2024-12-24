@@ -19,7 +19,7 @@
 </script>
 
 <label data-id="checkbox" class="flex cursor-pointer items-center" for={id} id="{value}-label">
-  <div class="mr-1">
+  <div class="mr-2xs">
     {#if checked}
       <SquareCheckIcon />
     {:else}

@@ -14,7 +14,7 @@
 <div
   data-id="overlay"
   use:melt={$meltOverlay}
-  class="bg-overlay-background/50 fixed inset-0 z-50 backdrop-blur-xs"
+  class="bg-overlay-background/50 inset-none z-overlay fixed backdrop-blur-xs"
   transition:fade={{ duration: 150 }}
   {...rest}
 >

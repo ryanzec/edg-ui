@@ -14,7 +14,7 @@
 </script>
 
 <label class="flex items-center" for={id} id="{value}-label">
-  <div class="pr-1">
+  <div class="pr-2xs">
     {#if group === value}
       <CircleCheckIcon />
     {:else}

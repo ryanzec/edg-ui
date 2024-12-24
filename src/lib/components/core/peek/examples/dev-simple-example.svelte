@@ -19,7 +19,7 @@
 <button type="button" onclick={() => peekIsOpened.set(true)}>default</button>
 <Peek isOpened={peekIsOpened} meltOverlay={overlay} meltPortalled={portalled} meltContent={content}>
   <PeekHeader meltTitle={title} title="My title" meltClose={close} />
-  <PeekContent><div use:melt={$description} class="mt-2 mb-5">Default peek</div></PeekContent>
+  <PeekContent><div use:melt={$description} class="mt-xs mb-lg">Default peek</div></PeekContent>
   <PeekFooter>
     <PeekFooterCloseAction meltClose={close} />
     <PeekFooterAction onclick={() => console.log('clicked action')} title="Action" />

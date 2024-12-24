@@ -26,7 +26,7 @@
 
 <div
   class={tailwindUtils.merge('border-outline flex flex-1 flex-col', extraClass)}
-  class:ml-2={isNested}
+  class:ml-xs={isNested}
   class:w-48={isNested === false}
   class:border-r={isNested === false}
 >
@@ -38,6 +38,7 @@
         {:else}
           <button
             type="button"
+            class="cursor-pointer"
             onclick={() => {
               handleDisplayComponent(item);
             }}

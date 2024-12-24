@@ -15,7 +15,7 @@
   {@render children?.()}
   {#snippet rightContent()}
     <div>
-      <ChevronRightIcon class="size-4" />
+      <ChevronRightIcon class="size-base" />
     </div>
   {/snippet}
 </DropDownItem>

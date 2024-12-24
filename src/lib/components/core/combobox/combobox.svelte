@@ -268,7 +268,7 @@
     callback: comboboxUtils.selectActiveOption,
   }}
 >
-  <div class="flex-col gap-1 {extraClass}">
+  <div class="gap-2xs flex-col {extraClass}">
     <Label for={id} use={labelAction}>{label}</Label>
     <!--
       while it is generally better / easier to just use a button for an element you want clickable, since this
@@ -282,9 +282,9 @@
       tabindex="-1"
       onkeypress={() => {}}
       onclick={() => $inputElement?.focus()}
-      class="border-outline bg-surface-pure text-on-surface focus:border-outline-active flex w-full rounded-lg border px-2 py-1 data-[state=open]:rounded-b-none"
+      class="border-outline bg-surface-pure text-on-surface focus:border-outline-active rounded-base px-xs py-2xs flex w-full border data-[state=open]:rounded-b-none"
     >
-      <div class="relative flex flex-1 flex-wrap items-center gap-2">
+      <div class="gap-xs relative flex flex-1 flex-wrap items-center">
         {#if isMultiple && showInlineSelectedOptions && $selected.length > 0}
           {#each $selected as selectedOption}
             <Badge data-id="selected-indicator">
@@ -315,9 +315,9 @@
       </div>
       <div class="self-center">
         {#if $isOpened}
-          <ChevronUpIcon class="size-4" />
+          <ChevronUpIcon class="size-base" />
         {:else}
-          <ChevronDownIcon class="size-4" />
+          <ChevronDownIcon class="size-base" />
         {/if}
       </div>
     </div>

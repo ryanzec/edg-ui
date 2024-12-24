@@ -4,10 +4,27 @@ export default {
   theme: {
     colors: {
       transparent: 'transparent',
-%COLOR_VARIABLES%
-      'scroll-area-bar': 'var(--color-surface-on-tertiary)',
+%TAILWIND_COLOR_VARIABLES%
     },
-    extend: { zIndex: { dialog: '50' } },
+    spacing: {
+%TAILWIND_SPACING_VARIABLES%
+    },
+    borderRadius: {
+%TAILWIND_BORDER_RADIUS_VARIABLES%
+    },
+    fontSize: {
+%TAILWIND_SIZE_VARIABLES%
+    },
+    lineHeight: {
+%TAILWIND_LINE_HEIGHT_VARIABLES%
+    },
+    zIndex: {
+%TAILWIND_Z_INDEX_VARIABLES%
+    },
+    opacity: {
+%TAILWIND_OPACITY_VARIABLES%
+    },
+    extend: {},
   },
   content: ['./src/**/*.{html,js,svelte,ts}'], // for unused CSS
   variants: { extend: {} },

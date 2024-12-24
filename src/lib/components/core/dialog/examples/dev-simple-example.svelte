@@ -29,7 +29,7 @@
 
 <button
   use:melt={$trigger}
-  class="inline-flex items-center justify-center rounded-xl px-4 py-3 leading-none font-medium shadow-sm"
+  class="rounded-large2 px-base py-sm inline-flex items-center justify-center leading-none font-medium shadow-sm"
 >
   Open Dialog
 </button>
@@ -37,7 +37,7 @@
 <Dialog meltContent={content} meltOverlay={overlay} meltPortalled={portalled} {isOpened}>
   <DialogHeader meltTitle={title} title="Edit profile" meltClose={close} />
   <DialogContent>
-    <p use:melt={$description} class="">Make changes to your profile here. Click save when you're done.</p>
+    <p use:melt={$description}>Make changes to your profile here. Click save when you're done.</p>
     <FormField data-id="text">
       <Label for="text">Name</Label>
       <TextInput bind:value={$value1} name="text" />

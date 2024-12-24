@@ -4,4 +4,4 @@
   let { children }: Props = $props();
 </script>
 
-<div data-id="footer" class="flex justify-end gap-2">{@render children?.()}</div>
+<div data-id="footer" class="gap-xs flex justify-end">{@render children?.()}</div>

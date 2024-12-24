@@ -43,9 +43,9 @@
   {#snippet leftContent()}
     <div>
       {#if $isChecked(option)}
-        <CircleCheckIcon class="size-4" />
+        <CircleCheckIcon class="size-base" />
       {:else}
-        <CircleIcon class="size-4" />
+        <CircleIcon class="size-base" />
       {/if}
     </div>
   {/snippet}

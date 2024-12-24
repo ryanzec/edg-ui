@@ -3,7 +3,7 @@
   "metadata": {},
   "collections": [
     {
-      "name": "colors",
+      "name": "color",
       "modes": [
         {
           "name": "light",
@@ -762,37 +762,37 @@
       ]
     },
     {
-      "name": "spacing",
+      "name": "space",
       "modes": [
         {
-          "name": "mode-1",
+          "name": "default",
           "variables": [
             {
-              "name": "none",
+              "name": "0",
               "type": "number",
               "isAlias": false,
               "value": 0
             },
             {
-              "name": "small4",
+              "name": "3xs",
               "type": "number",
               "isAlias": false,
               "value": 2
             },
             {
-              "name": "small3",
+              "name": "2xs",
               "type": "number",
               "isAlias": false,
               "value": 4
             },
             {
-              "name": "small2",
+              "name": "xs",
               "type": "number",
               "isAlias": false,
               "value": 8
             },
             {
-              "name": "small1",
+              "name": "sm",
               "type": "number",
               "isAlias": false,
               "value": 12
@@ -804,19 +804,19 @@
               "value": 16
             },
             {
-              "name": "large1",
+              "name": "lg",
               "type": "number",
               "isAlias": false,
               "value": 20
             },
             {
-              "name": "large2",
+              "name": "xl",
               "type": "number",
               "isAlias": false,
               "value": 28
             },
             {
-              "name": "large3",
+              "name": "2xl",
               "type": "number",
               "isAlias": false,
               "value": 36
@@ -826,25 +826,25 @@
       ]
     },
     {
-      "name": "border-radiuses",
+      "name": "border-radius",
       "modes": [
         {
-          "name": "mode-1",
+          "name": "default",
           "variables": [
             {
-              "name": "none",
+              "name": "0",
               "type": "number",
               "isAlias": false,
               "value": 0
             },
             {
-              "name": "small2",
+              "name": "xs",
               "type": "number",
               "isAlias": false,
               "value": 3
             },
             {
-              "name": "small1",
+              "name": "sm",
               "type": "number",
               "isAlias": false,
               "value": 5
@@ -853,16 +853,22 @@
               "name": "base",
               "type": "number",
               "isAlias": false,
+              "value": 8
+            },
+            {
+              "name": "lg",
+              "type": "number",
+              "isAlias": false,
               "value": 10
             },
             {
-              "name": "large1",
+              "name": "xl",
               "type": "number",
               "isAlias": false,
-              "value": 15
+              "value": 14
             },
             {
-              "name": "round",
+              "name": "full",
               "type": "number",
               "isAlias": false,
               "value": 9999
@@ -872,2345 +878,160 @@
       ]
     },
     {
-      "name": "sizes",
+      "name": "font-size",
       "modes": [
         {
-          "name": "mode-1",
+          "name": "default",
           "variables": [
             {
-              "name": "small2",
+              "name": "xs",
               "type": "number",
               "isAlias": false,
               "value": 12
             },
             {
-              "name": "small1",
+              "name": "sm",
               "type": "number",
               "isAlias": false,
-              "value": 18
+              "value": 14
             },
             {
               "name": "base",
               "type": "number",
               "isAlias": false,
+              "value": 16
+            },
+            {
+              "name": "lg",
+              "type": "number",
+              "isAlias": false,
+              "value": 18
+            },
+            {
+              "name": "xl",
+              "type": "number",
+              "isAlias": false,
               "value": 24
             },
             {
-              "name": "large1",
-              "type": "number",
-              "isAlias": false,
-              "value": 30
-            },
-            {
-              "name": "large2",
-              "type": "number",
-              "isAlias": false,
-              "value": 38
-            },
-            {
-              "name": "large3",
-              "type": "number",
-              "isAlias": false,
-              "value": 50
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "button",
-      "modes": [
-        {
-          "name": "mode-1",
-          "variables": [
-            {
-              "name": "margin-pre-post-item",
-              "type": "number",
-              "isAlias": true,
-              "value": {
-                "collection": "spacing",
-                "name": "small3"
-              }
-            },
-            {
-              "name": "padding-horizontal",
-              "type": "number",
-              "isAlias": true,
-              "value": {
-                "collection": "spacing",
-                "name": "base"
-              }
-            },
-            {
-              "name": "padding-vertical",
-              "type": "number",
-              "isAlias": true,
-              "value": {
-                "collection": "spacing",
-                "name": "small2"
-              }
-            },
-            {
-              "name": "drop-down/border-color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "outline/active"
-              }
-            },
-            {
-              "name": "drop-down/border-radius",
-              "type": "number",
-              "isAlias": true,
-              "value": {
-                "collection": "border-radiuses",
-                "name": "small1"
-              }
-            },
-            {
-              "name": "drop-down/padding",
-              "type": "number",
-              "isAlias": true,
-              "value": {
-                "collection": "spacing",
-                "name": "small2"
-              }
-            },
-            {
-              "name": "neutral/background-color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "neutral/subtle"
-              }
-            },
-            {
-              "name": "neutral/background-color-hover",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "neutral/subtle2"
-              }
-            },
-            {
-              "name": "neutral/background-color-active",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "neutral/subtle3"
-              }
-            },
-            {
-              "name": "neutral/background-color-filled",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "neutral/base"
-              }
-            },
-            {
-              "name": "neutral/background-color-filled-hover",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "neutral/base2"
-              }
-            },
-            {
-              "name": "neutral/background-color-filled-active",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "neutral/base3"
-              }
-            },
-            {
-              "name": "neutral/border-color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "neutral/base"
-              }
-            },
-            {
-              "name": "neutral/border-color-active",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "neutral/base"
-              }
-            },
-            {
-              "name": "neutral/color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "neutral/bold"
-              }
-            },
-            {
-              "name": "neutral/color-filled",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "neutral/on-base"
-              }
-            },
-            {
-              "name": "brand/background-color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "brand/subtle"
-              }
-            },
-            {
-              "name": "brand/background-color-hover",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "brand/subtle2"
-              }
-            },
-            {
-              "name": "brand/background-color-active",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "brand/subtle3"
-              }
-            },
-            {
-              "name": "brand/background-color-filled",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "brand/base"
-              }
-            },
-            {
-              "name": "brand/background-color-filled-hover",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "brand/base2"
-              }
-            },
-            {
-              "name": "brand/background-color-filled-active",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "brand/base3"
-              }
-            },
-            {
-              "name": "brand/border-color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "brand/base"
-              }
-            },
-            {
-              "name": "brand/border-color-active",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "brand/base"
-              }
-            },
-            {
-              "name": "brand/color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "brand/bold"
-              }
-            },
-            {
-              "name": "brand/color-filled",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "brand/on-base"
-              }
-            },
-            {
-              "name": "success/background-color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "success/subtle"
-              }
-            },
-            {
-              "name": "success/background-color-hover",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "success/subtle2"
-              }
-            },
-            {
-              "name": "success/background-color-active",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "success/subtle3"
-              }
-            },
-            {
-              "name": "success/background-color-filled",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "success/base"
-              }
-            },
-            {
-              "name": "success/background-color-filled-hover",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "success/base2"
-              }
-            },
-            {
-              "name": "success/background-color-filled-active",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "success/base3"
-              }
-            },
-            {
-              "name": "success/border-color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "success/base"
-              }
-            },
-            {
-              "name": "success/border-color-active",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "success/base"
-              }
-            },
-            {
-              "name": "success/color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "success/bold"
-              }
-            },
-            {
-              "name": "success/color-filled",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "success/on-base"
-              }
-            },
-            {
-              "name": "info/background-color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "info/subtle"
-              }
-            },
-            {
-              "name": "info/background-color-hover",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "info/subtle2"
-              }
-            },
-            {
-              "name": "info/background-color-active",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "info/subtle3"
-              }
-            },
-            {
-              "name": "info/background-color-filled",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "info/base"
-              }
-            },
-            {
-              "name": "info/background-color-filled-hover",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "info/base2"
-              }
-            },
-            {
-              "name": "info/background-color-filled-active",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "info/base3"
-              }
-            },
-            {
-              "name": "info/border-color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "info/base"
-              }
-            },
-            {
-              "name": "info/border-color-active",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "info/base"
-              }
-            },
-            {
-              "name": "info/color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "info/bold"
-              }
-            },
-            {
-              "name": "info/color-filled",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "info/on-base"
-              }
-            },
-            {
-              "name": "warning/background-color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "warning/subtle"
-              }
-            },
-            {
-              "name": "warning/background-color-hover",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "warning/subtle2"
-              }
-            },
-            {
-              "name": "warning/background-color-active",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "warning/subtle3"
-              }
-            },
-            {
-              "name": "warning/background-color-filled",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "warning/base"
-              }
-            },
-            {
-              "name": "warning/background-color-filled-hover",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "warning/base2"
-              }
-            },
-            {
-              "name": "warning/background-color-filled-active",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "warning/base3"
-              }
-            },
-            {
-              "name": "warning/border-color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "warning/base"
-              }
-            },
-            {
-              "name": "warning/border-color-active",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "warning/base"
-              }
-            },
-            {
-              "name": "warning/color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "warning/bold"
-              }
-            },
-            {
-              "name": "warning/color-filled",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "warning/on-base"
-              }
-            },
-            {
-              "name": "min-height",
+              "name": "2xl",
               "type": "number",
               "isAlias": false,
               "value": 32
-            },
-            {
-              "name": "border-radius",
-              "type": "number",
-              "isAlias": true,
-              "value": {
-                "collection": "border-radiuses",
-                "name": "base"
-              }
-            },
-            {
-              "name": "margin-between-self",
-              "type": "number",
-              "isAlias": true,
-              "value": {
-                "collection": "spacing",
-                "name": "small2"
-              }
-            },
-            {
-              "name": "danger/background-color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "danger/subtle"
-              }
-            },
-            {
-              "name": "danger/background-color-hover",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "danger/subtle2"
-              }
-            },
-            {
-              "name": "danger/background-color-active",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "danger/subtle3"
-              }
-            },
-            {
-              "name": "danger/background-color-filled",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "danger/base"
-              }
-            },
-            {
-              "name": "danger/background-color-filled-hover",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "danger/base2"
-              }
-            },
-            {
-              "name": "danger/background-color-filled-active",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "danger/base3"
-              }
-            },
-            {
-              "name": "drop-down/background-color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "surface/pure"
-              }
-            },
-            {
-              "name": "danger/border-color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "danger/base"
-              }
-            },
-            {
-              "name": "drop-down/color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "surface/on-base"
-              }
-            },
-            {
-              "name": "danger/border-color-active",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "danger/base"
-              }
-            },
-            {
-              "name": "danger/color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "danger/bold"
-              }
-            },
-            {
-              "name": "danger/color-filled",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "danger/on-base"
-              }
             }
           ]
         }
       ]
     },
     {
-      "name": "auto-complete",
+      "name": "line-height",
       "modes": [
         {
-          "name": "mode-1",
+          "name": "default",
           "variables": [
             {
-              "name": "color-add",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "success/base"
-              }
-            },
-            {
-              "name": "color-remove",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "danger/base"
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "input",
-      "modes": [
-        {
-          "name": "mode-1",
-          "variables": [
-            {
-              "name": "border-radius",
-              "type": "number",
-              "isAlias": true,
-              "value": {
-                "collection": "border-radiuses",
-                "name": "small1"
-              }
-            },
-            {
-              "name": "padding",
-              "type": "number",
-              "isAlias": true,
-              "value": {
-                "collection": "spacing",
-                "name": "small2"
-              }
-            },
-            {
-              "name": "margin-pre-post-item",
-              "type": "number",
-              "isAlias": true,
-              "value": {
-                "collection": "spacing",
-                "name": "small3"
-              }
-            },
-            {
-              "name": "color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "surface/on-base"
-              }
-            },
-            {
-              "name": "color-placeholder",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "misc/input-placeholder-color"
-              }
-            },
-            {
-              "name": "background-color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "misc/input-background-color"
-              }
-            },
-            {
-              "name": "background-color-readonly",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "surface/secondary"
-              }
-            },
-            {
-              "name": "border-color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "outline/base"
-              }
-            },
-            {
-              "name": "border-color-active",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "outline/active"
-              }
-            },
-            {
-              "name": "border-color-error",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "danger/base"
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "label",
-      "modes": [
-        {
-          "name": "mode-1",
-          "variables": [
-            {
-              "name": "margin",
-              "type": "number",
-              "isAlias": true,
-              "value": {
-                "collection": "spacing",
-                "name": "small3"
-              }
-            },
-            {
-              "name": "margin-loading-indicator",
-              "type": "number",
-              "isAlias": true,
-              "value": {
-                "collection": "spacing",
-                "name": "small3"
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "list",
-      "modes": [
-        {
-          "name": "mode-1",
-          "variables": [
-            {
-              "name": "padding-vertical",
-              "type": "number",
-              "isAlias": true,
-              "value": {
-                "collection": "spacing",
-                "name": "small3"
-              }
-            },
-            {
-              "name": "padding-horizontal",
-              "type": "number",
-              "isAlias": true,
-              "value": {
-                "collection": "spacing",
-                "name": "small2"
-              }
-            },
-            {
-              "name": "border-color-item",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "outline/base"
-              }
-            },
-            {
-              "name": "background-color-item",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "surface/pure"
-              }
-            },
-            {
-              "name": "background-color-item-selected",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "brand/subtle"
-              }
-            },
-            {
-              "name": "margin-pre-item",
-              "type": "number",
-              "isAlias": true,
-              "value": {
-                "collection": "spacing",
-                "name": "small3"
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "avatar",
-      "modes": [
-        {
-          "name": "mode-1",
-          "variables": [
-            {
-              "name": "size",
+              "name": "0",
               "type": "number",
               "isAlias": false,
-              "value": 40
+              "value": 0
             },
             {
-              "name": "border-radius",
-              "type": "number",
-              "isAlias": true,
-              "value": {
-                "collection": "border-radiuses",
-                "name": "round"
-              }
-            },
-            {
-              "name": "color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "brand/on-base"
-              }
-            },
-            {
-              "name": "background-color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "brand/base"
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "supporting-text",
-      "modes": [
-        {
-          "name": "mode-1",
-          "variables": [
-            {
-              "name": "margin",
-              "type": "number",
-              "isAlias": true,
-              "value": {
-                "collection": "spacing",
-                "name": "small3"
-              }
-            },
-            {
-              "name": "color-neutral",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "surface/on-tertiary"
-              }
-            },
-            {
-              "name": "color-danger",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "danger/base"
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "bubble",
-      "modes": [
-        {
-          "name": "mode-1",
-          "variables": [
-            {
-              "name": "border-radius",
-              "type": "number",
-              "isAlias": true,
-              "value": {
-                "collection": "border-radiuses",
-                "name": "small1"
-              }
-            },
-            {
-              "name": "padding-vertical",
-              "type": "number",
-              "isAlias": true,
-              "value": {
-                "collection": "spacing",
-                "name": "small3"
-              }
-            },
-            {
-              "name": "padding-horizontal",
-              "type": "number",
-              "isAlias": true,
-              "value": {
-                "collection": "spacing",
-                "name": "small2"
-              }
-            },
-            {
-              "name": "padding-icon",
-              "type": "number",
-              "isAlias": true,
-              "value": {
-                "collection": "spacing",
-                "name": "small3"
-              }
-            },
-            {
-              "name": "size-icon-small",
-              "type": "number",
-              "isAlias": true,
-              "value": {
-                "collection": "sizes",
-                "name": "small1"
-              }
-            },
-            {
-              "name": "neutral/background-color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "neutral/base"
-              }
-            },
-            {
-              "name": "neutral/background-color-weak",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "neutral/subtle"
-              }
-            },
-            {
-              "name": "neutral/border-color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "neutral/base"
-              }
-            },
-            {
-              "name": "neutral/color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "neutral/on-base"
-              }
-            },
-            {
-              "name": "neutral/color-weak",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "surface/on-base"
-              }
-            },
-            {
-              "name": "brand/background-color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "brand/base"
-              }
-            },
-            {
-              "name": "brand/background-color-weak",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "brand/subtle"
-              }
-            },
-            {
-              "name": "brand/border-color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "brand/base"
-              }
-            },
-            {
-              "name": "brand/color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "brand/on-base"
-              }
-            },
-            {
-              "name": "brand/color-weak",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "surface/on-base"
-              }
-            },
-            {
-              "name": "success/background-color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "success/base"
-              }
-            },
-            {
-              "name": "success/background-color-weak",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "success/subtle"
-              }
-            },
-            {
-              "name": "success/border-color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "success/base"
-              }
-            },
-            {
-              "name": "success/color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "success/on-base"
-              }
-            },
-            {
-              "name": "success/color-weak",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "surface/on-base"
-              }
-            },
-            {
-              "name": "info/background-color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "info/base"
-              }
-            },
-            {
-              "name": "info/background-color-weak",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "info/subtle"
-              }
-            },
-            {
-              "name": "info/border-color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "info/base"
-              }
-            },
-            {
-              "name": "info/color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "info/on-base"
-              }
-            },
-            {
-              "name": "info/color-weak",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "surface/on-base"
-              }
-            },
-            {
-              "name": "warning/background-color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "warning/base"
-              }
-            },
-            {
-              "name": "warning/background-color-weak",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "warning/subtle"
-              }
-            },
-            {
-              "name": "warning/border-color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "warning/base"
-              }
-            },
-            {
-              "name": "warning/color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "warning/on-base"
-              }
-            },
-            {
-              "name": "warning/color-weak",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "surface/on-base"
-              }
-            },
-            {
-              "name": "danger/background-color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "danger/base"
-              }
-            },
-            {
-              "name": "danger/background-color-weak",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "danger/subtle"
-              }
-            },
-            {
-              "name": "danger/border-color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "danger/base"
-              }
-            },
-            {
-              "name": "danger/color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "danger/on-base"
-              }
-            },
-            {
-              "name": "danger/color-weak",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "surface/on-base"
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "callout",
-      "modes": [
-        {
-          "name": "mode-1",
-          "variables": [
-            {
-              "name": "padding-vertical",
-              "type": "number",
-              "isAlias": true,
-              "value": {
-                "collection": "spacing",
-                "name": "small2"
-              }
-            },
-            {
-              "name": "padding-horizontal",
-              "type": "number",
-              "isAlias": true,
-              "value": {
-                "collection": "spacing",
-                "name": "small1"
-              }
-            },
-            {
-              "name": "border-width",
-              "type": "number",
-              "isAlias": false,
-              "value": 8
-            },
-            {
-              "name": "border-radius",
-              "type": "number",
-              "isAlias": true,
-              "value": {
-                "collection": "border-radiuses",
-                "name": "small1"
-              }
-            },
-            {
-              "name": "neutral/background-color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "neutral/base"
-              }
-            },
-            {
-              "name": "neutral/background-color-weak",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "neutral/subtle"
-              }
-            },
-            {
-              "name": "neutral/border-color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "neutral/base"
-              }
-            },
-            {
-              "name": "neutral/color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "neutral/on-base"
-              }
-            },
-            {
-              "name": "neutral/color-weak",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "surface/on-base"
-              }
-            },
-            {
-              "name": "brand/background-color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "brand/base"
-              }
-            },
-            {
-              "name": "brand/background-color-weak",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "brand/subtle"
-              }
-            },
-            {
-              "name": "brand/border-color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "brand/base"
-              }
-            },
-            {
-              "name": "brand/color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "brand/on-base"
-              }
-            },
-            {
-              "name": "brand/color-weak",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "surface/on-base"
-              }
-            },
-            {
-              "name": "success/background-color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "success/base"
-              }
-            },
-            {
-              "name": "success/background-color-weak",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "success/subtle"
-              }
-            },
-            {
-              "name": "success/border-color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "success/base"
-              }
-            },
-            {
-              "name": "success/color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "success/on-base"
-              }
-            },
-            {
-              "name": "success/color-weak",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "surface/on-base"
-              }
-            },
-            {
-              "name": "info/background-color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "info/base"
-              }
-            },
-            {
-              "name": "info/background-color-weak",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "info/subtle"
-              }
-            },
-            {
-              "name": "info/border-color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "info/base"
-              }
-            },
-            {
-              "name": "info/color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "info/on-base"
-              }
-            },
-            {
-              "name": "info/color-weak",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "surface/on-base"
-              }
-            },
-            {
-              "name": "warning/background-color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "warning/base"
-              }
-            },
-            {
-              "name": "warning/background-color-weak",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "warning/subtle"
-              }
-            },
-            {
-              "name": "warning/border-color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "warning/base"
-              }
-            },
-            {
-              "name": "warning/color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "warning/on-base"
-              }
-            },
-            {
-              "name": "warning/color-weak",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "surface/on-base"
-              }
-            },
-            {
-              "name": "danger/background-color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "danger/base"
-              }
-            },
-            {
-              "name": "danger/background-color-weak",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "danger/subtle"
-              }
-            },
-            {
-              "name": "danger/border-color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "danger/base"
-              }
-            },
-            {
-              "name": "danger/color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "danger/on-base"
-              }
-            },
-            {
-              "name": "danger/color-weak",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "surface/on-base"
-              }
-            },
-            {
-              "name": "margin-pre-post-item",
-              "type": "number",
-              "isAlias": true,
-              "value": {
-                "collection": "spacing",
-                "name": "small3"
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "checkbox",
-      "modes": [
-        {
-          "name": "mode-1",
-          "variables": [
-            {
-              "name": "margin",
-              "type": "number",
-              "isAlias": true,
-              "value": {
-                "collection": "spacing",
-                "name": "small3"
-              }
-            },
-            {
-              "name": "width-toggle-bar",
-              "type": "number",
-              "isAlias": false,
-              "value": 40
-            },
-            {
-              "name": "height-toggle-bar",
+              "name": "sm",
               "type": "number",
               "isAlias": false,
               "value": 16
             },
             {
-              "name": "size-knob",
+              "name": "base",
+              "type": "number",
+              "isAlias": false,
+              "value": 20
+            },
+            {
+              "name": "lg",
               "type": "number",
               "isAlias": false,
               "value": 24
             },
             {
-              "name": "size",
-              "type": "number",
-              "isAlias": true,
-              "value": {
-                "collection": "sizes",
-                "name": "base"
-              }
-            },
-            {
-              "name": "color-icon",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "neutral/base"
-              }
-            },
-            {
-              "name": "color-icon-active",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "brand/base"
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "radio",
-      "modes": [
-        {
-          "name": "mode-1",
-          "variables": [
-            {
-              "name": "margin",
-              "type": "number",
-              "isAlias": true,
-              "value": {
-                "collection": "spacing",
-                "name": "small3"
-              }
-            },
-            {
-              "name": "size",
-              "type": "number",
-              "isAlias": true,
-              "value": {
-                "collection": "sizes",
-                "name": "base"
-              }
-            },
-            {
-              "name": "color-icon",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "neutral/base"
-              }
-            },
-            {
-              "name": "color-icon-active",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "brand/base"
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "global-notification",
-      "modes": [
-        {
-          "name": "mode-1",
-          "variables": [
-            {
-              "name": "margin-list",
-              "type": "number",
-              "isAlias": true,
-              "value": {
-                "collection": "spacing",
-                "name": "small2"
-              }
-            },
-            {
-              "name": "margin-between-self",
-              "type": "number",
-              "isAlias": true,
-              "value": {
-                "collection": "spacing",
-                "name": "small2"
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "form-error",
-      "modes": [
-        {
-          "name": "mode-1",
-          "variables": [
-            {
-              "name": "margin",
-              "type": "number",
-              "isAlias": true,
-              "value": {
-                "collection": "spacing",
-                "name": "small1"
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "form-field",
-      "modes": [
-        {
-          "name": "mode-1",
-          "variables": [
-            {
-              "name": "margin",
-              "type": "number",
-              "isAlias": true,
-              "value": {
-                "collection": "spacing",
-                "name": "small1"
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "dialog",
-      "modes": [
-        {
-          "name": "mode-1",
-          "variables": [
-            {
-              "name": "border-radius",
-              "type": "number",
-              "isAlias": true,
-              "value": {
-                "collection": "border-radiuses",
-                "name": "small1"
-              }
-            },
-            {
-              "name": "padding-horizontal",
-              "type": "number",
-              "isAlias": true,
-              "value": {
-                "collection": "spacing",
-                "name": "small1"
-              }
-            },
-            {
-              "name": "padding-vertical-header-footer",
-              "type": "number",
-              "isAlias": true,
-              "value": {
-                "collection": "spacing",
-                "name": "small2"
-              }
-            },
-            {
-              "name": "padding-vertical-content",
-              "type": "number",
-              "isAlias": true,
-              "value": {
-                "collection": "spacing",
-                "name": "small1"
-              }
-            },
-            {
-              "name": "background-color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "misc/dialog-background-color"
-              }
-            },
-            {
-              "name": "border-color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "outline/base"
-              }
-            },
-            {
-              "name": "color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "surface/on-base"
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "overlay",
-      "modes": [
-        {
-          "name": "mode-1",
-          "variables": [
-            {
-              "name": "background-color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "misc/overlay-background-color"
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "emoji",
-      "modes": [
-        {
-          "name": "mode-1",
-          "variables": [
-            {
-              "name": "margin",
-              "type": "number",
-              "isAlias": true,
-              "value": {
-                "collection": "spacing",
-                "name": "small3"
-              }
-            },
-            {
-              "name": "font-size",
-              "type": "number",
-              "isAlias": true,
-              "value": {
-                "collection": "sizes",
-                "name": "large1"
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "icon",
-      "modes": [
-        {
-          "name": "mode-1",
-          "variables": [
-            {
-              "name": "margin",
-              "type": "number",
-              "isAlias": true,
-              "value": {
-                "collection": "spacing",
-                "name": "small3"
-              }
-            },
-            {
-              "name": "color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "surface/on-base"
-              }
-            },
-            {
-              "name": "neutral/color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "neutral/base"
-              }
-            },
-            {
-              "name": "brand/color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "brand/base"
-              }
-            },
-            {
-              "name": "success/color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "success/base"
-              }
-            },
-            {
-              "name": "info/color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "info/base"
-              }
-            },
-            {
-              "name": "warning/color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "warning/base"
-              }
-            },
-            {
-              "name": "danger/color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "danger/base"
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "card",
-      "modes": [
-        {
-          "name": "mode-1",
-          "variables": [
-            {
-              "name": "padding-vertical",
-              "type": "number",
-              "isAlias": true,
-              "value": {
-                "collection": "spacing",
-                "name": "small2"
-              }
-            },
-            {
-              "name": "padding-horizontal",
-              "type": "number",
-              "isAlias": true,
-              "value": {
-                "collection": "spacing",
-                "name": "small1"
-              }
-            },
-            {
-              "name": "margin-pre-post-item",
-              "type": "number",
-              "isAlias": true,
-              "value": {
-                "collection": "spacing",
-                "name": "small2"
-              }
-            },
-            {
-              "name": "border-radius",
-              "type": "number",
-              "isAlias": true,
-              "value": {
-                "collection": "border-radiuses",
-                "name": "small1"
-              }
-            },
-            {
-              "name": "background-color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "surface/pure"
-              }
-            },
-            {
-              "name": "border-color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "outline/base"
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "text",
-      "modes": [
-        {
-          "name": "mode-1",
-          "variables": [
-            {
-              "name": "color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "surface/on-base"
-              }
-            },
-            {
-              "name": "color-link",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "info/base"
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "date-picker",
-      "modes": [
-        {
-          "name": "mode-1",
-          "variables": [
-            {
-              "name": "border-radius",
-              "type": "number",
-              "isAlias": true,
-              "value": {
-                "collection": "border-radiuses",
-                "name": "small1"
-              }
-            },
-            {
-              "name": "border-radius-day-active-indicator",
-              "type": "number",
-              "isAlias": true,
-              "value": {
-                "collection": "border-radiuses",
-                "name": "round"
-              }
-            },
-            {
-              "name": "padding",
-              "type": "number",
-              "isAlias": true,
-              "value": {
-                "collection": "spacing",
-                "name": "small2"
-              }
-            },
-            {
-              "name": "gap-calendar",
-              "type": "number",
-              "isAlias": true,
-              "value": {
-                "collection": "spacing",
-                "name": "small4"
-              }
-            },
-            {
-              "name": "size-day-item",
+              "name": "xl",
               "type": "number",
               "isAlias": false,
-              "value": 32
+              "value": 30
             },
             {
-              "name": "width",
+              "name": "2xl",
               "type": "number",
               "isAlias": false,
-              "value": 250
-            },
+              "value": 40
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "z",
+      "modes": [
+        {
+          "name": "default",
+          "variables": [
             {
-              "name": "width-year-selection",
+              "name": "overlay",
               "type": "number",
               "isAlias": false,
-              "value": 90
+              "value": 5
             },
             {
-              "name": "width-time-input",
+              "name": "combobox-options",
+              "type": "number",
+              "isAlias": false,
+              "value": 10
+            },
+            {
+              "name": "drop-down",
+              "type": "number",
+              "isAlias": false,
+              "value": 40
+            },
+            {
+              "name": "dialog",
+              "type": "number",
+              "isAlias": false,
+              "value": 50
+            },
+            {
+              "name": "tooltip",
               "type": "number",
               "isAlias": false,
               "value": 100
-            },
-            {
-              "name": "border-color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "outline/base"
-              }
-            },
-            {
-              "name": "background-color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "surface/pure"
-              }
-            },
-            {
-              "name": "color",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "surface/on-base"
-              }
-            },
-            {
-              "name": "color-day-inactive",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "neutral/base"
-              }
-            },
-            {
-              "name": "color-day-disabled",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "neutral/subtle3"
-              }
-            },
-            {
-              "name": "background-color-day-highlighted",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "brand/subtle"
-              }
-            },
-            {
-              "name": "background-color-day-current",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "info/subtle"
-              }
             }
           ]
         }
       ]
     },
     {
-      "name": "side-navigation",
+      "name": "opacity",
       "modes": [
         {
-          "name": "Mode 1",
+          "name": "default",
           "variables": [
             {
-              "name": "padding-item",
-              "type": "number",
-              "isAlias": true,
-              "value": {
-                "collection": "spacing",
-                "name": "small3"
-              }
-            },
-            {
-              "name": "size-header-indicator",
+              "name": "0",
               "type": "number",
               "isAlias": false,
-              "value": 9
+              "value": 0
             },
             {
-              "name": "margin-header-indicator",
-              "type": "number",
-              "isAlias": true,
-              "value": {
-                "collection": "spacing",
-                "name": "small1"
-              }
-            },
-            {
-              "name": "border-radius-header-indicator",
-              "type": "number",
-              "isAlias": true,
-              "value": {
-                "collection": "border-radiuses",
-                "name": "small2"
-              }
-            },
-            {
-              "name": "border-offset",
+              "name": "disabled",
               "type": "number",
               "isAlias": false,
-              "value": 4
+              "value": 45
             },
             {
-              "name": "color-header",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "surface/on-tertiary"
-              }
-            },
-            {
-              "name": "color-item",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "surface/on-secondary"
-              }
-            },
-            {
-              "name": "border-color-header-indicator",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "outline/base"
-              }
-            },
-            {
-              "name": "color-item-active",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "brand/base"
-              }
-            },
-            {
-              "name": "border-color-item",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "outline/base"
-              }
-            },
-            {
-              "name": "border-color-item-active",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "collection": "colors",
-                "name": "brand/base"
-              }
+              "name": "full",
+              "type": "number",
+              "isAlias": false,
+              "value": 100
             }
           ]
         }

@@ -20,12 +20,12 @@
 </script>
 
 <CollapsibleTrigger meltTrigger={trigger} class="w-full">
-  <div class="flex cursor-pointer items-center gap-1">
+  <div class="gap-2xs flex cursor-pointer items-center">
     <Typography class="flex-1">{item.display}</Typography>
     {#if $open}
-      <ChevronUpIcon class="ml-auto size-4" />
+      <ChevronUpIcon class="size-base ml-auto" />
     {:else}
-      <ChevronDownIcon class="ml-auto size-4" />
+      <ChevronDownIcon class="size-base ml-auto" />
     {/if}
   </div>
 </CollapsibleTrigger>

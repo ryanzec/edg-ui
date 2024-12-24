@@ -10,7 +10,12 @@ const splitOnceWithAll = <TValue1 = string, TValue2 = string>(value: string, sep
   return [(parts.shift() || '') as TValue1, parts.join(separator) as TValue2];
 };
 
+const startsWithNumber = (value: string): boolean => {
+  return /^\d/.test(value);
+};
+
 export const stringUtils = {
   toTitleCase,
   splitOnceWithAll,
+  startsWithNumber,
 };

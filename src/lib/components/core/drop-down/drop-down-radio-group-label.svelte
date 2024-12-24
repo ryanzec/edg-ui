@@ -4,4 +4,4 @@
   let { children }: Props = $props();
 </script>
 
-<div data-id="label" class="px-2 text-xs leading-6">{@render children?.()}</div>
+<div data-id="label" class="px-xs leading-lg text-xs">{@render children?.()}</div>

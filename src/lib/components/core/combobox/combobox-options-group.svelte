@@ -16,7 +16,7 @@
 </script>
 
 {#if options.length > 0}
-  {#if header}<div data-id="group-header" class="p-1 font-semibold">{header}</div>{/if}
+  {#if header}<div data-id="group-header" class="p-2xs font-semibold">{header}</div>{/if}
   {#each options as option, index (option.value)}
     {@const SvelteComponent = optionComponent || ComboboxOption}
     <SvelteComponent {option} optionIndex={index + indexOffset} {optionAction} />

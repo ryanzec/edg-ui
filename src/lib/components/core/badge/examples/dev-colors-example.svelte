@@ -2,7 +2,7 @@
   import Badge, { BadgeColor } from '../badge.svelte';
 </script>
 
-<div class="flex flex-col items-start gap-2">
+<div class="gap-xs flex flex-col items-start">
   <Badge color={BadgeColor.BRAND}>Primary</Badge>
   <Badge color={BadgeColor.NEUTRAL}>Neutral</Badge>
   <Badge color={BadgeColor.SUCCESS}>Success</Badge>
