@@ -4,6 +4,7 @@
   import type { Writable } from 'svelte/store';
   import { fly } from 'svelte/transition';
   import Overlay from '../overlay/overlay.svelte';
+  import { tailwindUtils } from '$lib/utils/tailwind';
 
   type Props = {
     hasOverlay?: boolean;
@@ -15,6 +16,7 @@
     onOpened?: () => void;
     onClosed?: () => void;
     children?: import('svelte').Snippet;
+    class?: string;
   };
 
   let {
@@ -27,6 +29,7 @@
     onOpened,
     onClosed,
     children,
+    class: extraClass = '',
   }: Props = $props();
 
   let peekElement: HTMLElement | undefined = $state();
@@ -116,7 +119,10 @@
     <div
       use:melt={$meltContent}
       bind:this={peekElement}
-      class="border-outline bg-surface-pure top-none right-none z-dialog p-base fixed flex h-screen w-[350px] flex-col border-l"
+      class={tailwindUtils.merge(
+        'border-outline bg-surface-pure top-none right-none z-dialog p-base fixed flex h-screen w-[350px] flex-col border-l',
+        extraClass,
+      )}
       transition:fly={{
         x: 350,
         duration: 300,

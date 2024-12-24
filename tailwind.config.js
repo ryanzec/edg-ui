@@ -68,7 +68,7 @@ export default {
       'overlay-background': 'var(--color-overlay-background)',
     },
     spacing: {
-      0: 'var(--spacing-0)',
+      none: 'var(--spacing-none)',
       '3xs': 'var(--spacing-3xs)',
       '2xs': 'var(--spacing-2xs)',
       xs: 'var(--spacing-xs)',
@@ -79,7 +79,7 @@ export default {
       '2xl': 'var(--spacing-2xl)',
     },
     borderRadius: {
-      0: 'var(--border-radius-0)',
+      none: 'var(--border-radius-none)',
       xs: 'var(--border-radius-xs)',
       sm: 'var(--border-radius-sm)',
       base: 'var(--border-radius-base)',
@@ -96,7 +96,7 @@ export default {
       '2xl': 'var(--font-size-2xl)',
     },
     lineHeight: {
-      0: 'var(--line-height-0)',
+      none: 'var(--line-height-none)',
       sm: 'var(--line-height-sm)',
       base: 'var(--line-height-base)',
       lg: 'var(--line-height-lg)',
@@ -111,7 +111,7 @@ export default {
       tooltip: 'var(--z-index-tooltip)',
     },
     opacity: {
-      0: 'var(--opacity-0)',
+      none: 'var(--opacity-none)',
       disabled: 'var(--opacity-disabled)',
       full: 'var(--opacity-full)',
     },

@@ -11,6 +11,7 @@
   import { type Writable } from 'svelte/store';
   import type { WithGet } from '@melt-ui/svelte/internal/helpers';
   import type { HTMLAttributes } from 'svelte/elements';
+  import { tailwindUtils } from '$lib/utils/tailwind';
 
   type Props = HTMLAttributes<HTMLDivElement> & {
     meltMenu: AnyMeltElement;
@@ -36,9 +37,13 @@
 {#if $isOpened}
   <div
     data-id="menu"
-    class="border-outline bg-surface-pure z-drop-down rounded-base flex min-w-[220px] flex-col border ring-0 shadow-sm"
-    class:shadow-lg={type === DropDownMenuType.MAIN}
-    class:shadow-md={type === DropDownMenuType.SUB}
+    class={tailwindUtils.merge(
+      'border-outline bg-surface-pure z-drop-down rounded-base flex min-w-[220px] flex-col border ring-0 shadow-sm',
+      {
+        'shadow-lg': type === DropDownMenuType.MAIN,
+        'shadow-md': type === DropDownMenuType.SUB,
+      },
+    )}
     use:melt={$meltMenu}
     transition:fly={flyOptions}
     {...rest}

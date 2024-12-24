@@ -768,7 +768,7 @@
           "name": "default",
           "variables": [
             {
-              "name": "0",
+              "name": "none",
               "type": "number",
               "isAlias": false,
               "value": 0
@@ -832,7 +832,7 @@
           "name": "default",
           "variables": [
             {
-              "name": "0",
+              "name": "none",
               "type": "number",
               "isAlias": false,
               "value": 0
@@ -930,7 +930,7 @@
           "name": "default",
           "variables": [
             {
-              "name": "0",
+              "name": "none",
               "type": "number",
               "isAlias": false,
               "value": 0
@@ -1016,7 +1016,7 @@
           "name": "default",
           "variables": [
             {
-              "name": "0",
+              "name": "none",
               "type": "number",
               "isAlias": false,
               "value": 0

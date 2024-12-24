@@ -38,7 +38,7 @@
 
   export const shapeCss: Record<BadgeShape, string> = {
     [BadgeShape.ROUNDED]: 'rounded-base',
-    [BadgeShape.PILL]: 'rounded-round',
+    [BadgeShape.PILL]: 'rounded-full',
   };
 </script>
 

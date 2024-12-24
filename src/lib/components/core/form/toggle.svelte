@@ -26,13 +26,13 @@
   <div
     data-id="inner"
     class={tailwindUtils.merge(
-      'mr-2xs h-base rounded-round inline-flex w-[32px] items-center outline-hidden transition-colors duration-150',
+      'mr-2xs h-base inline-flex w-[32px] items-center rounded-full outline-hidden transition-colors duration-150',
       checkedBarCss,
       buttonCss,
     )}
   >
     <div
-      class={tailwindUtils.merge('bg-surface mx-3xs h-sm rounded-round block w-sm duration-150', checkedButtonCss)}
+      class={tailwindUtils.merge('bg-surface mx-3xs h-sm block w-sm rounded-full duration-150', checkedButtonCss)}
     ></div>
   </div>
   <input {id} {name} type="checkbox" {value} bind:checked class="appearance-none" />

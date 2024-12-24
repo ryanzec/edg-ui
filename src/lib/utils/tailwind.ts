@@ -1,4 +1,5 @@
 import { extendTailwindMerge } from 'tailwind-merge';
+import { clsx, type ClassValue } from 'clsx';
 
 // example usage for custom tailwind classes
 const merge = extendTailwindMerge({
@@ -7,4 +8,8 @@ const merge = extendTailwindMerge({
 
 // const merge = extendTailwindMerge({});
 
-export const tailwindUtils = { merge };
+export const tailwindUtils = {
+  merge: (...inputs: ClassValue[]) => {
+    return merge(clsx(inputs));
+  },
+};

@@ -25,10 +25,11 @@
 </script>
 
 <div
-  class={tailwindUtils.merge('border-outline flex flex-1 flex-col', extraClass)}
-  class:ml-xs={isNested}
-  class:w-48={isNested === false}
-  class:border-r={isNested === false}
+  class={tailwindUtils.merge('border-outline flex flex-1 flex-col', extraClass, {
+    'border-r': isNested === false,
+    'ml-xs': isNested,
+    'w-[200px]': isNested === false,
+  })}
 >
   <div class="flex flex-col">
     {#each items as item}

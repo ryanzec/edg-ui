@@ -17,7 +17,14 @@
 </script>
 
 <button type="button" onclick={() => peekIsOpened.set(true)}>resizable</button>
-<Peek isOpened={peekIsOpened} isResizable meltOverlay={overlay} meltPortalled={portalled} meltContent={content}>
+<Peek
+  isOpened={peekIsOpened}
+  isResizable
+  meltOverlay={overlay}
+  meltPortalled={portalled}
+  meltContent={content}
+  class="w-[800px]"
+>
   <PeekHeader meltTitle={title} title="My resizable title" meltClose={close} />
   <PeekContent><div use:melt={$description} class="mt-xs mb-lg">I am resizable</div></PeekContent>
   <PeekFooter>

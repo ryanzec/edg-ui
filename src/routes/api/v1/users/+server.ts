@@ -39,6 +39,8 @@ interface ErrorResponse {
 export async function GET({ request }: RequestEvent) {
   console.log(request.method, request.url);
 
+  await new Promise((resolve) => setTimeout(resolve, 100));
+
   var data: UsersResponse = {
     data: [
       {
@@ -55,6 +57,15 @@ export async function GET({ request }: RequestEvent) {
         firstName: 'Jane',
         lastName: 'Doe',
         email: 'jane.doe@example.com',
+        role: UserRole.ADMIN,
+        createdAt: '2021-01-01T00:00:00.000Z',
+        updatedAt: '2021-01-01T00:00:00.000Z',
+      },
+      {
+        id: '3',
+        firstName: 'Jake',
+        lastName: 'Doe',
+        email: 'jake.doe@example.com',
         role: UserRole.ADMIN,
         createdAt: '2021-01-01T00:00:00.000Z',
         updatedAt: '2021-01-01T00:00:00.000Z',

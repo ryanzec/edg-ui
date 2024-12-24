@@ -16,7 +16,7 @@
   let { isOpened = writable(false) }: Props = $props();
 
   const {
-    elements: { trigger, overlay, content, title, description, close, portalled },
+    elements: { overlay, content, title, description, close, portalled },
   } = createDialog(dialogUtils.buildCreateOptions(isOpened));
 
   const handleAction = () => {
@@ -27,12 +27,12 @@
   let value2: Writable<string> = writable('@thomasglopes');
 </script>
 
-<button
-  use:melt={$trigger}
+<Button
   class="rounded-large2 px-base py-sm inline-flex items-center justify-center leading-none font-medium shadow-sm"
+  onclick={() => ($isOpened = true)}
 >
   Open Dialog
-</button>
+</Button>
 
 <Dialog meltContent={content} meltOverlay={overlay} meltPortalled={portalled} {isOpened}>
   <DialogHeader meltTitle={title} title="Edit profile" meltClose={close} />

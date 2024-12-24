@@ -9,7 +9,7 @@ export type PlaywrightMockEndpointOptions = {
 };
 
 const mockGetUsersEndpoint = async (page: Page, options: PlaywrightMockEndpointOptions = {}) => {
-  await page.route('http://localhost:3001/api/users', async (route) => {
+  await page.route('http://localhost:3000/api/users', async (route) => {
     await asyncUtils.sleep(options.delay || 0);
     const json: ResponseStructure<User[]> = { data: [] };
 
@@ -32,7 +32,7 @@ const mockGetUsersEndpoint = async (page: Page, options: PlaywrightMockEndpointO
 };
 
 const mockGetUsersNoResultsEndpoint = async (page: Page, options: PlaywrightMockEndpointOptions = {}) => {
-  await page.route('http://localhost:3001/api/users', async (route) => {
+  await page.route('http://localhost:3000/api/users', async (route) => {
     await asyncUtils.sleep(options.delay || 0);
     const json = { data: [] };
     await route.fulfill({ json });

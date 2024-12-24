@@ -1,6 +1,7 @@
 <script lang="ts">
   import { melt } from '@melt-ui/svelte';
   import type { HTMLAttributes } from 'svelte/elements';
+  import { tailwindUtils } from '$lib/utils/tailwind';
 
   // @todo need to figure out if there is a proper way to type this
 
@@ -39,8 +40,10 @@
 <button
   data-id="item"
   use:melt={meltItem}
-  class="data-highlighted:bg-neutral-subtle z-drop-down px-xs flex min-h-[24px] items-center text-sm leading-none ring-0 outline-hidden select-none"
-  class:opacity-disabled={disabled}
+  class={tailwindUtils.merge(
+    'data-highlighted:bg-neutral-subtle z-drop-down px-xs flex min-h-[24px] items-center text-sm leading-none ring-0 outline-hidden select-none',
+    { 'opacity-disabled': disabled },
+  )}
   onm-click={handleClick}
   {...rest}
   type="button"
