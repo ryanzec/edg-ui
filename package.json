@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "css:build-variables": "tsx scripts/process-design-variables.ts",
+    "css:build": "tsx scripts/process-design-variables.ts",
     "dev": "vite dev",
     "dev:force": "vite dev --force",
     "build": "vite build",

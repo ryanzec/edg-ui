@@ -130,6 +130,7 @@
   data-id="button"
   type="button"
   {...rest}
+  disabled={isDisabled}
   class={tailwindUtils.merge(
     'gap-xs flex cursor-pointer items-center justify-center border border-transparent',
     colorsCss[variant][color],

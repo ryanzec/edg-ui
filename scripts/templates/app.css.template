@@ -20,8 +20,7 @@
   }
 }
 
-@layer base {
-  :root {
+@theme {
 %LIGHT_COLOR_VARIABLES%
 
 %SPACING_VARIABLES%
@@ -35,11 +34,10 @@
 %Z_INDEX_VARIABLES%
 
 %OPACITY_VARIABLES%
-  }
+}
 
-  body[data-theme='dark'] {
+body[data-theme='dark'] {
 %DARK_COLOR_VARIABLES%
-  }
 }
 
 /* since buttons are overridden to look like plain text, resetting the text to align to the left */
