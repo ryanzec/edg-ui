@@ -128,7 +128,7 @@ export class FormComponentPage {
   }
 
   toggleLocator(index: number) {
-    return this.page.locator(`[data-id="toggle-group"] label:nth-of-type(${index + 1}) [data-id="bar"]`);
+    return this.page.locator(`[data-id="toggle-group"] label:nth-of-type(${index + 1}) [data-id="inner"]`);
   }
 
   radioLocator(index: number) {
@@ -141,7 +141,7 @@ export class FormComponentPage {
 
   objectToggleLocator(index: number) {
     return this.page.locator(
-      `[data-id="object"] [data-id="toggle-group"] label:nth-of-type(${index + 1}) [data-id="bar"]`,
+      `[data-id="object"] [data-id="toggle-group"] label:nth-of-type(${index + 1}) [data-id="inner"]`,
     );
   }
 

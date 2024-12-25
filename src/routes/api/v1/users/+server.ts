@@ -39,8 +39,6 @@ interface ErrorResponse {
 export async function GET({ request }: RequestEvent) {
   console.log(request.method, request.url);
 
-  await new Promise((resolve) => setTimeout(resolve, 100));
-
   var data: UsersResponse = {
     data: [
       {
