@@ -11,6 +11,8 @@
   import { peekExampleItems } from '$lib/components/core/peek/examples/utils';
   import { scrollAreaExampleItems } from '$lib/components/core/scroll-area/examples/utils';
   import { tooltipExampleItems } from '$lib/components/core/tooltip/examples/utils';
+  import { avatarExampleItems } from '$lib/components/core/avatar/examples/utils';
+
   type Props = { children?: import('svelte').Snippet };
 
   let { children }: Props = $props();
@@ -51,6 +53,7 @@
     comboboxExampleItems,
     usersTableExampleItems,
     badgeExampleItems,
+    avatarExampleItems,
   ];
 
   sortItems(items);
