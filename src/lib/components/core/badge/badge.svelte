@@ -12,6 +12,11 @@
     ROUNDED = 'rounded',
     PILL = 'pill',
   }
+
+  export enum BadgeStrength {
+    STRONG = 'strong',
+    WEAK = 'weak',
+  }
 </script>
 
 <script lang="ts">
@@ -22,18 +27,34 @@
   type Props = HTMLAttributes<HTMLDivElement> & {
     color?: BadgeColor;
     shape?: BadgeShape;
+    strength?: BadgeStrength;
     children?: import('svelte').Snippet;
   };
 
-  let { color = BadgeColor.NEUTRAL, shape = BadgeShape.ROUNDED, children, ...rest }: Props = $props();
+  let {
+    color = BadgeColor.NEUTRAL,
+    shape = BadgeShape.ROUNDED,
+    strength = BadgeStrength.WEAK,
+    children,
+    ...rest
+  }: Props = $props();
 
-  const colorCss: Record<BadgeColor, string> = {
-    [BadgeColor.BRAND]: 'border-brand-bold bg-brand-subtle2 text-brand-bold',
-    [BadgeColor.NEUTRAL]: 'border-neutral-bold bg-neutral-subtle2 text-neutral-bold',
-    [BadgeColor.SUCCESS]: 'border-success-bold bg-success-subtle2 text-success-bold',
-    [BadgeColor.INFO]: 'border-info-bold bg-info-subtle2 text-info-bold',
-    [BadgeColor.WARNING]: 'border-warning-bold bg-warning-subtle2 text-warning-bold',
-    [BadgeColor.DANGER]: 'border-danger-bold bg-danger-subtle2 text-danger-bold',
+  const weakColorCss: Record<BadgeColor, string> = {
+    [BadgeColor.BRAND]: 'border-brand bg-brand-subtle text-brand-bold',
+    [BadgeColor.NEUTRAL]: 'border-neutral bg-neutral-subtle text-neutral-bold',
+    [BadgeColor.SUCCESS]: 'border-success bg-success-subtle text-success-bold',
+    [BadgeColor.INFO]: 'border-info bg-info-subtle text-info-bold',
+    [BadgeColor.WARNING]: 'border-warning bg-warning-subtle text-warning-bold',
+    [BadgeColor.DANGER]: 'border-danger bg-danger-subtle text-danger-bold',
+  };
+
+  const strongColorCss: Record<BadgeColor, string> = {
+    [BadgeColor.BRAND]: 'border-brand bg-brand text-on-brand',
+    [BadgeColor.NEUTRAL]: 'border-neutral bg-neutral text-on-neutral',
+    [BadgeColor.SUCCESS]: 'border-success bg-success text-on-success',
+    [BadgeColor.INFO]: 'border-info bg-info text-on-info',
+    [BadgeColor.WARNING]: 'border-warning bg-warning text-on-warning',
+    [BadgeColor.DANGER]: 'border-danger bg-danger text-on-danger',
   };
 
   export const shapeCss: Record<BadgeShape, string> = {
@@ -43,7 +64,10 @@
 </script>
 
 <div
-  class={tailwindUtils.merge('px-2xs py-3xs inline-block border text-xs', colorCss[color], shapeCss[shape])}
+  class={tailwindUtils.merge('px-2xs py-3xs inline-block border text-xs', shapeCss[shape], {
+    [weakColorCss[color]]: strength === BadgeStrength.WEAK,
+    [strongColorCss[color]]: strength === BadgeStrength.STRONG,
+  })}
   {...rest}
 >
   {@render children?.()}
