@@ -142,8 +142,8 @@
       'rounded-full': shape === ButtonShape.PILL || shape === ButtonShape.CIRCLE,
       'px-xs': shape !== ButtonShape.CIRCLE,
       'py-3xs': shape !== ButtonShape.CIRCLE,
-      'px-small3': shape === ButtonShape.CIRCLE,
-      'py-small3': shape === ButtonShape.CIRCLE,
+      'px-2xs': shape === ButtonShape.CIRCLE,
+      'py-2xs': shape === ButtonShape.CIRCLE,
     },
   )}
 >

@@ -1,6 +1,6 @@
 import type { ComboboxStore } from '$lib/components/core/combobox/store';
 import type { ComputePositionConfig, OffsetOptions } from '@floating-ui/dom';
-import type { ComponentType, SvelteComponent } from 'svelte';
+import type { SvelteComponent } from 'svelte';
 
 export type BaseComboboxOptionValue = {
   display: string;
@@ -9,13 +9,15 @@ export type BaseComboboxOptionValue = {
   value: string;
 };
 
-export type ComboboxOptionComponent<TOptionValue extends BaseComboboxOptionValue> = ComponentType<
-  SvelteComponent<{
-    option: TOptionValue;
-    optionIndex: number;
-    optionAction: ComboboxStore<TOptionValue>['optionAction'];
-  }>
->;
+type ComboboxOptionComponentProps<TOptionValue extends BaseComboboxOptionValue> = {
+  option: TOptionValue;
+  optionIndex: number;
+  optionAction: ComboboxStore<TOptionValue>['optionAction'];
+};
+
+export type ComboboxOptionComponent<TOptionValue extends BaseComboboxOptionValue> = new (
+  ...args: any[]
+) => SvelteComponent<ComboboxOptionComponentProps<TOptionValue>>;
 
 export type ComboboxOptionsActionOptions = {
   placement?: ComputePositionConfig['placement'];

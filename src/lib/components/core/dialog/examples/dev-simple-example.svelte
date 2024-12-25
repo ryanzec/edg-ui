@@ -28,7 +28,7 @@
 </script>
 
 <Button
-  class="rounded-large2 px-base py-sm inline-flex items-center justify-center leading-none font-medium shadow-sm"
+  class="xl px-base py-sm inline-flex items-center justify-center leading-none font-medium shadow-sm"
   onclick={() => ($isOpened = true)}
 >
   Open Dialog
