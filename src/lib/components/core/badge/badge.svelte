@@ -71,7 +71,7 @@
 
 <div
   class={tailwindUtils.merge(
-    'px-2xs py-3xs gap-2xs flex inline-block items-center border text-xs',
+    'px-2xs py-3xs gap-2xs tracking-xs flex inline-block items-center border text-xs',
     shapeCss[shape],
     colorCss[strength][color],
     { 'px-xs': shape === BadgeShape.PILL },

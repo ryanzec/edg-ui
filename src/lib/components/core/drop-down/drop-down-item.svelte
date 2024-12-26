@@ -41,7 +41,7 @@
   data-id="item"
   use:melt={meltItem}
   class={tailwindUtils.merge(
-    'data-highlighted:bg-neutral-subtle z-drop-down px-xs flex min-h-[24px] items-center text-sm leading-none ring-0 outline-hidden select-none',
+    'data-highlighted:bg-neutral-subtle z-drop-down px-xs tracking-base flex min-h-[24px] items-center text-base leading-none ring-0 outline-hidden select-none',
     { 'opacity-disabled': disabled },
   )}
   onm-click={handleClick}

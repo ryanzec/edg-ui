@@ -14,8 +14,9 @@ enum ReplaceKey {
   DARK_CSS_VARIABLES = '%DARK_COLOR_VARIABLES%',
   SPACING_CSS_VARIABLES = '%SPACING_VARIABLES%',
   BORDER_RADIUS_CSS_VARIABLES = '%BORDER_RADIUS_VARIABLES%',
-  SIZE_CSS_VARIABLES = '%SIZE_VARIABLES%',
+  FONT_SIZE_CSS_VARIABLES = '%FONT_SIZE_VARIABLES%',
   LINE_HEIGHT_CSS_VARIABLES = '%LINE_HEIGHT_VARIABLES%',
+  LETTER_SPACING_CSS_VARIABLES = '%LETTER_SPACING_VARIABLES%',
   Z_INDEX_CSS_VARIABLES = '%Z_INDEX_VARIABLES%',
   OPACITY_CSS_VARIABLES = '%OPACITY_VARIABLES%',
 }
@@ -64,11 +65,12 @@ enum VariableCollection {
   BORDER_RADIUS = 'border-radius',
   FONT_SIZE = 'font-size',
   LINE_HEIGHT = 'line-height',
+  LETTER_SPACING = 'letter-spacing',
   Z_INDEX = 'z',
   OPACITY = 'opacity',
 }
 
-const sizeCollections: VariableCollection[] = [
+const remSizeCollections: VariableCollection[] = [
   VariableCollection.SPACE,
   VariableCollection.BORDER_RADIUS,
   VariableCollection.FONT_SIZE,
@@ -82,6 +84,7 @@ const variableCollectionCssVariablePrefixMap: Record<VariableCollection, string>
   [VariableCollection.BORDER_RADIUS]: 'radius',
   [VariableCollection.FONT_SIZE]: 'text',
   [VariableCollection.LINE_HEIGHT]: 'line-height',
+  [VariableCollection.LETTER_SPACING]: 'tracking',
   [VariableCollection.Z_INDEX]: 'z-index',
   [VariableCollection.OPACITY]: 'opacity',
 };
@@ -143,8 +146,8 @@ const buildGeneralCssVariables = (data: ConfigData, variableCollection: Variable
 
   for (const variable of collection.modes[0].variables) {
     const variableName = cleanVariableName(variable.name);
-    const variableUnit = sizeCollections.includes(variableCollection) ? 'rem' : '';
-    let variableRawValue = sizeCollections.includes(variableCollection)
+    const variableUnit = remSizeCollections.includes(variableCollection) ? 'rem' : '';
+    let variableRawValue = remSizeCollections.includes(variableCollection)
       ? (variable.value as number) / BASE_SIZE
       : (variable.value as number);
 
@@ -164,8 +167,9 @@ const writeCssFile = () => {
   const [lightCssVariables, darkCssVariables] = buildColorCssVariables(data);
   const spacingCssVariables = buildGeneralCssVariables(data, VariableCollection.SPACE);
   const borderRadiusCssVariables = buildGeneralCssVariables(data, VariableCollection.BORDER_RADIUS);
-  const sizeCssVariables = buildGeneralCssVariables(data, VariableCollection.FONT_SIZE);
+  const fontSizeCssVariables = buildGeneralCssVariables(data, VariableCollection.FONT_SIZE);
   const lineHeightCssVariables = buildGeneralCssVariables(data, VariableCollection.LINE_HEIGHT);
+  const letterSpacingCssVariables = buildGeneralCssVariables(data, VariableCollection.LETTER_SPACING);
   const zIndexCssVariables = buildGeneralCssVariables(data, VariableCollection.Z_INDEX);
   const opacityCssVariables = buildGeneralCssVariables(data, VariableCollection.OPACITY);
 
@@ -179,7 +183,8 @@ const writeCssFile = () => {
     .replace(ReplaceKey.LINE_HEIGHT_CSS_VARIABLES, lineHeightCssVariables.join('\n'))
     .replace(ReplaceKey.Z_INDEX_CSS_VARIABLES, zIndexCssVariables.join('\n'))
     .replace(ReplaceKey.OPACITY_CSS_VARIABLES, opacityCssVariables.join('\n'))
-    .replace(ReplaceKey.SIZE_CSS_VARIABLES, sizeCssVariables.join('\n'));
+    .replace(ReplaceKey.LETTER_SPACING_CSS_VARIABLES, letterSpacingCssVariables.join('\n'))
+    .replace(ReplaceKey.FONT_SIZE_CSS_VARIABLES, fontSizeCssVariables.join('\n'));
 
   fs.writeFileSync(OutputPath.CSS, cssTemplate);
 };

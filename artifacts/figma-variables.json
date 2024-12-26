@@ -887,19 +887,19 @@
               "name": "xs",
               "type": "number",
               "isAlias": false,
-              "value": 12
+              "value": 10
             },
             {
               "name": "sm",
               "type": "number",
               "isAlias": false,
-              "value": 14
+              "value": 12
             },
             {
               "name": "base",
               "type": "number",
               "isAlias": false,
-              "value": 16
+              "value": 14
             },
             {
               "name": "lg",
@@ -936,10 +936,16 @@
               "value": 0
             },
             {
+              "name": "xs",
+              "type": "number",
+              "isAlias": false,
+              "value": 13
+            },
+            {
               "name": "sm",
               "type": "number",
               "isAlias": false,
-              "value": 16
+              "value": 15
             },
             {
               "name": "base",
@@ -1050,13 +1056,65 @@
       ]
     },
     {
+      "name": "letter-spacing",
+      "modes": [
+        {
+          "name": "Mode 1",
+          "variables": [
+            {
+              "name": "none",
+              "type": "number",
+              "isAlias": false,
+              "value": 0
+            },
+            {
+              "name": "xs",
+              "type": "number",
+              "isAlias": false,
+              "value": 0.5
+            },
+            {
+              "name": "sm",
+              "type": "number",
+              "isAlias": false,
+              "value": 0.5
+            },
+            {
+              "name": "base",
+              "type": "number",
+              "isAlias": false,
+              "value": 0.25
+            },
+            {
+              "name": "lg",
+              "type": "number",
+              "isAlias": false,
+              "value": 0.25
+            },
+            {
+              "name": "xl",
+              "type": "number",
+              "isAlias": false,
+              "value": 0.5
+            },
+            {
+              "name": "2xl",
+              "type": "number",
+              "isAlias": false,
+              "value": 0.5
+            }
+          ]
+        }
+      ]
+    },
+    {
       "name": "Typography",
       "modes": [
         {
           "name": "Style",
           "variables": [
             {
-              "name": "large3-bold",
+              "name": "2xl-bold",
               "type": "typography",
               "isAlias": false,
               "value": {
@@ -1064,70 +1122,6 @@
                 "fontFamily": "Roboto",
                 "fontWeight": "SemiBold",
                 "lineHeight": 40,
-                "lineHeightUnit": "PIXELS",
-                "letterSpacing": 0,
-                "letterSpacingUnit": "PERCENT",
-                "textCase": "ORIGINAL",
-                "textDecoration": "NONE"
-              }
-            },
-            {
-              "name": "large3",
-              "type": "typography",
-              "isAlias": false,
-              "value": {
-                "fontSize": 32,
-                "fontFamily": "Roboto",
-                "fontWeight": "Regular",
-                "lineHeight": 40,
-                "lineHeightUnit": "PIXELS",
-                "letterSpacing": 0,
-                "letterSpacingUnit": "PERCENT",
-                "textCase": "ORIGINAL",
-                "textDecoration": "NONE"
-              }
-            },
-            {
-              "name": "large2-bold",
-              "type": "typography",
-              "isAlias": false,
-              "value": {
-                "fontSize": 24,
-                "fontFamily": "Roboto",
-                "fontWeight": "SemiBold",
-                "lineHeight": 30,
-                "lineHeightUnit": "PIXELS",
-                "letterSpacing": 0,
-                "letterSpacingUnit": "PERCENT",
-                "textCase": "ORIGINAL",
-                "textDecoration": "NONE"
-              }
-            },
-            {
-              "name": "large2",
-              "type": "typography",
-              "isAlias": false,
-              "value": {
-                "fontSize": 24,
-                "fontFamily": "Roboto",
-                "fontWeight": "Regular",
-                "lineHeight": 30,
-                "lineHeightUnit": "PIXELS",
-                "letterSpacing": 0,
-                "letterSpacingUnit": "PERCENT",
-                "textCase": "ORIGINAL",
-                "textDecoration": "NONE"
-              }
-            },
-            {
-              "name": "large1-bold",
-              "type": "typography",
-              "isAlias": false,
-              "value": {
-                "fontSize": 18,
-                "fontFamily": "Roboto",
-                "fontWeight": "SemiBold",
-                "lineHeight": 24,
                 "lineHeightUnit": "PIXELS",
                 "letterSpacing": 0.5,
                 "letterSpacingUnit": "PIXELS",
@@ -1136,16 +1130,80 @@
               }
             },
             {
-              "name": "large1",
+              "name": "2xl",
               "type": "typography",
               "isAlias": false,
               "value": {
-                "fontSize": 18,
+                "fontSize": 32,
                 "fontFamily": "Roboto",
                 "fontWeight": "Regular",
-                "lineHeight": 26,
+                "lineHeight": 40,
                 "lineHeightUnit": "PIXELS",
                 "letterSpacing": 0.5,
+                "letterSpacingUnit": "PIXELS",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "xl-bold",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 24,
+                "fontFamily": "Roboto",
+                "fontWeight": "SemiBold",
+                "lineHeight": 30,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0.5,
+                "letterSpacingUnit": "PIXELS",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "xl",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 24,
+                "fontFamily": "Roboto",
+                "fontWeight": "Regular",
+                "lineHeight": 30,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0.5,
+                "letterSpacingUnit": "PIXELS",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "lg-bold",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 20,
+                "fontFamily": "Roboto",
+                "fontWeight": "SemiBold",
+                "lineHeight": 24,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0.25,
+                "letterSpacingUnit": "PIXELS",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "lg",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 20,
+                "fontFamily": "Roboto",
+                "fontWeight": "Regular",
+                "lineHeight": 24,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0.25,
                 "letterSpacingUnit": "PIXELS",
                 "textCase": "ORIGINAL",
                 "textDecoration": "NONE"
@@ -1200,32 +1258,64 @@
               }
             },
             {
-              "name": "small1-bold",
+              "name": "sm-bold",
               "type": "typography",
               "isAlias": false,
               "value": {
                 "fontSize": 12,
                 "fontFamily": "Inter",
                 "fontWeight": "Semi Bold",
-                "lineHeight": "auto",
-                "lineHeightUnit": "AUTO",
-                "letterSpacing": 0,
-                "letterSpacingUnit": "PERCENT",
+                "lineHeight": 15,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0.5,
+                "letterSpacingUnit": "PIXELS",
                 "textCase": "ORIGINAL",
                 "textDecoration": "NONE"
               }
             },
             {
-              "name": "small1",
+              "name": "sm",
               "type": "typography",
               "isAlias": false,
               "value": {
                 "fontSize": 12,
                 "fontFamily": "Roboto",
                 "fontWeight": "Regular",
-                "lineHeight": 16,
+                "lineHeight": 15,
                 "lineHeightUnit": "PIXELS",
-                "letterSpacing": 0,
+                "letterSpacing": 0.5,
+                "letterSpacingUnit": "PIXELS",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "xs-bold",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 10,
+                "fontFamily": "Inter",
+                "fontWeight": "Semi Bold",
+                "lineHeight": 13,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0.5,
+                "letterSpacingUnit": "PIXELS",
+                "textCase": "ORIGINAL",
+                "textDecoration": "NONE"
+              }
+            },
+            {
+              "name": "xs",
+              "type": "typography",
+              "isAlias": false,
+              "value": {
+                "fontSize": 10,
+                "fontFamily": "Inter",
+                "fontWeight": "Regular",
+                "lineHeight": 13,
+                "lineHeightUnit": "PIXELS",
+                "letterSpacing": 0.5,
                 "letterSpacingUnit": "PERCENT",
                 "textCase": "ORIGINAL",
                 "textDecoration": "NONE"

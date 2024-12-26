@@ -85,6 +85,32 @@
   --color-input-placeholder: #6A6A6A;
   --color-overlay-background: #000000;
 
+  --text-*: initial;
+  --text-xs: 0.625rem;
+  --text-sm: 0.75rem;
+  --text-base: 0.875rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.5rem;
+  --text-2xl: 2rem;
+
+  --line-height-*: initial;
+  --line-height-none: 0rem;
+  --line-height-xs: 0.8125rem;
+  --line-height-sm: 0.9375rem;
+  --line-height-base: 1.25rem;
+  --line-height-lg: 1.5rem;
+  --line-height-xl: 1.875rem;
+  --line-height-2xl: 2.5rem;
+
+  --tracking-*: initial;
+  --tracking-none: 0;
+  --tracking-xs: 0.5;
+  --tracking-sm: 0.5;
+  --tracking-base: 0.25;
+  --tracking-lg: 0.25;
+  --tracking-xl: 0.5;
+  --tracking-2xl: 0.5;
+
   --spacing-*: initial;
   --spacing-none: 0rem;
   --spacing-3xs: 0.125rem;
@@ -96,14 +122,6 @@
   --spacing-xl: 1.75rem;
   --spacing-2xl: 2.25rem;
 
-  --text-*: initial;
-  --text-xs: 0.75rem;
-  --text-sm: 0.875rem;
-  --text-base: 1rem;
-  --text-lg: 1.125rem;
-  --text-xl: 1.5rem;
-  --text-2xl: 2rem;
-
   --radius-*: initial;
   --radius-none: 0rem;
   --radius-xs: 0.1875rem;
@@ -112,14 +130,6 @@
   --radius-lg: 0.625rem;
   --radius-xl: 0.875rem;
   --radius-full: 624.9375rem;
-
-  --line-height-*: initial;
-  --line-height-none: 0rem;
-  --line-height-sm: 1rem;
-  --line-height-base: 1.25rem;
-  --line-height-lg: 1.5rem;
-  --line-height-xl: 1.875rem;
-  --line-height-2xl: 2.5rem;
 
   --z-index-*: initial;
   --z-index-overlay: 5;
