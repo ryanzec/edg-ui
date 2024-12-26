@@ -3,10 +3,10 @@
 </script>
 
 <div class="gap-xs flex flex-col items-start">
-  <Callout variant={CalloutVariant.FILLED} color={CalloutColor.BRAND} label="Brand" />
-  <Callout variant={CalloutVariant.FILLED} color={CalloutColor.NEUTRAL} label="Neutral" />
-  <Callout variant={CalloutVariant.FILLED} color={CalloutColor.SUCCESS} label="Success" />
-  <Callout variant={CalloutVariant.FILLED} color={CalloutColor.INFO} label="Info" />
-  <Callout variant={CalloutVariant.FILLED} color={CalloutColor.WARNING} label="Warning" />
-  <Callout variant={CalloutVariant.FILLED} color={CalloutColor.DANGER} label="Danger" />
+  <Callout variant={CalloutVariant.FILLED} color={CalloutColor.BRAND}>Brand</Callout>
+  <Callout variant={CalloutVariant.FILLED} color={CalloutColor.NEUTRAL}>Neutral</Callout>
+  <Callout variant={CalloutVariant.FILLED} color={CalloutColor.SUCCESS}>Success</Callout>
+  <Callout variant={CalloutVariant.FILLED} color={CalloutColor.INFO}>Info</Callout>
+  <Callout variant={CalloutVariant.FILLED} color={CalloutColor.WARNING}>Warning</Callout>
+  <Callout variant={CalloutVariant.FILLED} color={CalloutColor.DANGER}>Danger</Callout>
 </div>

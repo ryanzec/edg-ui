@@ -18,16 +18,17 @@
   import { iconComponents, type IconName } from '$lib/components/core/icons/utils';
   import { tailwindUtils } from '$lib/utils/tailwind';
   import type { HTMLAttributes } from 'svelte/elements';
+  import type { Snippet } from 'svelte';
 
   type Props = HTMLAttributes<HTMLDivElement> & {
     variant?: CalloutVariant;
     color?: CalloutColor;
     preIcon?: IconName;
     postIcon?: IconName;
-    label: string;
+    children: Snippet;
   };
 
-  let { variant = CalloutVariant.FILLED, color = CalloutColor.NEUTRAL, preIcon, postIcon, label }: Props = $props();
+  let { variant = CalloutVariant.WEAK, color = CalloutColor.NEUTRAL, preIcon, postIcon, children }: Props = $props();
 
   const colorCss: Record<CalloutVariant, Record<CalloutColor, string>> = {
     [CalloutVariant.WEAK]: {
@@ -58,7 +59,7 @@
     {@const IconComponent = iconComponents[preIcon]}
     <IconComponent />
   {/if}
-  {label}
+  {@render children()}
   {#if postIcon}
     {@const IconComponent = iconComponents[postIcon]}
     <IconComponent />

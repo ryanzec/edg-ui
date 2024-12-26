@@ -48,7 +48,7 @@
   let {
     isLoading = false,
     variant = ButtonVariant.FILLED,
-    color = ButtonColor.NEUTRAL,
+    color = ButtonColor.BRAND,
     shape = ButtonShape.ROUNDED,
     action = () => {},
     actionOptions = undefined,

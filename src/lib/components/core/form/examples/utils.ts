@@ -13,6 +13,7 @@ import DevSelectExample from '$lib/components/core/form/examples/dev-select-exam
 import DevTextExample from '$lib/components/core/form/examples/dev-text-example.svelte';
 import DevTextareaExample from '$lib/components/core/form/examples/dev-textarea-example.svelte';
 import DevToggleExample from '$lib/components/core/form/examples/dev-toggle-example.svelte';
+import DevFormErrorsExample from '$lib/components/core/form/examples/dev-form-errors-example.svelte';
 import DevValidateOnBlurExample from '$lib/components/core/form/examples/dev-validate-on-blur-example.svelte';
 
 export const formExampleItems: DevNavigationItem = {
@@ -29,6 +30,10 @@ export const formExampleItems: DevNavigationItem = {
     {
       display: 'Validate on Blur',
       component: DevValidateOnBlurExample,
+    },
+    {
+      display: 'Form Errors',
+      component: DevFormErrorsExample,
     },
     {
       display: 'Input Types',
