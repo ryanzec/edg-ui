@@ -63,7 +63,7 @@
   isOpened={open}
   id={dropDown1Id}
 >
-  <AlignJustifiedIcon class="m-xs size-base" />
+  <AlignJustifiedIcon class="m-xs" />
 </DropDownTrigger>
 <DropDownMenu isOpened={open} meltMenu={menu} {...dropDown1Attributes}>
   <DropDownItem meltItem={$item} onclick={() => console.log('about melt ui')}>About Melt UI</DropDownItem>
@@ -109,7 +109,7 @@
   isOpened={open2}
   id={dropDown2Id}
 >
-  <AlignJustifiedIcon class="m-xs size-base" />
+  <AlignJustifiedIcon class="m-xs" />
 </DropDownTrigger>
 <DropDownMenu isOpened={open2} meltMenu={menu2} {...dropDown2Attributes}>
   <DropDownItem meltItem={$item2} onclick={() => console.log('about melt ui')}>About Melt UI</DropDownItem>

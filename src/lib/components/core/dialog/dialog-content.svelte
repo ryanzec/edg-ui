@@ -1,9 +1,12 @@
 <script lang="ts">
-  type Props = { children?: import('svelte').Snippet };
+  import type { HTMLAttributes } from 'svelte/elements';
+  import { tailwindUtils } from '$lib/utils/tailwind.js';
 
-  let { children }: Props = $props();
+  type Props = HTMLAttributes<HTMLDivElement> & { children?: import('svelte').Snippet };
+
+  let { children, class: extraClass = '', ...rest }: Props = $props();
 </script>
 
-<div data-id="content">
+<div data-id="content" class={tailwindUtils.merge('p-sm', extraClass)} {...rest}>
   {@render children?.()}
 </div>

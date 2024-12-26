@@ -16,9 +16,9 @@
 <CollapsibleTrigger meltTrigger={trigger}>
   <div>
     {#if $open}
-      <XIcon class="size-base" />
+      <XIcon />
     {:else}
-      <ChevronSelectorIcon class="size-base" />
+      <ChevronSelectorIcon />
     {/if}
   </div>
 </CollapsibleTrigger>

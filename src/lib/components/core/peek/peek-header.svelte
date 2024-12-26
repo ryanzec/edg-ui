@@ -14,6 +14,6 @@
 <h2 data-id="header" use:melt={$meltTitle} class="flex justify-between">
   {title}
   <button use:melt={$meltClose} aria-label="close">
-    <XIcon class="size-base" />
+    <XIcon />
   </button>
 </h2>

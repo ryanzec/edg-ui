@@ -23,9 +23,9 @@
   <div class="gap-2xs flex cursor-pointer items-center">
     <Typography class="flex-1">{item.display}</Typography>
     {#if $open}
-      <ChevronUpIcon class="size-base ml-auto" />
+      <ChevronUpIcon class="ml-auto" />
     {:else}
-      <ChevronDownIcon class="size-base ml-auto" />
+      <ChevronDownIcon class="ml-auto" />
     {/if}
   </div>
 </CollapsibleTrigger>

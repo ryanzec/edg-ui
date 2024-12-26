@@ -315,9 +315,9 @@
       </div>
       <div class="self-center">
         {#if $isOpened}
-          <ChevronUpIcon class="size-base" />
+          <ChevronUpIcon />
         {:else}
-          <ChevronDownIcon class="size-base" />
+          <ChevronDownIcon />
         {/if}
       </div>
     </div>
