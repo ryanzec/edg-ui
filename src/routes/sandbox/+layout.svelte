@@ -12,6 +12,7 @@
   import { scrollAreaExampleItems } from '$lib/components/core/scroll-area/examples/utils';
   import { tooltipExampleItems } from '$lib/components/core/tooltip/examples/utils';
   import { avatarExampleItems } from '$lib/components/core/avatar/examples/utils';
+  import { calloutExampleItems } from '$lib/components/core/callout/examples/utils';
 
   type Props = { children?: import('svelte').Snippet };
 
@@ -54,6 +55,7 @@
     usersTableExampleItems,
     badgeExampleItems,
     avatarExampleItems,
+    calloutExampleItems,
   ];
 
   sortItems(items);

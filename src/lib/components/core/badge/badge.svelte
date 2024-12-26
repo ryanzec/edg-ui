@@ -13,8 +13,8 @@
     PILL = 'pill',
   }
 
-  export enum BadgeStrength {
-    STRONG = 'strong',
+  export enum BadgeVariant {
+    FILLED = 'filled',
     WEAK = 'weak',
   }
 </script>
@@ -28,7 +28,7 @@
   type Props = HTMLAttributes<HTMLDivElement> & {
     color?: BadgeColor;
     shape?: BadgeShape;
-    strength?: BadgeStrength;
+    variant?: BadgeVariant;
     children?: import('svelte').Snippet;
     preIcon?: IconName;
     postIcon?: IconName;
@@ -37,15 +37,15 @@
   let {
     color = BadgeColor.NEUTRAL,
     shape = BadgeShape.ROUNDED,
-    strength = BadgeStrength.WEAK,
+    variant = BadgeVariant.WEAK,
     children,
     preIcon,
     postIcon,
     ...rest
   }: Props = $props();
 
-  const colorCss: Record<BadgeStrength, Record<BadgeColor, string>> = {
-    [BadgeStrength.WEAK]: {
+  const colorCss: Record<BadgeVariant, Record<BadgeColor, string>> = {
+    [BadgeVariant.WEAK]: {
       [BadgeColor.BRAND]: 'border-brand bg-brand-subtle text-brand-bold',
       [BadgeColor.NEUTRAL]: 'border-neutral bg-neutral-subtle text-neutral-bold',
       [BadgeColor.SUCCESS]: 'border-success bg-success-subtle text-success-bold',
@@ -53,7 +53,7 @@
       [BadgeColor.WARNING]: 'border-warning bg-warning-subtle text-warning-bold',
       [BadgeColor.DANGER]: 'border-danger bg-danger-subtle text-danger-bold',
     },
-    [BadgeStrength.STRONG]: {
+    [BadgeVariant.FILLED]: {
       [BadgeColor.BRAND]: 'border-brand bg-brand text-on-brand',
       [BadgeColor.NEUTRAL]: 'border-neutral bg-neutral text-on-neutral',
       [BadgeColor.SUCCESS]: 'border-success bg-success text-on-success',
@@ -71,9 +71,9 @@
 
 <div
   class={tailwindUtils.merge(
-    'px-2xs py-3xs gap-2xs tracking-xs flex inline-block items-center border text-xs',
+    'px-2xs py-3xs gap-2xs tracking-sm flex items-center border text-sm',
     shapeCss[shape],
-    colorCss[strength][color],
+    colorCss[variant][color],
     { 'px-xs': shape === BadgeShape.PILL },
   )}
   {...rest}
