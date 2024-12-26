@@ -1,6 +1,7 @@
 import { type DevNavigationItem } from '$lib/components/core/dev-navigation/dev-navigation.svelte';
 import DevArrayExample from '$lib/components/core/form/examples/dev-array-example.svelte';
 import DevCheckboxExample from '$lib/components/core/form/examples/dev-checkbox-example.svelte';
+import DevCheckboxIndeterminateExample from '$lib/components/core/form/examples/dev-checkbox-Indeterminate-example.svelte';
 import DevComboboxMultipleExample from '$lib/components/core/form/examples/dev-combobox-multiple-example.svelte';
 import DevComboboxSingleExample from '$lib/components/core/form/examples/dev-combobox-single-example.svelte';
 import DevCompleteExample from '$lib/components/core/form/examples/dev-complete-example.svelte';
@@ -39,6 +40,10 @@ export const formExampleItems: DevNavigationItem = {
         {
           display: 'Checkbox',
           component: DevCheckboxExample,
+        },
+        {
+          display: 'Checkbox Intermediate',
+          component: DevCheckboxIndeterminateExample,
         },
         {
           display: 'Combobox Multiple',

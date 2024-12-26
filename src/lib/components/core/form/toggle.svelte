@@ -22,11 +22,11 @@
   let checkedButtonCss = $derived(checked ? 'translate-x-base' : '');
 </script>
 
-<label data-id="toggle" class="flex cursor-pointer items-center" for={id} id="{value}-label">
+<label data-id="toggle" class="gap-2xs flex cursor-pointer items-center" for={id} id="{value}-label">
   <div
     data-id="inner"
     class={tailwindUtils.merge(
-      'mr-2xs h-base inline-flex w-[32px] items-center rounded-full outline-hidden transition-colors duration-150',
+      'h-base inline-flex w-[32px] items-center rounded-full outline-hidden transition-colors duration-150',
       checkedBarCss,
       buttonCss,
     )}
@@ -35,6 +35,6 @@
       class={tailwindUtils.merge('bg-surface mx-3xs h-sm block w-sm rounded-full duration-150', checkedButtonCss)}
     ></div>
   </div>
-  <input {id} {name} type="checkbox" {value} bind:checked class="appearance-none" />
+  <input {id} {name} type="checkbox" {value} bind:checked class="hidden appearance-none" />
   {stringUtils.toTitleCase(label)}
 </label>
