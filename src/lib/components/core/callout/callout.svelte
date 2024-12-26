@@ -17,8 +17,9 @@
 <script lang="ts">
   import { iconComponents, type IconName } from '$lib/components/core/icons/utils';
   import { tailwindUtils } from '$lib/utils/tailwind';
+  import type { HTMLAttributes } from 'svelte/elements';
 
-  type Props = {
+  type Props = HTMLAttributes<HTMLDivElement> & {
     variant?: CalloutVariant;
     color?: CalloutColor;
     preIcon?: IconName;

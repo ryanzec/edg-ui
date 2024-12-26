@@ -36,6 +36,8 @@
 %Z_INDEX_VARIABLES%
 
 %OPACITY_VARIABLES%
+
+%SIZE_VARIABLES%
 }
 
 body[data-theme='dark'] {

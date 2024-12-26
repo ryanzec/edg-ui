@@ -144,6 +144,25 @@
   --opacity-disabled: 0.45;
   --opacity-overlay-strong: 0.7;
   --opacity-full: 1;
+
+  --height-*: initial;
+  --width-*: initial;
+  --height-xs: 0.5rem;
+  --width-xs: 0.5rem;
+  --height-sm: 0.75rem;
+  --width-sm: 0.75rem;
+  --height-base: 0.875rem;
+  --width-base: 0.875rem;
+  --height-lg: 1.125rem;
+  --width-lg: 1.125rem;
+  --height-xl: 1.5rem;
+  --width-xl: 1.5rem;
+  --height-2xl: 2.25rem;
+  --width-2xl: 2.25rem;
+  --height-3xl: 3rem;
+  --width-3xl: 3rem;
+  --height-4xl: 4rem;
+  --width-4xl: 4rem;
 }
 
 body[data-theme='dark'] {

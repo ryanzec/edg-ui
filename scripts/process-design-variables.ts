@@ -19,6 +19,7 @@ enum ReplaceKey {
   LETTER_SPACING_CSS_VARIABLES = '%LETTER_SPACING_VARIABLES%',
   Z_INDEX_CSS_VARIABLES = '%Z_INDEX_VARIABLES%',
   OPACITY_CSS_VARIABLES = '%OPACITY_VARIABLES%',
+  SIZE_CSS_VARIABLES = '%SIZE_VARIABLES%',
 }
 
 type AliasVariable = {
@@ -68,6 +69,7 @@ enum VariableCollection {
   LETTER_SPACING = 'letter-spacing',
   Z_INDEX = 'z',
   OPACITY = 'opacity',
+  SIZE = 'size',
 }
 
 const remSizeCollections: VariableCollection[] = [
@@ -76,9 +78,10 @@ const remSizeCollections: VariableCollection[] = [
   VariableCollection.FONT_SIZE,
   VariableCollection.LINE_HEIGHT,
   VariableCollection.BORDER_RADIUS,
+  VariableCollection.SIZE,
 ];
 
-const variableCollectionCssVariablePrefixMap: Record<VariableCollection, string> = {
+const variableCollectionCssVariablePrefixMap: Record<VariableCollection, string | string[]> = {
   [VariableCollection.COLOR]: 'color',
   [VariableCollection.SPACE]: 'spacing',
   [VariableCollection.BORDER_RADIUS]: 'radius',
@@ -87,6 +90,7 @@ const variableCollectionCssVariablePrefixMap: Record<VariableCollection, string>
   [VariableCollection.LETTER_SPACING]: 'tracking',
   [VariableCollection.Z_INDEX]: 'z-index',
   [VariableCollection.OPACITY]: 'opacity',
+  [VariableCollection.SIZE]: ['height', 'width'],
 };
 
 const cleanVariableName = (variableName: string): string => variableName.replace(/\//g, '-');
@@ -108,7 +112,7 @@ const buildColorCssVariables = (data: ConfigData): [string[], string[]] => {
     throw new Error('colors collection not found');
   }
 
-  const cssPrefix = variableCollectionCssVariablePrefixMap[VariableCollection.COLOR];
+  const cssPrefix = variableCollectionCssVariablePrefixMap[VariableCollection.COLOR] as string;
 
   // this default value basically reset the classes for any variable type we dynamically generate to avoid the
   // default ones from being used and limit ourselves to just the ones we define
@@ -127,6 +131,18 @@ const buildColorCssVariables = (data: ConfigData): [string[], string[]] => {
   return [lightCssVariables, darkCssVariables];
 };
 
+const addValuesForCssVariables = (cssPrefix: string | string[], variable: string, value: string): string[] => {
+  if (typeof cssPrefix === 'string') {
+    return [`  --${cssPrefix}-${variable}: ${value};`];
+  }
+
+  return cssPrefix.reduce<string[]>((collection, prefix) => {
+    collection.push(`  --${prefix}-${variable}: ${value};`);
+
+    return collection;
+  }, []);
+};
+
 const buildGeneralCssVariables = (data: ConfigData, variableCollection: VariableCollection): string[] => {
   const collection = data.collections.find((collection) => collection.name === variableCollection);
 
@@ -142,7 +158,7 @@ const buildGeneralCssVariables = (data: ConfigData, variableCollection: Variable
 
   // this default value basically reset the classes for any variable type we dynamically generate to avoid the
   // default ones from being used and limit ourselves to just the ones we define
-  const cssVariables: string[] = [`  --${cssPrefix}-*: initial;`];
+  let cssVariables: string[] = addValuesForCssVariables(cssPrefix, '*', 'initial');
 
   for (const variable of collection.modes[0].variables) {
     const variableName = cleanVariableName(variable.name);
@@ -155,7 +171,9 @@ const buildGeneralCssVariables = (data: ConfigData, variableCollection: Variable
       variableRawValue /= 100;
     }
 
-    cssVariables.push(`  --${cssPrefix}-${variableName}: ${variableRawValue}${variableUnit};`);
+    cssVariables = cssVariables.concat(
+      addValuesForCssVariables(cssPrefix, variableName, `${variableRawValue}${variableUnit}`),
+    );
   }
 
   return cssVariables;
@@ -172,6 +190,7 @@ const writeCssFile = () => {
   const letterSpacingCssVariables = buildGeneralCssVariables(data, VariableCollection.LETTER_SPACING);
   const zIndexCssVariables = buildGeneralCssVariables(data, VariableCollection.Z_INDEX);
   const opacityCssVariables = buildGeneralCssVariables(data, VariableCollection.OPACITY);
+  const sizeCssVariables = buildGeneralCssVariables(data, VariableCollection.SIZE);
 
   let cssTemplate = fs.readFileSync(TemplatePath.CSS, 'utf8');
 
@@ -184,6 +203,7 @@ const writeCssFile = () => {
     .replace(ReplaceKey.Z_INDEX_CSS_VARIABLES, zIndexCssVariables.join('\n'))
     .replace(ReplaceKey.OPACITY_CSS_VARIABLES, opacityCssVariables.join('\n'))
     .replace(ReplaceKey.LETTER_SPACING_CSS_VARIABLES, letterSpacingCssVariables.join('\n'))
+    .replace(ReplaceKey.SIZE_CSS_VARIABLES, sizeCssVariables.join('\n'))
     .replace(ReplaceKey.FONT_SIZE_CSS_VARIABLES, fontSizeCssVariables.join('\n'));
 
   fs.writeFileSync(OutputPath.CSS, cssTemplate);

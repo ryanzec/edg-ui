@@ -1108,6 +1108,64 @@
       ]
     },
     {
+      "name": "size",
+      "modes": [
+        {
+          "name": "Mode 1",
+          "variables": [
+            {
+              "name": "xs",
+              "type": "number",
+              "isAlias": false,
+              "value": 8
+            },
+            {
+              "name": "sm",
+              "type": "number",
+              "isAlias": false,
+              "value": 12
+            },
+            {
+              "name": "base",
+              "type": "number",
+              "isAlias": false,
+              "value": 14
+            },
+            {
+              "name": "lg",
+              "type": "number",
+              "isAlias": false,
+              "value": 18
+            },
+            {
+              "name": "xl",
+              "type": "number",
+              "isAlias": false,
+              "value": 24
+            },
+            {
+              "name": "2xl",
+              "type": "number",
+              "isAlias": false,
+              "value": 36
+            },
+            {
+              "name": "3xl",
+              "type": "number",
+              "isAlias": false,
+              "value": 48
+            },
+            {
+              "name": "4xl",
+              "type": "number",
+              "isAlias": false,
+              "value": 64
+            }
+          ]
+        }
+      ]
+    },
+    {
       "name": "Typography",
       "modes": [
         {

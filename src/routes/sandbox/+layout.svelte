@@ -13,6 +13,7 @@
   import { tooltipExampleItems } from '$lib/components/core/tooltip/examples/utils';
   import { avatarExampleItems } from '$lib/components/core/avatar/examples/utils';
   import { calloutExampleItems } from '$lib/components/core/callout/examples/utils';
+  import { cardExampleItems } from '$lib/components/core/card/examples/utils';
 
   type Props = { children?: import('svelte').Snippet };
 
@@ -56,6 +57,7 @@
     badgeExampleItems,
     avatarExampleItems,
     calloutExampleItems,
+    cardExampleItems,
   ];
 
   sortItems(items);
