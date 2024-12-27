@@ -1,7 +1,6 @@
 <script lang="ts">
   import { melt, type AnyMeltElement } from '@melt-ui/svelte';
   import type { Writable } from 'svelte/store';
-  import { slide } from 'svelte/transition';
   import { tailwindUtils } from '$lib/utils/tailwind';
 
   type Props = {
@@ -17,7 +16,7 @@
 
 <div data-id="collapsible-content" use:melt={$meltRoot} class={tailwindUtils.merge('relative', extraClass)}>
   {#if $isOpened}
-    <div use:melt={$meltContent} transition:slide>
+    <div use:melt={$meltContent}>
       {@render children?.()}
     </div>
   {/if}

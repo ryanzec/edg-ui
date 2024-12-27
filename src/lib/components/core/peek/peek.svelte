@@ -1,7 +1,6 @@
 <script lang="ts">
   import { melt, type AnyMeltElement } from '@melt-ui/svelte';
   import type { Writable } from 'svelte/store';
-  import { fly } from 'svelte/transition';
   import MeltOverlay from '$lib/components/core/overlay/melt-overlay.svelte';
   import { tailwindUtils } from '$lib/utils/tailwind';
 
@@ -119,14 +118,9 @@
       use:melt={$meltContent}
       bind:this={peekElement}
       class={tailwindUtils.merge(
-        'border-outline bg-surface-pure top-none right-none z-dialog p-base fixed flex h-screen w-[350px] flex-col border-l',
+        'border-outline bg-surface-pure top-none right-none z-dialog fixed flex h-screen w-[350px] flex-col border-l',
         extraClass,
       )}
-      transition:fly={{
-        x: 350,
-        duration: 300,
-        opacity: 1,
-      }}
     >
       {@render children?.()}
     </div>

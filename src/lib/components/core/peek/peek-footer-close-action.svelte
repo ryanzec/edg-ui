@@ -1,5 +1,7 @@
 <script lang="ts">
-  import { melt, type AnyMeltElement } from '@melt-ui/svelte';
+  import MeltButton from '$lib/components/core/button/melt-button.svelte';
+  import { ButtonColor } from '$lib/components/core/button/button.svelte';
+  import { type AnyMeltElement } from '@melt-ui/svelte';
 
   type Props = {
     meltClose: AnyMeltElement;
@@ -9,6 +11,6 @@
   let { meltClose, title = 'Cancel' }: Props = $props();
 </script>
 
-<button data-id="close-action" type="button" use:melt={$meltClose}>
+<MeltButton color={ButtonColor.NEUTRAL} data-id="close-action" type="button" meltAction={meltClose}>
   {title}
-</button>
+</MeltButton>

@@ -7,7 +7,6 @@
 
 <script lang="ts">
   import { melt, type AnyMeltElement } from '@melt-ui/svelte';
-  import { fly, type FlyParams } from 'svelte/transition';
   import { type Writable } from 'svelte/store';
   import type { WithGet } from '@melt-ui/svelte/internal/helpers';
   import type { HTMLAttributes } from 'svelte/elements';
@@ -17,21 +16,10 @@
     meltMenu: AnyMeltElement;
     isOpened: WithGet<Writable<boolean>>;
     type?: DropDownMenuType;
-    flyOptions?: FlyParams;
     children?: import('svelte').Snippet;
   };
 
-  let {
-    meltMenu,
-    isOpened,
-    type = DropDownMenuType.MAIN,
-    flyOptions = {
-      duration: 150,
-      y: -10,
-    },
-    children,
-    ...rest
-  }: Props = $props();
+  let { meltMenu, isOpened, type = DropDownMenuType.MAIN, children, ...rest }: Props = $props();
 </script>
 
 {#if $isOpened}
@@ -45,7 +33,6 @@
       },
     )}
     use:melt={$meltMenu}
-    transition:fly={flyOptions}
     {...rest}
   >
     {@render children?.()}

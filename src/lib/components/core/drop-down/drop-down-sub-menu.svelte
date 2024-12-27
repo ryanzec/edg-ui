@@ -13,15 +13,6 @@
   let { subMenu, isOpened, children }: Props = $props();
 </script>
 
-<DropDownMenu
-  data-id="sub-menu"
-  meltMenu={subMenu}
-  type={DropDownMenuType.SUB}
-  {isOpened}
-  flyOptions={{
-    x: -50,
-    duration: 150,
-  }}
->
+<DropDownMenu data-id="sub-menu" meltMenu={subMenu} type={DropDownMenuType.SUB} {isOpened}>
   {@render children?.()}
 </DropDownMenu>

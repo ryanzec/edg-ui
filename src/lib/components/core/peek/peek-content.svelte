@@ -4,4 +4,4 @@
   let { children }: Props = $props();
 </script>
 
-<div data-id="content" class="flex-1">{@render children?.()}</div>
+<div data-id="content" class="p-base flex-1">{@render children?.()}</div>

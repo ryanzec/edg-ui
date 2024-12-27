@@ -1,39 +1,17 @@
-<script module lang="ts">
-  export enum ButtonVariant {
-    FILLED = 'filled',
-    WEAK = 'weak',
-    OUTLINED = 'outlined',
-    GHOST = 'ghost',
-  }
-  export enum ButtonColor {
-    BRAND = 'brand',
-    NEUTRAL = 'neutral',
-    SUCCESS = 'success',
-    INFO = 'info',
-    WARNING = 'warning',
-    DANGER = 'danger',
-  }
-  export enum ButtonShape {
-    ROUNDED = 'rounded',
-    PILL = 'pill',
-    CIRCLE = 'circle',
-  }
-</script>
-
 <script lang="ts">
   import LoaderIcon from '$lib/components/core/loader/loader-icon.svelte';
   import type { HTMLAttributes } from 'svelte/elements';
   import { tailwindUtils } from '$lib/utils/tailwind';
+  import type { AnyMeltElement } from '@melt-ui/svelte';
+  import { melt } from '@melt-ui/svelte';
+  import { ButtonColor, ButtonShape, ButtonVariant } from '$lib/components/core/button/button.svelte';
 
   type Props = HTMLAttributes<HTMLButtonElement> & {
     isLoading?: boolean;
     variant?: ButtonVariant;
     color?: ButtonColor;
     shape?: ButtonShape;
-
-    // since action can really be anything, we are going to ignore eslint issue for these
-    action?: Function;
-    actionOptions?: any;
+    meltAction: AnyMeltElement;
 
     class?: string;
     preItem?: import('svelte').Snippet;
@@ -50,8 +28,7 @@
     variant = ButtonVariant.FILLED,
     color = ButtonColor.BRAND,
     shape = ButtonShape.ROUNDED,
-    action = () => {},
-    actionOptions = undefined,
+    meltAction,
     class: extraClass = '',
     preItem,
     children,
@@ -126,7 +103,7 @@
 </script>
 
 <button
-  use:action={actionOptions}
+  use:melt={$meltAction}
   data-id="button"
   type="button"
   {...rest}

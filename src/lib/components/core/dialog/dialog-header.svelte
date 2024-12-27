@@ -3,7 +3,7 @@
   import Icon from '$lib/components/core/icons/icon.svelte';
   import type { HTMLAttributes } from 'svelte/elements';
   import { tailwindUtils } from '$lib/utils/tailwind';
-  import Button, { ButtonShape, ButtonVariant } from '$lib/components/core/button/button.svelte';
+  import Button, { ButtonShape, ButtonVariant, ButtonColor } from '$lib/components/core/button/button.svelte';
 
   type Props = HTMLAttributes<HTMLDivElement> & {
     meltTitle: AnyMeltElement;
@@ -19,13 +19,14 @@
   class={tailwindUtils.merge('px-sm py-xs border-outline flex items-center border-b', extraClass)}
   {...rest}
 >
-  <h2 use:melt={$meltTitle} class="m-none tracking-lg text-lg font-medium">
+  <h2 use:melt={$meltTitle} class="m-none tracking-lg text-xl font-medium">
     {title}
   </h2>
   <Button
     {...$meltClose}
     shape={ButtonShape.CIRCLE}
     variant={ButtonVariant.GHOST}
+    color={ButtonColor.NEUTRAL}
     action={$meltClose.action}
     aria-label="close"
     class="ml-auto"

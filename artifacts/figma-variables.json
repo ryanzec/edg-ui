@@ -379,6 +379,12 @@
               "type": "color",
               "isAlias": false,
               "value": "#000000"
+            },
+            {
+              "name": "misc/transparent",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FFFFFF00"
             }
           ]
         },
@@ -756,6 +762,12 @@
               "type": "color",
               "isAlias": false,
               "value": "#000000"
+            },
+            {
+              "name": "misc/transparent",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FFFFFF00"
             }
           ]
         }

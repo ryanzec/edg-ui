@@ -1,6 +1,5 @@
 <script lang="ts">
   import type { HTMLAttributes } from 'svelte/elements';
-  import { fade } from 'svelte/transition';
   import { tailwindUtils } from '$lib/utils/tailwind';
 
   type Props = HTMLAttributes<HTMLDivElement> & {
@@ -17,7 +16,6 @@
     fixed: isFixed,
     absolute: !isFixed,
   })}
-  transition:fade={{ duration: 150 }}
   {...rest}
 >
   {@render children?.()}
