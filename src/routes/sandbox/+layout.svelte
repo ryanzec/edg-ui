@@ -17,6 +17,7 @@
   import { iconExampleItems } from '$lib/components/core/icons/examples/utils';
   import { listExampleItems } from '$lib/components/core/list/examples/utils';
   import { loaderExampleItems } from '$lib/components/core/loader/examples/utils';
+  import { typographyExampleItems } from '$lib/components/core/typography/examples/utils';
 
   type Props = { children?: import('svelte').Snippet };
 
@@ -64,6 +65,7 @@
     iconExampleItems,
     listExampleItems,
     loaderExampleItems,
+    typographyExampleItems,
   ];
 
   sortItems(items);

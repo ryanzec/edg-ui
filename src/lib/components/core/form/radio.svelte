@@ -1,6 +1,6 @@
 <script lang="ts">
   import { stringUtils } from '$lib/utils/string';
-  import Icon from '$lib/components/core/icons/icon.svelte';
+  import Icon, { IconColor } from '$lib/components/core/icons/icon.svelte';
 
   type Props = {
     group: string;
@@ -13,13 +13,13 @@
 </script>
 
 <label class="flex items-center" for={id} id="{value}-label">
-  <div class="pr-2xs">
+  <span class="pr-2xs">
     {#if group === value}
-      <Icon icon="circle-check" />
+      <Icon icon="circle-dot" color={IconColor.BRAND} />
     {:else}
       <Icon icon="circle" />
     {/if}
-  </div>
+  </span>
   <input bind:group {id} {name} type="radio" {value} class="appearance-none" />
   {stringUtils.toTitleCase(value)}
 </label>
