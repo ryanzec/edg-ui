@@ -1,36 +1,36 @@
 <script lang="ts">
-  import XIcon from '$lib/components/core/icons/x-icon.svelte';
+  import Icon from '$lib/components/core/icons/icon.svelte';
 
   import Button from '$lib/components/core/button/button.svelte';
 </script>
 
 <Button>
   {#snippet preItem()}
-    <XIcon />
+    <Icon icon="x" />
   {/snippet}
   Pre Item
 </Button>
 <Button>
   Post Item
   {#snippet postItem()}
-    <XIcon />
+    <Icon icon="x" />
   {/snippet}
 </Button>
 <Button>
   {#snippet preItem()}
-    <XIcon />
+    <Icon icon="x" />
   {/snippet}
   Pre and Post Item
   {#snippet postItem()}
-    <XIcon />
+    <Icon icon="x" />
   {/snippet}
 </Button>
 <Button isLoading>
   {#snippet preItem()}
-    <XIcon />
+    <Icon icon="x" />
   {/snippet}
   Is Loading Hides Items
   {#snippet postItem()}
-    <XIcon />
+    <Icon icon="x" />
   {/snippet}
 </Button>

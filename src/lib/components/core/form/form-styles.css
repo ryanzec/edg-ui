@@ -1,0 +1,8 @@
+.has-error input[type="text"],
+.has-error input[type="text"]:hover,
+.has-error input[type="text"]:active,
+.has-error textarea,
+.has-error textarea:hover,
+.has-error textarea:active {
+  border-color: var(--color-danger);
+}

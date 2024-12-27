@@ -8,14 +8,14 @@
 <script lang="ts">
   type Props = {
     options: SelectOption[];
-    defaultDisplay: 'Select...';
+    defaultDisplay?: string;
     name: string;
     value: string;
     id?: string;
     label?: import('svelte').Snippet;
   };
 
-  let { options, defaultDisplay, name, value = $bindable(), id = name, label }: Props = $props();
+  let { options, defaultDisplay = 'Select...', name, value = $bindable(), id = name, label }: Props = $props();
 </script>
 
 {@render label?.()}

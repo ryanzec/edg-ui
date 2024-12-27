@@ -37,7 +37,7 @@
   This is used to test the case of the combobox being in a focusable element but still properly allow click selection
   <Combobox name="value" label="simple" {options} {selected} clearOptionDisplay="None" />
 </div>
-<!-- for manaul testing -->
+<!-- for manual testing -->
 <pre>{JSON.stringify($selected, null, 2)}</pre>
 <!-- for automated testing -->
 <pre data-id="selected-value" class="hidden">{JSON.stringify($selected)}</pre>

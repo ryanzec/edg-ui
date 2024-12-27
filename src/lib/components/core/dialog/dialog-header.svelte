@@ -1,6 +1,6 @@
 <script lang="ts">
   import { melt, type AnyMeltElement } from '@melt-ui/svelte';
-  import XIcon from '$lib/components/core/icons/x-icon.svelte';
+  import Icon from '$lib/components/core/icons/icon.svelte';
   import type { HTMLAttributes } from 'svelte/elements';
   import { tailwindUtils } from '$lib/utils/tailwind';
   import Button, { ButtonShape, ButtonVariant } from '$lib/components/core/button/button.svelte';
@@ -30,6 +30,6 @@
     aria-label="close"
     class="ml-auto"
   >
-    <XIcon />
+    <Icon icon="x" />
   </Button>
 </div>

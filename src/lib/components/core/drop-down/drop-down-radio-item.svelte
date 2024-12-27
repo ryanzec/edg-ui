@@ -1,8 +1,7 @@
 <script lang="ts">
   import type { Readable, Writable } from 'svelte/store';
   import DropDownItem from '$lib/components/core/drop-down/drop-down-item.svelte';
-  import CircleIcon from '../icons/circle-icon.svelte';
-  import CircleCheckIcon from '../icons/circle-check-icon.svelte';
+  import Icon from '$lib/components/core/icons/icon.svelte';
 
   // @todo need to figure out if there is a proper way to type this
 
@@ -43,9 +42,9 @@
   {#snippet leftContent()}
     <div>
       {#if $isChecked(option)}
-        <CircleCheckIcon />
+        <Icon icon="circle-check" />
       {:else}
-        <CircleIcon />
+        <Icon icon="circle" />
       {/if}
     </div>
   {/snippet}

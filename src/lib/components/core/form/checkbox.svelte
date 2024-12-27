@@ -4,9 +4,7 @@
 
 <script lang="ts">
   import { stringUtils } from '$lib/utils/string';
-  import SquareIcon from '$lib/components/core/icons/square-icon.svelte';
-  import SquareCheckIcon from '$lib/components/core/icons/square-check-icon.svelte';
-  import SquareMinusIcon from '$lib/components/core/icons/square-minus-icon.svelte';
+  import Icon, { IconSize, IconColor } from '$lib/components/core/icons/icon.svelte';
 
   type Props = {
     checked: boolean;
@@ -21,13 +19,13 @@
 </script>
 
 <label data-id="checkbox" class="gap-2xs flex cursor-pointer items-center" for={id} id="{value}-label">
-  <span class="h-xl w-xl">
+  <span class="h-lg w-lg">
     {#if indeterminate}
-      <SquareMinusIcon class="h-xl text-brand w-xl" />
+      <Icon icon="square-minus" size={IconSize.FULL} color={IconColor.BRAND} />
     {:else if checked}
-      <SquareCheckIcon class="h-xl text-brand w-xl" />
+      <Icon icon="square-check" size={IconSize.FULL} color={IconColor.BRAND} />
     {:else}
-      <SquareIcon class="h-xl w-xl" />
+      <Icon icon="square" size={IconSize.FULL} />
     {/if}
   </span>
   <input {id} {name} type="checkbox" {value} bind:checked class="hidden appearance-none" />

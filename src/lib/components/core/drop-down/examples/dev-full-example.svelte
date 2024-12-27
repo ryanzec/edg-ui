@@ -10,7 +10,7 @@
   import DropDownRadioGroupLabel from '$lib/components/core/drop-down/drop-down-radio-group-label.svelte';
   import DropDownSubMenu from '$lib/components/core/drop-down/drop-down-sub-menu.svelte';
   import DropDownMenu from '$lib/components/core/drop-down/drop-down-menu.svelte';
-  import AlignJustifiedIcon from '$lib/components/core/icons/align-justified-icon.svelte';
+  import Icon from '$lib/components/core/icons/icon.svelte';
   import { dropDownUtils } from '$lib/components/core/drop-down/utils';
   import { IGNORE_DATA_ATTRIBUTE_NAME } from '$lib/actions/click-outside-action';
 
@@ -63,7 +63,7 @@
   isOpened={open}
   id={dropDown1Id}
 >
-  <AlignJustifiedIcon class="m-xs" />
+  <Icon icon="align-justified" class="m-xs" />
 </DropDownTrigger>
 <DropDownMenu isOpened={open} meltMenu={menu} {...dropDown1Attributes}>
   <DropDownItem meltItem={$item} onclick={() => console.log('about melt ui')}>About Melt UI</DropDownItem>
@@ -109,7 +109,7 @@
   isOpened={open2}
   id={dropDown2Id}
 >
-  <AlignJustifiedIcon class="m-xs" />
+  <Icon icon="align-justified" class="m-xs" />
 </DropDownTrigger>
 <DropDownMenu isOpened={open2} meltMenu={menu2} {...dropDown2Attributes}>
   <DropDownItem meltItem={$item2} onclick={() => console.log('about melt ui')}>About Melt UI</DropDownItem>

@@ -14,6 +14,9 @@
   import { avatarExampleItems } from '$lib/components/core/avatar/examples/utils';
   import { calloutExampleItems } from '$lib/components/core/callout/examples/utils';
   import { cardExampleItems } from '$lib/components/core/card/examples/utils';
+  import { iconExampleItems } from '$lib/components/core/icons/examples/utils';
+  import { listExampleItems } from '$lib/components/core/list/examples/utils';
+  import { loaderExampleItems } from '$lib/components/core/loader/examples/utils';
 
   type Props = { children?: import('svelte').Snippet };
 
@@ -58,6 +61,9 @@
     avatarExampleItems,
     calloutExampleItems,
     cardExampleItems,
+    iconExampleItems,
+    listExampleItems,
+    loaderExampleItems,
   ];
 
   sortItems(items);

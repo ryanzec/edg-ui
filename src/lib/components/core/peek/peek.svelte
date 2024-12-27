@@ -1,9 +1,8 @@
 <script lang="ts">
-  // @todo(feature) support passing in width (as a class name probably)
   import { melt, type AnyMeltElement } from '@melt-ui/svelte';
   import type { Writable } from 'svelte/store';
   import { fly } from 'svelte/transition';
-  import Overlay from '../overlay/overlay.svelte';
+  import MeltOverlay from '$lib/components/core/overlay/melt-overlay.svelte';
   import { tailwindUtils } from '$lib/utils/tailwind';
 
   type Props = {
@@ -115,7 +114,7 @@
 
 {#if $isOpened}
   <div data-id="peek" use:melt={$meltPortalled}>
-    {#if hasOverlay}<Overlay {meltOverlay} />{/if}
+    {#if hasOverlay}<MeltOverlay {meltOverlay} />{/if}
     <div
       use:melt={$meltContent}
       bind:this={peekElement}

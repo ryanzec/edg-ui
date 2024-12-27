@@ -1,5 +1,5 @@
 <script>
-  import PlusIcon from '$lib/components/core/icons/plus-icon.svelte';
+  import Icon from '$lib/components/core/icons/icon.svelte';
   import Tooltip from '$lib/components/core/tooltip/tooltip.svelte';
 </script>
 
@@ -8,11 +8,12 @@
   <Tooltip>
     {#snippet handle()}
       <button type="button" aria-label="Add">
-        <PlusIcon />
+        <Icon icon="plus" />
       </button>
     {/snippet}
     {#snippet content()}
       <div>My tooltip content</div>
     {/snippet}
   </Tooltip>
+  <div>Other Content</div>
 </div>

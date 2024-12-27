@@ -6,8 +6,7 @@
   import { keyPressedAction } from '$lib/actions/key-pressed-action';
   import { domUtils } from '$lib/utils/dom';
   import { createComboboxStore } from '$lib/components/core/combobox/store';
-  import ChevronDownIcon from '$lib/components/core/icons/chevron-down-icon.svelte';
-  import ChevronUpIcon from '$lib/components/core/icons/chevron-up-icon.svelte';
+  import Icon from '$lib/components/core/icons/icon.svelte';
   import Label from '$lib/components/core/form/label.svelte';
   import {
     COMBOBOX_DEFAULT_DELAY,
@@ -315,9 +314,9 @@
       </div>
       <div class="self-center">
         {#if $isOpened}
-          <ChevronUpIcon />
+          <Icon icon="chevron-up" />
         {:else}
-          <ChevronDownIcon />
+          <Icon icon="chevron-down" />
         {/if}
       </div>
     </div>

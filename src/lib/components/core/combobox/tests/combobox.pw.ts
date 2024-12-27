@@ -84,7 +84,7 @@ export class ComboboxPage {
       .click();
   }
 
-  // because of the way the combobox handle mouse event, we need to simulate the mouse down and up manaully to
+  // because of the way the combobox handle mouse event, we need to simulate the mouse down and up manually to
   // properly simulate the user as it would in the browser instead of the .click() api
   async clickOption(index: number) {
     await this.optionLocator(index).hover();

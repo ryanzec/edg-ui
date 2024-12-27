@@ -1,7 +1,7 @@
 <script lang="ts">
   import { melt, type AnyMeltElement } from '@melt-ui/svelte';
   import type { Writable } from 'svelte/store';
-  import Overlay from '$lib/components/core/overlay/overlay.svelte';
+  import MeltOverlay from '$lib/components/core/overlay/melt-overlay.svelte';
   import { tailwindUtils } from '$lib/utils/tailwind';
   import type { HTMLAttributes } from 'svelte/elements';
 
@@ -34,7 +34,7 @@
 
 {#if $isOpened}
   <div data-id="dialog" use:melt={$meltPortalled}>
-    <Overlay {meltOverlay} />
+    <MeltOverlay {meltOverlay} />
     <div
       class={tailwindUtils.merge(
         'z-dialog bg-surface-pure fixed top-1/2 left-1/2 flex max-h-[85vh] w-[90vw] max-w-[450px] -translate-x-1/2 -translate-y-1/2 flex-col rounded-xl shadow-lg',

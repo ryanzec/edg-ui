@@ -6,7 +6,7 @@
 
   /* global TOptionValue */
   import type { ComboboxOptionComponent, ComboboxOptionsActionOptions } from '$lib/components/core/combobox/utils';
-  import LoaderIcon from '$lib/components/core/icons/loader-icon.svelte';
+  import Icon from '$lib/components/core/icons/icon.svelte';
 
   type Props = {
     options: TOptionValue[];
@@ -77,7 +77,7 @@
     {#if isLoading}
       <!-- the rotating icon can cause scrolling so just hidding the overflow to avoid that -->
       <div data-id="loading-option" class="overflow gap-xs px-xs py-2xs relative flex items-center overflow-hidden">
-        <LoaderIcon class="animate-spin" /> Loading...
+        <Icon icon="loader" class="animate-spin" /> Loading...
       </div>
     {:else if totalOptionsCount === 0 || !passesThresholdCheck}
       {#if inputValue && passesThresholdCheck}

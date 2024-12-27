@@ -1,7 +1,12 @@
 <script lang="ts">
-  type Props = { children?: import('svelte').Snippet };
+  import type { HTMLAttributes } from 'svelte/elements';
+  import { tailwindUtils } from '$lib/utils/tailwind.js';
 
-  let { children }: Props = $props();
+  type Props = HTMLAttributes<HTMLDivElement> & { children?: import('svelte').Snippet };
+
+  let { children, class: extraClass = '' }: Props = $props();
 </script>
 
-<div class="gap-2xs flex flex-col">{@render children?.()}</div>
+<div class={tailwindUtils.merge('gap-2xs flex flex-col', extraClass)}>
+  {@render children?.()}
+</div>

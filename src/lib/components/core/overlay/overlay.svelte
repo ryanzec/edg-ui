@@ -1,20 +1,22 @@
 <script lang="ts">
-  import { melt, type AnyMeltElement } from '@melt-ui/svelte';
   import type { HTMLAttributes } from 'svelte/elements';
   import { fade } from 'svelte/transition';
+  import { tailwindUtils } from '$lib/utils/tailwind';
 
   type Props = HTMLAttributes<HTMLDivElement> & {
-    meltOverlay: AnyMeltElement;
     children?: import('svelte').Snippet;
+    isFixed?: boolean;
   };
 
-  let { meltOverlay, children, ...rest }: Props = $props();
+  let { children, isFixed = true, class: extraClass = '', ...rest }: Props = $props();
 </script>
 
 <div
   data-id="overlay"
-  use:melt={$meltOverlay}
-  class="bg-overlay-background/50 inset-none z-overlay fixed backdrop-blur-xs"
+  class={tailwindUtils.merge('bg-overlay-background/50 inset-none z-overlay backdrop-blur-xs', extraClass, {
+    fixed: isFixed,
+    absolute: !isFixed,
+  })}
   transition:fade={{ duration: 150 }}
   {...rest}
 >

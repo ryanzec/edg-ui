@@ -14,4 +14,3 @@
 >
   {@render children?.()}
 </div>
-<div>Other Content</div>

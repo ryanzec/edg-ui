@@ -1,7 +1,6 @@
 <script lang="ts">
   import { createCollapsible } from '@melt-ui/svelte';
-  import ChevronSelectorIcon from '$lib/components/core/icons/chevron-selector-icon.svelte';
-  import XIcon from '$lib/components/core/icons/x-icon.svelte';
+  import Icon from '$lib/components/core/icons/icon.svelte';
   import CollapsibleTrigger from '$lib/components/core/collapsible/collapsible-trigger.svelte';
   import CollapsibleContent from '$lib/components/core/collapsible/collapsible-content.svelte';
   import { collapsibleUtils } from '$lib/components/core/collapsible/utils';
@@ -16,9 +15,9 @@
 <CollapsibleTrigger meltTrigger={trigger}>
   <div>
     {#if $open}
-      <XIcon />
+      <Icon icon="x" />
     {:else}
-      <ChevronSelectorIcon />
+      <Icon icon="selector" />
     {/if}
   </div>
 </CollapsibleTrigger>

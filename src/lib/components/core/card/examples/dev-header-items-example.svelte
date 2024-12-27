@@ -3,8 +3,7 @@
   import CardHeader from '$lib/components/core/card/card-header.svelte';
   import CardContent from '$lib/components/core/card/card-content.svelte';
   import CardFooter from '$lib/components/core/card/card-footer.svelte';
-  import XIcon from '$lib/components/core/icons/x-icon.svelte';
-  import CheckIcon from '$lib/components/core/icons/check-icon.svelte';
+  import Icon from '$lib/components/core/icons/icon.svelte';
   import Button, { ButtonShape, ButtonVariant } from '$lib/components/core/button/button.svelte';
 
   let cardIsActive: boolean = $state(true);
@@ -15,14 +14,14 @@
     <Card>
       <CardHeader label="Header">
         {#snippet preItem()}
-          <CheckIcon class="h-2xl w-2xl" />
+          <Icon icon="check" class="h-2xl w-2xl" />
         {/snippet}
         {#snippet postItem()}
           <Button
             class="ml-auto"
             onclick={() => (cardIsActive = false)}
             shape={ButtonShape.CIRCLE}
-            variant={ButtonVariant.GHOST}><XIcon /></Button
+            variant={ButtonVariant.GHOST}><Icon icon="x" /></Button
           >
         {/snippet}
       </CardHeader>

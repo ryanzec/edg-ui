@@ -309,7 +309,7 @@
     </FormFields>
     <button type="submit">Submit</button>
   </form>
-  <!-- for manaul testing -->
+  <!-- for manual testing -->
   <pre>{JSON.stringify(submittedData, null, 2)}</pre>
   <!-- for automated testing -->
   <pre data-id="submitted-data" class="hidden">{JSON.stringify(submittedData)}</pre>

@@ -21,7 +21,8 @@
 
 <script lang="ts">
   import type { HTMLAttributes } from 'svelte/elements';
-  import { iconComponents, type IconName } from '$lib/components/core/icons/utils';
+  import type { IconName } from '$lib/components/core/icons/utils';
+  import Icon from '$lib/components/core/icons/icon.svelte';
 
   import { tailwindUtils } from '$lib/utils/tailwind';
 
@@ -79,12 +80,10 @@
   {...rest}
 >
   {#if preIcon}
-    {@const IconComponent = iconComponents[preIcon]}
-    <IconComponent />
+    <Icon icon={preIcon} />
   {/if}
   {@render children?.()}
   {#if postIcon}
-    {@const IconComponent = iconComponents[postIcon]}
-    <IconComponent />
+    <Icon icon={postIcon} />
   {/if}
 </div>

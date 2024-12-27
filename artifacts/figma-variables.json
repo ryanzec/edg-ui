@@ -988,6 +988,12 @@
               "value": 5
             },
             {
+              "name": "over-overlay",
+              "type": "number",
+              "isAlias": false,
+              "value": 6
+            },
+            {
               "name": "combobox-options",
               "type": "number",
               "isAlias": false,

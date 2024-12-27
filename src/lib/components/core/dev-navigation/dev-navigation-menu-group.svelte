@@ -4,8 +4,7 @@
   import Typography from '$lib/components/core/typography/typography.svelte';
   import DevNavigationMenu from '$lib/components/core/dev-navigation/dev-navigation-menu.svelte';
   import type { DevNavigationItem } from '$lib/components/core/dev-navigation/dev-navigation.svelte';
-  import ChevronDownIcon from '$lib/components/core/icons/chevron-down-icon.svelte';
-  import ChevronUpIcon from '$lib/components/core/icons/chevron-up-icon.svelte';
+  import Icon from '$lib/components/core/icons/icon.svelte';
   import { createCollapsible } from '@melt-ui/svelte';
   import { collapsibleUtils } from '$lib/components/core/collapsible/utils';
 
@@ -23,9 +22,9 @@
   <div class="gap-2xs flex cursor-pointer items-center">
     <Typography class="flex-1">{item.display}</Typography>
     {#if $open}
-      <ChevronUpIcon class="ml-auto" />
+      <Icon icon="chevron-up" class="ml-auto" />
     {:else}
-      <ChevronDownIcon class="ml-auto" />
+      <Icon icon="chevron-down" class="ml-auto" />
     {/if}
   </div>
 </CollapsibleTrigger>

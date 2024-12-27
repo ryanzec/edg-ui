@@ -36,7 +36,7 @@
 
 <Combobox name="value" label="custom option" {options} {selected} optionComponent={DevCustomOptionComponent} />
 <a href="#test">link to test tabbing closing</a>
-<!-- for manaul testing -->
+<!-- for manual testing -->
 <pre>{JSON.stringify($selected, null, 2)}</pre>
 <!-- for automated testing -->
 <pre data-id="selected-value" class="hidden">{JSON.stringify($selected)}</pre>

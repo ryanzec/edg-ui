@@ -1,5 +1,8 @@
 @import 'tailwindcss';
 
+/* tailwind does make it hard to provide styling for element based on parent classes so these files do it manually */
+@import '../src/lib/components/core/form/form-styles.css';
+
 @config '../tailwind.config.js';
 
 /*
@@ -93,14 +96,14 @@
   --text-xl: 1.5rem;
   --text-2xl: 2rem;
 
-  --line-height-*: initial;
-  --line-height-none: 0rem;
-  --line-height-xs: 0.8125rem;
-  --line-height-sm: 0.9375rem;
-  --line-height-base: 1.25rem;
-  --line-height-lg: 1.5rem;
-  --line-height-xl: 1.875rem;
-  --line-height-2xl: 2.5rem;
+  --leading-*: initial;
+  --leading-none: 0rem;
+  --leading-xs: 0.8125rem;
+  --leading-sm: 0.9375rem;
+  --leading-base: 1.25rem;
+  --leading-lg: 1.5rem;
+  --leading-xl: 1.875rem;
+  --leading-2xl: 2.5rem;
 
   --tracking-*: initial;
   --tracking-none: 0;
@@ -133,6 +136,7 @@
 
   --z-index-*: initial;
   --z-index-overlay: 5;
+  --z-index-over-overlay: 6;
   --z-index-combobox-options: 10;
   --z-index-drop-down: 40;
   --z-index-dialog: 50;

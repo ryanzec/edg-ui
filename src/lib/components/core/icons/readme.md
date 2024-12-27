@@ -1,1 +1,1 @@
-The package for these icons generates a huge file size so we add them as needed
+These icons are modified versions of the Tabler icons (original license included in this directory). The primary reason for using modified versions of Tabler icons is to create them in such a way that there is no inner padding so when setting the size of the icon, the size that is set is the size of the color whether that is width / height / or both depending on the icon.

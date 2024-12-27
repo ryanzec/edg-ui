@@ -1,7 +1,7 @@
 <script lang="ts">
   import { type AnyMeltElement } from '@melt-ui/svelte';
   import DropDownItem from '$lib/components/core/drop-down/drop-down-item.svelte';
-  import ChevronRightIcon from '../icons/chevron-right-icon.svelte';
+  import Icon from '$lib/components/core/icons/icon.svelte';
 
   type Props = {
     subTrigger: AnyMeltElement;
@@ -15,7 +15,7 @@
   {@render children?.()}
   {#snippet rightContent()}
     <div>
-      <ChevronRightIcon />
+      <Icon icon="chevron-right" />
     </div>
   {/snippet}
 </DropDownItem>

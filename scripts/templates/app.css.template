@@ -1,5 +1,8 @@
 @import 'tailwindcss';
 
+/* tailwind does make it hard to provide styling for element based on parent classes so these files do it manually */
+@import '../src/lib/components/core/form/form-styles.css';
+
 @config '../tailwind.config.js';
 
 /*

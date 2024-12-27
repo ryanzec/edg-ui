@@ -38,10 +38,12 @@
       <DevNavigationMenu class="p-sm" {items} />
     </div>
   </ScrollArea>
-  <div data-id="component-container" class="p-sm flex-1">
-    {#if $devNavigationStore.activeComponent}
-      {@const SvelteComponent = $devNavigationStore.activeComponent}
-      <SvelteComponent />
-    {/if}
-  </div>
+  <ScrollArea class="h-full flex-1">
+    <div data-id="component-container" class="p-sm flex-1">
+      {#if $devNavigationStore.activeComponent}
+        {@const SvelteComponent = $devNavigationStore.activeComponent}
+        <SvelteComponent />
+      {/if}
+    </div>
+  </ScrollArea>
 </div>

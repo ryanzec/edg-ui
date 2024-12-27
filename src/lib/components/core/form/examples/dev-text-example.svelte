@@ -1,4 +1,6 @@
 <script lang="ts" module>
+  import { zodUtils } from '$lib/utils/zod';
+  import * as zod from 'zod';
   export type FormData = { text: string };
 
   export const formDataSchema = zodUtils.schemaForType<FormData>()(
@@ -20,8 +22,6 @@
 
 <script lang="ts">
   import { createFormManagerStore } from '$lib/stores/form-manager.store';
-  import { zodUtils } from '$lib/utils/zod';
-  import * as zod from 'zod';
   import FormField from '$lib/components/core/form/form-field.svelte';
   import Label from '$lib/components/core/form/label.svelte';
   import TextInput from '$lib/components/core/form/text-input.svelte';
@@ -47,12 +47,20 @@
     <FormFields>
       <FormField data-id="text" error={$textError}>
         <Label for="text">Text</Label>
-        <TextInput bind:value={$text} name="text" />
+        <TextInput bind:value={$text} name="text" placeholder="Placeholder" />
+      </FormField>
+      <FormField data-id="text-readonly" error={$textError}>
+        <Label for="text-readonly">Text (Readonly)</Label>
+        <TextInput readonly bind:value={$text} name="text" placeholder="Placeholder" />
+      </FormField>
+      <FormField data-id="text-disabled" error={$textError}>
+        <Label for="text-disabled">Text (Disabled)</Label>
+        <TextInput disabled bind:value={$text} name="text" placeholder="Placeholder" />
       </FormField>
     </FormFields>
     <button type="submit">Submit</button>
   </form>
-  <!-- for manaul testing -->
+  <!-- for manual testing -->
   <pre>{JSON.stringify(submittedData, null, 2)}</pre>
   <!-- for automated testing -->
   <pre data-id="submitted-data" class="hidden">{JSON.stringify(submittedData)}</pre>

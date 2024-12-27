@@ -9,7 +9,7 @@
 
   let { label, src, count = 0, ...rest }: Props = $props();
 
-  let labelText = label;
+  let labelText = $state(label);
 
   if (count > 0) {
     labelText = `+${count > 99 ? '99' : count}`;

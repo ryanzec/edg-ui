@@ -49,10 +49,18 @@
         <Label for="textarea">Textarea</Label>
         <Textarea bind:value={$textarea} name="textarea" />
       </FormField>
+      <FormField data-id="textarea-readonly" error={$textareaError}>
+        <Label for="textarea-readonly">Textarea (Readonly)</Label>
+        <Textarea readonly bind:value={$textarea} name="textarea" />
+      </FormField>
+      <FormField data-id="textarea-disabled" error={$textareaError}>
+        <Label for="textarea-disabled">Textarea (Disabled)</Label>
+        <Textarea disabled bind:value={$textarea} name="textarea" />
+      </FormField>
     </FormFields>
     <button type="submit">Submit</button>
   </form>
-  <!-- for manaul testing -->
+  <!-- for manual testing -->
   <pre>{JSON.stringify(submittedData, null, 2)}</pre>
   <!-- for automated testing -->
   <pre data-id="submitted-data" class="hidden">{JSON.stringify(submittedData)}</pre>

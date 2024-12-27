@@ -34,7 +34,7 @@
 </script>
 
 <Combobox name="value" label="filtering" {options} {selected} useFiltering isMultiple />
-<!-- for manaul testing -->
+<!-- for manual testing -->
 <pre>{JSON.stringify($selected, null, 2)}</pre>
 <!-- for automated testing -->
 <pre data-id="selected-value" class="hidden">{JSON.stringify($selected)}</pre>

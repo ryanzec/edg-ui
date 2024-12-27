@@ -49,7 +49,7 @@
 >
   <div>escape triggered: <span data-id="external-escape-trigger">{escapeTriggered}</span></div>
   <Combobox name="value" label="simple" {options} {selected} clearOptionDisplay="None" />
-  <!-- for manaul testing -->
+  <!-- for manual testing -->
   <pre>{JSON.stringify($selected, null, 2)}</pre>
   <!-- for automated testing -->
   <pre data-id="selected-value" class="hidden">{JSON.stringify($selected)}</pre>

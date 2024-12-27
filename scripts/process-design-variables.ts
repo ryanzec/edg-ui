@@ -86,7 +86,7 @@ const variableCollectionCssVariablePrefixMap: Record<VariableCollection, string 
   [VariableCollection.SPACE]: 'spacing',
   [VariableCollection.BORDER_RADIUS]: 'radius',
   [VariableCollection.FONT_SIZE]: 'text',
-  [VariableCollection.LINE_HEIGHT]: 'line-height',
+  [VariableCollection.LINE_HEIGHT]: 'leading',
   [VariableCollection.LETTER_SPACING]: 'tracking',
   [VariableCollection.Z_INDEX]: 'z-index',
   [VariableCollection.OPACITY]: 'opacity',
@@ -103,6 +103,18 @@ const cleanColorVariableName = (variableName: string): string => {
   }
 
   return cleanName;
+};
+
+const addValuesForCssVariables = (cssPrefix: string | string[], variable: string, value: string): string[] => {
+  if (typeof cssPrefix === 'string') {
+    return [`  --${cssPrefix}-${variable}: ${value};`];
+  }
+
+  return cssPrefix.reduce<string[]>((collection, prefix) => {
+    collection.push(`  --${prefix}-${variable}: ${value};`);
+
+    return collection;
+  }, []);
 };
 
 const buildColorCssVariables = (data: ConfigData): [string[], string[]] => {
@@ -129,18 +141,6 @@ const buildColorCssVariables = (data: ConfigData): [string[], string[]] => {
   }
 
   return [lightCssVariables, darkCssVariables];
-};
-
-const addValuesForCssVariables = (cssPrefix: string | string[], variable: string, value: string): string[] => {
-  if (typeof cssPrefix === 'string') {
-    return [`  --${cssPrefix}-${variable}: ${value};`];
-  }
-
-  return cssPrefix.reduce<string[]>((collection, prefix) => {
-    collection.push(`  --${prefix}-${variable}: ${value};`);
-
-    return collection;
-  }, []);
 };
 
 const buildGeneralCssVariables = (data: ConfigData, variableCollection: VariableCollection): string[] => {
