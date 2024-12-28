@@ -17,6 +17,7 @@
   import { writable, type Writable } from 'svelte/store';
   import ComboboxOptions from '$lib/components/core/combobox/combobox-options.svelte';
   import { clickOutsideAction } from '$lib/actions/click-outside-action';
+  import { tailwindUtils } from '$lib/utils/tailwind';
 
   // @todo(feature) character threshold
   // @todo(feature) allow new value
@@ -281,7 +282,10 @@
       tabindex="-1"
       onkeypress={() => {}}
       onclick={() => $inputElement?.focus()}
-      class="border-outline bg-surface-pure text-on-surface focus:border-outline-active rounded-base px-xs py-2xs flex w-full border data-[state=open]:rounded-b-none"
+      class={tailwindUtils.merge(
+        'border-outline bg-surface-pure text-on-surface focus:border-outline-active rounded-base px-xs py-2xs flex w-full border data-[state=open]:rounded-b-none',
+        { 'border-outline-active': $isOpened },
+      )}
     >
       <div class="gap-xs relative flex flex-1 flex-wrap items-center">
         {#if isMultiple && showInlineSelectedOptions && $selected.length > 0}

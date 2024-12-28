@@ -19,7 +19,7 @@
   class={tailwindUtils.merge('px-sm py-xs border-outline flex items-center border-b', extraClass)}
   {...rest}
 >
-  <h2 use:melt={$meltTitle} class="m-none tracking-lg text-xl font-medium">
+  <h2 use:melt={$meltTitle} class="m-none tracking-lg text-xl font-semibold">
     {title}
   </h2>
   <Button

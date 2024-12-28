@@ -11,9 +11,7 @@
   import FormField from '$lib/components/core/form/form-field.svelte';
   import Label from '$lib/components/core/form/label.svelte';
 
-  type Props = { isOpened?: Writable<boolean> };
-
-  let { isOpened = writable(false) }: Props = $props();
+  let isOpened: Writable<boolean> = writable(false);
 
   const {
     elements: { overlay, content, title, description, close, portalled },
@@ -27,12 +25,7 @@
   let value2: Writable<string> = writable('@thomasglopes');
 </script>
 
-<Button
-  class="xl px-base py-sm inline-flex items-center justify-center leading-none font-medium shadow-sm"
-  onclick={() => ($isOpened = true)}
->
-  Open Dialog
-</Button>
+<Button onclick={() => ($isOpened = true)}>Open Dialog</Button>
 
 <Dialog meltContent={content} meltOverlay={overlay} meltPortalled={portalled} {isOpened}>
   <DialogHeader meltTitle={title} title="Edit profile" meltClose={close} />

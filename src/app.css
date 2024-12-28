@@ -3,6 +3,7 @@
 /* tailwind does make it hard to provide styling for element based on parent classes so these files do it manually */
 @import '../src/lib/components/core/button/button.css';
 @import '../src/lib/components/core/form/form.css';
+@import '../src/lib/components/core/list/list.css';
 
 @config '../tailwind.config.js';
 

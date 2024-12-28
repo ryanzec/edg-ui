@@ -15,7 +15,7 @@
 <h2
   data-id="header"
   use:melt={$meltTitle}
-  class="border-outline p-base flex items-center justify-between border-b text-xl font-medium"
+  class="border-outline p-base flex items-center justify-between border-b text-xl font-semibold"
 >
   {title}
   <Button

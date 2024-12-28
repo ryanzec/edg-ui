@@ -1,0 +1,7 @@
+ul.rounded-base li:first-child {
+  @apply rounded-t-base;
+}
+
+ul.rounded-base li:last-child {
+  @apply rounded-b-base;
+}

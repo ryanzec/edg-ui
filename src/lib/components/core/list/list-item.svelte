@@ -11,7 +11,7 @@
   let { children, preIcon }: Props = $props();
 </script>
 
-<li class="gap-xs px-xs py-2xs bg-surface-pure border-outline flex items-center border border-b-0 last:border-b">
+<li class="gap-xs px-xs py-2xs bg-surface-pure border-outline flex items-center border-t first:border-0">
   {#if preIcon}<Icon icon={preIcon} />{/if}
   {@render children()}
 </li>
