@@ -18,14 +18,20 @@
     PILL = 'pill',
     CIRCLE = 'circle',
   }
-</script>
 
-<script lang="ts">
-  import LoaderIcon from '$lib/components/core/loader/loader-icon.svelte';
-  import type { HTMLAttributes } from 'svelte/elements';
-  import { tailwindUtils } from '$lib/utils/tailwind';
+  export const BUTTON_CONTEXT_KEY = 'button';
 
-  type Props = HTMLAttributes<HTMLButtonElement> & {
+  export type ButtonContext = {
+    variant?: ButtonVariant;
+    color?: ButtonColor;
+    shape?: ButtonShape;
+  };
+
+  export const getButtonContext = (): ButtonContext => {
+    return getContext<ButtonContext>(BUTTON_CONTEXT_KEY);
+  };
+
+  export type ButtonProps = HTMLAttributes<HTMLButtonElement> & {
     isLoading?: boolean;
     variant?: ButtonVariant;
     color?: ButtonColor;
@@ -39,25 +45,36 @@
     preItem?: import('svelte').Snippet;
     children?: import('svelte').Snippet;
     postItem?: import('svelte').Snippet;
+    isActive?: boolean;
 
     // these should be standard but apparent not
     disabled?: boolean;
     type?: 'button' | 'submit' | 'reset';
   };
+</script>
+
+<script lang="ts">
+  import LoaderIcon from '$lib/components/core/loader/loader-icon.svelte';
+  import type { HTMLAttributes } from 'svelte/elements';
+  import { tailwindUtils } from '$lib/utils/tailwind';
+  import { getContext } from 'svelte';
+
+  const buttonContext = getButtonContext();
 
   let {
     isLoading = false,
-    variant = ButtonVariant.FILLED,
-    color = ButtonColor.BRAND,
-    shape = ButtonShape.ROUNDED,
+    variant = buttonContext?.variant || ButtonVariant.FILLED,
+    color = buttonContext?.color || ButtonColor.BRAND,
+    shape = buttonContext?.shape || ButtonShape.ROUNDED,
     action = () => {},
     actionOptions = undefined,
     class: extraClass = '',
     preItem,
-    children,
     postItem,
+    isActive = false,
+    children,
     ...rest
-  }: Props = $props();
+  }: ButtonProps = $props();
 
   let isDisabled = $derived(isLoading || !!rest.disabled);
 
@@ -117,6 +134,14 @@
     [ButtonColor.DANGER]:
       'text-danger-bold fill-danger-bold [&:not([disabled])]:hover:bg-danger-subtle2 [&:not([disabled])]:active:bg-danger-subtle3',
   };
+  const activeColorsCss: Record<ButtonColor, string> = {
+    [ButtonColor.BRAND]: '[&:not([disabled])]:bg-brand-subtle3',
+    [ButtonColor.NEUTRAL]: '[&:not([disabled])]:bg-neutral-subtle3',
+    [ButtonColor.SUCCESS]: '[&:not([disabled])]:bg-success-subtle3',
+    [ButtonColor.INFO]: '[&:not([disabled])]:bg-info-subtle3',
+    [ButtonColor.WARNING]: '[&:not([disabled])]:bg-warning-subtle3',
+    [ButtonColor.DANGER]: '[&:not([disabled])]:bg-danger-subtle3',
+  };
   const colorsCss: Record<ButtonVariant, Record<ButtonColor, string>> = {
     [ButtonVariant.FILLED]: filledColorsCss,
     [ButtonVariant.WEAK]: weakColorsCss,
@@ -134,6 +159,7 @@
   class={tailwindUtils.merge(
     'gap-xs flex cursor-pointer items-center justify-center border border-transparent',
     colorsCss[variant][color],
+    isActive && variant === ButtonVariant.OUTLINED && activeColorsCss[color],
     extraClass,
     {
       'opacity-disabled': isDisabled,
@@ -145,6 +171,7 @@
       // dislike pixel perfect setting like this but do not see any other way
       'w-[30px]': shape === ButtonShape.CIRCLE,
       'h-[30px]': shape === ButtonShape.CIRCLE,
+      active: isActive,
     },
   )}
 >

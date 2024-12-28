@@ -7,6 +7,7 @@ import DevPillExample from '$lib/components/core/button/examples/dev-pill-exampl
 import DevPrePostItemsExample from '$lib/components/core/button/examples/dev-pre-post-items-example.svelte';
 import DevWeakExample from '$lib/components/core/button/examples/dev-weak-example.svelte';
 import DevFilledExample from '$lib/components/core/button/examples/dev-filled-example.svelte';
+import DevToggleExample from '$lib/components/core/button/examples/dev-toggle-example.svelte';
 import { type DevNavigationItem } from '$lib/components/core/dev-navigation/dev-navigation.svelte';
 
 export const buttonExampleItems: DevNavigationItem = {
@@ -47,6 +48,10 @@ export const buttonExampleItems: DevNavigationItem = {
     {
       display: 'Weak',
       component: DevWeakExample,
+    },
+    {
+      display: 'Toggle',
+      component: DevToggleExample,
     },
   ],
 };

@@ -1,0 +1,11 @@
+.button-toggle button:first-child {
+  @apply rounded-r-none border-r-0;
+}
+
+.button-toggle button:last-child {
+  @apply rounded-l-none;
+}
+
+.button-toggle button:not(:first-child):not(:last-child) {
+  @apply rounded-none border-r-0;
+}

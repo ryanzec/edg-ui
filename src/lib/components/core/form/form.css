@@ -4,5 +4,5 @@
 .has-error textarea,
 .has-error textarea:hover,
 .has-error textarea:active {
-  border-color: var(--color-danger);
+  @apply border-danger;
 }
