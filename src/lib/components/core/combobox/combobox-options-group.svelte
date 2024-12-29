@@ -1,18 +1,32 @@
-<script lang="ts" generics="TOptionValue extends { display: string; value: string; }">
-  /* global TOptionValue */
+<script module lang="ts">
   import type { ComboboxStore } from '$lib/components/core/combobox/store';
   import type { ComboboxOptionComponent } from '$lib/components/core/combobox/utils';
-  import ComboboxOption from '$lib/components/core/combobox/combobox-option.svelte';
 
-  type Props = {
+  export type ComboboxOptionsGroupProps<
+    TOptionValue extends {
+      display: string;
+      value: string;
+    },
+  > = {
     options: TOptionValue[];
     optionAction: ComboboxStore<TOptionValue>['optionAction'];
     optionComponent?: ComboboxOptionComponent<TOptionValue> | undefined;
     header?: string;
     indexOffset?: number;
   };
+</script>
 
-  let { options, optionAction, optionComponent = undefined, header = '', indexOffset = 0 }: Props = $props();
+<script lang="ts" generics="TOptionValue extends { display: string; value: string; }">
+  /* global TOptionValue */
+  import ComboboxOption from '$lib/components/core/combobox/combobox-option.svelte';
+
+  let {
+    options,
+    optionAction,
+    optionComponent = undefined,
+    header = '',
+    indexOffset = 0,
+  }: ComboboxOptionsGroupProps<TOptionValue> = $props();
 </script>
 
 {#if options.length > 0}

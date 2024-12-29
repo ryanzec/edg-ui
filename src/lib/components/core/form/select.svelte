@@ -1,14 +1,12 @@
 <script lang="ts" module>
+  import type { HTMLAttributes } from 'svelte/elements';
+
   export type SelectOption = {
     value: string;
     display: string;
   };
-</script>
 
-<script lang="ts">
-  import type { HTMLAttributes } from 'svelte/elements';
-
-  type Props = HTMLAttributes<HTMLSelectElement> & {
+  export type SelectProps = HTMLAttributes<HTMLSelectElement> & {
     options: SelectOption[];
     defaultDisplay?: string;
     name: string;
@@ -16,8 +14,18 @@
     id?: string;
     label?: import('svelte').Snippet;
   };
+</script>
 
-  let { options, defaultDisplay = 'Select...', name, value = $bindable(), id = name, label, ...rest }: Props = $props();
+<script lang="ts">
+  let {
+    options,
+    defaultDisplay = 'Select...',
+    name,
+    value = $bindable(),
+    id = name,
+    label,
+    ...rest
+  }: SelectProps = $props();
 </script>
 
 {@render label?.()}

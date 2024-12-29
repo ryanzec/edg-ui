@@ -1,15 +1,23 @@
-<script lang="ts" generics="TOptionValue extends { display: string; value: string; }">
-  /* global TOptionValue */
+<script module lang="ts">
   import type { ComboboxStore } from '$lib/components/core/combobox/store';
   import type { HTMLAttributes } from 'svelte/elements';
 
-  type Props = HTMLAttributes<HTMLLIElement> & {
+  export type ComboboxOptionProps<
+    TOptionValue extends {
+      display: string;
+      value: string;
+    },
+  > = HTMLAttributes<HTMLLIElement> & {
     option: TOptionValue;
     optionIndex: number;
     optionAction: ComboboxStore<TOptionValue>['optionAction'];
   };
+</script>
 
-  let { option, optionIndex, optionAction, ...rest }: Props = $props();
+<script lang="ts" generics="TOptionValue extends { display: string; value: string; }">
+  /* global TOptionValue */
+
+  let { option, optionIndex, optionAction, ...rest }: ComboboxOptionProps<TOptionValue> = $props();
 </script>
 
 <li

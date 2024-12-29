@@ -1,5 +1,5 @@
 import { expect, test, describe } from 'vitest';
-import { stringUtils } from './string.js';
+import { stringUtils } from '$lib/utils/string';
 
 describe('string utils', () => {
   test('toTitleCase', () => {

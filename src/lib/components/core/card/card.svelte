@@ -1,10 +1,13 @@
-<script lang="ts">
+<script module lang="ts">
   import type { HTMLAttributes } from 'svelte/elements';
+
+  type CardProps = HTMLAttributes<HTMLDivElement> & { children: import('svelte').Snippet };
+</script>
+
+<script lang="ts">
   import { tailwindUtils } from '$lib/utils/tailwind';
 
-  type Props = HTMLAttributes<HTMLDivElement> & { children: import('svelte').Snippet };
-
-  let { children, class: extraClass = '', ...rest }: Props = $props();
+  let { children, class: extraClass = '', ...rest }: CardProps = $props();
 </script>
 
 <div

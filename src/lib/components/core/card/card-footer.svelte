@@ -1,9 +1,11 @@
-<script lang="ts">
+<script module lang="ts">
   import type { HTMLAttributes } from 'svelte/elements';
 
-  type Props = HTMLAttributes<HTMLDivElement> & { children: import('svelte').Snippet };
+  export type CardFooterProps = HTMLAttributes<HTMLDivElement> & { children: import('svelte').Snippet };
+</script>
 
-  let { children, class: extraClass = '', ...rest }: Props = $props();
+<script lang="ts">
+  let { children, class: extraClass = '', ...rest }: CardFooterProps = $props();
 </script>
 
 <div class={extraClass} {...rest}>

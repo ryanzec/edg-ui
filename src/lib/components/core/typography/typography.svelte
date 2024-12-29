@@ -1,4 +1,6 @@
 <script module lang="ts">
+  import type { HTMLAttributes } from 'svelte/elements';
+
   export enum TypographyColor {
     DEFAULT = 'default',
     BRAND = 'brand',
@@ -8,21 +10,26 @@
     WARNING = 'warning',
     DANGER = 'danger',
   }
-</script>
 
-<script lang="ts">
-  import type { HTMLAttributes } from 'svelte/elements';
-  import { tailwindUtils } from '$lib/utils/tailwind';
-
-  type Props<TElementType extends keyof HTMLElementTagNameMap = 'div'> = HTMLAttributes<
+  export type TypographyProps<TElementType extends keyof HTMLElementTagNameMap = 'div'> = HTMLAttributes<
     HTMLElementTagNameMap[TElementType]
   > & {
     tag?: TElementType;
     children?: import('svelte').Snippet;
     color?: TypographyColor;
   };
+</script>
 
-  let { tag = 'div', children, color = TypographyColor.DEFAULT, class: extraClass = '', ...rest }: Props = $props();
+<script lang="ts">
+  import { tailwindUtils } from '$lib/utils/tailwind';
+
+  let {
+    tag = 'div',
+    children,
+    color = TypographyColor.DEFAULT,
+    class: extraClass = '',
+    ...rest
+  }: TypographyProps = $props();
 </script>
 
 <svelte:element

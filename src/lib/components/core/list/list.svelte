@@ -1,20 +1,21 @@
 <script module lang="ts">
+  import type { HTMLAttributes } from 'svelte/elements';
+
   export enum ListShape {
     SQUARE = 'square',
     ROUNDED = 'rounded',
   }
-</script>
 
-<script lang="ts">
-  import type { HTMLAttributes } from 'svelte/elements';
-  import { tailwindUtils } from '$lib/utils/tailwind';
-
-  type Props = HTMLAttributes<HTMLUListElement> & {
+  export type ListProps = HTMLAttributes<HTMLUListElement> & {
     children: import('svelte').Snippet;
     shape?: ListShape;
   };
+</script>
 
-  let { children, shape = ListShape.SQUARE, class: extraClass = '', ...rest }: Props = $props();
+<script lang="ts">
+  import { tailwindUtils } from '$lib/utils/tailwind';
+
+  let { children, shape = ListShape.SQUARE, class: extraClass = '', ...rest }: ListProps = $props();
 </script>
 
 <ul

@@ -1,4 +1,6 @@
 <script module lang="ts">
+  import { type IconName } from '$lib/components/core/icons/utils';
+
   export enum IconSize {
     EXTRA_SMALL = 'extra-small',
     SMALL = 'small',
@@ -20,20 +22,20 @@
     WARNING = 'warning',
     DANGER = 'danger',
   }
-</script>
 
-<script lang="ts">
-  import { iconComponents, type IconName } from '$lib/components/core/icons/utils';
-  import type { HTMLAttributes } from 'svelte/elements';
-  import { tailwindUtils } from '$lib/utils/tailwind';
-
-  type Props = HTMLAttributes<HTMLDivElement> & {
+  export type IconProps = HTMLAttributes<HTMLDivElement> & {
     icon: IconName;
     size?: IconSize;
     color?: IconColor;
   };
+</script>
 
-  let { icon, size = IconSize.BASE, class: extraClass = '', color = IconColor.DEFAULT, ...rest }: Props = $props();
+<script lang="ts">
+  import { iconComponents } from '$lib/components/core/icons/utils';
+  import type { HTMLAttributes } from 'svelte/elements';
+  import { tailwindUtils } from '$lib/utils/tailwind';
+
+  let { icon, size = IconSize.BASE, class: extraClass = '', color = IconColor.DEFAULT, ...rest }: IconProps = $props();
 </script>
 
 {#if icon}

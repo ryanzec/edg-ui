@@ -1,13 +1,7 @@
 <script module lang="ts">
   export type CheckboxValue = boolean | 'indeterminate';
-</script>
 
-<script lang="ts">
-  import { stringUtils } from '$lib/utils/string';
-  import Icon, { IconSize, IconColor } from '$lib/components/core/icons/icon.svelte';
-  import type { HTMLAttributes } from 'svelte/elements';
-
-  type Props = HTMLAttributes<HTMLInputElement> & {
+  export type CheckboxProps = HTMLAttributes<HTMLInputElement> & {
     checked: boolean;
     name: string;
     id?: string;
@@ -16,6 +10,12 @@
     showLabel?: boolean;
     indeterminate?: boolean;
   };
+</script>
+
+<script lang="ts">
+  import { stringUtils } from '$lib/utils/string';
+  import Icon, { IconSize, IconColor } from '$lib/components/core/icons/icon.svelte';
+  import type { HTMLAttributes } from 'svelte/elements';
 
   let {
     checked = $bindable(),
@@ -26,7 +26,7 @@
     showLabel = true,
     indeterminate = false,
     ...rest
-  }: Props = $props();
+  }: CheckboxProps = $props();
 </script>
 
 <label data-id="checkbox" class="gap-2xs flex cursor-pointer items-center" for={id} id="{value}-label">

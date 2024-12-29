@@ -1,10 +1,12 @@
-<script lang="ts" generics="TFormData">
+<script module lang="ts">
   import type { WithFormFieldErrors } from '$lib/stores/form-manager.store';
   import type { HTMLAttributes } from 'svelte/elements';
 
-  type Props = HTMLAttributes<HTMLDivElement> & { error: WithFormFieldErrors | undefined };
+  export type ValidationMessagesProps = HTMLAttributes<HTMLDivElement> & { error: WithFormFieldErrors | undefined };
+</script>
 
-  let { error, ...rest }: Props = $props();
+<script lang="ts">
+  let { error, ...rest }: ValidationMessagesProps = $props();
 </script>
 
 {#if error?.errors && error.errors.length > 0}

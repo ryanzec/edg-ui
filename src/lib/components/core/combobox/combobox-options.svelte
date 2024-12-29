@@ -1,16 +1,14 @@
-<script lang="ts" generics="TOptionValue extends { display: string; value: string; }">
-  import ComboboxClearOption from '$lib/components/core/combobox/combobox-clear-option.svelte';
-  import ComboboxOptionsGroup from '$lib/components/core/combobox/combobox-options-group.svelte';
-
+<script module lang="ts">
   import type { ComboboxStore } from '$lib/components/core/combobox/store';
-
-  /* global TOptionValue */
   import type { ComboboxOptionComponent, ComboboxOptionsActionOptions } from '$lib/components/core/combobox/utils';
-  import Icon from '$lib/components/core/icons/icon.svelte';
-  import type { rest } from 'lodash-es';
   import type { HTMLAttributes } from 'svelte/elements';
 
-  type Props = HTMLAttributes<HTMLDivElement> & {
+  export type ComboboxOptionsProps<
+    TOptionValue extends {
+      display: string;
+      value: string;
+    },
+  > = HTMLAttributes<HTMLDivElement> & {
     options: TOptionValue[];
     groupedOptions?: Record<string, TOptionValue[]> | undefined;
     optionsAction: ComboboxStore<TOptionValue>['optionsAction'];
@@ -23,6 +21,13 @@
     clearOptionDisplay?: string;
     clearOptionAction?: ComboboxStore<TOptionValue>['clearOptionAction'] | undefined;
   };
+</script>
+
+<script lang="ts" generics="TOptionValue extends { display: string; value: string; }">
+  import ComboboxClearOption from '$lib/components/core/combobox/combobox-clear-option.svelte';
+  import ComboboxOptionsGroup from '$lib/components/core/combobox/combobox-options-group.svelte';
+  import Icon from '$lib/components/core/icons/icon.svelte';
+  /* global TOptionValue */
 
   let {
     options,
@@ -37,7 +42,7 @@
     clearOptionDisplay = '',
     clearOptionAction = undefined,
     ...rest
-  }: Props = $props();
+  }: ComboboxOptionsProps<TOptionValue> = $props();
 
   // we need the correct element index in order for the combobox options to work properly so this handle
   // tracking the offsets when groups are used since there are extra elements that does count

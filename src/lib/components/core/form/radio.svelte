@@ -1,16 +1,19 @@
-<script lang="ts">
-  import { stringUtils } from '$lib/utils/string';
-  import Icon, { IconColor } from '$lib/components/core/icons/icon.svelte';
+<script module lang="ts">
   import type { HTMLAttributes } from 'svelte/elements';
 
-  type Props = HTMLAttributes<HTMLInputElement> & {
+  export type RadioProps = HTMLAttributes<HTMLInputElement> & {
     group: string;
     name: string;
     id?: string;
     value: string;
   };
+</script>
 
-  let { group = $bindable(), name, id = name, value, ...rest }: Props = $props();
+<script lang="ts">
+  import { stringUtils } from '$lib/utils/string';
+  import Icon, { IconColor } from '$lib/components/core/icons/icon.svelte';
+
+  let { group = $bindable(), name, id = name, value, ...rest }: RadioProps = $props();
 </script>
 
 <label class="flex items-center" for={id} id="{value}-label">

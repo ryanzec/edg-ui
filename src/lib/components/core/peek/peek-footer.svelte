@@ -1,9 +1,11 @@
-<script lang="ts">
+<script module lang="ts">
   import type { HTMLAttributes } from 'svelte/elements';
 
-  type Props = HTMLAttributes<HTMLDivElement> & { children?: import('svelte').Snippet };
+  export type PeekFooterProps = HTMLAttributes<HTMLDivElement> & { children?: import('svelte').Snippet };
+</script>
 
-  let { children, ...rest }: Props = $props();
+<script lang="ts">
+  let { children, ...rest }: PeekFooterProps = $props();
 </script>
 
 <div data-id="footer" class="gap-xs border-outline p-base flex justify-end border-t" {...rest}>

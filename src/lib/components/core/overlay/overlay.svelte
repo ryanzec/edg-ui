@@ -1,13 +1,16 @@
-<script lang="ts">
+<script module lang="ts">
   import type { HTMLAttributes } from 'svelte/elements';
-  import { tailwindUtils } from '$lib/utils/tailwind';
 
-  type Props = HTMLAttributes<HTMLDivElement> & {
+  export type OverlayProps = HTMLAttributes<HTMLDivElement> & {
     children?: import('svelte').Snippet;
     isFixed?: boolean;
   };
+</script>
 
-  let { children, isFixed = true, class: extraClass = '', ...rest }: Props = $props();
+<script lang="ts">
+  import { tailwindUtils } from '$lib/utils/tailwind';
+
+  let { children, isFixed = true, class: extraClass = '', ...rest }: OverlayProps = $props();
 </script>
 
 <div

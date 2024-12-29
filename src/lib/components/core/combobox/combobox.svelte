@@ -1,29 +1,14 @@
-<script lang="ts" generics="TOptionValue extends { display: string; value: string; }">
-  import Badge from '$lib/components/core/badge/badge.svelte';
-
-  /* global TOptionValue */
-  import debounce from 'debounce';
-  import { keyPressedAction } from '$lib/actions/key-pressed-action';
-  import { domUtils } from '$lib/utils/dom';
-  import { createComboboxStore } from '$lib/components/core/combobox/store';
-  import Icon from '$lib/components/core/icons/icon.svelte';
-  import Label from '$lib/components/core/form/label.svelte';
-  import {
-    COMBOBOX_DEFAULT_DELAY,
-    comboboxComponentUtils,
-    type ComboboxOptionComponent,
-    type ComboboxOptionsActionOptions,
-  } from '$lib/components/core/combobox/utils';
-  import { writable, type Writable } from 'svelte/store';
-  import ComboboxOptions from '$lib/components/core/combobox/combobox-options.svelte';
-  import { clickOutsideAction } from '$lib/actions/click-outside-action';
-  import { tailwindUtils } from '$lib/utils/tailwind';
+<script module lang="ts">
+  import { type ComboboxOptionComponent, type ComboboxOptionsActionOptions } from '$lib/components/core/combobox/utils';
+  import { type Writable } from 'svelte/store';
   import type { HTMLAttributes } from 'svelte/elements';
 
-  // @todo(feature) character threshold
-  // @todo(feature) allow new value
-
-  type Props = HTMLAttributes<HTMLDivElement> & {
+  export type ComboboxProps<
+    TOptionValue extends {
+      display: string;
+      value: string;
+    },
+  > = HTMLAttributes<HTMLDivElement> & {
     label: string;
     placeholder?: string;
     // the `value` for each option must be unique for this to work properly
@@ -46,6 +31,26 @@
     onSelectedChanged?: ((selected: TOptionValue[]) => void) | undefined;
     class?: string;
   };
+</script>
+
+<script lang="ts" generics="TOptionValue extends { display: string; value: string; }">
+  import Badge from '$lib/components/core/badge/badge.svelte';
+
+  /* global TOptionValue */
+  import debounce from 'debounce';
+  import { keyPressedAction } from '$lib/actions/key-pressed-action';
+  import { domUtils } from '$lib/utils/dom';
+  import { createComboboxStore } from '$lib/components/core/combobox/store';
+  import Icon from '$lib/components/core/icons/icon.svelte';
+  import Label from '$lib/components/core/form/label.svelte';
+  import { COMBOBOX_DEFAULT_DELAY, comboboxComponentUtils } from '$lib/components/core/combobox/utils';
+  import { writable } from 'svelte/store';
+  import ComboboxOptions from '$lib/components/core/combobox/combobox-options.svelte';
+  import { clickOutsideAction } from '$lib/actions/click-outside-action';
+  import { tailwindUtils } from '$lib/utils/tailwind';
+
+  // @todo(feature) character threshold
+  // @todo(feature) allow new value
 
   let {
     label,
@@ -69,7 +74,7 @@
     onSelectedChanged = undefined,
     class: extraClass = '',
     ...rest
-  }: Props = $props();
+  }: ComboboxProps<TOptionValue> = $props();
 
   // this holds the input value that is actively being used (since there can be a delay in getting option asyncly)
   let activeInputValue = $state('');

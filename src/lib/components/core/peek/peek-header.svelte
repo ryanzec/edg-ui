@@ -1,16 +1,20 @@
-<script lang="ts">
-  import { melt, type AnyMeltElement } from '@melt-ui/svelte';
-  import Icon from '$lib/components/core/icons/icon.svelte';
-  import Button, { ButtonColor, ButtonShape, ButtonVariant } from '$lib/components/core/button/button.svelte';
+<script module lang="ts">
+  import { type AnyMeltElement } from '@melt-ui/svelte';
   import type { HTMLAttributes } from 'svelte/elements';
 
-  type Props = HTMLAttributes<HTMLHeadingElement> & {
+  export type PeekHeaderProps = HTMLAttributes<HTMLHeadingElement> & {
     meltTitle: AnyMeltElement;
     meltClose: AnyMeltElement;
     title: string;
   };
+</script>
 
-  let { meltTitle, meltClose, title, ...rest }: Props = $props();
+<script lang="ts">
+  import { melt } from '@melt-ui/svelte';
+  import Icon from '$lib/components/core/icons/icon.svelte';
+  import Button, { ButtonColor, ButtonShape, ButtonVariant } from '$lib/components/core/button/button.svelte';
+
+  let { meltTitle, meltClose, title, ...rest }: PeekHeaderProps = $props();
 </script>
 
 <h2

@@ -13,7 +13,7 @@
   import { devNavigationStore } from '$lib/components/core/dev-navigation/store';
   import { page } from '$app/stores';
   import ScrollArea from '$lib/components/core/scroll-area/scroll-area.svelte';
-  import Button from '../button/button.svelte';
+  import Button from '$lib/components/core/button/button.svelte';
   import { applicationStore, ApplicationThemeMode } from '$lib/stores/application.store';
 
   type Props = { items?: DevNavigationItem[] };

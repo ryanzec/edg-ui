@@ -1,11 +1,9 @@
-<script lang="ts">
-  import { melt, type AnyMeltElement } from '@melt-ui/svelte';
+<script module lang="ts">
+  import { type AnyMeltElement } from '@melt-ui/svelte';
   import type { Writable } from 'svelte/store';
-  import MeltOverlay from '$lib/components/core/overlay/melt-overlay.svelte';
-  import { tailwindUtils } from '$lib/utils/tailwind';
   import type { HTMLAttributes } from 'svelte/elements';
 
-  type Props = HTMLAttributes<HTMLDivElement> & {
+  export type PeekProps = HTMLAttributes<HTMLDivElement> & {
     hasOverlay?: boolean;
     isOpened: Writable<boolean>;
     isResizable?: boolean;
@@ -17,6 +15,12 @@
     children?: import('svelte').Snippet;
     class?: string;
   };
+</script>
+
+<script lang="ts">
+  import { melt } from '@melt-ui/svelte';
+  import MeltOverlay from '$lib/components/core/overlay/melt-overlay.svelte';
+  import { tailwindUtils } from '$lib/utils/tailwind';
 
   let {
     hasOverlay = true,
@@ -30,7 +34,7 @@
     children,
     class: extraClass = '',
     ...rest
-  }: Props = $props();
+  }: PeekProps = $props();
 
   let peekElement: HTMLElement | undefined = $state();
   let xResizeLeft = 0;

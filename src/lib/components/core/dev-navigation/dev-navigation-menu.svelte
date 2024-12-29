@@ -3,7 +3,7 @@
   import { devNavigationStore } from '$lib/components/core/dev-navigation/store';
   import { page } from '$app/stores';
   import { goto } from '$app/navigation';
-  import DevNavigationMenuGroup from './dev-navigation-menu-group.svelte';
+  import DevNavigationMenuGroup from '$lib/components/core/dev-navigation/dev-navigation-menu-group.svelte';
   import { tailwindUtils } from '$lib/utils/tailwind';
 
   type Props = {

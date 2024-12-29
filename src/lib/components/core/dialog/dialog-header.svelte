@@ -1,17 +1,21 @@
-<script lang="ts">
-  import { melt, type AnyMeltElement } from '@melt-ui/svelte';
-  import Icon from '$lib/components/core/icons/icon.svelte';
+<script module lang="ts">
+  import { type AnyMeltElement } from '@melt-ui/svelte';
   import type { HTMLAttributes } from 'svelte/elements';
-  import { tailwindUtils } from '$lib/utils/tailwind';
-  import Button, { ButtonShape, ButtonVariant, ButtonColor } from '$lib/components/core/button/button.svelte';
 
-  type Props = HTMLAttributes<HTMLDivElement> & {
+  export type DialogHeaderProps = HTMLAttributes<HTMLDivElement> & {
     meltTitle: AnyMeltElement;
     meltClose: AnyMeltElement;
     title: string;
   };
+</script>
 
-  let { meltTitle, meltClose, title, class: extraClass = '', ...rest }: Props = $props();
+<script lang="ts">
+  import { melt } from '@melt-ui/svelte';
+  import Icon from '$lib/components/core/icons/icon.svelte';
+  import { tailwindUtils } from '$lib/utils/tailwind';
+  import Button, { ButtonShape, ButtonVariant, ButtonColor } from '$lib/components/core/button/button.svelte';
+
+  let { meltTitle, meltClose, title, class: extraClass = '', ...rest }: DialogHeaderProps = $props();
 </script>
 
 <div

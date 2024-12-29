@@ -1,21 +1,23 @@
-<script lang="ts">
-  import { melt, type AnyMeltElement } from '@melt-ui/svelte';
+<script module lang="ts">
+  import { type AnyMeltElement } from '@melt-ui/svelte';
   import type { Readable, Writable } from 'svelte/store';
-  import DropDownRadioItem from '$lib/components/core/drop-down/drop-down-radio-item.svelte';
   import type { HTMLAttributes } from 'svelte/elements';
 
-  // @todo need to figure out if there is a proper way to type this
-
-  type Props = HTMLAttributes<HTMLDivElement> & {
+  export type DropDownRadioGroupProps = HTMLAttributes<HTMLDivElement> & {
     meltRadioGroup: AnyMeltElement;
-
+    // @todo need to figure out if there is a proper way to type this
     meltRadioItem: any;
     isChecked: Readable<(option: string) => boolean>;
     options: string[];
     value: Writable<string>;
   };
+</script>
 
-  let { meltRadioGroup, meltRadioItem, isChecked, options, value, ...rest }: Props = $props();
+<script lang="ts">
+  import { melt } from '@melt-ui/svelte';
+  import DropDownRadioItem from '$lib/components/core/drop-down/drop-down-radio-item.svelte';
+
+  let { meltRadioGroup, meltRadioItem, isChecked, options, value, ...rest }: DropDownRadioGroupProps = $props();
 </script>
 
 <div data-id="radio-group" use:melt={$meltRadioGroup} class="flex flex-col" {...rest}>

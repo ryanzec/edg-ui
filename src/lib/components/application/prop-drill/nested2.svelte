@@ -1,7 +1,7 @@
 <script lang="ts">
   import Button from '$lib/components/core/button/button.svelte';
   import { getContext } from 'svelte';
-  import { PROP_DRILL_CONTEXT_KEY, type PropDrillContext } from './utils';
+  import { PROP_DRILL_CONTEXT_KEY, type PropDrillContext } from '$lib/components/application/prop-drill/utils';
 
   const componentContext = getContext<PropDrillContext | undefined>(PROP_DRILL_CONTEXT_KEY);
 </script>

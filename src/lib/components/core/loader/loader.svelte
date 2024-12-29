@@ -1,16 +1,19 @@
+<script module lang="ts">
+  import type { HTMLAttributes } from 'svelte/elements';
+
+  export type LoaderProps = HTMLAttributes<HTMLDivElement> & {
+    isActive: boolean;
+    isFixed?: boolean;
+  };
+</script>
+
 <script lang="ts">
   import Overlay from '$lib/components/core/overlay/overlay.svelte';
   import Callout, { CalloutColor, CalloutVariant } from '$lib/components/core/callout/callout.svelte';
   import LoaderIcon from '$lib/components/core/loader/loader-icon.svelte';
-  import type { HTMLAttributes } from 'svelte/elements';
   import { tailwindUtils } from '$lib/utils/tailwind';
 
-  type Props = HTMLAttributes<HTMLDivElement> & {
-    isActive: boolean;
-    isFixed?: boolean;
-  };
-
-  let { isActive, class: extraClass = '', isFixed = true, ...rest }: Props = $props();
+  let { isActive, class: extraClass = '', isFixed = true, ...rest }: LoaderProps = $props();
 </script>
 
 {#if isActive}

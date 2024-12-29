@@ -1,21 +1,22 @@
 <script module lang="ts">
-  export type CheckboxValue = boolean | 'indeterminate';
-</script>
-
-<script lang="ts">
-  import { stringUtils } from '$lib/utils/string';
-  import { tailwindUtils } from '$lib/utils/tailwind';
   import type { HTMLAttributes } from 'svelte/elements';
 
-  type Props = HTMLAttributes<HTMLInputElement> & {
+  export type CheckboxValue = boolean | 'indeterminate';
+
+  export type ToggleProps = HTMLAttributes<HTMLInputElement> & {
     checked: boolean;
     name: string;
     id?: string;
     value: string;
     label?: string;
   };
+</script>
 
-  let { checked = $bindable(), name, id = name, value, label = value, ...rest }: Props = $props();
+<script lang="ts">
+  import { stringUtils } from '$lib/utils/string';
+  import { tailwindUtils } from '$lib/utils/tailwind';
+
+  let { checked = $bindable(), name, id = name, value, label = value, ...rest }: ToggleProps = $props();
 
   const buttonCss = '';
 

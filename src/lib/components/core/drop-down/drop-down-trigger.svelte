@@ -1,19 +1,23 @@
-<script lang="ts">
-  import { clickOutsideAction } from '$lib/actions/click-outside-action';
-  import { melt, type AnyMeltElement } from '@melt-ui/svelte';
+<script module lang="ts">
+  import { type AnyMeltElement } from '@melt-ui/svelte';
   import { type WithGet } from '@melt-ui/svelte/internal/helpers';
   import type { HTMLAttributes } from 'svelte/elements';
   import { type Writable } from 'svelte/store';
 
-  type Props = HTMLAttributes<HTMLDivElement> & {
+  export type DropDownTriggerProps = HTMLAttributes<HTMLDivElement> & {
     id?: string;
     meltTrigger: AnyMeltElement;
     class?: string;
     isOpened: WithGet<Writable<boolean>>;
     children?: import('svelte').Snippet;
   };
+</script>
 
-  let { id, meltTrigger, class: extraClass = '', children, isOpened, ...rest }: Props = $props();
+<script lang="ts">
+  import { clickOutsideAction } from '$lib/actions/click-outside-action';
+  import { melt } from '@melt-ui/svelte';
+
+  let { id, meltTrigger, class: extraClass = '', children, isOpened, ...rest }: DropDownTriggerProps = $props();
 
   const handleClickOutside = () => {
     // while melt-ui is supposed to close the drop down on clicking outside of one, when you open a drop down

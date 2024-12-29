@@ -1,16 +1,19 @@
-<script lang="ts">
+<script module lang="ts">
   import type { HTMLAttributes } from 'svelte/elements';
-  import { tailwindUtils } from '$lib/utils/tailwind';
 
-  type Props = HTMLAttributes<HTMLTextAreaElement> & {
+  export type TextareaProps = HTMLAttributes<HTMLTextAreaElement> & {
     value?: string;
     name: string;
     id?: string;
     disabled?: boolean;
     readonly?: boolean;
   };
+</script>
 
-  let { value = $bindable(''), name, id = name, class: extraClass = '', ...rest }: Props = $props();
+<script lang="ts">
+  import { tailwindUtils } from '$lib/utils/tailwind';
+
+  let { value = $bindable(''), name, id = name, class: extraClass = '', ...rest }: TextareaProps = $props();
   let isEnabled = $derived(!rest.disabled && !rest.readonly);
 </script>
 

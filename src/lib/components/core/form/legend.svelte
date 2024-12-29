@@ -1,9 +1,11 @@
-<script lang="ts">
+<script module lang="ts">
   import type { HTMLAttributes } from 'svelte/elements';
 
-  type Props = HTMLAttributes<HTMLLegendElement> & { children?: import('svelte').Snippet };
+  export type LegendProps = HTMLAttributes<HTMLLegendElement> & { children?: import('svelte').Snippet };
+</script>
 
-  let { children, ...rest }: Props = $props();
+<script lang="ts">
+  let { children, ...rest }: LegendProps = $props();
 </script>
 
 <legend {...rest}>{@render children?.()}</legend>

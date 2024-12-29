@@ -1,10 +1,14 @@
-<script lang="ts">
-  import Callout, { CalloutColor, type CalloutProps } from '$lib/components/core/callout/callout.svelte';
+<script module lang="ts">
+  import { type CalloutProps } from '$lib/components/core/callout/callout.svelte';
   import type { Snippet } from 'svelte';
 
-  type Props = CalloutProps & { children?: Snippet };
+  export type FormErrorsProps = CalloutProps & { children?: Snippet };
+</script>
 
-  let { children, ...rest }: Props = $props();
+<script lang="ts">
+  import Callout, { CalloutColor } from '$lib/components/core/callout/callout.svelte';
+
+  let { children, ...rest }: FormErrorsProps = $props();
 </script>
 
 <Callout {...rest} color={CalloutColor.DANGER}>

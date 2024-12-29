@@ -1,10 +1,13 @@
-<script lang="ts">
+<script module lang="ts">
   import type { HTMLAttributes } from 'svelte/elements';
+
+  export type DialogFooterProps = HTMLAttributes<HTMLDivElement> & { children?: import('svelte').Snippet };
+</script>
+
+<script lang="ts">
   import { tailwindUtils } from '$lib/utils/tailwind';
 
-  type Props = HTMLAttributes<HTMLDivElement> & { children?: import('svelte').Snippet };
-
-  let { children, class: extraClass = '', ...rest }: Props = $props();
+  let { children, class: extraClass = '', ...rest }: DialogFooterProps = $props();
 </script>
 
 <div data-id="footer" class={tailwindUtils.merge('px-sm py-xs gap-xs flex justify-end', extraClass)} {...rest}>

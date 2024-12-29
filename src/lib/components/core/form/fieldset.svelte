@@ -1,9 +1,11 @@
-<script lang="ts">
+<script module lang="ts">
   import type { HTMLAttributes } from 'svelte/elements';
 
-  type Props = HTMLAttributes<HTMLFieldSetElement> & { children?: import('svelte').Snippet };
+  export type FieldsetProps = HTMLAttributes<HTMLFieldSetElement> & { children?: import('svelte').Snippet };
+</script>
 
-  let { children, ...rest }: Props = $props();
+<script lang="ts">
+  let { children, ...rest }: FieldsetProps = $props();
 </script>
 
 <fieldset {...rest}>{@render children?.()}</fieldset>

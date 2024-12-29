@@ -1,16 +1,18 @@
-<script lang="ts" generics="TActionOptions">
+<script module lang="ts">
   import type { HTMLAttributes } from 'svelte/elements';
-  /* global TActionOptions */
 
-  import { tailwindUtils } from '$lib/utils/tailwind';
-
-  type Props = HTMLAttributes<HTMLLabelElement> & {
+  export type LabelProps<TActionOptions> = HTMLAttributes<HTMLLabelElement> & {
     use?: (element: HTMLLabelElement, options?: TActionOptions) => void;
     useOptions?: TActionOptions | undefined;
     for?: string | undefined;
     class?: string;
     children?: import('svelte').Snippet;
   };
+</script>
+
+<script lang="ts" generics="TActionOptions">
+  /* global TActionOptions */
+  import { tailwindUtils } from '$lib/utils/tailwind';
 
   let {
     use = () => {},
@@ -19,7 +21,7 @@
     class: extraClass = '',
     children,
     ...rest
-  }: Props = $props();
+  }: LabelProps<TActionOptions> = $props();
 </script>
 
 <label use:use={useOptions} for={forName} class={tailwindUtils.merge('inline-block w-full', extraClass)} {...rest}>

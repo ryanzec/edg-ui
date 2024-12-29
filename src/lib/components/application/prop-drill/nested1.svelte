@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Nested2 from './nested2.svelte';
+  import Nested2 from '$lib/components/application/prop-drill/nested2.svelte';
 </script>
 
 <Nested2 />

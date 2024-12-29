@@ -1,18 +1,20 @@
-<script lang="ts">
+<script module lang="ts">
   import type { Writable } from 'svelte/store';
-  import Icon from '$lib/components/core/icons/icon.svelte';
-  import DropDownItem, { type DropDownItemProps } from '$lib/components/core/drop-down/drop-down-item.svelte';
+  import { type DropDownItemProps } from '$lib/components/core/drop-down/drop-down-item.svelte';
 
-  // @todo need to figure out if there is a proper way to type this
-
-  type Props = DropDownItemProps & {
+  export type DropDownCheckboxItemProps = DropDownItemProps & {
     checked: Writable<boolean>;
     closeOnClick?: boolean;
     children?: import('svelte').Snippet;
     rightContent?: import('svelte').Snippet;
   };
+</script>
 
-  let { checked, closeOnClick = false, children, rightContent, ...rest }: Props = $props();
+<script lang="ts">
+  import Icon from '$lib/components/core/icons/icon.svelte';
+  import DropDownItem from '$lib/components/core/drop-down/drop-down-item.svelte';
+
+  let { checked, closeOnClick = false, children, rightContent, ...rest }: DropDownCheckboxItemProps = $props();
 
   // because the default behaviour for checkbox drop down elements includ setting the checked state, in order to
   // be able to make the drop down not close on click, we need to manually apply that functionality

@@ -1,11 +1,8 @@
-<script lang="ts">
+<script module lang="ts">
   import type { Readable, Writable } from 'svelte/store';
-  import DropDownItem, { type DropDownItemProps } from '$lib/components/core/drop-down/drop-down-item.svelte';
-  import Icon from '$lib/components/core/icons/icon.svelte';
+  import { type DropDownItemProps } from '$lib/components/core/drop-down/drop-down-item.svelte';
 
-  // @todo need to figure out if there is a proper way to type this
-
-  type Props = DropDownItemProps & {
+  type DropDownRadioItemProps = DropDownItemProps & {
     isChecked: Readable<(option: string) => boolean>;
     option: string;
     closeOnClick?: boolean;
@@ -13,8 +10,21 @@
     children?: import('svelte').Snippet;
     rightContent?: import('svelte').Snippet;
   };
+</script>
 
-  let { isChecked, option, closeOnClick = false, value, children, rightContent, ...rest }: Props = $props();
+<script lang="ts">
+  import DropDownItem from '$lib/components/core/drop-down/drop-down-item.svelte';
+  import Icon from '$lib/components/core/icons/icon.svelte';
+
+  let {
+    isChecked,
+    option,
+    closeOnClick = false,
+    value,
+    children,
+    rightContent,
+    ...rest
+  }: DropDownRadioItemProps = $props();
 
   // because the default behaviour for radio drop down elements include setting the checked state, in order to
   // be able to make the drop down not close on click, we need to manually apply that functionality

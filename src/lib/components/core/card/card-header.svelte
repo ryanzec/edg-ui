@@ -1,15 +1,18 @@
-<script lang="ts">
+<script module lang="ts">
   import type { Snippet } from 'svelte';
   import type { HTMLAttributes } from 'svelte/elements';
-  import { tailwindUtils } from '$lib/utils/tailwind';
 
-  type Props = HTMLAttributes<HTMLDivElement> & {
+  export type CardHeaderProps = HTMLAttributes<HTMLDivElement> & {
     preItem?: Snippet;
     postItem?: Snippet;
     label: string;
   };
+</script>
 
-  let { preItem, postItem, label, class: extraClass = '', ...rest }: Props = $props();
+<script lang="ts">
+  import { tailwindUtils } from '$lib/utils/tailwind';
+
+  let { preItem, postItem, label, class: extraClass = '', ...rest }: CardHeaderProps = $props();
 </script>
 
 <div class={tailwindUtils.merge('gap-xs tracking-x flex items-center text-xl font-semibold', extraClass)} {...rest}>

@@ -1,14 +1,17 @@
-<script lang="ts">
+<script module lang="ts">
   import type { PartialOptions } from 'overlayscrollbars';
-  import { OverlayScrollbarsComponent } from 'overlayscrollbars-svelte';
 
-  type Props = {
+  export type ScrollAreaProps = {
     options?: PartialOptions;
     class?: string;
     children?: import('svelte').Snippet;
   };
+</script>
 
-  let { options = {}, class: extraClass = '', children }: Props = $props();
+<script lang="ts">
+  import { OverlayScrollbarsComponent } from 'overlayscrollbars-svelte';
+
+  let { options = {}, class: extraClass = '', children }: ScrollAreaProps = $props();
 
   const defaultOptions: PartialOptions = { scrollbars: { autoHideDelay: 100 } };
 </script>

@@ -1,12 +1,14 @@
-<script lang="ts">
+<script module lang="ts">
   import type { HTMLAttributes } from 'svelte/elements';
 
-  type Props = HTMLAttributes<HTMLDivElement> & {
+  export type TooltipContentProps = HTMLAttributes<HTMLDivElement> & {
     class?: string;
     children?: import('svelte').Snippet;
   };
+</script>
 
-  let { class: extraClass = '', children, ...rest }: Props = $props();
+<script lang="ts">
+  let { class: extraClass = '', children, ...rest }: TooltipContentProps = $props();
 </script>
 
 <div

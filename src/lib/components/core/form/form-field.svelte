@@ -1,15 +1,18 @@
-<script lang="ts">
-  import ValidationMessages from '$lib/components/core/form/validation-messages.svelte';
+<script module lang="ts">
   import type { WithFormFieldErrors } from '$lib/stores/form-manager.store';
   import type { HTMLAttributes } from 'svelte/elements';
-  import { tailwindUtils } from '$lib/utils/tailwind';
 
-  type Props = HTMLAttributes<HTMLDivElement> & {
+  export type FormFieldProps = HTMLAttributes<HTMLDivElement> & {
     error?: WithFormFieldErrors | undefined;
     children?: import('svelte').Snippet;
   };
+</script>
 
-  let { error = undefined, children, class: extraClass = '', ...rest }: Props = $props();
+<script lang="ts">
+  import ValidationMessages from '$lib/components/core/form/validation-messages.svelte';
+  import { tailwindUtils } from '$lib/utils/tailwind';
+
+  let { error = undefined, children, class: extraClass = '', ...rest }: FormFieldProps = $props();
 </script>
 
 <div

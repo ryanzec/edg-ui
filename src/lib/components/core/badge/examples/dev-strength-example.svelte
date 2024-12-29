@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Badge, { BadgeColor, BadgeVariant } from '../badge.svelte';
+  import Badge, { BadgeColor, BadgeVariant } from '$lib/components/core/badge/badge.svelte';
 </script>
 
 <div class="gap-xs flex flex-col items-start">

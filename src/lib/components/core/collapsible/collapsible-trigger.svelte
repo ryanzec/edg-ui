@@ -1,15 +1,19 @@
-<script lang="ts">
-  import { melt, type AnyMeltElement } from '@melt-ui/svelte';
-  import { tailwindUtils } from '$lib/utils/tailwind.js';
+<script module lang="ts">
+  import { type AnyMeltElement } from '@melt-ui/svelte';
   import type { HTMLAttributes } from 'svelte/elements';
 
-  type Props = HTMLAttributes<HTMLButtonElement> & {
+  export type CollapibleTriggerProps = HTMLAttributes<HTMLButtonElement> & {
     meltTrigger: AnyMeltElement;
     children?: import('svelte').Snippet;
     class?: string;
   };
+</script>
 
-  let { meltTrigger, children, class: extraClass = '', ...rest }: Props = $props();
+<script lang="ts">
+  import { melt } from '@melt-ui/svelte';
+  import { tailwindUtils } from '$lib/utils/tailwind';
+
+  let { meltTrigger, children, class: extraClass = '', ...rest }: CollapibleTriggerProps = $props();
 </script>
 
 <button

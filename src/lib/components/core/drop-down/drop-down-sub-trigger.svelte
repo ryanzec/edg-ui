@@ -1,10 +1,14 @@
+<script module lang="ts">
+  import { type DropDownItemProps } from '$lib/components/core/drop-down/drop-down-item.svelte';
+
+  export type DropDownSubTriggerProps = DropDownItemProps & { children?: import('svelte').Snippet };
+</script>
+
 <script lang="ts">
-  import DropDownItem, { type DropDownItemProps } from '$lib/components/core/drop-down/drop-down-item.svelte';
+  import DropDownItem from '$lib/components/core/drop-down/drop-down-item.svelte';
   import Icon from '$lib/components/core/icons/icon.svelte';
 
-  type Props = DropDownItemProps & { children?: import('svelte').Snippet };
-
-  let { children, ...rest }: Props = $props();
+  let { children, ...rest }: DropDownSubTriggerProps = $props();
 </script>
 
 <DropDownItem data-id="sub-trigger" {...rest}>

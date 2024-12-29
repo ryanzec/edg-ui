@@ -1,12 +1,9 @@
-<script lang="ts">
-  import { melt, type AnyMeltElement } from '@melt-ui/svelte';
+<script module lang="ts">
+  import { type AnyMeltElement } from '@melt-ui/svelte';
   import type { Writable } from 'svelte/store';
-  import MeltOverlay from '$lib/components/core/overlay/melt-overlay.svelte';
-  import { tailwindUtils } from '$lib/utils/tailwind';
   import type { HTMLAttributes } from 'svelte/elements';
-  import { onDestroy } from 'svelte';
 
-  type Props = HTMLAttributes<HTMLDivElement> & {
+  export type DialogProps = HTMLAttributes<HTMLDivElement> & {
     isOpened: Writable<boolean>;
     meltPortalled: AnyMeltElement;
     meltOverlay: AnyMeltElement;
@@ -15,6 +12,13 @@
     onClosed?: () => void;
     children?: import('svelte').Snippet;
   };
+</script>
+
+<script lang="ts">
+  import { melt } from '@melt-ui/svelte';
+  import MeltOverlay from '$lib/components/core/overlay/melt-overlay.svelte';
+  import { tailwindUtils } from '$lib/utils/tailwind';
+  import { onDestroy } from 'svelte';
 
   let {
     isOpened,
@@ -26,7 +30,7 @@
     children,
     class: extraClass = '',
     ...rest
-  }: Props = $props();
+  }: DialogProps = $props();
 
   let dialogContainerElement: HTMLElement | undefined = $state();
 

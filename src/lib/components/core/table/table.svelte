@@ -18,7 +18,7 @@
 
 <script lang="ts">
   import { tailwindUtils } from '$lib/utils/tailwind';
-  import ScrollArea from '../scroll-area/scroll-area.svelte';
+  import ScrollArea from '$lib/components/core/scroll-area/scroll-area.svelte';
 
   let {
     children,

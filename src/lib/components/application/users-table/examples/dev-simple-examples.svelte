@@ -1,5 +1,5 @@
 <script>
-  import UsersTable from '../users-table.svelte';
+  import UsersTable from '$lib/components/application/users-table/users-table.svelte';
 </script>
 
 <div>

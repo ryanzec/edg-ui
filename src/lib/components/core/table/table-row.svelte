@@ -13,8 +13,8 @@
 
 <script lang="ts">
   import { tailwindUtils } from '$lib/utils/tailwind';
-  import Checkbox from '../form/checkbox.svelte';
-  import TableData from './table-data.svelte';
+  import Checkbox from '$lib/components/core/form/checkbox.svelte';
+  import TableData from '$lib/components/core/table/table-data.svelte';
 
   let {
     children,

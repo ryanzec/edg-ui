@@ -13,7 +13,6 @@
     shape?: ButtonShape;
     meltAction: AnyMeltElement;
 
-    class?: string;
     preItem?: import('svelte').Snippet;
     children?: import('svelte').Snippet;
     postItem?: import('svelte').Snippet;

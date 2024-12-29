@@ -1,9 +1,11 @@
-<script lang="ts">
+<script module lang="ts">
   import type { HTMLAttributes } from 'svelte/elements';
 
-  type Props = HTMLAttributes<HTMLSpanElement> & { children?: import('svelte').Snippet };
+  export type SelectLabelProps = HTMLAttributes<HTMLSpanElement> & { children?: import('svelte').Snippet };
+</script>
 
-  let { children, ...rest }: Props = $props();
+<script lang="ts">
+  let { children, ...rest }: SelectLabelProps = $props();
 </script>
 
 <span {...rest}>{@render children?.()}</span>
