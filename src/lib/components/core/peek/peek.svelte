@@ -13,7 +13,6 @@
     onOpened?: () => void;
     onClosed?: () => void;
     children?: import('svelte').Snippet;
-    class?: string;
   };
 </script>
 

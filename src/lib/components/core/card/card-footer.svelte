@@ -5,9 +5,9 @@
 </script>
 
 <script lang="ts">
-  let { children, class: extraClass = '', ...rest }: CardFooterProps = $props();
+  let { children, ...rest }: CardFooterProps = $props();
 </script>
 
-<div class={extraClass} {...rest}>
+<div {...rest}>
   {@render children()}
 </div>

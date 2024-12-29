@@ -10,10 +10,9 @@
     isNested?: boolean;
     items?: DevNavigationItem[];
     parent?: string;
-    class?: string;
   };
 
-  let { isNested = false, items = [], parent = '', class: extraClass = '' }: Props = $props();
+  let { isNested = false, items = [], parent = '' }: Props = $props();
 
   const handleDisplayComponent = (item: DevNavigationItem) => {
     devNavigationStore.setActiveComponent(item.component);
@@ -25,7 +24,7 @@
 </script>
 
 <div
-  class={tailwindUtils.merge('border-outline flex flex-1 flex-col', extraClass, {
+  class={tailwindUtils.merge('border-outline p-sm flex flex-1 flex-col', {
     'border-r': isNested === false,
     'ml-xs': isNested,
     'w-[200px]': isNested === false,

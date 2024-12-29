@@ -13,14 +13,18 @@
   import { melt } from '@melt-ui/svelte';
   import Icon from '$lib/components/core/icons/icon.svelte';
   import Button, { ButtonColor, ButtonShape, ButtonVariant } from '$lib/components/core/button/button.svelte';
+  import { tailwindUtils } from '$lib/utils/tailwind';
 
-  let { meltTitle, meltClose, title, ...rest }: PeekHeaderProps = $props();
+  let { meltTitle, meltClose, title, class: extraClass = '', ...rest }: PeekHeaderProps = $props();
 </script>
 
 <h2
   data-id="header"
   use:melt={$meltTitle}
-  class="border-outline p-base flex items-center justify-between border-b text-xl font-semibold"
+  class={tailwindUtils.merge(
+    'border-outline p-base flex items-center justify-between border-b text-xl font-semibold',
+    extraClass,
+  )}
   {...rest}
 >
   {title}

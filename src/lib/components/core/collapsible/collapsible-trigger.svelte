@@ -5,7 +5,6 @@
   export type CollapibleTriggerProps = HTMLAttributes<HTMLButtonElement> & {
     meltTrigger: AnyMeltElement;
     children?: import('svelte').Snippet;
-    class?: string;
   };
 </script>
 

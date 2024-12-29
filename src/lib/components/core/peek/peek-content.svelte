@@ -5,7 +5,9 @@
 </script>
 
 <script lang="ts">
-  let { children, ...rest }: PeekContentProps = $props();
+  import { tailwindUtils } from '$lib/utils/tailwind';
+
+  let { children, class: extraClass = '', ...rest }: PeekContentProps = $props();
 </script>
 
-<div data-id="content" class="p-base flex-1" {...rest}>{@render children?.()}</div>
+<div data-id="content" class={tailwindUtils.merge('p-base flex-1', extraClass)} {...rest}>{@render children?.()}</div>

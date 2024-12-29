@@ -16,7 +16,15 @@
   import { stringUtils } from '$lib/utils/string';
   import { tailwindUtils } from '$lib/utils/tailwind';
 
-  let { checked = $bindable(), name, id = name, value, label = value, ...rest }: ToggleProps = $props();
+  let {
+    checked = $bindable(),
+    name,
+    id = name,
+    value,
+    label = value,
+    class: extraClass = '',
+    ...rest
+  }: ToggleProps = $props();
 
   const buttonCss = '';
 
@@ -29,6 +37,7 @@
     data-id="inner"
     class={tailwindUtils.merge(
       'h-base inline-flex w-[32px] items-center rounded-full outline-hidden transition-colors duration-150',
+      extraClass,
       checkedBarCss,
       buttonCss,
     )}

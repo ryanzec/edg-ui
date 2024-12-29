@@ -6,9 +6,15 @@
 </script>
 
 <script lang="ts">
+  import { tailwindUtils } from '$lib/utils/tailwind';
   import { melt } from '@melt-ui/svelte';
 
-  let { meltSeparator, ...rest }: DropDownSeparatorProps = $props();
+  let { meltSeparator, class: extraClass = '', ...rest }: DropDownSeparatorProps = $props();
 </script>
 
-<div data-id="separator" use:melt={$meltSeparator} class="bg-outline m-2xs h-[1px]" {...rest}></div>
+<div
+  data-id="separator"
+  use:melt={$meltSeparator}
+  class={tailwindUtils.merge('bg-outline m-2xs h-[1px]', extraClass)}
+  {...rest}
+></div>

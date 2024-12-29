@@ -6,11 +6,13 @@
 </script>
 
 <script lang="ts">
-  let { error, ...rest }: ValidationMessagesProps = $props();
+  import { tailwindUtils } from '$lib/utils/tailwind';
+
+  let { error, class: extraClass = '', ...rest }: ValidationMessagesProps = $props();
 </script>
 
 {#if error?.errors && error.errors.length > 0}
-  <div data-id="validation-messages" class="text-danger" {...rest}>
+  <div data-id="validation-messages" class={tailwindUtils.merge('text-danger', extraClass)} {...rest}>
     {#each error.errors as errorMessage}
       <div data-id="message">{errorMessage}</div>
     {/each}

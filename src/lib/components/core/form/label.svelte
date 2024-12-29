@@ -5,7 +5,6 @@
     use?: (element: HTMLLabelElement, options?: TActionOptions) => void;
     useOptions?: TActionOptions | undefined;
     for?: string | undefined;
-    class?: string;
     children?: import('svelte').Snippet;
   };
 </script>

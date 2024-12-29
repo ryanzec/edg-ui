@@ -5,9 +5,15 @@
 </script>
 
 <script lang="ts">
-  let { children, ...rest }: PeekFooterProps = $props();
+  import { tailwindUtils } from '$lib/utils/tailwind';
+
+  let { children, class: extraClass = '', ...rest }: PeekFooterProps = $props();
 </script>
 
-<div data-id="footer" class="gap-xs border-outline p-base flex justify-end border-t" {...rest}>
+<div
+  data-id="footer"
+  class={tailwindUtils.merge('gap-xs border-outline p-base flex justify-end border-t', extraClass)}
+  {...rest}
+>
   {@render children?.()}
 </div>

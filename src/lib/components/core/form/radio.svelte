@@ -1,7 +1,7 @@
 <script module lang="ts">
   import type { HTMLAttributes } from 'svelte/elements';
 
-  export type RadioProps = HTMLAttributes<HTMLInputElement> & {
+  export type RadioProps = Omit<HTMLAttributes<HTMLInputElement>, 'class'> & {
     group: string;
     name: string;
     id?: string;

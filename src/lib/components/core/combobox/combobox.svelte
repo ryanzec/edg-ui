@@ -29,7 +29,6 @@
     optionsActionOptions?: ComboboxOptionsActionOptions;
     clearOptionDisplay?: string;
     onSelectedChanged?: ((selected: TOptionValue[]) => void) | undefined;
-    class?: string;
   };
 </script>
 

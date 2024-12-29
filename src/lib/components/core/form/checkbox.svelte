@@ -1,7 +1,7 @@
 <script module lang="ts">
   export type CheckboxValue = boolean | 'indeterminate';
 
-  export type CheckboxProps = HTMLAttributes<HTMLInputElement> & {
+  export type CheckboxProps = Omit<HTMLAttributes<HTMLInputElement>, 'class'> & {
     checked: boolean;
     name: string;
     id?: string;

@@ -17,6 +17,8 @@
 </script>
 
 <script lang="ts">
+  import { tailwindUtils } from '$lib/utils/tailwind';
+
   let {
     options,
     defaultDisplay = 'Select...',
@@ -24,6 +26,7 @@
     value = $bindable(),
     id = name,
     label,
+    class: extraClass = '',
     ...rest
   }: SelectProps = $props();
 </script>
@@ -36,7 +39,10 @@
   bind:value
   {name}
   {id}
-  class="border-outline bg-input-background hover:border-outline-active focus:border-outline-active px-xs py-2xs rounded-sm border outline-hidden"
+  class={tailwindUtils.merge(
+    'border-outline bg-input-background hover:border-outline-active focus:border-outline-active px-xs py-2xs rounded-sm border outline-hidden',
+    extraClass,
+  )}
   {...rest}
 >
   {#if defaultDisplay}

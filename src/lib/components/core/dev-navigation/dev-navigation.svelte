@@ -35,7 +35,7 @@
   <ScrollArea class="h-full">
     <div class="flex h-full flex-col">
       <Button onclick={handleToggleThemeMode}>Toggle Theme Mode</Button>
-      <DevNavigationMenu class="p-sm" {items} />
+      <DevNavigationMenu {items} />
     </div>
   </ScrollArea>
   <ScrollArea class="h-full flex-1">

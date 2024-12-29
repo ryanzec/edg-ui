@@ -1,19 +1,28 @@
-<script lang="ts">
-  import { melt, type AnyMeltElement } from '@melt-ui/svelte';
+<script module lang="ts">
+  import { type AnyMeltElement } from '@melt-ui/svelte';
   import type { HTMLAttributes } from 'svelte/elements';
 
-  type Props = HTMLAttributes<HTMLDivElement> & {
+  export type MeltOverlayProps = HTMLAttributes<HTMLDivElement> & {
     meltOverlay: AnyMeltElement;
     children?: import('svelte').Snippet;
+    isFixed?: boolean;
   };
+</script>
 
-  let { meltOverlay, children, ...rest }: Props = $props();
+<script lang="ts">
+  import { melt } from '@melt-ui/svelte';
+  import { tailwindUtils } from '$lib/utils/tailwind';
+
+  let { children, meltOverlay, isFixed = true, class: extraClass = '', ...rest }: MeltOverlayProps = $props();
 </script>
 
 <div
   data-id="overlay"
   use:melt={$meltOverlay}
-  class="bg-overlay-background/50 inset-none z-overlay fixed backdrop-blur-xs"
+  class={tailwindUtils.merge('bg-overlay-background/50 inset-none z-overlay backdrop-blur-xs', extraClass, {
+    fixed: isFixed,
+    absolute: !isFixed,
+  })}
   {...rest}
 >
   {@render children?.()}

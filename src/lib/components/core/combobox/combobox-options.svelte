@@ -27,6 +27,7 @@
   import ComboboxClearOption from '$lib/components/core/combobox/combobox-clear-option.svelte';
   import ComboboxOptionsGroup from '$lib/components/core/combobox/combobox-options-group.svelte';
   import Icon from '$lib/components/core/icons/icon.svelte';
+  import { tailwindUtils } from '$lib/utils/tailwind';
   /* global TOptionValue */
 
   let {
@@ -41,6 +42,7 @@
     optionsActionOptions = {},
     clearOptionDisplay = '',
     clearOptionAction = undefined,
+    class: extraClass = '',
     ...rest
   }: ComboboxOptionsProps<TOptionValue> = $props();
 
@@ -79,7 +81,10 @@
   tabindex="-1"
   data-id="options"
   use:optionsAction={optionsActionOptions}
-  class="bg-surface-pure z-combobox-options mt-3xs rounded-base absolute flex max-h-[300px] flex-col overflow-hidden overflow-y-auto border"
+  class={tailwindUtils.merge(
+    'bg-surface-pure z-combobox-options mt-3xs rounded-base absolute flex max-h-[300px] flex-col overflow-hidden overflow-y-auto border',
+    extraClass,
+  )}
   {...rest}
 >
   <div class="gap-none flex max-h-full flex-col">

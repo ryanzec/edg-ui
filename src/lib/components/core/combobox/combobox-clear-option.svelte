@@ -16,14 +16,24 @@
 <script lang="ts" generics="TOptionValue extends { display: string; value: string; }">
   /* global TOptionValue */
 
-  let { display = '', clearOptionAction, ...rest }: ComboboxClearOptionProps<TOptionValue> = $props();
+  import { tailwindUtils } from '$lib/utils/tailwind';
+
+  let {
+    display = '',
+    clearOptionAction,
+    class: extraClass = '',
+    ...rest
+  }: ComboboxClearOptionProps<TOptionValue> = $props();
 </script>
 
 {#if display}
   <li
     data-id="clear-option"
     use:clearOptionAction
-    class="data-combobox-drop-down-selected:bg-brand-subtle data-combobox-highlighted:bg-surface-tertiary scroll-my-xs gap-xs px-xs py-2xs data-disabled:opacity-disabled relative flex cursor-pointer items-center last:rounded-b-none"
+    class={tailwindUtils.merge(
+      'data-combobox-drop-down-selected:bg-brand-subtle data-combobox-highlighted:bg-surface-tertiary scroll-my-xs gap-xs px-xs py-2xs data-disabled:opacity-disabled relative flex cursor-pointer items-center last:rounded-b-none',
+      extraClass,
+    )}
     {...rest}
   >
     <div>

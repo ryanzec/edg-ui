@@ -41,7 +41,6 @@
     action?: Function;
     actionOptions?: any;
 
-    class?: string;
     preItem?: import('svelte').Snippet;
     children?: import('svelte').Snippet;
     postItem?: import('svelte').Snippet;

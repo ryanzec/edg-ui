@@ -21,7 +21,14 @@
   import { type Writable } from 'svelte/store';
   import { tailwindUtils } from '$lib/utils/tailwind';
 
-  let { meltMenu, isOpened, type = DropDownMenuType.MAIN, children, ...rest }: DropDownMenuProps = $props();
+  let {
+    meltMenu,
+    isOpened,
+    type = DropDownMenuType.MAIN,
+    children,
+    class: extraClass = '',
+    ...rest
+  }: DropDownMenuProps = $props();
 </script>
 
 {#if $isOpened}
@@ -29,6 +36,7 @@
     data-id="menu"
     class={tailwindUtils.merge(
       'border-outline bg-surface-pure z-drop-down rounded-base flex min-w-[220px] flex-col border ring-0 shadow-sm',
+      extraClass,
       {
         'shadow-lg': type === DropDownMenuType.MAIN,
         'shadow-md': type === DropDownMenuType.SUB,

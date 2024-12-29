@@ -8,7 +8,6 @@
     meltContent: AnyMeltElement;
     isOpened: Writable<boolean>;
     children?: import('svelte').Snippet;
-    class?: string;
   };
 </script>
 

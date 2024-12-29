@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { tailwindUtils } from '$lib/utils/tailwind';
   import type { HTMLAttributes } from 'svelte/elements';
 
   type Props = HTMLAttributes<HTMLDivElement> & {
@@ -7,7 +8,7 @@
     count?: number;
   };
 
-  let { label, src, count = 0, ...rest }: Props = $props();
+  let { label, src, count = 0, class: extraClass = '', ...rest }: Props = $props();
 
   let labelText = $state(label);
 
@@ -16,7 +17,13 @@
   }
 </script>
 
-<div {...rest} class="bg-brand text-surface-on-inverse h-[40px] w-[40px] overflow-hidden rounded-full border">
+<div
+  {...rest}
+  class={tailwindUtils.merge(
+    'bg-brand text-surface-on-inverse h-[40px] w-[40px] overflow-hidden rounded-full border',
+    extraClass,
+  )}
+>
   {#if src}
     <img class="h-full w-full object-cover" {src} alt={label} />
   {:else}

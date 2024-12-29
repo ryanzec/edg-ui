@@ -7,7 +7,6 @@
   export type DropDownTriggerProps = HTMLAttributes<HTMLDivElement> & {
     id?: string;
     meltTrigger: AnyMeltElement;
-    class?: string;
     isOpened: WithGet<Writable<boolean>>;
     children?: import('svelte').Snippet;
   };
@@ -15,6 +14,7 @@
 
 <script lang="ts">
   import { clickOutsideAction } from '$lib/actions/click-outside-action';
+  import { tailwindUtils } from '$lib/utils/tailwind';
   import { melt } from '@melt-ui/svelte';
 
   let { id, meltTrigger, class: extraClass = '', children, isOpened, ...rest }: DropDownTriggerProps = $props();
@@ -34,7 +34,7 @@
     callback: handleClickOutside,
   }}
   data-id="trigger"
-  class="inline-block {extraClass}"
+  class={tailwindUtils.merge('inline-block', extraClass)}
   {...rest}
 >
   {@render children?.()}
