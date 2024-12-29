@@ -5,17 +5,28 @@
 <script lang="ts">
   import { stringUtils } from '$lib/utils/string';
   import Icon, { IconSize, IconColor } from '$lib/components/core/icons/icon.svelte';
+  import type { HTMLAttributes } from 'svelte/elements';
 
-  type Props = {
+  type Props = HTMLAttributes<HTMLInputElement> & {
     checked: boolean;
     name: string;
     id?: string;
     value: string;
     label?: string;
+    showLabel?: boolean;
     indeterminate?: boolean;
   };
 
-  let { checked = $bindable(), name, id = name, value, label = value, indeterminate = false }: Props = $props();
+  let {
+    checked = $bindable(),
+    name,
+    id = name,
+    value,
+    label = value,
+    showLabel = true,
+    indeterminate = false,
+    ...rest
+  }: Props = $props();
 </script>
 
 <label data-id="checkbox" class="gap-2xs flex cursor-pointer items-center" for={id} id="{value}-label">
@@ -28,6 +39,8 @@
       <Icon icon="square" size={IconSize.FULL} />
     {/if}
   </span>
-  <input {id} {name} type="checkbox" {value} bind:checked class="hidden appearance-none" />
-  {stringUtils.toTitleCase(label)}
+  <input {id} {name} type="checkbox" {value} bind:checked class="hidden appearance-none" {...rest} />
+  {#if showLabel}
+    {stringUtils.toTitleCase(label)}
+  {/if}
 </label>

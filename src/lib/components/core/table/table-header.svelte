@@ -3,7 +3,7 @@
   import type { Snippet } from 'svelte';
   import type { HTMLAttributes } from 'svelte/elements';
 
-  export type TableHeaderProps = HTMLAttributes<HTMLTableCellElement> & { children: Snippet };
+  export type TableHeaderProps = HTMLAttributes<HTMLTableCellElement> & { children?: Snippet };
 </script>
 
 <script lang="ts">
@@ -12,8 +12,8 @@
 
 <th
   class={tailwindUtils.merge(
-    'bg-surface-pure p-xs border-outline bg-surface-tertiary text-left [:not(:last-child)]:border-r',
+    'p-xs border-outline bg-surface-tertiary text-left [:not(:last-child)]:border-r',
     extraClass,
   )}
-  {...rest}>{@render children()}</th
+  {...rest}>{@render children?.()}</th
 >

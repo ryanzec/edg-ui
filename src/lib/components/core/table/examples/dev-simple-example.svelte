@@ -15,8 +15,8 @@
   }
 </script>
 
-<div class="gap-sm flex flex-col">
-  <div class="w-[700px]">
+<div class="gap-sm flex w-[700px] flex-col">
+  <div>
     <div>Header / Footer</div>
     <Table>
       {#snippet tableHead()}
@@ -38,7 +38,7 @@
       {/snippet}
     </Table>
   </div>
-  <div class="w-[700px]">
+  <div>
     <div>No Header</div>
     <Table>
       {#each tableData as row}
@@ -53,7 +53,7 @@
       {/snippet}
     </Table>
   </div>
-  <div class="w-[700px]">
+  <div>
     <div>No Footer</div>
     <Table>
       {#snippet tableHead()}
@@ -72,7 +72,7 @@
       {/each}
     </Table>
   </div>
-  <div class="w-[700px]">
+  <div>
     <div>No Header / Footer</div>
     <Table>
       {#each tableData as row}

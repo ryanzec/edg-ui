@@ -15,3 +15,7 @@
 .table-container.rounded-sm:not(:has(.footer)) tbody tr:last-child td:last-child {
   @apply rounded-br-sm;
 }
+
+tr.is-selected td {
+  @apply bg-brand-subtle;
+}
