@@ -1,0 +1,17 @@
+.table-container.rounded-sm:has(thead) thead tr:first-child th:first-child,
+.table-container.rounded-sm:not(:has(thead)) tbody tr:first-child td:first-child {
+  @apply rounded-tl-sm;
+}
+
+.table-container.rounded-sm:has(thead) thead tr:first-child th:last-child,
+.table-container.rounded-sm:not(:has(thead)) tbody tr:first-child td:last-child {
+  @apply rounded-tr-sm;
+}
+
+.table-container.rounded-sm:not(:has(.footer)) tbody tr:last-child td:first-child {
+  @apply rounded-bl-sm;
+}
+
+.table-container.rounded-sm:not(:has(.footer)) tbody tr:last-child td:last-child {
+  @apply rounded-br-sm;
+}
