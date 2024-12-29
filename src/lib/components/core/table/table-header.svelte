@@ -12,7 +12,7 @@
 
 <th
   class={tailwindUtils.merge(
-    'p-xs border-outline bg-surface-tertiary text-left [:not(:last-child)]:border-r',
+    'p-xs bg-surface-tertiary border-outline border-b text-left [:not(:first-child)]:border-l',
     extraClass,
   )}
   {...rest}>{@render children?.()}</th

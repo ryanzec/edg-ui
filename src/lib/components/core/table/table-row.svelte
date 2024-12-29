@@ -27,12 +27,7 @@
   }: TableHeaderProps = $props();
 </script>
 
-<tr
-  class={tailwindUtils.merge('border-outline only:border-b [:not(:last-child)]:border-b', extraClass, {
-    'is-selected': isSelected,
-  })}
-  {...rest}
->
+<tr class={tailwindUtils.merge('border-outline', extraClass, { 'is-selected': isSelected })} {...rest}>
   {#if isSelectable && isSelected !== undefined && onSelected && id}
     <!-- setting thw width to 1px will make the table data element only take up the width of the content -->
     <TableData class="w-[1px]">

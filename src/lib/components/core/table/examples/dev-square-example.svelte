@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Table from '$lib/components/core/table/table.svelte';
+  import Table, { TableShape } from '$lib/components/core/table/table.svelte';
   import TableRow from '$lib/components/core/table/table-row.svelte';
   import TableData from '$lib/components/core/table/table-data.svelte';
   import TableHeader from '$lib/components/core/table/table-header.svelte';
@@ -18,7 +18,7 @@
 <div class="gap-sm flex w-[700px] flex-col">
   <div>
     <div>Header / Footer</div>
-    <Table>
+    <Table shape={TableShape.SQUARE}>
       {#snippet tableHead()}
         <TableRow>
           <TableHeader class="w-[200px]">Name</TableHeader>
@@ -40,7 +40,7 @@
   </div>
   <div>
     <div>No Header</div>
-    <Table>
+    <Table shape={TableShape.SQUARE}>
       {#each tableData as row}
         <TableRow>
           <TableData>{row.name}</TableData>
@@ -55,7 +55,7 @@
   </div>
   <div>
     <div>No Footer</div>
-    <Table>
+    <Table shape={TableShape.SQUARE}>
       {#snippet tableHead()}
         <TableRow>
           <TableHeader class="w-[200px]">Name</TableHeader>
@@ -74,7 +74,7 @@
   </div>
   <div>
     <div>No Header / Footer</div>
-    <Table>
+    <Table shape={TableShape.SQUARE}>
       {#each tableData as row}
         <TableRow>
           <TableData>{row.name}</TableData>

@@ -11,6 +11,6 @@
 </script>
 
 <td
-  class={tailwindUtils.merge('bg-surface-pure p-xs border-outline [:not(:last-child)]:border-r', extraClass)}
+  class={tailwindUtils.merge('bg-surface-pure p-xs border-outline border-b [:not(:first-child)]:border-l', extraClass)}
   {...rest}>{@render children()}</td
 >

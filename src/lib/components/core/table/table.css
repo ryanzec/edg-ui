@@ -16,6 +16,10 @@
   @apply rounded-br-sm;
 }
 
+.table-container:not(:has(.footer)) tbody tr:last-child td {
+  @apply border-b-0;
+}
+
 tr.is-selected td {
   @apply bg-brand-subtle;
 }
