@@ -3,8 +3,9 @@
   import type { Writable } from 'svelte/store';
   import MeltOverlay from '$lib/components/core/overlay/melt-overlay.svelte';
   import { tailwindUtils } from '$lib/utils/tailwind';
+  import type { HTMLAttributes } from 'svelte/elements';
 
-  type Props = {
+  type Props = HTMLAttributes<HTMLDivElement> & {
     hasOverlay?: boolean;
     isOpened: Writable<boolean>;
     isResizable?: boolean;
@@ -28,6 +29,7 @@
     onClosed,
     children,
     class: extraClass = '',
+    ...rest
   }: Props = $props();
 
   let peekElement: HTMLElement | undefined = $state();
@@ -112,7 +114,7 @@
 </script>
 
 {#if $isOpened}
-  <div data-id="peek" use:melt={$meltPortalled}>
+  <div data-id="peek" use:melt={$meltPortalled} {...rest}>
     {#if hasOverlay}<MeltOverlay {meltOverlay} />{/if}
     <div
       use:melt={$meltContent}

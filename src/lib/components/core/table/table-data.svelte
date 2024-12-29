@@ -12,5 +12,7 @@
 
 <td
   class={tailwindUtils.merge('bg-surface-pure p-xs border-outline border-b [:not(:first-child)]:border-l', extraClass)}
-  {...rest}>{@render children()}</td
+  {...rest}
 >
+  {@render children()}
+</td>

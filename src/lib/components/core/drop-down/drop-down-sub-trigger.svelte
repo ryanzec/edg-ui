@@ -1,17 +1,13 @@
 <script lang="ts">
-  import { type AnyMeltElement } from '@melt-ui/svelte';
-  import DropDownItem from '$lib/components/core/drop-down/drop-down-item.svelte';
+  import DropDownItem, { type DropDownItemProps } from '$lib/components/core/drop-down/drop-down-item.svelte';
   import Icon from '$lib/components/core/icons/icon.svelte';
 
-  type Props = {
-    subTrigger: AnyMeltElement;
-    children?: import('svelte').Snippet;
-  };
+  type Props = DropDownItemProps & { children?: import('svelte').Snippet };
 
-  let { subTrigger, children }: Props = $props();
+  let { children, ...rest }: Props = $props();
 </script>
 
-<DropDownItem data-id="sub-trigger" meltItem={$subTrigger}>
+<DropDownItem data-id="sub-trigger" {...rest}>
   {@render children?.()}
   {#snippet rightContent()}
     <div>

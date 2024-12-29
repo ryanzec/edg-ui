@@ -1,7 +1,9 @@
 <script lang="ts">
-  type Props = { children?: import('svelte').Snippet };
+  import type { HTMLAttributes } from 'svelte/elements';
 
-  let { children }: Props = $props();
+  type Props = HTMLAttributes<HTMLSpanElement> & { children?: import('svelte').Snippet };
+
+  let { children, ...rest }: Props = $props();
 </script>
 
-<span>{@render children?.()}</span>
+<span {...rest}>{@render children?.()}</span>

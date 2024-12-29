@@ -5,8 +5,9 @@
 <script lang="ts">
   import { stringUtils } from '$lib/utils/string';
   import { tailwindUtils } from '$lib/utils/tailwind';
+  import type { HTMLAttributes } from 'svelte/elements';
 
-  type Props = {
+  type Props = HTMLAttributes<HTMLInputElement> & {
     checked: boolean;
     name: string;
     id?: string;
@@ -14,7 +15,7 @@
     label?: string;
   };
 
-  let { checked = $bindable(), name, id = name, value, label = value }: Props = $props();
+  let { checked = $bindable(), name, id = name, value, label = value, ...rest }: Props = $props();
 
   const buttonCss = '';
 
@@ -35,6 +36,6 @@
       class={tailwindUtils.merge('bg-surface mx-3xs h-sm block w-sm rounded-full duration-150', checkedButtonCss)}
     ></div>
   </div>
-  <input {id} {name} type="checkbox" {value} bind:checked class="hidden appearance-none" />
+  <input {id} {name} type="checkbox" {value} bind:checked class="hidden appearance-none" {...rest} />
   {stringUtils.toTitleCase(label)}
 </label>

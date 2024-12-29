@@ -1,12 +1,12 @@
 <script lang="ts">
-  import Callout, { CalloutColor } from '$lib/components/core/callout/callout.svelte';
+  import Callout, { CalloutColor, type CalloutProps } from '$lib/components/core/callout/callout.svelte';
   import type { Snippet } from 'svelte';
 
-  type Props = { children?: Snippet };
+  type Props = CalloutProps & { children?: Snippet };
 
-  let { children }: Props = $props();
+  let { children, ...rest }: Props = $props();
 </script>
 
-<Callout color={CalloutColor.DANGER}>
+<Callout {...rest} color={CalloutColor.DANGER}>
   {@render children?.()}
 </Callout>

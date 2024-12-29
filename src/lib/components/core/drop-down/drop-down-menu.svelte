@@ -1,25 +1,27 @@
 <script module lang="ts">
+  import { type AnyMeltElement } from '@melt-ui/svelte';
+  import type { WithGet } from '@melt-ui/svelte/internal/helpers';
+  import type { HTMLAttributes } from 'svelte/elements';
+
   export enum DropDownMenuType {
     MAIN = 'main',
     SUB = 'sub',
   }
-</script>
 
-<script lang="ts">
-  import { melt, type AnyMeltElement } from '@melt-ui/svelte';
-  import { type Writable } from 'svelte/store';
-  import type { WithGet } from '@melt-ui/svelte/internal/helpers';
-  import type { HTMLAttributes } from 'svelte/elements';
-  import { tailwindUtils } from '$lib/utils/tailwind';
-
-  type Props = HTMLAttributes<HTMLDivElement> & {
+  export type DropDownMenuProps = HTMLAttributes<HTMLDivElement> & {
     meltMenu: AnyMeltElement;
     isOpened: WithGet<Writable<boolean>>;
     type?: DropDownMenuType;
     children?: import('svelte').Snippet;
   };
+</script>
 
-  let { meltMenu, isOpened, type = DropDownMenuType.MAIN, children, ...rest }: Props = $props();
+<script lang="ts">
+  import { melt } from '@melt-ui/svelte';
+  import { type Writable } from 'svelte/store';
+  import { tailwindUtils } from '$lib/utils/tailwind';
+
+  let { meltMenu, isOpened, type = DropDownMenuType.MAIN, children, ...rest }: DropDownMenuProps = $props();
 </script>
 
 {#if $isOpened}

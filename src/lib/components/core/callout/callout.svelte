@@ -1,4 +1,7 @@
 <script module lang="ts">
+  import type { HTMLAttributes } from 'svelte/elements';
+  import type { Snippet } from 'svelte';
+
   export enum CalloutVariant {
     FILLED = 'filled',
     WEAK = 'weak',
@@ -12,20 +15,18 @@
     WARNING = 'warning',
     DANGER = 'danger',
   }
-</script>
 
-<script lang="ts">
-  import { tailwindUtils } from '$lib/utils/tailwind';
-  import type { HTMLAttributes } from 'svelte/elements';
-  import type { Snippet } from 'svelte';
-
-  type Props = HTMLAttributes<HTMLDivElement> & {
+  export type CalloutProps = HTMLAttributes<HTMLDivElement> & {
     variant?: CalloutVariant;
     color?: CalloutColor;
     preItem?: Snippet;
     postItem?: Snippet;
     children: Snippet;
   };
+</script>
+
+<script lang="ts">
+  import { tailwindUtils } from '$lib/utils/tailwind';
 
   let {
     variant = CalloutVariant.WEAK,
@@ -34,7 +35,8 @@
     postItem,
     class: extraClass = '',
     children,
-  }: Props = $props();
+    ...rest
+  }: CalloutProps = $props();
 
   const colorCss: Record<CalloutVariant, Record<CalloutColor, string>> = {
     [CalloutVariant.WEAK]: {
@@ -63,6 +65,7 @@
     colorCss[variant][color],
     { ' border-l-[8px]': variant === CalloutVariant.WEAK },
   )}
+  {...rest}
 >
   {@render preItem?.()}
   {@render children()}

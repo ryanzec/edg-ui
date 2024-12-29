@@ -69,9 +69,9 @@
   <DropDownItem meltItem={$item} onclick={() => console.log('about melt ui')}>About Melt UI</DropDownItem>
   <DropDownItem meltItem={$item}>Check for Updates..</DropDownItem>
   <DropDownSeparator meltSeparator={separator} />
-  <DropDownCheckboxItem item={$checkboxItem} checked={settingsSync}>Settings Sync is On</DropDownCheckboxItem>
-  <DropDownSubTrigger {subTrigger}>Profiles</DropDownSubTrigger>
-  <DropDownSubMenu {subMenu} isOpened={subOpen}>
+  <DropDownCheckboxItem meltItem={$checkboxItem} checked={settingsSync}>Settings Sync is On</DropDownCheckboxItem>
+  <DropDownSubTrigger meltItem={subTrigger}>Profiles</DropDownSubTrigger>
+  <DropDownSubMenu meltMenu={subMenu} isOpened={subOpen}>
     <DropDownRadioGroupLabel>People</DropDownRadioGroupLabel>
     <DropDownRadioGroup
       meltRadioGroup={radioGroup}
@@ -82,7 +82,7 @@
     />
   </DropDownSubMenu>
   <DropDownSeparator meltSeparator={separator} />
-  <DropDownCheckboxItem item={$checkboxItemA} checked={hideMeltUI}>
+  <DropDownCheckboxItem meltItem={$checkboxItemA} checked={hideMeltUI}>
     Hide Melt UI
     {#snippet rightContent()}
       ⌘H

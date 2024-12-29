@@ -2,9 +2,10 @@
   import { clickOutsideAction } from '$lib/actions/click-outside-action';
   import { melt, type AnyMeltElement } from '@melt-ui/svelte';
   import { type WithGet } from '@melt-ui/svelte/internal/helpers';
+  import type { HTMLAttributes } from 'svelte/elements';
   import { type Writable } from 'svelte/store';
 
-  type Props = {
+  type Props = HTMLAttributes<HTMLDivElement> & {
     id?: string;
     meltTrigger: AnyMeltElement;
     class?: string;
@@ -12,7 +13,7 @@
     children?: import('svelte').Snippet;
   };
 
-  let { id, meltTrigger, class: extraClass = '', children, isOpened }: Props = $props();
+  let { id, meltTrigger, class: extraClass = '', children, isOpened, ...rest }: Props = $props();
 
   const handleClickOutside = () => {
     // while melt-ui is supposed to close the drop down on clicking outside of one, when you open a drop down
@@ -30,6 +31,7 @@
   }}
   data-id="trigger"
   class="inline-block {extraClass}"
+  {...rest}
 >
   {@render children?.()}
   <span class="sr-only">Open Popover</span>

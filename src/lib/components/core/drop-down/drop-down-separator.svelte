@@ -1,9 +1,10 @@
 <script lang="ts">
   import { melt, type AnyMeltElement } from '@melt-ui/svelte';
+  import type { HTMLAttributes } from 'svelte/elements';
 
-  type Props = { meltSeparator: AnyMeltElement };
+  type Props = HTMLAttributes<HTMLDivElement> & { meltSeparator: AnyMeltElement };
 
-  let { meltSeparator }: Props = $props();
+  let { meltSeparator, ...rest }: Props = $props();
 </script>
 
-<div data-id="separator" use:melt={$meltSeparator} class="bg-outline m-2xs h-[1px]"></div>
+<div data-id="separator" use:melt={$meltSeparator} class="bg-outline m-2xs h-[1px]" {...rest}></div>

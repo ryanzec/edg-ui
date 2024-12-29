@@ -1,7 +1,9 @@
 <script lang="ts">
-  type Props = { children?: import('svelte').Snippet };
+  import type { HTMLAttributes } from 'svelte/elements';
 
-  let { children }: Props = $props();
+  type Props = HTMLAttributes<HTMLDivElement> & { children?: import('svelte').Snippet };
+
+  let { children, ...rest }: Props = $props();
 </script>
 
-<div data-id="label" class="px-xs leading-lg tracking-xs text-xs">{@render children?.()}</div>
+<div data-id="label" class="px-xs leading-lg tracking-xs text-xs" {...rest}>{@render children?.()}</div>

@@ -1,12 +1,11 @@
 <script lang="ts">
   import type { Readable, Writable } from 'svelte/store';
-  import DropDownItem from '$lib/components/core/drop-down/drop-down-item.svelte';
+  import DropDownItem, { type DropDownItemProps } from '$lib/components/core/drop-down/drop-down-item.svelte';
   import Icon from '$lib/components/core/icons/icon.svelte';
 
   // @todo need to figure out if there is a proper way to type this
 
-  type Props = {
-    item: any;
+  type Props = DropDownItemProps & {
     isChecked: Readable<(option: string) => boolean>;
     option: string;
     closeOnClick?: boolean;
@@ -15,7 +14,7 @@
     rightContent?: import('svelte').Snippet;
   };
 
-  let { item, isChecked, option, closeOnClick = false, value, children, rightContent }: Props = $props();
+  let { isChecked, option, closeOnClick = false, value, children, rightContent, ...rest }: Props = $props();
 
   // because the default behaviour for radio drop down elements include setting the checked state, in order to
   // be able to make the drop down not close on click, we need to manually apply that functionality
@@ -38,7 +37,7 @@
   const rightContent_render = $derived(rightContent);
 </script>
 
-<DropDownItem data-id="radio-item" meltItem={item} onclick={handleClick}>
+<DropDownItem data-id="radio-item" onclick={handleClick} {...rest}>
   {#snippet leftContent()}
     <div>
       {#if $isChecked(option)}

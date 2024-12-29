@@ -7,8 +7,10 @@
   /* global TOptionValue */
   import type { ComboboxOptionComponent, ComboboxOptionsActionOptions } from '$lib/components/core/combobox/utils';
   import Icon from '$lib/components/core/icons/icon.svelte';
+  import type { rest } from 'lodash-es';
+  import type { HTMLAttributes } from 'svelte/elements';
 
-  type Props = {
+  type Props = HTMLAttributes<HTMLDivElement> & {
     options: TOptionValue[];
     groupedOptions?: Record<string, TOptionValue[]> | undefined;
     optionsAction: ComboboxStore<TOptionValue>['optionsAction'];
@@ -34,6 +36,7 @@
     optionsActionOptions = {},
     clearOptionDisplay = '',
     clearOptionAction = undefined,
+    ...rest
   }: Props = $props();
 
   // we need the correct element index in order for the combobox options to work properly so this handle
@@ -72,6 +75,7 @@
   data-id="options"
   use:optionsAction={optionsActionOptions}
   class="bg-surface-pure z-combobox-options mt-3xs rounded-base absolute flex max-h-[300px] flex-col overflow-hidden overflow-y-auto border"
+  {...rest}
 >
   <div class="gap-none flex max-h-full flex-col">
     {#if isLoading}

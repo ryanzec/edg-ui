@@ -18,11 +18,12 @@
   import ComboboxOptions from '$lib/components/core/combobox/combobox-options.svelte';
   import { clickOutsideAction } from '$lib/actions/click-outside-action';
   import { tailwindUtils } from '$lib/utils/tailwind';
+  import type { HTMLAttributes } from 'svelte/elements';
 
   // @todo(feature) character threshold
   // @todo(feature) allow new value
 
-  type Props = {
+  type Props = HTMLAttributes<HTMLDivElement> & {
     label: string;
     placeholder?: string;
     // the `value` for each option must be unique for this to work properly
@@ -67,6 +68,7 @@
     clearOptionDisplay = '',
     onSelectedChanged = undefined,
     class: extraClass = '',
+    ...rest
   }: Props = $props();
 
   // this holds the input value that is actively being used (since there can be a delay in getting option asyncly)
@@ -268,7 +270,7 @@
     callback: comboboxUtils.selectActiveOption,
   }}
 >
-  <div class="gap-2xs flex-col {extraClass}">
+  <div class="gap-2xs flex-col {extraClass}" {...rest}>
     <Label for={id} use={labelAction}>{label}</Label>
     <!--
       while it is generally better / easier to just use a button for an element you want clickable, since this

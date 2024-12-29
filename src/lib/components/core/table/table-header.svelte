@@ -15,5 +15,7 @@
     'p-xs bg-surface-tertiary border-outline border-b text-left [:not(:first-child)]:border-l',
     extraClass,
   )}
-  {...rest}>{@render children?.()}</th
+  {...rest}
 >
+  {@render children?.()}
+</th>

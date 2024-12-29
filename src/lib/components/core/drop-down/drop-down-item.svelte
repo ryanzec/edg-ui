@@ -1,11 +1,7 @@
-<script lang="ts">
-  import { melt } from '@melt-ui/svelte';
-  import type { HTMLAttributes } from 'svelte/elements';
-  import { tailwindUtils } from '$lib/utils/tailwind';
-
+<script module lang="ts">
   // @todo need to figure out if there is a proper way to type this
 
-  type Props = HTMLAttributes<HTMLButtonElement> & {
+  export type DropDownItemProps = HTMLAttributes<HTMLButtonElement> & {
     meltItem: any;
     disabled?: boolean;
     closeOnClick?: boolean;
@@ -14,6 +10,12 @@
     leftContent?: import('svelte').Snippet;
     children?: import('svelte').Snippet;
   };
+</script>
+
+<script lang="ts">
+  import { melt } from '@melt-ui/svelte';
+  import type { HTMLAttributes } from 'svelte/elements';
+  import { tailwindUtils } from '$lib/utils/tailwind';
 
   let {
     meltItem,
@@ -24,7 +26,7 @@
     leftContent,
     children,
     ...rest
-  }: Props = $props();
+  }: DropDownItemProps = $props();
 
   const handleClick = (event: MouseEvent) => {
     if (closeOnClick === false) {

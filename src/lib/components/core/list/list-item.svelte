@@ -8,10 +8,10 @@
     preIcon?: IconName;
   };
 
-  let { children, preIcon }: Props = $props();
+  let { children, preIcon, ...rest }: Props = $props();
 </script>
 
-<li class="gap-xs px-xs py-2xs bg-surface-pure border-outline flex items-center border-t first:border-0">
+<li class="gap-xs px-xs py-2xs bg-surface-pure border-outline flex items-center border-t first:border-0" {...rest}>
   {#if preIcon}<Icon icon={preIcon} />{/if}
   {@render children()}
 </li>
