@@ -70,8 +70,6 @@ Everything else is automatically setup to use the generated variables that comma
 
 # Major Included Libraries
 
-
-
 To use
 
 - `pnpm install`
