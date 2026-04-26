@@ -19,11 +19,11 @@ import { Input } from '../input/input';
 import { Calendar, CalendarPartialRangeSelectionType } from '../calendar/calendar';
 import { CalendarFooter } from '../calendar/calendar-footer';
 import { Button } from '../button/button';
-import { DateFormat, TimeFormat } from '@organization/shared-utils';
+import { angularUtils, DateFormat, TimeFormat } from '@organization/shared-utils';
 import { DatePickerInputBrainDirective } from '../../brain/date-picker-input-brain/date-picker-input-brain';
 
 export const DATE_PICKER_INPUT_DATE_FORMAT_DEFAULT: DateFormat = DateFormat.STANDARD;
-export const DATE_PICKER_INPUT_TIME_FORMAT_DEFAULT: TimeFormat | null = null;
+export const DATE_PICKER_INPUT_TIME_FORMAT_DEFAULT: TimeFormat | undefined = undefined;
 export const DATE_PICKER_INPUT_ALLOW_PARTIAL_RANGE_SELECTION_DEFAULT = false;
 export const DATE_PICKER_INPUT_PARTIAL_RANGE_SELECTION_TYPE_DEFAULT: CalendarPartialRangeSelectionType = 'range';
 export const DATE_PICKER_INPUT_PLACEHOLDER_DEFAULT = 'Select date...';
@@ -31,11 +31,11 @@ export const DATE_PICKER_INPUT_AUTO_FOCUS_DEFAULT = false;
 export const DATE_PICKER_INPUT_DEFAULT_DISPLAY_DATE_DEFAULT: DateTime = DateTime.now();
 export const DATE_PICKER_INPUT_START_YEAR_DEFAULT: number = DateTime.now().year - 100;
 export const DATE_PICKER_INPUT_END_YEAR_DEFAULT: number = DateTime.now().year + 20;
-export const DATE_PICKER_INPUT_SELECTED_START_DATE_DEFAULT: DateTime | null = null;
-export const DATE_PICKER_INPUT_SELECTED_END_DATE_DEFAULT: DateTime | null = null;
+export const DATE_PICKER_INPUT_SELECTED_START_DATE_DEFAULT: DateTime | undefined = undefined;
+export const DATE_PICKER_INPUT_SELECTED_END_DATE_DEFAULT: DateTime | undefined = undefined;
 export const DATE_PICKER_INPUT_ALLOW_RANGE_SELECTION_DEFAULT = false;
-export const DATE_PICKER_INPUT_DISABLE_BEFORE_DEFAULT: DateTime | null = null;
-export const DATE_PICKER_INPUT_DISABLE_AFTER_DEFAULT: DateTime | null = null;
+export const DATE_PICKER_INPUT_DISABLE_BEFORE_DEFAULT: DateTime | undefined = undefined;
+export const DATE_PICKER_INPUT_DISABLE_AFTER_DEFAULT: DateTime | undefined = undefined;
 export const DATE_PICKER_INPUT_ALLOWED_DATE_RANGE_DEFAULT = 0;
 export const DATE_PICKER_INPUT_DISABLED_DEFAULT = false;
 export const DATE_PICKER_INPUT_ALLOW_CLEAR_DEFAULT = true;
@@ -105,7 +105,10 @@ export class DatePickerInput implements ControlValueAccessor {
 
   // custom input properties
   public readonly dateFormat = input<DateFormat>(DATE_PICKER_INPUT_DATE_FORMAT_DEFAULT);
-  public readonly timeFormat = input<TimeFormat | null>(DATE_PICKER_INPUT_TIME_FORMAT_DEFAULT);
+  public readonly timeFormat = input<TimeFormat | undefined, TimeFormat | null | undefined>(
+    DATE_PICKER_INPUT_TIME_FORMAT_DEFAULT,
+    { transform: angularUtils.transformNullToUndefined }
+  );
   public readonly allowPartialRangeSelection = input<boolean>(DATE_PICKER_INPUT_ALLOW_PARTIAL_RANGE_SELECTION_DEFAULT);
   public readonly partialRangeSelectionType = input<CalendarPartialRangeSelectionType>(
     DATE_PICKER_INPUT_PARTIAL_RANGE_SELECTION_TYPE_DEFAULT
@@ -120,11 +123,23 @@ export class DatePickerInput implements ControlValueAccessor {
   public readonly defaultDisplayDate = input<DateTime>(DATE_PICKER_INPUT_DEFAULT_DISPLAY_DATE_DEFAULT);
   public readonly startYear = input<number>(DATE_PICKER_INPUT_START_YEAR_DEFAULT);
   public readonly endYear = input<number>(DATE_PICKER_INPUT_END_YEAR_DEFAULT);
-  public readonly selectedStartDate = input<DateTime | null>(DATE_PICKER_INPUT_SELECTED_START_DATE_DEFAULT);
-  public readonly selectedEndDate = input<DateTime | null>(DATE_PICKER_INPUT_SELECTED_END_DATE_DEFAULT);
+  public readonly selectedStartDate = input<DateTime | undefined, DateTime | null | undefined>(
+    DATE_PICKER_INPUT_SELECTED_START_DATE_DEFAULT,
+    { transform: angularUtils.transformNullToUndefined }
+  );
+  public readonly selectedEndDate = input<DateTime | undefined, DateTime | null | undefined>(
+    DATE_PICKER_INPUT_SELECTED_END_DATE_DEFAULT,
+    { transform: angularUtils.transformNullToUndefined }
+  );
   public readonly allowRangeSelection = input<boolean>(DATE_PICKER_INPUT_ALLOW_RANGE_SELECTION_DEFAULT);
-  public readonly disableBefore = input<DateTime | null>(DATE_PICKER_INPUT_DISABLE_BEFORE_DEFAULT);
-  public readonly disableAfter = input<DateTime | null>(DATE_PICKER_INPUT_DISABLE_AFTER_DEFAULT);
+  public readonly disableBefore = input<DateTime | undefined, DateTime | null | undefined>(
+    DATE_PICKER_INPUT_DISABLE_BEFORE_DEFAULT,
+    { transform: angularUtils.transformNullToUndefined }
+  );
+  public readonly disableAfter = input<DateTime | undefined, DateTime | null | undefined>(
+    DATE_PICKER_INPUT_DISABLE_AFTER_DEFAULT,
+    { transform: angularUtils.transformNullToUndefined }
+  );
   public readonly allowedDateRange = input<number>(DATE_PICKER_INPUT_ALLOWED_DATE_RANGE_DEFAULT);
 
   // additional input properties

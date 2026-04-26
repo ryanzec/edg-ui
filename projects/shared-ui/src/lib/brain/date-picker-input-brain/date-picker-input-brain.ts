@@ -1,4 +1,5 @@
 import { Directive, computed, effect, input, output, signal } from '@angular/core';
+import { angularUtils } from '@organization/shared-utils';
 import { DateTime } from 'luxon';
 import type { CalendarPartialRangeSelectionType } from '../calendar-brain/calendar-brain';
 
@@ -15,10 +16,10 @@ export const DATE_PICKER_INPUT_ALLOW_PARTIAL_RANGE_SELECTION_DEFAULT = false;
 export const DATE_PICKER_INPUT_PARTIAL_RANGE_SELECTION_TYPE_DEFAULT: CalendarPartialRangeSelectionType = 'range';
 
 /** default value for the datePickerInputSelectedStartDate input */
-export const DATE_PICKER_INPUT_SELECTED_START_DATE_DEFAULT: DateTime | null = null;
+export const DATE_PICKER_INPUT_SELECTED_START_DATE_DEFAULT: DateTime | undefined = undefined;
 
 /** default value for the datePickerInputSelectedEndDate input */
-export const DATE_PICKER_INPUT_SELECTED_END_DATE_DEFAULT: DateTime | null = null;
+export const DATE_PICKER_INPUT_SELECTED_END_DATE_DEFAULT: DateTime | undefined = undefined;
 
 /** default value for the datePickerInputAllowRangeSelection input */
 export const DATE_PICKER_INPUT_ALLOW_RANGE_SELECTION_DEFAULT = false;
@@ -80,10 +81,14 @@ export class DatePickerInputBrainDirective {
   });
 
   // inputs
-  public readonly datePickerInputSelectedStartDate = input<DateTime | null>(
-    DATE_PICKER_INPUT_SELECTED_START_DATE_DEFAULT
+  public readonly datePickerInputSelectedStartDate = input<DateTime | undefined, DateTime | null | undefined>(
+    DATE_PICKER_INPUT_SELECTED_START_DATE_DEFAULT,
+    { transform: angularUtils.transformNullToUndefined }
   );
-  public readonly datePickerInputSelectedEndDate = input<DateTime | null>(DATE_PICKER_INPUT_SELECTED_END_DATE_DEFAULT);
+  public readonly datePickerInputSelectedEndDate = input<DateTime | undefined, DateTime | null | undefined>(
+    DATE_PICKER_INPUT_SELECTED_END_DATE_DEFAULT,
+    { transform: angularUtils.transformNullToUndefined }
+  );
   public readonly datePickerInputAllowRangeSelection = input<boolean>(DATE_PICKER_INPUT_ALLOW_RANGE_SELECTION_DEFAULT);
   public readonly datePickerInputAllowPartialRangeSelection = input<boolean>(
     DATE_PICKER_INPUT_ALLOW_PARTIAL_RANGE_SELECTION_DEFAULT
@@ -118,7 +123,7 @@ export class DatePickerInputBrainDirective {
       return this._state().committedStartDate;
     }
 
-    return this.datePickerInputSelectedStartDate();
+    return this.datePickerInputSelectedStartDate() ?? null;
   });
 
   /** the committed end date (form-controlled internal state when form-controlled, else input) */
@@ -127,7 +132,7 @@ export class DatePickerInputBrainDirective {
       return this._state().committedEndDate;
     }
 
-    return this.datePickerInputSelectedEndDate();
+    return this.datePickerInputSelectedEndDate() ?? null;
   });
 
   /** the committed partial-range type (form-controlled internal state when form-controlled, else input) */

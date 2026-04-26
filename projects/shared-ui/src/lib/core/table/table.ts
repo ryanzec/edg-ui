@@ -13,6 +13,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
+import { angularUtils } from '@organization/shared-utils';
 import { ScrollArea } from '../scroll-area/scroll-area';
 import { LoadingSpinner } from '../loading-spinner/loading-spinner';
 import { LoadingBlocker } from '../loading-blocker/loading-blocker';
@@ -81,9 +82,10 @@ export class Table<T = unknown> {
    * the selection store driving the built-in selection column and selected actions bar; when provided, the table
    * automatically renders a select-all checkbox in the header and a per-row checkbox in the body
    */
-  public readonly selectionData = input<DataSelectionStore<T & { id: string }> | undefined>(
-    TABLE_SELECTION_DATA_DEFAULT
-  );
+  public readonly selectionData = input<
+    DataSelectionStore<T & { id: string }> | undefined,
+    DataSelectionStore<T & { id: string }> | null | undefined
+  >(TABLE_SELECTION_DATA_DEFAULT, { transform: angularUtils.transformNullToUndefined });
 
   /** whether the auto-rendered header row should be sticky */
   public readonly stickyHeader = input<boolean>(TABLE_STICKY_HEADER_DEFAULT);

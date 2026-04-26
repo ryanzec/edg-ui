@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { angularUtils } from '@organization/shared-utils';
 import { Box, BOX_BACKGROUND_DEFAULT } from '../box/box';
 import type { BoxBackground, BoxBorder } from '../box/box';
 import { ComponentColor, allComponentColors } from '../types/component-types';
@@ -10,7 +11,7 @@ export type CardColor = ComponentColor;
 export const cardColors = allComponentColors;
 
 /** default value for the card color input */
-export const CARD_COLOR_DEFAULT: CardColor | null = null;
+export const CARD_COLOR_DEFAULT: CardColor | undefined = undefined;
 
 /** default value for the card container class input */
 export const CARD_CONTAINER_CLASS_DEFAULT = '';
@@ -35,7 +36,9 @@ export const CARD_BOX_BACKGROUND_DEFAULT = BOX_BACKGROUND_DEFAULT;
 })
 export class Card {
   /** the semantic color applied to the card border */
-  public color = input<CardColor | null>(CARD_COLOR_DEFAULT);
+  public color = input<CardColor | undefined, CardColor | null | undefined>(CARD_COLOR_DEFAULT, {
+    transform: angularUtils.transformNullToUndefined,
+  });
 
   /** css class(es) applied to the outermost container element */
   public containerClass = input<string>(CARD_CONTAINER_CLASS_DEFAULT);

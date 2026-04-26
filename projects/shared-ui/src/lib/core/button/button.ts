@@ -1,4 +1,5 @@
 import { Component, ChangeDetectionStrategy, computed, contentChildren, input, output, viewChild } from '@angular/core';
+import { angularUtils } from '@organization/shared-utils';
 import { LoadingSpinner } from '../loading-spinner/loading-spinner';
 import { ComponentColor, ComponentSize } from '../types/component-types';
 import { ButtonBrainDirective } from '../../brain/button-brain/button-brain';
@@ -53,10 +54,10 @@ export const BUTTON_EXCLUDE_SPACING_DEFAULT = false;
 export const BUTTON_BUTTON_CLASS_DEFAULT = '';
 
 /** the default aria-label of the button */
-export const BUTTON_ARIA_LABEL_DEFAULT: string | null = null;
+export const BUTTON_ARIA_LABEL_DEFAULT: string | undefined = undefined;
 
 /** the default aria-expanded state of the button */
-export const BUTTON_ARIA_EXPANDED_DEFAULT: boolean | null = null;
+export const BUTTON_ARIA_EXPANDED_DEFAULT: boolean | undefined = undefined;
 
 @Component({
   selector: 'org-button',
@@ -107,10 +108,14 @@ export class Button {
   public readonly buttonClass = input<string>(BUTTON_BUTTON_CLASS_DEFAULT);
 
   /** accessible label for icon-only buttons or when the visual label needs an override */
-  public readonly ariaLabel = input<string | null>(BUTTON_ARIA_LABEL_DEFAULT);
+  public readonly ariaLabel = input<string | undefined, string | null | undefined>(BUTTON_ARIA_LABEL_DEFAULT, {
+    transform: angularUtils.transformNullToUndefined,
+  });
 
   /** communicates whether a controlled element is expanded or collapsed */
-  public readonly ariaExpanded = input<boolean | null>(BUTTON_ARIA_EXPANDED_DEFAULT);
+  public readonly ariaExpanded = input<boolean | undefined, boolean | null | undefined>(BUTTON_ARIA_EXPANDED_DEFAULT, {
+    transform: angularUtils.transformNullToUndefined,
+  });
 
   /** emitted when the button is clicked while not disabled or loading */
   public readonly clicked = output<void>();

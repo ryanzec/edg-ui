@@ -1,6 +1,7 @@
 import { Component, ChangeDetectionStrategy, input, computed, signal } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { outputFromObservable } from '@angular/core/rxjs-interop';
+import { angularUtils } from '@organization/shared-utils';
 import { Button } from '../button/button';
 import {
   Box,
@@ -13,13 +14,13 @@ import {
 } from '../box/box';
 
 /** default value for the {@link EmptyIndicator.description} input */
-export const EMPTY_INDICATOR_DESCRIPTION_DEFAULT: string | null = null;
+export const EMPTY_INDICATOR_DESCRIPTION_DEFAULT: string | undefined = undefined;
 
 /** default value for the {@link EmptyIndicator.actionLabel} input */
-export const EMPTY_INDICATOR_ACTION_LABEL_DEFAULT: string | null = null;
+export const EMPTY_INDICATOR_ACTION_LABEL_DEFAULT: string | undefined = undefined;
 
 /** default value for the {@link EmptyIndicator.boxColor} input */
-export const EMPTY_INDICATOR_BOX_COLOR_DEFAULT: BoxColor | null = BOX_COLOR_DEFAULT;
+export const EMPTY_INDICATOR_BOX_COLOR_DEFAULT: BoxColor | undefined = BOX_COLOR_DEFAULT;
 
 /** default value for the {@link EmptyIndicator.boxBorder} input */
 export const EMPTY_INDICATOR_BOX_BORDER_DEFAULT: BoxBorder = BOX_BORDER_DEFAULT;
@@ -58,14 +59,20 @@ export class EmptyIndicator {
   /** required header text displayed above the description */
   public header = input.required<string>();
 
-  /** optional description text displayed below the header; when null no description is rendered */
-  public description = input<string | null>(EMPTY_INDICATOR_DESCRIPTION_DEFAULT);
+  /** optional description text displayed below the header; when undefined no description is rendered */
+  public description = input<string | undefined, string | null | undefined>(EMPTY_INDICATOR_DESCRIPTION_DEFAULT, {
+    transform: angularUtils.transformNullToUndefined,
+  });
 
-  /** optional label for the action button; when null no button is rendered */
-  public actionLabel = input<string | null>(EMPTY_INDICATOR_ACTION_LABEL_DEFAULT);
+  /** optional label for the action button; when undefined no button is rendered */
+  public actionLabel = input<string | undefined, string | null | undefined>(EMPTY_INDICATOR_ACTION_LABEL_DEFAULT, {
+    transform: angularUtils.transformNullToUndefined,
+  });
 
   /** the semantic color applied to the inner Box component */
-  public boxColor = input<BoxColor | null>(EMPTY_INDICATOR_BOX_COLOR_DEFAULT);
+  public boxColor = input<BoxColor | undefined, BoxColor | null | undefined>(EMPTY_INDICATOR_BOX_COLOR_DEFAULT, {
+    transform: angularUtils.transformNullToUndefined,
+  });
 
   /** the border/visual style variant applied to the inner Box component */
   public boxBorder = input<BoxBorder>(EMPTY_INDICATOR_BOX_BORDER_DEFAULT);

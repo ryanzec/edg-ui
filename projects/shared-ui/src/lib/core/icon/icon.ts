@@ -1,4 +1,5 @@
 import { Component, ChangeDetectionStrategy, input, computed } from '@angular/core';
+import { angularUtils } from '@organization/shared-utils';
 import {
   LucideDynamicIcon,
   LucideArrowDown,
@@ -203,7 +204,9 @@ export class Icon {
    * accessible label for the icon; when provided the icon is treated as meaningful
    * (role="img") and aria-hidden is removed; omit for decorative icons
    */
-  public label = input<string | undefined>(ICON_LABEL_DEFAULT);
+  public label = input<string | undefined, string | null | undefined>(ICON_LABEL_DEFAULT, {
+    transform: angularUtils.transformNullToUndefined,
+  });
 
   /** the resolved lucide icon object derived from the name input */
   protected readonly lucideIcon = computed<LucideIcon>(() => iconMap[this.name()]);

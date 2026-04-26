@@ -17,10 +17,6 @@
     padding: var(--spacing-2) var(--spacing-3);
     background-color: var(--color-info-background-subtle);
     color: var(--color-info-text);
-    /*border: 0.0625rem solid var(--color-info-border-subtle); /* 1px
-    border-bottom: none;
-    border-top-left-radius: var(--radius-md);
-    border-top-right-radius: var(--radius-md);*/
   }
 
   .selected-actions-bar .selected-count {
@@ -57,11 +53,6 @@
     text-overflow: ellipsis;
     white-space: normal;
     word-break: break-word;
-  }
-
-  /* scroll content — 1px-inset radius to match the container's border */
-  .org-table-scroll {
-    /*border-radius: calc(var(--radius-md) - 0.0625rem); /* 1px */
   }
 
   /* table element — no utilities for border-collapse / border-spacing */

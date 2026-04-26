@@ -545,7 +545,7 @@ Utility css classes **MUST** be used for all other styles:
 # Styling Patterns
 - **NEVER** add styling to components in `projects/shared-ui/src/lib/brain`.
 - **ALWAYS** use css files for styling components and directives in `projects/shared-ui/src/lib/core` **EXCEPT** for `*stories*` files.
-- **ALWAYS** use css variables from `projects/shared-ui/src/lib/styles/system-tokens.css` for color based styling in css files.
+- **ALWAYS** use css variables from `projects/shared-ui/src/lib/styles/variables/system-tokens.css` for color based styling in css files.
 - **ALWAYS** use css variables from `projects/shared-ui/src/lib/styles/design-tokens.css` for non-color based styling in css files.
 - **ALWAYS** favor css utility based styling for component **OUTSIDE** of `projects/shared-ui/src/lib/core`.
 

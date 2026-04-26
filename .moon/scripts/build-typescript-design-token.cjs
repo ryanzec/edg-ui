@@ -4,8 +4,8 @@ const fs = require('fs');
 const path = require('path');
 
 const REPO_ROOT = path.resolve(__dirname, '..', '..');
-const BASE_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/base-tokens.css');
-const SYSTEM_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/system-tokens.css');
+const BASE_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/variables/base-tokens.css');
+const SYSTEM_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/variables/system-tokens.css');
 const OUTPUT_TS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/design-tokens.ts');
 
 /**

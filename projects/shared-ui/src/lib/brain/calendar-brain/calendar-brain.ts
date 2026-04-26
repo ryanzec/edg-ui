@@ -10,6 +10,7 @@ import {
   signal,
   untracked,
 } from '@angular/core';
+import { angularUtils } from '@organization/shared-utils';
 import { DateTime } from 'luxon';
 
 /**
@@ -46,13 +47,13 @@ type CalendarState = {
 export const CALENDAR_DEFAULT_DISPLAY_DATE_DEFAULT = DateTime.now();
 export const CALENDAR_START_YEAR_DEFAULT = DateTime.now().year - 100;
 export const CALENDAR_END_YEAR_DEFAULT = DateTime.now().year + 20;
-export const CALENDAR_SELECTED_START_DATE_DEFAULT: DateTime | null = null;
-export const CALENDAR_SELECTED_END_DATE_DEFAULT: DateTime | null = null;
+export const CALENDAR_SELECTED_START_DATE_DEFAULT: DateTime | undefined = undefined;
+export const CALENDAR_SELECTED_END_DATE_DEFAULT: DateTime | undefined = undefined;
 export const CALENDAR_ALLOW_RANGE_SELECTION_DEFAULT = false;
 export const CALENDAR_ALLOW_PARTIAL_RANGE_SELECTION_DEFAULT = false;
 export const CALENDAR_PARTIAL_RANGE_SELECTION_TYPE_DEFAULT: CalendarPartialRangeSelectionType = 'range';
-export const CALENDAR_DISABLE_BEFORE_DEFAULT: DateTime | null = null;
-export const CALENDAR_DISABLE_AFTER_DEFAULT: DateTime | null = null;
+export const CALENDAR_DISABLE_BEFORE_DEFAULT: DateTime | undefined = undefined;
+export const CALENDAR_DISABLE_AFTER_DEFAULT: DateTime | undefined = undefined;
 export const CALENDAR_ALLOWED_DATE_RANGE_DEFAULT = 0;
 export const CALENDAR_ENABLE_DESELECTION_DEFAULT = true;
 
@@ -86,15 +87,27 @@ export class CalendarBrainDirective {
   public readonly calendarDefaultDisplayDate = input<DateTime>(CALENDAR_DEFAULT_DISPLAY_DATE_DEFAULT);
   public readonly calendarStartYear = input<number>(CALENDAR_START_YEAR_DEFAULT);
   public readonly calendarEndYear = input<number>(CALENDAR_END_YEAR_DEFAULT);
-  public readonly calendarSelectedStartDate = input<DateTime | null>(CALENDAR_SELECTED_START_DATE_DEFAULT);
-  public readonly calendarSelectedEndDate = input<DateTime | null>(CALENDAR_SELECTED_END_DATE_DEFAULT);
+  public readonly calendarSelectedStartDate = input<DateTime | undefined, DateTime | null | undefined>(
+    CALENDAR_SELECTED_START_DATE_DEFAULT,
+    { transform: angularUtils.transformNullToUndefined }
+  );
+  public readonly calendarSelectedEndDate = input<DateTime | undefined, DateTime | null | undefined>(
+    CALENDAR_SELECTED_END_DATE_DEFAULT,
+    { transform: angularUtils.transformNullToUndefined }
+  );
   public readonly calendarAllowRangeSelection = input<boolean>(CALENDAR_ALLOW_RANGE_SELECTION_DEFAULT);
   public readonly calendarAllowPartialRangeSelection = input<boolean>(CALENDAR_ALLOW_PARTIAL_RANGE_SELECTION_DEFAULT);
   public readonly calendarPartialRangeSelectionType = input<CalendarPartialRangeSelectionType>(
     CALENDAR_PARTIAL_RANGE_SELECTION_TYPE_DEFAULT
   );
-  public readonly calendarDisableBefore = input<DateTime | null>(CALENDAR_DISABLE_BEFORE_DEFAULT);
-  public readonly calendarDisableAfter = input<DateTime | null>(CALENDAR_DISABLE_AFTER_DEFAULT);
+  public readonly calendarDisableBefore = input<DateTime | undefined, DateTime | null | undefined>(
+    CALENDAR_DISABLE_BEFORE_DEFAULT,
+    { transform: angularUtils.transformNullToUndefined }
+  );
+  public readonly calendarDisableAfter = input<DateTime | undefined, DateTime | null | undefined>(
+    CALENDAR_DISABLE_AFTER_DEFAULT,
+    { transform: angularUtils.transformNullToUndefined }
+  );
   public readonly calendarAllowedDateRange = input<number>(CALENDAR_ALLOWED_DATE_RANGE_DEFAULT);
   public readonly calendarEnableDeselection = input<boolean>(CALENDAR_ENABLE_DESELECTION_DEFAULT);
 
@@ -125,16 +138,18 @@ export class CalendarBrainDirective {
 
   private readonly _effectiveAllowedDateRange = computed<number>(() => Math.max(0, this.calendarAllowedDateRange()));
 
-  private readonly _effectiveDisableRange = computed<{ before: DateTime | null; after: DateTime | null }>(() => {
-    const before = this.calendarDisableBefore();
-    const after = this.calendarDisableAfter();
+  private readonly _effectiveDisableRange = computed<{ before: DateTime | undefined; after: DateTime | undefined }>(
+    () => {
+      const before = this.calendarDisableBefore();
+      const after = this.calendarDisableAfter();
 
-    if (before && after && before.startOf('day') > after.startOf('day')) {
-      return { before: null, after: null };
+      if (before && after && before.startOf('day') > after.startOf('day')) {
+        return { before: undefined, after: undefined };
+      }
+
+      return { before, after };
     }
-
-    return { before, after };
-  });
+  );
 
   /** generates array of years for dropdown */
   public readonly yearOptions = computed<number[]>(() => {
@@ -243,8 +258,8 @@ export class CalendarBrainDirective {
           return;
         }
 
-        let newStart: DateTime | null = currentStart;
-        let newEnd: DateTime | null = currentEnd;
+        let newStart: DateTime | null = currentStart ?? null;
+        let newEnd: DateTime | null = currentEnd ?? null;
 
         if (selectionType === 'range') {
           if (currentStart && !currentEnd) {
@@ -405,8 +420,8 @@ export class CalendarBrainDirective {
     }
 
     const clickedDate = dateData.date;
-    const currentStart = this.calendarSelectedStartDate();
-    const currentEnd = this.calendarSelectedEndDate();
+    const currentStart = this.calendarSelectedStartDate() ?? null;
+    const currentEnd = this.calendarSelectedEndDate() ?? null;
     const selectionType = this.calendarPartialRangeSelectionType();
 
     if (this.calendarEnableDeselection()) {
@@ -606,10 +621,10 @@ export class CalendarBrainDirective {
   /** checks if a date is disabled */
   private _isDateDisabled(
     date: DateTime,
-    startDate: DateTime | null,
-    endDate: DateTime | null,
-    disableBefore: DateTime | null,
-    disableAfter: DateTime | null,
+    startDate: DateTime | undefined,
+    endDate: DateTime | undefined,
+    disableBefore: DateTime | undefined,
+    disableAfter: DateTime | undefined,
     allowedRange: number
   ): boolean {
     if (disableBefore && date < disableBefore.startOf('day')) {
@@ -656,7 +671,7 @@ export class CalendarBrainDirective {
   }
 
   /** checks if a date is selected (matches start or end) */
-  private _isDateSelected(date: DateTime, startDate: DateTime | null, endDate: DateTime | null): boolean {
+  private _isDateSelected(date: DateTime, startDate: DateTime | undefined, endDate: DateTime | undefined): boolean {
     if (startDate && date.hasSame(startDate, 'day')) {
       return true;
     }
@@ -669,7 +684,7 @@ export class CalendarBrainDirective {
   }
 
   /** checks if a date is strictly inside the selected range */
-  private _isDateInRange(date: DateTime, startDate: DateTime | null, endDate: DateTime | null): boolean {
+  private _isDateInRange(date: DateTime, startDate: DateTime | undefined, endDate: DateTime | undefined): boolean {
     if (!startDate || !endDate) {
       return false;
     }

@@ -13,7 +13,7 @@ import {
 import { outputFromObservable, takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Subject } from 'rxjs';
 import { FocusMonitor } from '@angular/cdk/a11y';
-import { logManager } from '@organization/shared-utils';
+import { angularUtils, logManager } from '@organization/shared-utils';
 
 /** the internal state shape for the button brain directive */
 type ButtonState = {
@@ -31,10 +31,10 @@ export const BUTTON_LOADING_DEFAULT = false;
 export const BUTTON_ICON_ONLY_DEFAULT = false;
 
 /** default value for the buttonAriaLabel input */
-export const BUTTON_ARIA_LABEL_DEFAULT: string | null = null;
+export const BUTTON_ARIA_LABEL_DEFAULT: string | undefined = undefined;
 
 /** default value for the buttonAriaExpanded input */
-export const BUTTON_ARIA_EXPANDED_DEFAULT: boolean | null = null;
+export const BUTTON_ARIA_EXPANDED_DEFAULT: boolean | undefined = undefined;
 
 /**
  * headless brain directive for the button. owns interaction state (pressed / focused), pointer and touch event
@@ -81,10 +81,15 @@ export class ButtonBrainDirective implements OnInit, OnDestroy {
   public readonly buttonIconOnly = input<boolean>(BUTTON_ICON_ONLY_DEFAULT);
 
   /** accessible label for icon-only buttons or when the visual label needs an override */
-  public readonly buttonAriaLabel = input<string | null>(BUTTON_ARIA_LABEL_DEFAULT);
+  public readonly buttonAriaLabel = input<string | undefined, string | null | undefined>(BUTTON_ARIA_LABEL_DEFAULT, {
+    transform: angularUtils.transformNullToUndefined,
+  });
 
   /** communicates whether a controlled element is expanded or collapsed */
-  public readonly buttonAriaExpanded = input<boolean | null>(BUTTON_ARIA_EXPANDED_DEFAULT);
+  public readonly buttonAriaExpanded = input<boolean | undefined, boolean | null | undefined>(
+    BUTTON_ARIA_EXPANDED_DEFAULT,
+    { transform: angularUtils.transformNullToUndefined }
+  );
 
   /** emitted when the host button is clicked while not disabled or loading */
   public readonly buttonClicked = outputFromObservable(this._clicked$);

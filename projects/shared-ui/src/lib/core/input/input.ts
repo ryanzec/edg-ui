@@ -11,6 +11,7 @@ import {
   forwardRef,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { angularUtils } from '@organization/shared-utils';
 import { Icon, type IconName } from '../icon/icon';
 import { Tag } from '../tag/tag';
 import { TagIcon } from '../tag/tag-icon';
@@ -38,16 +39,16 @@ export const INPUT_DISABLED_DEFAULT = false;
 export const INPUT_READONLY_DEFAULT = false;
 
 /** default value for the preIcon input */
-export const INPUT_PRE_ICON_DEFAULT: IconName | null = null;
+export const INPUT_PRE_ICON_DEFAULT: IconName | undefined = undefined;
 
 /** default value for the postIcon input */
-export const INPUT_POST_ICON_DEFAULT: IconName | null = null;
+export const INPUT_POST_ICON_DEFAULT: IconName | undefined = undefined;
 
 /** default value for the preIconAriaLabel input */
-export const INPUT_PRE_ICON_ARIA_LABEL_DEFAULT: string | null = null;
+export const INPUT_PRE_ICON_ARIA_LABEL_DEFAULT: string | undefined = undefined;
 
 /** default value for the postIconAriaLabel input */
-export const INPUT_POST_ICON_ARIA_LABEL_DEFAULT: string | null = null;
+export const INPUT_POST_ICON_ARIA_LABEL_DEFAULT: string | undefined = undefined;
 
 /** default value for the inlineItems input */
 export const INPUT_INLINE_ITEMS_DEFAULT: InputInlineItem[] = [];
@@ -68,25 +69,25 @@ export const INPUT_AUTOCOMPLETE_DEFAULT = 'off';
 export const INPUT_BLOCK_PASSWORD_MANAGER_DEFAULT = true;
 
 /** default value for the ariaExpanded input */
-export const INPUT_ARIA_EXPANDED_DEFAULT: boolean | null = null;
+export const INPUT_ARIA_EXPANDED_DEFAULT: boolean | undefined = undefined;
 
 /** default value for the ariaHasPopup input */
-export const INPUT_ARIA_HAS_POPUP_DEFAULT: string | null = null;
+export const INPUT_ARIA_HAS_POPUP_DEFAULT: string | undefined = undefined;
 
 /** default value for the ariaAutoComplete input */
-export const INPUT_ARIA_AUTO_COMPLETE_DEFAULT: string | null = null;
+export const INPUT_ARIA_AUTO_COMPLETE_DEFAULT: string | undefined = undefined;
 
 /** default value for the ariaActiveDescendant input */
-export const INPUT_ARIA_ACTIVE_DESCENDANT_DEFAULT: string | null = null;
+export const INPUT_ARIA_ACTIVE_DESCENDANT_DEFAULT: string | undefined = undefined;
 
 /** default value for the ariaControls input */
-export const INPUT_ARIA_CONTROLS_DEFAULT: string | null = null;
+export const INPUT_ARIA_CONTROLS_DEFAULT: string | undefined = undefined;
 
 /** default value for the inputRole input */
-export const INPUT_ROLE_DEFAULT: string | null = null;
+export const INPUT_ROLE_DEFAULT: string | undefined = undefined;
 
 /** default value for the ariaLabel input */
-export const INPUT_ARIA_LABEL_DEFAULT: string | null = null;
+export const INPUT_ARIA_LABEL_DEFAULT: string | undefined = undefined;
 
 /** available visual variants for the input component */
 export const allInputVariants = ['bordered', 'borderless'] as const;
@@ -170,16 +171,26 @@ export class Input implements AfterViewInit, ControlValueAccessor {
   public readonly readonly = input<boolean>(INPUT_READONLY_DEFAULT);
 
   /** icon displayed before the input text */
-  public readonly preIcon = input<IconName | null>(INPUT_PRE_ICON_DEFAULT);
+  public readonly preIcon = input<IconName | undefined, IconName | null | undefined>(INPUT_PRE_ICON_DEFAULT, {
+    transform: angularUtils.transformNullToUndefined,
+  });
 
   /** accessible label for the pre-icon button when it is interactive */
-  public readonly preIconAriaLabel = input<string | null>(INPUT_PRE_ICON_ARIA_LABEL_DEFAULT);
+  public readonly preIconAriaLabel = input<string | undefined, string | null | undefined>(
+    INPUT_PRE_ICON_ARIA_LABEL_DEFAULT,
+    { transform: angularUtils.transformNullToUndefined }
+  );
 
   /** icon displayed after the input text */
-  public readonly postIcon = input<IconName | null>(INPUT_POST_ICON_DEFAULT);
+  public readonly postIcon = input<IconName | undefined, IconName | null | undefined>(INPUT_POST_ICON_DEFAULT, {
+    transform: angularUtils.transformNullToUndefined,
+  });
 
   /** accessible label for the post-icon button when it is interactive and not a password toggle */
-  public readonly postIconAriaLabel = input<string | null>(INPUT_POST_ICON_ARIA_LABEL_DEFAULT);
+  public readonly postIconAriaLabel = input<string | undefined, string | null | undefined>(
+    INPUT_POST_ICON_ARIA_LABEL_DEFAULT,
+    { transform: angularUtils.transformNullToUndefined }
+  );
 
   /** array of inline tag items displayed inside the input */
   public readonly inlineItems = input<InputInlineItem[]>(INPUT_INLINE_ITEMS_DEFAULT);
@@ -203,25 +214,41 @@ export class Input implements AfterViewInit, ControlValueAccessor {
   public readonly blockPasswordManager = input<boolean>(INPUT_BLOCK_PASSWORD_MANAGER_DEFAULT);
 
   /** aria-expanded attribute value forwarded to the native input */
-  public readonly ariaExpanded = input<boolean | null>(INPUT_ARIA_EXPANDED_DEFAULT);
+  public readonly ariaExpanded = input<boolean | undefined, boolean | null | undefined>(INPUT_ARIA_EXPANDED_DEFAULT, {
+    transform: angularUtils.transformNullToUndefined,
+  });
 
   /** aria-haspopup attribute value forwarded to the native input */
-  public readonly ariaHasPopup = input<string | null>(INPUT_ARIA_HAS_POPUP_DEFAULT);
+  public readonly ariaHasPopup = input<string | undefined, string | null | undefined>(INPUT_ARIA_HAS_POPUP_DEFAULT, {
+    transform: angularUtils.transformNullToUndefined,
+  });
 
   /** aria-autocomplete attribute value forwarded to the native input */
-  public readonly ariaAutoComplete = input<string | null>(INPUT_ARIA_AUTO_COMPLETE_DEFAULT);
+  public readonly ariaAutoComplete = input<string | undefined, string | null | undefined>(
+    INPUT_ARIA_AUTO_COMPLETE_DEFAULT,
+    { transform: angularUtils.transformNullToUndefined }
+  );
 
   /** aria-activedescendant attribute value forwarded to the native input */
-  public readonly ariaActiveDescendant = input<string | null>(INPUT_ARIA_ACTIVE_DESCENDANT_DEFAULT);
+  public readonly ariaActiveDescendant = input<string | undefined, string | null | undefined>(
+    INPUT_ARIA_ACTIVE_DESCENDANT_DEFAULT,
+    { transform: angularUtils.transformNullToUndefined }
+  );
 
   /** aria-controls attribute value forwarded to the native input */
-  public readonly ariaControls = input<string | null>(INPUT_ARIA_CONTROLS_DEFAULT);
+  public readonly ariaControls = input<string | undefined, string | null | undefined>(INPUT_ARIA_CONTROLS_DEFAULT, {
+    transform: angularUtils.transformNullToUndefined,
+  });
 
   /** role attribute value forwarded to the native input */
-  public readonly inputRole = input<string | null>(INPUT_ROLE_DEFAULT);
+  public readonly inputRole = input<string | undefined, string | null | undefined>(INPUT_ROLE_DEFAULT, {
+    transform: angularUtils.transformNullToUndefined,
+  });
 
   /** accessible label forwarded to the native input element */
-  public readonly ariaLabel = input<string | null>(INPUT_ARIA_LABEL_DEFAULT);
+  public readonly ariaLabel = input<string | undefined, string | null | undefined>(INPUT_ARIA_LABEL_DEFAULT, {
+    transform: angularUtils.transformNullToUndefined,
+  });
 
   /** emitted when the input value changes */
   public readonly valueChange = output<string>();
@@ -254,7 +281,7 @@ export class Input implements AfterViewInit, ControlValueAccessor {
   });
 
   /** the effective post icon, accounting for the password visibility toggle */
-  protected readonly currentPostIcon = computed<IconName | null>(() => {
+  protected readonly currentPostIcon = computed<IconName | undefined>(() => {
     if (this.showPasswordToggle() && this.type() === 'password') {
       return this.brain.showPassword() ? 'eye-off' : 'eye';
     }

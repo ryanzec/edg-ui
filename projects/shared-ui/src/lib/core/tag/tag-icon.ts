@@ -1,17 +1,18 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, output } from '@angular/core';
 import { outputFromObservable } from '@angular/core/rxjs-interop';
 import { Subject } from 'rxjs';
+import { angularUtils } from '@organization/shared-utils';
 import { Icon, type IconName } from '../icon/icon';
 import { Tag } from './tag';
 
 /** the default icon name of the tag-icon */
-export const TAG_ICON_NAME_DEFAULT: IconName | null = null;
+export const TAG_ICON_NAME_DEFAULT: IconName | undefined = undefined;
 
 /** the default removable state of the tag-icon */
 export const TAG_ICON_REMOVABLE_DEFAULT = false;
 
 /** the default accessible label of the tag-icon button */
-export const TAG_ICON_ARIA_LABEL_DEFAULT: string | null = null;
+export const TAG_ICON_ARIA_LABEL_DEFAULT: string | undefined = undefined;
 
 @Component({
   selector: 'org-tag-icon',
@@ -30,14 +31,18 @@ export class TagIcon {
   // needed in order to determine if the clicked output event is being listened to
   private readonly _clicked$ = new Subject<MouseEvent>();
 
-  /** the icon to display; when null and removable is false nothing renders */
-  public readonly name = input<IconName | null>(TAG_ICON_NAME_DEFAULT);
+  /** the icon to display; when undefined and removable is false nothing renders */
+  public readonly name = input<IconName | undefined, IconName | null | undefined>(TAG_ICON_NAME_DEFAULT, {
+    transform: angularUtils.transformNullToUndefined,
+  });
 
   /** when true, the icon renders as the remove (x) affordance and emits removed on click */
   public readonly removable = input<boolean>(TAG_ICON_REMOVABLE_DEFAULT);
 
   /** accessible label for the icon button */
-  public readonly ariaLabel = input<string | null>(TAG_ICON_ARIA_LABEL_DEFAULT);
+  public readonly ariaLabel = input<string | undefined, string | null | undefined>(TAG_ICON_ARIA_LABEL_DEFAULT, {
+    transform: angularUtils.transformNullToUndefined,
+  });
 
   /** emitted when the icon is clicked while not in removable mode */
   public readonly clicked = outputFromObservable(this._clicked$);
@@ -46,7 +51,7 @@ export class TagIcon {
   public readonly removed = output<void>();
 
   /** the resolved icon name, substituting the remove icon when removable */
-  protected readonly resolvedIconName = computed<IconName | null>(() => {
+  protected readonly resolvedIconName = computed<IconName | undefined>(() => {
     if (this.removable()) {
       return 'x';
     }

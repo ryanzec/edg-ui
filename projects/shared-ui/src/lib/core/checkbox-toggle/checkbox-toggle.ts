@@ -1,5 +1,6 @@
 import { Component, ChangeDetectionStrategy, input, computed, forwardRef, inject } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { angularUtils } from '@organization/shared-utils';
 import { Icon, IconName, IconSize } from '../icon/icon';
 import { TextDirective, TextSize } from '../text-directive/text-directive';
 import { ComponentSize } from '../types/component-types';
@@ -9,6 +10,12 @@ import { CheckboxToggleBrainDirective } from '../../brain/checkbox-toggle-brain/
 export const allCheckboxToggleSizes = ['sm', 'base', 'lg'] as const satisfies readonly ComponentSize[];
 
 export type CheckboxToggleSize = (typeof allCheckboxToggleSizes)[number];
+
+/** default value for the onIcon input */
+export const CHECKBOX_TOGGLE_ON_ICON_DEFAULT: IconName | undefined = undefined;
+
+/** default value for the offIcon input */
+export const CHECKBOX_TOGGLE_OFF_ICON_DEFAULT: IconName | undefined = undefined;
 
 @Component({
   selector: 'org-checkbox-toggle',
@@ -51,8 +58,12 @@ export class CheckboxToggle implements ControlValueAccessor {
   public readonly checked = input<boolean>(false);
   public readonly disabled = input<boolean>(false);
   public readonly size = input<CheckboxToggleSize>('base');
-  public readonly onIcon = input<IconName | null>(null);
-  public readonly offIcon = input<IconName | null>(null);
+  public readonly onIcon = input<IconName | undefined, IconName | null | undefined>(CHECKBOX_TOGGLE_ON_ICON_DEFAULT, {
+    transform: angularUtils.transformNullToUndefined,
+  });
+  public readonly offIcon = input<IconName | undefined, IconName | null | undefined>(CHECKBOX_TOGGLE_OFF_ICON_DEFAULT, {
+    transform: angularUtils.transformNullToUndefined,
+  });
 
   public readonly isChecked = computed<boolean>(() => this.brain.isChecked());
   public readonly isDisabled = computed<boolean>(() => this.brain.isDisabled());
@@ -68,7 +79,7 @@ export class CheckboxToggle implements ControlValueAccessor {
     }
   });
 
-  public readonly displayIcon = computed<IconName | null>(() => {
+  public readonly displayIcon = computed<IconName | undefined>(() => {
     if (this.isChecked()) {
       return this.onIcon();
     }

@@ -1,15 +1,16 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, input, signal } from '@angular/core';
+import { angularUtils } from '@organization/shared-utils';
 import SparkMD5 from 'spark-md5';
 import { Avatar } from './avatar';
 
 /** default value for the src input. */
-export const AVATAR_IMAGE_SRC_DEFAULT: string | null = null;
+export const AVATAR_IMAGE_SRC_DEFAULT: string | undefined = undefined;
 
 /** default value for the email input. */
-export const AVATAR_IMAGE_EMAIL_DEFAULT: string | null = null;
+export const AVATAR_IMAGE_EMAIL_DEFAULT: string | undefined = undefined;
 
 /** default value for the alt input. */
-export const AVATAR_IMAGE_ALT_DEFAULT: string | null = null;
+export const AVATAR_IMAGE_ALT_DEFAULT: string | undefined = undefined;
 
 type AvatarImageState = {
   loadError: boolean;
@@ -31,16 +32,22 @@ export class AvatarImage {
   });
 
   /** explicit image url; takes priority over gravatar. */
-  public src = input<string | null>(AVATAR_IMAGE_SRC_DEFAULT);
+  public src = input<string | undefined, string | null | undefined>(AVATAR_IMAGE_SRC_DEFAULT, {
+    transform: angularUtils.transformNullToUndefined,
+  });
 
   /** email address used to fetch a gravatar image when no src is provided. */
-  public email = input<string | null>(AVATAR_IMAGE_EMAIL_DEFAULT);
+  public email = input<string | undefined, string | null | undefined>(AVATAR_IMAGE_EMAIL_DEFAULT, {
+    transform: angularUtils.transformNullToUndefined,
+  });
 
-  /** overrides the alt text; when null, falls back to the parent avatar label. */
-  public alt = input<string | null>(AVATAR_IMAGE_ALT_DEFAULT);
+  /** overrides the alt text; when undefined, falls back to the parent avatar label. */
+  public alt = input<string | undefined, string | null | undefined>(AVATAR_IMAGE_ALT_DEFAULT, {
+    transform: angularUtils.transformNullToUndefined,
+  });
 
-  /** resolved image url — prefers src, falls back to gravatar, then null. */
-  protected readonly imageSrc = computed<string | null>(() => {
+  /** resolved image url — prefers src, falls back to gravatar, then undefined. */
+  protected readonly imageSrc = computed<string | undefined>(() => {
     if (this.src()) {
       return this.src();
     }
@@ -49,7 +56,7 @@ export class AvatarImage {
       return this._generateGravatarUrl(this.email()!);
     }
 
-    return null;
+    return undefined;
   });
 
   /** resolved alt text — prefers the explicit alt input, falls back to the parent avatar label. */

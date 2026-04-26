@@ -59,7 +59,7 @@ class DropDownSelectorHost {
   public readonly disabled = input<boolean>(DROP_DOWN_SELECTOR_DISABLED_DEFAULT);
   public readonly size = input<DropDownSelectorSize>(DROP_DOWN_SELECTOR_SIZE_DEFAULT);
   public readonly position = input<DropDownSelectorPosition>(DROP_DOWN_SELECTOR_POSITION_DEFAULT);
-  public readonly iconName = input<IconName | null>(DROP_DOWN_SELECTOR_ICON_NAME_DEFAULT);
+  public readonly iconName = input<IconName | undefined>(DROP_DOWN_SELECTOR_ICON_NAME_DEFAULT);
   public readonly initialSelection = input<SelectionValue<string>[]>([]);
 
   protected readonly selectedItems = computed<SelectionValue<string>[]>(() => this.selectionStore.selectedItemsArray());

@@ -1,14 +1,15 @@
 import { Component, ChangeDetectionStrategy, input } from '@angular/core';
 import { NgOptimizedImage } from '@angular/common';
+import { angularUtils } from '@organization/shared-utils';
 
 /** default value for the card image full width input */
 export const CARD_IMAGE_FULL_WIDTH_DEFAULT = true;
 
 /** default value for the card image width input */
-export const CARD_IMAGE_WIDTH_DEFAULT: number | null = null;
+export const CARD_IMAGE_WIDTH_DEFAULT: number | undefined = undefined;
 
 /** default value for the card image height input */
-export const CARD_IMAGE_HEIGHT_DEFAULT: number | null = null;
+export const CARD_IMAGE_HEIGHT_DEFAULT: number | undefined = undefined;
 
 /** default value for the card image priority input */
 export const CARD_IMAGE_PRIORITY_DEFAULT = false;
@@ -36,10 +37,14 @@ export class CardImage {
   public fullWidth = input<boolean>(CARD_IMAGE_FULL_WIDTH_DEFAULT);
 
   /** the intrinsic width of the image in pixels; when omitted the image renders in fill mode */
-  public width = input<number | null>(CARD_IMAGE_WIDTH_DEFAULT);
+  public width = input<number | undefined, number | null | undefined>(CARD_IMAGE_WIDTH_DEFAULT, {
+    transform: angularUtils.transformNullToUndefined,
+  });
 
   /** the intrinsic height of the image in pixels; when omitted the image renders in fill mode */
-  public height = input<number | null>(CARD_IMAGE_HEIGHT_DEFAULT);
+  public height = input<number | undefined, number | null | undefined>(CARD_IMAGE_HEIGHT_DEFAULT, {
+    transform: angularUtils.transformNullToUndefined,
+  });
 
   /** whether to treat this image as a lcp element and load it with high priority */
   public priority = input<boolean>(CARD_IMAGE_PRIORITY_DEFAULT);

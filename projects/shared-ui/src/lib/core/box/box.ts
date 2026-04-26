@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { angularUtils } from '@organization/shared-utils';
 import { ComponentColor, allComponentColors } from '../types/component-types';
 
 /** the color variant type for the box component */
@@ -38,7 +39,7 @@ export const allBoxBackgrounds = ['colored', 'colorless'] as const;
 export type BoxBackground = (typeof allBoxBackgrounds)[number];
 
 /** default value for the box color input */
-export const BOX_COLOR_DEFAULT: BoxColor | null = null;
+export const BOX_COLOR_DEFAULT: BoxColor | undefined = undefined;
 
 /** default value for the box border input */
 export const BOX_BORDER_DEFAULT: BoxBorder = 'bordered';
@@ -68,7 +69,9 @@ export class Box {
    * consumers must add appropriate aria attributes (e.g. role="alert") when the color
    * carries semantic importance for assistive technologies.
    */
-  public color = input<BoxColor | null>(BOX_COLOR_DEFAULT);
+  public color = input<BoxColor | undefined, BoxColor | null | undefined>(BOX_COLOR_DEFAULT, {
+    transform: angularUtils.transformNullToUndefined,
+  });
 
   /** the border/visual style variant of the box */
   public border = input<BoxBorder>(BOX_BORDER_DEFAULT);

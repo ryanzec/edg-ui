@@ -1,8 +1,9 @@
 import { Directive, OnDestroy, computed, effect, input, signal } from '@angular/core';
+import { angularUtils } from '@organization/shared-utils';
 import { Chart as ChartJS, ChartConfiguration } from 'chart.js/auto';
 
 /** default value for the chartConfig input */
-export const CHART_CONFIG_DEFAULT: ChartConfiguration | null = null;
+export const CHART_CONFIG_DEFAULT: ChartConfiguration | undefined = undefined;
 
 /** default value for the chartIsLoading input */
 export const CHART_IS_LOADING_DEFAULT = false;
@@ -30,8 +31,11 @@ export class ChartBrainDirective implements OnDestroy {
 
   private readonly _canvasElement = signal<HTMLCanvasElement | null>(null);
 
-  /** chart.js configuration object; setting this to null clears the chart */
-  public readonly chartConfig = input<ChartConfiguration | null>(CHART_CONFIG_DEFAULT);
+  /** chart.js configuration object; setting this to undefined clears the chart */
+  public readonly chartConfig = input<ChartConfiguration | undefined, ChartConfiguration | null | undefined>(
+    CHART_CONFIG_DEFAULT,
+    { transform: angularUtils.transformNullToUndefined }
+  );
 
   /** when true, suspends chart creation and clears any existing instance */
   public readonly chartIsLoading = input<boolean>(CHART_IS_LOADING_DEFAULT);

@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, signal } from '@angular/core';
 import { CdkConnectedOverlay, CdkOverlayOrigin, type ConnectedPosition } from '@angular/cdk/overlay';
+import { angularUtils } from '@organization/shared-utils';
 import { Icon, type IconName, type IconSize } from '../icon/icon';
 import { List } from '../list/list';
 import { ListItem } from '../list/list-item';
@@ -43,7 +44,7 @@ export const DROP_DOWN_SELECTOR_SIZE_DEFAULT: DropDownSelectorSize = 'base';
 export const DROP_DOWN_SELECTOR_POSITION_DEFAULT: DropDownSelectorPosition = 'below';
 
 /** default value for the iconName input */
-export const DROP_DOWN_SELECTOR_ICON_NAME_DEFAULT: IconName | null = null;
+export const DROP_DOWN_SELECTOR_ICON_NAME_DEFAULT: IconName | undefined = undefined;
 
 /** the icon size used for each supported drop-down selector trigger size */
 const TRIGGER_ICON_SIZE_BY_TRIGGER_SIZE: Record<DropDownSelectorSize, IconSize> = {
@@ -113,8 +114,11 @@ export class DropDownSelector<TValue = unknown> {
   /** the position of the dropdown menu relative to the trigger */
   public readonly position = input<DropDownSelectorPosition>(DROP_DOWN_SELECTOR_POSITION_DEFAULT);
 
-  /** the optional icon rendered before the trigger label; when null, no leading icon is rendered */
-  public readonly iconName = input<IconName | null>(DROP_DOWN_SELECTOR_ICON_NAME_DEFAULT);
+  /** the optional icon rendered before the trigger label; when undefined, no leading icon is rendered */
+  public readonly iconName = input<IconName | undefined, IconName | null | undefined>(
+    DROP_DOWN_SELECTOR_ICON_NAME_DEFAULT,
+    { transform: angularUtils.transformNullToUndefined }
+  );
 
   /** the icon size to use for icons rendered inside the trigger, derived from the trigger size variant */
   protected readonly triggerIconSize = computed<IconSize>(() => TRIGGER_ICON_SIZE_BY_TRIGGER_SIZE[this.size()]);

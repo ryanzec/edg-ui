@@ -1,4 +1,5 @@
 import { Directive, input } from '@angular/core';
+import { angularUtils } from '@organization/shared-utils';
 import { ComponentColor, allComponentColors } from '../types/component-types';
 
 /** semantic color options available for the text directive */
@@ -14,10 +15,10 @@ export type TextSize = '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
 export const textSizes = ['2xs', 'xs', 'sm', 'md', 'lg', 'xl', '2xl'] as const satisfies readonly TextSize[];
 
 /** default value for the textColor input */
-export const TEXT_COLOR_DEFAULT: TextColor | null = null;
+export const TEXT_COLOR_DEFAULT: TextColor | undefined = undefined;
 
 /** default value for the textSize input */
-export const TEXT_SIZE_DEFAULT: TextSize | null = null;
+export const TEXT_SIZE_DEFAULT: TextSize | undefined = undefined;
 
 /** applies semantic text color and size utility classes to any host element */
 @Directive({
@@ -29,8 +30,12 @@ export const TEXT_SIZE_DEFAULT: TextSize | null = null;
 })
 export class TextDirective {
   /** the semantic color to apply to the text */
-  public textColor = input<TextColor | null>(TEXT_COLOR_DEFAULT);
+  public textColor = input<TextColor | undefined, TextColor | null | undefined>(TEXT_COLOR_DEFAULT, {
+    transform: angularUtils.transformNullToUndefined,
+  });
 
   /** the font size to apply to the text */
-  public textSize = input<TextSize | null>(TEXT_SIZE_DEFAULT);
+  public textSize = input<TextSize | undefined, TextSize | null | undefined>(TEXT_SIZE_DEFAULT, {
+    transform: angularUtils.transformNullToUndefined,
+  });
 }

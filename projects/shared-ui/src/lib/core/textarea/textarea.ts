@@ -20,7 +20,7 @@ import { TagIcon } from '../tag/tag-icon';
 import { Subject } from 'rxjs';
 import { outputFromObservable } from '@angular/core/rxjs-interop';
 import { FORM_FIELD_COMPONENT } from '../form-field/form-field';
-import { logManager } from '@organization/shared-utils';
+import { angularUtils, logManager } from '@organization/shared-utils';
 import { TextareaBrainDirective } from '../../brain/textarea-brain/textarea-brain';
 
 /** default value for the variant input */
@@ -39,16 +39,16 @@ export const TEXTAREA_DISABLED_DEFAULT = false;
 export const TEXTAREA_READONLY_DEFAULT = false;
 
 /** default value for the preIcon input */
-export const TEXTAREA_PRE_ICON_DEFAULT: IconName | null = null;
+export const TEXTAREA_PRE_ICON_DEFAULT: IconName | undefined = undefined;
 
 /** default value for the preIconAriaLabel input */
-export const TEXTAREA_PRE_ICON_ARIA_LABEL_DEFAULT: string | null = null;
+export const TEXTAREA_PRE_ICON_ARIA_LABEL_DEFAULT: string | undefined = undefined;
 
 /** default value for the postIcon input */
-export const TEXTAREA_POST_ICON_DEFAULT: IconName | null = null;
+export const TEXTAREA_POST_ICON_DEFAULT: IconName | undefined = undefined;
 
 /** default value for the postIconAriaLabel input */
-export const TEXTAREA_POST_ICON_ARIA_LABEL_DEFAULT: string | null = null;
+export const TEXTAREA_POST_ICON_ARIA_LABEL_DEFAULT: string | undefined = undefined;
 
 /** default value for the preIconAlignment input */
 export const TEXTAREA_PRE_ICON_ALIGNMENT_DEFAULT: TextareaIconAlignment = 'start';
@@ -167,16 +167,26 @@ export class Textarea implements AfterViewInit, ControlValueAccessor {
   public readonly readonly = input<boolean>(TEXTAREA_READONLY_DEFAULT);
 
   /** icon displayed before the textarea text */
-  public readonly preIcon = input<IconName | null>(TEXTAREA_PRE_ICON_DEFAULT);
+  public readonly preIcon = input<IconName | undefined, IconName | null | undefined>(TEXTAREA_PRE_ICON_DEFAULT, {
+    transform: angularUtils.transformNullToUndefined,
+  });
 
   /** accessible label for the pre-icon button when it is interactive */
-  public readonly preIconAriaLabel = input<string | null>(TEXTAREA_PRE_ICON_ARIA_LABEL_DEFAULT);
+  public readonly preIconAriaLabel = input<string | undefined, string | null | undefined>(
+    TEXTAREA_PRE_ICON_ARIA_LABEL_DEFAULT,
+    { transform: angularUtils.transformNullToUndefined }
+  );
 
   /** icon displayed after the textarea text */
-  public readonly postIcon = input<IconName | null>(TEXTAREA_POST_ICON_DEFAULT);
+  public readonly postIcon = input<IconName | undefined, IconName | null | undefined>(TEXTAREA_POST_ICON_DEFAULT, {
+    transform: angularUtils.transformNullToUndefined,
+  });
 
   /** accessible label for the post-icon button when it is interactive */
-  public readonly postIconAriaLabel = input<string | null>(TEXTAREA_POST_ICON_ARIA_LABEL_DEFAULT);
+  public readonly postIconAriaLabel = input<string | undefined, string | null | undefined>(
+    TEXTAREA_POST_ICON_ARIA_LABEL_DEFAULT,
+    { transform: angularUtils.transformNullToUndefined }
+  );
 
   /** vertical alignment of the pre-icon button */
   public readonly preIconAlignment = input<TextareaIconAlignment>(TEXTAREA_PRE_ICON_ALIGNMENT_DEFAULT);

@@ -1,11 +1,12 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
+import { angularUtils } from '@organization/shared-utils';
 import { List } from '../list/list';
 import { ListItem } from '../list/list-item';
 import { Combobox } from './combobox';
 import type { ComboboxOption as ComboboxOptionData } from '../combobox-store/combobox-store';
 
 /** default value for the displayLabelPrefix input */
-export const COMBOBOX_OPTION_DISPLAY_LABEL_PREFIX_DEFAULT: string | null = null;
+export const COMBOBOX_OPTION_DISPLAY_LABEL_PREFIX_DEFAULT: string | undefined = undefined;
 
 /**
  * renders a single option inside the combobox dropdown; reads focused state and forwards
@@ -32,8 +33,11 @@ export class ComboboxOption {
   /** the option data to render. */
   public option = input.required<ComboboxOptionData>();
 
-  /** optional label-wrapper prefix (e.g. `Add` to produce `Add "label"`); when null the raw label is rendered. */
-  public displayLabelPrefix = input<string | null>(COMBOBOX_OPTION_DISPLAY_LABEL_PREFIX_DEFAULT);
+  /** optional label-wrapper prefix (e.g. `Add` to produce `Add "label"`); when undefined the raw label is rendered. */
+  public displayLabelPrefix = input<string | undefined, string | null | undefined>(
+    COMBOBOX_OPTION_DISPLAY_LABEL_PREFIX_DEFAULT,
+    { transform: angularUtils.transformNullToUndefined }
+  );
 
   /** whether this option matches the currently focused option in the parent combobox. */
   protected readonly isFocused = computed<boolean>(

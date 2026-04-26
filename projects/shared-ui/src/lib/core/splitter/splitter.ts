@@ -9,7 +9,7 @@ import {
   input,
 } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
-import { logManager } from '@organization/shared-utils';
+import { angularUtils, logManager } from '@organization/shared-utils';
 import {
   SPLITTER_COLLAPSED_SIDE_DEFAULT as BRAIN_SPLITTER_COLLAPSED_SIDE_DEFAULT,
   SPLITTER_DEFAULT_SIZE_DEFAULT as BRAIN_SPLITTER_DEFAULT_SIZE_DEFAULT,
@@ -42,7 +42,7 @@ export const SPLITTER_DEFAULT_SIZE_DEFAULT: number[] = BRAIN_SPLITTER_DEFAULT_SI
 export const SPLITTER_IS_ENABLED_DEFAULT = BRAIN_SPLITTER_IS_ENABLED_DEFAULT;
 
 /** the default collapsed side of the splitter */
-export const SPLITTER_COLLAPSED_SIDE_DEFAULT: SplitterCollapsedSide | null = BRAIN_SPLITTER_COLLAPSED_SIDE_DEFAULT;
+export const SPLITTER_COLLAPSED_SIDE_DEFAULT: SplitterCollapsedSide | undefined = BRAIN_SPLITTER_COLLAPSED_SIDE_DEFAULT;
 
 @Component({
   selector: 'org-splitter',
@@ -87,8 +87,11 @@ export class Splitter {
   /** whether the divider is interactive and draggable */
   public readonly isEnabled = input<boolean>(SPLITTER_IS_ENABLED_DEFAULT);
 
-  /** which section is collapsed to take up all space, null means neither section is collapsed */
-  public readonly collapsedSide = input<SplitterCollapsedSide | null>(SPLITTER_COLLAPSED_SIDE_DEFAULT);
+  /** which section is collapsed to take up all space, undefined means neither section is collapsed */
+  public readonly collapsedSide = input<SplitterCollapsedSide | undefined, SplitterCollapsedSide | null | undefined>(
+    SPLITTER_COLLAPSED_SIDE_DEFAULT,
+    { transform: angularUtils.transformNullToUndefined }
+  );
 
   /** the first section template ref from projected ng-template #section */
   protected readonly firstSectionTemplate = computed<TemplateRef<unknown> | null>(() => {

@@ -1,8 +1,9 @@
 import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
+import { angularUtils } from '@organization/shared-utils';
 import { Avatar } from './avatar';
 
 /** default value for the subLabel input. */
-export const AVATAR_LABEL_SUB_LABEL_DEFAULT: string | null = null;
+export const AVATAR_LABEL_SUB_LABEL_DEFAULT: string | undefined = undefined;
 
 @Component({
   selector: 'org-avatar-label',
@@ -18,5 +19,7 @@ export class AvatarLabel {
   protected readonly avatarComponent = inject(Avatar, { host: true });
 
   /** optional secondary text displayed below the main label. */
-  public subLabel = input<string | null>(AVATAR_LABEL_SUB_LABEL_DEFAULT);
+  public subLabel = input<string | undefined, string | null | undefined>(AVATAR_LABEL_SUB_LABEL_DEFAULT, {
+    transform: angularUtils.transformNullToUndefined,
+  });
 }

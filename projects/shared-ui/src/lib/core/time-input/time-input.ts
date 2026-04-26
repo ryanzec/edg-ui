@@ -13,6 +13,7 @@ import {
   untracked,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { angularUtils } from '@organization/shared-utils';
 import { Input as BaseInput, type InputVariant } from '../input/input';
 import { TimeInputBrainDirective } from '../../brain/time-input-brain/time-input-brain';
 
@@ -38,7 +39,7 @@ export const TIME_INPUT_DEFAULT_VALUE_DEFAULT = '';
 export const TIME_INPUT_AUTO_FOCUS_DEFAULT = false;
 
 /** default value for the ariaLabel input */
-export const TIME_INPUT_ARIA_LABEL_DEFAULT: string | null = null;
+export const TIME_INPUT_ARIA_LABEL_DEFAULT: string | undefined = undefined;
 
 @Component({
   selector: 'org-time-input',
@@ -100,7 +101,9 @@ export class TimeInput implements AfterViewInit, ControlValueAccessor {
   public readonly autoFocus = input<boolean>(TIME_INPUT_AUTO_FOCUS_DEFAULT);
 
   /** accessible label passed through to the native input element */
-  public readonly ariaLabel = input<string | null>(TIME_INPUT_ARIA_LABEL_DEFAULT);
+  public readonly ariaLabel = input<string | undefined, string | null | undefined>(TIME_INPUT_ARIA_LABEL_DEFAULT, {
+    transform: angularUtils.transformNullToUndefined,
+  });
 
   /** current time value in "hh:mm am/pm" format, supports two-way binding */
   public readonly value = model<string>('');

@@ -15,6 +15,7 @@ import {
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { CdkConnectedOverlay, CdkOverlayOrigin } from '@angular/cdk/overlay';
+import { angularUtils } from '@organization/shared-utils';
 import { Input, type InputInlineItem } from '../input/input';
 import {
   ComboboxStore,
@@ -36,7 +37,8 @@ export const COMBOBOX_ALLOW_NEW_OPTIONS_DEFAULT = false;
 export const COMBOBOX_IS_MULTI_SELECT_DEFAULT = false;
 
 /** default value for the optionFilter input */
-export const COMBOBOX_OPTION_FILTER_DEFAULT: ((inputValue: string, option: ComboboxOption) => boolean) | null = null;
+export const COMBOBOX_OPTION_FILTER_DEFAULT: ((inputValue: string, option: ComboboxOption) => boolean) | undefined =
+  undefined;
 
 /** default value for the filterSelectedOptions input */
 export const COMBOBOX_FILTER_SELECTED_OPTIONS_DEFAULT = false;
@@ -115,9 +117,10 @@ export class Combobox implements AfterViewInit, ControlValueAccessor {
   public readonly autoShowOption = input<boolean>(COMBOBOX_AUTO_SHOW_OPTION_DEFAULT);
   public readonly allowNewOptions = input<boolean>(COMBOBOX_ALLOW_NEW_OPTIONS_DEFAULT);
   public readonly isMultiSelect = input<boolean>(COMBOBOX_IS_MULTI_SELECT_DEFAULT);
-  public readonly optionFilter = input<((inputValue: string, option: ComboboxOption) => boolean) | null>(
-    COMBOBOX_OPTION_FILTER_DEFAULT
-  );
+  public readonly optionFilter = input<
+    ((inputValue: string, option: ComboboxOption) => boolean) | undefined,
+    ((inputValue: string, option: ComboboxOption) => boolean) | null | undefined
+  >(COMBOBOX_OPTION_FILTER_DEFAULT, { transform: angularUtils.transformNullToUndefined });
   public readonly filterSelectedOptions = input<boolean>(COMBOBOX_FILTER_SELECTED_OPTIONS_DEFAULT);
   public readonly placeholder = input<string>(COMBOBOX_PLACEHOLDER_DEFAULT);
   public readonly isGroupingEnabled = input<boolean>(COMBOBOX_IS_GROUPING_ENABLED_DEFAULT);
@@ -219,7 +222,7 @@ export class Combobox implements AfterViewInit, ControlValueAccessor {
       this._store.initialize(this.options(), {
         isMultiSelect: this.isMultiSelect(),
         allowNewOptions: this.allowNewOptions(),
-        optionFilter: this.optionFilter(),
+        optionFilter: this.optionFilter() ?? null,
         filterSelectedOptions: this.filterSelectedOptions(),
       });
     });
@@ -237,7 +240,7 @@ export class Combobox implements AfterViewInit, ControlValueAccessor {
       const config = {
         isMultiSelect: this.isMultiSelect(),
         allowNewOptions: this.allowNewOptions(),
-        optionFilter: this.optionFilter(),
+        optionFilter: this.optionFilter() ?? null,
         filterSelectedOptions: this.filterSelectedOptions(),
       };
       untracked(() => {

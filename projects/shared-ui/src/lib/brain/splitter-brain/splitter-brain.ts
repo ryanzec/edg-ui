@@ -1,4 +1,5 @@
 import { Directive, ElementRef, computed, inject, input, signal } from '@angular/core';
+import { angularUtils } from '@organization/shared-utils';
 
 /** all available splitter direction values */
 export const allSplitterDirections = ['horizontal', 'vertical'] as const;
@@ -22,7 +23,7 @@ export const SPLITTER_DEFAULT_SIZE_DEFAULT: number[] = [50];
 export const SPLITTER_IS_ENABLED_DEFAULT = true;
 
 /** default value for the splitterCollapsedSide input */
-export const SPLITTER_COLLAPSED_SIDE_DEFAULT: SplitterCollapsedSide | null = null;
+export const SPLITTER_COLLAPSED_SIDE_DEFAULT: SplitterCollapsedSide | undefined = undefined;
 
 /** the internal state shape for the splitter brain directive */
 type SplitterState = {
@@ -63,8 +64,11 @@ export class SplitterBrainDirective {
   /** whether the divider is interactive and draggable */
   public readonly splitterIsEnabled = input<boolean>(SPLITTER_IS_ENABLED_DEFAULT);
 
-  /** which section is collapsed to take up all space, null means neither section is collapsed */
-  public readonly splitterCollapsedSide = input<SplitterCollapsedSide | null>(SPLITTER_COLLAPSED_SIDE_DEFAULT);
+  /** which section is collapsed to take up all space, undefined means neither section is collapsed */
+  public readonly splitterCollapsedSide = input<
+    SplitterCollapsedSide | undefined,
+    SplitterCollapsedSide | null | undefined
+  >(SPLITTER_COLLAPSED_SIDE_DEFAULT, { transform: angularUtils.transformNullToUndefined });
 
   /** the resolved minimum size tuple [first, second] in pixels */
   public readonly resolvedMinimumSize = computed<[number, number]>(() => {
@@ -90,7 +94,7 @@ export class SplitterBrainDirective {
 
   /** whether the divider can be dragged to resize sections */
   public readonly isDraggable = computed<boolean>(() => {
-    return this.splitterIsEnabled() && this.splitterCollapsedSide() === null;
+    return this.splitterIsEnabled() && this.splitterCollapsedSide() === undefined;
   });
 
   /** whether the divider is currently being dragged */

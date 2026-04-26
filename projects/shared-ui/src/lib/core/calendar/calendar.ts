@@ -9,6 +9,7 @@ import {
   inject,
   Injector,
 } from '@angular/core';
+import { angularUtils } from '@organization/shared-utils';
 import { DateTime } from 'luxon';
 import { CalendarHeader } from './calendar-header';
 import { CalendarDates } from './calendar-dates';
@@ -54,13 +55,13 @@ export type CalendarMonthOption = {
 export const CALENDAR_DEFAULT_DISPLAY_DATE_DEFAULT = DateTime.now();
 export const CALENDAR_START_YEAR_DEFAULT = DateTime.now().year - 100;
 export const CALENDAR_END_YEAR_DEFAULT = DateTime.now().year + 20;
-export const CALENDAR_SELECTED_START_DATE_DEFAULT: DateTime | null = null;
-export const CALENDAR_SELECTED_END_DATE_DEFAULT: DateTime | null = null;
+export const CALENDAR_SELECTED_START_DATE_DEFAULT: DateTime | undefined = undefined;
+export const CALENDAR_SELECTED_END_DATE_DEFAULT: DateTime | undefined = undefined;
 export const CALENDAR_ALLOW_RANGE_SELECTION_DEFAULT = false;
 export const CALENDAR_ALLOW_PARTIAL_RANGE_SELECTION_DEFAULT = false;
 export const CALENDAR_PARTIAL_RANGE_SELECTION_TYPE_DEFAULT: CalendarPartialRangeSelectionType = 'range';
-export const CALENDAR_DISABLE_BEFORE_DEFAULT: DateTime | null = null;
-export const CALENDAR_DISABLE_AFTER_DEFAULT: DateTime | null = null;
+export const CALENDAR_DISABLE_BEFORE_DEFAULT: DateTime | undefined = undefined;
+export const CALENDAR_DISABLE_AFTER_DEFAULT: DateTime | undefined = undefined;
 export const CALENDAR_ALLOWED_DATE_RANGE_DEFAULT = 0;
 export const CALENDAR_ENABLE_DESELECTION_DEFAULT = true;
 export const CALENDAR_CONTAINER_CLASS_DEFAULT = '';
@@ -116,15 +117,27 @@ export class Calendar {
   public readonly defaultDisplayDate = input<DateTime>(CALENDAR_DEFAULT_DISPLAY_DATE_DEFAULT);
   public readonly startYear = input<number>(CALENDAR_START_YEAR_DEFAULT);
   public readonly endYear = input<number>(CALENDAR_END_YEAR_DEFAULT);
-  public readonly selectedStartDate = input<DateTime | null>(CALENDAR_SELECTED_START_DATE_DEFAULT);
-  public readonly selectedEndDate = input<DateTime | null>(CALENDAR_SELECTED_END_DATE_DEFAULT);
+  public readonly selectedStartDate = input<DateTime | undefined, DateTime | null | undefined>(
+    CALENDAR_SELECTED_START_DATE_DEFAULT,
+    { transform: angularUtils.transformNullToUndefined }
+  );
+  public readonly selectedEndDate = input<DateTime | undefined, DateTime | null | undefined>(
+    CALENDAR_SELECTED_END_DATE_DEFAULT,
+    { transform: angularUtils.transformNullToUndefined }
+  );
   public readonly allowRangeSelection = input<boolean>(CALENDAR_ALLOW_RANGE_SELECTION_DEFAULT);
   public readonly allowPartialRangeSelection = input<boolean>(CALENDAR_ALLOW_PARTIAL_RANGE_SELECTION_DEFAULT);
   public readonly partialRangeSelectionType = input<CalendarPartialRangeSelectionType>(
     CALENDAR_PARTIAL_RANGE_SELECTION_TYPE_DEFAULT
   );
-  public readonly disableBefore = input<DateTime | null>(CALENDAR_DISABLE_BEFORE_DEFAULT);
-  public readonly disableAfter = input<DateTime | null>(CALENDAR_DISABLE_AFTER_DEFAULT);
+  public readonly disableBefore = input<DateTime | undefined, DateTime | null | undefined>(
+    CALENDAR_DISABLE_BEFORE_DEFAULT,
+    { transform: angularUtils.transformNullToUndefined }
+  );
+  public readonly disableAfter = input<DateTime | undefined, DateTime | null | undefined>(
+    CALENDAR_DISABLE_AFTER_DEFAULT,
+    { transform: angularUtils.transformNullToUndefined }
+  );
   public readonly allowedDateRange = input<number>(CALENDAR_ALLOWED_DATE_RANGE_DEFAULT);
   public readonly enableDeselection = input<boolean>(CALENDAR_ENABLE_DESELECTION_DEFAULT);
   public readonly containerClass = input<string>(CALENDAR_CONTAINER_CLASS_DEFAULT);

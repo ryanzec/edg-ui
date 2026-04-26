@@ -11,11 +11,11 @@ import {
 import { ChartConfiguration } from 'chart.js/auto';
 import { LoadingSpinner } from '../loading-spinner/loading-spinner';
 import { EmptyIndicator } from '../empty-indicator/empty-indicator';
-import { cssUtils } from '@organization/shared-utils';
+import { angularUtils, cssUtils } from '@organization/shared-utils';
 import { ChartBrainDirective } from '../../brain/chart-brain/chart-brain';
 
 /** default value for the config input */
-export const CHART_CONFIG_DEFAULT: ChartConfiguration | null = null;
+export const CHART_CONFIG_DEFAULT: ChartConfiguration | undefined = undefined;
 
 /** default value for the isLoading input */
 export const CHART_IS_LOADING_DEFAULT = false;
@@ -45,8 +45,11 @@ export class Chart {
   /** reference to the canvas element used to render the chart */
   private readonly _canvasRef = viewChild<ElementRef<HTMLCanvasElement>>('canvasRef');
 
-  /** chart.js configuration object; setting this to null clears the chart */
-  public readonly config = input<ChartConfiguration | null>(CHART_CONFIG_DEFAULT);
+  /** chart.js configuration object; setting this to undefined clears the chart */
+  public readonly config = input<ChartConfiguration | undefined, ChartConfiguration | null | undefined>(
+    CHART_CONFIG_DEFAULT,
+    { transform: angularUtils.transformNullToUndefined }
+  );
 
   /** when true, displays a loading spinner in place of the chart */
   public readonly isLoading = input<boolean>(CHART_IS_LOADING_DEFAULT);

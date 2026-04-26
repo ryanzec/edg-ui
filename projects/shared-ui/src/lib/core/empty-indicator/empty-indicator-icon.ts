@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { angularUtils } from '@organization/shared-utils';
 import { Icon, ICON_COLOR_DEFAULT, ICON_LABEL_DEFAULT, type IconColor, type IconName } from '../icon/icon';
 
 /** default value for the {@link EmptyIndicatorIcon.color} input */
@@ -21,5 +22,7 @@ export class EmptyIndicatorIcon {
   public color = input<IconColor>(EMPTY_INDICATOR_ICON_COLOR_DEFAULT);
 
   /** the accessible label of the icon, passed through to the inner Icon component */
-  public label = input<string | undefined>(EMPTY_INDICATOR_ICON_LABEL_DEFAULT);
+  public label = input<string | undefined, string | null | undefined>(EMPTY_INDICATOR_ICON_LABEL_DEFAULT, {
+    transform: angularUtils.transformNullToUndefined,
+  });
 }

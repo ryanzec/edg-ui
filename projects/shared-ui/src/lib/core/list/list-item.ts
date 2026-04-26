@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, computed, effect, inject, input } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { logManager } from '@organization/shared-utils';
+import { angularUtils, logManager } from '@organization/shared-utils';
 import { List, type ListSize } from './list';
 import { ListItemBrainDirective } from '../../brain/list-item-brain/list-item-brain';
 
@@ -12,7 +12,7 @@ export const allListItemTags = ['a', 'button'] as const;
 export type ListItemTag = (typeof allListItemTags)[number];
 
 /** the default tag of the list item */
-export const LIST_ITEM_AS_TAG_DEFAULT: ListItemTag | null = null;
+export const LIST_ITEM_AS_TAG_DEFAULT: ListItemTag | undefined = undefined;
 
 /** the default selected state of the list item */
 export const LIST_ITEM_IS_SELECTED_DEFAULT = false;
@@ -21,16 +21,16 @@ export const LIST_ITEM_IS_SELECTED_DEFAULT = false;
 export const LIST_ITEM_DISABLED_DEFAULT = false;
 
 /** the default href of the list item */
-export const LIST_ITEM_HREF_DEFAULT: string | null = null;
+export const LIST_ITEM_HREF_DEFAULT: string | undefined = undefined;
 
 /** the default router link path of the list item */
-export const LIST_ITEM_ROUTER_LINK_DEFAULT: string | null = null;
+export const LIST_ITEM_ROUTER_LINK_DEFAULT: string | undefined = undefined;
 
 /** the default external href flag of the list item */
 export const LIST_ITEM_IS_EXTERNAL_HREF_DEFAULT = false;
 
 /** the default override size of the list item */
-export const LIST_ITEM_OVERRIDE_SIZE_DEFAULT: ListSize | null = null;
+export const LIST_ITEM_OVERRIDE_SIZE_DEFAULT: ListSize | undefined = undefined;
 
 /** the default force clickable state of the list item */
 export const LIST_ITEM_FORCE_CLICKABLE_DEFAULT = false;
@@ -68,7 +68,9 @@ export class ListItem {
   protected readonly brain = inject(ListItemBrainDirective, { self: true });
 
   /** the html element tag to render the list item content as */
-  public readonly asTag = input<ListItemTag | null>(LIST_ITEM_AS_TAG_DEFAULT);
+  public readonly asTag = input<ListItemTag | undefined, ListItemTag | null | undefined>(LIST_ITEM_AS_TAG_DEFAULT, {
+    transform: angularUtils.transformNullToUndefined,
+  });
 
   /** whether the list item is in a selected state */
   public readonly isSelected = input<boolean>(LIST_ITEM_IS_SELECTED_DEFAULT);
@@ -77,16 +79,23 @@ export class ListItem {
   public readonly disabled = input<boolean>(LIST_ITEM_DISABLED_DEFAULT);
 
   /** the href url used when asTag is set to a */
-  public readonly href = input<string | null>(LIST_ITEM_HREF_DEFAULT);
+  public readonly href = input<string | undefined, string | null | undefined>(LIST_ITEM_HREF_DEFAULT, {
+    transform: angularUtils.transformNullToUndefined,
+  });
 
   /** the angular router link path used when asTag is set to a */
-  public readonly routerLink = input<string | null>(LIST_ITEM_ROUTER_LINK_DEFAULT);
+  public readonly routerLink = input<string | undefined, string | null | undefined>(LIST_ITEM_ROUTER_LINK_DEFAULT, {
+    transform: angularUtils.transformNullToUndefined,
+  });
 
   /** whether the href is an external url that should open in a new tab */
   public readonly isExternalHref = input<boolean>(LIST_ITEM_IS_EXTERNAL_HREF_DEFAULT);
 
   /** overrides the size inherited from the parent list component for this item only */
-  public readonly overrideSize = input<ListSize | null>(LIST_ITEM_OVERRIDE_SIZE_DEFAULT);
+  public readonly overrideSize = input<ListSize | undefined, ListSize | null | undefined>(
+    LIST_ITEM_OVERRIDE_SIZE_DEFAULT,
+    { transform: angularUtils.transformNullToUndefined }
+  );
 
   /**
    * forces the list item to display clickable styles even when no direct click handler is attached;
@@ -113,7 +122,7 @@ export class ListItem {
 
   /** the resolved size, using overrideSize when provided or falling back to the parent list size */
   public readonly finalSize = computed<ListSize>(() => {
-    if (this.overrideSize() !== null) {
+    if (this.overrideSize() !== undefined) {
       return this.overrideSize()!;
     }
 

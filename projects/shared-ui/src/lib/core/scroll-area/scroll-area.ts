@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, input, viewChild, computed } from '@angular/core';
 import { NgScrollbar } from 'ngx-scrollbar';
 import type { ScrollbarOrientation, ScrollbarVisibility } from 'ngx-scrollbar';
-import { cssUtils } from '@organization/shared-utils';
+import { angularUtils, cssUtils } from '@organization/shared-utils';
 
 /** valid scroll directions for the scroll area component */
 export const allScrollAreaDirections = ['vertical', 'horizontal', 'both'] as const;
@@ -25,10 +25,10 @@ export const SCROLL_AREA_CONTAINER_CLASS_DEFAULT = '';
 export const SCROLL_AREA_SPACING_CLASS_DEFAULT = '';
 
 /** default value for the role input */
-export const SCROLL_AREA_ROLE_DEFAULT: string | null = null;
+export const SCROLL_AREA_ROLE_DEFAULT: string | undefined = undefined;
 
 /** default value for the ariaLabel input */
-export const SCROLL_AREA_ARIA_LABEL_DEFAULT: string | null = null;
+export const SCROLL_AREA_ARIA_LABEL_DEFAULT: string | undefined = undefined;
 
 @Component({
   selector: 'org-scroll-area',
@@ -64,10 +64,14 @@ export class ScrollArea {
   public spacingClass = input<string>(SCROLL_AREA_SPACING_CLASS_DEFAULT);
 
   /** aria role attribute forwarded to the ng-scrollbar host */
-  public role = input<string | null>(SCROLL_AREA_ROLE_DEFAULT);
+  public role = input<string | undefined, string | null | undefined>(SCROLL_AREA_ROLE_DEFAULT, {
+    transform: angularUtils.transformNullToUndefined,
+  });
 
   /** aria-label attribute forwarded to the ng-scrollbar host */
-  public ariaLabel = input<string | null>(SCROLL_AREA_ARIA_LABEL_DEFAULT);
+  public ariaLabel = input<string | undefined, string | null | undefined>(SCROLL_AREA_ARIA_LABEL_DEFAULT, {
+    transform: angularUtils.transformNullToUndefined,
+  });
 
   /** reference to the cssUtils merge function for combining class strings in the template */
   protected mergeClasses = cssUtils.merge;

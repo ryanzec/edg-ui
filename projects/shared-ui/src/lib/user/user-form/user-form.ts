@@ -13,7 +13,7 @@ import { Button } from '../../core/button/button';
 import { Checkbox } from '../../core/checkbox/checkbox';
 import { Label } from '../../core/label/label';
 import { validationUtils } from '../../utils/validation';
-import { userUtils } from '@organization/shared-utils';
+import { angularUtils, userUtils } from '@organization/shared-utils';
 import { FormFields } from '../../core/form-fields/form-fields';
 import { FormField } from '../../core/form-field/form-field';
 import { FormDisabledDirective } from '../../core/form-disabled-directive/form-disabled-directive';
@@ -27,6 +27,12 @@ export type UserFormData = {
   permissions: UserPermission[];
 };
 
+/** default value for the existingUser input */
+export const USER_FORM_EXISTING_USER_DEFAULT: User | undefined = undefined;
+
+/** default value for the isProcessing input */
+export const USER_FORM_IS_PROCESSING_DEFAULT = false;
+
 @Component({
   selector: 'org-user-form',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -38,8 +44,10 @@ export type UserFormData = {
 })
 export class UserForm {
   // inputs
-  public readonly existingUser = input<User | null>(null);
-  public readonly isProcessing = input<boolean>(false);
+  public readonly existingUser = input<User | undefined, User | null | undefined>(USER_FORM_EXISTING_USER_DEFAULT, {
+    transform: angularUtils.transformNullToUndefined,
+  });
+  public readonly isProcessing = input<boolean>(USER_FORM_IS_PROCESSING_DEFAULT);
 
   // outputs
   public readonly formSubmitted = output<UserFormData>();

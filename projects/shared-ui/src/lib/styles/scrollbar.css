@@ -15,7 +15,7 @@
 
     --scrollbar-thumb-color and --scrollbar-thumb-hover-color are intentionally not set here
     because ngx-scrollbar uses those same variable names, so the design tokens defined in
-    system-tokens.css (--scrollbar-thumb-color, --scrollbar-thumb-hover-color) are picked up
+    variables/system-tokens.css (--scrollbar-thumb-color, --scrollbar-thumb-hover-color) are picked up
     automatically with no mapping required.
 
     --scrollbar-color (our design token for the track/container background) maps to ngx-scrollbar's
