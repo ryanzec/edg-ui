@@ -82,13 +82,6 @@ Generic typescript
 - refactor css to use utility class when possible over custom css classes
 - review sub component exports and remove ones that are internal (ie. card sub component are good but combobox sub components are not)
 - figure out pattern for contianer query (integration list)
-- example of unsaved changes (and a component for it + guard + reload / unload for the browser)
-- randomized avatar character based on first character
-- refactor all component that accept only one of null or undefined (in additional to other value) to only accept undefined (and default to that is previous default was null) and add an input trasnfrom to allow null to be passed but have it converted to undefined.
-
-```
-you are tasked to create a new guard in ??? for can deactive. then you need to update ROUTES FILE so that ??? uses theis cand the the ??? component implement the code for the guard. the component need to also support this functionlity if the browser page refreshed / or the tab is closed.
-```
 
 To save:
 

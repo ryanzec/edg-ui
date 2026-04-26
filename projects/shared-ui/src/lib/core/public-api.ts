@@ -46,6 +46,7 @@ export * from './icon/icon';
 export * from './indicator/indicator';
 export * from './input/input';
 export * from './label/label';
+export * from './link/link';
 export * from './list/list';
 export * from './list/list-item';
 export * from './loading-blocker/loading-blocker';

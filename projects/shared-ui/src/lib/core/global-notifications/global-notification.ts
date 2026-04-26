@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, output } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
 import { Card } from '../card/card';
 import { CardContent } from '../card/card-content';
 import { Button } from '../button/button';
@@ -9,7 +10,7 @@ import { GlobalNotificationBrainDirective } from '../../brain/global-notificatio
 @Component({
   selector: 'org-global-notification',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Card, CardContent, Button, ButtonIcon],
+  imports: [Card, CardContent, Button, ButtonIcon, NgTemplateOutlet],
   templateUrl: './global-notification.html',
   styleUrl: './global-notification.css',
   hostDirectives: [

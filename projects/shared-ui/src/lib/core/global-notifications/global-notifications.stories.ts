@@ -1,10 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/angular';
-import { Component, inject, signal } from '@angular/core';
+import { Component, TemplateRef, inject, signal, viewChild } from '@angular/core';
 import { GlobalNotifications } from './global-notifications';
 import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
 import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
 import { GlobalNotificationManager } from '../global-notification-manager/global-notification-manager';
 import { Button } from '../button/button';
+import { Link } from '../link/link';
 
 @Component({
   selector: 'story-global-notifications-default-story',
@@ -366,6 +367,76 @@ class GlobalNotificationsAutoCloseStory {
 }
 
 @Component({
+  selector: 'story-global-notifications-update-dynamically-story',
+  imports: [GlobalNotifications, Button, StorybookExampleContainer, StorybookExampleContainerSection],
+  template: `
+    <org-storybook-example-container
+      title="Update Dynamically"
+      currentState="Adding a persistent notification then updating it to a closeable success notification"
+    >
+      <org-storybook-example-container-section label="Add then update">
+        <org-button color="info" [disabled]="!!notificationId()" (click)="addPersistentNotification()">
+          Add Persistent Notification
+        </org-button>
+        <org-button color="safe" [disabled]="!notificationId()" (click)="updateToCloseableSuccess()">
+          Update To Closeable Success
+        </org-button>
+      </org-storybook-example-container-section>
+
+      <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+        <li>
+          <strong>Add Persistent Notification</strong>: Creates an info notification that cannot be closed and does not
+          auto-close
+        </li>
+        <li>
+          <strong>Update To Closeable Success</strong>: Updates the existing notification to safe color, allows manual
+          close, and auto-closes after 5 seconds
+        </li>
+        <li>
+          <strong>Button states</strong>: The add button disables once a notification exists, the update button enables
+          only while a notification is active
+        </li>
+      </ul>
+
+      <org-global-notifications />
+    </org-storybook-example-container>
+  `,
+})
+class GlobalNotificationsUpdateDynamicallyStory {
+  private _globalNotificationManager = inject(GlobalNotificationManager);
+
+  public notificationId = signal<string | null>(null);
+
+  public addPersistentNotification(): void {
+    const id = this._globalNotificationManager.add({
+      message: 'This notification is persistent and cannot be closed',
+      color: 'info',
+      canClose: false,
+      autoCloseIn: 0,
+    });
+
+    this.notificationId.set(id);
+  }
+
+  public updateToCloseableSuccess(): void {
+    const id = this.notificationId();
+
+    if (!id) {
+      return;
+    }
+
+    this._globalNotificationManager.update(id, {
+      message: 'This notification is now a closeable success notification',
+      color: 'safe',
+      canClose: true,
+      autoCloseIn: 5000,
+    });
+
+    this.notificationId.set(null);
+  }
+}
+
+@Component({
   selector: 'story-global-notifications-accessibility-story',
   imports: [GlobalNotifications, Button, StorybookExampleContainer, StorybookExampleContainerSection],
   template: `
@@ -397,6 +468,53 @@ class GlobalNotificationsAccessibilityStory {
       color: 'info',
       canClose: true,
     });
+  }
+}
+
+@Component({
+  selector: 'story-global-notifications-link-action-story',
+  imports: [GlobalNotifications, Button, Link, StorybookExampleContainer, StorybookExampleContainerSection],
+  template: `
+    <org-storybook-example-container
+      title="Link Action"
+      currentState="Notification with an org-link inside that closes the notification when clicked"
+    >
+      <ng-template #linkContent let-notificationId>
+        Your changes were not saved.
+        <org-link (clicked)="onLinkClicked(notificationId)">Click here to retry</org-link>
+      </ng-template>
+
+      <org-storybook-example-container-section label="Add notification with link">
+        <org-button color="info" (click)="addNotificationWithLink()"> Add Notification With Link </org-button>
+      </org-storybook-example-container-section>
+
+      <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+        <li><strong>Add Notification With Link</strong>: Creates an info notification containing an org-link inside</li>
+        <li><strong>Click the link</strong>: Logs to the console and closes the notification</li>
+        <li><strong>No close button or auto-close</strong>: The link is the only way to dismiss the notification</li>
+      </ul>
+
+      <org-global-notifications />
+    </org-storybook-example-container>
+  `,
+})
+class GlobalNotificationsLinkActionStory {
+  private _globalNotificationManager = inject(GlobalNotificationManager);
+
+  protected linkContentRef = viewChild.required<TemplateRef<{ $implicit: string }>>('linkContent');
+
+  protected addNotificationWithLink(): void {
+    this._globalNotificationManager.add({
+      contentTemplate: this.linkContentRef(),
+      color: 'info',
+      canClose: false,
+      autoCloseIn: 0,
+    });
+  }
+
+  protected onLinkClicked(notificationId: string): void {
+    console.log('link clicked, closing notification', notificationId);
+    this._globalNotificationManager.remove(notificationId);
   }
 }
 
@@ -534,6 +652,23 @@ export const AutoClose: Story = {
   }),
 };
 
+export const UpdateDynamically: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Demonstrates adding a persistent notification then updating it in place to change its color and close behavior.',
+      },
+    },
+  },
+  render: () => ({
+    template: `<story-global-notifications-update-dynamically-story />`,
+    moduleMetadata: {
+      imports: [GlobalNotificationsUpdateDynamicallyStory],
+    },
+  }),
+};
+
 export const Accessibility: Story = {
   parameters: {
     docs: {
@@ -547,6 +682,23 @@ export const Accessibility: Story = {
     template: `<story-global-notifications-accessibility-story />`,
     moduleMetadata: {
       imports: [GlobalNotificationsAccessibilityStory],
+    },
+  }),
+};
+
+export const LinkAction: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Demonstrates a notification rendering an org-link inside via contentTemplate; clicking the link logs to the console and closes the notification.',
+      },
+    },
+  },
+  render: () => ({
+    template: `<story-global-notifications-link-action-story />`,
+    moduleMetadata: {
+      imports: [GlobalNotificationsLinkActionStory],
     },
   }),
 };

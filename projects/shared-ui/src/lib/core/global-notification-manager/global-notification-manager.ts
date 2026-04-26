@@ -1,4 +1,4 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, signal, computed, type TemplateRef } from '@angular/core';
 import { v4 as uuidv4 } from 'uuid';
 import type { CardColor } from '../card/card';
 
@@ -11,7 +11,8 @@ export const GLOBAL_NOTIFICATION_MANAGER_AUTO_CLOSE_IN_DEFAULT = 3000;
 /** data shape for a notification stored in the manager */
 export type GlobalNotificationData = {
   id: string;
-  message: string;
+  message?: string;
+  contentTemplate?: TemplateRef<{ $implicit: string }>;
   autoCloseIn?: number;
   color?: CardColor;
   canClose: boolean;

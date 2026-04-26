@@ -2,7 +2,11 @@
   <org-card-content>
     <div class="content-row">
       <div class="message">
-        {{ notification().message }}
+        @if (notification().contentTemplate; as contentTemplate) {
+          <ng-container *ngTemplateOutlet="contentTemplate; context: { $implicit: notification().id }" />
+        } @else {
+          {{ notification().message }}
+        }
       </div>
       @if (notification().canClose) {
         <org-button
