@@ -1,0 +1,20 @@
+<org-card [color]="notification().color ?? null">
+  <org-card-content>
+    <div class="content-row">
+      <div class="message">
+        {{ notification().message }}
+      </div>
+      @if (notification().canClose) {
+        <org-button
+          variant="text"
+          color="neutral"
+          [excludeSpacing]="true"
+          aria-label="Close notification"
+          (click)="startClose()"
+        >
+          <org-button-icon name="x" />
+        </org-button>
+      }
+    </div>
+  </org-card-content>
+</org-card>

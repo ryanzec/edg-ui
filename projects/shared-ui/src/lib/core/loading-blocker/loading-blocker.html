@@ -1,0 +1,14 @@
+<div
+  cdkTrapFocus
+  [cdkTrapFocusAutoCapture]="true"
+  tabindex="-1"
+  role="status"
+  [attr.aria-busy]="isVisible()"
+  [attr.aria-label]="text() || 'Loading'"
+  class="content"
+>
+  <org-loading-spinner />
+  @if (text()) {
+    <span>{{ text() }}</span>
+  }
+</div>

@@ -1,0 +1,104 @@
+@layer components {
+  :host {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-background);
+    border-right: var(--border-width) solid var(--color-border);
+    min-width: var(--sizing-4xs);
+    max-width: var(--sizing-4xs);
+    transition:
+      min-width 200ms ease,
+      max-width 200ms ease;
+  }
+
+  .main-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-3);
+  }
+
+  .logo-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: var(--sizing-9xs);
+    padding: var(--spacing-2);
+    border-bottom: var(--border-width) solid var(--color-border);
+  }
+
+  .logo {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+  }
+
+  .nav {
+    flex: 1;
+  }
+
+  .settings-section {
+    margin-top: auto;
+  }
+
+  .tooltip-content {
+    padding: var(--spacing-1) var(--spacing-2);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+    background-color: var(--color-background-level2);
+    color: var(--color-text);
+  }
+
+  .logout-text {
+    font-weight: var(--font-weight-medium);
+  }
+
+  .user-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-1);
+    padding: var(--spacing-2);
+    border-top: var(--border-width) solid var(--color-border);
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 0.0625rem; /* 1px */
+    height: 0.0625rem; /* 1px */
+    padding: 0;
+    margin: -0.0625rem; /* 1px */
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  :host([data-collapsed]) {
+    min-width: var(--sizing-9xs);
+    max-width: var(--sizing-9xs);
+  }
+
+  .logo-toggle .toggle-icon {
+    display: none;
+  }
+
+  /* when no logo is provided, the toggle icon is always visible */
+  .logo-toggle:not([data-has-logo]) .logo {
+    display: none;
+  }
+
+  .logo-toggle:not([data-has-logo]) .toggle-icon {
+    display: flex;
+  }
+
+  /* when a logo is provided, the icon replaces the logo on hover / focus */
+  .logo-toggle[data-has-logo]:is(:hover, :focus-visible) .logo {
+    display: none;
+  }
+
+  .logo-toggle[data-has-logo]:is(:hover, :focus-visible) .toggle-icon {
+    display: flex;
+  }
+}

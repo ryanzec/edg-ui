@@ -1,0 +1,11 @@
+@layer components {
+  :host {
+    display: contents;
+  }
+
+  .form-fields-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-1_5);
+  }
+}

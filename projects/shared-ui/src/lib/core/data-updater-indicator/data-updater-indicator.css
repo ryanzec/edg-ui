@@ -1,0 +1,14 @@
+@layer components {
+  :host {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-2);
+  }
+
+  .timestamp {
+    display: inline-flex;
+    font-size: var(--text-xs);
+    line-height: var(--text-xs--line-height);
+    letter-spacing: var(--text-xs--letter-spacing);
+  }
+}

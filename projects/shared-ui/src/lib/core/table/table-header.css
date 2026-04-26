@@ -1,0 +1,15 @@
+@layer components {
+  :host {
+    display: contents;
+  }
+
+  .header-cell {
+    padding: var(--spacing-3) var(--spacing-4);
+    font-size: var(--text-sm);
+    line-height: var(--text-sm--line-height);
+    letter-spacing: var(--text-sm--letter-spacing);
+    font-weight: var(--font-weight-semibold);
+    text-align: left;
+    background-color: var(--color-background-level2);
+  }
+}

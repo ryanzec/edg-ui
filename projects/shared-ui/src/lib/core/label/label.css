@@ -1,0 +1,33 @@
+@layer components {
+  :host {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-1);
+    font-size: var(--text-sm);
+    line-height: var(--text-sm--line-height);
+    letter-spacing: var(--text-sm--letter-spacing);
+  }
+
+  label,
+  div {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-1);
+  }
+
+  .required-marker {
+    color: var(--color-danger-text);
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 0.0625rem; /* 1px */
+    height: 0.0625rem; /* 1px */
+    padding: 0;
+    margin: -0.0625rem; /* 1px */
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+}

@@ -1,0 +1,50 @@
+$schema: 'https://moonrepo.dev/schemas/project.json'
+
+type: 'application'
+language: 'typescript'
+
+tasks:
+  type-check:
+    command: '$workspaceRoot/node_modules/.bin/ngc --project tsconfig.app.json'
+    inputs:
+      - '**/*'
+      - /tsconfig.json
+      - /tsconfig.app.json
+    env:
+      NODE_ENV: 'development'
+    options:
+      runFromWorkspaceRoot: false
+
+  dev:
+    command: '$workspaceRoot/node_modules/.bin/ng serve internal-portal --port 4101'
+    local: true
+    env:
+      NODE_ENV: 'development'
+    options:
+      runFromWorkspaceRoot: false
+
+  build:
+    command: '$workspaceRoot/node_modules/.bin/ng build customer-portal'
+    inputs:
+      - '**/*'
+      - /projects/shared-ui/src/**/*
+      - /projects/shared-types/src/**/*
+      - /projects/shared-utils/src/**/*
+      - /tsconfig.json
+    env:
+      NODE_ENV: 'development'
+    options:
+      runFromWorkspaceRoot: false
+
+  build-production:
+    command: '$workspaceRoot/node_modules/.bin/ng build internal-portal --configuration production'
+    inputs:
+      - '**/*'
+      - /projects/shared-ui/src/**/*
+      - /projects/shared-types/src/**/*
+      - /projects/shared-utils/src/**/*
+      - /tsconfig.json
+    env:
+      NODE_ENV: 'production'
+    options:
+      runFromWorkspaceRoot: false

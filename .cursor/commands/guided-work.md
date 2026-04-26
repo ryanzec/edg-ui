@@ -1,0 +1,1 @@
+- If injecting a component with `inject()`, **ALWAYS** ask if the inject should include `host: true`.

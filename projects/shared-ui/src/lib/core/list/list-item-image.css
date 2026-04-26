@@ -1,0 +1,22 @@
+@layer components {
+  :host {
+    position: relative;
+    display: inline-block;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+
+  :host img {
+    object-fit: cover;
+  }
+
+  :host([data-size='sm']) {
+    width: var(--spacing-4); /* 16px */
+    height: var(--spacing-4); /* 16px */
+  }
+
+  :host([data-size='base']) {
+    width: var(--spacing-5); /* 20px */
+    height: var(--spacing-5); /* 20px */
+  }
+}

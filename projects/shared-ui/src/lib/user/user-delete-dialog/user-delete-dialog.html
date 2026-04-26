@@ -1,0 +1,10 @@
+<org-dialog [class]="dialogClass()" [hasRoundedCorners]="hasRoundedCorners()">
+  <org-dialog-header title="Delete User" />
+  <org-dialog-content>
+    <p>Are you sure you want to delete {{ usersName() }}?</p>
+  </org-dialog-content>
+  <org-dialog-footer>
+    <org-button color="neutral" [disabled]="isProcessing()" (clicked)="onCancelClick()"> Cancel </org-button>
+    <org-button color="danger" [loading]="isProcessing()" (clicked)="onDeleteClick()"> Delete </org-button>
+  </org-dialog-footer>
+</org-dialog>

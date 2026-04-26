@@ -1,0 +1,12 @@
+@layer components {
+  :host {
+    position: absolute;
+    top: var(--spacing-4); /* 16px */
+    right: var(--spacing-4); /* 16px */
+  }
+
+  :host .close-button--disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}

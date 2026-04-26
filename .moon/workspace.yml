@@ -1,0 +1,17 @@
+# https://moonrepo.dev/docs/config/workspace
+$schema: 'https://moonrepo.dev/schemas/workspace.json'
+
+projects:
+  - 'projects/*'
+  - 'global'
+
+vcs:
+  manager: 'git'
+  defaultBranch: 'main'
+  syncHooks: true
+  hooks:
+    pre-commit:
+      - '$(moon bin pnpm) lint-staged'
+
+constraints:
+  enforceLayerRelationships: false

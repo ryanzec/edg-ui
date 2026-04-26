@@ -1,0 +1,22 @@
+<div class="flex flex-col gap-4">
+  <div class="rounded border border-border bg-background p-4">
+    <div class="mb-3 text-sm font-medium text-text">
+      When a parent needs access to a nested child's public logic, we use the registry pattern.
+    </div>
+    <ul class="list-inside list-disc flex flex-col gap-2 text-sm text-text">
+      <li>
+        We should add the registry provider as low in the tree as needed in order to avoid issues like memory leaks that
+        can happen more easily with root level providers.
+      </li>
+      <li>
+        When a component can be accessed by a registry, we need to make sure the registering itself is done optionally
+        as components should be able to work without a registry as well.
+      </li>
+    </ul>
+  </div>
+
+  <div class="flex flex-col gap-2 rounded border border-info-border bg-info-background-subtle p-4">
+    <div class="text-sm font-medium text-text">Parent Component (stores created here via injection tokens)</div>
+    <org-example-nested-1 />
+  </div>
+</div>

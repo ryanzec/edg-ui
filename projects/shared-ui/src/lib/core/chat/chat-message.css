@@ -1,0 +1,86 @@
+@layer components {
+  :host {
+    display: block;
+  }
+
+  .message-text-row {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+  }
+
+  .message-text {
+    flex: 1;
+  }
+
+  .chat-message-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2);
+    align-items: flex-start;
+  }
+
+  :host([data-source='user']) .chat-message-container {
+    align-items: flex-end;
+  }
+
+  :host([data-source='system']) .chat-message-container {
+    align-items: center;
+  }
+
+  .chat-message-content {
+    display: flex;
+    flex-direction: column;
+    font-size: var(--text-sm);
+    max-width: 80%;
+  }
+
+  :host([data-source='system']) .chat-message-content {
+    max-width: 90%;
+  }
+
+  .chat-message-bubble {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-1);
+    padding-inline: var(--spacing-3);
+    padding-block: var(--spacing-2);
+  }
+
+  :host([data-source='user']) .chat-message-bubble,
+  :host([data-source='ai']) .chat-message-bubble {
+    border-radius: 1rem; /* 16px */
+    background-color: var(--color-background-level2);
+    color: var(--color-text);
+  }
+
+  :host([data-source='system']) .chat-message-bubble {
+    text-align: center;
+    font-weight: bold;
+    color: var(--color-text);
+  }
+
+  .chat-message-metadata {
+    display: flex;
+    align-items: center;
+    line-height: 1rem; /* 16px */
+    gap: var(--spacing-1);
+    font-size: var(--text-xs);
+    color: var(--color-text-subtle);
+  }
+
+  /* hide the metadata row when it has no visible content */
+  .chat-message-metadata:not(:has(*)) {
+    display: none;
+  }
+
+  .chat-message-status {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem; /* 6px */
+  }
+
+  :host([data-status='in-progress']) .chat-message-status org-indicator {
+    animation: var(--animate-pulse);
+  }
+}

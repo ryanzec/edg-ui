@@ -1,0 +1,62 @@
+@layer components {
+  :host {
+    display: inline-flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .native-input {
+    position: absolute;
+    width: 0.0625rem; /* 1px */
+    height: 0.0625rem; /* 1px */
+    padding: 0;
+    margin: -0.0625rem; /* 1px */
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  :host .checkbox-label {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-1);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+  }
+
+  :host .checkbox-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  :host([aria-disabled='true']) .checkbox-label {
+    opacity: var(--opacity-disabled);
+    cursor: not-allowed;
+  }
+
+  :host .checkbox-icon {
+    color: var(--color-neutral-text);
+  }
+
+  :host:not([aria-disabled='true']) .checkbox-label:hover .checkbox-icon {
+    color: var(--color-primary-background);
+  }
+
+  :host:not([aria-disabled='true']) .checkbox-label:focus-visible {
+    background-color: var(--color-primary-background-hover);
+  }
+
+  :host:not([aria-disabled='true']) .checkbox-label:focus-visible .checkbox-icon {
+    color: var(--color-text-inverse);
+  }
+
+  :host([aria-disabled='true']) .checkbox-icon {
+    color: var(--color-neutral-400);
+  }
+
+  .dark-theme :host([aria-disabled='true']) .checkbox-icon {
+    color: var(--color-neutral-600);
+  }
+}

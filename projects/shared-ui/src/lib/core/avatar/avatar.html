@@ -1,0 +1,13 @@
+<ng-template #avatarContent>
+  <ng-content />
+</ng-template>
+
+@if (isClickable()) {
+  <button type="button" [attr.aria-label]="label()" (click)="click($event)">
+    <ng-container [ngTemplateOutlet]="avatarContent" />
+  </button>
+} @else {
+  <div>
+    <ng-container [ngTemplateOutlet]="avatarContent" />
+  </div>
+}

@@ -1,0 +1,46 @@
+@layer components {
+  :host {
+    grid-area: 1 / 1;
+    width: 100%;
+    min-width: 0;
+    visibility: hidden;
+    /* delay visibility: hidden until after the slide-out animation completes */
+    transition:
+      transform 300ms ease-in-out,
+      visibility 0s 300ms;
+  }
+
+  :host([data-position='active']) {
+    visibility: visible;
+    transform: translate(0, 0);
+    /* make visibility: visible immediate when becoming active */
+    transition:
+      transform 300ms ease-in-out,
+      visibility 0s 0s;
+  }
+
+  /* horizontal (default) */
+  :host([data-position='before']) {
+    transform: translateX(-100%);
+  }
+
+  :host([data-position='after']) {
+    transform: translateX(100%);
+  }
+
+  /* vertical */
+  :host([data-orientation='vertical'][data-position='before']) {
+    transform: translateY(-100%);
+  }
+
+  :host([data-orientation='vertical'][data-position='after']) {
+    transform: translateY(100%);
+  }
+
+  /* dynamic: all items are always absolutely positioned so position never changes during animation */
+  :host([data-size='dynamic']) {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+}

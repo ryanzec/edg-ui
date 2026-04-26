@@ -1,0 +1,13 @@
+@layer components {
+  :host {
+    display: grid;
+    overflow: hidden;
+  }
+
+  /* dynamic: height is driven by a CSS variable set from JS measuring the active slide */
+  :host([data-size='dynamic']) {
+    display: block;
+    position: relative;
+    height: var(--slide-container-active-height, auto);
+  }
+}

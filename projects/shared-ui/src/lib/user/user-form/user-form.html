@@ -1,0 +1,72 @@
+<form class="flex flex-col gap-1" [formGroup]="userForm" (ngSubmit)="submit()">
+  <org-form-fields>
+    <org-form-field [validationMessage]="getFieldError('firstName') || ''">
+      <org-label [label]="getFieldLabel('firstName')" htmlFor="firstName" />
+      <org-input
+        type="text"
+        name="firstName"
+        formControlName="firstName"
+        placeholder="Enter first name"
+        autocomplete="given-name"
+        [orgFormDisabled]="isProcessing()"
+      />
+    </org-form-field>
+    <org-form-field [validationMessage]="getFieldError('lastName') || ''">
+      <org-label [label]="getFieldLabel('lastName')" htmlFor="lastName" />
+      <org-input
+        type="text"
+        name="lastName"
+        formControlName="lastName"
+        placeholder="Enter last name"
+        autocomplete="family-name"
+        [orgFormDisabled]="isProcessing()"
+      />
+    </org-form-field>
+    <org-form-field [validationMessage]="getFieldError('email') || ''">
+      <org-label [label]="getFieldLabel('email')" htmlFor="email" />
+      <org-input
+        type="email"
+        name="email"
+        formControlName="email"
+        placeholder="Enter email"
+        autocomplete="email"
+        preIcon="mail"
+        [orgFormDisabled]="isProcessing()"
+      />
+    </org-form-field>
+    <org-form-field [validationMessage]="getRoleError() || ''" formGroupName="roles">
+      <org-label [label]="getFieldLabel('roles')" htmlFor="roles" />
+      <div class="flex flex-col gap-0.5">
+        @for (role of assignableRoles; track role) {
+          <org-checkbox
+            [name]="role"
+            [value]="role"
+            [formControlName]="role"
+            [orgFormDisabled]="role === 'user' || isProcessing()"
+          >
+            {{ getRoleLabel(role) }}
+          </org-checkbox>
+        }
+      </div>
+    </org-form-field>
+    <org-form-field formGroupName="permissions">
+      <org-label [label]="getFieldLabel('permissions')" htmlFor="permissions" />
+      <div class="flex flex-col gap-0.5">
+        @for (permission of assignablePermissions; track permission) {
+          <org-checkbox
+            [name]="permission"
+            [value]="permission"
+            [formControlName]="permission"
+            [orgFormDisabled]="isProcessing()"
+          >
+            {{ getPermissionLabel(permission) }}
+          </org-checkbox>
+        }
+      </div>
+    </org-form-field>
+  </org-form-fields>
+
+  <org-button color="primary" type="submit" buttonClass="w-full" [loading]="isProcessing()">
+    {{ submitButtonText() }}
+  </org-button>
+</form>

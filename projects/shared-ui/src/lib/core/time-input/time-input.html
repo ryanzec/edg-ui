@@ -1,0 +1,16 @@
+<org-input
+  #inputComponent
+  [variant]="variant()"
+  [placeholder]="placeholder()"
+  [value]="formattedValue()"
+  [disabled]="isDisabled()"
+  [readonly]="readonly()"
+  [name]="name()"
+  [ariaLabel]="ariaLabel()"
+  [autoFocus]="autoFocus()"
+  type="text"
+  (keydown)="onKeyDown($event)"
+  (focused)="onFocus()"
+  (blurred)="onBlur()"
+  (click)="onClick()"
+/>

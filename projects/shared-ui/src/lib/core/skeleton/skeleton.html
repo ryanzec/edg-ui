@@ -1,0 +1,11 @@
+@if (isTable()) {
+  <div class="skeleton-table">
+    @for (bar of tableBars; track bar) {
+      <div class="skeleton-table-bar org-skeleton-gradient"></div>
+    }
+  </div>
+}
+
+@if (isCard()) {
+  <div class="skeleton-card org-skeleton-gradient"></div>
+}

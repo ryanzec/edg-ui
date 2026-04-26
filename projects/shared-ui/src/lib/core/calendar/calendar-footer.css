@@ -1,0 +1,10 @@
+@layer components {
+  :host {
+    display: block;
+  }
+
+  .footer {
+    padding: var(--spacing-2);
+    border-top: var(--border-width) solid var(--color-border-subtle);
+  }
+}

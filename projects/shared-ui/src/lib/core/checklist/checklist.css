@@ -1,0 +1,10 @@
+@layer components {
+  :host {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem; /* 2px */
+    font-size: var(--text-sm);
+    line-height: var(--text-sm--line-height);
+    letter-spacing: var(--text-sm--letter-spacing);
+  }
+}

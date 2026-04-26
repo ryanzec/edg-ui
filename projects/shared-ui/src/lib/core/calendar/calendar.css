@@ -1,0 +1,26 @@
+@layer components {
+  :host {
+    display: block;
+  }
+
+  .calendar-container {
+    width: var(--sizing-xs);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+    background-color: var(--color-background);
+    overflow: hidden;
+    outline: none;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 0.0625rem; /* 1px */
+    height: 0.0625rem; /* 1px */
+    padding: 0;
+    margin: -0.0625rem; /* 1px */
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+}

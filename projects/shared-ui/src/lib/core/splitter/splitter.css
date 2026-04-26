@@ -1,0 +1,107 @@
+@layer components {
+  :host {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  /* horizontal: left/right split */
+  :host([data-direction='horizontal']) {
+    flex-direction: row;
+  }
+
+  /* vertical: top/bottom split */
+  :host([data-direction='vertical']) {
+    flex-direction: column;
+  }
+
+  /* prevent text selection and maintain resize cursor while dragging */
+  :host([data-dragging]) {
+    user-select: none;
+  }
+
+  :host([data-dragging][data-direction='horizontal']) {
+    cursor: col-resize;
+  }
+
+  :host([data-dragging][data-direction='vertical']) {
+    cursor: row-resize;
+  }
+
+  .section {
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .first-section {
+    flex-grow: 0;
+    flex-shrink: 0;
+  }
+
+  .second-section {
+    flex: 1;
+  }
+
+  .splitter-divider {
+    position: relative;
+    flex-grow: 0;
+    flex-shrink: 0;
+    outline: none;
+    background-color: var(--color-border);
+  }
+
+  /* pseudo-element expands the pointer hit area ±3px without affecting layout */
+  .splitter-divider::before {
+    content: '';
+    position: absolute;
+    pointer-events: auto;
+  }
+
+  /* horizontal divider is a vertical line */
+  :host([data-direction='horizontal']) .splitter-divider {
+    width: 0.0625rem; /* 1px */
+    cursor: col-resize;
+  }
+
+  /* hit buffer extends 3px to each side */
+  :host([data-direction='horizontal']) .splitter-divider::before {
+    inset: 0 -0.25rem; /* 4px */
+  }
+
+  /* vertical divider is a horizontal line */
+  :host([data-direction='vertical']) .splitter-divider {
+    height: 0.0625rem; /* 1px */
+    cursor: row-resize;
+  }
+
+  /* hit buffer extends 3px above and below */
+  :host([data-direction='vertical']) .splitter-divider::before {
+    inset: -0.25rem 0; /* 4px */
+  }
+
+  /* enabled: 2px divider */
+  :host([data-enabled][data-direction='horizontal']) .splitter-divider {
+    width: var(--spacing-0_5); /* 2px */
+  }
+
+  :host([data-enabled][data-direction='vertical']) .splitter-divider {
+    height: var(--spacing-0_5); /* 2px */
+  }
+
+  /* enabled hover/focus effect conveys draggability */
+  :host([data-enabled]) .splitter-divider:hover {
+    background-color: var(--color-primary-background);
+  }
+
+  :host([data-enabled]) .splitter-divider:focus-visible {
+    background-color: var(--color-primary-background);
+  }
+
+  /* collapsed or disabled: non-interactive cursor on divider */
+  :host([data-collapsed-side]) .splitter-divider,
+  :host(:not([data-enabled])) .splitter-divider {
+    cursor: default;
+  }
+}

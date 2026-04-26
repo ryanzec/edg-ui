@@ -1,0 +1,91 @@
+/*
+ * in order to ensure the layers are orders correctly, this MUST be the first import in this file.
+ */
+@import './layers.css';
+@import './base-tokens.css';
+@import './system-tokens.css';
+@import './animations.css';
+@import './background-utility.css';
+@import './border-utility.css';
+@import './display.css';
+@import './flex-utility.css';
+@import './grid-utility.css';
+@import './font-utility.css';
+@import './list-utility.css';
+@import './opacity-utility.css';
+@import './overflow.css';
+@import './position-utility.css';
+@import './radius-utility.css';
+@import './sizing-utility.css';
+@import './spacing-utility.css';
+@import './z-index-utility.css';
+@import '../core/table/table.css';
+@import './core-directives.css';
+@import './scrollbar.css';
+
+/* we only include tailwind for the preflight reset as there is no library that provides this standalone */
+@import 'tailwindcss/preflight.css' layer(reset);
+
+@layer base {
+  html {
+    color-scheme: light;
+  }
+
+  html,
+  body {
+    height: 100%;
+    font-size: 100%;
+  }
+
+  body {
+    margin: 0;
+    font-family: 'Geist Sans', 'Helvetica Neue', sans-serif;
+    margin: 0;
+    background-color: var(--color-background);
+    color: var(--color-text);
+    font-size: var(--text-sm);
+  }
+
+  html.dark-theme {
+    color-scheme: dark;
+  }
+
+  h1 {
+    font-size: var(--text-2xl);
+    line-height: var(--text-2xl--line-height);
+    letter-spacing: var(--text-2xl--letter-spacing);
+    font-weight: var(--font-weight-bold);
+  }
+
+  h2 {
+    font-size: var(--text-2xl);
+    line-height: var(--text-2xl--line-height);
+    letter-spacing: var(--text-2xl--letter-spacing);
+  }
+
+  h3 {
+    font-size: var(--text-xl);
+    line-height: var(--text-xl--line-height);
+    letter-spacing: var(--text-xl--letter-spacing);
+    font-weight: var(--font-weight-bold);
+  }
+
+  h4 {
+    font-size: var(--text-xl);
+    line-height: var(--text-xl--line-height);
+    letter-spacing: var(--text-xl--letter-spacing);
+  }
+
+  h5 {
+    font-size: var(--text-lg);
+    line-height: var(--text-lg--line-height);
+    letter-spacing: var(--text-lg--letter-spacing);
+    font-weight: var(--font-weight-bold);
+  }
+
+  h6 {
+    font-size: var(--text-lg);
+    line-height: var(--text-lg--line-height);
+    letter-spacing: var(--text-lg--letter-spacing);
+  }
+}

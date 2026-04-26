@@ -1,0 +1,128 @@
+<div class="flex flex-row items-start justify-between gap-2">
+  <div class="flex flex-col gap-0.5">
+    <span orgText textSize="2xs" textColor="neutral" class="uppercase tracking-wider">Workspace Settings</span>
+    <h1 orgText textSize="2xl" class="font-semibold">Members</h1>
+    <span orgText textSize="sm" textColor="neutral">
+      Manage who has access to this workspace, and what they can do.
+    </span>
+  </div>
+  <org-button color="primary" (clicked)="onInviteMemberClick()">
+    <org-button-icon name="plus" />
+    Invite member
+  </org-button>
+</div>
+
+<div class="flex flex-row items-center justify-between gap-2">
+  <div class="flex flex-row items-center gap-1 flex-1">
+    <org-input
+      class="block w-3xs"
+      name="users-list-search"
+      placeholder="Search by name, email, or ID..."
+      preIcon="search"
+      [formControl]="searchControl"
+    />
+    <org-drop-down-selector
+      label="Role"
+      selectionMode="multiple"
+      iconName="chevron-down"
+      [items]="roleFilterOptions"
+      [(selectedItems)]="selectedRoleFilters"
+    />
+    <org-drop-down-selector
+      label="Permission"
+      selectionMode="multiple"
+      iconName="chevron-down"
+      [items]="permissionFilterOptions"
+      [(selectedItems)]="selectedPermissionFilters"
+    />
+  </div>
+  <span orgText textSize="sm" textColor="neutral">{{ totalItems() }} members</span>
+</div>
+
+@if (isInitialLoading()) {
+  <org-skeleton type="table" class="w-full" />
+} @else if (users().length === 0) {
+  <div class="flex justify-center items-center p-4">
+    @if (hasActiveFilters()) {
+      <span orgText textColor="neutral">No matches</span>
+    } @else {
+      <span orgText textColor="neutral">No members yet</span>
+    }
+  </div>
+} @else {
+  <org-table [data]="users()" [selectionData]="selectionStore" [isBackgroundLoading]="isBackgroundLoading()">
+    <ng-template #header>
+      <org-table-th>
+        <div [orgSortableKey]="'firstName'">Member</div>
+      </org-table-th>
+      <org-table-th>Email</org-table-th>
+      <org-table-th>Roles</org-table-th>
+      <org-table-th>Permissions</org-table-th>
+      <org-table-th>
+        <div [orgSortableKey]="'createdAt'">Created</div>
+      </org-table-th>
+      <org-table-th></org-table-th>
+    </ng-template>
+    <ng-template #body let-tempUser>
+      @let user = asUser(tempUser);
+      <org-table-td>
+        <div class="flex flex-row items-center gap-1">
+          <org-avatar [label]="fullName(user)" size="base">
+            <org-avatar-circle />
+          </org-avatar>
+          <div class="flex flex-col">
+            <span orgText textSize="sm">{{ fullName(user) }}</span>
+            <span orgText textSize="2xs" textColor="neutral">{{ subId(user) }}</span>
+          </div>
+        </div>
+      </org-table-td>
+      <org-table-td>{{ user.email }}</org-table-td>
+      <org-table-td>
+        <div class="flex flex-row gap-0.5">
+          @for (role of user.roles; track role) {
+            <org-tag [color]="getRoleColor(role)" variant="weak">{{ role }}</org-tag>
+          }
+        </div>
+      </org-table-td>
+      <org-table-td>
+        <div class="flex flex-row flex-wrap gap-0.5">
+          @for (permission of user.permissions; track permission) {
+            <org-tag color="neutral" variant="weak">{{ permission }}</org-tag>
+          }
+        </div>
+      </org-table-td>
+      <org-table-td>
+        <span orgText textSize="sm" textColor="neutral">{{ createdAtRelative(user) }}</span>
+      </org-table-td>
+      <org-table-td>
+        <div class="flex justify-end">
+          <org-button
+            [cdkMenuTriggerFor]="userActionsMenu"
+            [cdkMenuPosition]="rowActionsMenuPosition"
+            color="neutral"
+            variant="ghost"
+            [iconOnly]="true"
+            size="sm"
+            aria-label="User actions"
+          >
+            <org-button-icon name="ellipsis" />
+          </org-button>
+          <ng-template #userActionsMenu>
+            <org-overlay-menu
+              [menuItems]="rowActionsMenuItems"
+              (menuItemClicked)="onRowActionMenuItemClick($event, user)"
+            />
+          </ng-template>
+        </div>
+      </org-table-td>
+    </ng-template>
+    <ng-template #selectedActions>
+      <org-button color="danger" size="sm" (clicked)="onBulkDeleteClick()">
+        <org-button-icon name="trash" />
+        Delete
+      </org-button>
+    </ng-template>
+  </org-table>
+
+  <org-pagination [totalItems]="totalItems()" [itemsPerPageOptions]="itemsPerPageOptions" />
+}

@@ -1,0 +1,84 @@
+import type { Meta, StoryObj } from '@storybook/angular';
+import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
+import { CdkMenuTrigger } from '@angular/cdk/menu';
+import { OverlayMenu, type OverlayMenuItem, type OverlayMenuItemEntry } from './overlay-menu';
+import { Tag } from '../tag/tag';
+import { TagIcon } from '../tag/tag-icon';
+import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
+import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
+
+type TagTriggerMeta = {
+  value: string;
+};
+
+@Component({
+  selector: 'story-overlay-menu-tag-trigger',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CdkMenuTrigger, Tag, TagIcon, OverlayMenu, StorybookExampleContainer, StorybookExampleContainerSection],
+  template: `
+    <org-storybook-example-container
+      title="Tag as Menu Trigger"
+      currentState="Click the tag to open the menu. Selecting an item updates the tag's text from its meta.value"
+    >
+      <org-storybook-example-container-section label="Tag Trigger With Meta-Driven Label">
+        <org-tag [cdkMenuTriggerFor]="menu" color="neutral">
+          {{ triggerText() }}
+          <org-tag-icon name="chevron-down" />
+        </org-tag>
+        <ng-template #menu>
+          <org-overlay-menu [menuItems]="menuItems" (menuItemClicked)="handleMenuItemClicked($event)" />
+        </ng-template>
+      </org-storybook-example-container-section>
+
+      <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+        <li>The tag acts as the menu trigger via <strong>cdkMenuTriggerFor</strong></li>
+        <li>The tag text starts as <strong>Select value</strong></li>
+        <li>Selecting a menu item sets the tag text to that item's <strong>meta.value</strong></li>
+        <li>Reopening the menu and selecting a different item updates the tag text again</li>
+      </ul>
+    </org-storybook-example-container>
+  `,
+})
+class OverlayMenuTagTriggerStory {
+  protected readonly menuItems: OverlayMenuItem<TagTriggerMeta>[] = [
+    { id: '1', label: 'Apple', icon: 'circle', meta: { value: 'Apple' } },
+    { id: '2', label: 'Broccoli', icon: 'circle', meta: { value: 'Broccoli' } },
+    { id: '3', label: 'Chicken', icon: 'circle', meta: { value: 'Chicken' } },
+  ];
+
+  protected readonly triggerText = signal<string>('Select value');
+
+  protected handleMenuItemClicked(item: OverlayMenuItemEntry<TagTriggerMeta>): void {
+    if (!item.meta) {
+      return;
+    }
+
+    this.triggerText.set(item.meta.value);
+  }
+}
+
+const meta: Meta<OverlayMenuTagTriggerStory> = {
+  title: 'Core/Components/Overlay Menu/Use Cases',
+  component: OverlayMenuTagTriggerStory,
+  tags: ['autodocs'],
+};
+
+export default meta;
+type Story = StoryObj<OverlayMenuTagTriggerStory>;
+
+export const TagAsTrigger: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Uses the Tag component as the menu trigger. The tag text defaults to "Select value" and updates to the selected item meta.value when a menu item is clicked.',
+      },
+    },
+  },
+  render: () => ({
+    template: `<story-overlay-menu-tag-trigger />`,
+    moduleMetadata: {
+      imports: [OverlayMenuTagTriggerStory],
+    },
+  }),
+};

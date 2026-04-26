@@ -1,0 +1,10 @@
+@layer components {
+  :host {
+    display: contents;
+  }
+
+  /* hides the ngx-scrollbar track and thumb when enabled=false */
+  .org-scroll-area-hidden-scrollbar {
+    display: none !important;
+  }
+}

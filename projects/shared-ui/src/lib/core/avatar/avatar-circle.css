@@ -1,0 +1,46 @@
+@layer components {
+  :host {
+    position: relative;
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: var(--radius-full);
+    background-color: var(--color-primary-background);
+    color: var(--color-text-inverse);
+    font-weight: var(--font-weight-medium);
+  }
+
+  :host([data-size='sm']) {
+    width: var(--spacing-5); /* 20px */
+    height: var(--spacing-5); /* 20px */
+    font-size: var(--text-2xs);
+    line-height: var(--text-2xs--line-height);
+    letter-spacing: var(--text-2xs--letter-spacing);
+  }
+
+  :host([data-size='base']) {
+    width: var(--spacing-7); /* 28px */
+    height: var(--spacing-7); /* 28px */
+    font-size: var(--text-sm);
+    line-height: var(--text-sm--line-height);
+    letter-spacing: var(--text-sm--letter-spacing);
+  }
+
+  :host([data-size='lg']) {
+    width: var(--spacing-10); /* 40px */
+    height: var(--spacing-10); /* 40px */
+    font-size: var(--text-md);
+    line-height: var(--text-md--line-height);
+    letter-spacing: var(--text-md--letter-spacing);
+  }
+
+  :host([data-stacked='true']) {
+    border: var(--border-width-thick) solid var(--color-background);
+  }
+
+  .dark-theme :host {
+    color: var(--color-text);
+  }
+}

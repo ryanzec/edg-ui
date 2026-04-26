@@ -1,0 +1,15 @@
+$schema: 'https://moonrepo.dev/schemas/project.json'
+
+type: 'library'
+language: 'typescript'
+
+tasks:
+  type-check:
+    command: '$workspaceRoot/node_modules/.bin/tsc --project $workspaceRoot/tsconfig.json'
+    inputs:
+      - '**/*'
+      - /tsconfig.json
+    env:
+      NODE_ENV: 'development'
+    options:
+      runFromWorkspaceRoot: false

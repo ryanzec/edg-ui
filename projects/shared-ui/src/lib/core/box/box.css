@@ -1,0 +1,169 @@
+@layer components {
+  :host {
+    display: block;
+    overflow: hidden;
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+    background-color: var(--color-background);
+    padding: var(--spacing-2);
+  }
+
+  /* padding variants */
+  :host([data-padding='none']) {
+    padding: 0;
+  }
+
+  :host([data-padding='sm']) {
+    padding: var(--spacing-1);
+  }
+
+  :host([data-padding='lg']) {
+    padding: var(--spacing-4);
+  }
+
+  /* color variants - border and background */
+  :host([data-color='primary']) {
+    border-color: var(--color-primary-border);
+    background-color: var(--color-primary-background-subtle);
+  }
+
+  :host([data-color='secondary']) {
+    border-color: var(--color-secondary-border);
+    background-color: var(--color-secondary-background-subtle);
+  }
+
+  :host([data-color='neutral']) {
+    border-color: var(--color-neutral-border);
+    background-color: var(--color-neutral-background-subtle);
+  }
+
+  :host([data-color='safe']) {
+    border-color: var(--color-safe-border);
+    background-color: var(--color-safe-background-subtle);
+  }
+
+  :host([data-color='info']) {
+    border-color: var(--color-info-border);
+    background-color: var(--color-info-background-subtle);
+  }
+
+  :host([data-color='caution']) {
+    border-color: var(--color-caution-border);
+    background-color: var(--color-caution-background-subtle);
+  }
+
+  :host([data-color='warning']) {
+    border-color: var(--color-warning-border);
+    background-color: var(--color-warning-background-subtle);
+  }
+
+  :host([data-color='danger']) {
+    border-color: var(--color-danger-border);
+    background-color: var(--color-danger-background-subtle);
+  }
+
+  /* background=colorless - keep default background regardless of color */
+  :host([data-background='colorless']) {
+    background-color: var(--color-background);
+  }
+
+  /* border overrides - must come after color rules to win on border-color */
+  :host([data-border='border-thick']) {
+    border-width: var(--border-width-thick);
+  }
+
+  :host([data-border='borderless']) {
+    border-color: transparent;
+  }
+
+  :host([data-border='border-emphasize']) {
+    border-width: var(--border-width);
+    border-top-color: var(--color-border);
+    border-right-color: var(--color-border);
+    border-bottom-color: var(--color-border);
+    border-left-width: 0.4375rem; /* 7px */
+    border-left-color: var(--color-border);
+  }
+
+  /* border-emphasize per-color left border overrides */
+  :host([data-border='border-emphasize'][data-color='primary']) {
+    border-left-color: var(--color-primary-border);
+  }
+
+  :host([data-border='border-emphasize'][data-color='secondary']) {
+    border-left-color: var(--color-secondary-border);
+  }
+
+  :host([data-border='border-emphasize'][data-color='neutral']) {
+    border-left-color: var(--color-neutral-border);
+  }
+
+  :host([data-border='border-emphasize'][data-color='safe']) {
+    border-left-color: var(--color-safe-border);
+  }
+
+  :host([data-border='border-emphasize'][data-color='info']) {
+    border-left-color: var(--color-info-border);
+  }
+
+  :host([data-border='border-emphasize'][data-color='caution']) {
+    border-left-color: var(--color-caution-border);
+  }
+
+  :host([data-border='border-emphasize'][data-color='warning']) {
+    border-left-color: var(--color-warning-border);
+  }
+
+  :host([data-border='border-emphasize'][data-color='danger']) {
+    border-left-color: var(--color-danger-border);
+  }
+
+  /* border-emphasize + colored background: top/right/bottom also match the color input */
+  :host([data-border='border-emphasize'][data-background='colored'][data-color='primary']) {
+    border-top-color: var(--color-primary-border);
+    border-right-color: var(--color-primary-border);
+    border-bottom-color: var(--color-primary-border);
+  }
+
+  :host([data-border='border-emphasize'][data-background='colored'][data-color='secondary']) {
+    border-top-color: var(--color-secondary-border);
+    border-right-color: var(--color-secondary-border);
+    border-bottom-color: var(--color-secondary-border);
+  }
+
+  :host([data-border='border-emphasize'][data-background='colored'][data-color='neutral']) {
+    border-top-color: var(--color-neutral-border);
+    border-right-color: var(--color-neutral-border);
+    border-bottom-color: var(--color-neutral-border);
+  }
+
+  :host([data-border='border-emphasize'][data-background='colored'][data-color='safe']) {
+    border-top-color: var(--color-safe-border);
+    border-right-color: var(--color-safe-border);
+    border-bottom-color: var(--color-safe-border);
+  }
+
+  :host([data-border='border-emphasize'][data-background='colored'][data-color='info']) {
+    border-top-color: var(--color-info-border);
+    border-right-color: var(--color-info-border);
+    border-bottom-color: var(--color-info-border);
+  }
+
+  :host([data-border='border-emphasize'][data-background='colored'][data-color='caution']) {
+    border-top-color: var(--color-caution-border);
+    border-right-color: var(--color-caution-border);
+    border-bottom-color: var(--color-caution-border);
+  }
+
+  :host([data-border='border-emphasize'][data-background='colored'][data-color='warning']) {
+    border-top-color: var(--color-warning-border);
+    border-right-color: var(--color-warning-border);
+    border-bottom-color: var(--color-warning-border);
+  }
+
+  :host([data-border='border-emphasize'][data-background='colored'][data-color='danger']) {
+    border-top-color: var(--color-danger-border);
+    border-right-color: var(--color-danger-border);
+    border-bottom-color: var(--color-danger-border);
+  }
+}

@@ -1,0 +1,88 @@
+@layer components {
+  :host {
+    display: block;
+    position: relative;
+    height: 100%;
+  }
+
+  .table-wrapper {
+    position: relative;
+    height: 100%;
+  }
+
+  .selected-actions-bar {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+    padding: var(--spacing-2) var(--spacing-3);
+    background-color: var(--color-info-background-subtle);
+    color: var(--color-info-text);
+    /*border: 0.0625rem solid var(--color-info-border-subtle); /* 1px
+    border-bottom: none;
+    border-top-left-radius: var(--radius-md);
+    border-top-right-radius: var(--radius-md);*/
+  }
+
+  .selected-actions-bar .selected-count {
+    font-weight: var(--font-weight-medium);
+  }
+
+  .selected-actions-bar .actions {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    flex: 1;
+  }
+
+  .table {
+    width: 100%;
+  }
+
+  .background-loader {
+    position: absolute;
+    top: var(--spacing-2);
+    right: var(--spacing-2);
+    z-index: 10;
+  }
+
+  /* ellipsis support using css variables */
+  .org-table-ellipsis {
+    --ellipsis-lines: 1;
+
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: var(--ellipsis-lines);
+    line-clamp: var(--ellipsis-lines);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    word-break: break-word;
+  }
+
+  /* scroll content — 1px-inset radius to match the container's border */
+  .org-table-scroll {
+    /*border-radius: calc(var(--radius-md) - 0.0625rem); /* 1px */
+  }
+
+  /* table element — no utilities for border-collapse / border-spacing */
+  org-table table {
+    border-collapse: collapse;
+    border-spacing: 0;
+  }
+
+  /* sticky header */
+  org-table-tr[data-sticky] th {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-index-elevated);
+  }
+
+  /* body rows */
+  org-table-tr[data-variant='body']:not(:last-child) tr {
+    border-bottom: 0.0625rem solid var(--color-border-subtle); /* 1px */
+  }
+
+  org-table-tr[data-variant='body'] tr:hover {
+    background-color: var(--color-background-level1);
+  }
+}

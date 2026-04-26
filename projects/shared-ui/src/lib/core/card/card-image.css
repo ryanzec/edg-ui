@@ -1,0 +1,16 @@
+@layer components {
+  :host {
+    position: relative;
+    display: block;
+    overflow: hidden;
+  }
+
+  :host img {
+    object-fit: cover;
+  }
+
+  :host([data-full-width]) img {
+    width: 100%;
+    height: 100%;
+  }
+}

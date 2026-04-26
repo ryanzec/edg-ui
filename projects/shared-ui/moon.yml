@@ -1,0 +1,41 @@
+$schema: 'https://moonrepo.dev/schemas/project.json'
+
+type: 'library'
+language: 'typescript'
+
+tasks:
+  # can't seem to build this however since we don't need to since we directly import in the applications,
+  # commenting out for now
+  # build:
+  #   command: '$workspaceRoot/node_modules/.bin/ng build shared-ui'
+  #   inputs:
+  #     - '**/*'
+  #     - '/projects/shared-types/src/**/*'
+  #     - '/projects/shared-utils/src/**/*'
+  #     - /tsconfig.json
+  #   env:
+  #     NODE_ENV: 'development'
+  #   options:
+  #     runFromWorkspaceRoot: false
+
+  type-check:
+    command: '$workspaceRoot/node_modules/.bin/ngc --project tsconfig.lib.prod.json'
+    inputs:
+      - '**/*'
+      - /tsconfig.json
+      - /tsconfig.lib.json
+    env:
+      NODE_ENV: 'development'
+    options:
+      runFromWorkspaceRoot: false
+
+  test-unit:
+    command: '$workspaceRoot/node_modules/.bin/ng test shared-ui'
+    inputs:
+      - '**/*'
+      - /tsconfig.json
+      - /tsconfig.spec.json
+    env:
+      NODE_ENV: 'development'
+    options:
+      runFromWorkspaceRoot: false

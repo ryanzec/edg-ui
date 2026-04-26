@@ -1,0 +1,43 @@
+<div class="options-panel">
+  <org-scroll-area
+    #optionsScrollAreaComponent
+    [enabled]="isScrollNeeded()"
+    direction="vertical"
+    scrollClass="h-full w-full"
+  >
+    <div [attr.id]="listboxId()" role="listbox" aria-label="Options">
+      @if (hasFilteredOptions()) {
+        @if (!isGroupingEnabled()) {
+          <org-list>
+            @for (option of filteredOptions(); track option.value) {
+              <org-combobox-option [option]="option" />
+            }
+          </org-list>
+        } @else {
+          @for (group of filteredGroupedOptions(); track group.groupLabel) {
+            <div class="group" role="group" [attr.aria-label]="group.groupLabel">
+              <div class="group-label">{{ group.groupLabel }}</div>
+              <org-list>
+                @for (option of group.options; track option.value) {
+                  <org-combobox-option [option]="option" />
+                }
+              </org-list>
+            </div>
+          }
+        }
+      }
+
+      @if (newOptionSuggestion(); as suggestion) {
+        <org-list>
+          <org-combobox-option [option]="suggestion" displayLabelPrefix="Add" />
+        </org-list>
+      }
+
+      @if (!hasFilteredOptions() && !newOptionSuggestion()) {
+        <org-list>
+          <org-list-item> No options available </org-list-item>
+        </org-list>
+      }
+    </div>
+  </org-scroll-area>
+</div>

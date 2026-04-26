@@ -1,0 +1,72 @@
+@for (item of inlineItems(); track item.id) {
+  <org-tag color="primary" variant="weak">
+    {{ item.label }}
+    @if (!!(item.removable && !isDisabled() && !readonly())) {
+      <org-tag-icon [removable]="true" (removed)="onInlineItemRemove(item)" />
+    }
+  </org-tag>
+}
+@if (hasPreIcon()) {
+  @if (isPreIconClickable()) {
+    <button
+      type="button"
+      class="input-icon-btn"
+      (click)="onPreIconClick($event)"
+      [disabled]="isDisabled()"
+      [attr.aria-label]="preIconAriaLabel()"
+    >
+      <org-icon [name]="preIcon()!" />
+    </button>
+  } @else {
+    <span class="input-icon-btn" aria-hidden="true">
+      <org-icon [name]="preIcon()!" />
+    </span>
+  }
+}
+<input
+  #inputRef
+  class="native-input"
+  [type]="currentInputType()"
+  [value]="value()"
+  [placeholder]="placeholder()"
+  [disabled]="isDisabled()"
+  [readonly]="readonly()"
+  (input)="onInputChange($event)"
+  (blur)="onBlur()"
+  [name]="name()"
+  [attr.id]="name()"
+  [attr.aria-describedby]="ariaDescribedBy()"
+  [attr.aria-invalid]="ariaInvalid()"
+  [attr.autocomplete]="autocomplete()"
+  [attr.data-ip-ignore]="blockPasswordManager() ? 'true' : null"
+  [attr.role]="inputRole()"
+  [attr.aria-expanded]="ariaExpanded()"
+  [attr.aria-haspopup]="ariaHasPopup()"
+  [attr.aria-autocomplete]="ariaAutoComplete()"
+  [attr.aria-activedescendant]="ariaActiveDescendant()"
+  [attr.aria-controls]="ariaControls()"
+  [attr.aria-label]="ariaLabel()"
+/>
+@if (hasPostIcon()) {
+  @if (isPostIconInteractive()) {
+    <button
+      type="button"
+      class="input-icon-btn"
+      (click)="onPostIconClick($event)"
+      [disabled]="isDisabled()"
+      [attr.aria-label]="
+        showPasswordToggle() && type() === 'password'
+          ? showPassword()
+            ? 'Hide password'
+            : 'Show password'
+          : postIconAriaLabel()
+      "
+    >
+      <org-icon [name]="currentPostIcon()!" />
+    </button>
+  } @else {
+    <span class="input-icon-btn" aria-hidden="true">
+      <org-icon [name]="currentPostIcon()!" />
+    </span>
+  }
+}

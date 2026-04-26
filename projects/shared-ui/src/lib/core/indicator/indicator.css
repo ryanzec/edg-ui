@@ -1,0 +1,78 @@
+@layer components {
+  :host {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-full);
+  }
+
+  :host([data-size='sm']:not([data-has-number])) {
+    min-width: var(--spacing-2_5); /* 10px */
+    min-height: var(--spacing-2_5); /* 10px */
+  }
+  :host([data-size='base']:not([data-has-number])) {
+    min-width: var(--spacing-3_5); /* 14px */
+    min-height: var(--spacing-3_5); /* 14px */
+  }
+  :host([data-size='lg']:not([data-has-number])) {
+    min-width: 1.125rem; /* 18px */
+    min-height: 1.125rem; /* 18px */
+  }
+  :host([data-size='sm'][data-has-number]) {
+    min-width: var(--spacing-5); /* 20px */
+    min-height: var(--spacing-5); /* 20px */
+    padding: var(--spacing-1);
+    font-size: var(--text-xs);
+    font-weight: var(--font-weight-medium);
+    line-height: 1;
+  }
+  :host([data-size='base'][data-has-number]) {
+    min-width: var(--spacing-6); /* 24px */
+    min-height: var(--spacing-6); /* 24px */
+    padding: var(--spacing-1) var(--spacing-1_5);
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-medium);
+    line-height: 1;
+  }
+  :host([data-size='lg'][data-has-number]) {
+    min-width: var(--spacing-7); /* 28px */
+    min-height: var(--spacing-7); /* 28px */
+    padding: var(--spacing-1_5) var(--spacing-2);
+    font-size: var(--text-md);
+    font-weight: var(--font-weight-medium);
+    line-height: 1;
+  }
+
+  :host([data-color='primary']) {
+    background-color: var(--color-primary-background);
+    color: var(--color-text);
+  }
+  :host([data-color='secondary']) {
+    background-color: var(--color-secondary-background);
+    color: var(--color-text);
+  }
+  :host([data-color='neutral']) {
+    background-color: var(--color-neutral-background);
+    color: var(--color-text);
+  }
+  :host([data-color='safe']) {
+    background-color: var(--color-safe-background);
+    color: var(--color-text);
+  }
+  :host([data-color='info']) {
+    background-color: var(--color-info-background);
+    color: var(--color-text);
+  }
+  :host([data-color='caution']) {
+    background-color: var(--color-caution-background);
+    color: var(--color-text);
+  }
+  :host([data-color='warning']) {
+    background-color: var(--color-warning-background);
+    color: var(--color-text);
+  }
+  :host([data-color='danger']) {
+    background-color: var(--color-danger-background);
+    color: var(--color-text);
+  }
+}

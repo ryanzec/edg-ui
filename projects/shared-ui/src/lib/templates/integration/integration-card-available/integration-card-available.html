@@ -1,0 +1,27 @@
+<org-box background="colorless" color="neutral" padding="none" class="h-full">
+  <div class="flex flex-col gap-4 p-4 h-full">
+    <div class="flex items-center justify-between gap-3">
+      <div class="flex items-center gap-3 min-w-0">
+        <org-icon [name]="integration().iconName" size="lg" />
+        <div class="flex flex-col gap-1 min-w-0">
+          <h3 class="m-0">{{ integration().name }}</h3>
+        </div>
+      </div>
+      <org-button color="safe" (clicked)="onAdd()">
+        <org-button-icon name="plus" />
+        Add
+      </org-button>
+    </div>
+    <p class="m-0">{{ integration().description }}</p>
+    @if (integration().tags.length > 0) {
+      <div class="flex flex-wrap gap-2 mt-auto">
+        @for (tag of visibleTags(); track tag.label) {
+          <org-tag [color]="tag.color ?? 'neutral'">{{ tag.label }}</org-tag>
+        }
+        @if (overflowTagCount() > 0) {
+          <org-tag color="neutral">+{{ overflowTagCount() }}</org-tag>
+        }
+      </div>
+    }
+  </div>
+</org-box>

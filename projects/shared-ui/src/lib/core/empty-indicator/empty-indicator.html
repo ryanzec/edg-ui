@@ -1,0 +1,17 @@
+<org-box [color]="boxColor()" [border]="boxBorder()" [padding]="boxPadding()">
+  <div class="container">
+    <ng-content select="org-empty-indicator-icon" />
+
+    <p class="header">{{ header() }}</p>
+
+    @if (description()) {
+      <p class="description">{{ description() }}</p>
+    }
+
+    @if (hasActionButton()) {
+      <org-button color="primary" (clicked)="onActionClick()">
+        {{ actionLabel() }}
+      </org-button>
+    }
+  </div>
+</org-box>

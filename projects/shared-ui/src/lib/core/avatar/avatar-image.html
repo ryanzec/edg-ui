@@ -1,0 +1,3 @@
+@if (shouldShowImage()) {
+  <img [src]="imageSrc()" [alt]="effectiveAlt()" (error)="onError()" />
+}

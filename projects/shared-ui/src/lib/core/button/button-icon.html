@@ -1,0 +1,5 @@
+@if (showSpinner()) {
+  <org-loading-spinner [size]="size()" />
+} @else if (showIcon()) {
+  <org-icon [name]="name()" [size]="size()" />
+}

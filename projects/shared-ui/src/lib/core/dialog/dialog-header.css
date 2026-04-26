@@ -1,0 +1,12 @@
+@layer components {
+  :host {
+    display: block;
+  }
+
+  .title {
+    font-size: var(--text-lg);
+    line-height: var(--text-lg--line-height);
+    letter-spacing: var(--text-lg--letter-spacing);
+    font-weight: var(--font-weight-semibold);
+  }
+}

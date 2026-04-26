@@ -1,0 +1,29 @@
+@layer components {
+  :host {
+    display: block;
+    width: 100%;
+  }
+
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: var(--sizing-4xs);
+    gap: var(--spacing-1);
+  }
+
+  .header {
+    font-size: var(--text-lg);
+    line-height: var(--text-lg--line-height);
+    letter-spacing: var(--text-lg--letter-spacing);
+  }
+
+  .description {
+    font-size: var(--text-sm);
+    line-height: var(--text-sm--line-height);
+    letter-spacing: var(--text-sm--letter-spacing);
+    color: var(--color-text-subtle);
+  }
+}

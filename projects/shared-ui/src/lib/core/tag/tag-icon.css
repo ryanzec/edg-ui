@@ -1,0 +1,25 @@
+@layer components {
+  :host {
+    display: inline-flex;
+  }
+
+  .tag-icon-btn {
+    display: inline-flex;
+    flex-shrink: 0;
+    outline: none;
+  }
+
+  .tag-icon-btn[data-clickable]:hover {
+    opacity: 0.8;
+  }
+
+  .tag-icon-btn[data-clickable]:focus-visible {
+    background-color: color-mix(in srgb, currentColor 15%, transparent);
+    border-radius: var(--radius-xs);
+    opacity: 0.8;
+  }
+
+  .tag-icon-btn:disabled {
+    cursor: default;
+  }
+}

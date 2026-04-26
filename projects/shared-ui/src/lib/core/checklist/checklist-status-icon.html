@@ -1,0 +1,14 @@
+@switch (status()) {
+  @case ('not-started') {
+    <org-icon name="ellipsis" size="base" />
+  }
+  @case ('in-progress') {
+    <org-icon name="loader" size="base" class="spinner" />
+  }
+  @case ('valid') {
+    <org-icon name="circle-check-big" size="base" />
+  }
+  @case ('invalid') {
+    <org-icon name="circle-x" size="base" />
+  }
+}

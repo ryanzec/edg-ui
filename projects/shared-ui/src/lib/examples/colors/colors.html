@@ -1,0 +1,163 @@
+<div class="p-8 max-w-7xl mx-auto">
+  <div class="mb-12 text-center">
+    <h1 class="text-4xl font-bold text-text mb-4">Design System Colors</h1>
+    <div class="text-lg text-text-subtle max-w-2xl mx-auto line-height-relaxed">
+      Complete reference of all CSS color variables available in the design system. These colors automatically adapt to
+      light and dark themes.
+    </div>
+  </div>
+
+  <div class="flex flex-col gap-12">
+    <!-- Text and Link Colors -->
+    <section class="border-b border-border-subtle pb-12 last:border-b-0 last:pb-0">
+      <h2 class="text-3xl font-semibold text-text mb-8 pb-2 border-b-2 border-primary-border">Text & Link Colors</h2>
+
+      @for (category of colorCategories; track category.title) {
+        <div class="mb-10 last:mb-0">
+          <h3 class="text-xl font-semibold text-text mb-6 pl-2 border-l-3 border-primary-background">
+            {{ category.title }}
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            @for (color of category.colors; track color.cssVar) {
+              <div
+                [class]="
+                  mergeClasses(
+                    'flex items-start gap-4 p-4 border border-border-subtle rounded-lg bg-background',
+                    'hover:border-border hover:-translate-y-0.5'
+                  )
+                "
+              >
+                <div
+                  [class]="
+                    mergeClasses(
+                      'flex-shrink-0 min-w-9xs min-h-9xs rounded-md flex items-center justify-center font-semibold text-md border border-border-subtle',
+                      color.backgroundColorVar || defaultBackgroundColor() ? '' : 'bg-background-subtle'
+                    )
+                  "
+                  [style.color]="'var(' + color.cssVar + ')'"
+                  [style.background-color]="
+                    color.backgroundColorVar
+                      ? 'var(' + color.backgroundColorVar + ')'
+                      : defaultBackgroundColor()
+                        ? 'var(' + defaultBackgroundColor() + ')'
+                        : ''
+                  "
+                  [attr.data-css-var]="color.cssVar"
+                >
+                  Aa
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="font-semibold text-text mb-1 text-sm">{{ color.name }}</div>
+                  <div
+                    class="font-mono text-xs text-primary-text bg-primary-background-subtle px-1.5 py-0.5 rounded inline-block mb-2 break-all"
+                  >
+                    {{ color.cssVar }}
+                  </div>
+                  @if (color.description) {
+                    <div class="text-xs text-text-subtle leading-snug">{{ color.description }}</div>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </section>
+
+    <!-- Border Colors -->
+    <section class="border-b border-border-subtle pb-12 last:border-b-0 last:pb-0">
+      <h2 class="text-3xl font-semibold text-text mb-8 pb-2 border-b-2 border-primary-border">Border Colors</h2>
+
+      @for (category of borderColors; track category.title) {
+        <div class="mb-10 last:mb-0">
+          <h3 class="text-xl font-semibold text-text mb-6 pl-2 border-l-3 border-primary-background">
+            {{ category.title }}
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            @for (color of category.colors; track color.cssVar) {
+              <div
+                [class]="
+                  mergeClasses(
+                    'flex items-start gap-4 p-4 border border-border-subtle rounded-lg bg-background',
+                    'hover:border-border hover:-translate-y-0.5'
+                  )
+                "
+              >
+                <div
+                  [class]="
+                    mergeClasses(
+                      'colors-demo__swatch--border flex-shrink-0 min-w-9xs min-h-9xs rounded-md border-3 relative overflow-hidden',
+                      color.backgroundColorVar || defaultBackgroundColor() ? '' : 'bg-background-subtle'
+                    )
+                  "
+                  [style.border-color]="'var(' + color.cssVar + ')'"
+                  [style.background-color]="
+                    color.backgroundColorVar
+                      ? 'var(' + color.backgroundColorVar + ')'
+                      : defaultBackgroundColor()
+                        ? 'var(' + defaultBackgroundColor() + ')'
+                        : ''
+                  "
+                  [attr.data-css-var]="color.cssVar"
+                ></div>
+                <div class="flex-1 min-w-0">
+                  <div class="font-semibold text-text mb-1 text-sm">{{ color.name }}</div>
+                  <div
+                    class="font-mono text-xs text-primary-text bg-primary-background-subtle px-1.5 py-0.5 rounded inline-block mb-2 break-all"
+                  >
+                    {{ color.cssVar }}
+                  </div>
+                  @if (color.description) {
+                    <div class="text-xs text-text-subtle leading-snug">{{ color.description }}</div>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </section>
+
+    <!-- Background Colors -->
+    <section class="border-b border-border-subtle pb-12 last:border-b-0 last:pb-0">
+      <h2 class="text-3xl font-semibold text-text mb-8 pb-2 border-b-2 border-primary-border">Background Colors</h2>
+
+      @for (category of backgroundColors; track category.title) {
+        <div class="mb-10 last:mb-0">
+          <h3 class="text-xl font-semibold text-text mb-6 pl-2 border-l-3 border-primary-background">
+            {{ category.title }}
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            @for (color of category.colors; track color.cssVar) {
+              <div
+                [class]="
+                  mergeClasses(
+                    'flex items-start gap-4 p-4 border border-border-subtle rounded-lg bg-background',
+                    'hover:border-border hover:-translate-y-0.5'
+                  )
+                "
+              >
+                <div
+                  class="flex-shrink-0 min-w-9xs min-h-9xs rounded-md border border-border-subtle relative overflow-hidden"
+                  [style.background-color]="'var(' + color.cssVar + ')'"
+                  [attr.data-css-var]="color.cssVar"
+                ></div>
+                <div class="flex-1 min-w-0">
+                  <div class="font-semibold text-text mb-1 text-sm">{{ color.name }}</div>
+                  <div
+                    class="font-mono text-xs text-primary-text bg-primary-background-subtle px-1.5 py-0.5 rounded inline-block mb-2 break-all"
+                  >
+                    {{ color.cssVar }}
+                  </div>
+                  @if (color.description) {
+                    <div class="text-xs text-text-subtle leading-snug">{{ color.description }}</div>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </section>
+  </div>
+</div>

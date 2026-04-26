@@ -1,0 +1,41 @@
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none; /* internet explorer 10+ */
+    scrollbar-width: none; /* firefox */
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none; /* safari and chrome */
+  }
+}
+
+@layer components {
+  /*
+    ngx-scrollbar CSS variable overrides applied globally to all ng-scrollbar instances.
+
+    --scrollbar-thumb-color and --scrollbar-thumb-hover-color are intentionally not set here
+    because ngx-scrollbar uses those same variable names, so the design tokens defined in
+    system-tokens.css (--scrollbar-thumb-color, --scrollbar-thumb-hover-color) are picked up
+    automatically with no mapping required.
+
+    --scrollbar-color (our design token for the track/container background) maps to ngx-scrollbar's
+    --scrollbar-container-color. The track itself is kept transparent so only the thumb is visible.
+  */
+  ng-scrollbar {
+    --scrollbar-container-color: var(--scrollbar-color);
+    --scrollbar-track-color: transparent;
+    --scrollbar-track-thickness: 0.4375rem; /* 7px — matches the previous ::-webkit-scrollbar width/height */
+    --scrollbar-thumb-shape: 0.25rem; /* 4px — matches the previous border-radius on the thumb */
+  }
+
+  /*
+    native scrollbar styling for org-textarea defined globally to bypass angular's view encapsulation;
+    safari does not reliably match ::-webkit-scrollbar pseudo-elements when component-scoped attribute
+    selectors are applied, so these rules live here instead of in textarea.css.
+  */
+  org-textarea textarea {
+    /* firefox + modern safari (18+) */
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb-color) transparent;
+  }
+}

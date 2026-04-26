@@ -1,0 +1,12 @@
+@layer components {
+  :host {
+    display: contents;
+  }
+
+  .cell {
+    padding: var(--spacing-3) var(--spacing-4);
+    font-size: var(--text-sm);
+    line-height: var(--text-sm--line-height);
+    letter-spacing: var(--text-sm--letter-spacing);
+  }
+}

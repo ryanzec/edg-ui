@@ -1,0 +1,8 @@
+@let heightValue = height();
+@let widthValue = width();
+
+@if (heightValue && widthValue) {
+  <img [ngSrc]="src()" [alt]="alt()" [width]="widthValue" [height]="heightValue" [priority]="priority()" />
+} @else {
+  <img [ngSrc]="src()" [alt]="alt()" fill [priority]="priority()" />
+}

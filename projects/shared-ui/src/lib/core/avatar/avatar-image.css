@@ -1,0 +1,13 @@
+@layer components {
+  :host {
+    position: absolute;
+    inset: 0;
+    display: block;
+  }
+
+  :host img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}

@@ -1,0 +1,16 @@
+@layer components {
+  :host {
+    display: block;
+  }
+
+  .content-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--spacing-2);
+  }
+
+  .message {
+    flex: 1;
+  }
+}

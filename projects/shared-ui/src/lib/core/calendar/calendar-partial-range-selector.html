@@ -1,0 +1,15 @@
+@if (calendarComponent.showPartialRangeSelectionType()) {
+  <div class="selector-container">
+    <org-radio-group
+      name="partial-range-selection-type"
+      [value]="calendarComponent.partialRangeSelectionType()"
+      (valueChange)="calendarComponent.onPartialRangeSelectionTypeChange($event)"
+    >
+      <div class="radio-options">
+        <org-radio value="range">range</org-radio>
+        <org-radio value="onOrBefore">on or before</org-radio>
+        <org-radio value="onOrAfter">on or after</org-radio>
+      </div>
+    </org-radio-group>
+  </div>
+}

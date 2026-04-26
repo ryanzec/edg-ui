@@ -1,0 +1,43 @@
+@if (scrollable()) {
+  <org-button
+    color="neutral"
+    variant="ghost"
+    [iconOnly]="true"
+    [disabled]="!brain.canScrollLeft()"
+    (clicked)="onScrollLeft()"
+    buttonClass="shrink-0 self-center"
+    ariaLabel="Scroll tabs left"
+  >
+    <org-button-icon name="chevron-left" />
+  </org-button>
+}
+
+<!--
+  eslint-disable-next-line @angular-eslint/template/interactive-supports-focus -- tablist is a composite widget;
+  focus is managed by child role="tab" buttons per the ARIA tabs pattern (APG). keydown fires via event bubbling,
+  not direct container focus.
+-->
+<div
+  #tabsContainerRef
+  role="tablist"
+  class="tablist"
+  (scroll)="onScroll()"
+  (scrollend)="onScrollEnd()"
+  (keydown)="onKeyDown($event)"
+>
+  <ng-content />
+</div>
+
+@if (scrollable()) {
+  <org-button
+    color="neutral"
+    variant="ghost"
+    [iconOnly]="true"
+    [disabled]="!brain.canScrollRight()"
+    (clicked)="onScrollRight()"
+    buttonClass="shrink-0 self-center"
+    ariaLabel="Scroll tabs right"
+  >
+    <org-button-icon name="chevron-right" />
+  </org-button>
+}

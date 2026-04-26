@@ -1,0 +1,23 @@
+@layer components {
+  :host {
+    display: none;
+    position: absolute;
+    inset: 0;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-overlay-background);
+    z-index: var(--z-index-overlay);
+    pointer-events: auto;
+  }
+
+  :host([data-visible]) {
+    display: flex;
+  }
+
+  .content {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    margin: var(--spacing-4);
+  }
+}

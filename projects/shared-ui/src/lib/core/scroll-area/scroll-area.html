@@ -1,0 +1,30 @@
+<!--
+  using appearance="compact" gives overlay (non-space-reserving) scrollbars, matching the original
+  thin minimalist scrollbar design. the firefox border-radius two-div workaround is no longer needed
+  since ngx-scrollbar renders its own custom elements that don't interact with border-radius.
+
+  containerClass and scrollClass are both applied to the ng-scrollbar host so that border/rounded
+  styles and sizing classes work on the same element. ngx-scrollbar's internal viewport fills the
+  host 100%, so relative sizing (h-full, w-full) in scrollClass behaves identically to before.
+
+  spacingClass is applied to a single wrapper div inside ng-scrollbar. padding on this element is
+  safe because the overlay scrollbar floats above content rather than being pushed inward by padding.
+
+  when enabled=false, hiddenScrollbarClass hides the track and thumb elements so no scrollbar ui
+  is rendered, preserving the original "no scrollbar when scroll is not needed" behavior.
+-->
+<ng-scrollbar
+  #ngScrollbarComponent
+  [orientation]="orientation()"
+  [visibility]="visibility()"
+  appearance="compact"
+  [class]="mergeClasses(containerClass(), scrollClass())"
+  [trackClass]="hiddenScrollbarClass()"
+  [thumbClass]="hiddenScrollbarClass()"
+  [attr.role]="role()"
+  [attr.aria-label]="ariaLabel()"
+>
+  <div [class]="spacingClass()">
+    <ng-content />
+  </div>
+</ng-scrollbar>

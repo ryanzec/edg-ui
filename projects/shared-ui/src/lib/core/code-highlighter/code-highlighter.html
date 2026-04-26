@@ -1,0 +1,25 @@
+@if (isBlock()) {
+  <div class="code-highlighter-copy-wrapper">
+    @if (allowCopy()) {
+      <button type="button" class="code-highlighter-copy-btn" [cdkCopyToClipboard]="text()" aria-label="Copy code">
+        <org-icon name="copy" />
+      </button>
+    }
+  </div>
+  <div class="code-highlighter-body" role="region" aria-label="Code block">
+    <org-scroll-area direction="both" [onlyShowOnHover]="true" [scrollClass]="scrollClass()">
+      @if (_highlightedHtml()) {
+        <div
+          class="code-highlighter-content"
+          [style]="hasEllipsis() ? { '--ellipsis-lines': ellipsisAt() } : null"
+          [innerHTML]="_highlightedHtml()"
+        ></div>
+      } @else {
+        <pre class="code-highlighter-fallback"><code>{{ text() }}</code></pre>
+      }
+    </org-scroll-area>
+  </div>
+}
+@if (isInline()) {
+  <code class="code-highlighter-inline">{{ text() }}</code>
+}

@@ -1,0 +1,37 @@
+<ng-template #contentTemplate>
+  <ng-content />
+</ng-template>
+
+<li role="presentation">
+  @switch (asTag()) {
+    @case ('a') {
+      <a
+        [routerLink]="routerLink()"
+        [attr.href]="routerLink() ? null : href()"
+        [target]="isExternalHref() ? '_blank' : '_self'"
+        [attr.rel]="isExternalHref() ? 'noopener noreferrer' : null"
+        routerLinkActive
+        ariaCurrentWhenActive="page"
+        (isActiveChange)="onRouterLinkActiveChange($event)"
+        class="list-item-content"
+        (click)="onClick($event)"
+      >
+        <ng-container [ngTemplateOutlet]="contentTemplate" />
+      </a>
+    }
+    @case ('button') {
+      <!--
+      because the default disabled attribute can have issues with CDKs overlay functionality, we only set the
+      aria disabled property and handle the disabled state in the click handler itself
+      -->
+      <button type="button" class="list-item-content" (click)="onClick($event)">
+        <ng-container [ngTemplateOutlet]="contentTemplate" />
+      </button>
+    }
+    @default {
+      <div class="list-item-content">
+        <ng-container [ngTemplateOutlet]="contentTemplate" />
+      </div>
+    }
+  }
+</li>

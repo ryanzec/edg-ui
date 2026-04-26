@@ -1,0 +1,66 @@
+@layer components {
+  :host {
+    display: flex;
+    flex-direction: row;
+    gap: var(--spacing-3);
+  }
+
+  .indicator-column {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    top: 0.3125rem; /* 5px */
+  }
+
+  .content-column {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: var(--spacing-4);
+  }
+
+  .indicator-line {
+    flex: 1;
+    width: 0.0625rem; /* 1px */
+  }
+
+  :host(:last-child) .indicator-line {
+    display: none;
+  }
+
+  :host(:last-child) .content-column {
+    padding-bottom: 0;
+  }
+
+  :host([data-color='primary']) .indicator-line {
+    background-color: var(--color-primary-border);
+  }
+
+  :host([data-color='secondary']) .indicator-line {
+    background-color: var(--color-secondary-border);
+  }
+
+  :host([data-color='neutral']) .indicator-line {
+    background-color: var(--color-neutral-border);
+  }
+
+  :host([data-color='safe']) .indicator-line {
+    background-color: var(--color-safe-border);
+  }
+
+  :host([data-color='info']) .indicator-line {
+    background-color: var(--color-info-border);
+  }
+
+  :host([data-color='caution']) .indicator-line {
+    background-color: var(--color-caution-border);
+  }
+
+  :host([data-color='warning']) .indicator-line {
+    background-color: var(--color-warning-border);
+  }
+
+  :host([data-color='danger']) .indicator-line {
+    background-color: var(--color-danger-border);
+  }
+}

@@ -1,0 +1,18 @@
+<nav class="pagination-nav" aria-label="pagination">
+  <div class="result-text">{{ resultText() }}</div>
+  <org-pagination-navigation />
+  <div class="items-per-page-container">
+    <label class="items-per-page-label" for="pagination-items-per-page-select">Items per page:</label>
+    <select
+      id="pagination-items-per-page-select"
+      #selectElement
+      class="pagination-select"
+      [disabled]="disabled()"
+      (change)="itemsPerPageChange(+selectElement.value)"
+    >
+      @for (option of itemsPerPageOptions(); track option) {
+        <option [value]="option" [selected]="option === activeItemsPerPage()">{{ option }}</option>
+      }
+    </select>
+  </div>
+</nav>

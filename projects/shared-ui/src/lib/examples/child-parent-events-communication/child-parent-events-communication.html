@@ -1,0 +1,17 @@
+<div class="flex flex-col gap-4">
+  <div class="rounded border border-border bg-background p-4">
+    <div class="text-sm text-text">
+      While the <code class="rounded bg-background px-1 py-0.5 text-xs">&#64;Output EventEmitter</code> pattern has been
+      the popular way to communicate events to a parent component, the new stable pattern is to use the signal-based
+      <code class="rounded bg-background px-1 py-0.5 text-xs">output()</code> which follows a very similar API.
+    </div>
+  </div>
+
+  <div class="flex flex-col gap-2 rounded border border-info-border bg-info-background-subtle p-4">
+    <div class="text-sm font-medium text-text">Parent Component (store created here)</div>
+    <div class="text-sm text-text">
+      Message value: <strong>{{ message() }}</strong>
+    </div>
+    <org-example-nested-1 (messageEvent)="receiveMessage($event)" />
+  </div>
+</div>

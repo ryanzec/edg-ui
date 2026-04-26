@@ -1,0 +1,140 @@
+@layer components {
+  :host {
+    display: inline-block;
+  }
+
+  .tag-label {
+    display: inline-flex;
+    align-items: center;
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-xl);
+    font-weight: var(--font-weight-medium);
+  }
+
+  :host([data-size='xs']) .tag-label {
+    padding: var(--spacing-0_5) var(--spacing-1_5); /* 2px 6px */
+    font-size: var(--text-xs);
+    gap: var(--spacing-1);
+    line-height: var(--spacing-3); /* 12px */
+  }
+
+  :host([data-size='sm']) .tag-label {
+    padding: var(--spacing-1) var(--spacing-2);
+    font-size: var(--text-sm);
+    gap: var(--spacing-1_5); /* 6px */
+    line-height: var(--spacing-3_5); /* 14px */
+  }
+
+  :host([data-size='base']) .tag-label {
+    padding: var(--spacing-1) var(--spacing-2_5); /* 10px */
+    font-size: var(--text-md);
+    gap: var(--spacing-2);
+    line-height: var(--spacing-4); /* 16px */
+  }
+
+  :host([data-color='primary'][data-variant='strong']) .tag-label {
+    background-color: var(--color-primary-background);
+    color: var(--color-text-inverse);
+    border-color: var(--color-primary-background);
+  }
+
+  :host([data-color='primary'][data-variant='weak']) .tag-label {
+    background-color: var(--color-primary-background-subtle);
+    color: var(--color-primary-text-bold);
+    border-color: var(--color-primary-background-subtle);
+  }
+
+  :host([data-color='secondary'][data-variant='strong']) .tag-label {
+    background-color: var(--color-secondary-background);
+    color: var(--color-text);
+    border-color: var(--color-secondary-background);
+  }
+
+  :host([data-color='secondary'][data-variant='weak']) .tag-label {
+    background-color: var(--color-secondary-background-subtle);
+    color: var(--color-secondary-text-bold);
+    border-color: var(--color-secondary-background-subtle);
+  }
+
+  :host([data-color='neutral'][data-variant='strong']) .tag-label {
+    background-color: var(--color-neutral-background);
+    color: var(--color-text-inverse);
+    border-color: var(--color-neutral-background);
+  }
+
+  :host([data-color='neutral'][data-variant='weak']) .tag-label {
+    background-color: var(--color-neutral-background-subtle);
+    color: var(--color-text-bold);
+    border-color: var(--color-neutral-background-subtle);
+  }
+
+  :host([data-color='safe'][data-variant='strong']) .tag-label {
+    background-color: var(--color-safe-background);
+    color: var(--color-text-inverse);
+    border-color: var(--color-safe-background);
+  }
+
+  :host([data-color='safe'][data-variant='weak']) .tag-label {
+    background-color: var(--color-safe-background-subtle);
+    color: var(--color-safe-text-bold);
+    border-color: var(--color-safe-background-subtle);
+  }
+
+  :host([data-color='info'][data-variant='strong']) .tag-label {
+    background-color: var(--color-info-background);
+    color: var(--color-text-inverse);
+    border-color: var(--color-info-background);
+  }
+
+  :host([data-color='info'][data-variant='weak']) .tag-label {
+    background-color: var(--color-info-background-subtle);
+    color: var(--color-info-text-bold);
+    border-color: var(--color-info-background-subtle);
+  }
+
+  :host([data-color='caution'][data-variant='strong']) .tag-label {
+    background-color: var(--color-caution-background);
+    color: var(--color-text-inverse);
+    border-color: var(--color-caution-background);
+  }
+
+  :host([data-color='caution'][data-variant='weak']) .tag-label {
+    background-color: var(--color-caution-background-subtle);
+    color: var(--color-caution-text-bold);
+    border-color: var(--color-caution-background-subtle);
+  }
+
+  :host([data-color='warning'][data-variant='strong']) .tag-label {
+    background-color: var(--color-warning-background);
+    color: var(--color-text-inverse);
+    border-color: var(--color-warning-background);
+  }
+
+  :host([data-color='warning'][data-variant='weak']) .tag-label {
+    background-color: var(--color-warning-background-subtle);
+    color: var(--color-warning-text-bold);
+    border-color: var(--color-warning-background-subtle);
+  }
+
+  :host([data-color='danger'][data-variant='strong']) .tag-label {
+    background-color: var(--color-danger-background);
+    color: var(--color-text-inverse);
+    border-color: var(--color-danger-background);
+  }
+
+  :host([data-color='danger'][data-variant='weak']) .tag-label {
+    background-color: var(--color-danger-background-subtle);
+    color: var(--color-danger-text-bold);
+    border-color: var(--color-danger-background-subtle);
+  }
+
+  :host-context(body.dark-theme)[data-variant='strong'] .tag-label,
+  :host-context(body.dark-theme) [data-variant='strong'] .tag-label {
+    color: var(--color-text);
+  }
+
+  :host-context(body.dark-theme)[data-variant='weak'] .tag-label,
+  :host-context(body.dark-theme) [data-variant='weak'] .tag-label {
+    color: var(--color-text);
+  }
+}

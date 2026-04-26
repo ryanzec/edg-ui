@@ -1,0 +1,37 @@
+<div class="header">
+  <org-button
+    [iconOnly]="true"
+    variant="ghost"
+    [excludeSpacing]="true"
+    (clicked)="onPreviousClick()"
+    ariaLabel="Previous month"
+  >
+    <org-button-icon name="chevron-left" />
+  </org-button>
+
+  <div class="selectors">
+    <select class="selector" (change)="onMonthChange($event)" aria-label="Select month">
+      @for (month of calendarComponent.monthOptions; track month.value) {
+        <option [value]="month.value" [selected]="month.value === calendarComponent.displayMonth()">
+          {{ month.label }}
+        </option>
+      }
+    </select>
+
+    <select class="selector" (change)="onYearChange($event)" aria-label="Select year">
+      @for (year of calendarComponent.yearOptions(); track year) {
+        <option [value]="year" [selected]="year === calendarComponent.displayYear()">{{ year }}</option>
+      }
+    </select>
+  </div>
+
+  <org-button
+    [iconOnly]="true"
+    variant="ghost"
+    [excludeSpacing]="true"
+    (clicked)="onNextClick()"
+    ariaLabel="Next month"
+  >
+    <org-button-icon name="chevron-right" />
+  </org-button>
+</div>

@@ -1,0 +1,113 @@
+---
+alwaysApply: true
+---
+# IMPORTANT: These rules override general typescript / angular rules
+# General Angular Component Breakout Patterns
+- **NEVER** use `standalone: true` in the `@Component` decorator.
+- **ALWAYS** have a export default value for each input of the comopnent using the pattern of `{DIRECTORY_NAME}_{INPUT_NAME}_DEFAULT`.
+- **ONLY** use modern signal based features like `input()`, `output()`, `computed()`
+- **ALWAYS** use `computed()` when generating a property from another signal even if it current is not used reactively **ONLY** if it requires **NO** parameters.
+- **ALWAYS** use `rxjs` + `outputFromObservable()` when you need to determine if an output event is being listened to like this:
+```ts
+private _preIconClicked$ = new Subject<void>();
+// ...
+public preIconClicked = outputFromObservable(this._preIconClicked$);
+// ...
+```
+- **ALWAYS** have selector be prefixed with `org-` for components in `projects/shared-ui`.
+- **ALWAYS** explicitly mark members (data) / methods (functions) of the class component `protected` if it need to be accessed by the template
+- **ALWAYS** explicitly mark methods (functions) of the class component as `public` for anything that is request to be part of the public api
+<!-- needed to avoid compiler issues -->
+- **ALWAYS** use explicitly pattern for add `hostDirectives` to components
+```ts
+@Component({
+  //...
+  hostDirectives: [
+    {
+      directive: ComponentColorDirective,
+      inputs: ['orgColor'],
+    },
+  ],
+  //...
+})
+```
+- **ONLY** allow a `containerClass` input if it is applied to the outer most element in the template.
+- **ALWAYS** explicitly define the input(s) that the directive defines on the component itself when adding a `hostDirective` to a component
+- **ALWAYS** add icon to `IconName` in `projects/shared-ui/src/lib/core/icon/icon.ts` if request but not available
+- **ALWAYS** prefix any input with `default*` when it is **ONLY** used to default internal state
+- **ALWAYS** use Reactive forms over of Template-driven ones
+- **ONLY** use `class` attribute for css classes
+- **ONLY** use `style` attribute for inline styles when **100%** needed
+- **ALWAYS** suffix `@ViewChild` member name with `Ref` when it is linked to a native html element and the value for the `@ViewChild` must match:
+```ts
+// MUST DO
+@ViewChild('inputRef')
+  public readonly inputRef!: ElementRef<HTMLInputElement>;
+```
+- **ALWAYS** suffix `@ViewChild` member name with `Component` when it is linked to an Angular component element and the value for the `@ViewChild` must match:
+```ts
+// MUST DO
+@ViewChild('cardComponent')
+  public readonly cardComponent!: Card;
+```
+- **ALWAYS** suffix `@ViewChild` member name with `Directove` when it is linked to an Angular directive element and the value for the `@ViewChild` must match:
+```ts
+// MUST DO
+@ViewChild('autoScrollDirective')
+  public readonly autoScrollDirective!: Card;
+```
+- **ONLY** use `static: true` for `@ViewChild` if the DOM element is **ALWAYS** present (not conditionally rendered) **AND** is accessed in `ngOnInit()`.
+- **ALWAYS** define class inputs to a component with a prefix that is a semantic name for what it is applied to for clarity in the api.
+```ts
+// MUST DO
+public iconClass = input<string>('');
+public inputClass = input<string>('');
+```
+- **ALWAYS** make sure the form component properly support angular's reactive form system.
+- **ALWAYS** use `zodValidator` when dealing with form validation where a zod schema should be used.
+- **ALWAYS** use the `DialogController` when implementing a dialog component.
+- **ALWAYS** communicate child internal state changes to parent components with an `output()` event unless EXPLICITLY told otherwise.
+- **ALWAYS** use a `model()` instead of a `input()` when the component itself and its parent need acces to modify and / or know when it changes.
+- **ONLY** use `output()` to signal an internal event has happened in the component, NOT for state changing.
+- **ONLY** follow Angular's official naming conventions for internal event handler methods — use descriptive verb-based names (e.g., `save()`, `click()`, `submit()`) without requiring any specific prefix.
+- **ALWAYS** use `toObservable()` on request data that is passed to methods of api or data store services.
+```ts
+export class MyView implements AfterViewInit {
+  // other code...
+ 
+  private _fetchRequestData = signal<GetRequest>({
+    limit: 10,
+    offset: 0,
+    orderBy: 'updatedAt',
+    orderDirection: 'desc',
+  });
+ 
+  // other code...
+ 
+  public ngAfterViewInit(): void {
+    // we run this in here to avoid the init event storm that happens when the children components emit events that
+    // update the fetch request data to prevent unnecessary duplicate fetch requests
+    runInInjectionContext(this._injector, () => {
+      toObservable(this._fetchRequestData)
+        .pipe(
+          debounceTime(0),
+          takeUntilDestroyed(),
+          distinctUntilChanged((previous, current) => JSON.stringify(previous) === JSON.stringify(current))
+        )
+        .subscribe((requestData) => {
+          this._myDataStore.fetch(requestData);
+        });
+    });
+  }
+ 
+  protected onSortingChanged(sortingData: MySortingData): void {
+    // code to update _fetchRequestData
+  }
+ 
+  protected onFilterChanged(filterData: MyFilterData): void {
+    // code to update _fetchRequestData
+  }
+}
+```
+- **ALWAYS** inject the component intp a sub component when it needs to access property of the parent component.
+- **ALWAYS** use `computed()` is the reference data is a signal.

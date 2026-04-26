@@ -1,0 +1,57 @@
+<org-button
+  size="sm"
+  color="neutral"
+  [iconOnly]="true"
+  [ariaLabel]="'First page'"
+  [disabled]="paginationStore.disabled() || !paginationStore.hasPrevious()"
+  (clicked)="paginationStore.goToFirstPage()"
+>
+  <org-button-icon name="chevron-first" />
+</org-button>
+<org-button
+  size="sm"
+  color="neutral"
+  [iconOnly]="true"
+  [ariaLabel]="'Previous page'"
+  [disabled]="paginationStore.disabled() || !paginationStore.hasPrevious()"
+  (clicked)="paginationStore.goToPreviousPage()"
+>
+  <org-button-icon name="chevron-left" />
+</org-button>
+@for (page of paginationStore.visiblePageItems(); track page.value || 'ellipsis-' + $index) {
+  @if (page.type === 'ellipsis') {
+    <span class="ellipsis" aria-hidden="true">...</span>
+  } @else {
+    <org-button
+      size="sm"
+      [color]="page.isActive ? 'primary' : 'neutral'"
+      [disabled]="paginationStore.disabled()"
+      [attr.aria-current]="page.isActive ? 'page' : null"
+      [ariaLabel]="'Page ' + page.value"
+      (clicked)="paginationStore.goToPage(page.value!)"
+      class="page-button"
+    >
+      {{ page.value }}
+    </org-button>
+  }
+}
+<org-button
+  size="sm"
+  color="neutral"
+  [iconOnly]="true"
+  [ariaLabel]="'Next page'"
+  [disabled]="paginationStore.disabled() || !paginationStore.hasNext()"
+  (clicked)="paginationStore.goToNextPage()"
+>
+  <org-button-icon name="chevron-right" />
+</org-button>
+<org-button
+  size="sm"
+  color="neutral"
+  [iconOnly]="true"
+  [ariaLabel]="'Last page'"
+  [disabled]="paginationStore.disabled() || !paginationStore.hasNext()"
+  (clicked)="paginationStore.goToLastPage()"
+>
+  <org-button-icon name="chevron-last" />
+</org-button>

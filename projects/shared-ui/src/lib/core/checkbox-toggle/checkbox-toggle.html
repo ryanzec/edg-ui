@@ -1,0 +1,32 @@
+<label
+  orgText
+  [textSize]="textSize()"
+  class="checkbox-toggle-container"
+  (click)="onClick($event)"
+  (keydown)="onKeyDown($event)"
+  [attr.tabindex]="isDisabled() ? -1 : 0"
+  role="switch"
+  [attr.aria-checked]="isChecked()"
+  [attr.aria-disabled]="isDisabled()"
+  [attr.aria-describedby]="ariaDescribedBy()"
+  [attr.aria-invalid]="ariaInvalid()"
+>
+  <input
+    type="checkbox"
+    [name]="name()"
+    [value]="value()"
+    [checked]="isChecked()"
+    [disabled]="isDisabled()"
+    [attr.aria-hidden]="true"
+    tabindex="-1"
+    class="native-input"
+  />
+  <div class="checkbox-toggle-track">
+    <div class="checkbox-toggle-thumb">
+      @if (displayIcon()) {
+        <org-icon [name]="displayIcon()!" [size]="iconSize()" class="checkbox-toggle-icon" />
+      }
+    </div>
+  </div>
+  <ng-content />
+</label>

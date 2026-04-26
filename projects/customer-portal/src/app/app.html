@@ -1,0 +1,44 @@
+@if (hasInitialized() === false) {
+  <main>
+    <div>
+      <!-- loading this as hidden so the the theme is properly initialized while the application is loading -->
+      <org-ui-theme-switcher class="hidden"></org-ui-theme-switcher>
+      <div>Loading...</div>
+    </div>
+  </main>
+}
+@if (hasInitialized()) {
+  <div
+    [class]="
+      mergeClasses('h-full w-full', {
+        flex: isAuthenticated(),
+      })
+    "
+  >
+    @if (isAuthenticated()) {
+      <org-application-navigation
+        logo="https://placehold.co/225x60/4F46E5/white?text=MyApp"
+        [navigationItems]="[
+          { id: '1', label: 'Dashboard', icon: 'circle', routePath: '/dashboard' },
+          { id: '2', label: 'Users', icon: 'circle-check-big', routePath: '/users' },
+        ]"
+        [settingsMenuItems]="[
+          { id: '1', label: 'Profile Settings', icon: 'circle' },
+          { id: '2', label: 'Preferences', icon: 'cog' },
+          { id: '3', label: 'Help & Support', icon: 'mail' },
+        ]"
+        (settingsMenuItemClicked)="onSettingsMenuItemClick($event)"
+        (logout)="onLogout()"
+        class="h-full"
+      />
+    }
+    <main class="flex-1 p-4">
+      <div>
+        <div class="flex">
+          <org-ui-theme-switcher></org-ui-theme-switcher>
+        </div>
+      </div>
+      <router-outlet />
+    </main>
+  </div>
+}

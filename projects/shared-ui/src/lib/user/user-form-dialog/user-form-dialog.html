@@ -1,0 +1,10 @@
+<org-dialog [hasRoundedCorners]="hasRoundedCorners()">
+  <org-dialog-header [title]="dialogTitle()" />
+  <org-dialog-content>
+    <org-user-form
+      [existingUser]="existingUser()"
+      [isProcessing]="isProcessing()"
+      (formSubmitted)="onFormSubmitted($event)"
+    />
+  </org-dialog-content>
+</org-dialog>

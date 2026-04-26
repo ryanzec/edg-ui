@@ -1,0 +1,64 @@
+<org-box border="border-emphasize" background="colorless" [color]="statusColor()" padding="none" class="h-full">
+  <div class="flex flex-col gap-4 p-4 h-full">
+    <div class="flex items-start justify-between gap-3">
+      <div class="flex items-center gap-3 min-w-0">
+        <org-icon [name]="integration().iconName" size="lg" />
+        <div class="flex flex-col gap-1 min-w-0">
+          <h3 class="m-0">{{ integration().name }}</h3>
+          <div class="text-xs text-subtle -mt-1">{{ integration().workspace }} · {{ integration().channel }}</div>
+        </div>
+      </div>
+      <org-button
+        [cdkMenuTriggerFor]="menu"
+        variant="text"
+        color="neutral"
+        [iconOnly]="true"
+        ariaLabel="Open integration actions menu"
+      >
+        <org-button-icon name="ellipsis" />
+      </org-button>
+      <ng-template #menu>
+        <org-overlay-menu
+          [menuLabel]="menuLabel"
+          [menuItems]="menuItems()"
+          (menuItemClicked)="onMenuItemClicked($event)"
+        />
+      </ng-template>
+    </div>
+    <p class="m-0">{{ integration().description }}</p>
+    @if (integration().tags.length > 0) {
+      <div class="flex flex-wrap gap-2">
+        @for (tag of visibleTags(); track tag.label) {
+          <org-tag [color]="tag.color ?? 'neutral'">{{ tag.label }}</org-tag>
+        }
+        @if (overflowTagCount() > 0) {
+          <org-tag color="neutral">+{{ overflowTagCount() }}</org-tag>
+        }
+      </div>
+    }
+    <org-divider class="mt-auto" />
+    <div class="flex items-center justify-between gap-2">
+      <div class="flex items-center gap-2">
+        <org-icon
+          [name]="statusIcon()"
+          [color]="statusColor()"
+          size="sm"
+          [class]="isConnecting() ? 'animate-spin' : ''"
+        />
+        <span>{{ statusLabel() }}</span>
+      </div>
+      @if (integration().status !== 'connecting') {
+        <div class="flex flex-col">
+          <div class="w-6xs flex justify-between text-subtle text-xs">
+            <div>Connected:</div>
+            {{ integration().createdAt | orgDate }}
+          </div>
+          <div class="w-6xs flex justify-between text-subtle text-xs">
+            <div>Last Activity:</div>
+            {{ integration().createdAt | orgDate: { relative: true } }}
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</org-box>

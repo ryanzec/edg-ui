@@ -1,0 +1,24 @@
+<ng-template #labelTemplate>
+  {{ label() }}
+
+  @if (isRequired()) {
+    <span class="required-marker" aria-hidden="true">*</span>
+    <span class="sr-only">required</span>
+  }
+
+  @if (isLoading()) {
+    <org-loading-spinner />
+  }
+
+  <ng-content />
+</ng-template>
+
+@if (asLabel()) {
+  <label [for]="htmlFor()">
+    <ng-container [ngTemplateOutlet]="labelTemplate" />
+  </label>
+} @else {
+  <div>
+    <ng-container [ngTemplateOutlet]="labelTemplate" />
+  </div>
+}

@@ -1,0 +1,11 @@
+<button
+  #buttonRef
+  type="button"
+  role="tab"
+  class="tab-btn"
+  [attr.aria-selected]="isActive() ? 'true' : 'false'"
+  [attr.aria-disabled]="disabled() ? 'true' : null"
+  (click)="onClick()"
+>
+  <ng-content />
+</button>

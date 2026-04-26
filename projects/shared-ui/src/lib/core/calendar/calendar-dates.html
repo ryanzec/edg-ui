@@ -1,0 +1,36 @@
+<div role="grid" class="grid">
+  <!-- day of week labels row -->
+  <div role="row" class="grid grid-cols-7 gap-1">
+    @for (label of calendarComponent.dayLabels; track $index) {
+      <div role="columnheader" class="day-label" [attr.aria-label]="label.label">
+        {{ label.short }}
+      </div>
+    }
+  </div>
+
+  <!-- calendar date rows -->
+  @for (week of calendarComponent.calendarDates(); track $index) {
+    <div role="row" class="week-row">
+      @for (dateData of week; track dateData.date.toISO()) {
+        <div role="gridcell" class="date-cell">
+          <button
+            type="button"
+            class="date-button"
+            (click)="calendarComponent.onDateClick(dateData)"
+            (mouseenter)="calendarComponent.onDateHover(dateData)"
+            [disabled]="dateData.isDisabled"
+            [attr.aria-label]="dateData.date.toFormat('MMMM d, yyyy')"
+            [attr.aria-selected]="dateData.isSelected"
+            [attr.aria-disabled]="dateData.isDisabled"
+            [attr.data-current-month]="dateData.isCurrentMonth ? '' : null"
+            [attr.data-in-range]="dateData.isInRange ? '' : null"
+            [attr.data-focused]="dateData.isFocused ? '' : null"
+            [attr.aria-current]="dateData.isToday ? 'date' : null"
+          >
+            {{ getDay(dateData) }}
+          </button>
+        </div>
+      }
+    </div>
+  }
+</div>

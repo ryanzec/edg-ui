@@ -1,0 +1,28 @@
+@layer components {
+  :host {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .spinner {
+    animation: var(--animate-spin);
+  }
+
+  :host([data-status='not-started']) {
+    color: var(--color-neutral-text);
+  }
+
+  :host([data-status='in-progress']) {
+    color: var(--color-info-text);
+  }
+
+  :host([data-status='valid']) {
+    color: var(--color-safe-text);
+  }
+
+  :host([data-status='invalid']) {
+    color: var(--color-danger-text);
+  }
+}

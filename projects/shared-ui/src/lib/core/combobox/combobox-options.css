@@ -1,0 +1,23 @@
+@layer components {
+  .options-panel {
+    max-width: var(--sizing-xl);
+    max-height: var(--sizing-xs);
+    overflow: hidden;
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+    background-color: var(--color-input-background);
+  }
+
+  .group {
+    padding: var(--spacing-1) 0;
+  }
+
+  .group-label {
+    padding: var(--spacing-1) var(--spacing-2);
+    font-size: var(--text-sm);
+    line-height: var(--text-sm--line-height);
+    letter-spacing: var(--text-sm--letter-spacing);
+    color: var(--color-text-subtle);
+    background-color: var(--color-neutral-background-subtle);
+  }
+}

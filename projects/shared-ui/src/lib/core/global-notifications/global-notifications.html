@@ -1,0 +1,3 @@
+@for (notification of notifications(); track notification.id) {
+  <org-global-notification [notification]="notification" (closed)="onClosed($event)" />
+}

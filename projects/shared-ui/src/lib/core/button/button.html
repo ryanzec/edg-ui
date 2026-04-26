@@ -1,0 +1,17 @@
+<button
+  orgButtonBrain
+  [type]="type()"
+  [class]="buttonClass()"
+  [buttonDisabled]="disabled()"
+  [buttonLoading]="loading()"
+  [buttonIconOnly]="iconOnly()"
+  [buttonAriaLabel]="ariaLabel()"
+  [buttonAriaExpanded]="ariaExpanded()"
+  (buttonClicked)="onBrainClicked()"
+>
+  @if (showStandaloneSpinner()) {
+    <org-loading-spinner [size]="size()" />
+  }
+
+  <ng-content />
+</button>

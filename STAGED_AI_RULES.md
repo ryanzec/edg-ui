@@ -1,0 +1,4 @@
+- **ONLY** use `computed()` where logic is needs to determine the end value.
+- **ALWAYS** use `.asReadonly()` over `computed()` when you need to expose a writable signal as readonly.
+- Dont optomize for minimal amount of dom element, have one of two extra dom elements when not needed but not cause issue it probably better than addinglogic to remove it when it is not needing making the code harder to reason about.
+-

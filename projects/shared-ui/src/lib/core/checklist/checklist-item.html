@@ -1,0 +1,34 @@
+@if (hasNestedItems()) {
+  <button type="button" class="checklist-item-button" (click)="toggle()" [attr.aria-expanded]="isItemExpanded()">
+    <org-checklist-status-icon [status]="item().status" />
+
+    <span class="label">
+      {{ item().label }}
+      @if (nestedItemCount() > 0) {
+        <span>({{ nestedItemCount() }})</span>
+      }
+    </span>
+
+    <org-icon [name]="isItemExpanded() ? 'chevron-down' : 'chevron-right'" size="sm" class="chevron" />
+  </button>
+} @else {
+  <div class="checklist-item-row">
+    <org-checklist-status-icon [status]="item().status" />
+
+    <span class="label">{{ item().label }}</span>
+  </div>
+}
+
+@if (hasNestedItems() && isItemExpanded()) {
+  <div class="nested-items" role="list">
+    @for (nestedItem of item().items; track nestedItem.id) {
+      <div class="nested-item" role="listitem">
+        <div class="nested-item-row">
+          <org-checklist-status-icon [status]="nestedItem.status" />
+
+          <span class="label">{{ nestedItem.label }}</span>
+        </div>
+      </div>
+    }
+  </div>
+}

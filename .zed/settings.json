@@ -1,0 +1,62 @@
+{
+  "languages": {
+    "HTML": {
+      "language_servers": ["eslint", "..."],
+      "formatter": {
+        "external": {
+          "command": "npx",
+          "arguments": [
+            "prettier",
+            "--config",
+            ".prettierrc",
+            "--ignore-path",
+            ".prettierignore",
+            "--stdin-filepath",
+            "{buffer_path}"
+          ]
+        }
+      },
+      "code_actions_on_format": {
+        "source.fixAll.eslint": true
+      }
+    },
+    "JavaScript": {
+      "formatter": {
+        "external": {
+          "command": "npx",
+          "arguments": [
+            "prettier",
+            "--config",
+            ".prettierrc",
+            "--ignore-path",
+            ".prettierignore",
+            "--stdin-filepath",
+            "{buffer_path}"
+          ]
+        }
+      },
+      "code_actions_on_format": {
+        "source.fixAll.eslint": true
+      }
+    },
+    "TypeScript": {
+      "formatter": {
+        "external": {
+          "command": "npx",
+          "arguments": [
+            "prettier",
+            "--config",
+            ".prettierrc",
+            "--ignore-path",
+            ".prettierignore",
+            "--stdin-filepath",
+            "{buffer_path}"
+          ]
+        }
+      },
+      "code_actions_on_format": {
+        "source.fixAll.eslint": true
+      }
+    }
+  }
+}

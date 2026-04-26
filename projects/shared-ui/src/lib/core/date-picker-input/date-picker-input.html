@@ -1,0 +1,66 @@
+<div cdkOverlayOrigin #trigger="cdkOverlayOrigin">
+  <org-input
+    #inputComponent
+    [value]="displayValue()"
+    [placeholder]="placeholder()"
+    [autoFocus]="autoFocus()"
+    [disabled]="isDisabled()"
+    [readonly]="true"
+    preIcon="calendar"
+    postIcon="chevron-down"
+    (postIconClicked)="onPostIconClick()"
+    (click)="onInputClick()"
+    (keydown)="onInputKeyDown($event)"
+    (focused)="onInputFocused()"
+    (blurred)="onInputBlurred()"
+    [name]="name()"
+  />
+</div>
+
+<ng-template
+  cdkConnectedOverlay
+  [cdkConnectedOverlayOrigin]="trigger"
+  [cdkConnectedOverlayOpen]="isOverlayOpen()"
+  [cdkConnectedOverlayPositions]="overlayPositions"
+  [cdkConnectedOverlayHasBackdrop]="true"
+  [cdkConnectedOverlayBackdropClass]="'cdk-overlay-transparent-backdrop'"
+  [cdkConnectedOverlayPanelClass]="'org-date-picker-input-overlay'"
+  (backdropClick)="onBackdropClick()"
+  (attach)="onOverlayAttach()"
+  (detach)="onOverlayDetach()"
+>
+  <div
+    [id]="overlayId"
+    tabindex="0"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Date picker calendar"
+    (keydown)="onCalendarKeyDown($event)"
+  >
+    <org-calendar
+      #calendarComponent
+      [defaultDisplayDate]="defaultDisplayDate()"
+      [startYear]="startYear()"
+      [endYear]="endYear()"
+      [selectedStartDate]="inProgressStartDate()"
+      [selectedEndDate]="inProgressEndDate()"
+      [allowRangeSelection]="allowRangeSelection()"
+      [allowPartialRangeSelection]="allowPartialRangeSelection()"
+      [partialRangeSelectionType]="inProgressPartialRangeSelectionType()"
+      [disableBefore]="disableBefore()"
+      [disableAfter]="disableAfter()"
+      [allowedDateRange]="allowedDateRange()"
+      [enableDeselection]="false"
+      (dateSelected)="onDateSelected($event)"
+      (partialRangeSelectionTypeChange)="onPartialRangeSelectionTypeChange($event)"
+    >
+      @if (allowClear()) {
+        <org-calendar-footer>
+          <div class="footer-actions">
+            <org-button color="neutral" [disabled]="isClearDisabled()" (clicked)="onClearClick()">Clear</org-button>
+          </div>
+        </org-calendar-footer>
+      }
+    </org-calendar>
+  </div>
+</ng-template>

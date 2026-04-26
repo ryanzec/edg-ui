@@ -1,0 +1,13 @@
+@layer utilities {
+  .z-elevated {
+    z-index: var(--z-index-elevated);
+  }
+
+  .z-notification {
+    z-index: var(--z-index-notification);
+  }
+
+  .z-overlay {
+    z-index: var(--z-index-overlay);
+  }
+}

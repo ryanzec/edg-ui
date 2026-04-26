@@ -1,0 +1,36 @@
+<button
+  type="button"
+  class="file-upload-zone"
+  (click)="openFileSelector($event)"
+  aria-label="Upload file — click or drag and drop to select a file"
+>
+  <input
+    type="file"
+    #fileInputRef
+    class="native-input"
+    [accept]="fileTypesAsString()"
+    (change)="onFileSelected($event)"
+    data-testid="file-upload-input"
+  />
+
+  @if (fileName()) {
+    <div class="file-message">
+      <org-icon name="check" size="lg" class="icon-safe"></org-icon>
+      <span class="primary-text">{{ fileName() }} ready!</span>
+      <small class="secondary-text">Click or drag another file to replace.</small>
+    </div>
+  } @else {
+    <div class="file-message">
+      <org-icon name="upload" size="lg" class="icon-info"></org-icon>
+      <span class="primary-text">Drag &amp; Drop your file here</span>
+      <small class="secondary-text">or <b class="click-text">click</b> to select one</small>
+    </div>
+  }
+
+  @if (error()) {
+    <div class="file-upload-error" role="alert">
+      <org-icon name="x" class="icon-danger"></org-icon>
+      <span>{{ error() }}</span>
+    </div>
+  }
+</button>

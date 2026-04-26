@@ -1,0 +1,126 @@
+@layer utilities {
+  /* Border presence */
+  .border {
+    border: var(--border-width) solid var(--color-border);
+  }
+
+  .border-none {
+    border: none;
+  }
+
+  /* Border width variants */
+  .border-thick {
+    border-width: var(--border-width-thick);
+  }
+
+  .border-emphasized {
+    border-width: var(--border-width-emphasized);
+  }
+
+  /* Border style */
+  .border-solid {
+    border-style: solid;
+  }
+
+  .border-dashed {
+    border-style: dashed;
+  }
+
+  .border-dotted {
+    border-style: dotted;
+  }
+
+  /* Per-side border presence */
+  .border-t {
+    border-top-width: var(--border-width);
+    border-top-style: solid;
+  }
+
+  .border-r {
+    border-right-width: var(--border-width);
+    border-right-style: solid;
+  }
+
+  .border-b {
+    border-bottom-width: var(--border-width);
+    border-bottom-style: solid;
+  }
+
+  .border-l {
+    border-left-width: var(--border-width);
+    border-left-style: solid;
+  }
+
+  .border-x {
+    border-left-width: var(--border-width);
+    border-left-style: solid;
+    border-right-width: var(--border-width);
+    border-right-style: solid;
+  }
+
+  .border-y {
+    border-top-width: var(--border-width);
+    border-top-style: solid;
+    border-bottom-width: var(--border-width);
+    border-bottom-style: solid;
+  }
+
+  /* Border color - semantic */
+  .border-default-color {
+    border-color: var(--color-border);
+  }
+
+  .border-subtle {
+    border-color: var(--color-border-subtle);
+  }
+
+  .border-bold {
+    border-color: var(--color-border-bold);
+  }
+
+  .border-transparent {
+    border-color: transparent;
+  }
+
+  /* Outline */
+  .outline-none {
+    outline: none;
+  }
+
+  /* Border color - component colors */
+  .border-primary {
+    border-color: var(--color-primary-border);
+  }
+
+  .border-secondary {
+    border-color: var(--color-secondary-border);
+  }
+
+  .border-neutral {
+    border-color: var(--color-neutral-border);
+  }
+
+  .border-safe {
+    border-color: var(--color-safe-border);
+  }
+
+  .border-info {
+    border-color: var(--color-info-border);
+  }
+
+  .border-caution {
+    border-color: var(--color-caution-border);
+  }
+
+  .border-warning {
+    border-color: var(--color-warning-border);
+  }
+
+  .border-danger {
+    border-color: var(--color-danger-border);
+  }
+
+  .border-input-focused {
+    border-color: var(--color-input-border-focused);
+  }
+}

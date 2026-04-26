@@ -1,0 +1,28 @@
+@layer components {
+  :host {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-1);
+    padding: var(--spacing-3) var(--spacing-3) 0;
+  }
+
+  .title-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .title {
+    font-size: var(--text-md);
+    line-height: var(--text-md--line-height);
+    letter-spacing: var(--text-md--letter-spacing);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .subtitle {
+    font-size: var(--text-xs);
+    line-height: var(--text-xs--line-height);
+    letter-spacing: var(--text-xs--letter-spacing);
+    color: var(--color-text-subtle);
+    margin-top: calc(-1 * var(--spacing-1));
+  }
+}

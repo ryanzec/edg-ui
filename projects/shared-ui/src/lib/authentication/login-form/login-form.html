@@ -1,0 +1,38 @@
+<org-card>
+  <org-card-header title="Sign In" subtitle="Please enter your credentials to continue" />
+  <org-card-content>
+    <form [formGroup]="loginForm" (ngSubmit)="login()">
+      <org-form-fields>
+        <org-form-field [validationMessage]="getFieldError('email') || ''">
+          <org-label htmlFor="email" [label]="getFieldLabel('email')" />
+          <org-input
+            type="email"
+            name="email"
+            formControlName="email"
+            placeholder="Enter your email"
+            autocomplete="email"
+            [autoFocus]="true"
+            preIcon="mail"
+          />
+        </org-form-field>
+        <org-form-field [validationMessage]="getFieldError('password') || ''">
+          <org-label htmlFor="password" [label]="getFieldLabel('password')" />
+          <org-input
+            type="password"
+            name="password"
+            formControlName="password"
+            placeholder="Enter your password"
+            autocomplete="current-password"
+            preIcon="lock-keyhole"
+            [showPasswordToggle]="true"
+          />
+        </org-form-field>
+      </org-form-fields>
+      <org-button-group orientation="vertical">
+        <org-button color="primary" type="submit" buttonClass="w-full" [loading]="isProcessing()"> Sign In </org-button>
+        <org-button color="primary" buttonClass="w-full" [disabled]="isProcessing()"> Reset Password </org-button>
+        <org-button color="primary" buttonClass="w-full" [disabled]="isProcessing()"> Single Sign-On </org-button>
+      </org-button-group>
+    </form>
+  </org-card-content>
+</org-card>

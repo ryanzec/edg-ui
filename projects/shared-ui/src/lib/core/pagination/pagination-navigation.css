@@ -1,0 +1,22 @@
+@layer components {
+  :host {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    margin-left: auto;
+  }
+
+  org-button.page-button {
+    min-width: var(--spacing-6); /* 24px */
+    line-height: 1;
+  }
+
+  .ellipsis {
+    padding: var(--spacing-1) var(--spacing-2);
+    font-size: var(--text-sm);
+    line-height: var(--text-sm--line-height);
+    letter-spacing: var(--text-sm--letter-spacing);
+    color: var(--color-text-subtle);
+    user-select: none;
+  }
+}

@@ -1,0 +1,87 @@
+@layer components {
+  :host {
+    display: inline-flex;
+  }
+
+  :host([data-size='2xs']) svg {
+    width: var(--text-2xs);
+    height: var(--text-2xs);
+  }
+
+  :host([data-size='xs']) svg {
+    width: var(--text-xs);
+    height: var(--text-xs);
+  }
+
+  :host([data-size='sm']) svg {
+    width: var(--text-sm);
+    height: var(--text-sm);
+  }
+
+  :host([data-size='base']) svg {
+    width: var(--text-md);
+    height: var(--text-md);
+  }
+
+  :host([data-size='lg']) svg {
+    width: var(--text-lg);
+    height: var(--text-lg);
+  }
+
+  :host([data-size='xl']) svg {
+    width: var(--text-xl);
+    height: var(--text-xl);
+  }
+
+  :host([data-size='2xl']) svg {
+    width: var(--text-2xl);
+    height: var(--text-2xl);
+  }
+
+  :host([data-size='3xl']) svg {
+    width: var(--text-3xl);
+    height: var(--text-3xl);
+  }
+
+  :host([data-size='4xl']) svg {
+    width: var(--text-4xl);
+    height: var(--text-4xl);
+  }
+
+  :host([data-size='5xl']) svg {
+    width: var(--text-5xl);
+    height: var(--text-5xl);
+  }
+
+  :host([data-color='primary']) svg {
+    color: var(--color-primary-text);
+  }
+
+  :host([data-color='secondary']) svg {
+    color: var(--color-secondary-text);
+  }
+
+  :host([data-color='neutral']) svg {
+    color: var(--color-neutral-text);
+  }
+
+  :host([data-color='safe']) svg {
+    color: var(--color-safe-text);
+  }
+
+  :host([data-color='info']) svg {
+    color: var(--color-info-text);
+  }
+
+  :host([data-color='caution']) svg {
+    color: var(--color-caution-text);
+  }
+
+  :host([data-color='warning']) svg {
+    color: var(--color-warning-text);
+  }
+
+  :host([data-color='danger']) svg {
+    color: var(--color-danger-text);
+  }
+}

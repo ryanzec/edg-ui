@@ -1,0 +1,95 @@
+/*
+ * styles for directives in core/ — directives cannot host their own styles so these rules
+ * live in the shared stylesheet and target host elements via data-* attributes the
+ * directives apply.
+ */
+
+@layer components {
+  [data-sortable-enabled] {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-1);
+    cursor: pointer;
+    user-select: none;
+  }
+
+  [data-sortable-inactive] {
+    color: var(--color-text-subtle);
+  }
+
+  /* org-text directive: text-color driven by input via [attr.data-text-color] */
+  [data-text-color='primary'] {
+    color: var(--color-primary-text);
+  }
+
+  [data-text-color='secondary'] {
+    color: var(--color-secondary-text);
+  }
+
+  [data-text-color='neutral'] {
+    color: var(--color-neutral-text);
+  }
+
+  [data-text-color='safe'] {
+    color: var(--color-safe-text);
+  }
+
+  [data-text-color='info'] {
+    color: var(--color-info-text);
+  }
+
+  [data-text-color='caution'] {
+    color: var(--color-caution-text);
+  }
+
+  [data-text-color='warning'] {
+    color: var(--color-warning-text);
+  }
+
+  [data-text-color='danger'] {
+    color: var(--color-danger-text);
+  }
+
+  /* org-text directive: text-size driven by input via [attr.data-text-size] */
+  [data-text-size='2xs'] {
+    font-size: var(--text-2xs);
+    line-height: var(--text-2xs--line-height);
+    letter-spacing: var(--text-2xs--letter-spacing);
+  }
+
+  [data-text-size='xs'] {
+    font-size: var(--text-xs);
+    line-height: var(--text-xs--line-height);
+    letter-spacing: var(--text-xs--letter-spacing);
+  }
+
+  [data-text-size='sm'] {
+    font-size: var(--text-sm);
+    line-height: var(--text-sm--line-height);
+    letter-spacing: var(--text-sm--letter-spacing);
+  }
+
+  [data-text-size='md'] {
+    font-size: var(--text-md);
+    line-height: var(--text-md--line-height);
+    letter-spacing: var(--text-md--letter-spacing);
+  }
+
+  [data-text-size='lg'] {
+    font-size: var(--text-lg);
+    line-height: var(--text-lg--line-height);
+    letter-spacing: var(--text-lg--letter-spacing);
+  }
+
+  [data-text-size='xl'] {
+    font-size: var(--text-xl);
+    line-height: var(--text-xl--line-height);
+    letter-spacing: var(--text-xl--letter-spacing);
+  }
+
+  [data-text-size='2xl'] {
+    font-size: var(--text-2xl);
+    line-height: var(--text-2xl--line-height);
+    letter-spacing: var(--text-2xl--letter-spacing);
+  }
+}

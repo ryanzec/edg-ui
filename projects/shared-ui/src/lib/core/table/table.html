@@ -1,0 +1,65 @@
+<div class="table-wrapper">
+  @if (showSelectedActions()) {
+    <div class="selected-actions-bar">
+      <span class="selected-count">{{ selectedCount() }} selected</span>
+      <div class="actions">
+        <ng-container *ngTemplateOutlet="selectedActionsTemplate()!" />
+      </div>
+      <org-button variant="text" (clicked)="onClearSelection()">Clear</org-button>
+    </div>
+  }
+  <org-scroll-area
+    #scrollAreaComponent
+    [enabled]="isScrollNeeded()"
+    direction="both"
+    scrollClass="org-table-scroll block w-full h-full bg-default-color"
+  >
+    <org-loading-blocker [isVisible]="isLoading()" text="Loading data..." />
+    <table class="table">
+      @if (headerTemplate()) {
+        <thead>
+          <org-table-tr variant="header" [isSticky]="stickyHeader()">
+            @if (selectionData()) {
+              <org-table-th>
+                <org-form-field [reserveValidationSpace]="false">
+                  <org-checkbox
+                    name="select-all"
+                    value="select-all"
+                    [checked]="selectionData()!.areAllSelected(asSelectableData(data()))"
+                    [indeterminate]="selectionData()!.areSomeSelected(asSelectableData(data()))"
+                    (checkedChange)="selectionData()!.setMultiple(asSelectableData(data()), $event)"
+                  />
+                </org-form-field>
+              </org-table-th>
+            }
+            <ng-container *ngTemplateOutlet="headerTemplate()!" />
+          </org-table-tr>
+        </thead>
+      }
+      @if (bodyTemplate()) {
+        <tbody>
+          @for (item of data(); track trackByItem(item)) {
+            <org-table-tr>
+              @if (selectionData()) {
+                <org-table-td>
+                  <org-form-field [reserveValidationSpace]="false">
+                    <org-checkbox
+                      [name]="'select-' + asSelectable(item).id"
+                      [value]="asSelectable(item).id"
+                      [checked]="selectionData()!.isSelected(asSelectable(item))"
+                      (checkedChange)="selectionData()!.set(asSelectable(item), $event)"
+                    />
+                  </org-form-field>
+                </org-table-td>
+              }
+              <ng-container *ngTemplateOutlet="bodyTemplate()!; context: { $implicit: item }" />
+            </org-table-tr>
+          }
+        </tbody>
+      }
+    </table>
+  </org-scroll-area>
+  @if (isBackgroundLoading()) {
+    <org-loading-spinner class="background-loader" />
+  }
+</div>

@@ -1,0 +1,88 @@
+@layer components {
+  :host {
+    display: block;
+  }
+
+  /* Inline variant */
+  :host([data-variant='inline']) {
+    display: inline;
+  }
+
+  /* Block variant */
+  :host([data-variant='block']) {
+    position: relative;
+  }
+
+  .code-block-copy-wrapper {
+    position: absolute;
+  }
+
+  .code-block-copy-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-1);
+    border: none;
+    border-radius: var(--radius-sm);
+    background-color: transparent;
+    color: var(--color-text);
+    cursor: pointer;
+  }
+
+  .code-block-body {
+    position: relative;
+    display: block;
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+    background-color: var(--color-neutral-background-subtle);
+  }
+
+  :host([data-variant='block']) .code-block-copy-wrapper {
+    top: -1.5rem; /* -24px */
+    right: 0;
+  }
+
+  :host([data-variant='block']) .code-block-copy-btn {
+    opacity: 0.1;
+  }
+
+  :host([data-variant='block']) .code-block-copy-btn:focus-visible {
+    opacity: 0.8;
+  }
+
+  :host([data-variant='block']):hover .code-block-copy-btn {
+    opacity: 0.8;
+  }
+
+  :host([data-variant='block']) .code-block-pre {
+    margin: 0;
+    white-space: pre;
+    font-family: monospace;
+    font-size: var(--text-sm);
+    line-height: normal;
+    color: var(--color-text);
+  }
+
+  /* Ellipsis styling */
+  :host([data-has-ellipsis][data-variant='block']) .code-block-pre {
+    overflow: hidden;
+    white-space: pre-wrap;
+    word-break: break-all;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: var(--ellipsis-lines);
+    line-clamp: var(--ellipsis-lines);
+  }
+
+  /* Inline code element */
+  .code-block-inline {
+    display: inline;
+    padding-block: var(--spacing-0_5); /* 2px */
+    padding-inline: var(--spacing-1_5); /* 6px */
+    border-radius: var(--radius-sm);
+    background-color: var(--color-neutral-background-subtle);
+    font-family: monospace;
+    font-size: var(--text-sm);
+    color: var(--color-text);
+  }
+}

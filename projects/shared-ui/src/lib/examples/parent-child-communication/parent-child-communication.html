@@ -1,0 +1,13 @@
+<div class="flex flex-col gap-4">
+  <div class="rounded border border-border bg-background p-4">
+    <div class="text-sm text-text">
+      When a parent needs access to a direct child's public logic, we can use the
+      <code class="rounded bg-background px-1 py-0.5 text-xs">&#64;ViewChild</code> decorator.
+    </div>
+  </div>
+
+  <div class="flex flex-col gap-2 rounded border border-info-border bg-info-background-subtle p-4">
+    <div class="text-sm font-medium text-text">Parent Component (calls child's setValue method)</div>
+    <org-example-nested-1 #child1 />
+  </div>
+</div>

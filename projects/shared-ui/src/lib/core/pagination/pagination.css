@@ -1,0 +1,56 @@
+@layer components {
+  :host {
+    display: block;
+  }
+
+  .pagination-nav {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-4);
+  }
+
+  .result-text {
+    font-size: var(--text-sm);
+    line-height: var(--text-sm--line-height);
+    letter-spacing: var(--text-sm--letter-spacing);
+    color: var(--color-text-subtle);
+    white-space: nowrap;
+  }
+
+  .items-per-page-container {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    font-size: var(--text-sm);
+    line-height: var(--text-sm--line-height);
+    letter-spacing: var(--text-sm--letter-spacing);
+    white-space: nowrap;
+  }
+
+  .items-per-page-label {
+    color: var(--color-text-subtle);
+  }
+
+  .pagination-select {
+    padding: var(--spacing-1) var(--spacing-2);
+    font-size: var(--text-sm);
+    line-height: var(--text-sm--line-height);
+    letter-spacing: var(--text-sm--letter-spacing);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+    background-color: var(--color-input-background);
+    outline: none;
+    cursor: pointer;
+  }
+
+  .pagination-select:focus-visible {
+    box-shadow: 0 0 0 0.125rem var(--color-input-border-focused); /* 2px */
+    border-color: var(--color-input-border-focused);
+  }
+
+  .pagination-select:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: var(--color-secondary-background-subtle);
+  }
+}

@@ -1,0 +1,28 @@
+<div class="chat-message-container">
+  <!-- main message container -->
+  <div class="chat-message-content">
+    <!-- message content -->
+    <div class="chat-message-bubble">
+      <org-chat-message-steps />
+      <div class="message-text-row">
+        <span class="message-text">{{ chatMessage().message }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- metadata section (status, duration, actions) -->
+  <div class="chat-message-metadata">
+    @if (hasStatus()) {
+      <div class="chat-message-status">
+        <org-indicator [color]="statusIndicatorColor()" />
+        <span>{{ statusDisplay() }}</span>
+      </div>
+    }
+
+    @if (hasDuration()) {
+      <span>({{ durationDisplay() }})</span>
+    }
+
+    <ng-content select="[actions]" />
+  </div>
+</div>

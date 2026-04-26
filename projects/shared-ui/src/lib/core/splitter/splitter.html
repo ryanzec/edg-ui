@@ -1,0 +1,24 @@
+<div class="section first-section" [style.flex-basis]="brain.firstSectionSize() + '%'">
+  @if (firstSectionTemplate(); as template) {
+    <ng-container [ngTemplateOutlet]="template" />
+  }
+</div>
+<div
+  class="splitter-divider"
+  role="separator"
+  [attr.aria-orientation]="direction() === 'horizontal' ? 'vertical' : 'horizontal'"
+  [attr.aria-valuenow]="brain.firstSectionSize()"
+  aria-valuemin="0"
+  aria-valuemax="100"
+  [attr.tabindex]="brain.isDraggable() ? 0 : -1"
+  (pointerdown)="brain.onDividerPointerDown($event)"
+  (pointermove)="brain.onDividerPointerMove($event)"
+  (pointerup)="brain.onDividerPointerUp($event)"
+  (pointercancel)="brain.onDividerPointerCancel()"
+  (keydown)="brain.onDividerKeyDown($event)"
+></div>
+<div class="section second-section">
+  @if (secondSectionTemplate(); as template) {
+    <ng-container [ngTemplateOutlet]="template" />
+  }
+</div>

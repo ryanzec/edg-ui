@@ -1,0 +1,30 @@
+<label
+  class="checkbox-label"
+  orgText
+  [textSize]="textSize()"
+  (click)="onClick($event)"
+  (keydown)="onKeyDown($event)"
+  [attr.tabindex]="disabled() ? -1 : 0"
+  role="checkbox"
+  [attr.aria-checked]="indeterminate() ? 'mixed' : checked()"
+  [attr.aria-disabled]="disabled() ? 'true' : null"
+  [attr.aria-describedby]="ariaDescribedBy()"
+  [attr.aria-invalid]="ariaInvalid()"
+>
+  <input
+    #inputRef
+    type="checkbox"
+    [name]="name()"
+    [value]="value()"
+    [checked]="checked()"
+    [disabled]="disabled()"
+    [indeterminate]="indeterminate()"
+    [attr.aria-hidden]="true"
+    tabindex="-1"
+    class="native-input"
+  />
+  <div class="checkbox-icon">
+    <org-icon [name]="currentIcon()" [size]="size()" />
+  </div>
+  <ng-content />
+</label>

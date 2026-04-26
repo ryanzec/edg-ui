@@ -1,0 +1,7 @@
+<div>
+  While in other frameworks it is common to pass a callback function to a child component, in Angular, the preferred way
+  is to use the signal-base output(). This promotes a better level of de-coupling between components and falls more in
+  line with Angular conventions. When passing a callback function, if you want to reference the parents component using
+  `this`, you would have to use a arrow function which is odd in a class-based component and easy to forget so passing
+  callbacks to children should only be used in complex situations when the event system would not be practical.
+</div>

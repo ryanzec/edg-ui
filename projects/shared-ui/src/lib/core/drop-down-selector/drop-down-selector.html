@@ -1,0 +1,65 @@
+<button
+  type="button"
+  cdkOverlayOrigin
+  #trigger="cdkOverlayOrigin"
+  [disabled]="disabled()"
+  [attr.aria-label]="label()"
+  aria-haspopup="listbox"
+  [attr.aria-expanded]="isOpen()"
+  (click)="onTriggerClick()"
+  class="trigger-button"
+>
+  @if (iconName(); as leadingIconName) {
+    <org-icon [name]="leadingIconName" [size]="triggerIconSize()" />
+  }
+  <span class="trigger-label">{{ displayLabel() }}</span>
+  <org-icon name="chevron-down" [size]="triggerIconSize()" />
+</button>
+
+<ng-template
+  cdkConnectedOverlay
+  [cdkConnectedOverlayOrigin]="trigger"
+  [cdkConnectedOverlayOpen]="isOpen()"
+  [cdkConnectedOverlayPositions]="menuPositions()"
+  [cdkConnectedOverlayHasBackdrop]="true"
+  [cdkConnectedOverlayBackdropClass]="'cdk-overlay-transparent-backdrop'"
+  [cdkConnectedOverlayPanelClass]="'org-drop-down-selector-overlay'"
+  (backdropClick)="onBackdropClick()"
+>
+  <div
+    role="listbox"
+    tabindex="-1"
+    [attr.aria-label]="label()"
+    [attr.aria-multiselectable]="selectionMode() === 'multiple'"
+    (keydown)="onPanelKeyDown($event)"
+    class="menu-panel"
+  >
+    <org-list listRole="none" borderVariant="outer">
+      @for (item of items(); track $index) {
+        @let isItemSelected = brain.isSelected(item);
+        <button
+          type="button"
+          role="option"
+          [attr.aria-selected]="isItemSelected"
+          (click)="onItemClick(item)"
+          class="menu-item-button"
+        >
+          <org-list-item [forceClickable]="true" [isSelected]="isItemSelected">
+            @if (selectionMode() === 'multiple') {
+              <org-list-item-icon [name]="isItemSelected ? 'square-check-big' : 'square'" />
+            } @else if (isItemSelected) {
+              <org-list-item-icon name="check" />
+            }
+            {{ item.display }}
+          </org-list-item>
+        </button>
+      }
+      @if (brain.hasSelection() && selectionMode() === 'multiple') {
+        <org-overlay-menu-divider />
+        <button type="button" (click)="onClearClick()" class="menu-item-button">
+          <org-list-item [forceClickable]="true">Clear</org-list-item>
+        </button>
+      }
+    </org-list>
+  </div>
+</ng-template>

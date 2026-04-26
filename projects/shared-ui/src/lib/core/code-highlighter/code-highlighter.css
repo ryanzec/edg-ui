@@ -1,0 +1,113 @@
+@layer components {
+  :host {
+    display: block;
+  }
+
+  :host([data-variant='inline']) {
+    display: inline;
+  }
+
+  :host([data-variant='block']) {
+    position: relative;
+  }
+
+  .code-highlighter-copy-wrapper {
+    position: absolute;
+  }
+
+  .code-highlighter-copy-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-1);
+    border: none;
+    border-radius: var(--radius-sm);
+    background-color: transparent;
+    color: var(--color-text);
+    cursor: pointer;
+    z-index: var(--z-index-elevated);
+  }
+
+  .code-highlighter-body {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+  }
+
+  :host([data-variant='block']) .code-highlighter-copy-wrapper {
+    top: -1.5rem; /* -24px */
+    right: 0;
+  }
+
+  :host([data-variant='block']) .code-highlighter-copy-btn {
+    opacity: 0.1;
+  }
+
+  :host([data-variant='block']) .code-highlighter-copy-btn:focus-visible {
+    opacity: 0.8;
+  }
+
+  :host([data-variant='block']):hover .code-highlighter-copy-btn {
+    opacity: 0.8;
+  }
+
+  /* Shiki injects its own <pre> element — pierce encapsulation to style it */
+  :host([data-variant='block']) ::ng-deep .shiki {
+    margin: 0;
+    border-radius: 0;
+    font-family: monospace;
+    font-size: var(--text-sm);
+    line-height: normal;
+    /* padding lives here so it scrolls with the content, not around it */
+    padding: var(--spacing-2);
+    /* prevent the pre from shrinking below its content width */
+    min-width: max-content;
+    /* --viewport-height is explicitly set by ngx-scrollbar on the ng-scrollbar host */
+    min-height: calc(var(--viewport-height) * 1px);
+  }
+
+  :host([data-variant='block']) ::ng-deep .shiki code {
+    display: block;
+  }
+
+  /* Ellipsis styling applied to the wrapper div */
+  :host([data-has-ellipsis][data-variant='block']) .code-highlighter-content {
+    overflow: hidden;
+  }
+
+  :host([data-has-ellipsis][data-variant='block']) ::ng-deep .shiki code {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: var(--ellipsis-lines);
+    line-clamp: var(--ellipsis-lines);
+    overflow: hidden;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+
+  /* Fallback state while Shiki initializes */
+  :host([data-variant='block']) .code-highlighter-fallback {
+    margin: 0;
+    padding: var(--spacing-2);
+    white-space: pre;
+    font-family: monospace;
+    font-size: var(--text-sm);
+    line-height: normal;
+    color: var(--color-text);
+    background-color: var(--color-neutral-background-subtle);
+    min-width: max-content;
+  }
+
+  .code-highlighter-inline {
+    display: inline;
+    padding-block: var(--spacing-0_5); /* 2px */
+    padding-inline: var(--spacing-1_5); /* 6px */
+    border-radius: var(--radius-sm);
+    background-color: var(--color-neutral-background-subtle);
+    font-family: monospace;
+    font-size: var(--text-sm);
+    color: var(--color-text);
+  }
+}

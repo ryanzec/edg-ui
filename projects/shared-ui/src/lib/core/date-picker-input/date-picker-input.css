@@ -1,0 +1,12 @@
+@layer components {
+  :host {
+    position: relative;
+    display: block;
+    width: 100%;
+  }
+
+  .footer-actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+}

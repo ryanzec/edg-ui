@@ -1,0 +1,38 @@
+<div [class]="'combobox-container ' + containerClass()">
+  <div cdkOverlayOrigin #trigger="cdkOverlayOrigin">
+    <org-input
+      #inputComponent
+      [placeholder]="placeholder()"
+      [value]="currentInputValue()"
+      [disabled]="isDisabled()"
+      [inlineItems]="inlineItems()"
+      postIcon="chevron-down"
+      (valueChange)="inputValueChange($event)"
+      (focused)="inputFocus()"
+      (blurred)="inputBlur()"
+      (inlineItemRemoved)="inlineItemRemove($event)"
+      (keydown)="keyDown($event)"
+      (click)="inputClick()"
+      [name]="name()"
+      inputClass="min-w-0"
+      inputRole="combobox"
+      [ariaExpanded]="isOpened()"
+      ariaHasPopup="listbox"
+      ariaAutoComplete="list"
+      [ariaActiveDescendant]="focusedOptionId()"
+      [ariaControls]="listboxId()"
+    />
+  </div>
+
+  <ng-template
+    cdkConnectedOverlay
+    [cdkConnectedOverlayOrigin]="trigger"
+    [cdkConnectedOverlayOpen]="isOpened()"
+    [cdkConnectedOverlayPositions]="overlayPositions"
+    [cdkConnectedOverlayHasBackdrop]="false"
+    [cdkConnectedOverlayPanelClass]="'org-combobox-overlay'"
+    [cdkConnectedOverlayMinWidth]="inputComponent.inputRef.nativeElement.offsetWidth"
+  >
+    <org-combobox-options />
+  </ng-template>
+</div>

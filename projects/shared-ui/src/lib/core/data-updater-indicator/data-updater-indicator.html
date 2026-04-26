@@ -1,0 +1,8 @@
+@if (isLoading()) {
+  <org-loading-spinner [iconColor]="indicatorColor()" />
+} @else {
+  <org-indicator [color]="indicatorColor()" />
+}
+<span orgText textSize="sm" [textColor]="lastUpdatedAt().isValid ? null : 'neutral'" class="timestamp">
+  {{ lastUpdatedAt() | orgDate: { dateFormat: DateFormat.STANDARD, timeFormat: TimeFormat.STANDARD } }}
+</span>

@@ -1,0 +1,13 @@
+---
+paths:
+  - projects/shared-ui/src/lib/brain/**
+---
+# IMPORTANT: These rules override general typescript / angular rules
+# General Angualr Brain Directive / Component Patterns
+- **ALWAYS** prefer using a directive over a component whenever possible
+- **NEVER** container styling code
+- **ONLY** the input that matches the selector can have the `org` and `brain` in the name, **NOTHING** else in the brain directive / component files can have `org` or `brain` in the name including but not limited to:
+  - inputs
+  - outputs
+  - types / interfaces
+  - constants

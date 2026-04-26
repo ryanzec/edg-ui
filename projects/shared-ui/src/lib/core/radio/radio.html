@@ -1,0 +1,26 @@
+<label
+  orgText
+  [textSize]="textSize()"
+  class="radio-label"
+  (click)="onClick($event)"
+  (keydown)="onKeyDown($event)"
+  [attr.tabindex]="isDisabled() ? -1 : 0"
+  role="radio"
+  [attr.aria-checked]="isChecked()"
+  [attr.aria-disabled]="isDisabled() ? 'true' : null"
+>
+  <input
+    #inputRef
+    type="radio"
+    [name]="finalName()"
+    [value]="value()"
+    [checked]="isChecked()"
+    [attr.aria-hidden]="true"
+    tabindex="-1"
+    class="native-input"
+  />
+  <div class="radio-icon-container">
+    <org-icon [name]="currentIcon()" [size]="size()" />
+  </div>
+  <ng-content />
+</label>

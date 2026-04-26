@@ -1,0 +1,17 @@
+@layer components {
+  org-avatar-stack {
+    display: flex;
+  }
+
+  org-avatar-stack[data-size='sm'] > * ~ * {
+    margin-inline-start: calc(-1 * var(--spacing-3));
+  }
+
+  org-avatar-stack[data-size='base'] > * ~ * {
+    margin-inline-start: calc(-1 * var(--spacing-4));
+  }
+
+  org-avatar-stack[data-size='lg'] > * ~ * {
+    margin-inline-start: calc(-1 * var(--spacing-6));
+  }
+}

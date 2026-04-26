@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx tsc:*)",
+      "Bash(npx ngc:*)",
+      "Bash(echo:*)",
+      "Bash(cp:*)",
+      "Bash(grep:*)",
+      "Bash(find:*)",
+      "Bash(moon:*)",
+      "Bash(for:*)",
+      "Bash(cd:*)",
+      "Bash(xargs:*)",
+      "Edit",
+      "Write"
+    ]
+  },
+  "defaultMode": "auto-accept"
+}

@@ -1,0 +1,43 @@
+@layer components {
+  :host {
+    display: contents;
+  }
+
+  .chart-container {
+    position: relative;
+    width: 100%;
+  }
+
+  .state-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: var(--aspect-video);
+  }
+
+  .error-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-4);
+    height: 100%;
+    aspect-ratio: var(--aspect-video);
+    border: var(--border-width) solid var(--color-danger-border);
+    border-radius: var(--radius-md);
+    background-color: var(--color-danger-background-subtle);
+    color: var(--color-danger-text);
+  }
+
+  .error-message {
+    font-size: var(--text-sm);
+    line-height: var(--text-sm--line-height);
+    letter-spacing: var(--text-sm--letter-spacing);
+  }
+
+  .canvas-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: var(--aspect-video);
+  }
+}

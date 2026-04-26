@@ -1,0 +1,11 @@
+@layer components {
+  :host {
+    display: flex;
+    flex-direction: row;
+    gap: var(--spacing-1);
+  }
+
+  :host([data-orientation='vertical']) {
+    flex-direction: column;
+  }
+}

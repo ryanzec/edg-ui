@@ -1,0 +1,12 @@
+@if (hasIcon()) {
+  <button
+    type="button"
+    class="tag-icon-btn"
+    [attr.data-clickable]="isClickable() ? '' : null"
+    [disabled]="!isClickable()"
+    (click)="click($event)"
+    [attr.aria-label]="resolvedAriaLabel()"
+  >
+    <org-icon [name]="resolvedIconName()!" [size]="size()" />
+  </button>
+}

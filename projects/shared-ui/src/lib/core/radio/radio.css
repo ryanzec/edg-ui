@@ -1,0 +1,44 @@
+@layer components {
+  :host {
+    display: inline-flex;
+  }
+
+  .native-input {
+    position: absolute;
+    width: 0.0625rem; /* 1px */
+    height: 0.0625rem; /* 1px */
+    padding: 0;
+    margin: -0.0625rem; /* 1px */
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  .radio-label {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-1);
+    cursor: pointer;
+  }
+
+  .radio-icon-container {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-neutral-text);
+  }
+
+  :host([aria-disabled='true']) .radio-label {
+    opacity: var(--opacity-disabled);
+    cursor: not-allowed;
+  }
+
+  :host:not([aria-disabled='true']) .radio-label:hover .radio-icon-container {
+    color: var(--color-primary-background);
+  }
+
+  :host:not([aria-disabled='true']) .radio-label:focus-visible .radio-icon-container {
+    color: var(--color-primary-background);
+  }
+}

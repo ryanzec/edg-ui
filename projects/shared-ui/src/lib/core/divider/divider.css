@@ -1,0 +1,16 @@
+@layer components {
+  :host {
+    display: block;
+    border-color: var(--color-border);
+  }
+
+  :host([data-direction='horizontal']) {
+    width: 100%;
+    border-top: var(--border-width) solid var(--color-border);
+  }
+
+  :host([data-direction='vertical']) {
+    height: 100%;
+    border-left: var(--border-width) solid var(--color-border);
+  }
+}

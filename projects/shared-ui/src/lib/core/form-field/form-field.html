@@ -1,0 +1,15 @@
+<div class="form-field-container">
+  <ng-content />
+  @if (finalReserveValidationSpace() || hasValidationMessage()) {
+    <div
+      class="form-field-validation"
+      [attr.data-has-message]="hasValidationMessage() ? '' : null"
+      aria-live="polite"
+      aria-atomic="true"
+    >
+      @if (hasValidationMessage()) {
+        {{ validationMessage() }}
+      }
+    </div>
+  }
+</div>

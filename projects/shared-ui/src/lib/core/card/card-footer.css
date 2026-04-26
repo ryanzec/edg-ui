@@ -1,0 +1,19 @@
+@layer components {
+  :host {
+    display: flex;
+    gap: var(--spacing-1);
+    padding: 0 var(--spacing-3) var(--spacing-3);
+  }
+
+  :host([data-alignment='start']) {
+    justify-content: flex-start;
+  }
+
+  :host([data-alignment='center']) {
+    justify-content: center;
+  }
+
+  :host([data-alignment='end']) {
+    justify-content: flex-end;
+  }
+}

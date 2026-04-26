@@ -1,0 +1,82 @@
+@layer components {
+  :host {
+    position: relative;
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--spacing-1);
+    width: 100%;
+    padding: 0 var(--spacing-2);
+    min-height: 1.875rem; /* 30px */
+  }
+
+  :host:focus-within {
+    box-shadow: 0 0 0 0.0625rem var(--color-input-border-focused); /* 1px */
+  }
+
+  :host([data-variant='bordered']) {
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+    background-color: var(--color-input-background);
+  }
+
+  :host([data-variant='bordered']:focus-within) {
+    border-color: var(--color-input-border-focused);
+  }
+
+  :host([data-variant='bordered'][aria-disabled='true']) {
+    background-color: var(--color-input-background);
+    border-color: var(--color-border);
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  :host([data-variant='borderless']) {
+    border: none;
+    background-color: var(--color-input-background);
+  }
+
+  :host([data-variant='borderless'][aria-disabled='true']) {
+    background-color: var(--color-input-background);
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  .native-input {
+    flex: 1;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    font-size: var(--text-sm);
+    line-height: var(--text-sm--line-height);
+    letter-spacing: var(--text-sm--letter-spacing);
+  }
+
+  :host input::placeholder {
+    color: var(--color-text-subtle);
+  }
+
+  :host input::selection {
+    background-color: var(--color-primary-background-subtle);
+  }
+
+  :host input:disabled,
+  :host input[readonly] {
+    cursor: not-allowed;
+  }
+
+  .input-icon-btn {
+    display: inline-flex;
+    flex-shrink: 0;
+    color: var(--color-text-subtle);
+  }
+
+  .input-icon-btn:focus-visible {
+    background-color: var(--color-primary-background-subtle);
+    border-radius: var(--radius-sm);
+  }
+
+  .input-icon-btn:not(:disabled):hover {
+    color: var(--color-text);
+  }
+}

@@ -1,0 +1,4 @@
+<div #contentWrapperRef [class]="containerClass()" [attr.aria-live]="ariaLive()">
+  <ng-content />
+</div>
+<div #sentinelRef data-auto-scroll-sentinel="true" aria-hidden="true"></div>

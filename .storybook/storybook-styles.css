@@ -1,0 +1,69 @@
+/**
+ * Not sure of a better way to get the storybook generated docs to play well with our dark mode
+ */
+.sbdocs.sbdocs-wrapper {
+  background-color: var(--color-background);
+  color: var(--color-text);
+
+  .sbdocs-title,
+  .docblock-argstable-head,
+  .docblock-argstable-head th,
+  .docblock-code-toggle,
+  .docblock-argstable-body,
+  .docblock-argstable-body > tr > td,
+  .docblock-argstable-body > tr > td span,
+  .docblock-argstable-body > tr > td button,
+  .docblock-argstable-body > tr > td select,
+  .docblock-argstable-body > tr > td textarea,
+  .sbdocs-preview,
+  .sbdocs-content h2,
+  .sbdocs-content .sb-anchor > h3,
+  .sbdocs-content .sb-anchor > p,
+  .sb-bar,
+  .docs-story > *,
+  .docs-top-level-overview > *,
+  .docs-top-level-overview > * li,
+  .docs-top-level-overview > * .prismjs,
+  .docs-top-level-overview > * code {
+    background-color: var(--color-background);
+    color: var(--color-text);
+    border-color: var(--color-border);
+  }
+
+  .docs-top-level-overview .css-1dnv2kn * .token.operator {
+    color: var(--color-text);
+  }
+
+  .docs-top-level-overview .css-1dnv2kn * .token.attr-name,
+  .docs-top-level-overview .css-1dnv2kn * .token.tag,
+  .docs-top-level-overview .css-1dnv2kn * .token.string {
+    color: var(--color-danger-text);
+  }
+
+  .docs-top-level-overview .css-1dnv2kn * .token.punctuation {
+    color: var(--color-text);
+  }
+
+  .docs-top-level-overview .css-1dnv2kn * .token.comment,
+  .docs-top-level-overview .css-1dnv2kn * .token.builtin,
+  .docs-top-level-overview .css-1dnv2kn * .token.class-name {
+    color: var(--color-safe-text);
+  }
+
+  .docs-top-level-overview .css-1dnv2kn * .token.function,
+  .docs-top-level-overview .css-1dnv2kn * .token.keyword {
+    color: var(--color-info-text);
+  }
+
+  .docblock-argstable-body input:checked ~ span:last-of-type,
+  .docblock-argstable-body input:not(:checked) ~ span:first-of-type {
+    background-color: var(--color-gray-300);
+  }
+}
+
+.dark-theme .sbdocs.sbdocs-wrapper {
+  .docblock-argstable-body input:checked ~ span:last-of-type,
+  .docblock-argstable-body input:not(:checked) ~ span:first-of-type {
+    background-color: var(--color-gray-600);
+  }
+}

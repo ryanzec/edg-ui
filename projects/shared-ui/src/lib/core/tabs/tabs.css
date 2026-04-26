@@ -1,0 +1,19 @@
+@layer components {
+  :host {
+    display: flex;
+    gap: var(--spacing-1);
+  }
+
+  .tablist {
+    display: flex;
+  }
+
+  :host([data-scrollable]) .tablist {
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  :host([data-scrollable]) .tablist::-webkit-scrollbar {
+    display: none;
+  }
+}

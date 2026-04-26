@@ -1,0 +1,40 @@
+@layer components {
+  :host {
+    display: inline-flex;
+  }
+
+  .tab-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-1) var(--spacing-2);
+    min-height: var(--sizing-10xs);
+    background-color: transparent;
+    color: var(--color-text-subtle);
+    white-space: nowrap;
+    outline: none;
+    cursor: pointer;
+    border-bottom: var(--spacing-0_5) solid var(--color-border); /* 2px */
+    transition:
+      color 200ms,
+      background-color 200ms;
+  }
+
+  .tab-btn:focus-visible {
+    background-color: var(--color-background-level1);
+  }
+
+  .tab-btn[aria-selected='true'] {
+    border-bottom-color: var(--color-border-bold);
+    color: var(--color-text);
+  }
+
+  .tab-btn:not([aria-selected='true']):not([aria-disabled='true']):hover {
+    background-color: var(--color-background-level1);
+  }
+
+  .tab-btn[aria-disabled='true'] {
+    opacity: var(--opacity-disabled);
+    cursor: not-allowed;
+  }
+}

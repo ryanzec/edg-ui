@@ -1,0 +1,19 @@
+@if (variant() === 'block') {
+  <div class="code-block-copy-wrapper">
+    @if (allowCopy()) {
+      <button type="button" class="code-block-copy-btn" [cdkCopyToClipboard]="text()" aria-label="Copy code">
+        <org-icon name="copy" />
+      </button>
+    }
+  </div>
+  <div class="code-block-body">
+    <org-scroll-area direction="both" [onlyShowOnHover]="true" [scrollClass]="scrollClass()" spacingClass="p-2">
+      <pre
+        class="code-block-pre"
+        [style]="hasEllipsis() ? { '--ellipsis-lines': ellipsisAt() } : null"
+      ><code>{{ text() }}</code></pre>
+    </org-scroll-area>
+  </div>
+} @else if (variant() === 'inline') {
+  <code class="code-block-inline">{{ text() }}</code>
+}
