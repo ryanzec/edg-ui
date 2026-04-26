@@ -1,9 +1,21 @@
-// Auto-generated from base-tokens.css and system-tokens.css — do not edit manually.
+// Auto-generated from base-tokens.css, system-tokens.css, chart-tokens.css, scrollbar-tokens.css, and avatar-tokens.css — do not edit manually.
 // Run the build-typescript-design-token script to regenerate.
 
 type DesignTokenTheme = 'light' | 'dark';
 
 const colorLight: Record<string, string> = {
+  'avatar.0': 'oklch(63.7% 0.237 25.331)',
+  'avatar.1': 'oklch(70.5% 0.213 47.604)',
+  'avatar.10': 'oklch(60.6% 0.25 292.717)',
+  'avatar.11': 'oklch(66.7% 0.295 322.15)',
+  'avatar.2': 'oklch(76.9% 0.188 70.08)',
+  'avatar.3': 'oklch(76.8% 0.233 130.85)',
+  'avatar.4': 'oklch(72.3% 0.219 149.579)',
+  'avatar.5': 'oklch(70.4% 0.14 182.503)',
+  'avatar.6': 'oklch(71.5% 0.143 215.221)',
+  'avatar.7': 'oklch(68.5% 0.169 237.323)',
+  'avatar.8': 'oklch(62.3% 0.214 259.815)',
+  'avatar.9': 'oklch(58.5% 0.233 277.117)',
   background: 'oklch(97% 0 0)',
   'background.inverse': 'oklch(20.5% 0 0)',
   'background.level1': 'color-mix(in srgb, oklch(97% 0 0) 96%, black 4%)',
@@ -435,6 +447,7 @@ const colorDark: Record<string, string> = {
 };
 
 const nonColorTokens: Record<string, string> = {
+  'aspect.square': '1 / 1',
   'aspect.video': '16 / 9',
   'border.width': '0.0625rem',
   'border.width.emphasized': '0.25rem',
@@ -462,6 +475,7 @@ const nonColorTokens: Record<string, string> = {
   'radius.2xl': '1rem',
   'radius.3xl': '1.5rem',
   'radius.4xl': '2rem',
+  'radius.full': '100rem',
   'radius.lg': '0.5rem',
   'radius.md': '0.375rem',
   'radius.sm': '0.25rem',
@@ -470,6 +484,8 @@ const nonColorTokens: Record<string, string> = {
   'scrollbar.color': 'transparent',
   'scrollbar.thumb.color': 'rgb(148 163 184 / 0.7)',
   'scrollbar.thumb.hover.color': 'rgb(100 116 139 / 0.9)',
+  'sizing.10xs': '2rem',
+  'sizing.11xs': '1rem',
   'sizing.2xl': '42rem',
   'sizing.2xs': '18rem',
   'sizing.3xl': '48rem',
@@ -481,22 +497,29 @@ const nonColorTokens: Record<string, string> = {
   'sizing.6xl': '72rem',
   'sizing.6xs': '10rem',
   'sizing.7xl': '80rem',
+  'sizing.7xs': '8rem',
+  'sizing.8xs': '6rem',
+  'sizing.9xs': '3rem',
   'sizing.lg': '32rem',
   'sizing.md': '28rem',
   'sizing.sm': '24rem',
   'sizing.xl': '36rem',
   'sizing.xs': '20rem',
+  'spacing.0_5': '0.125rem',
   'spacing.1': '0.25rem',
+  'spacing.1_5': '0.375rem',
   'spacing.10': '2.5rem',
   'spacing.12': '3rem',
   'spacing.14': '3.5rem',
   'spacing.16': '4rem',
   'spacing.18': '4.5rem',
   'spacing.2': '0.5rem',
+  'spacing.2_5': '0.625rem',
   'spacing.20': '5rem',
   'spacing.24': '6rem',
   'spacing.28': '7rem',
   'spacing.3': '0.75rem',
+  'spacing.3_5': '0.875rem',
   'spacing.32': '8rem',
   'spacing.4': '1rem',
   'spacing.5': '1.25rem',
@@ -534,6 +557,8 @@ const nonColorTokens: Record<string, string> = {
   'text.xs': '0.75rem',
   'text.xs.letter.spacing': '0.01em',
   'text.xs.line.height': 'calc(1 / 0.75)',
+  'z.index.elevated': '10',
+  'z.index.notification': '50',
   'z.index.overlay': '1000',
 };
 

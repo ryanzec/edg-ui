@@ -7,7 +7,7 @@
     justify-content: center;
     overflow: hidden;
     border-radius: var(--radius-full);
-    background-color: var(--color-primary-background);
+    background-color: var(--color-avatar-0);
     color: var(--color-text-inverse);
     font-weight: var(--font-weight-medium);
   }
@@ -34,6 +34,54 @@
     font-size: var(--text-md);
     line-height: var(--text-md--line-height);
     letter-spacing: var(--text-md--letter-spacing);
+  }
+
+  :host([data-color-index='0']) {
+    background-color: var(--color-avatar-0);
+  }
+
+  :host([data-color-index='1']) {
+    background-color: var(--color-avatar-1);
+  }
+
+  :host([data-color-index='2']) {
+    background-color: var(--color-avatar-2);
+  }
+
+  :host([data-color-index='3']) {
+    background-color: var(--color-avatar-3);
+  }
+
+  :host([data-color-index='4']) {
+    background-color: var(--color-avatar-4);
+  }
+
+  :host([data-color-index='5']) {
+    background-color: var(--color-avatar-5);
+  }
+
+  :host([data-color-index='6']) {
+    background-color: var(--color-avatar-6);
+  }
+
+  :host([data-color-index='7']) {
+    background-color: var(--color-avatar-7);
+  }
+
+  :host([data-color-index='8']) {
+    background-color: var(--color-avatar-8);
+  }
+
+  :host([data-color-index='9']) {
+    background-color: var(--color-avatar-9);
+  }
+
+  :host([data-color-index='10']) {
+    background-color: var(--color-avatar-10);
+  }
+
+  :host([data-color-index='11']) {
+    background-color: var(--color-avatar-11);
   }
 
   :host([data-stacked='true']) {

@@ -84,3 +84,4 @@ const logUser = (user: Pick<User, 'name'>) => {
 - **ALWAYS** prefer positive name variables / fields / method / etc. to avoid double negative confusion.
 - If something can not be `null` / `undefined` based on typescript typing, falsey checks are ok **ONLY** if they include a comment above the check indicating it is just a defensive check.
 - **ALWAYS** have a comment in an empty method that is designed to be overriden or set outside of the class to avoid confusion on why there is an empty method + prevent eslint errors
+- **AWLAYS** use the `projects/shared-ui/src/lib/styles/design-tokens.ts` when you need to access css design tokens in typescript code.

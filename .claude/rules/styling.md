@@ -58,3 +58,5 @@ Utility css classes **MUST** be used for all other styles:
 - **NEVER** use ring / outline styles other than to remove it.
 - **NEVER** use a default values when using `var(...)`.
 - **ALWAYS** make css class name as short as needed but still descripitive since Angular handle encapulation to avoid naming conflict so `header` instead of `integration-card-configured-header`.
+- **ALWAYS** make sure to update the `.moon/scripts/build-typescript-design-token.cjs` script when modifies css variables in `projects/shared-ui/src/lib/styles/variables`.
+- **ALWAYS** make sure to run `moon :build-design-tokens` when css variables in `projects/shared-ui/src/lib/styles/variables` are modified in any way (added / removed / changed).

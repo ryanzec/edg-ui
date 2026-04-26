@@ -351,6 +351,77 @@ export const InitialsGeneration: Story = {
   }),
 };
 
+export const LabelColors: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The avatar circle background cycles through 12 distinct colors based on the lowercased character code of the first label character (modulo 12). The same first character always produces the same color.',
+      },
+    },
+  },
+  render: () => ({
+    template: `
+      <org-storybook-example-container
+        title="Label Color Cycling"
+        currentState="Comparing background colors derived from the first character of each label"
+      >
+        <org-storybook-example-container-section label="Letters A-L (one per color)">
+          <div class="flex gap-2 items-center">
+            <org-avatar label="Alice"><org-avatar-circle /></org-avatar>
+            <org-avatar label="Bob"><org-avatar-circle /></org-avatar>
+            <org-avatar label="Carol"><org-avatar-circle /></org-avatar>
+            <org-avatar label="Dave"><org-avatar-circle /></org-avatar>
+            <org-avatar label="Eve"><org-avatar-circle /></org-avatar>
+            <org-avatar label="Frank"><org-avatar-circle /></org-avatar>
+            <org-avatar label="Grace"><org-avatar-circle /></org-avatar>
+            <org-avatar label="Heidi"><org-avatar-circle /></org-avatar>
+            <org-avatar label="Ivan"><org-avatar-circle /></org-avatar>
+            <org-avatar label="Judy"><org-avatar-circle /></org-avatar>
+            <org-avatar label="Karl"><org-avatar-circle /></org-avatar>
+            <org-avatar label="Liam"><org-avatar-circle /></org-avatar>
+          </div>
+        </org-storybook-example-container-section>
+
+        <org-storybook-example-container-section label="Letters M-X (cycle wraps)">
+          <div class="flex gap-2 items-center">
+            <org-avatar label="Mallory"><org-avatar-circle /></org-avatar>
+            <org-avatar label="Niaj"><org-avatar-circle /></org-avatar>
+            <org-avatar label="Olivia"><org-avatar-circle /></org-avatar>
+            <org-avatar label="Peggy"><org-avatar-circle /></org-avatar>
+            <org-avatar label="Quentin"><org-avatar-circle /></org-avatar>
+            <org-avatar label="Rupert"><org-avatar-circle /></org-avatar>
+            <org-avatar label="Sybil"><org-avatar-circle /></org-avatar>
+            <org-avatar label="Trent"><org-avatar-circle /></org-avatar>
+            <org-avatar label="Uma"><org-avatar-circle /></org-avatar>
+            <org-avatar label="Victor"><org-avatar-circle /></org-avatar>
+            <org-avatar label="Walter"><org-avatar-circle /></org-avatar>
+            <org-avatar label="Xavier"><org-avatar-circle /></org-avatar>
+          </div>
+        </org-storybook-example-container-section>
+
+        <org-storybook-example-container-section label="Case insensitivity">
+          <div class="flex gap-2 items-center">
+            <org-avatar label="alice"><org-avatar-circle /></org-avatar>
+            <org-avatar label="Alice"><org-avatar-circle /></org-avatar>
+            <org-avatar label="ALICE"><org-avatar-circle /></org-avatar>
+          </div>
+        </org-storybook-example-container-section>
+
+        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+          <li>Color is computed as <code>lowercased first char's char code % 12</code></li>
+          <li>Same first character always produces the same color regardless of casing</li>
+          <li>Empty labels fall back to color index 0</li>
+          <li>Image overlays sit on top, so the colored background is visible only when no image is loaded (or when one fails)</li>
+        </ul>
+      </org-storybook-example-container>
+    `,
+    moduleMetadata: {
+      imports: [Avatar, AvatarCircle, StorybookExampleContainer, StorybookExampleContainerSection],
+    },
+  }),
+};
+
 export const Clickable: Story = {
   parameters: {
     docs: {

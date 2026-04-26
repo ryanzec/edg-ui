@@ -2,57 +2,6 @@
 
 /* system level tokens */
 :root {
-  /* chart colors - 1 is the primary shade, 2 is the darker shade */
-  --color-chart-red-1: var(--color-red-500);
-  --color-chart-red-2: var(--color-red-600);
-  --color-chart-orange-1: var(--color-orange-500);
-  --color-chart-orange-2: var(--color-orange-600);
-  --color-chart-amber-1: var(--color-amber-500);
-  --color-chart-amber-2: var(--color-amber-600);
-  --color-chart-yellow-1: var(--color-yellow-500);
-  --color-chart-yellow-2: var(--color-yellow-600);
-  --color-chart-lime-1: var(--color-lime-500);
-  --color-chart-lime-2: var(--color-lime-600);
-  --color-chart-green-1: var(--color-green-500);
-  --color-chart-green-2: var(--color-green-600);
-  --color-chart-emerald-1: var(--color-emerald-500);
-  --color-chart-emerald-2: var(--color-emerald-600);
-  --color-chart-teal-1: var(--color-teal-500);
-  --color-chart-teal-2: var(--color-teal-600);
-  --color-chart-cyan-1: var(--color-cyan-500);
-  --color-chart-cyan-2: var(--color-cyan-600);
-  --color-chart-sky-1: var(--color-sky-500);
-  --color-chart-sky-2: var(--color-sky-600);
-  --color-chart-blue-1: var(--color-blue-500);
-  --color-chart-blue-2: var(--color-blue-600);
-  --color-chart-indigo-1: var(--color-indigo-500);
-  --color-chart-indigo-2: var(--color-indigo-600);
-  --color-chart-violet-1: var(--color-violet-500);
-  --color-chart-violet-2: var(--color-violet-600);
-  --color-chart-purple-1: var(--color-purple-500);
-  --color-chart-purple-2: var(--color-purple-600);
-  --color-chart-fuchsia-1: var(--color-fuchsia-500);
-  --color-chart-fuchsia-2: var(--color-fuchsia-600);
-  --color-chart-pink-1: var(--color-pink-500);
-  --color-chart-pink-2: var(--color-pink-600);
-  --color-chart-rose-1: var(--color-rose-500);
-  --color-chart-rose-2: var(--color-rose-600);
-  --color-chart-gray-1: var(--color-gray-500);
-  --color-chart-gray-2: var(--color-gray-600);
-  --color-chart-slate-1: var(--color-slate-500);
-  --color-chart-slate-2: var(--color-slate-600);
-  --color-chart-zinc-1: var(--color-zinc-500);
-  --color-chart-zinc-2: var(--color-zinc-600);
-  --color-chart-neutral-1: var(--color-neutral-500);
-  --color-chart-neutral-2: var(--color-neutral-600);
-  --color-chart-stone-1: var(--color-stone-500);
-  --color-chart-stone-2: var(--color-stone-600);
-
-  /* customer scrollbar */
-  --scrollbar-color: transparent;
-  --scrollbar-thumb-color: rgb(148 163 184 / 0.7);
-  --scrollbar-thumb-hover-color: rgb(100 116 139 / 0.9);
-
   /* opacity */
   --opacity-skeleton-subtle: 0.15;
   --opacity-disabled: 0.2;
@@ -551,8 +500,4 @@
   --color-fuchsia-background-bold: var(--color-fuchsia-300);
   --color-fuchsia-background-hover-bold: var(--color-fuchsia-200);
   --color-fuchsia-background-pressed-bold: var(--color-fuchsia-300);
-
-  /* customer scrollbar */
-  --scrollbar-thumb-color: rgb(203 213 225 / 0.3);
-  --scrollbar-thumb-hover-color: rgb(203 213 225 / 0.5);
 }

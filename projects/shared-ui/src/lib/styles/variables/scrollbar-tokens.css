@@ -1,0 +1,13 @@
+/* scrollbar tokens */
+:root {
+  /* customer scrollbar */
+  --scrollbar-color: transparent;
+  --scrollbar-thumb-color: rgb(148 163 184 / 0.7);
+  --scrollbar-thumb-hover-color: rgb(100 116 139 / 0.9);
+}
+
+.dark-theme {
+  /* customer scrollbar */
+  --scrollbar-thumb-color: rgb(203 213 225 / 0.3);
+  --scrollbar-thumb-hover-color: rgb(203 213 225 / 0.5);
+}

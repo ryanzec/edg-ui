@@ -4,6 +4,9 @@
 @import './layers.css';
 @import './variables/base-tokens.css';
 @import './variables/system-tokens.css';
+@import './variables/chart-tokens.css';
+@import './variables/scrollbar-tokens.css';
+@import './variables/avatar-tokens.css';
 @import './animations.css';
 @import './background-utility.css';
 @import './border-utility.css';
