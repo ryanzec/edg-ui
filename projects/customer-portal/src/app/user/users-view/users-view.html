@@ -14,16 +14,6 @@
   (inviteMemberClicked)="onInviteMemberClick()"
 />
 
-<org-dialog-controller
-  #userFormDialogController
-  [dialogComponent]="UserFormDialogComponent"
-  position="right"
-  (closed)="clearSelectedUser()"
-/>
+<org-user-form-dialog #userFormDialog position="right" (closed)="clearSelectedUser()" />
 
-<org-dialog-controller
-  #userDeleteDialogController
-  [dialogComponent]="UserDeleteDialogComponent"
-  position="center"
-  (closed)="clearSelectedUser()"
-/>
+<org-user-delete-dialog #userDeleteDialog position="center" (closed)="clearSelectedUser()" />

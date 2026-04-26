@@ -3,7 +3,6 @@ import {
   UsersList,
   UsersDataStore,
   GlobalNotificationManager,
-  DialogController,
   UserFormDialog,
   UserDeleteDialog,
   UserFormData,
@@ -20,7 +19,7 @@ import { DialogRef } from '@angular/cdk/dialog';
 @Component({
   selector: 'cp-users-view',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [UsersList, DialogController, Card, CardHeader, CardContent],
+  imports: [UsersList, UserFormDialog, UserDeleteDialog, Card, CardHeader, CardContent],
   providers: [UsersDataStore],
   templateUrl: './users-view.html',
 })
@@ -32,16 +31,13 @@ export class UsersView {
   private _userFormDialogRef: DialogRef<UserFormDialog, UserFormDialog> | null = null;
   private _userDeleteDialogRef: DialogRef<UserDeleteDialog, UserDeleteDialog> | null = null;
 
-  protected readonly UserFormDialogComponent = UserFormDialog;
-  protected readonly UserDeleteDialogComponent = UserDeleteDialog;
-
   protected readonly usersError = this._usersDataStore.error;
 
-  @ViewChild('userFormDialogController')
-  public userFormDialogController!: DialogController<UserFormDialog>;
+  @ViewChild('userFormDialog')
+  public userFormDialog!: UserFormDialog;
 
-  @ViewChild('userDeleteDialogController')
-  public userDeleteDialogController!: DialogController<UserDeleteDialog>;
+  @ViewChild('userDeleteDialog')
+  public userDeleteDialog!: UserDeleteDialog;
 
   protected onInviteMemberClick(): void {
     this._openFormDialog(null);
@@ -108,10 +104,8 @@ export class UsersView {
   private _openFormDialog(existingUser: User | null): void {
     this._selectedUser.set(existingUser);
 
-    this._userFormDialogRef = this.userFormDialogController.openDialog({
+    this._userFormDialogRef = this.userFormDialog.openDialog({
       existingUser,
-      dialogClass: 'w-sm',
-      dialogController: this.userFormDialogController,
     });
 
     if (!this._userFormDialogRef || !this._userFormDialogRef.componentInstance) {
@@ -141,12 +135,11 @@ export class UsersView {
   private _openDeleteDialog(user: User): void {
     this._selectedUser.set(user);
 
-    this._userDeleteDialogRef = this.userDeleteDialogController.openDialog({
+    this._userDeleteDialogRef = this.userDeleteDialog.openDialog({
       user: {
         id: user.id,
         name: `${user.firstName} ${user.lastName}`,
       },
-      dialogController: this.userDeleteDialogController,
     });
 
     if (!this._userDeleteDialogRef || !this._userDeleteDialogRef.componentInstance) {
@@ -173,13 +166,12 @@ export class UsersView {
     });
 
     componentInstance.cancelConfirmed.subscribe(() => {
-      this.userDeleteDialogController.closeDialog();
+      this.userDeleteDialog.closeDialog();
     });
   }
 
   private async _processUserForm(formData: UserFormData): Promise<void> {
     this._userFormDialogRef?.componentInstance?.setProcessing(true);
-    this.userFormDialogController.setEnableEscapeKey(false);
 
     try {
       if (formData.id) {
@@ -203,7 +195,7 @@ export class UsersView {
         });
       }
 
-      this.userFormDialogController.closeDialog();
+      this.userFormDialog.closeDialog();
     } catch (error) {
       const errorType = formData.id ? 'update-user-error' : 'create-user-error';
       const errorMessage = formData.id ? 'Failed to update member' : 'Failed to add member';
@@ -221,13 +213,11 @@ export class UsersView {
       });
     } finally {
       this._userFormDialogRef?.componentInstance?.setProcessing(false);
-      this.userFormDialogController.setEnableEscapeKey(true);
     }
   }
 
   private async _deleteUser(userData: UserDeleteData): Promise<void> {
     this._userDeleteDialogRef?.componentInstance?.setProcessing(true);
-    this.userDeleteDialogController.setEnableEscapeKey(false);
 
     try {
       const response = await firstValueFrom(this._usersDataStore.delete(userData.id));
@@ -244,7 +234,7 @@ export class UsersView {
         canClose: true,
       });
 
-      this.userDeleteDialogController.closeDialog();
+      this.userDeleteDialog.closeDialog();
     } catch (error: unknown) {
       logManager.error({
         type: 'delete-user-error',
@@ -259,7 +249,6 @@ export class UsersView {
       });
     } finally {
       this._userDeleteDialogRef?.componentInstance?.setProcessing(false);
-      this.userDeleteDialogController.setEnableEscapeKey(true);
     }
   }
 }

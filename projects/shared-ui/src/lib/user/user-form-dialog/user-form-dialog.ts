@@ -5,12 +5,11 @@ import { Dialog } from '../../core/dialog/dialog';
 import { DialogHeader } from '../../core/dialog/dialog-header';
 import { DialogContent } from '../../core/dialog/dialog-content';
 import { UserForm, type UserFormData } from '../user-form/user-form';
-import { type DialogController } from '../../core/dialog/dialog-controller';
+import { DIALOG_TRIGGER_BRAIN, DialogBrainDirective } from '../../brain/dialog-brain/dialog-brain';
 
 export type UserFormDialogData = {
   existingUser?: User | null;
   hasRoundedCorners?: boolean;
-  dialogController?: DialogController<UserFormDialog>;
 };
 
 @Component({
@@ -18,40 +17,75 @@ export type UserFormDialogData = {
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [Dialog, DialogHeader, DialogContent, UserForm],
   templateUrl: './user-form-dialog.html',
+  hostDirectives: [
+    {
+      directive: DialogBrainDirective,
+      inputs: [
+        'dialogPosition: position',
+        'dialogHasRoundedCorners: hasRoundedCorners',
+        'dialogHasBackdrop: hasBackdrop',
+        'dialogEnableCloseOnClickOutside: enableCloseOnClickOutside',
+        'dialogEnableEscapeKey: enableEscapeKey',
+        'dialogShowCloseIcon: showCloseIcon',
+      ],
+      outputs: ['dialogClosed: closed'],
+    },
+  ],
   host: {
     class: 'contents',
   },
 })
 export class UserFormDialog {
-  private readonly _dialogRef = inject(DialogRef<UserFormDialog>);
+  // when rendered as the overlay instance, the trigger brain is provided via cdk dialog providers and is the brain
+  // that actually owns the dialog ref. when rendered as the trigger instance, fall back to the self brain (which is
+  // the same brain that opens the dialog).
+  private readonly _selfBrain = inject(DialogBrainDirective, { self: true });
+  private readonly _triggerBrain = inject(DIALOG_TRIGGER_BRAIN, { optional: true });
+  private readonly _brain = this._triggerBrain ?? this._selfBrain;
 
-  protected readonly data = inject<UserFormDialogData>(DIALOG_DATA);
+  private readonly _dialogRef = inject(DialogRef<UserFormDialog>, { optional: true });
+
+  protected readonly data = inject<UserFormDialogData>(DIALOG_DATA, { optional: true });
 
   protected readonly isProcessing = signal<boolean>(false);
+
+  /** true when this instance is rendered inside the cdk dialog overlay (not the trigger instance in the parent view) */
+  protected readonly isInDialog = !!this._dialogRef;
 
   public readonly formSubmitted = output<UserFormData>();
 
   /**
-   * sets the processing state of the dialog
+   * opens the dialog with the supplied data
+   */
+  public openDialog(data?: UserFormDialogData): DialogRef<UserFormDialog, UserFormDialog> | null {
+    return this._brain.openDialog<UserFormDialog>(UserFormDialog, data as Record<string, unknown> | undefined);
+  }
+
+  /**
+   * programmatically closes the open dialog
+   */
+  public closeDialog(): void {
+    this._brain.closeDialog();
+  }
+
+  /**
+   * sets the processing state of the dialog and toggles the escape key gating to match
    */
   public setProcessing(isProcessing: boolean): void {
     this.isProcessing.set(isProcessing);
-
-    if (this.data.dialogController) {
-      this.data.dialogController.setEnableEscapeKey(!isProcessing);
-    }
+    this._brain.setEnableEscapeKey(!isProcessing);
   }
 
   protected readonly dialogTitle = computed<string>(() => {
-    return this.data.existingUser ? 'Edit User' : 'Create User';
+    return this.data?.existingUser ? 'Edit User' : 'Create User';
   });
 
   protected readonly hasRoundedCorners = computed<boolean>(() => {
-    return this.data.hasRoundedCorners ?? true;
+    return this.data?.hasRoundedCorners ?? true;
   });
 
   protected readonly existingUser = computed<User | null>(() => {
-    return this.data.existingUser ?? null;
+    return this.data?.existingUser ?? null;
   });
 
   protected onFormSubmitted(formData: UserFormData): void {

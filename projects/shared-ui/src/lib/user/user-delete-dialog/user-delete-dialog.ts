@@ -6,7 +6,7 @@ import { DialogHeader } from '../../core/dialog/dialog-header';
 import { DialogContent } from '../../core/dialog/dialog-content';
 import { DialogFooter } from '../../core/dialog/dialog-footer';
 import { Button } from '../../core/button/button';
-import { type DialogController } from '../../core/dialog/dialog-controller';
+import { DIALOG_TRIGGER_BRAIN, DialogBrainDirective } from '../../brain/dialog-brain/dialog-brain';
 
 export type UserDeleteData = Pick<User, 'id'> & { name: string };
 
@@ -14,7 +14,6 @@ export type UserDeleteDialogData = {
   user: UserDeleteData;
   hasRoundedCorners?: boolean;
   dialogClass?: string;
-  dialogController?: DialogController<UserDeleteDialog>;
 };
 
 @Component({
@@ -22,14 +21,38 @@ export type UserDeleteDialogData = {
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [Dialog, DialogHeader, DialogContent, DialogFooter, Button],
   templateUrl: './user-delete-dialog.html',
+  hostDirectives: [
+    {
+      directive: DialogBrainDirective,
+      inputs: [
+        'dialogPosition: position',
+        'dialogHasRoundedCorners: hasRoundedCorners',
+        'dialogHasBackdrop: hasBackdrop',
+        'dialogEnableCloseOnClickOutside: enableCloseOnClickOutside',
+        'dialogEnableEscapeKey: enableEscapeKey',
+        'dialogShowCloseIcon: showCloseIcon',
+      ],
+      outputs: ['dialogClosed: closed'],
+    },
+  ],
   host: {},
 })
 export class UserDeleteDialog {
-  private readonly _dialogRef = inject(DialogRef<UserDeleteDialog>);
+  // when rendered as the overlay instance, the trigger brain is provided via cdk dialog providers and is the brain
+  // that actually owns the dialog ref. when rendered as the trigger instance, fall back to the self brain (which is
+  // the same brain that opens the dialog).
+  private readonly _selfBrain = inject(DialogBrainDirective, { self: true });
+  private readonly _triggerBrain = inject(DIALOG_TRIGGER_BRAIN, { optional: true });
+  private readonly _brain = this._triggerBrain ?? this._selfBrain;
 
-  protected readonly data = inject<UserDeleteDialogData>(DIALOG_DATA);
+  private readonly _dialogRef = inject(DialogRef<UserDeleteDialog>, { optional: true });
+
+  protected readonly data = inject<UserDeleteDialogData>(DIALOG_DATA, { optional: true });
 
   protected readonly isProcessing = signal<boolean>(false);
+
+  /** true when this instance is rendered inside the cdk dialog overlay (not the trigger instance in the parent view) */
+  protected readonly isInDialog = !!this._dialogRef;
 
   /**
    * emitted when the user confirms deletion
@@ -42,33 +65,52 @@ export class UserDeleteDialog {
   public readonly cancelConfirmed = output<UserDeleteData>();
 
   /**
-   * sets the processing state of the dialog
+   * opens the dialog with the supplied data
+   */
+  public openDialog(data: UserDeleteDialogData): DialogRef<UserDeleteDialog, UserDeleteDialog> | null {
+    return this._brain.openDialog<UserDeleteDialog>(UserDeleteDialog, data as unknown as Record<string, unknown>);
+  }
+
+  /**
+   * programmatically closes the open dialog
+   */
+  public closeDialog(): void {
+    this._brain.closeDialog();
+  }
+
+  /**
+   * sets the processing state of the dialog and toggles the escape key gating to match
    */
   public setProcessing(isProcessing: boolean): void {
     this.isProcessing.set(isProcessing);
-
-    if (this.data.dialogController) {
-      this.data.dialogController.setEnableEscapeKey(!isProcessing);
-    }
+    this._brain.setEnableEscapeKey(!isProcessing);
   }
 
   protected readonly hasRoundedCorners = computed<boolean>(() => {
-    return this.data.hasRoundedCorners ?? true;
+    return this.data?.hasRoundedCorners ?? true;
   });
 
   protected readonly dialogClass = computed<string>(() => {
-    return this.data.dialogClass ?? '';
+    return this.data?.dialogClass ?? '';
   });
 
   protected readonly usersName = computed<string>(() => {
-    return this.data.user.name;
+    return this.data?.user.name ?? '';
   });
 
   protected onDeleteClick(): void {
+    if (!this.data) {
+      return;
+    }
+
     this.deleteConfirmed.emit(this.data.user);
   }
 
   protected onCancelClick(): void {
+    if (!this.data) {
+      return;
+    }
+
     this.cancelConfirmed.emit(this.data.user);
   }
 }

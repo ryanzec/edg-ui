@@ -31,7 +31,6 @@ export * from './data-updater-indicator/data-updater-indicator';
 export * from './date-pipe/date-pipe';
 export * from './date-picker-input/date-picker-input';
 export * from './dialog/dialog';
-export * from './dialog/dialog-controller';
 export * from './dialog/dialog-content';
 export * from './dialog/dialog-footer';
 export * from './dialog/dialog-header';

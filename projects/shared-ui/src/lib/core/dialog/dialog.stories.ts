@@ -1,5 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/angular';
-import { DialogController, DialogPosition, allDialogPositions } from '../../core/dialog/dialog-controller';
+import {
+  DIALOG_TRIGGER_BRAIN,
+  DialogBrainDirective,
+  DialogPosition,
+  allDialogPositions,
+} from '../../brain/dialog-brain/dialog-brain';
 import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
 import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
 import { Button } from '../../core/button/button';
@@ -11,10 +16,10 @@ import { Dialog } from '../../core/dialog/dialog';
 import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { CheckboxToggle } from '../../core/checkbox-toggle/checkbox-toggle';
 
-export type EXAMPLEDialogData = {
+type EXAMPLEDialogData = {
   title: string;
   message: string;
-  hasRoundedCorners: boolean;
+  hasRoundedCorners?: boolean;
   onEscapeKeyToggle?: (enabled: boolean) => void;
   onShowCloseIconToggle?: (show: boolean) => void;
 };
@@ -24,65 +29,102 @@ export type EXAMPLEDialogData = {
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [Button, DialogHeader, DialogContent, DialogFooter, Dialog],
   template: `
-    <org-dialog [hasRoundedCorners]="data.hasRoundedCorners">
-      <org-dialog-header [title]="data.title" />
-      <org-dialog-content>{{ data.message }}</org-dialog-content>
-      <org-dialog-footer>
-        <org-button color="neutral" (clicked)="onCancel()">Cancel</org-button>
-        <org-button color="primary" (clicked)="onConfirm()">Confirm</org-button>
-      </org-dialog-footer>
-    </org-dialog>
+    @if (isInDialog) {
+      <org-dialog [hasRoundedCorners]="data.hasRoundedCorners ?? true">
+        <org-dialog-header [title]="data.title" />
+        <org-dialog-content>{{ data.message }}</org-dialog-content>
+        <org-dialog-footer>
+          <org-button color="neutral" (clicked)="onCancel()">Cancel</org-button>
+          <org-button color="primary" (clicked)="onConfirm()">Confirm</org-button>
+        </org-dialog-footer>
+      </org-dialog>
+    }
   `,
+  hostDirectives: [
+    {
+      directive: DialogBrainDirective,
+      inputs: [
+        'dialogPosition: position',
+        'dialogHasRoundedCorners: hasRoundedCorners',
+        'dialogHasBackdrop: hasBackdrop',
+        'dialogEnableCloseOnClickOutside: enableCloseOnClickOutside',
+        'dialogEnableEscapeKey: enableEscapeKey',
+        'dialogShowCloseIcon: showCloseIcon',
+      ],
+      outputs: ['dialogClosed: closed'],
+    },
+  ],
   host: {},
 })
 class EXAMPLEDialog {
-  private readonly _dialogRef = inject(DialogRef<DialogContent>);
+  private readonly _selfBrain = inject(DialogBrainDirective, { self: true });
+  private readonly _triggerBrain = inject(DIALOG_TRIGGER_BRAIN, { optional: true });
+  private readonly _brain = this._triggerBrain ?? this._selfBrain;
 
-  protected readonly data = inject<EXAMPLEDialogData>(DIALOG_DATA);
+  private readonly _dialogRef = inject(DialogRef<EXAMPLEDialog>, { optional: true });
+
+  protected readonly data = inject<EXAMPLEDialogData>(DIALOG_DATA, { optional: true }) ?? {
+    title: '',
+    message: '',
+  };
+  protected readonly isInDialog = !!this._dialogRef;
+
+  public openDialog(data?: EXAMPLEDialogData): DialogRef<EXAMPLEDialog, EXAMPLEDialog> | null {
+    return this._brain.openDialog<EXAMPLEDialog>(EXAMPLEDialog, data as Record<string, unknown> | undefined);
+  }
+
+  public closeDialog(): void {
+    this._brain.closeDialog();
+  }
+
+  public setEnableEscapeKey(enabled: boolean): void {
+    this._brain.setEnableEscapeKey(enabled);
+  }
+
+  public setShowCloseIcon(show: boolean): void {
+    this._brain.setShowCloseIcon(show);
+  }
 
   protected onCancel(): void {
     console.log('cancel button clicked');
-    this._dialogRef.close();
+    this.closeDialog();
   }
 
   protected onConfirm(): void {
     console.log('confirm button clicked');
-    this._dialogRef.close();
+    this.closeDialog();
   }
 }
 
 @Component({
   selector: 'story-example-story-dialog',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [DialogController, Button],
+  imports: [EXAMPLEDialog, Button],
   template: `
-    <org-button (click)="openDialog()">Open Dialog</org-button>
-    <org-dialog-controller
-      [dialogComponent]="EXAMPLEDialogComponent"
+    <story-example-dialog
+      #dialogComponent
       [position]="position()"
       [hasRoundedCorners]="hasRoundedCorners()"
       [enableCloseOnClickOutside]="enableCloseOnClickOutside()"
       [showCloseIcon]="showCloseIcon()"
       [enableEscapeKey]="enableEscapeKey()"
-      #dialogControllerComponent
     />
+    <org-button (click)="openDialog()">Open Dialog</org-button>
   `,
   host: {},
 })
 class EXAMPLEStoryDialog {
-  protected readonly EXAMPLEDialogComponent = EXAMPLEDialog;
-
   public position = input<DialogPosition>('center');
   public enableCloseOnClickOutside = input<boolean>(false);
   public hasRoundedCorners = input<boolean>(true);
   public showCloseIcon = input<boolean>(true);
   public enableEscapeKey = input<boolean>(true);
 
-  @ViewChild('dialogControllerComponent')
-  public readonly dialogControllerComponent!: DialogController<EXAMPLEDialog>;
+  @ViewChild('dialogComponent')
+  public readonly dialogComponent!: EXAMPLEDialog;
 
   protected openDialog(): void {
-    this.dialogControllerComponent.openDialog({
+    this.dialogComponent.openDialog({
       title: 'Example Dialog',
       message: 'This is a minimalistic example of Angular CDK Dialog.',
     });
@@ -100,27 +142,26 @@ const meta: Meta<EXAMPLEStoryDialog> = {
 <div class="docs-top-level-overview">
   ## Angular CDK Dialog Example
 
-  A minimalistic example demonstrating Angular CDK's Dialog functionality. This example shows how to create accessible modal dialogs with configurable positioning and backdrop.
+  A minimalistic example demonstrating Angular CDK's Dialog functionality. Consumers create a custom dialog component that applies the \`DialogBrainDirective\` as a \`hostDirective\`, exposes \`openDialog()\` / \`closeDialog()\` methods, and conditionally renders its modal content when \`DialogRef\` is injected (i.e. when the component is being rendered inside the cdk overlay).
 
   ### Features
   - Uses Angular CDK Dialog module for accessible modals
-  - Demonstrates dialog positioning (center, top, bottom)
+  - Configurable position, backdrop, rounded corners, escape-key behavior, and close-icon visibility
   - Backdrop click to close (disabled by default, can be enabled via enableCloseOnClickOutside input)
-  - Keyboard support (Escape to close, controlled via enableEscapeKey input and dialogRef.disableClose for processing states)
+  - Keyboard support (Escape to close, controlled via enableEscapeKey input)
   - Automatic focus management
   - Programmatic dialog opening and closing
 
   ### Usage Example
   \`\`\`html
-  <story-example-dialog position="center" />
+  <app-confirm-dialog #dlg position="center" (closed)="onClosed()" />
+  <org-button (clicked)="dlg.openDialog({ title, message })">Open</org-button>
   \`\`\`
 
   ### CDK Dialog Concepts
-  - **Dialog Service**: Programmatically opens dialogs using the inject pattern
-  - **Dialog Config**: Configure backdrop, position, close behavior
-  - **Dialog Reference**: Control and interact with opened dialogs
-  - **Component-based Content**: Pass components as dialog content
-  - **Data Passing**: Send data to dialog content via config
+  - **Brain Directive**: Wraps the cdk \`Dialog\` service, escape-key gating, and the close-icon state signals
+  - **Single Component**: The same component class plays both the trigger role (in the parent template) and the content role (rendered inside the cdk overlay)
+  - **Data Passing**: Send data to the dialog content via \`openDialog(data)\`
 </div>
         `,
       },
@@ -342,9 +383,10 @@ export const EnableEscapeKey: Story = {
 @Component({
   selector: 'story-example-story-dialog-with-closed-event',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [DialogController, Button],
+  imports: [EXAMPLEDialog, Button],
   template: `
     <div class="flex flex-col gap-4">
+      <story-example-dialog #dialogComponent position="center" (closed)="onDialogClosed()" />
       <org-button (click)="openDialog()">Open Dialog</org-button>
 
       @if (closeCount() > 0) {
@@ -353,26 +395,18 @@ export const EnableEscapeKey: Story = {
           <p class="text-xs text-text-subtle mt-1">Open and close the dialog to see the count increase</p>
         </div>
       }
-
-      <org-dialog-controller
-        [dialogComponent]="EXAMPLEDialogComponent"
-        position="center"
-        (closed)="onDialogClosed()"
-        #dialogControllerComponent
-      />
     </div>
   `,
   host: {},
 })
 class EXAMPLEStoryDialogWithClosedEvent {
-  protected readonly EXAMPLEDialogComponent = EXAMPLEDialog;
   protected readonly closeCount = signal(0);
 
-  @ViewChild('dialogControllerComponent')
-  public readonly dialogControllerComponent!: DialogController<EXAMPLEDialog>;
+  @ViewChild('dialogComponent')
+  public readonly dialogComponent!: EXAMPLEDialog;
 
   protected openDialog(): void {
-    this.dialogControllerComponent.openDialog({
+    this.dialogComponent.openDialog({
       title: 'Dialog with Closed Event',
       message: 'Close this dialog to see the closed event being triggered.',
     });
@@ -389,7 +423,7 @@ export const ClosedEvent: Story = {
     docs: {
       description: {
         story:
-          'Example demonstrating the closed output event. The dialog controller emits a closed event whenever the dialog is closed by any means (backdrop click, escape key, or programmatic close).',
+          'Example demonstrating the closed output event. The dialog component emits a closed event whenever the dialog is closed by any means (backdrop click, escape key, or programmatic close).',
       },
     },
   },
@@ -421,7 +455,7 @@ export const ClosedEvent: Story = {
 @Component({
   selector: 'story-example-story-dialog-with-backdrop-toggle',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [DialogController, Button, CheckboxToggle],
+  imports: [EXAMPLEDialog, Button, CheckboxToggle],
   template: `
     <div class="flex flex-col gap-4">
       <div class="flex items-center gap-2">
@@ -435,27 +469,24 @@ export const ClosedEvent: Story = {
         </org-checkbox-toggle>
       </div>
 
-      <org-button (click)="openDialog()">Open Dialog</org-button>
-
-      <org-dialog-controller
-        [dialogComponent]="EXAMPLEDialogComponent"
+      <story-example-dialog
+        #dialogComponent
         [position]="hasBackdrop() ? 'center' : 'right'"
         [hasBackdrop]="hasBackdrop()"
-        #dialogControllerComponent
       />
+      <org-button (click)="openDialog()">Open Dialog</org-button>
     </div>
   `,
   host: {},
 })
 class EXAMPLEStoryDialogWithBackdropToggle {
-  protected readonly EXAMPLEDialogComponent = EXAMPLEDialog;
   protected readonly hasBackdrop = signal(true);
 
-  @ViewChild('dialogControllerComponent')
-  public readonly dialogControllerComponent!: DialogController<EXAMPLEDialog>;
+  @ViewChild('dialogComponent')
+  public readonly dialogComponent!: EXAMPLEDialog;
 
   protected openDialog(): void {
-    this.dialogControllerComponent.openDialog({
+    this.dialogComponent.openDialog({
       title: 'Dialog with Backdrop Toggle',
       message: 'Try toggling the backdrop setting and opening the dialog to see the difference.',
     });
@@ -505,51 +536,89 @@ export const Backdrop: Story = {
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [Button, DialogHeader, DialogContent, DialogFooter, Dialog, CheckboxToggle],
   template: `
-    <org-dialog [hasRoundedCorners]="data.hasRoundedCorners">
-      <org-dialog-header [title]="data.title" />
-      <org-dialog-content>
-        <div class="flex flex-col gap-4">
-          <p>{{ data.message }}</p>
+    @if (isInDialog) {
+      <org-dialog [hasRoundedCorners]="data.hasRoundedCorners ?? true">
+        <org-dialog-header [title]="data.title" />
+        <org-dialog-content>
+          <div class="flex flex-col gap-4">
+            <p>{{ data.message }}</p>
 
-          <div class="p-4 bg-secondary-background-subtle rounded-lg">
-            <p class="text-sm font-medium mb-2">Close Icon Control</p>
-            <org-checkbox-toggle
-              name="showCloseIcon"
-              value="showCloseIcon"
-              [checked]="showCloseIcon()"
-              (checkedChange)="onShowCloseIconToggle($event)"
-            >
-              Show Close Icon
-            </org-checkbox-toggle>
-            <p class="text-xs text-text-subtle mt-2">
-              Toggle this checkbox to show or hide the close icon (X button) in the top-right corner of this dialog in
-              real-time.
-            </p>
+            <div class="p-4 bg-secondary-background-subtle rounded-lg">
+              <p class="text-sm font-medium mb-2">Close Icon Control</p>
+              <org-checkbox-toggle
+                name="showCloseIcon"
+                value="showCloseIcon"
+                [checked]="showCloseIcon()"
+                (checkedChange)="onShowCloseIconToggle($event)"
+              >
+                Show Close Icon
+              </org-checkbox-toggle>
+              <p class="text-xs text-text-subtle mt-2">
+                Toggle this checkbox to show or hide the close icon (X button) in the top-right corner of this dialog in
+                real-time.
+              </p>
+            </div>
           </div>
-        </div>
-      </org-dialog-content>
-      <org-dialog-footer>
-        <org-button color="neutral" (clicked)="onCancel()">Cancel</org-button>
-        <org-button color="primary" (clicked)="onConfirm()">Confirm</org-button>
-      </org-dialog-footer>
-    </org-dialog>
+        </org-dialog-content>
+        <org-dialog-footer>
+          <org-button color="neutral" (clicked)="onCancel()">Cancel</org-button>
+          <org-button color="primary" (clicked)="onConfirm()">Confirm</org-button>
+        </org-dialog-footer>
+      </org-dialog>
+    }
   `,
-  host: {},
+  hostDirectives: [
+    {
+      directive: DialogBrainDirective,
+      inputs: [
+        'dialogPosition: position',
+        'dialogHasRoundedCorners: hasRoundedCorners',
+        'dialogHasBackdrop: hasBackdrop',
+        'dialogEnableCloseOnClickOutside: enableCloseOnClickOutside',
+        'dialogEnableEscapeKey: enableEscapeKey',
+        'dialogShowCloseIcon: showCloseIcon',
+      ],
+      outputs: ['dialogClosed: closed'],
+    },
+  ],
 })
 class EXAMPLEDialogWithCloseIconToggle {
-  private readonly _dialogRef = inject(DialogRef<DialogContent>);
+  private readonly _selfBrain = inject(DialogBrainDirective, { self: true });
+  private readonly _triggerBrain = inject(DIALOG_TRIGGER_BRAIN, { optional: true });
+  private readonly _brain = this._triggerBrain ?? this._selfBrain;
 
-  protected readonly data = inject<EXAMPLEDialogData>(DIALOG_DATA);
+  private readonly _dialogRef = inject(DialogRef<EXAMPLEDialogWithCloseIconToggle>, { optional: true });
+
+  protected readonly data = inject<EXAMPLEDialogData>(DIALOG_DATA, { optional: true }) ?? {
+    title: '',
+    message: '',
+  };
+  protected readonly isInDialog = !!this._dialogRef;
   protected readonly showCloseIcon = signal(true);
+
+  public openDialog(data?: EXAMPLEDialogData) {
+    return this._brain.openDialog<EXAMPLEDialogWithCloseIconToggle>(
+      EXAMPLEDialogWithCloseIconToggle,
+      data as Record<string, unknown> | undefined
+    );
+  }
+
+  public closeDialog(): void {
+    this._brain.closeDialog();
+  }
+
+  public setShowCloseIcon(show: boolean): void {
+    this._brain.setShowCloseIcon(show);
+  }
 
   protected onCancel(): void {
     console.log('cancel button clicked');
-    this._dialogRef.close();
+    this.closeDialog();
   }
 
   protected onConfirm(): void {
     console.log('confirm button clicked');
-    this._dialogRef.close();
+    this.closeDialog();
   }
 
   protected onShowCloseIconToggle(value: boolean): void {
@@ -561,32 +630,25 @@ class EXAMPLEDialogWithCloseIconToggle {
 @Component({
   selector: 'story-example-story-dialog-with-close-icon',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [DialogController, Button],
+  imports: [EXAMPLEDialogWithCloseIconToggle, Button],
   template: `
     <div class="flex flex-col gap-4">
+      <story-example-dialog-with-close-icon-toggle #dialogComponent position="center" />
       <org-button (click)="openDialog()">Open Dialog</org-button>
-
-      <org-dialog-controller
-        [dialogComponent]="EXAMPLEDialogWithCloseIconToggleComponent"
-        position="center"
-        #dialogControllerComponent
-      />
     </div>
   `,
   host: {},
 })
 class EXAMPLEStoryDialogWithCloseIcon {
-  protected readonly EXAMPLEDialogWithCloseIconToggleComponent = EXAMPLEDialogWithCloseIconToggle;
-
-  @ViewChild('dialogControllerComponent')
-  public readonly dialogControllerComponent!: DialogController<EXAMPLEDialogWithCloseIconToggle>;
+  @ViewChild('dialogComponent')
+  public readonly dialogComponent!: EXAMPLEDialogWithCloseIconToggle;
 
   protected openDialog(): void {
-    this.dialogControllerComponent.openDialog({
+    this.dialogComponent.openDialog({
       title: 'Dialog with Close Icon',
       message: 'Use the toggle inside this dialog to show or hide the X button in real-time.',
       onShowCloseIconToggle: (show: boolean) => {
-        this.dialogControllerComponent.setShowCloseIcon(show);
+        this.dialogComponent.setShowCloseIcon(show);
       },
     });
   }
@@ -631,51 +693,89 @@ export const CloseIcon: Story = {
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [Button, DialogHeader, DialogContent, DialogFooter, Dialog, CheckboxToggle],
   template: `
-    <org-dialog [hasRoundedCorners]="data.hasRoundedCorners">
-      <org-dialog-header [title]="data.title" />
-      <org-dialog-content>
-        <div class="flex flex-col gap-4">
-          <p>{{ data.message }}</p>
+    @if (isInDialog) {
+      <org-dialog [hasRoundedCorners]="data.hasRoundedCorners ?? true">
+        <org-dialog-header [title]="data.title" />
+        <org-dialog-content>
+          <div class="flex flex-col gap-4">
+            <p>{{ data.message }}</p>
 
-          <div class="p-4 bg-secondary-background-subtle rounded-lg">
-            <p class="text-sm font-medium mb-2">Dynamic Close Control</p>
-            <org-checkbox-toggle
-              name="enableEscapeKey"
-              value="enableEscapeKey"
-              [checked]="enableEscapeKey()"
-              (checkedChange)="onEnableEscapeKeyToggle($event)"
-            >
-              Enable Escape Key & Close Icon
-            </org-checkbox-toggle>
-            <p class="text-xs text-text-subtle mt-2">
-              Toggle this checkbox to see the close icon (X button) become enabled/disabled in real-time. When disabled,
-              it appears with reduced opacity and doesn't respond to clicks.
-            </p>
+            <div class="p-4 bg-secondary-background-subtle rounded-lg">
+              <p class="text-sm font-medium mb-2">Dynamic Close Control</p>
+              <org-checkbox-toggle
+                name="enableEscapeKey"
+                value="enableEscapeKey"
+                [checked]="enableEscapeKey()"
+                (checkedChange)="onEnableEscapeKeyToggle($event)"
+              >
+                Enable Escape Key & Close Icon
+              </org-checkbox-toggle>
+              <p class="text-xs text-text-subtle mt-2">
+                Toggle this checkbox to see the close icon (X button) become enabled/disabled in real-time. When
+                disabled, it appears with reduced opacity and doesn't respond to clicks.
+              </p>
+            </div>
           </div>
-        </div>
-      </org-dialog-content>
-      <org-dialog-footer>
-        <org-button color="neutral" (clicked)="onCancel()">Cancel</org-button>
-        <org-button color="primary" (clicked)="onConfirm()">Confirm</org-button>
-      </org-dialog-footer>
-    </org-dialog>
+        </org-dialog-content>
+        <org-dialog-footer>
+          <org-button color="neutral" (clicked)="onCancel()">Cancel</org-button>
+          <org-button color="primary" (clicked)="onConfirm()">Confirm</org-button>
+        </org-dialog-footer>
+      </org-dialog>
+    }
   `,
-  host: {},
+  hostDirectives: [
+    {
+      directive: DialogBrainDirective,
+      inputs: [
+        'dialogPosition: position',
+        'dialogHasRoundedCorners: hasRoundedCorners',
+        'dialogHasBackdrop: hasBackdrop',
+        'dialogEnableCloseOnClickOutside: enableCloseOnClickOutside',
+        'dialogEnableEscapeKey: enableEscapeKey',
+        'dialogShowCloseIcon: showCloseIcon',
+      ],
+      outputs: ['dialogClosed: closed'],
+    },
+  ],
 })
 class EXAMPLEDialogWithEscapeToggle {
-  private readonly _dialogRef = inject(DialogRef<DialogContent>);
+  private readonly _selfBrain = inject(DialogBrainDirective, { self: true });
+  private readonly _triggerBrain = inject(DIALOG_TRIGGER_BRAIN, { optional: true });
+  private readonly _brain = this._triggerBrain ?? this._selfBrain;
 
-  protected readonly data = inject<EXAMPLEDialogData>(DIALOG_DATA);
+  private readonly _dialogRef = inject(DialogRef<EXAMPLEDialogWithEscapeToggle>, { optional: true });
+
+  protected readonly data = inject<EXAMPLEDialogData>(DIALOG_DATA, { optional: true }) ?? {
+    title: '',
+    message: '',
+  };
+  protected readonly isInDialog = !!this._dialogRef;
   protected readonly enableEscapeKey = signal(true);
+
+  public openDialog(data?: EXAMPLEDialogData) {
+    return this._brain.openDialog<EXAMPLEDialogWithEscapeToggle>(
+      EXAMPLEDialogWithEscapeToggle,
+      data as Record<string, unknown> | undefined
+    );
+  }
+
+  public closeDialog(): void {
+    this._brain.closeDialog();
+  }
+
+  public setEnableEscapeKey(enabled: boolean): void {
+    this._brain.setEnableEscapeKey(enabled);
+  }
 
   protected onCancel(): void {
     console.log('cancel button clicked');
-    this._dialogRef.close();
+    this.closeDialog();
   }
 
   protected onConfirm(): void {
     console.log('confirm button clicked');
-    this._dialogRef.close();
+    this.closeDialog();
   }
 
   protected onEnableEscapeKeyToggle(value: boolean): void {
@@ -687,32 +787,25 @@ class EXAMPLEDialogWithEscapeToggle {
 @Component({
   selector: 'story-example-story-dialog-dynamic-escape-key',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [DialogController, Button],
+  imports: [EXAMPLEDialogWithEscapeToggle, Button],
   template: `
     <div class="flex flex-col gap-4">
+      <story-example-dialog-with-escape-toggle #dialogComponent position="center" />
       <org-button (click)="openDialog()">Open Dialog</org-button>
-
-      <org-dialog-controller
-        [dialogComponent]="EXAMPLEDialogWithEscapeToggleComponent"
-        position="center"
-        #dialogControllerComponent
-      />
     </div>
   `,
   host: {},
 })
 class EXAMPLEStoryDialogDynamicEscapeKey {
-  protected readonly EXAMPLEDialogWithEscapeToggleComponent = EXAMPLEDialogWithEscapeToggle;
-
-  @ViewChild('dialogControllerComponent')
-  public readonly dialogControllerComponent!: DialogController<EXAMPLEDialogWithEscapeToggle>;
+  @ViewChild('dialogComponent')
+  public readonly dialogComponent!: EXAMPLEDialogWithEscapeToggle;
 
   protected openDialog(): void {
-    this.dialogControllerComponent.openDialog({
+    this.dialogComponent.openDialog({
       title: 'Dialog with Dynamic Close Control',
       message: 'Use the toggle inside this dialog to enable/disable the escape key and close icon.',
       onEscapeKeyToggle: (enabled: boolean) => {
-        this.dialogControllerComponent.setEnableEscapeKey(enabled);
+        this.dialogComponent.setEnableEscapeKey(enabled);
       },
     });
   }
@@ -757,7 +850,7 @@ export const DynamicCloseControl: Story = {
 @Component({
   selector: 'story-example-story-template-dialog',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [DialogController, Button, Dialog, DialogHeader, DialogContent, DialogFooter],
+  imports: [Button, Dialog, DialogHeader, DialogContent, DialogFooter],
   template: `
     <div class="flex flex-col gap-4">
       <org-button (click)="openDialog()">Open Dialog</org-button>
@@ -777,33 +870,36 @@ export const DynamicCloseControl: Story = {
           </org-dialog-footer>
         </org-dialog>
       </ng-template>
-
-      <org-dialog-controller [dialogTemplate]="dialogTemplateRef" position="center" #dialogControllerComponent />
     </div>
   `,
+  hostDirectives: [
+    {
+      directive: DialogBrainDirective,
+      inputs: ['dialogPosition: position'],
+    },
+  ],
   host: {},
 })
 class EXAMPLEStoryTemplateDialog {
+  private readonly _brain = inject(DialogBrainDirective, { self: true });
+
   @ViewChild('dialogTemplateRef')
   public readonly dialogTemplateRef!: TemplateRef<unknown>;
 
-  @ViewChild('dialogControllerComponent')
-  public readonly dialogControllerComponent!: DialogController<unknown>;
-
   protected openDialog(): void {
-    this.dialogControllerComponent.openDialog({
+    this._brain.openDialog(this.dialogTemplateRef, {
       message: 'Passed via template context from the parent component.',
     });
   }
 
   protected onCancel(): void {
     console.log('cancel button clicked');
-    this.dialogControllerComponent.closeDialog();
+    this._brain.closeDialog();
   }
 
   protected onConfirm(): void {
     console.log('confirm button clicked');
-    this.dialogControllerComponent.closeDialog();
+    this._brain.closeDialog();
   }
 }
 
@@ -823,14 +919,13 @@ export const TemplateBasedDialog: Story = {
         currentState="Demonstrating inline template content without a separate component"
       >
         <org-storybook-example-container-section label="Template Dialog">
-          <story-example-story-template-dialog />
+          <story-example-story-template-dialog position="center" />
         </org-storybook-example-container-section>
 
         <ul expected-behaviour class="flex flex-col gap-1 mt-1 list-inside list-disc">
           <li><strong>No Separate Component</strong>: Dialog content is defined inline in the parent template</li>
           <li><strong>Parent Scope Access</strong>: Template bindings call methods directly on the parent component</li>
           <li><strong>Template Context</strong>: Data passed to openDialog() is available via let-context in the template</li>
-          <li><strong>Close Icon</strong>: Shown by default — DIALOG_DATA signals are provided via a child injector automatically</li>
           <li><strong>Escape Key</strong>: Works the same as component-based dialogs</li>
         </ul>
       </org-storybook-example-container>

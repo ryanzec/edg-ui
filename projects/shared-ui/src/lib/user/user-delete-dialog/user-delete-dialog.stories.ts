@@ -3,13 +3,12 @@ import { UserDeleteDialog, type UserDeleteData } from './user-delete-dialog';
 import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
 import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
 import { Button } from '../../core/button/button';
-import { DialogController } from '../../core/dialog/dialog-controller';
 import { ChangeDetectionStrategy, Component, signal, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'story-user-delete-dialog-story',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [DialogController, Button],
+  imports: [UserDeleteDialog, Button],
   template: `
     <div class="flex flex-col gap-4">
       <org-button (click)="openDialog()">Open Delete Dialog</org-button>
@@ -21,26 +20,24 @@ import { ChangeDetectionStrategy, Component, signal, ViewChild } from '@angular/
         </div>
       }
 
-      <org-dialog-controller [dialogComponent]="UserDeleteDialogComponent" #dialogControllerComponent />
+      <org-user-delete-dialog #userDeleteDialog />
     </div>
   `,
   host: {},
 })
 export class UserDeleteDialogStory {
-  protected readonly UserDeleteDialogComponent = UserDeleteDialog;
   protected readonly lastAction = signal<string>('');
   protected readonly lastUser = signal<UserDeleteData | null>(null);
 
-  @ViewChild('dialogControllerComponent')
-  public readonly dialogControllerComponent!: DialogController<UserDeleteDialog>;
+  @ViewChild('userDeleteDialog')
+  public readonly userDeleteDialog!: UserDeleteDialog;
 
   protected openDialog(): void {
-    const dialogRef = this.dialogControllerComponent.openDialog({
+    const dialogRef = this.userDeleteDialog.openDialog({
       user: {
         id: '123',
         name: 'John Doe',
       },
-      dialogController: this.dialogControllerComponent,
     });
 
     if (!dialogRef) {
@@ -65,7 +62,7 @@ export class UserDeleteDialogStory {
 @Component({
   selector: 'story-user-delete-dialog-story-processing',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [DialogController, Button],
+  imports: [UserDeleteDialog, Button],
   template: `
     <div class="flex flex-col gap-4">
       <org-button (click)="openDialog()">Open Delete Dialog (Processing State)</org-button>
@@ -77,26 +74,24 @@ export class UserDeleteDialogStory {
         </div>
       }
 
-      <org-dialog-controller [dialogComponent]="UserDeleteDialogComponent" #dialogControllerComponent />
+      <org-user-delete-dialog #userDeleteDialog />
     </div>
   `,
   host: {},
 })
 export class UserDeleteDialogStoryProcessing {
-  protected readonly UserDeleteDialogComponent = UserDeleteDialog;
   protected readonly lastAction = signal<string>('');
   protected readonly lastUser = signal<UserDeleteData | null>(null);
 
-  @ViewChild('dialogControllerComponent')
-  public readonly dialogControllerComponent!: DialogController<UserDeleteDialog>;
+  @ViewChild('userDeleteDialog')
+  public readonly userDeleteDialog!: UserDeleteDialog;
 
   protected openDialog(): void {
-    const dialogRef = this.dialogControllerComponent.openDialog({
+    const dialogRef = this.userDeleteDialog.openDialog({
       user: {
         id: '456',
         name: 'Jane Smith',
       },
-      dialogController: this.dialogControllerComponent,
     });
 
     if (!dialogRef) {
@@ -140,7 +135,7 @@ const meta: Meta<UserDeleteDialog> = {
 <div class="docs-top-level-overview">
   ## User Delete Dialog
 
-  A confirmation dialog component for deleting users. This component follows the DIALOG_DATA pattern and provides a safe way to confirm user deletion with proper processing state management.
+  A confirmation dialog component for deleting users. The component applies \`DialogBrainDirective\` as a host directive and exposes \`openDialog()\` / \`closeDialog()\` directly — consumers render \`<org-user-delete-dialog>\` and call \`openDialog()\` on a \`@ViewChild\` reference, no separate dialog controller required.
 
   ### Features
   - Displays user name in confirmation message
@@ -152,9 +147,8 @@ const meta: Meta<UserDeleteDialog> = {
 
   ### Usage Example
   \`\`\`typescript
-  const dialogRef = this.dialogController.openDialog({
+  const dialogRef = this.userDeleteDialog.openDialog({
     user: { id: '123', name: 'John Doe' },
-    isProcessing: false,
   });
 
   dialogRef.componentInstance?.deleteConfirmed.subscribe((user) => {

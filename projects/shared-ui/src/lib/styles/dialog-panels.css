@@ -1,3 +1,8 @@
+/*
+ * panel-class styles for the dialog brain directive — applied to the cdk overlay panel which lives outside the
+ * component tree, so they must be defined globally rather than scoped to a component.
+ */
+
 @layer components {
   .dialog-panel-center {
     position: fixed !important;

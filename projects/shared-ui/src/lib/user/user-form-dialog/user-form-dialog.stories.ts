@@ -4,7 +4,6 @@ import { UserFormDialog } from './user-form-dialog';
 import { type User } from '@organization/shared-types';
 import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
 import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
-import { DialogController } from '../../core/dialog/dialog-controller';
 import { Button } from '../../core/button/button';
 import { type UserFormData } from '../user-form/user-form';
 
@@ -19,7 +18,7 @@ const meta: Meta<UserFormDialog> = {
 <div class="docs-top-level-overview">
   ## User Form Dialog Component
 
-  A dialog wrapper component for the UserForm that provides a consistent dialog interface for creating and editing users.
+  A dialog wrapper component for the UserForm that provides a consistent dialog interface for creating and editing users. The component applies \`DialogBrainDirective\` as a host directive, so consumers render \`<org-user-form-dialog>\` directly in their template and call \`openDialog()\` on a \`@ViewChild\` reference — no separate dialog controller is needed.
 
   ### Features
   - Wraps the UserForm component in a Dialog container
@@ -36,33 +35,21 @@ const meta: Meta<UserFormDialog> = {
 
   ### Usage Examples
   \`\`\`typescript
-  // In your component
-  import { DialogController } from '@organization/shared-ui/core/dialog/dialog-controller';
-  import { UserFormDialog, UserFormDialogData } from '@organization/shared-ui/user/user-form-dialog';
+  import { UserFormDialog } from '@organization/shared-ui';
 
   @Component({
     template: \`
       <org-button (click)="openUserDialog()">Create User</org-button>
-      <org-dialog-controller
-        [dialogComponent]="UserFormDialogComponent"
-        #dialogController
-      />
+      <org-user-form-dialog #userFormDialog position="right" />
     \`,
-    imports: [Button, DialogController]
+    imports: [Button, UserFormDialog]
   })
   export class MyComponent {
-    protected readonly UserFormDialogComponent = UserFormDialog;
-
-    @ViewChild('dialogController')
-    dialogController!: DialogController<UserFormDialog>;
-
-    private _dialogData: UserFormDialogData = {
-      existingUser: null,
-      hasRoundedCorners: true,
-    };
+    @ViewChild('userFormDialog')
+    public userFormDialog!: UserFormDialog;
 
     openUserDialog() {
-      this.dialogController.openDialog(this._dialogData);
+      this.userFormDialog.openDialog({ existingUser: null });
     }
   }
   \`\`\`
@@ -76,19 +63,20 @@ const meta: Meta<UserFormDialog> = {
   \`\`\`
 
   ### Public Methods
-  - **setProcessing(isProcessing: boolean)**: Sets the processing state of the dialog form
+  - **openDialog(data)**: Opens the dialog with the supplied data, returns the cdk \`DialogRef\`
+  - **closeDialog()**: Programmatically closes the open dialog
+  - **setProcessing(isProcessing: boolean)**: Sets the processing state of the dialog form (also gates the escape key)
 
   ### Events
   - **formSubmitted**: Emitted when the form is successfully submitted (emits \`UserFormData\`)
+  - **closed**: Emitted whenever the dialog is closed by any means
 
   ### Notes
   - The dialog does not automatically close on form submission - parent component is responsible for closing
   - Use setProcessing(true) when making API calls to prevent duplicate submissions
   - When processing, both escape key and backdrop clicks are disabled to prevent accidental closure
   - Click outside dialog is disabled by default to prevent accidental closure
-  - No close button in header - users must submit the form or use ESC key (when not processing)
 </div>
-\`\`\`
         `,
       },
     },
@@ -194,21 +182,18 @@ export const ProcessingStateManagement: Story = {
   selector: 'story-user-form-dialog-default-story',
   template: `
     <org-button (click)="openDialog()">Open Create User Dialog</org-button>
-    <org-dialog-controller [dialogComponent]="UserFormDialogComponent" #dialogController />
+    <org-user-form-dialog #userFormDialog />
   `,
-  imports: [Button, DialogController],
+  imports: [Button, UserFormDialog],
 })
 class UserFormDialogDefaultStory {
-  protected readonly UserFormDialogComponent = UserFormDialog;
-
-  @ViewChild('dialogController')
-  public dialogController!: DialogController<UserFormDialog>;
+  @ViewChild('userFormDialog')
+  public userFormDialog!: UserFormDialog;
 
   protected openDialog(): void {
-    this.dialogController.openDialog({
+    this.userFormDialog.openDialog({
       existingUser: null,
       hasRoundedCorners: true,
-      dialogController: this.dialogController,
     });
   }
 }
@@ -217,21 +202,18 @@ class UserFormDialogDefaultStory {
   selector: 'story-user-form-dialog-create-story',
   template: `
     <org-button (click)="openDialog()">Open Create User Dialog</org-button>
-    <org-dialog-controller [dialogComponent]="UserFormDialogComponent" #dialogController />
+    <org-user-form-dialog #userFormDialog />
   `,
-  imports: [Button, DialogController],
+  imports: [Button, UserFormDialog],
 })
 class UserFormDialogCreateStory {
-  protected readonly UserFormDialogComponent = UserFormDialog;
-
-  @ViewChild('dialogController')
-  public dialogController!: DialogController<UserFormDialog>;
+  @ViewChild('userFormDialog')
+  public userFormDialog!: UserFormDialog;
 
   protected openDialog(): void {
-    this.dialogController.openDialog({
+    this.userFormDialog.openDialog({
       existingUser: null,
       hasRoundedCorners: true,
-      dialogController: this.dialogController,
     });
   }
 }
@@ -240,15 +222,13 @@ class UserFormDialogCreateStory {
   selector: 'story-user-form-dialog-edit-story',
   template: `
     <org-button (click)="openDialog()">Open Edit User Dialog</org-button>
-    <org-dialog-controller [dialogComponent]="UserFormDialogComponent" #dialogController />
+    <org-user-form-dialog #userFormDialog />
   `,
-  imports: [Button, DialogController],
+  imports: [Button, UserFormDialog],
 })
 class UserFormDialogEditStory {
-  protected readonly UserFormDialogComponent = UserFormDialog;
-
-  @ViewChild('dialogController')
-  public dialogController!: DialogController<UserFormDialog>;
+  @ViewChild('userFormDialog')
+  public userFormDialog!: UserFormDialog;
 
   protected existingUser: User = {
     id: 'user-123',
@@ -264,10 +244,9 @@ class UserFormDialogEditStory {
   };
 
   protected openDialog(): void {
-    this.dialogController.openDialog({
+    this.userFormDialog.openDialog({
       existingUser: this.existingUser,
       hasRoundedCorners: true,
-      dialogController: this.dialogController,
     });
   }
 }
@@ -295,16 +274,14 @@ class UserFormDialogEditStory {
         </div>
       </div>
 
-      <org-dialog-controller [dialogComponent]="UserFormDialogComponent" #dialogController />
+      <org-user-form-dialog #userFormDialog />
     </div>
   `,
-  imports: [Button, DialogController],
+  imports: [Button, UserFormDialog],
 })
 class UserFormDialogInteractiveStory {
-  protected readonly UserFormDialogComponent = UserFormDialog;
-
-  @ViewChild('dialogController')
-  public dialogController!: DialogController<UserFormDialog>;
+  @ViewChild('userFormDialog')
+  public userFormDialog!: UserFormDialog;
 
   protected existingUser: User = {
     id: 'user-456',
@@ -320,18 +297,16 @@ class UserFormDialogInteractiveStory {
   };
 
   protected openCreateDialog(): void {
-    this.dialogController.openDialog({
+    this.userFormDialog.openDialog({
       existingUser: null,
       hasRoundedCorners: true,
-      dialogController: this.dialogController,
     });
   }
 
   protected openEditDialog(): void {
-    this.dialogController.openDialog({
+    this.userFormDialog.openDialog({
       existingUser: this.existingUser,
       hasRoundedCorners: true,
-      dialogController: this.dialogController,
     });
   }
 }
@@ -381,20 +356,14 @@ class UserFormDialogInteractiveStory {
         </div>
       </div>
 
-      <org-dialog-controller
-        [dialogComponent]="UserFormDialogComponent"
-        (closed)="onDialogClosed()"
-        #dialogController
-      />
+      <org-user-form-dialog #userFormDialog (closed)="onDialogClosed()" />
     </div>
   `,
-  imports: [Button, DialogController],
+  imports: [Button, UserFormDialog],
 })
 class UserFormDialogProcessingStateStory {
-  protected readonly UserFormDialogComponent = UserFormDialog;
-
-  @ViewChild('dialogController')
-  public dialogController!: DialogController<UserFormDialog>;
+  @ViewChild('userFormDialog')
+  public userFormDialog!: UserFormDialog;
 
   protected isProcessing = signal<boolean>(false);
   protected events = signal<
@@ -410,10 +379,9 @@ class UserFormDialogProcessingStateStory {
   >([]);
 
   protected openDialog(): void {
-    const dialogRef = this.dialogController.openDialog({
+    const dialogRef = this.userFormDialog.openDialog({
       existingUser: null,
       hasRoundedCorners: true,
-      dialogController: this.dialogController,
     });
 
     if (!dialogRef || !dialogRef.componentInstance) {
@@ -468,7 +436,7 @@ class UserFormDialogProcessingStateStory {
 
       this.isProcessing.set(false);
       componentInstance.setProcessing(false);
-      this.dialogController.closeDialog();
+      this.userFormDialog.closeDialog();
     }, 2000);
   }
 }

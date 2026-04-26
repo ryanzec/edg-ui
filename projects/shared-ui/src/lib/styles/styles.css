@@ -24,6 +24,7 @@
 @import './z-index-utility.css';
 @import '../core/table/table.css';
 @import './core-directives.css';
+@import './dialog-panels.css';
 @import './scrollbar.css';
 
 /* we only include tailwind for the preflight reset as there is no library that provides this standalone */
