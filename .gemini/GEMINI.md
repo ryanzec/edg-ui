@@ -6,7 +6,7 @@ You are an expert Principal Frontend Software Engineer specializing in the moder
 - **ALWAYS** ignore any other rule if there is a comment above the line in violation with a reason why there is a violation.
 
 # The "Ask First" Protocol
-- **ALWAYS** present questions to confirm the path forward before fully planning if you have any doubts or see potential improvements, repeat this process until there are no outstanding questions, exclusions to this are:
+- **ALWAYS** present questions to confirm the path forward before fully planning if you have any doubts or see potential improvements, or need **CLARITY** and repeat this process until there are no outstanding questions.
 - **NEVER** asks question if they:
   - Breaks a rule (**UNLESS** there is a **REALLY** good reason and if so, you **MUST** provide the reasoning). 
 - **ALWAYS** create a detailed plan checklist for the generation of the suggestions.
@@ -302,6 +302,7 @@ export class MyView implements AfterViewInit {
 ```
 - **ALWAYS** inject the component intp a sub component when it needs to access property of the parent component.
 - **ALWAYS** use `computed()` is the reference data is a signal.
+- **NEVER** allow `null` as a true value for an input(), instead, **ALWAYS** allow it as a input transform value and transform it to `undefined`.
 
 <!-- rules: angular/data-stores.md -->
 # IMPORTANT: These rules override general typescript / angular rules
@@ -335,6 +336,8 @@ export class FormDisabledDirective {
   // ...
 }
 ```
+- **NEVER** allow `null` as a true value for an input(), instead, **ALWAYS** allow it as a input transform value and transform it to `undefined`.
+-
 
 <!-- rules: angular/general.md -->
 # IMPORTANT: These rules override general typescript rules
@@ -579,6 +582,8 @@ Utility css classes **MUST** be used for all other styles:
 - **NEVER** use ring / outline styles other than to remove it.
 - **NEVER** use a default values when using `var(...)`.
 - **ALWAYS** make css class name as short as needed but still descripitive since Angular handle encapulation to avoid naming conflict so `header` instead of `integration-card-configured-header`.
+- **ALWAYS** make sure to update the `.moon/scripts/build-typescript-design-token.cjs` script when modifies css variables in `projects/shared-ui/src/lib/styles/variables`.
+- **ALWAYS** make sure to run `moon :build-design-tokens` when css variables in `projects/shared-ui/src/lib/styles/variables` are modified in any way (added / removed / changed).
 
 <!-- rules: testing/unit.md -->
 # IMPORTANT: These rules override general typescript / angular rules
@@ -680,12 +685,18 @@ const logUser = (user: Pick<User, 'name'>) => {
 - **ALWAYS** prefer positive name variables / fields / method / etc. to avoid double negative confusion.
 - If something can not be `null` / `undefined` based on typescript typing, falsey checks are ok **ONLY** if they include a comment above the check indicating it is just a defensive check.
 - **ALWAYS** have a comment in an empty method that is designed to be overriden or set outside of the class to avoid confusion on why there is an empty method + prevent eslint errors
+- **AWLAYS** use the `projects/shared-ui/src/lib/styles/design-tokens.ts` when you need to access css design tokens in typescript code.
 
 <!-- rules: use-cases/needing-multiple-ng-content-element.md -->
 # Needing Mutliple `<ng-content />` Elements
 Since Angular templates can only have one `<ng-content />`, when a pattern comes up where multiple there are multiple locations where we want to have `<ng-content />`, we need to use the built-in `NgTemplateOutlet` feature that puts the `<ng-content />` in a `<ng-template />` and then that template can be reference with `<ng-container />` multiple times.
 
 See `projects/shared-ui/src/lib/core/list` list item for a **PATTERN** refernce of this use case.
+
+<!-- rules: ux/usaved-changed.md -->
+# Unsaved Changes Patterns
+- **ALWAYS** implement the interface from `projects/shared-ui/src/lib/core/unsaved-changes-guard`.
+- **ALWAYS** add code to the component implementation this functionality to have guards when the tab is closed or page is refreshed.
 
 <!-- rules: ux.md -->
 # UX Patterns

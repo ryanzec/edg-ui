@@ -111,3 +111,4 @@ export class MyView implements AfterViewInit {
 ```
 - **ALWAYS** inject the component intp a sub component when it needs to access property of the parent component.
 - **ALWAYS** use `computed()` is the reference data is a signal.
+- **NEVER** allow `null` as a true value for an input(), instead, **ALWAYS** allow it as a input transform value and transform it to `undefined`.

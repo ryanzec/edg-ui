@@ -29,12 +29,12 @@
   }
 
   .trigger-button:not(:disabled):hover {
-    background-color: var(--color-neutral-background-hover-subtle);
+    background-color: var(--color-neutral-background-subtle-hover);
     border-color: var(--color-border);
   }
 
   .trigger-button:not(:disabled):focus-visible {
-    background-color: var(--color-neutral-background-hover-subtle);
+    background-color: var(--color-neutral-background-subtle-hover);
     border-color: var(--color-border);
   }
 

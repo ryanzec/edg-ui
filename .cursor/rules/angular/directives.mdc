@@ -27,3 +27,5 @@ export class FormDisabledDirective {
   // ...
 }
 ```
+- **NEVER** allow `null` as a true value for an input(), instead, **ALWAYS** allow it as a input transform value and transform it to `undefined`.
+-

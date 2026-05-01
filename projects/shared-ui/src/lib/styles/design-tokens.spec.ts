@@ -14,7 +14,7 @@ describe('designTokenUtils', () => {
       });
 
       it('resolves a chain of var() references', () => {
-        expect(designTokenUtils.getColorToken('validation.error.text')).toBe('oklch(57.7% 0.245 27.325)');
+        expect(designTokenUtils.getColorToken('text.selected')).toBe('oklch(60% 0.118 184.704)');
       });
 
       it('returns the light value when theme is explicitly "light"', () => {
@@ -93,7 +93,7 @@ describe('designTokenUtils', () => {
     });
 
     describe('opacity tokens', () => {
-      it('returns the disabled opacity value (last definition wins)', () => {
+      it('returns the disabled opacity value', () => {
         expect(designTokenUtils.getToken('opacity.disabled')).toBe('0.4');
       });
     });

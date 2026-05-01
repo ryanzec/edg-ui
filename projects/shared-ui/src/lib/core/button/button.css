@@ -10,7 +10,7 @@
     gap: var(--spacing-1);
     padding: var(--spacing-1) var(--spacing-2);
     border: var(--border-width) solid transparent;
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-sm);
     font-size: var(--text-sm);
     line-height: 1;
     letter-spacing: var(--text-sm--letter-spacing);

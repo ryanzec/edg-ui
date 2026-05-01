@@ -55,10 +55,10 @@
   }
 
   .checklist-item-button:hover {
-    background-color: var(--color-neutral-background-hover-subtle);
+    background-color: var(--color-neutral-background-subtle-hover);
   }
 
   .checklist-item-button:focus-visible {
-    background-color: var(--color-neutral-background-hover-subtle);
+    background-color: var(--color-neutral-background-subtle-hover);
   }
 }

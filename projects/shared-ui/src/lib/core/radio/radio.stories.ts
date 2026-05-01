@@ -513,7 +513,7 @@ export const MultipleGroups: Story = {
 
       <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
         <li>Validation message appears below the radio group when provided</li>
-        <li>Message uses <strong>text-validation-error-text</strong> color (danger/red)</li>
+        <li>Message uses <strong>text-danger-text</strong> color (danger/red)</li>
         <li>Message is visible only when validationMessage input is provided</li>
         <li>Proper ARIA attributes for accessibility (aria-invalid, aria-describedby)</li>
         <li>Message uses role="alert" and aria-live="polite" for screen readers</li>

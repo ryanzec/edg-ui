@@ -36,7 +36,7 @@
   }
 
   :host([data-clickable]:not([data-selected])) .list-item-content:is(:hover, :focus-visible) {
-    background-color: var(--color-neutral-background-hover-subtle);
+    background-color: var(--color-neutral-background-subtle-hover);
   }
 
   :host([data-selected]) .list-item-content {
