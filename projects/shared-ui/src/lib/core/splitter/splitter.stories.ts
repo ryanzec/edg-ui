@@ -1,6 +1,7 @@
 import { Component, ChangeDetectionStrategy, signal, computed } from '@angular/core';
 import type { Meta, StoryObj } from '@storybook/angular';
 import { Splitter, type SplitterCollapsedSide } from './splitter';
+import { Button } from '../button/button';
 import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
 import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
 
@@ -285,6 +286,73 @@ class SplitterCollapsedSideStory {
   }
 }
 
+@Component({
+  selector: 'story-splitter-programmatic-resize',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [Splitter, Button, StorybookExampleContainer, StorybookExampleContainerSection],
+  styles: [
+    `
+      .splitter-demo {
+        width: 31.25rem; /* 500px */
+        height: 31.25rem; /* 500px */
+      }
+    `,
+  ],
+  template: `
+    <org-storybook-example-container
+      title="Programmatic Resize"
+      currentState="Click the button to swap the current section sizes"
+    >
+      <org-storybook-example-container-section label="Horizontal">
+        <div class="splitter-demo">
+          <org-splitter direction="horizontal" [size]="size()" (sizeChanged)="onSizeChanged($event)">
+            <ng-template #section><div class="bg-safe-subtle w-full h-full"></div></ng-template>
+            <ng-template #section><div class="bg-danger-subtle w-full h-full"></div></ng-template>
+          </org-splitter>
+        </div>
+      </org-storybook-example-container-section>
+
+      <org-storybook-example-container-section label="Vertical">
+        <div class="splitter-demo">
+          <org-splitter direction="vertical" [size]="size()" (sizeChanged)="onSizeChanged($event)">
+            <ng-template #section><div class="bg-safe-subtle w-full h-full"></div></ng-template>
+            <ng-template #section><div class="bg-danger-subtle w-full h-full"></div></ng-template>
+          </org-splitter>
+        </div>
+      </org-storybook-example-container-section>
+
+      <div class="flex gap-2 items-center mt-2">
+        <org-button (clicked)="flip()">Flip Sizes</org-button>
+        <span>Current sizes: [{{ size()[0] }}, {{ size()[1] }}]</span>
+      </div>
+
+      <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+        <li>starts with first section at 20% and second section at 80%</li>
+        <li>clicking <strong>Flip Sizes</strong> reverses the current values regardless of what they are</li>
+        <li>both horizontal and vertical splitters update together since they share the same input</li>
+        <li>the swap animates smoothly over 200ms; dragging the divider remains instant</li>
+        <li>
+          dragging either divider updates the shared <code>size</code> via <code>sizeChanged</code>, so the button keeps
+          working after a drag
+        </li>
+      </ul>
+    </org-storybook-example-container>
+  `,
+})
+class SplitterProgrammaticResizeStory {
+  private readonly _size = signal<number[]>([20, 80]);
+
+  protected readonly size = this._size.asReadonly();
+
+  protected flip(): void {
+    this._size.update((current) => [current[1], current[0]]);
+  }
+
+  protected onSizeChanged(value: number[]): void {
+    this._size.set(value);
+  }
+}
+
 const meta: Meta<Splitter> = {
   title: 'Core/Components/Splitter',
   component: Splitter,
@@ -324,9 +392,15 @@ const meta: Meta<Splitter> = {
   ### Inputs
   - **direction** (required): \`"horizontal"\` or \`"vertical"\`
   - **minimumSize**: pixel minimum per section; single value applies to both, two values apply individually
-  - **defaultSize**: percentage default for first section; single value sets first with remainder for second
+  - **size**: percentage size as a tuple; single value sets first with remainder for second; updated by drag and keyboard interactions
   - **isEnabled**: when false, divider is a static 1px border; when true, 2px with hover effect
   - **collapsedSide**: \`null\`, \`"first"\`, or \`"second"\`; collapses one section and disables resizing
+  - **animateResize**: when true (default), section size changes (programmatic resize and collapse / expand) animate over 200ms; dragging stays instant; respects \`prefers-reduced-motion\`
+
+  ### Outputs
+  - **sizeChanged**: emitted whenever the size changes (drag, keyboard, or programmatic) with the new \`[first, second]\` tuple
+  - **dragStarted**: emitted when a drag interaction begins on the divider
+  - **dragCompleted**: emitted when a drag interaction ends on the divider, including pointer cancel
 </div>
         `,
       },
@@ -341,9 +415,10 @@ export const Default: Story = {
   args: {
     direction: 'horizontal',
     minimumSize: [0],
-    defaultSize: [50],
+    size: [50],
     isEnabled: true,
     collapsedSide: null,
+    animateResize: true,
   },
   argTypes: {
     direction: {
@@ -355,9 +430,10 @@ export const Default: Story = {
       control: 'object',
       description: 'minimum size in pixels per section; single value applies to both sides',
     },
-    defaultSize: {
+    size: {
       control: 'object',
-      description: 'initial size as a percentage for each section; single value sets first with remainder for second',
+      description:
+        'size as a percentage for each section; single value sets first with remainder for second; updated by drag and keyboard',
     },
     isEnabled: {
       control: 'boolean',
@@ -367,6 +443,10 @@ export const Default: Story = {
       control: 'select',
       options: [null, 'first', 'second'],
       description: 'which section is collapsed; null means neither section is collapsed',
+    },
+    animateResize: {
+      control: 'boolean',
+      description: 'whether section size changes animate; dragging is never animated; respects prefers-reduced-motion',
     },
   },
   parameters: {
@@ -383,9 +463,10 @@ export const Default: Story = {
         <org-splitter
           [direction]="direction"
           [minimumSize]="minimumSize"
-          [defaultSize]="defaultSize"
+          [size]="size"
           [isEnabled]="isEnabled"
           [collapsedSide]="collapsedSide"
+          [animateResize]="animateResize"
         >
           <ng-template #section><div class="bg-safe-subtle w-full h-full"></div></ng-template>
           <ng-template #section><div class="bg-danger-subtle w-full h-full"></div></ng-template>
@@ -461,6 +542,23 @@ export const CollapsedSide: Story = {
     template: '<story-splitter-collapsed-side />',
     moduleMetadata: {
       imports: [SplitterCollapsedSideStory],
+    },
+  }),
+};
+
+export const ProgrammaticResize: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Demonstrates programmatically swapping the section sizes. Starts at [20, 80]; clicking the button reverses the current values, regardless of what they are.',
+      },
+    },
+  },
+  render: () => ({
+    template: '<story-splitter-programmatic-resize />',
+    moduleMetadata: {
+      imports: [SplitterProgrammaticResizeStory],
     },
   }),
 };

@@ -40,6 +40,23 @@
     flex-shrink: 0;
   }
 
+  /* animate section size changes; second-section follows automatically via flex: 1 */
+  :host([data-animate-resize]) .first-section {
+    transition: flex-basis 200ms ease-in-out;
+  }
+
+  /* dragging must remain instant for responsive feedback; source order beats specificity tie */
+  :host([data-dragging]) .first-section {
+    transition: none;
+  }
+
+  /* respect user motion preferences */
+  @media (prefers-reduced-motion: reduce) {
+    :host .first-section {
+      transition: none;
+    }
+  }
+
   .second-section {
     flex: 1;
   }

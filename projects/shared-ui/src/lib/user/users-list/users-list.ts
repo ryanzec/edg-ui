@@ -40,6 +40,7 @@ import { type SelectionValue } from '../../brain/drop-down-selector-brain/drop-d
 import { SortingStore } from '../../core/sorting-store/sorting-store';
 import { SortableDirective } from '../../core/sortable-directive/sortable-directive';
 import { TextDirective } from '../../core/text-directive/text-directive';
+import { TypedContextDirective } from '../../core/typed-context-directive/typed-context-directive';
 import { Pagination } from '../../core/pagination/pagination';
 import { PaginationStore } from '../../core/pagination-store/pagination-store';
 import { DataSelectionStore } from '../../core/data-selection-store/data-selection-store';
@@ -114,6 +115,7 @@ const ROW_ACTIONS_MENU_POSITION = [
     ReactiveFormsModule,
     SortableDirective,
     TextDirective,
+    TypedContextDirective,
     Pagination,
   ],
   providers: [SortingStore, PaginationStore],
@@ -303,10 +305,6 @@ export class UsersList implements AfterViewInit {
 
   protected getRoleColor(role: UserRoleName): TagColor {
     return ROLE_TAG_COLORS[role];
-  }
-
-  protected asUser(tempUser: unknown): User {
-    return tempUser as User;
   }
 
   protected onRowActionMenuItemClick(menuItem: OverlayMenuItem, user: User): void {

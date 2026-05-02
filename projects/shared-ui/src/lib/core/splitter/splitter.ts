@@ -12,9 +12,9 @@ import { NgTemplateOutlet } from '@angular/common';
 import { angularUtils, logManager } from '@organization/shared-utils';
 import {
   SPLITTER_COLLAPSED_SIDE_DEFAULT as BRAIN_SPLITTER_COLLAPSED_SIDE_DEFAULT,
-  SPLITTER_DEFAULT_SIZE_DEFAULT as BRAIN_SPLITTER_DEFAULT_SIZE_DEFAULT,
   SPLITTER_IS_ENABLED_DEFAULT as BRAIN_SPLITTER_IS_ENABLED_DEFAULT,
   SPLITTER_MINIMUM_SIZE_DEFAULT as BRAIN_SPLITTER_MINIMUM_SIZE_DEFAULT,
+  SPLITTER_SIZE_DEFAULT as BRAIN_SPLITTER_SIZE_DEFAULT,
   SplitterBrainDirective,
   type SplitterCollapsedSide as BrainSplitterCollapsedSide,
   type SplitterDirection as BrainSplitterDirection,
@@ -35,14 +35,17 @@ export type SplitterCollapsedSide = BrainSplitterCollapsedSide;
 /** the default minimum size in pixels for each section */
 export const SPLITTER_MINIMUM_SIZE_DEFAULT: number[] = BRAIN_SPLITTER_MINIMUM_SIZE_DEFAULT;
 
-/** the default initial size as a percentage for the first section */
-export const SPLITTER_DEFAULT_SIZE_DEFAULT: number[] = BRAIN_SPLITTER_DEFAULT_SIZE_DEFAULT;
+/** the default size as a percentage for each section */
+export const SPLITTER_SIZE_DEFAULT: number[] = BRAIN_SPLITTER_SIZE_DEFAULT;
 
 /** the default enabled state of the splitter divider */
 export const SPLITTER_IS_ENABLED_DEFAULT = BRAIN_SPLITTER_IS_ENABLED_DEFAULT;
 
 /** the default collapsed side of the splitter */
 export const SPLITTER_COLLAPSED_SIDE_DEFAULT: SplitterCollapsedSide | undefined = BRAIN_SPLITTER_COLLAPSED_SIDE_DEFAULT;
+
+/** the default animate-resize state of the splitter */
+export const SPLITTER_ANIMATE_RESIZE_DEFAULT = true;
 
 @Component({
   selector: 'org-splitter',
@@ -56,9 +59,14 @@ export const SPLITTER_COLLAPSED_SIDE_DEFAULT: SplitterCollapsedSide | undefined 
       inputs: [
         'splitterDirection: direction',
         'splitterMinimumSize: minimumSize',
-        'splitterDefaultSize: defaultSize',
+        'splitterSize: size',
         'splitterIsEnabled: isEnabled',
         'splitterCollapsedSide: collapsedSide',
+      ],
+      outputs: [
+        'splitterSizeChange: sizeChanged',
+        'splitterDragStarted: dragStarted',
+        'splitterDragCompleted: dragCompleted',
       ],
     },
   ],
@@ -67,6 +75,7 @@ export const SPLITTER_COLLAPSED_SIDE_DEFAULT: SplitterCollapsedSide | undefined 
     '[attr.data-enabled]': 'isEnabled() ? "" : null',
     '[attr.data-collapsed-side]': 'collapsedSide()',
     '[attr.data-dragging]': 'brain.isDragging() ? "" : null',
+    '[attr.data-animate-resize]': 'animateResize() ? "" : null',
   },
 })
 export class Splitter {
@@ -81,8 +90,8 @@ export class Splitter {
   /** the minimum size in pixels for each section; single value applies to both sides */
   public readonly minimumSize = input<number[]>(SPLITTER_MINIMUM_SIZE_DEFAULT);
 
-  /** the initial size as a percentage for the first section; single value sets first with remainder for second */
-  public readonly defaultSize = input<number[]>(SPLITTER_DEFAULT_SIZE_DEFAULT);
+  /** the size as a percentage for each section; single value sets first with remainder for second; updated by drag and keyboard */
+  public readonly size = input<number[]>(SPLITTER_SIZE_DEFAULT);
 
   /** whether the divider is interactive and draggable */
   public readonly isEnabled = input<boolean>(SPLITTER_IS_ENABLED_DEFAULT);
@@ -92,6 +101,9 @@ export class Splitter {
     SPLITTER_COLLAPSED_SIDE_DEFAULT,
     { transform: angularUtils.transformNullToUndefined }
   );
+
+  /** whether section size changes are animated; dragging is never animated regardless */
+  public readonly animateResize = input<boolean>(SPLITTER_ANIMATE_RESIZE_DEFAULT);
 
   /** the first section template ref from projected ng-template #section */
   protected readonly firstSectionTemplate = computed<TemplateRef<unknown> | null>(() => {

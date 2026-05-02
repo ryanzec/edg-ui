@@ -12,6 +12,7 @@ import { PaginationStore } from '../pagination-store/pagination-store';
 import { DataSelectionStore } from '../data-selection-store/data-selection-store';
 import { Button } from '../button/button';
 import { ButtonIcon } from '../button/button-icon';
+import { TypedContextDirective } from '../typed-context-directive/typed-context-directive';
 
 type User = {
   id: string;
@@ -77,7 +78,7 @@ const SAMPLE_USERS: User[] = [
 @Component({
   selector: 'story-basic-table-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Table, TableHeader, TableCell],
+  imports: [Table, TableHeader, TableCell, TypedContextDirective],
   template: `
     <org-table [data]="users" [style.maxHeight]="'400px'">
       <ng-template #header>
@@ -86,8 +87,7 @@ const SAMPLE_USERS: User[] = [
         <org-table-th>Organization ID</org-table-th>
         <org-table-th>Roles</org-table-th>
       </ng-template>
-      <ng-template #body let-tempUser>
-        @let user = asUser(tempUser);
+      <ng-template [orgTypedContext]="users" #body let-user>
         <org-table-td>{{ user.name }}</org-table-td>
         <org-table-td>{{ user.email }}</org-table-td>
         <org-table-td>{{ user.organizationId }}</org-table-td>
@@ -98,16 +98,12 @@ const SAMPLE_USERS: User[] = [
 })
 class BasicTableDemo {
   protected readonly users = SAMPLE_USERS.slice(0, 10);
-
-  protected asUser(value: unknown): User {
-    return value as User;
-  }
 }
 
 @Component({
   selector: 'story-sortable-table-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Table, TableHeader, TableCell, SortableDirective],
+  imports: [Table, TableHeader, TableCell, SortableDirective, TypedContextDirective],
   providers: [SortingStore],
   template: `
     <div class="flex flex-col gap-4">
@@ -130,8 +126,7 @@ class BasicTableDemo {
           </org-table-th>
           <org-table-th>Roles</org-table-th>
         </ng-template>
-        <ng-template #body let-tempUser>
-          @let user = asUser(tempUser);
+        <ng-template [orgTypedContext]="sortedUsers()" #body let-user>
           <org-table-td>{{ user.name }}</org-table-td>
           <org-table-td>{{ user.email }}</org-table-td>
           <org-table-td>{{ user.organizationId }}</org-table-td>
@@ -169,16 +164,12 @@ class SortableTableDemo {
       return 0;
     });
   });
-
-  protected asUser(value: unknown): User {
-    return value as User;
-  }
 }
 
 @Component({
   selector: 'story-paginated-table-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Table, TableHeader, TableCell, Pagination],
+  imports: [Table, TableHeader, TableCell, Pagination, TypedContextDirective],
   providers: [PaginationStore],
   template: `
     <div class="flex flex-col gap-4">
@@ -189,8 +180,7 @@ class SortableTableDemo {
           <org-table-th>Organization ID</org-table-th>
           <org-table-th>Roles</org-table-th>
         </ng-template>
-        <ng-template #body let-tempUser>
-          @let user = asUser(tempUser);
+        <ng-template [orgTypedContext]="paginatedUsers()" #body let-user>
           <org-table-td>{{ user.name }}</org-table-td>
           <org-table-td>{{ user.email }}</org-table-td>
           <org-table-td>{{ user.organizationId }}</org-table-td>
@@ -219,16 +209,12 @@ class PaginatedTableDemo {
 
     return this.users.slice(start, end);
   });
-
-  protected asUser(value: unknown): User {
-    return value as User;
-  }
 }
 
 @Component({
   selector: 'story-selection-table-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Table, TableHeader, TableCell, Pagination, Button, ButtonIcon],
+  imports: [Table, TableHeader, TableCell, Pagination, Button, ButtonIcon, TypedContextDirective],
   providers: [PaginationStore],
   template: `
     <div class="flex flex-col gap-4">
@@ -251,8 +237,7 @@ class PaginatedTableDemo {
           <org-table-th>Organization ID</org-table-th>
           <org-table-th>Roles</org-table-th>
         </ng-template>
-        <ng-template #body let-tempUser>
-          @let user = asUser(tempUser);
+        <ng-template [orgTypedContext]="paginatedUsers()" #body let-user>
           <org-table-td>{{ user.name }}</org-table-td>
           <org-table-td>{{ user.email }}</org-table-td>
           <org-table-td>{{ user.organizationId }}</org-table-td>
@@ -283,10 +268,6 @@ class SelectionTableDemo {
     return this.users.slice(start, end);
   });
 
-  protected asUser(value: unknown): User {
-    return value as User;
-  }
-
   protected onResendInvite(): void {
     console.log('Resend invite for selected users:', this.selectionStore.selectedItemsArray());
   }
@@ -303,7 +284,7 @@ class SelectionTableDemo {
 @Component({
   selector: 'story-full-featured-table-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Table, TableHeader, TableCell, SortableDirective, Pagination, Button, ButtonIcon],
+  imports: [Table, TableHeader, TableCell, SortableDirective, Pagination, Button, ButtonIcon, TypedContextDirective],
   providers: [SortingStore, PaginationStore],
   template: `
     <div class="flex flex-col gap-4">
@@ -340,8 +321,7 @@ class SelectionTableDemo {
           </org-table-th>
           <org-table-th>Roles</org-table-th>
         </ng-template>
-        <ng-template #body let-tempUser>
-          @let user = asUser(tempUser);
+        <ng-template [orgTypedContext]="displayUsers()" #body let-user>
           <org-table-td>{{ user.name }}</org-table-td>
           <org-table-td>{{ user.email }}</org-table-td>
           <org-table-td>{{ user.organizationId }}</org-table-td>
@@ -399,10 +379,6 @@ class FullFeaturedTableDemo {
     return sorted.slice(start, end);
   });
 
-  protected asUser(value: unknown): User {
-    return value as User;
-  }
-
   protected onResendInvite(): void {
     console.log('Resend invite for selected users:', this.selectionStore.selectedItemsArray());
   }
@@ -421,7 +397,7 @@ type EllipsisUser = User & { description: string };
 @Component({
   selector: 'story-ellipsis-table-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Table, TableHeader, TableCell],
+  imports: [Table, TableHeader, TableCell, TypedContextDirective],
   template: `
     <div class="flex flex-col gap-4">
       <div class="text-sm">This table shows ellipsis for content that exceeds 2 lines in cells.</div>
@@ -431,8 +407,7 @@ type EllipsisUser = User & { description: string };
           <org-table-th>Email</org-table-th>
           <org-table-th>Long Description</org-table-th>
         </ng-template>
-        <ng-template #body let-tempUser>
-          @let user = asEllipsisUser(tempUser);
+        <ng-template [orgTypedContext]="users" #body let-user>
           <org-table-td [ellipsisLines]="2">{{ user.name }}</org-table-td>
           <org-table-td [ellipsisLines]="2">{{ user.email }}</org-table-td>
           <org-table-td [ellipsisLines]="2">{{ user.description }}</org-table-td>
@@ -442,20 +417,16 @@ type EllipsisUser = User & { description: string };
   `,
 })
 class EllipsisTableDemo {
-  protected readonly users = SAMPLE_USERS.slice(0, 10).map((user) => ({
+  protected readonly users: EllipsisUser[] = SAMPLE_USERS.slice(0, 10).map((user) => ({
     ...user,
     description: 'This is a very long description that will be truncated with ellipsis after two lines. '.repeat(3),
   }));
-
-  protected asEllipsisUser(value: unknown): EllipsisUser {
-    return value as EllipsisUser;
-  }
 }
 
 @Component({
   selector: 'story-dynamic-width-table-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Table, TableHeader, TableCell],
+  imports: [Table, TableHeader, TableCell, TypedContextDirective],
   template: `
     <div class="flex flex-col gap-4">
       <div class="text-sm">This table demonstrates dynamic column widths with fixed and flexible columns.</div>
@@ -468,8 +439,7 @@ class EllipsisTableDemo {
           <org-table-th>Organization ID</org-table-th>
           <org-table-th>Roles</org-table-th>
         </ng-template>
-        <ng-template #body let-tempUser>
-          @let user = asUser(tempUser);
+        <ng-template [orgTypedContext]="users" #body let-user>
           <org-table-td>{{ user.id }}</org-table-td>
           <org-table-td>{{ user.name }}</org-table-td>
           <org-table-td>{{ user.email }}</org-table-td>
@@ -482,10 +452,6 @@ class EllipsisTableDemo {
 })
 class DynamicWidthTableDemo {
   protected readonly users = SAMPLE_USERS.slice(0, 10);
-
-  protected asUser(value: unknown): User {
-    return value as User;
-  }
 }
 
 type ScrollingUser = User & { department: string; location: string; status: string };
@@ -493,7 +459,7 @@ type ScrollingUser = User & { department: string; location: string; status: stri
 @Component({
   selector: 'story-scrolling-table-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Table, TableHeader, TableCell],
+  imports: [Table, TableHeader, TableCell, TypedContextDirective],
   template: `
     <div class="flex flex-col gap-4">
       <div class="text-sm">
@@ -510,8 +476,7 @@ type ScrollingUser = User & { department: string; location: string; status: stri
           <org-table-th>Location</org-table-th>
           <org-table-th>Status</org-table-th>
         </ng-template>
-        <ng-template #body let-tempUser>
-          @let user = asScrollingUser(tempUser);
+        <ng-template [orgTypedContext]="users" #body let-user>
           <org-table-td>{{ user.id }}</org-table-td>
           <org-table-td>{{ user.name }}</org-table-td>
           <org-table-td>{{ user.email }}</org-table-td>
@@ -526,22 +491,18 @@ type ScrollingUser = User & { department: string; location: string; status: stri
   `,
 })
 class ScrollingTableDemo {
-  protected readonly users = SAMPLE_USERS.map((user, index) => ({
+  protected readonly users: ScrollingUser[] = SAMPLE_USERS.map((user, index) => ({
     ...user,
     department: ['Engineering', 'Sales', 'Marketing', 'Support', 'HR'][index % 5],
     location: ['New York', 'San Francisco', 'London', 'Tokyo', 'Sydney'][index % 5],
     status: ['Active', 'Inactive', 'Pending'][index % 3],
   }));
-
-  protected asScrollingUser(value: unknown): ScrollingUser {
-    return value as ScrollingUser;
-  }
 }
 
 @Component({
   selector: 'story-loading-table-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Table, TableHeader, TableCell, Button],
+  imports: [Table, TableHeader, TableCell, Button, TypedContextDirective],
   template: `
     <div class="flex flex-col gap-4">
       <div class="flex items-center gap-4">
@@ -557,8 +518,7 @@ class ScrollingTableDemo {
           <org-table-th>Organization ID</org-table-th>
           <org-table-th>Roles</org-table-th>
         </ng-template>
-        <ng-template #body let-tempUser>
-          @let user = asUser(tempUser);
+        <ng-template [orgTypedContext]="users" #body let-user>
           <org-table-td>{{ user.name }}</org-table-td>
           <org-table-td>{{ user.email }}</org-table-td>
           <org-table-td>{{ user.organizationId }}</org-table-td>
@@ -575,16 +535,12 @@ class LoadingTableDemo {
   protected toggleLoading(): void {
     this.isLoading.set(!this.isLoading());
   }
-
-  protected asUser(value: unknown): User {
-    return value as User;
-  }
 }
 
 @Component({
   selector: 'story-background-loading-table-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Table, TableHeader, TableCell, Button],
+  imports: [Table, TableHeader, TableCell, Button, TypedContextDirective],
   template: `
     <div class="flex flex-col gap-4">
       <div class="flex items-center gap-4">
@@ -602,8 +558,7 @@ class LoadingTableDemo {
           <org-table-th>Organization ID</org-table-th>
           <org-table-th>Roles</org-table-th>
         </ng-template>
-        <ng-template #body let-tempUser>
-          @let user = asUser(tempUser);
+        <ng-template [orgTypedContext]="users" #body let-user>
           <org-table-td>{{ user.name }}</org-table-td>
           <org-table-td>{{ user.email }}</org-table-td>
           <org-table-td>{{ user.organizationId }}</org-table-td>
@@ -620,16 +575,12 @@ class BackgroundLoadingTableDemo {
   protected toggleBackgroundLoading(): void {
     this.isBackgroundLoading.set(!this.isBackgroundLoading());
   }
-
-  protected asUser(value: unknown): User {
-    return value as User;
-  }
 }
 
 @Component({
   selector: 'story-combined-loading-table-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Table, TableHeader, TableCell, Button],
+  imports: [Table, TableHeader, TableCell, Button, TypedContextDirective],
   template: `
     <div class="flex flex-col gap-4">
       <div class="flex items-center gap-4">
@@ -658,8 +609,7 @@ class BackgroundLoadingTableDemo {
           <org-table-th>Organization ID</org-table-th>
           <org-table-th>Roles</org-table-th>
         </ng-template>
-        <ng-template #body let-tempUser>
-          @let user = asUser(tempUser);
+        <ng-template [orgTypedContext]="displayUsers()" #body let-user>
           <org-table-td>{{ user.name }}</org-table-td>
           <org-table-td>{{ user.email }}</org-table-td>
           <org-table-td>{{ user.organizationId }}</org-table-td>
@@ -695,16 +645,12 @@ class CombinedLoadingTableDemo {
       this.isBackgroundLoading.set(false);
     }, 2000);
   }
-
-  protected asUser(value: unknown): User {
-    return value as User;
-  }
 }
 
 @Component({
   selector: 'story-empty-state-table-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Table, TableHeader, TableCell],
+  imports: [Table, TableHeader, TableCell, TypedContextDirective],
   template: `
     <org-table [data]="users" [style.maxHeight]="'400px'">
       <ng-template #header>
@@ -713,8 +659,7 @@ class CombinedLoadingTableDemo {
         <org-table-th>Organization ID</org-table-th>
         <org-table-th>Roles</org-table-th>
       </ng-template>
-      <ng-template #body let-tempUser>
-        @let user = asUser(tempUser);
+      <ng-template [orgTypedContext]="users" #body let-user>
         <org-table-td>{{ user.name }}</org-table-td>
         <org-table-td>{{ user.email }}</org-table-td>
         <org-table-td>{{ user.organizationId }}</org-table-td>
@@ -725,10 +670,6 @@ class CombinedLoadingTableDemo {
 })
 class EmptyStateTableDemo {
   protected readonly users: User[] = [];
-
-  protected asUser(value: unknown): User {
-    return value as User;
-  }
 }
 
 const meta: Meta<Table> = {
@@ -765,8 +706,7 @@ const meta: Meta<Table> = {
       <org-table-th>Organization ID</org-table-th>
       <org-table-th>Roles</org-table-th>
     </ng-template>
-    <ng-template #body let-tempUser>
-      @let user = asUser(tempUser);
+    <ng-template [orgTypedContext]="users" #body let-user>
       <org-table-td>{{ user.name }}</org-table-td>
       <org-table-td>{{ user.email }}</org-table-td>
       <org-table-td>{{ user.organizationId }}</org-table-td>
@@ -839,7 +779,7 @@ export const Default: Story = {
           <org-table-th>Organization ID</org-table-th>
           <org-table-th>Roles</org-table-th>
         </ng-template>
-        <ng-template #body let-user>
+        <ng-template [orgTypedContext]="data" #body let-user>
           <org-table-td>{{ user.name }}</org-table-td>
           <org-table-td>{{ user.email }}</org-table-td>
           <org-table-td>{{ user.organizationId }}</org-table-td>
@@ -848,7 +788,7 @@ export const Default: Story = {
       </org-table>
     `,
     moduleMetadata: {
-      imports: [Table, TableHeader, TableCell],
+      imports: [Table, TableHeader, TableCell, TypedContextDirective],
     },
   }),
 };

@@ -6,6 +6,7 @@ import { StorybookExampleContainerSection } from '../../private/storybook-exampl
 import { GlobalNotificationManager } from '../global-notification-manager/global-notification-manager';
 import { Button } from '../button/button';
 import { Link } from '../link/link';
+import { TypedContextDirective } from '../typed-context-directive/typed-context-directive';
 
 @Component({
   selector: 'story-global-notifications-default-story',
@@ -473,13 +474,20 @@ class GlobalNotificationsAccessibilityStory {
 
 @Component({
   selector: 'story-global-notifications-link-action-story',
-  imports: [GlobalNotifications, Button, Link, StorybookExampleContainer, StorybookExampleContainerSection],
+  imports: [
+    GlobalNotifications,
+    Button,
+    Link,
+    StorybookExampleContainer,
+    StorybookExampleContainerSection,
+    TypedContextDirective,
+  ],
   template: `
     <org-storybook-example-container
       title="Link Action"
       currentState="Notification with an org-link inside that closes the notification when clicked"
     >
-      <ng-template #linkContent let-notificationId>
+      <ng-template [orgTypedContext]="notificationIdType" #linkContent let-notificationId>
         Your changes were not saved.
         <org-link (clicked)="onLinkClicked(notificationId)">Click here to retry</org-link>
       </ng-template>
@@ -502,6 +510,9 @@ class GlobalNotificationsLinkActionStory {
   private _globalNotificationManager = inject(GlobalNotificationManager);
 
   protected linkContentRef = viewChild.required<TemplateRef<{ $implicit: string }>>('linkContent');
+
+  /** sentinel array used purely for template-context type inference by `TypedContextDirective` */
+  protected readonly notificationIdType: string[] = [];
 
   protected addNotificationWithLink(): void {
     this._globalNotificationManager.add({

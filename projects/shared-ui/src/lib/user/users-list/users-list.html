@@ -63,8 +63,7 @@
       </org-table-th>
       <org-table-th></org-table-th>
     </ng-template>
-    <ng-template #body let-tempUser>
-      @let user = asUser(tempUser);
+    <ng-template [orgTypedContext]="users()" #body let-user>
       <org-table-td>
         <div class="flex flex-row items-center gap-1">
           <org-avatar [label]="fullName(user)" size="base">

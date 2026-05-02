@@ -1,4 +1,4 @@
-import { Directive, ElementRef, computed, inject, input, signal } from '@angular/core';
+import { Directive, ElementRef, computed, inject, input, model, output, signal } from '@angular/core';
 import { angularUtils } from '@organization/shared-utils';
 
 /** all available splitter direction values */
@@ -16,8 +16,8 @@ export type SplitterCollapsedSide = (typeof allSplitterCollapsedSides)[number];
 /** default value for the splitterMinimumSize input */
 export const SPLITTER_MINIMUM_SIZE_DEFAULT: number[] = [0];
 
-/** default value for the splitterDefaultSize input */
-export const SPLITTER_DEFAULT_SIZE_DEFAULT: number[] = [50];
+/** default value for the splitterSize model */
+export const SPLITTER_SIZE_DEFAULT: number[] = [50];
 
 /** default value for the splitterIsEnabled input */
 export const SPLITTER_IS_ENABLED_DEFAULT = true;
@@ -27,15 +27,14 @@ export const SPLITTER_COLLAPSED_SIDE_DEFAULT: SplitterCollapsedSide | undefined 
 
 /** the internal state shape for the splitter brain directive */
 type SplitterState = {
-  splitPosition: number | null;
   isDragging: boolean;
 };
 
 /**
- * headless brain directive for the splitter component. owns the split position state, the dragging state, the
- * pointer and keyboard event handlers, and the min / default size resolution. the directive injects its own
- * ElementRef which (when applied as a hostDirective on org-splitter) is the splitter container — used for
- * getBoundingClientRect during pointer / keyboard math.
+ * headless brain directive for the splitter component. owns the size model (which is the single source of truth
+ * for the split position), the dragging state, the pointer and keyboard event handlers, and the min / default
+ * size resolution. the directive injects its own ElementRef which (when applied as a hostDirective on
+ * org-splitter) is the splitter container — used for getBoundingClientRect during pointer / keyboard math.
  *
  * the presentation component renders the divider element and binds its pointer / keyboard events to the public
  * methods exposed by this directive.
@@ -48,7 +47,6 @@ export class SplitterBrainDirective {
   private readonly _containerElementRef = inject(ElementRef<HTMLElement>);
 
   private readonly _state = signal<SplitterState>({
-    splitPosition: null,
     isDragging: false,
   });
 
@@ -58,8 +56,8 @@ export class SplitterBrainDirective {
   /** the minimum size in pixels for each section; single value applies to both sides */
   public readonly splitterMinimumSize = input<number[]>(SPLITTER_MINIMUM_SIZE_DEFAULT);
 
-  /** the initial size as a percentage for the first section; single value sets first with remainder for second */
-  public readonly splitterDefaultSize = input<number[]>(SPLITTER_DEFAULT_SIZE_DEFAULT);
+  /** the size as a percentage for each section; single value sets first with remainder for second; updated by drag and keyboard interactions */
+  public readonly splitterSize = model<number[]>(SPLITTER_SIZE_DEFAULT);
 
   /** whether the divider is interactive and draggable */
   public readonly splitterIsEnabled = input<boolean>(SPLITTER_IS_ENABLED_DEFAULT);
@@ -69,6 +67,12 @@ export class SplitterBrainDirective {
     SplitterCollapsedSide | undefined,
     SplitterCollapsedSide | null | undefined
   >(SPLITTER_COLLAPSED_SIDE_DEFAULT, { transform: angularUtils.transformNullToUndefined });
+
+  /** emitted when a drag interaction begins on the divider */
+  public readonly splitterDragStarted = output<void>();
+
+  /** emitted when a drag interaction ends on the divider, including pointer cancel */
+  public readonly splitterDragCompleted = output<void>();
 
   /** the resolved minimum size tuple [first, second] in pixels */
   public readonly resolvedMinimumSize = computed<[number, number]>(() => {
@@ -81,9 +85,9 @@ export class SplitterBrainDirective {
     return [sizes[0], sizes[1]];
   });
 
-  /** the resolved default size tuple [first, second] as percentages */
-  public readonly resolvedDefaultSize = computed<[number, number]>(() => {
-    const sizes = this.splitterDefaultSize();
+  /** the resolved size tuple [first, second] as percentages */
+  public readonly resolvedSize = computed<[number, number]>(() => {
+    const sizes = this.splitterSize();
 
     if (sizes.length === 1) {
       return [sizes[0], 100 - sizes[0]];
@@ -110,7 +114,7 @@ export class SplitterBrainDirective {
       return 0;
     }
 
-    return this._state().splitPosition ?? this.resolvedDefaultSize()[0];
+    return this.resolvedSize()[0];
   });
 
   /** initiates drag on the divider, capturing pointer events for smooth resize */
@@ -126,9 +130,11 @@ export class SplitterBrainDirective {
       ...state,
       isDragging: true,
     }));
+
+    this.splitterDragStarted.emit();
   }
 
-  /** updates the split position as the pointer moves during an active drag */
+  /** updates the size model as the pointer moves during an active drag */
   public onDividerPointerMove(event: PointerEvent): void {
     if (!this._state().isDragging) {
       return;
@@ -153,10 +159,7 @@ export class SplitterBrainDirective {
       newPosition = Math.max(minFirstPercent, Math.min(100 - minSecondPercent, newPosition));
     }
 
-    this._state.update((state) => ({
-      ...state,
-      splitPosition: newPosition,
-    }));
+    this.splitterSize.set([newPosition, 100 - newPosition]);
   }
 
   /** ends the drag and releases pointer capture */
@@ -175,24 +178,32 @@ export class SplitterBrainDirective {
       ...state,
       isDragging: false,
     }));
+
+    this.splitterDragCompleted.emit();
   }
 
   /** cancels the drag and clears dragging state */
   public onDividerPointerCancel(): void {
+    if (!this._state().isDragging) {
+      return;
+    }
+
     this._state.update((state) => ({
       ...state,
       isDragging: false,
     }));
+
+    this.splitterDragCompleted.emit();
   }
 
-  /** adjusts split position via keyboard when the divider is focused */
+  /** adjusts size model via keyboard when the divider is focused */
   public onDividerKeyDown(event: KeyboardEvent): void {
     if (!this.isDraggable()) {
       return;
     }
 
     const step = 5;
-    const current = this._state().splitPosition ?? this.resolvedDefaultSize()[0];
+    const current = this.resolvedSize()[0];
     const containerRect = this._containerElementRef.nativeElement.getBoundingClientRect();
     const [minFirst, minSecond] = this.resolvedMinimumSize();
 
@@ -240,9 +251,6 @@ export class SplitterBrainDirective {
       return;
     }
 
-    this._state.update((state) => ({
-      ...state,
-      splitPosition: newPosition,
-    }));
+    this.splitterSize.set([newPosition, 100 - newPosition]);
   }
 }

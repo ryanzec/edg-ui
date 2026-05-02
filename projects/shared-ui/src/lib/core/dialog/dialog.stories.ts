@@ -15,6 +15,7 @@ import { DialogFooter } from '../../core/dialog/dialog-footer';
 import { Dialog } from '../../core/dialog/dialog';
 import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { CheckboxToggle } from '../../core/checkbox-toggle/checkbox-toggle';
+import { TypedContextDirective } from '../../core/typed-context-directive/typed-context-directive';
 
 type EXAMPLEDialogData = {
   title: string;
@@ -850,19 +851,17 @@ export const DynamicCloseControl: Story = {
 @Component({
   selector: 'story-example-story-template-dialog',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Button, Dialog, DialogHeader, DialogContent, DialogFooter],
+  imports: [Button, Dialog, DialogHeader, DialogContent, DialogFooter, TypedContextDirective],
   template: `
     <div class="flex flex-col gap-4">
       <org-button (click)="openDialog()">Open Dialog</org-button>
 
-      <ng-template #dialogTemplateRef let-context>
+      <ng-template [orgTypedContext]="dialogContextType" #dialogTemplateRef let-context>
         <org-dialog>
           <org-dialog-header title="Template-Based Dialog" />
           <org-dialog-content>
             <p>This dialog content is defined inline as a template reference — no separate component required.</p>
-            @if (context?.message) {
-              <p class="mt-2 text-sm text-text-subtle">{{ context.message }}</p>
-            }
+            <p class="mt-2 text-sm text-text-subtle">{{ context.message }}</p>
           </org-dialog-content>
           <org-dialog-footer>
             <org-button color="neutral" (clicked)="onCancel()">Cancel</org-button>
@@ -884,7 +883,10 @@ class EXAMPLEStoryTemplateDialog {
   private readonly _brain = inject(DialogBrainDirective, { self: true });
 
   @ViewChild('dialogTemplateRef')
-  public readonly dialogTemplateRef!: TemplateRef<unknown>;
+  public readonly dialogTemplateRef!: TemplateRef<{ $implicit: { message: string } }>;
+
+  /** sentinel array used purely for template-context type inference by `TypedContextDirective` */
+  protected readonly dialogContextType: { message: string }[] = [];
 
   protected openDialog(): void {
     this._brain.openDialog(this.dialogTemplateRef, {
@@ -925,7 +927,7 @@ export const TemplateBasedDialog: Story = {
         <ul expected-behaviour class="flex flex-col gap-1 mt-1 list-inside list-disc">
           <li><strong>No Separate Component</strong>: Dialog content is defined inline in the parent template</li>
           <li><strong>Parent Scope Access</strong>: Template bindings call methods directly on the parent component</li>
-          <li><strong>Template Context</strong>: Data passed to openDialog() is available via let-context in the template</li>
+          <li><strong>Template Context</strong>: Data passed to openDialog() is available via the let-* binding (typed via the orgTypedContext directive)</li>
           <li><strong>Escape Key</strong>: Works the same as component-based dialogs</li>
         </ul>
       </org-storybook-example-container>
