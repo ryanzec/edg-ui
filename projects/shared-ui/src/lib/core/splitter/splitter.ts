@@ -56,18 +56,8 @@ export const SPLITTER_ANIMATE_RESIZE_DEFAULT = true;
   hostDirectives: [
     {
       directive: SplitterBrainDirective,
-      inputs: [
-        'splitterDirection: direction',
-        'splitterMinimumSize: minimumSize',
-        'splitterSize: size',
-        'splitterIsEnabled: isEnabled',
-        'splitterCollapsedSide: collapsedSide',
-      ],
-      outputs: [
-        'splitterSizeChange: sizeChanged',
-        'splitterDragStarted: dragStarted',
-        'splitterDragCompleted: dragCompleted',
-      ],
+      inputs: ['direction', 'minimumSize', 'size', 'isEnabled', 'collapsedSide'],
+      outputs: ['sizeChange: sizeChanged', 'dragStarted', 'dragCompleted'],
     },
   ],
   host: {

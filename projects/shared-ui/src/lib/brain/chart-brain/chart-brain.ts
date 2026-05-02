@@ -2,10 +2,10 @@ import { Directive, OnDestroy, computed, effect, input, signal } from '@angular/
 import { angularUtils } from '@organization/shared-utils';
 import { Chart as ChartJS, ChartConfiguration } from 'chart.js/auto';
 
-/** default value for the chartConfig input */
+/** default value for the config input */
 export const CHART_CONFIG_DEFAULT: ChartConfiguration | undefined = undefined;
 
-/** default value for the chartIsLoading input */
+/** default value for the isLoading input */
 export const CHART_IS_LOADING_DEFAULT = false;
 
 /** the internal state shape for the chart brain directive */
@@ -32,13 +32,13 @@ export class ChartBrainDirective implements OnDestroy {
   private readonly _canvasElement = signal<HTMLCanvasElement | null>(null);
 
   /** chart.js configuration object; setting this to undefined clears the chart */
-  public readonly chartConfig = input<ChartConfiguration | undefined, ChartConfiguration | null | undefined>(
+  public readonly config = input<ChartConfiguration | undefined, ChartConfiguration | null | undefined>(
     CHART_CONFIG_DEFAULT,
     { transform: angularUtils.transformNullToUndefined }
   );
 
   /** when true, suspends chart creation and clears any existing instance */
-  public readonly chartIsLoading = input<boolean>(CHART_IS_LOADING_DEFAULT);
+  public readonly isLoading = input<boolean>(CHART_IS_LOADING_DEFAULT);
 
   /** the current error message if chart rendering failed, null otherwise */
   public readonly error = computed<string | null>(() => this._state().error);
@@ -46,10 +46,10 @@ export class ChartBrainDirective implements OnDestroy {
   constructor() {
     // create, update, or destroy the chart instance in response to config, loading, and canvas availability changes
     effect(() => {
-      const config = this.chartConfig();
+      const config = this.config();
       const canvasElement = this._canvasElement();
 
-      if (!config || this.chartIsLoading()) {
+      if (!config || this.isLoading()) {
         this._destroyChart();
 
         return;

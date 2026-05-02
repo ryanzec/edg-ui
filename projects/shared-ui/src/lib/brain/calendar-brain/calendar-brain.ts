@@ -84,43 +84,43 @@ export class CalendarBrainDirective {
   private readonly _liveAnnouncementSignal = signal<string>('');
 
   // input properties
-  public readonly calendarDefaultDisplayDate = input<DateTime>(CALENDAR_DEFAULT_DISPLAY_DATE_DEFAULT);
-  public readonly calendarStartYear = input<number>(CALENDAR_START_YEAR_DEFAULT);
-  public readonly calendarEndYear = input<number>(CALENDAR_END_YEAR_DEFAULT);
-  public readonly calendarSelectedStartDate = input<DateTime | undefined, DateTime | null | undefined>(
+  public readonly defaultDisplayDate = input<DateTime>(CALENDAR_DEFAULT_DISPLAY_DATE_DEFAULT);
+  public readonly startYear = input<number>(CALENDAR_START_YEAR_DEFAULT);
+  public readonly endYear = input<number>(CALENDAR_END_YEAR_DEFAULT);
+  public readonly selectedStartDate = input<DateTime | undefined, DateTime | null | undefined>(
     CALENDAR_SELECTED_START_DATE_DEFAULT,
     { transform: angularUtils.transformNullToUndefined }
   );
-  public readonly calendarSelectedEndDate = input<DateTime | undefined, DateTime | null | undefined>(
+  public readonly selectedEndDate = input<DateTime | undefined, DateTime | null | undefined>(
     CALENDAR_SELECTED_END_DATE_DEFAULT,
     { transform: angularUtils.transformNullToUndefined }
   );
-  public readonly calendarAllowRangeSelection = input<boolean>(CALENDAR_ALLOW_RANGE_SELECTION_DEFAULT);
-  public readonly calendarAllowPartialRangeSelection = input<boolean>(CALENDAR_ALLOW_PARTIAL_RANGE_SELECTION_DEFAULT);
-  public readonly calendarPartialRangeSelectionType = input<CalendarPartialRangeSelectionType>(
+  public readonly allowRangeSelection = input<boolean>(CALENDAR_ALLOW_RANGE_SELECTION_DEFAULT);
+  public readonly allowPartialRangeSelection = input<boolean>(CALENDAR_ALLOW_PARTIAL_RANGE_SELECTION_DEFAULT);
+  public readonly partialRangeSelectionType = input<CalendarPartialRangeSelectionType>(
     CALENDAR_PARTIAL_RANGE_SELECTION_TYPE_DEFAULT
   );
-  public readonly calendarDisableBefore = input<DateTime | undefined, DateTime | null | undefined>(
+  public readonly disableBefore = input<DateTime | undefined, DateTime | null | undefined>(
     CALENDAR_DISABLE_BEFORE_DEFAULT,
     { transform: angularUtils.transformNullToUndefined }
   );
-  public readonly calendarDisableAfter = input<DateTime | undefined, DateTime | null | undefined>(
+  public readonly disableAfter = input<DateTime | undefined, DateTime | null | undefined>(
     CALENDAR_DISABLE_AFTER_DEFAULT,
     { transform: angularUtils.transformNullToUndefined }
   );
-  public readonly calendarAllowedDateRange = input<number>(CALENDAR_ALLOWED_DATE_RANGE_DEFAULT);
-  public readonly calendarEnableDeselection = input<boolean>(CALENDAR_ENABLE_DESELECTION_DEFAULT);
+  public readonly allowedDateRange = input<number>(CALENDAR_ALLOWED_DATE_RANGE_DEFAULT);
+  public readonly enableDeselection = input<boolean>(CALENDAR_ENABLE_DESELECTION_DEFAULT);
 
   // outputs
-  public readonly calendarDateSelected = output<{ startDate: DateTime | null; endDate: DateTime | null }>();
-  public readonly calendarPartialRangeSelectionTypeChanged = output<CalendarPartialRangeSelectionType>();
-  public readonly calendarDisplayMonthChanged = output<{
+  public readonly dateSelected = output<{ startDate: DateTime | null; endDate: DateTime | null }>();
+  public readonly partialRangeSelectionTypeChanged = output<CalendarPartialRangeSelectionType>();
+  public readonly displayMonthChanged = output<{
     currentMonth: number;
     currentYear: number;
     previousMonth: number;
     previousYear: number;
   }>();
-  public readonly calendarFocusContainerRequested = output<void>();
+  public readonly focusContainerRequested = output<void>();
 
   // computed properties
   public readonly displayYear = computed<number>(() => this._state().displayYear);
@@ -128,20 +128,16 @@ export class CalendarBrainDirective {
   public readonly focusedDate = computed<DateTime | null>(() => this._state().focusedDate);
   public readonly liveAnnouncement = computed<string>(() => this._liveAnnouncementSignal());
 
-  private readonly _effectiveStartYear = computed<number>(() =>
-    Math.min(this.calendarStartYear(), this.calendarEndYear())
-  );
+  private readonly _effectiveStartYear = computed<number>(() => Math.min(this.startYear(), this.endYear()));
 
-  private readonly _effectiveEndYear = computed<number>(() =>
-    Math.max(this.calendarStartYear(), this.calendarEndYear())
-  );
+  private readonly _effectiveEndYear = computed<number>(() => Math.max(this.startYear(), this.endYear()));
 
-  private readonly _effectiveAllowedDateRange = computed<number>(() => Math.max(0, this.calendarAllowedDateRange()));
+  private readonly _effectiveAllowedDateRange = computed<number>(() => Math.max(0, this.allowedDateRange()));
 
   private readonly _effectiveDisableRange = computed<{ before: DateTime | undefined; after: DateTime | undefined }>(
     () => {
-      const before = this.calendarDisableBefore();
-      const after = this.calendarDisableAfter();
+      const before = this.disableBefore();
+      const after = this.disableAfter();
 
       if (before && after && before.startOf('day') > after.startOf('day')) {
         return { before: undefined, after: undefined };
@@ -168,8 +164,8 @@ export class CalendarBrainDirective {
   public readonly calendarDates = computed<CalendarDateData[][]>(() => {
     const year = this.displayYear();
     const month = this.displayMonth();
-    const startDate = this.calendarSelectedStartDate();
-    const endDate = this.calendarSelectedEndDate();
+    const startDate = this.selectedStartDate();
+    const endDate = this.selectedEndDate();
     const focusedDate = this.focusedDate();
     const { before: disableBefore, after: disableAfter } = this._effectiveDisableRange();
     const allowedRange = this._effectiveAllowedDateRange();
@@ -220,7 +216,7 @@ export class CalendarBrainDirective {
 
   constructor() {
     // inputs are available synchronously on signal-based components
-    const initialDate = this.calendarSelectedStartDate() ?? this.calendarDefaultDisplayDate();
+    const initialDate = this.selectedStartDate() ?? this.defaultDisplayDate();
 
     this._state.update((state) => ({
       ...state,
@@ -238,9 +234,9 @@ export class CalendarBrainDirective {
 
     // handle partial range selection type switching
     effect(() => {
-      const selectionType = this.calendarPartialRangeSelectionType();
-      const allowPartial = this.calendarAllowPartialRangeSelection();
-      const allowRange = this.calendarAllowRangeSelection();
+      const selectionType = this.partialRangeSelectionType();
+      const allowPartial = this.allowPartialRangeSelection();
+      const allowRange = this.allowRangeSelection();
 
       if (!allowPartial || !allowRange) {
         return;
@@ -251,8 +247,8 @@ export class CalendarBrainDirective {
       }
 
       untracked(() => {
-        const currentStart = this.calendarSelectedStartDate();
-        const currentEnd = this.calendarSelectedEndDate();
+        const currentStart = this.selectedStartDate();
+        const currentEnd = this.selectedEndDate();
 
         if (!currentStart && !currentEnd) {
           return;
@@ -293,7 +289,7 @@ export class CalendarBrainDirective {
         if (needsUpdate) {
           afterNextRender(
             () => {
-              this.calendarDateSelected.emit({ startDate: newStart, endDate: newEnd });
+              this.dateSelected.emit({ startDate: newStart, endDate: newEnd });
             },
             { injector: this._injector }
           );
@@ -315,7 +311,7 @@ export class CalendarBrainDirective {
 
     this._liveAnnouncementSignal.set(date.toFormat('MMMM yyyy'));
 
-    this.calendarDisplayMonthChanged.emit({
+    this.displayMonthChanged.emit({
       currentMonth: date.month,
       currentYear: date.year,
       previousMonth,
@@ -337,7 +333,7 @@ export class CalendarBrainDirective {
 
     this._liveAnnouncementSignal.set(DateTime.local(year, currentMonth, 1).toFormat('MMMM yyyy'));
 
-    this.calendarDisplayMonthChanged.emit({
+    this.displayMonthChanged.emit({
       currentMonth,
       currentYear: year,
       previousMonth,
@@ -359,7 +355,7 @@ export class CalendarBrainDirective {
 
     this._liveAnnouncementSignal.set(DateTime.local(currentYear, month, 1).toFormat('MMMM yyyy'));
 
-    this.calendarDisplayMonthChanged.emit({
+    this.displayMonthChanged.emit({
       currentMonth: month,
       currentYear,
       previousMonth,
@@ -382,7 +378,7 @@ export class CalendarBrainDirective {
 
     this._liveAnnouncementSignal.set(newDate.toFormat('MMMM yyyy'));
 
-    this.calendarDisplayMonthChanged.emit({
+    this.displayMonthChanged.emit({
       currentMonth: newDate.month,
       currentYear: newDate.year,
       previousMonth: currentMonth,
@@ -405,7 +401,7 @@ export class CalendarBrainDirective {
 
     this._liveAnnouncementSignal.set(newDate.toFormat('MMMM yyyy'));
 
-    this.calendarDisplayMonthChanged.emit({
+    this.displayMonthChanged.emit({
       currentMonth: newDate.month,
       currentYear: newDate.year,
       previousMonth: currentMonth,
@@ -420,35 +416,35 @@ export class CalendarBrainDirective {
     }
 
     const clickedDate = dateData.date;
-    const currentStart = this.calendarSelectedStartDate() ?? null;
-    const currentEnd = this.calendarSelectedEndDate() ?? null;
-    const selectionType = this.calendarPartialRangeSelectionType();
+    const currentStart = this.selectedStartDate() ?? null;
+    const currentEnd = this.selectedEndDate() ?? null;
+    const selectionType = this.partialRangeSelectionType();
 
-    if (this.calendarEnableDeselection()) {
+    if (this.enableDeselection()) {
       if (currentStart && clickedDate.hasSame(currentStart, 'day')) {
-        this.calendarDateSelected.emit({ startDate: null, endDate: currentEnd });
+        this.dateSelected.emit({ startDate: null, endDate: currentEnd });
 
         return;
       }
 
       if (currentEnd && clickedDate.hasSame(currentEnd, 'day')) {
-        this.calendarDateSelected.emit({ startDate: currentStart, endDate: null });
+        this.dateSelected.emit({ startDate: currentStart, endDate: null });
 
         return;
       }
     }
 
-    if (this.calendarAllowRangeSelection() && this.calendarAllowPartialRangeSelection()) {
+    if (this.allowRangeSelection() && this.allowPartialRangeSelection()) {
       if (selectionType === 'onOrAfter') {
         const startDate = clickedDate.startOf('day');
-        this.calendarDateSelected.emit({ startDate, endDate: null });
+        this.dateSelected.emit({ startDate, endDate: null });
 
         return;
       }
 
       if (selectionType === 'onOrBefore') {
         const endDate = clickedDate.endOf('day');
-        this.calendarDateSelected.emit({ startDate: null, endDate });
+        this.dateSelected.emit({ startDate: null, endDate });
 
         return;
       }
@@ -456,44 +452,44 @@ export class CalendarBrainDirective {
 
     if (!currentStart) {
       const startDate = clickedDate.startOf('day');
-      this.calendarDateSelected.emit({ startDate, endDate: currentEnd });
+      this.dateSelected.emit({ startDate, endDate: currentEnd });
 
       return;
     }
 
     if (!currentEnd) {
-      if (this.calendarAllowRangeSelection()) {
+      if (this.allowRangeSelection()) {
         if (clickedDate > currentStart) {
           const endDate = clickedDate.endOf('day');
-          this.calendarDateSelected.emit({ startDate: currentStart, endDate });
+          this.dateSelected.emit({ startDate: currentStart, endDate });
         } else if (clickedDate < currentStart) {
           const startDate = clickedDate.startOf('day');
           const endDate = currentStart.endOf('day');
-          this.calendarDateSelected.emit({ startDate, endDate });
+          this.dateSelected.emit({ startDate, endDate });
         } else {
           const startDate = clickedDate.startOf('day');
           const endDate = clickedDate.endOf('day');
-          this.calendarDateSelected.emit({ startDate, endDate });
+          this.dateSelected.emit({ startDate, endDate });
         }
       } else {
         const startDate = clickedDate.startOf('day');
-        this.calendarDateSelected.emit({ startDate, endDate: null });
+        this.dateSelected.emit({ startDate, endDate: null });
       }
 
       return;
     }
 
-    if (this.calendarAllowRangeSelection()) {
+    if (this.allowRangeSelection()) {
       if (clickedDate > currentStart && clickedDate < currentEnd) {
         const endDate = clickedDate.endOf('day');
-        this.calendarDateSelected.emit({ startDate: currentStart, endDate });
+        this.dateSelected.emit({ startDate: currentStart, endDate });
 
         return;
       }
 
       if (clickedDate > currentStart) {
         const endDate = clickedDate.endOf('day');
-        this.calendarDateSelected.emit({ startDate: currentStart, endDate });
+        this.dateSelected.emit({ startDate: currentStart, endDate });
 
         return;
       }
@@ -501,7 +497,7 @@ export class CalendarBrainDirective {
       if (clickedDate < currentStart) {
         const startDate = clickedDate.startOf('day');
         const endDate = currentStart.endOf('day');
-        this.calendarDateSelected.emit({ startDate, endDate });
+        this.dateSelected.emit({ startDate, endDate });
       }
     }
   }
@@ -587,7 +583,7 @@ export class CalendarBrainDirective {
 
       this._liveAnnouncementSignal.set(newFocused.toFormat('MMMM yyyy'));
 
-      this.calendarDisplayMonthChanged.emit({
+      this.displayMonthChanged.emit({
         currentMonth: newFocused.month,
         currentYear: newFocused.year,
         previousMonth,
@@ -596,7 +592,7 @@ export class CalendarBrainDirective {
 
       afterNextRender(
         () => {
-          this.calendarFocusContainerRequested.emit();
+          this.focusContainerRequested.emit();
         },
         { injector: this._injector }
       );
@@ -614,7 +610,7 @@ export class CalendarBrainDirective {
   /** handles partial range selection type change from the radio group */
   public onPartialRangeSelectionTypeChange(type: string): void {
     if (allCalendarPartialRangeSelectionTypes.includes(type as CalendarPartialRangeSelectionType)) {
-      this.calendarPartialRangeSelectionTypeChanged.emit(type as CalendarPartialRangeSelectionType);
+      this.partialRangeSelectionTypeChanged.emit(type as CalendarPartialRangeSelectionType);
     }
   }
 

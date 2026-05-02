@@ -14,7 +14,7 @@ export type AutoScrollScrollToBottomOptions = {
   onAfterScroll?: () => void;
 };
 
-/** default value for the autoScrollEnabled input */
+/** default value for the enabled input */
 export const AUTO_SCROLL_ENABLED_DEFAULT = true;
 
 /** the internal state shape for the auto scroll brain directive */
@@ -57,13 +57,13 @@ export class AutoScrollBrainDirective {
   private _pendingScrollCallback: (() => void) | null = null;
 
   /** whether auto-scroll-to-bottom is currently enabled by the consumer */
-  public readonly autoScrollEnabled = input<boolean>(AUTO_SCROLL_ENABLED_DEFAULT);
+  public readonly enabled = input<boolean>(AUTO_SCROLL_ENABLED_DEFAULT);
 
   /** emitted whenever the internal auto-scroll state changes */
-  public readonly autoScrollStateChange = output<AutoScrollState>();
+  public readonly stateChange = output<AutoScrollState>();
 
   /** emitted once the brain has detected a scrollable parent and finished initialising its observers */
-  public readonly autoScrollReady = output<void>();
+  public readonly ready = output<void>();
 
   /** the current auto-scroll state */
   public readonly autoScrollState = computed<AutoScrollState>(() => this._state().autoScrollState);
@@ -149,7 +149,7 @@ export class AutoScrollBrainDirective {
       this._setupScrollListener();
       this._initializeAutoScrollState();
       initialized = true;
-      this.autoScrollReady.emit();
+      this.ready.emit();
     });
   }
 
@@ -166,9 +166,9 @@ export class AutoScrollBrainDirective {
     this._scrollableParent = parent as HTMLElement;
   }
 
-  /** sets initial state based on the autoScrollEnabled input */
+  /** sets initial state based on the enabled input */
   private _initializeAutoScrollState(): void {
-    if (this.autoScrollEnabled()) {
+    if (this.enabled()) {
       this._state.update((state) => ({
         ...state,
         autoScrollState: 'enabled',
@@ -227,19 +227,19 @@ export class AutoScrollBrainDirective {
     this._scrollableParent.addEventListener('scroll', this._scrollListener);
   }
 
-  /** emits autoScrollStateChange whenever the internal state machine transitions */
+  /** emits stateChange whenever the internal state machine transitions */
   private _setupStateChangeEffect(): void {
     effect(() => {
-      this.autoScrollStateChange.emit(this._state().autoScrollState);
+      this.stateChange.emit(this._state().autoScrollState);
     });
   }
 
-  /** reacts to autoScrollEnabled transitions to force-disable or re-evaluate the state machine */
+  /** reacts to enabled transitions to force-disable or re-evaluate the state machine */
   private _setupEnabledInputEffect(): void {
-    let previousValue = this.autoScrollEnabled();
+    let previousValue = this.enabled();
 
     effect(() => {
-      const currentValue = this.autoScrollEnabled();
+      const currentValue = this.enabled();
 
       if (previousValue === currentValue) {
         return;

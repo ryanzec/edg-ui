@@ -76,12 +76,8 @@ const POSITION_CONFIGURATIONS: Record<DropDownSelectorPosition, ConnectedPositio
   hostDirectives: [
     {
       directive: DropDownSelectorBrainDirective,
-      inputs: [
-        'dropDownSelectorSelectionMode: selectionMode',
-        'dropDownSelectorDisabled: disabled',
-        'dropDownSelectorSelectedItems: selectedItems',
-      ],
-      outputs: ['dropDownSelectorSelectedItemsChange: selectedItemsChange'],
+      inputs: ['selectionMode', 'disabled', 'selectedItems'],
+      outputs: ['selectedItemsChange'],
     },
   ],
   host: {

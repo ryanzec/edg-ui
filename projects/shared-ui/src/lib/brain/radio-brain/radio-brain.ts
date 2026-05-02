@@ -1,6 +1,6 @@
 import { Directive, computed, input, output, signal } from '@angular/core';
 
-/** default value for the radioDisabled input */
+/** default value for the disabled input */
 export const RADIO_DISABLED_DEFAULT = false;
 
 /**
@@ -17,19 +17,19 @@ export class RadioBrainDirective {
   private readonly _selected = signal<boolean>(false);
 
   /** whether the radio is disabled (resolved by the presentation, may include a group's disabled state) */
-  public readonly radioDisabled = input<boolean>(RADIO_DISABLED_DEFAULT);
+  public readonly disabled = input<boolean>(RADIO_DISABLED_DEFAULT);
 
   /** whether this radio is currently selected */
   public readonly isChecked = computed<boolean>(() => this._selected());
 
   /** emitted when the user activates this radio via click, space, or enter */
-  public readonly radioSelectionRequested = output<void>();
+  public readonly selectionRequested = output<void>();
 
   /** emitted when the user requests focus on the next radio via arrow-down or arrow-right */
-  public readonly radioFocusNextRequested = output<void>();
+  public readonly focusNextRequested = output<void>();
 
   /** emitted when the user requests focus on the previous radio via arrow-up or arrow-left */
-  public readonly radioFocusPreviousRequested = output<void>();
+  public readonly focusPreviousRequested = output<void>();
 
   /** sets the local selected state; called by the presentation when used standalone or when synced from a group */
   public setSelected(selected: boolean): void {
@@ -40,36 +40,36 @@ export class RadioBrainDirective {
   public handleClick(event: Event): void {
     event.preventDefault();
 
-    if (this.radioDisabled()) {
+    if (this.disabled()) {
       return;
     }
 
-    this.radioSelectionRequested.emit();
+    this.selectionRequested.emit();
   }
 
   /** handles keyboard interaction; space / enter selects, arrow keys navigate */
   public handleKeyDown(event: KeyboardEvent): void {
-    if (this.radioDisabled()) {
+    if (this.disabled()) {
       return;
     }
 
     if (event.key === ' ' || event.key === 'Enter') {
       event.preventDefault();
-      this.radioSelectionRequested.emit();
+      this.selectionRequested.emit();
 
       return;
     }
 
     if (event.key === 'ArrowDown' || event.key === 'ArrowRight') {
       event.preventDefault();
-      this.radioFocusNextRequested.emit();
+      this.focusNextRequested.emit();
 
       return;
     }
 
     if (event.key === 'ArrowUp' || event.key === 'ArrowLeft') {
       event.preventDefault();
-      this.radioFocusPreviousRequested.emit();
+      this.focusPreviousRequested.emit();
     }
   }
 }

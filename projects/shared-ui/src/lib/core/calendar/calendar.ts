@@ -78,23 +78,23 @@ export const CALENDAR_CONTAINER_CLASS_DEFAULT = '';
     {
       directive: CalendarBrainDirective,
       inputs: [
-        'calendarDefaultDisplayDate: defaultDisplayDate',
-        'calendarStartYear: startYear',
-        'calendarEndYear: endYear',
-        'calendarSelectedStartDate: selectedStartDate',
-        'calendarSelectedEndDate: selectedEndDate',
-        'calendarAllowRangeSelection: allowRangeSelection',
-        'calendarAllowPartialRangeSelection: allowPartialRangeSelection',
-        'calendarPartialRangeSelectionType: partialRangeSelectionType',
-        'calendarDisableBefore: disableBefore',
-        'calendarDisableAfter: disableAfter',
-        'calendarAllowedDateRange: allowedDateRange',
-        'calendarEnableDeselection: enableDeselection',
+        'defaultDisplayDate',
+        'startYear',
+        'endYear',
+        'selectedStartDate',
+        'selectedEndDate',
+        'allowRangeSelection',
+        'allowPartialRangeSelection',
+        'partialRangeSelectionType',
+        'disableBefore',
+        'disableAfter',
+        'allowedDateRange',
+        'enableDeselection',
       ],
       outputs: [
-        'calendarDateSelected: dateSelected',
-        'calendarPartialRangeSelectionTypeChanged: partialRangeSelectionTypeChange',
-        'calendarDisplayMonthChanged: displayMonthChanged',
+        'dateSelected',
+        'partialRangeSelectionTypeChanged: partialRangeSelectionTypeChange',
+        'displayMonthChanged',
       ],
     },
   ],
@@ -192,7 +192,7 @@ export class Calendar {
 
   constructor() {
     // when the brain requests container focus (typically after keyboard nav crossed a month boundary), apply it
-    this.brain.calendarFocusContainerRequested.subscribe(() => {
+    this.brain.focusContainerRequested.subscribe(() => {
       this.calendarContainerRef?.nativeElement.focus();
     });
   }

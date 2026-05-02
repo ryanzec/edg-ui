@@ -24,10 +24,10 @@ export class GlobalNotificationBrainDirective {
   private _removeTimer: ReturnType<typeof setTimeout> | undefined;
 
   /** the per-notification config the brain uses to drive auto-close + fade-out timers */
-  public readonly globalNotificationConfig = input.required<GlobalNotificationConfig>();
+  public readonly config = input.required<GlobalNotificationConfig>();
 
   /** emitted with the notification id once the fade-out animation completes */
-  public readonly globalNotificationClosed = output<string>();
+  public readonly closed = output<string>();
 
   /** whether the fade-out animation is currently running */
   public readonly isRemoving = computed<boolean>(() => this._isRemoving());
@@ -38,7 +38,7 @@ export class GlobalNotificationBrainDirective {
      * when the config changes or the brain is destroyed.
      */
     effect((onCleanup) => {
-      const config = this.globalNotificationConfig();
+      const config = this.config();
 
       if (config.autoCloseIn === undefined || config.autoCloseIn <= 0) {
         return;
@@ -77,12 +77,12 @@ export class GlobalNotificationBrainDirective {
 
     this._isRemoving.set(true);
 
-    const config = this.globalNotificationConfig();
+    const config = this.config();
     const delayMs = config.animationDuration * 1000;
 
     this._removeTimer = setTimeout(() => {
       this._removeTimer = undefined;
-      this.globalNotificationClosed.emit(config.id);
+      this.closed.emit(config.id);
     }, delayMs);
   }
 }

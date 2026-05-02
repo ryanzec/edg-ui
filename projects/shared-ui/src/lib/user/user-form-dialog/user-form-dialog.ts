@@ -21,14 +21,14 @@ export type UserFormDialogData = {
     {
       directive: DialogBrainDirective,
       inputs: [
-        'dialogPosition: position',
-        'dialogHasRoundedCorners: hasRoundedCorners',
-        'dialogHasBackdrop: hasBackdrop',
-        'dialogEnableCloseOnClickOutside: enableCloseOnClickOutside',
-        'dialogEnableEscapeKey: enableEscapeKey',
-        'dialogShowCloseIcon: showCloseIcon',
+        'position',
+        'hasRoundedCorners',
+        'hasBackdrop',
+        'enableCloseOnClickOutside',
+        'enableEscapeKey',
+        'showCloseIcon',
       ],
-      outputs: ['dialogClosed: closed'],
+      outputs: ['closed'],
     },
   ],
   host: {

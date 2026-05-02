@@ -21,19 +21,19 @@ type ButtonState = {
   isFocused: boolean;
 };
 
-/** default value for the buttonDisabled input */
+/** default value for the disabled input */
 export const BUTTON_DISABLED_DEFAULT = false;
 
-/** default value for the buttonLoading input */
+/** default value for the loading input */
 export const BUTTON_LOADING_DEFAULT = false;
 
-/** default value for the buttonIconOnly input */
+/** default value for the iconOnly input */
 export const BUTTON_ICON_ONLY_DEFAULT = false;
 
-/** default value for the buttonAriaLabel input */
+/** default value for the ariaLabel input */
 export const BUTTON_ARIA_LABEL_DEFAULT: string | undefined = undefined;
 
-/** default value for the buttonAriaExpanded input */
+/** default value for the ariaExpanded input */
 export const BUTTON_ARIA_EXPANDED_DEFAULT: boolean | undefined = undefined;
 
 /**
@@ -46,9 +46,9 @@ export const BUTTON_ARIA_EXPANDED_DEFAULT: boolean | undefined = undefined;
   exportAs: 'orgButtonBrain',
   host: {
     '[disabled]': 'isDisabled()',
-    '[attr.aria-label]': 'buttonAriaLabel()',
-    '[attr.aria-expanded]': 'buttonAriaExpanded()',
-    '[attr.aria-busy]': 'buttonLoading() ? "true" : null',
+    '[attr.aria-label]': 'ariaLabel()',
+    '[attr.aria-expanded]': 'ariaExpanded()',
+    '[attr.aria-busy]': 'loading() ? "true" : null',
     '[attr.aria-disabled]': 'isDisabled() ? "true" : null',
     '(click)': 'click()',
     '(mousedown)': 'mouseDown()',
@@ -72,27 +72,26 @@ export class ButtonBrainDirective implements OnInit, OnDestroy {
   private readonly _clicked$ = new Subject<void>();
 
   /** whether the button is disabled and non-interactive */
-  public readonly buttonDisabled = input<boolean>(BUTTON_DISABLED_DEFAULT);
+  public readonly disabled = input<boolean>(BUTTON_DISABLED_DEFAULT);
 
   /** whether the button is in a loading state, also disables interaction */
-  public readonly buttonLoading = input<boolean>(BUTTON_LOADING_DEFAULT);
+  public readonly loading = input<boolean>(BUTTON_LOADING_DEFAULT);
 
   /** whether the host button is rendered in icon-only mode; used to enforce the aria-label requirement */
-  public readonly buttonIconOnly = input<boolean>(BUTTON_ICON_ONLY_DEFAULT);
+  public readonly iconOnly = input<boolean>(BUTTON_ICON_ONLY_DEFAULT);
 
   /** accessible label for icon-only buttons or when the visual label needs an override */
-  public readonly buttonAriaLabel = input<string | undefined, string | null | undefined>(BUTTON_ARIA_LABEL_DEFAULT, {
+  public readonly ariaLabel = input<string | undefined, string | null | undefined>(BUTTON_ARIA_LABEL_DEFAULT, {
     transform: angularUtils.transformNullToUndefined,
   });
 
   /** communicates whether a controlled element is expanded or collapsed */
-  public readonly buttonAriaExpanded = input<boolean | undefined, boolean | null | undefined>(
-    BUTTON_ARIA_EXPANDED_DEFAULT,
-    { transform: angularUtils.transformNullToUndefined }
-  );
+  public readonly ariaExpanded = input<boolean | undefined, boolean | null | undefined>(BUTTON_ARIA_EXPANDED_DEFAULT, {
+    transform: angularUtils.transformNullToUndefined,
+  });
 
   /** emitted when the host button is clicked while not disabled or loading */
-  public readonly buttonClicked = outputFromObservable(this._clicked$);
+  public readonly clicked = outputFromObservable(this._clicked$);
 
   /** whether the button is currently being pressed */
   public readonly isPressed = computed<boolean>(() => this._state().isPressed);
@@ -101,12 +100,12 @@ export class ButtonBrainDirective implements OnInit, OnDestroy {
   public readonly isFocused = computed<boolean>(() => this._state().isFocused);
 
   /** whether the button should be treated as disabled (true when either disabled or loading) */
-  public readonly isDisabled = computed<boolean>(() => this.buttonDisabled() || this.buttonLoading());
+  public readonly isDisabled = computed<boolean>(() => this.disabled() || this.loading());
 
   constructor() {
     // warn when an icon-only button is missing the aria label required for accessibility
     effect(() => {
-      if (this.buttonIconOnly() && !this.buttonAriaLabel()) {
+      if (this.iconOnly() && !this.ariaLabel()) {
         logManager.warn({
           type: 'button-missing-aria-label',
           message: 'icon-only buttons require an ariaLabel input for accessibility',
@@ -135,7 +134,7 @@ export class ButtonBrainDirective implements OnInit, OnDestroy {
     this._focusMonitor.stopMonitoring(this._elementRef.nativeElement);
   }
 
-  /** handles click events, emitting buttonClicked when the button is not disabled or loading */
+  /** handles click events, emitting clicked when the button is not disabled or loading */
   protected click(): void {
     if (this.isDisabled()) {
       return;

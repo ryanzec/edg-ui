@@ -2,7 +2,7 @@ import { Directive, computed, input, signal } from '@angular/core';
 import { Observable, Subject, type Subscriber } from 'rxjs';
 import { outputFromObservable } from '@angular/core/rxjs-interop';
 
-/** default value for the listItemDisabled input */
+/** default value for the disabled input */
 export const LIST_ITEM_DISABLED_DEFAULT = false;
 
 /**
@@ -20,10 +20,10 @@ export class ListItemBrainDirective {
   private readonly _clicked$ = new Subject<void>();
 
   /** whether the list item is disabled */
-  public readonly listItemDisabled = input<boolean>(LIST_ITEM_DISABLED_DEFAULT);
+  public readonly disabled = input<boolean>(LIST_ITEM_DISABLED_DEFAULT);
 
   /** emits when the list item is clicked and is not disabled; observer-tracked so presentation can react */
-  public readonly listItemClicked = outputFromObservable(
+  public readonly clicked = outputFromObservable(
     new Observable<void>((subscriber: Subscriber<void>) => {
       this._hasClickObserver.set(true);
 
@@ -49,7 +49,7 @@ export class ListItemBrainDirective {
 
   /** handles click events, suppressing interaction when the item is disabled */
   public handleClick(event: MouseEvent): void {
-    if (this.listItemDisabled()) {
+    if (this.disabled()) {
       event.preventDefault();
       event.stopPropagation();
 

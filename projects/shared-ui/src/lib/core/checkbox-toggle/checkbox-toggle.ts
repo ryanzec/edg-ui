@@ -26,8 +26,8 @@ export const CHECKBOX_TOGGLE_OFF_ICON_DEFAULT: IconName | undefined = undefined;
   hostDirectives: [
     {
       directive: CheckboxToggleBrainDirective,
-      inputs: ['checkboxToggleChecked: checked', 'checkboxToggleDisabled: disabled'],
-      outputs: ['checkboxToggleChanged: checkedChange'],
+      inputs: ['checked', 'disabled'],
+      outputs: ['changed: checkedChange'],
     },
   ],
   host: {
@@ -119,11 +119,11 @@ export class CheckboxToggle implements ControlValueAccessor {
   });
 
   constructor() {
-    this.brain.checkboxToggleChanged.subscribe((value) => {
+    this.brain.changed.subscribe((value) => {
       this._onChange(value);
     });
 
-    this.brain.checkboxToggleTouched.subscribe(() => {
+    this.brain.touched.subscribe(() => {
       this._onTouched();
     });
   }

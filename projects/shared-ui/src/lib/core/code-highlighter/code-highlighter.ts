@@ -35,7 +35,7 @@ export const CODE_HIGHLIGHTER_SCROLL_CLASS_DEFAULT = '';
   hostDirectives: [
     {
       directive: CodeHighlighterBrainDirective,
-      inputs: ['codeHighlighterText: text', 'codeHighlighterLanguage: language'],
+      inputs: ['text', 'language'],
     },
   ],
   host: {

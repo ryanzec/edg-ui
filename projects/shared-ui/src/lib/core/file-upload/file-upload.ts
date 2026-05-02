@@ -23,7 +23,7 @@ export const FILE_UPLOAD_FILE_TYPES_DEFAULT: string[] = [];
   hostDirectives: [
     {
       directive: FileUploadBrainDirective,
-      inputs: ['fileUploadFileTypes: fileTypes'],
+      inputs: ['fileTypes'],
     },
   ],
   host: {
@@ -57,7 +57,7 @@ export class FileUploadComponent {
   private readonly _fileInputRef!: ElementRef<HTMLInputElement>;
 
   constructor() {
-    this.brain.fileUploadFileSelected.subscribe((file) => this.fileUpload.emit(file));
+    this.brain.fileSelected.subscribe((file) => this.fileUpload.emit(file));
   }
 
   /** handles native file input change event by delegating to the brain */

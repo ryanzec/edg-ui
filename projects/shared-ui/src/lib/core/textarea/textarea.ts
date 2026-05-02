@@ -102,12 +102,8 @@ export type TextareaInlineItem = {
   hostDirectives: [
     {
       directive: TextareaBrainDirective,
-      inputs: [
-        'textareaSelectAllOnFocus: selectAllOnFocus',
-        'textareaDisabled: disabled',
-        'textareaInverseEnter: inverseEnter',
-      ],
-      outputs: ['textareaFocused: focused', 'textareaBlurred: blurred', 'textareaEnterPressed: enterPressed'],
+      inputs: ['selectAllOnFocus', 'disabled', 'inverseEnter'],
+      outputs: ['focused', 'blurred', 'enterPressed'],
     },
   ],
   host: {

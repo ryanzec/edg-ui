@@ -59,12 +59,12 @@ export const DATE_PICKER_INPUT_ALLOW_CLEAR_DEFAULT = true;
     {
       directive: DatePickerInputBrainDirective,
       inputs: [
-        'datePickerInputSelectedStartDate: selectedStartDate',
-        'datePickerInputSelectedEndDate: selectedEndDate',
-        'datePickerInputAllowRangeSelection: allowRangeSelection',
-        'datePickerInputAllowPartialRangeSelection: allowPartialRangeSelection',
-        'datePickerInputPartialRangeSelectionType: partialRangeSelectionType',
-        'datePickerInputDisabled: disabled',
+        'selectedStartDate',
+        'selectedEndDate',
+        'allowRangeSelection',
+        'allowPartialRangeSelection',
+        'partialRangeSelectionType',
+        'disabled',
       ],
     },
   ],
@@ -246,27 +246,27 @@ export class DatePickerInput implements ControlValueAccessor {
     });
 
     // forward brain's form-controlled date-selected to the cva _onChange callback
-    this.brain.datePickerInputDateSelectedNotified.subscribe((selection) => {
+    this.brain.dateSelectedNotified.subscribe((selection) => {
       this._onChange(selection);
     });
 
     // forward brain's non-form date-selected emissions to the public dateSelected output
-    this.brain.datePickerInputDateSelectedEmitted.subscribe((selection) => {
+    this.brain.dateSelectedEmitted.subscribe((selection) => {
       this.dateSelected.emit(selection);
     });
 
     // forward brain's partial-range type change emissions to the public output
-    this.brain.datePickerInputPartialRangeSelectionTypeEmitted.subscribe((type) => {
+    this.brain.partialRangeSelectionTypeEmitted.subscribe((type) => {
       this.partialRangeSelectionTypeChange.emit(type);
     });
 
     // forward brain's touched-notified events to the cva _onTouched callback
-    this.brain.datePickerInputTouchedNotified.subscribe(() => {
+    this.brain.touchedNotified.subscribe(() => {
       this._onTouched();
     });
 
     // when the brain wants the calendar focused (after overlay attach), apply it
-    this.brain.datePickerInputFocusCalendarRequested.subscribe(() => {
+    this.brain.focusCalendarRequested.subscribe(() => {
       afterNextRender(
         () => {
           if (this.calendarComponent?.calendarContainerRef) {

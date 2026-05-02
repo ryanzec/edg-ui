@@ -50,8 +50,8 @@ export const TIME_INPUT_ARIA_LABEL_DEFAULT: string | undefined = undefined;
   hostDirectives: [
     {
       directive: TimeInputBrainDirective,
-      inputs: ['timeInputDisabled: disabled', 'timeInputReadonly: readonly'],
-      outputs: ['timeInputFocused: focused', 'timeInputBlurred: blurred'],
+      inputs: ['disabled', 'readonly'],
+      outputs: ['focused', 'blurred'],
     },
   ],
   host: {
@@ -122,13 +122,13 @@ export class TimeInput implements AfterViewInit, ControlValueAccessor {
 
   constructor() {
     // forward brain value-change events to the form callbacks and value model
-    this.brain.timeInputValueChanged.subscribe((newValue) => {
+    this.brain.valueChanged.subscribe((newValue) => {
       this._onChange(newValue);
       this.value.set(newValue);
     });
 
     // forward brain touched events to the form's onTouched callback
-    this.brain.timeInputTouched.subscribe(() => {
+    this.brain.touched.subscribe(() => {
       this._onTouched();
     });
 

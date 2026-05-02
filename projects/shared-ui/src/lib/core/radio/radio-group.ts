@@ -33,8 +33,8 @@ export const RADIO_GROUP_NAME_DEFAULT = '';
   hostDirectives: [
     {
       directive: RadioGroupBrainDirective,
-      inputs: ['radioGroupValue: value', 'radioGroupDisabled: disabled'],
-      outputs: ['radioGroupValueChange: valueChange'],
+      inputs: ['value', 'disabled'],
+      outputs: ['valueChange'],
     },
   ],
   styleUrl: './radio-group.css',
@@ -95,7 +95,7 @@ export class RadioGroup implements ControlValueAccessor {
     });
 
     /** forward brain value changes to the reactive-forms callbacks */
-    this._brain.radioGroupValueChange.subscribe((value) => {
+    this._brain.valueChange.subscribe((value) => {
       this._onChange(value);
       this._onTouched();
       this.valueChange.emit(value);

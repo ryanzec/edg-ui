@@ -1,10 +1,10 @@
 import { Directive, OnDestroy, computed, effect, inject, input, output, signal } from '@angular/core';
 import { FocusMonitor } from '@angular/cdk/a11y';
 
-/** default value for the inputSelectAllOnFocus input */
+/** default value for the selectAllOnFocus input */
 export const INPUT_SELECT_ALL_ON_FOCUS_DEFAULT = false;
 
-/** default value for the inputDisabled input */
+/** default value for the disabled input */
 export const INPUT_DISABLED_DEFAULT = false;
 
 /** the internal state shape for the input brain directive */
@@ -39,16 +39,16 @@ export class InputBrainDirective implements OnDestroy {
   private _monitoredElement: HTMLInputElement | null = null;
 
   /** whether to select all text when the input receives focus */
-  public readonly inputSelectAllOnFocus = input<boolean>(INPUT_SELECT_ALL_ON_FOCUS_DEFAULT);
+  public readonly selectAllOnFocus = input<boolean>(INPUT_SELECT_ALL_ON_FOCUS_DEFAULT);
 
   /** whether the input is disabled by its consumer (combined with form-controlled disabled state) */
-  public readonly inputDisabled = input<boolean>(INPUT_DISABLED_DEFAULT);
+  public readonly disabled = input<boolean>(INPUT_DISABLED_DEFAULT);
 
   /** emitted when the input receives focus */
-  public readonly inputFocused = output<void>();
+  public readonly focused = output<void>();
 
   /** emitted when the input loses focus */
-  public readonly inputBlurred = output<void>();
+  public readonly blurred = output<void>();
 
   /** whether the input currently has focus */
   public readonly isFocused = computed<boolean>(() => this._state().isFocused);
@@ -57,7 +57,7 @@ export class InputBrainDirective implements OnDestroy {
   public readonly showPassword = computed<boolean>(() => this._state().showPassword);
 
   /** the resolved disabled state (consumer-disabled OR form-disabled) */
-  public readonly isDisabled = computed<boolean>(() => this.inputDisabled() || this._state().isDisabledFromForms);
+  public readonly isDisabled = computed<boolean>(() => this.disabled() || this._state().isDisabledFromForms);
 
   constructor() {
     // start / restart focus monitoring whenever the input element is (re)provided
@@ -86,13 +86,13 @@ export class InputBrainDirective implements OnDestroy {
         }));
 
         if (isFocused && !wasFocused) {
-          this.inputFocused.emit();
+          this.focused.emit();
 
-          if (this.inputSelectAllOnFocus()) {
+          if (this.selectAllOnFocus()) {
             element.select();
           }
         } else if (!isFocused && wasFocused) {
-          this.inputBlurred.emit();
+          this.blurred.emit();
         }
       });
     });

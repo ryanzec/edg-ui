@@ -44,8 +44,8 @@ export const LIST_ITEM_FORCE_CLICKABLE_DEFAULT = false;
   hostDirectives: [
     {
       directive: ListItemBrainDirective,
-      inputs: ['listItemDisabled: disabled'],
-      outputs: ['listItemClicked: clicked'],
+      inputs: ['disabled'],
+      outputs: ['clicked'],
     },
   ],
   host: {

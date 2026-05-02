@@ -13,16 +13,16 @@ export const allSplitterCollapsedSides = ['first', 'second'] as const;
 /** which section is collapsed to take up no space */
 export type SplitterCollapsedSide = (typeof allSplitterCollapsedSides)[number];
 
-/** default value for the splitterMinimumSize input */
+/** default value for the minimumSize input */
 export const SPLITTER_MINIMUM_SIZE_DEFAULT: number[] = [0];
 
-/** default value for the splitterSize model */
+/** default value for the size model */
 export const SPLITTER_SIZE_DEFAULT: number[] = [50];
 
-/** default value for the splitterIsEnabled input */
+/** default value for the isEnabled input */
 export const SPLITTER_IS_ENABLED_DEFAULT = true;
 
-/** default value for the splitterCollapsedSide input */
+/** default value for the collapsedSide input */
 export const SPLITTER_COLLAPSED_SIDE_DEFAULT: SplitterCollapsedSide | undefined = undefined;
 
 /** the internal state shape for the splitter brain directive */
@@ -51,32 +51,32 @@ export class SplitterBrainDirective {
   });
 
   /** the orientation of the split layout */
-  public readonly splitterDirection = input.required<SplitterDirection>();
+  public readonly direction = input.required<SplitterDirection>();
 
   /** the minimum size in pixels for each section; single value applies to both sides */
-  public readonly splitterMinimumSize = input<number[]>(SPLITTER_MINIMUM_SIZE_DEFAULT);
+  public readonly minimumSize = input<number[]>(SPLITTER_MINIMUM_SIZE_DEFAULT);
 
   /** the size as a percentage for each section; single value sets first with remainder for second; updated by drag and keyboard interactions */
-  public readonly splitterSize = model<number[]>(SPLITTER_SIZE_DEFAULT);
+  public readonly size = model<number[]>(SPLITTER_SIZE_DEFAULT);
 
   /** whether the divider is interactive and draggable */
-  public readonly splitterIsEnabled = input<boolean>(SPLITTER_IS_ENABLED_DEFAULT);
+  public readonly isEnabled = input<boolean>(SPLITTER_IS_ENABLED_DEFAULT);
 
   /** which section is collapsed to take up all space, undefined means neither section is collapsed */
-  public readonly splitterCollapsedSide = input<
-    SplitterCollapsedSide | undefined,
-    SplitterCollapsedSide | null | undefined
-  >(SPLITTER_COLLAPSED_SIDE_DEFAULT, { transform: angularUtils.transformNullToUndefined });
+  public readonly collapsedSide = input<SplitterCollapsedSide | undefined, SplitterCollapsedSide | null | undefined>(
+    SPLITTER_COLLAPSED_SIDE_DEFAULT,
+    { transform: angularUtils.transformNullToUndefined }
+  );
 
   /** emitted when a drag interaction begins on the divider */
-  public readonly splitterDragStarted = output<void>();
+  public readonly dragStarted = output<void>();
 
   /** emitted when a drag interaction ends on the divider, including pointer cancel */
-  public readonly splitterDragCompleted = output<void>();
+  public readonly dragCompleted = output<void>();
 
   /** the resolved minimum size tuple [first, second] in pixels */
   public readonly resolvedMinimumSize = computed<[number, number]>(() => {
-    const sizes = this.splitterMinimumSize();
+    const sizes = this.minimumSize();
 
     if (sizes.length === 1) {
       return [sizes[0], sizes[0]];
@@ -87,7 +87,7 @@ export class SplitterBrainDirective {
 
   /** the resolved size tuple [first, second] as percentages */
   public readonly resolvedSize = computed<[number, number]>(() => {
-    const sizes = this.splitterSize();
+    const sizes = this.size();
 
     if (sizes.length === 1) {
       return [sizes[0], 100 - sizes[0]];
@@ -98,7 +98,7 @@ export class SplitterBrainDirective {
 
   /** whether the divider can be dragged to resize sections */
   public readonly isDraggable = computed<boolean>(() => {
-    return this.splitterIsEnabled() && this.splitterCollapsedSide() === undefined;
+    return this.isEnabled() && this.collapsedSide() === undefined;
   });
 
   /** whether the divider is currently being dragged */
@@ -106,11 +106,11 @@ export class SplitterBrainDirective {
 
   /** the size of the first section as a percentage of the container */
   public readonly firstSectionSize = computed<number>(() => {
-    if (this.splitterCollapsedSide() === 'second') {
+    if (this.collapsedSide() === 'second') {
       return 100;
     }
 
-    if (this.splitterCollapsedSide() === 'first') {
+    if (this.collapsedSide() === 'first') {
       return 0;
     }
 
@@ -131,7 +131,7 @@ export class SplitterBrainDirective {
       isDragging: true,
     }));
 
-    this.splitterDragStarted.emit();
+    this.dragStarted.emit();
   }
 
   /** updates the size model as the pointer moves during an active drag */
@@ -145,7 +145,7 @@ export class SplitterBrainDirective {
 
     let newPosition: number;
 
-    if (this.splitterDirection() === 'horizontal') {
+    if (this.direction() === 'horizontal') {
       const containerWidth = containerRect.width;
       newPosition = ((event.clientX - containerRect.left) / containerWidth) * 100;
       const minFirstPercent = (minFirst / containerWidth) * 100;
@@ -159,7 +159,7 @@ export class SplitterBrainDirective {
       newPosition = Math.max(minFirstPercent, Math.min(100 - minSecondPercent, newPosition));
     }
 
-    this.splitterSize.set([newPosition, 100 - newPosition]);
+    this.size.set([newPosition, 100 - newPosition]);
   }
 
   /** ends the drag and releases pointer capture */
@@ -179,7 +179,7 @@ export class SplitterBrainDirective {
       isDragging: false,
     }));
 
-    this.splitterDragCompleted.emit();
+    this.dragCompleted.emit();
   }
 
   /** cancels the drag and clears dragging state */
@@ -193,7 +193,7 @@ export class SplitterBrainDirective {
       isDragging: false,
     }));
 
-    this.splitterDragCompleted.emit();
+    this.dragCompleted.emit();
   }
 
   /** adjusts size model via keyboard when the divider is focused */
@@ -209,7 +209,7 @@ export class SplitterBrainDirective {
 
     let newPosition = current;
 
-    if (this.splitterDirection() === 'horizontal') {
+    if (this.direction() === 'horizontal') {
       const containerWidth = containerRect.width;
       const minFirstPercent = (minFirst / containerWidth) * 100;
       const minSecondPercent = (minSecond / containerWidth) * 100;
@@ -251,6 +251,6 @@ export class SplitterBrainDirective {
       return;
     }
 
-    this.splitterSize.set([newPosition, 100 - newPosition]);
+    this.size.set([newPosition, 100 - newPosition]);
   }
 }

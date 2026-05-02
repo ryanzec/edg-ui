@@ -9,22 +9,22 @@ export type DatePickerInputSelection = {
   endDate: DateTime | null;
 };
 
-/** default value for the datePickerInputAllowPartialRangeSelection input */
+/** default value for the allowPartialRangeSelection input */
 export const DATE_PICKER_INPUT_ALLOW_PARTIAL_RANGE_SELECTION_DEFAULT = false;
 
-/** default value for the datePickerInputPartialRangeSelectionType input */
+/** default value for the partialRangeSelectionType input */
 export const DATE_PICKER_INPUT_PARTIAL_RANGE_SELECTION_TYPE_DEFAULT: CalendarPartialRangeSelectionType = 'range';
 
-/** default value for the datePickerInputSelectedStartDate input */
+/** default value for the selectedStartDate input */
 export const DATE_PICKER_INPUT_SELECTED_START_DATE_DEFAULT: DateTime | undefined = undefined;
 
-/** default value for the datePickerInputSelectedEndDate input */
+/** default value for the selectedEndDate input */
 export const DATE_PICKER_INPUT_SELECTED_END_DATE_DEFAULT: DateTime | undefined = undefined;
 
-/** default value for the datePickerInputAllowRangeSelection input */
+/** default value for the allowRangeSelection input */
 export const DATE_PICKER_INPUT_ALLOW_RANGE_SELECTION_DEFAULT = false;
 
-/** default value for the datePickerInputDisabled input */
+/** default value for the disabled input */
 export const DATE_PICKER_INPUT_DISABLED_DEFAULT = false;
 
 /** the internal state shape for the date-picker-input brain directive */
@@ -81,29 +81,27 @@ export class DatePickerInputBrainDirective {
   });
 
   // inputs
-  public readonly datePickerInputSelectedStartDate = input<DateTime | undefined, DateTime | null | undefined>(
+  public readonly selectedStartDate = input<DateTime | undefined, DateTime | null | undefined>(
     DATE_PICKER_INPUT_SELECTED_START_DATE_DEFAULT,
     { transform: angularUtils.transformNullToUndefined }
   );
-  public readonly datePickerInputSelectedEndDate = input<DateTime | undefined, DateTime | null | undefined>(
+  public readonly selectedEndDate = input<DateTime | undefined, DateTime | null | undefined>(
     DATE_PICKER_INPUT_SELECTED_END_DATE_DEFAULT,
     { transform: angularUtils.transformNullToUndefined }
   );
-  public readonly datePickerInputAllowRangeSelection = input<boolean>(DATE_PICKER_INPUT_ALLOW_RANGE_SELECTION_DEFAULT);
-  public readonly datePickerInputAllowPartialRangeSelection = input<boolean>(
-    DATE_PICKER_INPUT_ALLOW_PARTIAL_RANGE_SELECTION_DEFAULT
-  );
-  public readonly datePickerInputPartialRangeSelectionType = input<CalendarPartialRangeSelectionType>(
+  public readonly allowRangeSelection = input<boolean>(DATE_PICKER_INPUT_ALLOW_RANGE_SELECTION_DEFAULT);
+  public readonly allowPartialRangeSelection = input<boolean>(DATE_PICKER_INPUT_ALLOW_PARTIAL_RANGE_SELECTION_DEFAULT);
+  public readonly partialRangeSelectionType = input<CalendarPartialRangeSelectionType>(
     DATE_PICKER_INPUT_PARTIAL_RANGE_SELECTION_TYPE_DEFAULT
   );
-  public readonly datePickerInputDisabled = input<boolean>(DATE_PICKER_INPUT_DISABLED_DEFAULT);
+  public readonly disabled = input<boolean>(DATE_PICKER_INPUT_DISABLED_DEFAULT);
 
   // outputs — abstract events the presentation routes to its public api / cva callbacks
-  public readonly datePickerInputDateSelectedNotified = output<DatePickerInputSelection>();
-  public readonly datePickerInputDateSelectedEmitted = output<DatePickerInputSelection>();
-  public readonly datePickerInputPartialRangeSelectionTypeEmitted = output<CalendarPartialRangeSelectionType>();
-  public readonly datePickerInputTouchedNotified = output<void>();
-  public readonly datePickerInputFocusCalendarRequested = output<void>();
+  public readonly dateSelectedNotified = output<DatePickerInputSelection>();
+  public readonly dateSelectedEmitted = output<DatePickerInputSelection>();
+  public readonly partialRangeSelectionTypeEmitted = output<CalendarPartialRangeSelectionType>();
+  public readonly touchedNotified = output<void>();
+  public readonly focusCalendarRequested = output<void>();
 
   /** whether the overlay is currently open */
   public readonly isOverlayOpen = computed<boolean>(() => this._isOverlayOpenSignal());
@@ -114,7 +112,7 @@ export class DatePickerInputBrainDirective {
       return this._state().disabled;
     }
 
-    return this.datePickerInputDisabled();
+    return this.disabled();
   });
 
   /** the committed start date (form-controlled internal state when form-controlled, else input) */
@@ -123,7 +121,7 @@ export class DatePickerInputBrainDirective {
       return this._state().committedStartDate;
     }
 
-    return this.datePickerInputSelectedStartDate() ?? null;
+    return this.selectedStartDate() ?? null;
   });
 
   /** the committed end date (form-controlled internal state when form-controlled, else input) */
@@ -132,7 +130,7 @@ export class DatePickerInputBrainDirective {
       return this._state().committedEndDate;
     }
 
-    return this.datePickerInputSelectedEndDate() ?? null;
+    return this.selectedEndDate() ?? null;
   });
 
   /** the committed partial-range type (form-controlled internal state when form-controlled, else input) */
@@ -141,7 +139,7 @@ export class DatePickerInputBrainDirective {
       return this._state().committedPartialRangeSelectionType;
     }
 
-    return this.datePickerInputPartialRangeSelectionType();
+    return this.partialRangeSelectionType();
   });
 
   /** the in-progress start date (always from internal state) */
@@ -163,7 +161,7 @@ export class DatePickerInputBrainDirective {
   constructor() {
     // sync the partialRangeSelectionType input to internal state for form-controlled components
     effect(() => {
-      const type = this.datePickerInputPartialRangeSelectionType();
+      const type = this.partialRangeSelectionType();
       this._state.update((state) => ({
         ...state,
         committedPartialRangeSelectionType: type,
@@ -297,7 +295,7 @@ export class DatePickerInputBrainDirective {
 
   /** handles date selection from the calendar */
   public handleDateSelected(dates: DatePickerInputSelection): void {
-    const isRange = this.datePickerInputAllowRangeSelection();
+    const isRange = this.allowRangeSelection();
     const currentState = this._state();
     const selectionType = currentState.inProgressPartialRangeSelectionType;
 
@@ -381,10 +379,10 @@ export class DatePickerInputBrainDirective {
     }));
 
     if (this._isFormControlled()) {
-      this.datePickerInputDateSelectedNotified.emit({ startDate: null, endDate: null });
-      this.datePickerInputTouchedNotified.emit();
+      this.dateSelectedNotified.emit({ startDate: null, endDate: null });
+      this.touchedNotified.emit();
     } else {
-      this.datePickerInputDateSelectedEmitted.emit({ startDate: null, endDate: null });
+      this.dateSelectedEmitted.emit({ startDate: null, endDate: null });
     }
 
     this._isClosingAfterCommit = true;
@@ -399,7 +397,7 @@ export class DatePickerInputBrainDirective {
   /** handles overlay attach event from cdk */
   public handleOverlayAttach(): void {
     this._isOverlayOpenSignal.set(true);
-    this.datePickerInputFocusCalendarRequested.emit();
+    this.focusCalendarRequested.emit();
   }
 
   /** handles overlay detach event from cdk; reverts/clears if closing without an explicit commit */
@@ -414,12 +412,12 @@ export class DatePickerInputBrainDirective {
 
     this._isClosingAfterCommit = false;
     this._isOverlayOpenSignal.set(false);
-    this.datePickerInputTouchedNotified.emit();
+    this.touchedNotified.emit();
   }
 
   private _isSelectionComplete(startDate: DateTime | null, endDate: DateTime | null): boolean {
-    const isRange = this.datePickerInputAllowRangeSelection();
-    const allowPartial = this.datePickerInputAllowPartialRangeSelection();
+    const isRange = this.allowRangeSelection();
+    const allowPartial = this.allowPartialRangeSelection();
     const selectionType = this._state().inProgressPartialRangeSelectionType;
 
     if (!isRange) {
@@ -440,8 +438,8 @@ export class DatePickerInputBrainDirective {
   }
 
   private _shouldClearIncompleteRange(): boolean {
-    const isRange = this.datePickerInputAllowRangeSelection();
-    const allowPartial = this.datePickerInputAllowPartialRangeSelection();
+    const isRange = this.allowRangeSelection();
+    const allowPartial = this.allowPartialRangeSelection();
     const state = this._state();
     const selectionType = state.inProgressPartialRangeSelectionType;
 
@@ -474,12 +472,12 @@ export class DatePickerInputBrainDirective {
           committedEndDate: null,
         }));
 
-        this.datePickerInputDateSelectedNotified.emit({ startDate: null, endDate: null });
+        this.dateSelectedNotified.emit({ startDate: null, endDate: null });
 
         return;
       }
 
-      this.datePickerInputDateSelectedEmitted.emit({ startDate: null, endDate: null });
+      this.dateSelectedEmitted.emit({ startDate: null, endDate: null });
 
       return;
     }
@@ -495,7 +493,7 @@ export class DatePickerInputBrainDirective {
       committedPartialRangeSelectionType: state.snapshotPartialRangeSelectionType,
     }));
 
-    this.datePickerInputDateSelectedNotified.emit({
+    this.dateSelectedNotified.emit({
       startDate: state.snapshotStartDate,
       endDate: state.snapshotEndDate,
     });
@@ -514,17 +512,17 @@ export class DatePickerInputBrainDirective {
         committedPartialRangeSelectionType: inProgressMode,
       }));
 
-      this.datePickerInputDateSelectedNotified.emit({ startDate, endDate });
+      this.dateSelectedNotified.emit({ startDate, endDate });
     } else {
       this._state.update((s) => ({
         ...s,
         committedPartialRangeSelectionType: inProgressMode,
       }));
-      this.datePickerInputDateSelectedEmitted.emit({ startDate, endDate });
+      this.dateSelectedEmitted.emit({ startDate, endDate });
     }
 
     if (inProgressMode !== committedMode) {
-      this.datePickerInputPartialRangeSelectionTypeEmitted.emit(inProgressMode);
+      this.partialRangeSelectionTypeEmitted.emit(inProgressMode);
     }
 
     this._isClosingAfterCommit = true;

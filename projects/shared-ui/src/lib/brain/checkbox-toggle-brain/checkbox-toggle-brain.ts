@@ -1,9 +1,9 @@
 import { Directive, computed, effect, input, output, signal } from '@angular/core';
 
-/** default value for the checkboxToggleChecked input */
+/** default value for the checked input */
 export const CHECKBOX_TOGGLE_CHECKED_DEFAULT = false;
 
-/** default value for the checkboxToggleDisabled input */
+/** default value for the disabled input */
 export const CHECKBOX_TOGGLE_DISABLED_DEFAULT = false;
 
 /**
@@ -21,28 +21,28 @@ export class CheckboxToggleBrainDirective {
   private readonly _formDisabled = signal<boolean>(false);
 
   /** the checked input value (used in non-form binding); synced into internal state when not form-controlled */
-  public readonly checkboxToggleChecked = input<boolean>(CHECKBOX_TOGGLE_CHECKED_DEFAULT);
+  public readonly checked = input<boolean>(CHECKBOX_TOGGLE_CHECKED_DEFAULT);
 
   /** whether the checkbox-toggle is disabled by its consumer */
-  public readonly checkboxToggleDisabled = input<boolean>(CHECKBOX_TOGGLE_DISABLED_DEFAULT);
+  public readonly disabled = input<boolean>(CHECKBOX_TOGGLE_DISABLED_DEFAULT);
 
   /** emitted with the new checked value whenever a user interaction toggles the checkbox-toggle */
-  public readonly checkboxToggleChanged = output<boolean>();
+  public readonly changed = output<boolean>();
 
   /** emitted whenever a user interaction completes (the equivalent of blur for ControlValueAccessor onTouched) */
-  public readonly checkboxToggleTouched = output<void>();
+  public readonly touched = output<void>();
 
   /** the resolved current checked state */
   public readonly isChecked = computed<boolean>(() => this._internalChecked());
 
   /** the resolved current disabled state (consumer-disabled OR form-disabled) */
-  public readonly isDisabled = computed<boolean>(() => this.checkboxToggleDisabled() || this._formDisabled());
+  public readonly isDisabled = computed<boolean>(() => this.disabled() || this._formDisabled());
 
   constructor() {
     // syncs the checked input to internal state when not form-controlled so non-form usage (e.g. storybook args) reflects changes
     effect(() => {
       if (!this._isFormControlled()) {
-        this._internalChecked.set(this.checkboxToggleChecked());
+        this._internalChecked.set(this.checked());
       }
     });
   }
@@ -75,8 +75,8 @@ export class CheckboxToggleBrainDirective {
     const newChecked = !this._internalChecked();
 
     this._internalChecked.set(newChecked);
-    this.checkboxToggleChanged.emit(newChecked);
-    this.checkboxToggleTouched.emit();
+    this.changed.emit(newChecked);
+    this.touched.emit();
   }
 
   /** handles keyboard interaction, triggering a click toggle on space or enter */

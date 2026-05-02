@@ -1,9 +1,9 @@
 import { Directive, computed, input, output, signal } from '@angular/core';
 
-/** default value for the radioGroupValue input */
+/** default value for the value input */
 export const RADIO_GROUP_VALUE_DEFAULT = '';
 
-/** default value for the radioGroupDisabled input */
+/** default value for the disabled input */
 export const RADIO_GROUP_DISABLED_DEFAULT = false;
 
 /**
@@ -27,13 +27,13 @@ export class RadioGroupBrainDirective {
   private _getOrderedValues: () => string[] = () => [];
 
   /** the externally bound value input (used in non-form binding) */
-  public readonly radioGroupValue = input<string>(RADIO_GROUP_VALUE_DEFAULT);
+  public readonly value = input<string>(RADIO_GROUP_VALUE_DEFAULT);
 
   /** whether all radios in the group are disabled */
-  public readonly radioGroupDisabled = input<boolean>(RADIO_GROUP_DISABLED_DEFAULT);
+  public readonly disabled = input<boolean>(RADIO_GROUP_DISABLED_DEFAULT);
 
   /** emits the newly selected value when a radio is selected via this brain */
-  public readonly radioGroupValueChange = output<string>();
+  public readonly valueChange = output<string>();
 
   /** the resolved current value — uses internal state when form-controlled, otherwise the value input */
   public readonly currentValue = computed<string>(() => {
@@ -41,7 +41,7 @@ export class RadioGroupBrainDirective {
       return this._internalValue();
     }
 
-    return this.radioGroupValue();
+    return this.value();
   });
 
   /** registers the lookup the brain uses to resolve the ordered list of values for next/previous navigation */
@@ -61,17 +61,17 @@ export class RadioGroupBrainDirective {
 
   /** selects the given value and emits the change; gated by disabled */
   public selectValue(value: string): void {
-    if (this.radioGroupDisabled()) {
+    if (this.disabled()) {
       return;
     }
 
     this._internalValue.set(value);
-    this.radioGroupValueChange.emit(value);
+    this.valueChange.emit(value);
   }
 
   /** selects the value after the given current value, wrapping around */
   public selectNext(currentValue: string): void {
-    if (this.radioGroupDisabled()) {
+    if (this.disabled()) {
       return;
     }
 
@@ -88,7 +88,7 @@ export class RadioGroupBrainDirective {
 
   /** selects the value before the given current value, wrapping around */
   public selectPrevious(currentValue: string): void {
-    if (this.radioGroupDisabled()) {
+    if (this.disabled()) {
       return;
     }
 

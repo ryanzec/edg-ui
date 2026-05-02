@@ -117,8 +117,8 @@ export type InputInlineItem = {
   hostDirectives: [
     {
       directive: InputBrainDirective,
-      inputs: ['inputSelectAllOnFocus: selectAllOnFocus', 'inputDisabled: disabled'],
-      outputs: ['inputFocused: focused', 'inputBlurred: blurred'],
+      inputs: ['selectAllOnFocus', 'disabled'],
+      outputs: ['focused', 'blurred'],
     },
   ],
   host: {

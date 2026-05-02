@@ -1,12 +1,12 @@
 import { Directive, input, model, output } from '@angular/core';
 
-/** default value for the checkboxChecked model */
+/** default value for the checked model */
 export const CHECKBOX_CHECKED_DEFAULT = false;
 
-/** default value for the checkboxIndeterminate model */
+/** default value for the indeterminate model */
 export const CHECKBOX_INDETERMINATE_DEFAULT = false;
 
-/** default value for the checkboxDisabled input */
+/** default value for the disabled input */
 export const CHECKBOX_DISABLED_DEFAULT = false;
 
 /**
@@ -20,23 +20,23 @@ export const CHECKBOX_DISABLED_DEFAULT = false;
 })
 export class CheckboxBrainDirective {
   /** whether the checkbox is currently checked */
-  public readonly checkboxChecked = model<boolean>(CHECKBOX_CHECKED_DEFAULT);
+  public readonly checked = model<boolean>(CHECKBOX_CHECKED_DEFAULT);
 
   /** whether the checkbox is in an indeterminate state */
-  public readonly checkboxIndeterminate = model<boolean>(CHECKBOX_INDETERMINATE_DEFAULT);
+  public readonly indeterminate = model<boolean>(CHECKBOX_INDETERMINATE_DEFAULT);
 
   /** whether the checkbox is disabled */
-  public readonly checkboxDisabled = input<boolean>(CHECKBOX_DISABLED_DEFAULT);
+  public readonly disabled = input<boolean>(CHECKBOX_DISABLED_DEFAULT);
 
   /** emitted with the new checked value whenever a user interaction toggles the checkbox */
-  public readonly checkboxChanged = output<boolean>();
+  public readonly changed = output<boolean>();
 
   /** emitted whenever a user interaction completes (i.e. the equivalent of blur for ControlValueAccessor onTouched) */
-  public readonly checkboxTouched = output<void>();
+  public readonly touched = output<void>();
 
   /** handles click interaction, toggling checked / indeterminate state */
   public handleClick(event: Event): void {
-    if (this.checkboxDisabled()) {
+    if (this.disabled()) {
       event.preventDefault();
 
       return;
@@ -44,17 +44,17 @@ export class CheckboxBrainDirective {
 
     event.preventDefault();
 
-    const newChecked = this.checkboxIndeterminate() ? true : !this.checkboxChecked();
+    const newChecked = this.indeterminate() ? true : !this.checked();
 
-    this.checkboxChecked.set(newChecked);
-    this.checkboxIndeterminate.set(false);
-    this.checkboxChanged.emit(newChecked);
-    this.checkboxTouched.emit();
+    this.checked.set(newChecked);
+    this.indeterminate.set(false);
+    this.changed.emit(newChecked);
+    this.touched.emit();
   }
 
   /** handles keyboard interaction, triggering a click toggle on space or enter */
   public handleKeyDown(event: KeyboardEvent): void {
-    if (this.checkboxDisabled()) {
+    if (this.disabled()) {
       return;
     }
 

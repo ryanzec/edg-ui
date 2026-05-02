@@ -17,22 +17,22 @@ export const allDialogPositions = ['center', 'top', 'bottom', 'left', 'right'] a
 /** union type of all valid dialog positions */
 export type DialogPosition = (typeof allDialogPositions)[number];
 
-/** default value for the dialogPosition input */
+/** default value for the position input */
 export const DIALOG_POSITION_DEFAULT: DialogPosition = 'center';
 
-/** default value for the dialogHasRoundedCorners input */
+/** default value for the hasRoundedCorners input */
 export const DIALOG_HAS_ROUNDED_CORNERS_DEFAULT = true;
 
-/** default value for the dialogHasBackdrop input */
+/** default value for the hasBackdrop input */
 export const DIALOG_HAS_BACKDROP_DEFAULT = true;
 
-/** default value for the dialogEnableCloseOnClickOutside input */
+/** default value for the enableCloseOnClickOutside input */
 export const DIALOG_ENABLE_CLOSE_ON_CLICK_OUTSIDE_DEFAULT = false;
 
-/** default value for the dialogEnableEscapeKey input */
+/** default value for the enableEscapeKey input */
 export const DIALOG_ENABLE_ESCAPE_KEY_DEFAULT = true;
 
-/** default value for the dialogShowCloseIcon input */
+/** default value for the showCloseIcon input */
 export const DIALOG_SHOW_CLOSE_ICON_DEFAULT = true;
 
 /**
@@ -57,25 +57,25 @@ export class DialogBrainDirective {
   private _showCloseIcon = signal<boolean>(true);
 
   /** position of the dialog on screen */
-  public readonly dialogPosition = input<DialogPosition>(DIALOG_POSITION_DEFAULT);
+  public readonly position = input<DialogPosition>(DIALOG_POSITION_DEFAULT);
 
   /** whether the dialog container has rounded corners */
-  public readonly dialogHasRoundedCorners = input<boolean>(DIALOG_HAS_ROUNDED_CORNERS_DEFAULT);
+  public readonly hasRoundedCorners = input<boolean>(DIALOG_HAS_ROUNDED_CORNERS_DEFAULT);
 
   /** whether a backdrop overlay is shown behind the dialog */
-  public readonly dialogHasBackdrop = input<boolean>(DIALOG_HAS_BACKDROP_DEFAULT);
+  public readonly hasBackdrop = input<boolean>(DIALOG_HAS_BACKDROP_DEFAULT);
 
   /** whether clicking the backdrop / outside the dialog should close it */
-  public readonly dialogEnableCloseOnClickOutside = input<boolean>(DIALOG_ENABLE_CLOSE_ON_CLICK_OUTSIDE_DEFAULT);
+  public readonly enableCloseOnClickOutside = input<boolean>(DIALOG_ENABLE_CLOSE_ON_CLICK_OUTSIDE_DEFAULT);
 
   /** whether the escape key can close the dialog */
-  public readonly dialogEnableEscapeKey = input<boolean>(DIALOG_ENABLE_ESCAPE_KEY_DEFAULT);
+  public readonly enableEscapeKey = input<boolean>(DIALOG_ENABLE_ESCAPE_KEY_DEFAULT);
 
   /** whether the close icon is shown in the dialog */
-  public readonly dialogShowCloseIcon = input<boolean>(DIALOG_SHOW_CLOSE_ICON_DEFAULT);
+  public readonly showCloseIcon = input<boolean>(DIALOG_SHOW_CLOSE_ICON_DEFAULT);
 
   /** emitted whenever the dialog is closed by any means */
-  public readonly dialogClosed = output<void>();
+  public readonly closed = output<void>();
 
   /** opens the dialog using the provided component or template, with optional data passed to it */
   public openDialog<T>(
@@ -91,13 +91,13 @@ export class DialogBrainDirective {
       return null;
     }
 
-    this._escapeKeyEnabled = this.dialogEnableEscapeKey();
+    this._escapeKeyEnabled = this.enableEscapeKey();
     this._closeIconEnabled.set(this._escapeKeyEnabled);
-    this._showCloseIcon.set(this.dialogShowCloseIcon());
+    this._showCloseIcon.set(this.showCloseIcon());
 
     const panelClass = this._getPanelClass();
-    const hasBackdrop = this.dialogHasBackdrop();
-    const disableClose = this.dialogEnableCloseOnClickOutside() === false;
+    const hasBackdrop = this.hasBackdrop();
+    const disableClose = this.enableCloseOnClickOutside() === false;
 
     const providers = [{ provide: DIALOG_TRIGGER_BRAIN, useValue: this }];
 
@@ -113,7 +113,7 @@ export class DialogBrainDirective {
     } else {
       const dialogData = {
         ...data,
-        hasRoundedCorners: this.dialogHasRoundedCorners(),
+        hasRoundedCorners: this.hasRoundedCorners(),
         showCloseIcon: this._showCloseIcon,
         closeIconEnabled: this._closeIconEnabled,
       };
@@ -129,7 +129,7 @@ export class DialogBrainDirective {
     }
 
     this._dialogRef.closed.pipe(take(1)).subscribe(() => {
-      this.dialogClosed.emit();
+      this.closed.emit();
     });
 
     return this._dialogRef as DialogRef<T, T>;
@@ -166,7 +166,7 @@ export class DialogBrainDirective {
       return;
     }
 
-    if (this.dialogEnableCloseOnClickOutside()) {
+    if (this.enableCloseOnClickOutside()) {
       return;
     }
 
@@ -181,7 +181,7 @@ export class DialogBrainDirective {
   }
 
   private _getPanelClass(): string[] {
-    const position = this.dialogPosition();
+    const position = this.position();
 
     switch (position) {
       case 'top':

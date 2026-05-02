@@ -31,7 +31,7 @@ export const CHART_CONTAINER_CLASS_DEFAULT = '';
   hostDirectives: [
     {
       directive: ChartBrainDirective,
-      inputs: ['chartConfig: config', 'chartIsLoading: isLoading'],
+      inputs: ['config', 'isLoading'],
     },
   ],
   styleUrl: './chart.css',

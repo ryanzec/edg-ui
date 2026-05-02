@@ -44,8 +44,8 @@ export const AUTO_SCROLL_ARIA_LIVE_DEFAULT: AutoScrollAriaLive = 'polite';
   hostDirectives: [
     {
       directive: AutoScrollBrainDirective,
-      inputs: ['autoScrollEnabled'],
-      outputs: ['autoScrollStateChange: stateChange', 'autoScrollReady: ready'],
+      inputs: ['enabled: autoScrollEnabled'],
+      outputs: ['stateChange', 'ready'],
     },
     {
       directive: CdkObserveContent,

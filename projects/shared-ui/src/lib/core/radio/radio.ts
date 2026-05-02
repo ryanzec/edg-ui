@@ -27,7 +27,7 @@ export const RADIO_SIZE_DEFAULT: RadioSize = 'sm';
   hostDirectives: [
     {
       directive: RadioBrainDirective,
-      inputs: ['radioDisabled: disabled'],
+      inputs: ['disabled'],
     },
   ],
   host: {
@@ -82,7 +82,7 @@ export class Radio implements OnInit {
 
   constructor() {
     // route brain interaction events to the parent group when present, otherwise mutate local state
-    this.brain.radioSelectionRequested.subscribe(() => {
+    this.brain.selectionRequested.subscribe(() => {
       if (this._radioGroup) {
         this._radioGroup._onRadioSelect(this.value());
 
@@ -94,11 +94,11 @@ export class Radio implements OnInit {
       }
     });
 
-    this.brain.radioFocusNextRequested.subscribe(() => {
+    this.brain.focusNextRequested.subscribe(() => {
       this._radioGroup?._focusNext(this.value());
     });
 
-    this.brain.radioFocusPreviousRequested.subscribe(() => {
+    this.brain.focusPreviousRequested.subscribe(() => {
       this._radioGroup?._focusPrevious(this.value());
     });
   }

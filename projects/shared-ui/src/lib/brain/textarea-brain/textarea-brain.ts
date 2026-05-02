@@ -3,13 +3,13 @@ import { FocusMonitor } from '@angular/cdk/a11y';
 import { Subject } from 'rxjs';
 import { outputFromObservable } from '@angular/core/rxjs-interop';
 
-/** default value for the textareaSelectAllOnFocus input */
+/** default value for the selectAllOnFocus input */
 export const TEXTAREA_SELECT_ALL_ON_FOCUS_DEFAULT = false;
 
-/** default value for the textareaDisabled input */
+/** default value for the disabled input */
 export const TEXTAREA_DISABLED_DEFAULT = false;
 
-/** default value for the textareaInverseEnter input */
+/** default value for the inverseEnter input */
 export const TEXTAREA_INVERSE_ENTER_DEFAULT = false;
 
 /** the internal state shape for the textarea brain directive */
@@ -44,28 +44,28 @@ export class TextareaBrainDirective implements OnDestroy {
   private _monitoredElement: HTMLTextAreaElement | null = null;
 
   /** whether to select all text when the textarea receives focus */
-  public readonly textareaSelectAllOnFocus = input<boolean>(TEXTAREA_SELECT_ALL_ON_FOCUS_DEFAULT);
+  public readonly selectAllOnFocus = input<boolean>(TEXTAREA_SELECT_ALL_ON_FOCUS_DEFAULT);
 
   /** whether the textarea is disabled by its consumer (combined with form-controlled disabled state) */
-  public readonly textareaDisabled = input<boolean>(TEXTAREA_DISABLED_DEFAULT);
+  public readonly disabled = input<boolean>(TEXTAREA_DISABLED_DEFAULT);
 
   /** when true, enter submits and shift+enter adds a new line; when false, the behavior is reversed */
-  public readonly textareaInverseEnter = input<boolean>(TEXTAREA_INVERSE_ENTER_DEFAULT);
+  public readonly inverseEnter = input<boolean>(TEXTAREA_INVERSE_ENTER_DEFAULT);
 
   /** emitted when the textarea receives focus */
-  public readonly textareaFocused = output<void>();
+  public readonly focused = output<void>();
 
   /** emitted when the textarea loses focus */
-  public readonly textareaBlurred = output<void>();
+  public readonly blurred = output<void>();
 
   /** emitted when the configured submit key combination is pressed */
-  public readonly textareaEnterPressed = outputFromObservable(this._enterPressed$);
+  public readonly enterPressed = outputFromObservable(this._enterPressed$);
 
   /** whether the textarea currently has focus */
   public readonly isFocused = computed<boolean>(() => this._state().isFocused);
 
   /** the resolved disabled state (consumer-disabled OR form-disabled) */
-  public readonly isDisabled = computed<boolean>(() => this.textareaDisabled() || this._state().isDisabledFromForms);
+  public readonly isDisabled = computed<boolean>(() => this.disabled() || this._state().isDisabledFromForms);
 
   constructor() {
     // start / restart focus monitoring whenever the textarea element is (re)provided
@@ -94,13 +94,13 @@ export class TextareaBrainDirective implements OnDestroy {
         }));
 
         if (isFocused && !wasFocused) {
-          this.textareaFocused.emit();
+          this.focused.emit();
 
-          if (this.textareaSelectAllOnFocus()) {
+          if (this.selectAllOnFocus()) {
             element.select();
           }
         } else if (!isFocused && wasFocused) {
-          this.textareaBlurred.emit();
+          this.blurred.emit();
         }
       });
     });
@@ -140,7 +140,7 @@ export class TextareaBrainDirective implements OnDestroy {
       return;
     }
 
-    const shouldTriggerEvent = this.textareaInverseEnter() ? !event.shiftKey : event.shiftKey;
+    const shouldTriggerEvent = this.inverseEnter() ? !event.shiftKey : event.shiftKey;
 
     if (!shouldTriggerEvent) {
       return;

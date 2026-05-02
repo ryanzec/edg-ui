@@ -1,6 +1,6 @@
 import { Directive, computed, input, output, signal } from '@angular/core';
 
-/** default value for the fileUploadFileTypes input */
+/** default value for the fileTypes input */
 export const FILE_UPLOAD_FILE_TYPES_DEFAULT: string[] = [];
 
 /** the internal state shape for the file-upload brain directive */
@@ -32,10 +32,10 @@ export class FileUploadBrainDirective {
   });
 
   /** accepted file types; supports prefix (e.g. "image/") or exact mime type (e.g. "image/png") */
-  public readonly fileUploadFileTypes = input<string[]>(FILE_UPLOAD_FILE_TYPES_DEFAULT);
+  public readonly fileTypes = input<string[]>(FILE_UPLOAD_FILE_TYPES_DEFAULT);
 
   /** emits the selected file when a valid file is chosen */
-  public readonly fileUploadFileSelected = output<File>();
+  public readonly fileSelected = output<File>();
 
   /** the name of the currently selected file */
   public readonly fileName = computed<string | undefined>(() => this._state().fileName);
@@ -47,7 +47,7 @@ export class FileUploadBrainDirective {
   public readonly error = computed<string | undefined>(() => this._state().error);
 
   /** comma-separated accepted file types string for the native input accept attribute */
-  public readonly fileTypesAsString = computed<string>(() => this.fileUploadFileTypes().join(','));
+  public readonly fileTypesAsString = computed<string>(() => this.fileTypes().join(','));
 
   /** activates hover state during drag-over */
   public handleDragOver(event: DragEvent): void {
@@ -85,7 +85,7 @@ export class FileUploadBrainDirective {
   }
 
   private _isFileValid(file: File): boolean {
-    const types = this.fileUploadFileTypes();
+    const types = this.fileTypes();
 
     return types.length === 0 || types.some((type) => file.type.startsWith(type));
   }
@@ -100,13 +100,13 @@ export class FileUploadBrainDirective {
     if (!this._isFileValid(file)) {
       this._state.update((state) => ({
         ...state,
-        error: `Invalid file type. Please select one of the following: ${this.fileUploadFileTypes().join(', ')}.`,
+        error: `Invalid file type. Please select one of the following: ${this.fileTypes().join(', ')}.`,
       }));
 
       return;
     }
 
     this._state.update((state) => ({ ...state, fileName: file.name, error: undefined }));
-    this.fileUploadFileSelected.emit(file);
+    this.fileSelected.emit(file);
   }
 }

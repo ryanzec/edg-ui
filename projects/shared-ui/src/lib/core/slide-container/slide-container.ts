@@ -49,13 +49,8 @@ export const SLIDE_CONTAINER_ARIA_LABEL_DEFAULT = 'Slide container';
   hostDirectives: [
     {
       directive: SlideContainerBrainDirective,
-      inputs: [
-        'slideContainerOrientation: orientation',
-        'slideContainerSize: size',
-        'slideContainerAllowLooping: allowLooping',
-        'slideContainerActiveIndex: activeIndex',
-      ],
-      outputs: ['slideContainerActiveIndexChange: activeIndexChange'],
+      inputs: ['orientation', 'size', 'allowLooping', 'activeIndex'],
+      outputs: ['activeIndexChange'],
     },
   ],
   host: {

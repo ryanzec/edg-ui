@@ -77,14 +77,8 @@ export const COMBOBOX_CONTAINER_CLASS_DEFAULT = '';
   hostDirectives: [
     {
       directive: ComboboxBrainDirective,
-      inputs: [
-        'comboboxAutoShowOption: autoShowOption',
-        'comboboxAllowNewOptions: allowNewOptions',
-        'comboboxIsMultiSelect: isMultiSelect',
-        'comboboxIsGroupingEnabled: isGroupingEnabled',
-        'comboboxDisabled: disabled',
-      ],
-      outputs: ['comboboxFocused: focused', 'comboboxBlurred: blurred'],
+      inputs: ['autoShowOption', 'allowNewOptions', 'isMultiSelect', 'isGroupingEnabled', 'disabled'],
+      outputs: ['focused', 'blurred'],
     },
   ],
   styleUrl: './combobox.css',
@@ -258,17 +252,17 @@ export class Combobox implements AfterViewInit, ControlValueAccessor {
     });
 
     // forward brain's form-controlled selected-values notifications to the cva _onChange callback
-    this.brain.comboboxSelectedValuesNotified.subscribe((values) => {
+    this.brain.selectedValuesNotified.subscribe((values) => {
       this._onChange(values);
     });
 
     // brain notifies the input was touched on blur (when no selection remains, etc.)
-    this.brain.comboboxBlurred.subscribe(() => {
+    this.brain.blurred.subscribe(() => {
       this._onTouched();
     });
 
     // brain requests an overlay position update (e.g. multi-select tag size change)
-    this.brain.comboboxOverlayPositionUpdateRequested.subscribe(() => {
+    this.brain.overlayPositionUpdateRequested.subscribe(() => {
       this._updateOverlayPosition();
     });
 

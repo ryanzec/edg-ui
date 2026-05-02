@@ -54,43 +54,43 @@ export class ComboboxBrainDirective {
   };
 
   /** auto-open / auto-show the dropdown when the input is focused / typed in */
-  public readonly comboboxAutoShowOption = input<boolean>(COMBOBOX_AUTO_SHOW_OPTION_DEFAULT);
+  public readonly autoShowOption = input<boolean>(COMBOBOX_AUTO_SHOW_OPTION_DEFAULT);
 
   /** allow a synthetic "new" option to be added when the input doesn't match any existing option */
-  public readonly comboboxAllowNewOptions = input<boolean>(COMBOBOX_ALLOW_NEW_OPTIONS_DEFAULT);
+  public readonly allowNewOptions = input<boolean>(COMBOBOX_ALLOW_NEW_OPTIONS_DEFAULT);
 
   /** whether the combobox supports multi-selection */
-  public readonly comboboxIsMultiSelect = input<boolean>(COMBOBOX_IS_MULTI_SELECT_DEFAULT);
+  public readonly isMultiSelect = input<boolean>(COMBOBOX_IS_MULTI_SELECT_DEFAULT);
 
   /** whether keyboard nav should respect option groups */
-  public readonly comboboxIsGroupingEnabled = input<boolean>(COMBOBOX_IS_GROUPING_ENABLED_DEFAULT);
+  public readonly isGroupingEnabled = input<boolean>(COMBOBOX_IS_GROUPING_ENABLED_DEFAULT);
 
   /** whether the combobox is disabled by its consumer (combined with form-controlled disabled state) */
-  public readonly comboboxDisabled = input<boolean>(COMBOBOX_DISABLED_DEFAULT);
+  public readonly disabled = input<boolean>(COMBOBOX_DISABLED_DEFAULT);
 
   /** emitted when the input gains focus */
-  public readonly comboboxFocused = output<void>();
+  public readonly focused = output<void>();
 
   /** emitted when the input loses focus */
-  public readonly comboboxBlurred = output<void>();
+  public readonly blurred = output<void>();
 
   /** emitted when the brain wants the presentation to update the overlay position (e.g. multi-select tag size change) */
-  public readonly comboboxOverlayPositionUpdateRequested = output<void>();
+  public readonly overlayPositionUpdateRequested = output<void>();
 
   /** emitted with the new selected values when they change while the form is controlled and not initializing */
-  public readonly comboboxSelectedValuesNotified = output<(string | number)[]>();
+  public readonly selectedValuesNotified = output<(string | number)[]>();
 
   /** whether the input currently has focus */
   public readonly isFocused = computed<boolean>(() => this._state().isFocused);
 
   /** the resolved disabled state */
-  public readonly isDisabled = computed<boolean>(() => this.comboboxDisabled() || this._state().isDisabledByForm);
+  public readonly isDisabled = computed<boolean>(() => this.disabled() || this._state().isDisabledByForm);
 
   /**
    * synthetic option to display when allowNewOptions is true and the input doesn't exactly match any existing option
    */
   public readonly newOptionSuggestion = computed<ComboboxOption | null>(() => {
-    if (!this.comboboxAllowNewOptions()) {
+    if (!this.allowNewOptions()) {
       return null;
     }
 
@@ -144,14 +144,14 @@ export class ComboboxBrainDirective {
       return;
     }
 
-    this.comboboxSelectedValuesNotified.emit(values);
+    this.selectedValuesNotified.emit(values);
   }
 
   /** handles input value changes from the inner input */
   public handleInputValueChange(value: string): void {
     this._store.setInputValue(value);
 
-    if (this.comboboxAutoShowOption() && value.length > 0 && !this._store.isOpened()) {
+    if (this.autoShowOption() && value.length > 0 && !this._store.isOpened()) {
       this._store.open();
     }
   }
@@ -159,9 +159,9 @@ export class ComboboxBrainDirective {
   /** handles input focus */
   public handleInputFocus(): void {
     this._state.update((state) => ({ ...state, isFocused: true }));
-    this.comboboxFocused.emit();
+    this.focused.emit();
 
-    if (this.comboboxAutoShowOption()) {
+    if (this.autoShowOption()) {
       this._store.open();
     }
   }
@@ -180,7 +180,7 @@ export class ComboboxBrainDirective {
   /** handles input blur, also notifies form-controlled callback when no selection remains */
   public handleInputBlur(): void {
     this._state.update((state) => ({ ...state, isFocused: false }));
-    this.comboboxBlurred.emit();
+    this.blurred.emit();
 
     this._store.close();
 
@@ -190,13 +190,13 @@ export class ComboboxBrainDirective {
       this._store.clearInputValue();
 
       if (this._state().isFormControlled) {
-        this.comboboxSelectedValuesNotified.emit([]);
+        this.selectedValuesNotified.emit([]);
       }
 
       return;
     }
 
-    if (!this.comboboxIsMultiSelect()) {
+    if (!this.isMultiSelect()) {
       this._store.setInputValue(selectedOptions[0].label);
 
       return;
@@ -279,7 +279,7 @@ export class ComboboxBrainDirective {
 
   /** signals to the presentation that the overlay needs a position recalculation */
   public requestOverlayPositionUpdate(): void {
-    this.comboboxOverlayPositionUpdateRequested.emit();
+    this.overlayPositionUpdateRequested.emit();
   }
 
   private _enterKey(): void {
@@ -303,7 +303,7 @@ export class ComboboxBrainDirective {
       this._store.open();
     }
 
-    if (this.comboboxIsGroupingEnabled()) {
+    if (this.isGroupingEnabled()) {
       if (!this._store.focusedOption()) {
         this._store.groupFocusFirst();
 
@@ -329,7 +329,7 @@ export class ComboboxBrainDirective {
       this._store.open();
     }
 
-    if (this.comboboxIsGroupingEnabled()) {
+    if (this.isGroupingEnabled()) {
       if (!this._store.focusedOption()) {
         this._store.groupFocusLast();
 
@@ -351,7 +351,7 @@ export class ComboboxBrainDirective {
   }
 
   private _homeKey(): void {
-    if (this.comboboxIsGroupingEnabled()) {
+    if (this.isGroupingEnabled()) {
       this._store.groupFocusFirst();
 
       return;
@@ -361,7 +361,7 @@ export class ComboboxBrainDirective {
   }
 
   private _endKey(): void {
-    if (this.comboboxIsGroupingEnabled()) {
+    if (this.isGroupingEnabled()) {
       this._store.groupFocusLast();
 
       return;
@@ -389,7 +389,7 @@ export class ComboboxBrainDirective {
   private _selectOption(option: ComboboxOption): void {
     const currentSelected = this._store.selectedValues();
 
-    if (this.comboboxIsMultiSelect()) {
+    if (this.isMultiSelect()) {
       if (!currentSelected.includes(option.value)) {
         this._store.setSelectedValues([...currentSelected, option.value]);
       }

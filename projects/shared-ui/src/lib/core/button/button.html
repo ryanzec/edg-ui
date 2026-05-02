@@ -2,12 +2,12 @@
   orgButtonBrain
   [type]="type()"
   [class]="buttonClass()"
-  [buttonDisabled]="disabled()"
-  [buttonLoading]="loading()"
-  [buttonIconOnly]="iconOnly()"
-  [buttonAriaLabel]="ariaLabel()"
-  [buttonAriaExpanded]="ariaExpanded()"
-  (buttonClicked)="onBrainClicked()"
+  [disabled]="disabled()"
+  [loading]="loading()"
+  [iconOnly]="iconOnly()"
+  [ariaLabel]="ariaLabel()"
+  [ariaExpanded]="ariaExpanded()"
+  (clicked)="onBrainClicked()"
 >
   @if (showStandaloneSpinner()) {
     <org-loading-spinner [size]="size()" />

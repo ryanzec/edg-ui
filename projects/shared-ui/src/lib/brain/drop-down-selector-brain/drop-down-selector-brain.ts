@@ -14,15 +14,15 @@ export type SelectionValue<TValue = unknown> = {
   display: string;
 };
 
-/** default value for the dropDownSelectorSelectionMode input */
+/** default value for the selectionMode input */
 export const DROP_DOWN_SELECTOR_SELECTION_MODE_DEFAULT: DropDownSelectorSelectionMode = 'single';
 
-/** default value for the dropDownSelectorDisabled input */
+/** default value for the disabled input */
 export const DROP_DOWN_SELECTOR_DISABLED_DEFAULT = false;
 
 /**
  * headless brain directive for the drop-down selector. owns selection-mode awareness, selected-item state via the
- * `dropDownSelectorSelectedItems` model, comparison logic (matching by `value`), and the computed display
+ * `selectedItems` model, comparison logic (matching by `value`), and the computed display
  * text rendered next to the trigger label. carries no styling, template, or markup — apply alongside a
  * presentation component that renders the trigger and overlay menu.
  */
@@ -32,18 +32,16 @@ export const DROP_DOWN_SELECTOR_DISABLED_DEFAULT = false;
 })
 export class DropDownSelectorBrainDirective<TValue = unknown> {
   /** controls whether a single or multiple items can be selected at a time */
-  public readonly dropDownSelectorSelectionMode = input<DropDownSelectorSelectionMode>(
-    DROP_DOWN_SELECTOR_SELECTION_MODE_DEFAULT
-  );
+  public readonly selectionMode = input<DropDownSelectorSelectionMode>(DROP_DOWN_SELECTOR_SELECTION_MODE_DEFAULT);
 
   /** whether the drop-down selector is disabled and cannot be interacted with */
-  public readonly dropDownSelectorDisabled = input<boolean>(DROP_DOWN_SELECTOR_DISABLED_DEFAULT);
+  public readonly disabled = input<boolean>(DROP_DOWN_SELECTOR_DISABLED_DEFAULT);
 
   /** the currently selected items, used for both single and multiple selection modes */
-  public readonly dropDownSelectorSelectedItems = model.required<SelectionValue<TValue>[]>();
+  public readonly selectedItems = model.required<SelectionValue<TValue>[]>();
 
   /** the count of currently selected items */
-  public readonly selectionCount = computed<number>(() => this.dropDownSelectorSelectedItems().length);
+  public readonly selectionCount = computed<number>(() => this.selectedItems().length);
 
   /** whether any items are currently selected */
   public readonly hasSelection = computed<boolean>(() => this.selectionCount() > 0);
@@ -54,7 +52,7 @@ export class DropDownSelectorBrainDirective<TValue = unknown> {
    * more than one is selected.
    */
   public readonly displayValueText = computed<string | null>(() => {
-    const selected = this.dropDownSelectorSelectedItems();
+    const selected = this.selectedItems();
 
     if (selected.length === 0) {
       return null;
@@ -69,7 +67,7 @@ export class DropDownSelectorBrainDirective<TValue = unknown> {
 
   /** returns true when the provided item is currently part of the selected items, comparing by `value` */
   public isSelected(item: SelectionValue<TValue>): boolean {
-    return this.dropDownSelectorSelectedItems().some((selected) => selected.value === item.value);
+    return this.selectedItems().some((selected) => selected.value === item.value);
   }
 
   /**
@@ -77,33 +75,33 @@ export class DropDownSelectorBrainDirective<TValue = unknown> {
    * provided item, in `'multiple'` mode the item is added to or removed from the existing selection
    */
   public toggleItem(item: SelectionValue<TValue>): void {
-    if (this.dropDownSelectorDisabled()) {
+    if (this.disabled()) {
       return;
     }
 
-    if (this.dropDownSelectorSelectionMode() === 'single') {
-      this.dropDownSelectorSelectedItems.set([item]);
+    if (this.selectionMode() === 'single') {
+      this.selectedItems.set([item]);
 
       return;
     }
 
-    const current = this.dropDownSelectorSelectedItems();
+    const current = this.selectedItems();
 
     if (this.isSelected(item)) {
-      this.dropDownSelectorSelectedItems.set(current.filter((selected) => selected.value !== item.value));
+      this.selectedItems.set(current.filter((selected) => selected.value !== item.value));
 
       return;
     }
 
-    this.dropDownSelectorSelectedItems.set([...current, item]);
+    this.selectedItems.set([...current, item]);
   }
 
   /** clears all selected items */
   public clearSelection(): void {
-    if (this.dropDownSelectorDisabled()) {
+    if (this.disabled()) {
       return;
     }
 
-    this.dropDownSelectorSelectedItems.set([]);
+    this.selectedItems.set([]);
   }
 }

@@ -14,16 +14,16 @@ type TimeInputState = {
   hasReceivedCvaValue: boolean;
 };
 
-/** default value for the timeInputDisabled input */
+/** default value for the disabled input */
 export const TIME_INPUT_DISABLED_DEFAULT = false;
 
-/** default value for the timeInputReadonly input */
+/** default value for the readonly input */
 export const TIME_INPUT_READONLY_DEFAULT = false;
 
 /**
  * headless brain directive for the time-input component. owns the segmented time-state machine
  * (hours / minutes / am-pm), the segment-switching, the keyboard handlers, the value parsing / formatting, and the
- * form-controlled disabled state. emits `timeInputValueChanged` whenever a user interaction completes a
+ * form-controlled disabled state. emits `valueChanged` whenever a user interaction completes a
  * segment or rolls a value via arrow keys.
  *
  * the presentation pushes the native input element into the brain so the brain can call `setSelectionRange` to
@@ -47,22 +47,22 @@ export class TimeInputBrainDirective {
   private _inputElement: HTMLInputElement | null = null;
 
   /** whether the time-input is disabled by its consumer (combined with form-controlled disabled state) */
-  public readonly timeInputDisabled = input<boolean>(TIME_INPUT_DISABLED_DEFAULT);
+  public readonly disabled = input<boolean>(TIME_INPUT_DISABLED_DEFAULT);
 
   /** whether the time-input is readonly (interaction is suppressed but it remains focusable) */
-  public readonly timeInputReadonly = input<boolean>(TIME_INPUT_READONLY_DEFAULT);
+  public readonly readonly = input<boolean>(TIME_INPUT_READONLY_DEFAULT);
 
   /** emitted with the new "hh:mm aa" value whenever a user interaction changes the time */
-  public readonly timeInputValueChanged = output<string>();
+  public readonly valueChanged = output<string>();
 
   /** emitted when the focus event fires (presentation forwards from the inner input) */
-  public readonly timeInputFocused = output<void>();
+  public readonly focused = output<void>();
 
   /** emitted when the blur event fires (presentation forwards from the inner input) */
-  public readonly timeInputBlurred = output<void>();
+  public readonly blurred = output<void>();
 
   /** emitted when the inner input is touched (so the presentation can call ControlValueAccessor onTouched) */
-  public readonly timeInputTouched = output<void>();
+  public readonly touched = output<void>();
 
   /** the formatted "hh:mm aa" representation of the current internal state */
   public readonly formattedValue = computed<string>(() => {
@@ -72,7 +72,7 @@ export class TimeInputBrainDirective {
   });
 
   /** the resolved disabled state (consumer-disabled OR form-disabled) */
-  public readonly isDisabled = computed<boolean>(() => this.timeInputDisabled() || this._state().isDisabledFromForms);
+  public readonly isDisabled = computed<boolean>(() => this.disabled() || this._state().isDisabledFromForms);
 
   /** whether writeValue has been called from reactive forms */
   public readonly hasReceivedCvaValue = computed<boolean>(() => this._state().hasReceivedCvaValue);
@@ -129,18 +129,18 @@ export class TimeInputBrainDirective {
     }));
 
     this._selectSegment();
-    this.timeInputFocused.emit();
+    this.focused.emit();
   }
 
   /** handles blur by emitting touched (presentation translates to ControlValueAccessor onTouched) */
   public handleBlur(): void {
-    this.timeInputTouched.emit();
-    this.timeInputBlurred.emit();
+    this.touched.emit();
+    this.blurred.emit();
   }
 
   /** handles a click in the input by detecting and selecting the clicked segment based on caret position */
   public handleClick(): void {
-    if (this.isDisabled() || this.timeInputReadonly()) {
+    if (this.isDisabled() || this.readonly()) {
       return;
     }
 
@@ -169,7 +169,7 @@ export class TimeInputBrainDirective {
 
   /** handles keydown for segment navigation, value entry, and am/pm toggling */
   public handleKeyDown(event: KeyboardEvent): void {
-    if (this.isDisabled() || this.timeInputReadonly()) {
+    if (this.isDisabled() || this.readonly()) {
       return;
     }
 
@@ -474,6 +474,6 @@ export class TimeInputBrainDirective {
   }
 
   private _emitValue(): void {
-    this.timeInputValueChanged.emit(this.formattedValue());
+    this.valueChanged.emit(this.formattedValue());
   }
 }

@@ -24,16 +24,16 @@ export const allSlideContainerSizes = ['stable', 'dynamic'] as const;
 /** size type for the slide container brain */
 export type SlideContainerSize = (typeof allSlideContainerSizes)[number];
 
-/** default value for the slideContainerOrientation input */
+/** default value for the orientation input */
 export const SLIDE_CONTAINER_ORIENTATION_DEFAULT: SlideContainerOrientation = 'horizontal';
 
-/** default value for the slideContainerSize input */
+/** default value for the size input */
 export const SLIDE_CONTAINER_SIZE_DEFAULT: SlideContainerSize = 'stable';
 
-/** default value for the slideContainerAllowLooping input */
+/** default value for the allowLooping input */
 export const SLIDE_CONTAINER_ALLOW_LOOPING_DEFAULT = false;
 
-/** default value for the slideContainerActiveIndex model */
+/** default value for the activeIndex model */
 export const SLIDE_CONTAINER_ACTIVE_INDEX_DEFAULT = 0;
 
 /** the navigation direction tracked by the brain */
@@ -69,16 +69,16 @@ export class SlideContainerBrainDirective {
   });
 
   /** orientation of the slide animation */
-  public readonly slideContainerOrientation = input<SlideContainerOrientation>(SLIDE_CONTAINER_ORIENTATION_DEFAULT);
+  public readonly orientation = input<SlideContainerOrientation>(SLIDE_CONTAINER_ORIENTATION_DEFAULT);
 
   /** sizing mode — stable keeps the largest slide height; dynamic resizes to the active slide */
-  public readonly slideContainerSize = input<SlideContainerSize>(SLIDE_CONTAINER_SIZE_DEFAULT);
+  public readonly size = input<SlideContainerSize>(SLIDE_CONTAINER_SIZE_DEFAULT);
 
   /** whether navigation wraps around from the last slide back to the first */
-  public readonly slideContainerAllowLooping = input<boolean>(SLIDE_CONTAINER_ALLOW_LOOPING_DEFAULT);
+  public readonly allowLooping = input<boolean>(SLIDE_CONTAINER_ALLOW_LOOPING_DEFAULT);
 
   /** two-way bindable index of the currently active slide */
-  public readonly slideContainerActiveIndex = model<number>(SLIDE_CONTAINER_ACTIVE_INDEX_DEFAULT);
+  public readonly activeIndex = model<number>(SLIDE_CONTAINER_ACTIVE_INDEX_DEFAULT);
 
   /** total number of slide items */
   public readonly slideCount = computed<number>(() => this._state().slideCount);
@@ -95,8 +95,8 @@ export class SlideContainerBrainDirective {
   constructor() {
     // track direction so the exiting item animates to the correct side
     effect(() => {
-      const newIndex = this.slideContainerActiveIndex();
-      const allowLooping = this.slideContainerAllowLooping();
+      const newIndex = this.activeIndex();
+      const allowLooping = this.allowLooping();
       const prevState = untracked(() => this._state());
       const prevIndex = prevState.displayActiveIndex;
       const count = prevState.slideCount;
@@ -131,7 +131,7 @@ export class SlideContainerBrainDirective {
 
   /** schedules a dom measurement for the active slide and applies the resulting height as a css custom property */
   public scheduleDynamicHeightUpdate(getActiveItemHeight: () => number | null): void {
-    if (this.slideContainerSize() !== 'dynamic') {
+    if (this.size() !== 'dynamic') {
       return;
     }
 

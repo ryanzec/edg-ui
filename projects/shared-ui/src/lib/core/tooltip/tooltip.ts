@@ -41,16 +41,8 @@ export {
   hostDirectives: [
     {
       directive: TooltipBrainDirective,
-      inputs: [
-        'tooltipTriggerType: triggerType',
-        'tooltipTemplateRef: templateRef',
-        'tooltipOpenDelay: openDelay',
-        'tooltipCloseDelay: closeDelay',
-        'tooltipKeepOpenOnHover: keepOpenOnHover',
-        'tooltipXPosition: xPosition',
-        'tooltipYPosition: yPosition',
-      ],
-      outputs: ['tooltipOpened: opened', 'tooltipClosed: closed'],
+      inputs: ['triggerType', 'templateRef', 'openDelay', 'closeDelay', 'keepOpenOnHover', 'xPosition', 'yPosition'],
+      outputs: ['opened', 'closed'],
     },
   ],
   host: {

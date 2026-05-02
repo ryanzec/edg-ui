@@ -32,22 +32,22 @@ export const allTooltipYPositionValues = ['top', 'center', 'bottom'] as const;
 /** vertical position of the tooltip relative to the trigger */
 export type TooltipYPosition = (typeof allTooltipYPositionValues)[number];
 
-/** default value for the tooltipTriggerType input */
+/** default value for the triggerType input */
 export const TOOLTIP_TRIGGER_TYPE_DEFAULT: TooltipTriggerType = 'hover';
 
-/** default value for the tooltipOpenDelay input (milliseconds) */
+/** default value for the openDelay input (milliseconds) */
 export const TOOLTIP_OPEN_DELAY_DEFAULT = 200;
 
-/** default value for the tooltipCloseDelay input (milliseconds) */
+/** default value for the closeDelay input (milliseconds) */
 export const TOOLTIP_CLOSE_DELAY_DEFAULT = 200;
 
-/** default value for the tooltipKeepOpenOnHover input */
+/** default value for the keepOpenOnHover input */
 export const TOOLTIP_KEEP_OPEN_ON_HOVER_DEFAULT = false;
 
-/** default value for the tooltipXPosition input */
+/** default value for the xPosition input */
 export const TOOLTIP_X_POSITION_DEFAULT: TooltipXPosition = 'center';
 
-/** default value for the tooltipYPosition input */
+/** default value for the yPosition input */
 export const TOOLTIP_Y_POSITION_DEFAULT: TooltipYPosition = 'bottom';
 
 /** the internal state shape for the tooltip brain directive */
@@ -93,36 +93,36 @@ export class TooltipBrainDirective implements OnDestroy {
   private _hoverListenersAttached = false;
 
   /** how the tooltip is triggered */
-  public readonly tooltipTriggerType = input<TooltipTriggerType>(TOOLTIP_TRIGGER_TYPE_DEFAULT);
+  public readonly triggerType = input<TooltipTriggerType>(TOOLTIP_TRIGGER_TYPE_DEFAULT);
 
   /** template for the tooltip content */
-  public readonly tooltipTemplateRef = input.required<TemplateRef<unknown>>();
+  public readonly templateRef = input.required<TemplateRef<unknown>>();
 
   /** delay in milliseconds before showing the tooltip */
-  public readonly tooltipOpenDelay = input<number>(TOOLTIP_OPEN_DELAY_DEFAULT);
+  public readonly openDelay = input<number>(TOOLTIP_OPEN_DELAY_DEFAULT);
 
   /** delay in milliseconds before hiding the tooltip */
-  public readonly tooltipCloseDelay = input<number>(TOOLTIP_CLOSE_DELAY_DEFAULT);
+  public readonly closeDelay = input<number>(TOOLTIP_CLOSE_DELAY_DEFAULT);
 
   /** whether to keep the tooltip open when hovering over its overlay */
-  public readonly tooltipKeepOpenOnHover = input<boolean>(TOOLTIP_KEEP_OPEN_ON_HOVER_DEFAULT);
+  public readonly keepOpenOnHover = input<boolean>(TOOLTIP_KEEP_OPEN_ON_HOVER_DEFAULT);
 
   /** horizontal position of the tooltip relative to the trigger */
-  public readonly tooltipXPosition = input<TooltipXPosition>(TOOLTIP_X_POSITION_DEFAULT);
+  public readonly xPosition = input<TooltipXPosition>(TOOLTIP_X_POSITION_DEFAULT);
 
   /** vertical position of the tooltip relative to the trigger */
-  public readonly tooltipYPosition = input<TooltipYPosition>(TOOLTIP_Y_POSITION_DEFAULT);
+  public readonly yPosition = input<TooltipYPosition>(TOOLTIP_Y_POSITION_DEFAULT);
 
   /** emitted when the tooltip opens */
-  public readonly tooltipOpened = output<void>();
+  public readonly opened = output<void>();
 
   /** emitted when the tooltip closes */
-  public readonly tooltipClosed = output<void>();
+  public readonly closed = output<void>();
 
   constructor() {
     /** recreate the portal whenever the template reference changes so the overlay always reflects the latest template */
     effect(() => {
-      const contentTemplate = this.tooltipTemplateRef();
+      const contentTemplate = this.templateRef();
 
       this._portal = new TemplatePortal(contentTemplate, this._viewContainerRef);
     });
@@ -140,7 +140,7 @@ export class TooltipBrainDirective implements OnDestroy {
   }
 
   protected onTriggerMouseEnter(): void {
-    if (this.tooltipTriggerType() !== 'hover') {
+    if (this.triggerType() !== 'hover') {
       return;
     }
 
@@ -148,7 +148,7 @@ export class TooltipBrainDirective implements OnDestroy {
   }
 
   protected onTriggerMouseLeave(): void {
-    if (this.tooltipTriggerType() !== 'hover') {
+    if (this.triggerType() !== 'hover') {
       return;
     }
 
@@ -156,7 +156,7 @@ export class TooltipBrainDirective implements OnDestroy {
   }
 
   protected onTriggerClick(): void {
-    if (this.tooltipTriggerType() !== 'click') {
+    if (this.triggerType() !== 'click') {
       return;
     }
 
@@ -170,7 +170,7 @@ export class TooltipBrainDirective implements OnDestroy {
   }
 
   protected onTriggerFocusIn(): void {
-    if (this.tooltipTriggerType() !== 'hover') {
+    if (this.triggerType() !== 'hover') {
       return;
     }
 
@@ -178,7 +178,7 @@ export class TooltipBrainDirective implements OnDestroy {
   }
 
   protected onTriggerFocusOut(): void {
-    if (this.tooltipTriggerType() !== 'hover') {
+    if (this.triggerType() !== 'hover') {
       return;
     }
 
@@ -194,7 +194,7 @@ export class TooltipBrainDirective implements OnDestroy {
 
     this._openTimeoutId = window.setTimeout(() => {
       this._openTooltip();
-    }, this.tooltipOpenDelay());
+    }, this.openDelay());
   }
 
   private _scheduleClose(): void {
@@ -205,12 +205,12 @@ export class TooltipBrainDirective implements OnDestroy {
     }
 
     this._closeTimeoutId = window.setTimeout(() => {
-      if (this.tooltipKeepOpenOnHover() && this._state().isHoveringTooltip) {
+      if (this.keepOpenOnHover() && this._state().isHoveringTooltip) {
         return;
       }
 
       this._closeTooltip();
-    }, this.tooltipCloseDelay());
+    }, this.closeDelay());
   }
 
   private _openTooltip(): void {
@@ -218,7 +218,7 @@ export class TooltipBrainDirective implements OnDestroy {
       return;
     }
 
-    this.tooltipOpened.emit();
+    this.opened.emit();
 
     if (!this._overlayRef) {
       this._createOverlay();
@@ -227,7 +227,7 @@ export class TooltipBrainDirective implements OnDestroy {
     if (this._portal && this._overlayRef && !this._overlayRef.hasAttached()) {
       this._overlayRef.attach(this._portal);
 
-      if (this.tooltipTriggerType() === 'hover' && this.tooltipKeepOpenOnHover()) {
+      if (this.triggerType() === 'hover' && this.keepOpenOnHover()) {
         this._attachTooltipHoverListeners();
       }
     }
@@ -245,7 +245,7 @@ export class TooltipBrainDirective implements OnDestroy {
       return;
     }
 
-    this.tooltipClosed.emit();
+    this.closed.emit();
     this._triggerElement.removeAttribute('aria-describedby');
     this._detachTooltipHoverListeners();
 
@@ -278,8 +278,8 @@ export class TooltipBrainDirective implements OnDestroy {
   }
 
   private _getPositionStrategies(): ConnectedPosition[] {
-    const xPos = this.tooltipXPosition();
-    const yPos = this.tooltipYPosition();
+    const xPos = this.xPosition();
+    const yPos = this.yPosition();
 
     const xMapping = {
       left: { originX: 'start' as const, overlayX: 'end' as const, offsetX: -8 },

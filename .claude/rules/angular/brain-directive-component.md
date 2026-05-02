@@ -11,3 +11,4 @@ paths:
   - outputs
   - types / interfaces
   - constants
+- **NEVER** prefix inputs / outputs / models on brain directives with the directive name; brain directives use bare names (e.g. `direction`, `size`, `dragStarted`). This overrides the generic directive prefix rule in `.claude/rules/angular/directives.md`.

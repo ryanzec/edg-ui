@@ -43,8 +43,8 @@ export const CHECKBOX_SIZE_DEFAULT: CheckboxSize = 'base';
   hostDirectives: [
     {
       directive: CheckboxBrainDirective,
-      inputs: ['checkboxChecked: checked', 'checkboxIndeterminate: indeterminate', 'checkboxDisabled: disabled'],
-      outputs: ['checkboxCheckedChange: checkedChange', 'checkboxIndeterminateChange: indeterminateChange'],
+      inputs: ['checked', 'indeterminate', 'disabled'],
+      outputs: ['checkedChange', 'indeterminateChange'],
     },
   ],
   host: {
@@ -142,11 +142,11 @@ export class Checkbox implements ControlValueAccessor {
 
   constructor() {
     // forward brain user-interaction events to the reactive-forms callbacks
-    this.brain.checkboxChanged.subscribe((value) => {
+    this.brain.changed.subscribe((value) => {
       this._onChange(value);
     });
 
-    this.brain.checkboxTouched.subscribe(() => {
+    this.brain.touched.subscribe(() => {
       this._onTouched();
     });
   }

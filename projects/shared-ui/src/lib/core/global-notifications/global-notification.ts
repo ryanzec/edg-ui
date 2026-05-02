@@ -16,8 +16,8 @@ import { GlobalNotificationBrainDirective } from '../../brain/global-notificatio
   hostDirectives: [
     {
       directive: GlobalNotificationBrainDirective,
-      inputs: ['globalNotificationConfig: notification'],
-      outputs: ['globalNotificationClosed: closed'],
+      inputs: ['config: notification'],
+      outputs: ['closed'],
     },
   ],
   host: {

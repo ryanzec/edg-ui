@@ -6,7 +6,7 @@ import { createHighlighter } from 'shiki';
 import { UiThemeManager } from '../../ui-theme/ui-theme-manager/ui-theme-manager';
 import { logManager } from '@organization/shared-utils';
 
-/** default value for the codeHighlighterLanguage input */
+/** default value for the language input */
 export const CODE_HIGHLIGHTER_LANGUAGE_DEFAULT = 'text';
 
 let _highlighterPromise: ReturnType<typeof createHighlighter> | null = null;
@@ -36,15 +36,15 @@ export class CodeHighlighterBrainDirective {
   private readonly _themeManager = inject(UiThemeManager);
 
   /** the code text to highlight */
-  public readonly codeHighlighterText = input.required<string>();
+  public readonly text = input.required<string>();
 
   /** the language to use for syntax highlighting */
-  public readonly codeHighlighterLanguage = input<string>(CODE_HIGHLIGHTER_LANGUAGE_DEFAULT);
+  public readonly language = input<string>(CODE_HIGHLIGHTER_LANGUAGE_DEFAULT);
 
   /** combined params used as the source for the reactive shiki rendering pipeline */
   private readonly _params = computed<{ text: string; language: string; isDark: boolean }>(() => ({
-    text: this.codeHighlighterText(),
-    language: this.codeHighlighterLanguage(),
+    text: this.text(),
+    language: this.language(),
     isDark: this._themeManager.isDarkMode(),
   }));
 
