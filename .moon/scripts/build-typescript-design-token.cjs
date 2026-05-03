@@ -5,7 +5,6 @@ const path = require('path');
 
 const REPO_ROOT = path.resolve(__dirname, '..', '..');
 const BASE_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/variables/base-tokens.css');
-const SYSTEM_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/variables/system-tokens.css');
 const CHART_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/variables/chart-tokens.css');
 const SCROLLBAR_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/variables/scrollbar-tokens.css');
 const AVATAR_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/variables/avatar-tokens.css');
@@ -186,7 +185,6 @@ function main() {
     content.replace(/@import[^;]+;/g, '').replace(/\/\*[\s\S]*?\*\//g, '');
 
   const baseContent = cleanCss(fs.readFileSync(BASE_TOKENS_CSS, 'utf-8'));
-  const systemContent = cleanCss(fs.readFileSync(SYSTEM_TOKENS_CSS, 'utf-8'));
   const chartContent = cleanCss(fs.readFileSync(CHART_TOKENS_CSS, 'utf-8'));
   const scrollbarContent = cleanCss(fs.readFileSync(SCROLLBAR_TOKENS_CSS, 'utf-8'));
   const avatarContent = cleanCss(fs.readFileSync(AVATAR_TOKENS_CSS, 'utf-8'));
@@ -194,12 +192,11 @@ function main() {
   // Base tokens: all :root vars; color vars are used only for resolution, non-color vars are also output
   const baseVars = Object.assign({}, ...findBlocks(baseContent, ':root').map(extractVariables));
 
-  // System tokens: :root vars for output, .dark-theme vars for dark theme overrides; chart, scrollbar,
+  // System tokens: :root vars for output, .dark vars for dark theme overrides; chart, scrollbar,
   // and avatar token files contribute to the same buckets so the resulting design-tokens.ts stays
   // equivalent regardless of which file a variable lives in
   const systemRootVars = Object.assign(
     {},
-    ...findBlocks(systemContent, ':root').map(extractVariables),
     ...findBlocks(chartContent, ':root').map(extractVariables),
     ...findBlocks(scrollbarContent, ':root').map(extractVariables),
     ...findBlocks(avatarContent, ':root').map(extractVariables),

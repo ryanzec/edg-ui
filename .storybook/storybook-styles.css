@@ -1,9 +1,10 @@
 /**
  * Not sure of a better way to get the storybook generated docs to play well with our dark mode
  */
-.sbdocs.sbdocs-wrapper {
-  background-color: var(--color-background);
-  color: var(--color-text);
+.sbdocs.sbdocs-wrapper,
+.sb-show-main {
+  background-color: var(--color-bg-app);
+  color: var(--color-fg);
 
   .sbdocs-title,
   .docblock-argstable-head,
@@ -25,45 +26,38 @@
   .docs-top-level-overview > * li,
   .docs-top-level-overview > * .prismjs,
   .docs-top-level-overview > * code {
-    background-color: var(--color-background);
-    color: var(--color-text);
+    background-color: var(--color-bg-app);
+    color: var(--color-fg);
     border-color: var(--color-border);
   }
 
   .docs-top-level-overview .css-1dnv2kn * .token.operator {
-    color: var(--color-text);
+    color: var(--color-fg);
   }
 
   .docs-top-level-overview .css-1dnv2kn * .token.attr-name,
   .docs-top-level-overview .css-1dnv2kn * .token.tag,
   .docs-top-level-overview .css-1dnv2kn * .token.string {
-    color: var(--color-danger-text);
+    color: var(--color-danger);
   }
 
   .docs-top-level-overview .css-1dnv2kn * .token.punctuation {
-    color: var(--color-text);
+    color: var(--color-fg);
   }
 
   .docs-top-level-overview .css-1dnv2kn * .token.comment,
   .docs-top-level-overview .css-1dnv2kn * .token.builtin,
   .docs-top-level-overview .css-1dnv2kn * .token.class-name {
-    color: var(--color-safe-text);
+    color: var(--color-safe);
   }
 
   .docs-top-level-overview .css-1dnv2kn * .token.function,
   .docs-top-level-overview .css-1dnv2kn * .token.keyword {
-    color: var(--color-info-text);
+    color: var(--color-info);
   }
 
   .docblock-argstable-body input:checked ~ span:last-of-type,
   .docblock-argstable-body input:not(:checked) ~ span:first-of-type {
-    background-color: var(--color-gray-300);
-  }
-}
-
-.dark-theme .sbdocs.sbdocs-wrapper {
-  .docblock-argstable-body input:checked ~ span:last-of-type,
-  .docblock-argstable-body input:not(:checked) ~ span:first-of-type {
-    background-color: var(--color-gray-600);
+    background-color: var(--color-neutral-soft);
   }
 }

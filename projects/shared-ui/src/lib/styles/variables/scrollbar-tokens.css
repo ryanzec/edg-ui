@@ -6,7 +6,7 @@
   --scrollbar-thumb-hover-color: rgb(100 116 139 / 0.9);
 }
 
-.dark-theme {
+.dark {
   /* customer scrollbar */
   --scrollbar-thumb-color: rgb(203 213 225 / 0.3);
   --scrollbar-thumb-hover-color: rgb(203 213 225 / 0.5);

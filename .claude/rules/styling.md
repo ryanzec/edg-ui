@@ -24,8 +24,7 @@ Utility css classes **MUST** be used for all other styles:
 # Styling Patterns
 - **NEVER** add styling to components in `projects/shared-ui/src/lib/brain`.
 - **ALWAYS** use css files for styling components and directives in `projects/shared-ui/src/lib/core` **EXCEPT** for `*stories*` files.
-- **ALWAYS** use css variables from `projects/shared-ui/src/lib/styles/variables/system-tokens.css` for color based styling in css files.
-- **ALWAYS** use css variables from `projects/shared-ui/src/lib/styles/design-tokens.css` for non-color based styling in css files.
+- **ALWAYS** use css variables from `projects/shared-ui/src/lib/styles/variables/base-tokens.css` or the `{component-name}-tokens.css` file for styling in css files.
 - **ALWAYS** favor css utility based styling for component **OUTSIDE** of `projects/shared-ui/src/lib/core`.
 
 # General Styling Patterns
@@ -41,7 +40,7 @@ Utility css classes **MUST** be used for all other styles:
 - **ALWAYS** use `var()` when defining custom css variables
 - ONLY use system level design tokens in css utility classes
 - **ALWAYS** use `aria-*` when available and then fallback to `data-*` attributes for component styling that is based on an input having the input value be the `data-*` attribute value, see `projects/shared-ui/src/lib/core/box` as a reference.
-- **ALWAYS** use the `.dark-theme` for defining dark mode colors.
+- **ALWAYS** use the `.dark` for defining dark mode colors.
 - **ALWAYS** use `/* ... */` to comment is CSS.
 - **ALWAYS** wrap css in general component css files (NOT variables component cssfiles) in `@layer components {...}`.
 - ONLY use negative margins as a LAST resort.
@@ -55,7 +54,7 @@ Utility css classes **MUST** be used for all other styles:
 - **NEVER** add animations or transitions unless **EXPLICITLY** asked for.
 - **NEVER** use box shadows unless **EXPLICITLY** asked for.
 - **NEVER** use margin to space element within a container.
-- **NEVER** use ring / outline styles other than to remove it.
+- **NEVER** use ring / outline / box-shadow styles other than to remove it **OR** if it is for a11y.
 - **NEVER** use a default values when using `var(...)`.
 - **ALWAYS** make css class name as short as needed but still descripitive since Angular handle encapulation to avoid naming conflict so `header` instead of `integration-card-configured-header`.
 - **ALWAYS** make sure to update the `.moon/scripts/build-typescript-design-token.cjs` script when modifies css variables in `projects/shared-ui/src/lib/styles/variables`.

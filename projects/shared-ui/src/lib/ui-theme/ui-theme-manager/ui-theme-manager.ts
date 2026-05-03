@@ -34,9 +34,9 @@ export class UiThemeManager {
     const htmlElement = this.document.documentElement;
 
     if (isDarkMode) {
-      htmlElement.classList.add('dark-theme');
+      htmlElement.classList.add('dark');
     } else {
-      htmlElement.classList.remove('dark-theme');
+      htmlElement.classList.remove('dark');
     }
   }
 }

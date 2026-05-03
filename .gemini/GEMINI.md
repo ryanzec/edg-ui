@@ -104,11 +104,17 @@ public preIconClicked = outputFromObservable(this._preIconClicked$);
   public readonly autoScrollDirective!: Card;
 ```
 - **ONLY** use `static: true` for `@ViewChild` if the DOM element is **ALWAYS** present (not conditionally rendered) **AND** is accessed in `ngOnInit()`.
-- **ALWAYS** define class inputs to a component with a prefix that is a semantic name for what it is applied to for clarity in the api.
+- **ALWAYS** prefix any input that is forwarded as-is to a sub-component (or a native html element) with a semantic name for the inner element it drives, so the api makes clear which inner thing the value is wired to. This applies to **all** inputs (not just `class` pass-throughs), including ones forwarded as values to sub-component inputs.
 ```ts
-// MUST DO
+// MUST DO — class pass-throughs
 public iconClass = input<string>('');
 public inputClass = input<string>('');
+
+// MUST DO — value forwarded to an inner <org-icon>'s color input
+public iconColor = input<IconColor>('inherit');
+
+// MUST DO — value forwarded to an inner <input>'s placeholder attribute
+public inputPlaceholder = input<string>('');
 ```
 - **ALWAYS** make sure the form component properly support angular's reactive form system.
 - **ALWAYS** use `zodValidator` when dealing with form validation where a zod schema should be used.
@@ -169,6 +175,7 @@ export class MyView implements AfterViewInit {
   - outputs
   - types / interfaces
   - constants
+- **NEVER** prefix inputs / outputs / models on brain directives with the directive name; brain directives use bare names (e.g. `direction`, `size`, `dragStarted`). This overrides the generic directive prefix rule in `.claude/rules/angular/directives.md`.
 
 <!-- rules: angular/cdk.md -->
 # IMPORTANT: These rules override general typescript / angular rules
@@ -248,11 +255,17 @@ public preIconClicked = outputFromObservable(this._preIconClicked$);
   public readonly autoScrollDirective!: Card;
 ```
 - **ONLY** use `static: true` for `@ViewChild` if the DOM element is **ALWAYS** present (not conditionally rendered) **AND** is accessed in `ngOnInit()`.
-- **ALWAYS** define class inputs to a component with a prefix that is a semantic name for what it is applied to for clarity in the api.
+- **ALWAYS** prefix any input that is forwarded as-is to a sub-component (or a native html element) with a semantic name for the inner element it drives, so the api makes clear which inner thing the value is wired to. This applies to **all** inputs (not just `class` pass-throughs), including ones forwarded as values to sub-component inputs.
 ```ts
-// MUST DO
+// MUST DO — class pass-throughs
 public iconClass = input<string>('');
 public inputClass = input<string>('');
+
+// MUST DO — value forwarded to an inner <org-icon>'s color input
+public iconColor = input<IconColor>('inherit');
+
+// MUST DO — value forwarded to an inner <input>'s placeholder attribute
+public inputPlaceholder = input<string>('');
 ```
 - **ALWAYS** make sure the form component properly support angular's reactive form system.
 - **ALWAYS** use `zodValidator` when dealing with form validation where a zod schema should be used.
@@ -325,6 +338,7 @@ export class ScrollAreaDirective {
   public scrollAreaOnlyShowOnHover = input<boolean>(SCROLL_AREA_ONLY_SHOW_ON_HOVER_DEFAULT);
   // ... 
 ```
+  - This rule does **NOT** apply to brain directives (those in `projects/shared-ui/src/lib/brain/`); see `.claude/rules/angular/brain-directive-component.md` for the brain-specific rule.
 - When the directive selector is **ALSO** used as a value input (e.g. `[orgFormDisabled]="boolean"`), that selector-matching input is the **ONLY** input allowed to keep the `org*` prefix. All other inputs on the directive **MUST** still follow the standard "camelCase class name minus `Directive` part" prefix rule. Example:
 ```ts
 // ...
@@ -420,20 +434,11 @@ When you need a low level components / directives / pipes / services, use the co
 - **ONLY** use either use `[selected]` for the option or reactive form binding if a reactive form is needed for select elements values.
 - **ALWAYS** use the async pipe to handle observables.
 - **ALWAYS** use html entity for angular special character in template (such as `&#64;` instead of `@`).
-- **ALWAYS** use the `button` html element when needing to create an element that has clickbility
-- **ALWAYS** use `@let` to provide typing for templates that use `let-*` in like this:
-```html
-<ng-template #body let-tempUser>
-  @let user = asUser(tempUser);
-  <!-- ... -->
-</ng-template>
-```
-```ts
-  protected asUser(tempUser: unknown): User {
-    return tempUser as User;
-  }
-```
+- **ALWAYS** use the `button` html element when needing to create an element that has clickbility.
+- **ALWAYS** use the `` directive to apply typing to templates that are passed data. 
+- **NEVER** use `@let` or `as*()` component method to provide typing for templates.
 - **ONLY** use native control flow like `@if`, `@for`, `@switch` in templates.
+-
 
 <!-- rules: angular/view-components.md -->
 # IMPORTANT: These rules override general typescript / angular / angular components rules
@@ -548,8 +553,7 @@ Utility css classes **MUST** be used for all other styles:
 # Styling Patterns
 - **NEVER** add styling to components in `projects/shared-ui/src/lib/brain`.
 - **ALWAYS** use css files for styling components and directives in `projects/shared-ui/src/lib/core` **EXCEPT** for `*stories*` files.
-- **ALWAYS** use css variables from `projects/shared-ui/src/lib/styles/variables/system-tokens.css` for color based styling in css files.
-- **ALWAYS** use css variables from `projects/shared-ui/src/lib/styles/design-tokens.css` for non-color based styling in css files.
+- **ALWAYS** use css variables from `projects/shared-ui/src/lib/styles/variables/base-tokens.css` or the `{component-name}-tokens.css` file for styling in css files.
 - **ALWAYS** favor css utility based styling for component **OUTSIDE** of `projects/shared-ui/src/lib/core`.
 
 # General Styling Patterns
@@ -565,7 +569,7 @@ Utility css classes **MUST** be used for all other styles:
 - **ALWAYS** use `var()` when defining custom css variables
 - ONLY use system level design tokens in css utility classes
 - **ALWAYS** use `aria-*` when available and then fallback to `data-*` attributes for component styling that is based on an input having the input value be the `data-*` attribute value, see `projects/shared-ui/src/lib/core/box` as a reference.
-- **ALWAYS** use the `.dark-theme` for defining dark mode colors.
+- **ALWAYS** use the `.dark` for defining dark mode colors.
 - **ALWAYS** use `/* ... */` to comment is CSS.
 - **ALWAYS** wrap css in general component css files (NOT variables component cssfiles) in `@layer components {...}`.
 - ONLY use negative margins as a LAST resort.
@@ -579,7 +583,7 @@ Utility css classes **MUST** be used for all other styles:
 - **NEVER** add animations or transitions unless **EXPLICITLY** asked for.
 - **NEVER** use box shadows unless **EXPLICITLY** asked for.
 - **NEVER** use margin to space element within a container.
-- **NEVER** use ring / outline styles other than to remove it.
+- **NEVER** use ring / outline / box-shadow styles other than to remove it **OR** if it is for a11y.
 - **NEVER** use a default values when using `var(...)`.
 - **ALWAYS** make css class name as short as needed but still descripitive since Angular handle encapulation to avoid naming conflict so `header` instead of `integration-card-configured-header`.
 - **ALWAYS** make sure to update the `.moon/scripts/build-typescript-design-token.cjs` script when modifies css variables in `projects/shared-ui/src/lib/styles/variables`.

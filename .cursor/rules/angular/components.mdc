@@ -57,11 +57,17 @@ public preIconClicked = outputFromObservable(this._preIconClicked$);
   public readonly autoScrollDirective!: Card;
 ```
 - **ONLY** use `static: true` for `@ViewChild` if the DOM element is **ALWAYS** present (not conditionally rendered) **AND** is accessed in `ngOnInit()`.
-- **ALWAYS** define class inputs to a component with a prefix that is a semantic name for what it is applied to for clarity in the api.
+- **ALWAYS** prefix any input that is forwarded as-is to a sub-component (or a native html element) with a semantic name for the inner element it drives, so the api makes clear which inner thing the value is wired to. This applies to **all** inputs (not just `class` pass-throughs), including ones forwarded as values to sub-component inputs.
 ```ts
-// MUST DO
+// MUST DO — class pass-throughs
 public iconClass = input<string>('');
 public inputClass = input<string>('');
+
+// MUST DO — value forwarded to an inner <org-icon>'s color input
+public iconColor = input<IconColor>('inherit');
+
+// MUST DO — value forwarded to an inner <input>'s placeholder attribute
+public inputPlaceholder = input<string>('');
 ```
 - **ALWAYS** make sure the form component properly support angular's reactive form system.
 - **ALWAYS** use `zodValidator` when dealing with form validation where a zod schema should be used.
