@@ -88,7 +88,7 @@
     border: var(--border-width-thick) solid var(--color-background);
   }
 
-  .dark-theme :host {
+  .dark :host {
     color: var(--color-text);
   }
 }

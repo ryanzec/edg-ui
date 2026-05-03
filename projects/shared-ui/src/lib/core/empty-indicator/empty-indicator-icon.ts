@@ -12,7 +12,7 @@ export const EMPTY_INDICATOR_ICON_LABEL_DEFAULT: string | undefined = ICON_LABEL
   selector: 'org-empty-indicator-icon',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [Icon],
-  template: '<org-icon size="5xl" [name]="name()" [color]="color()" [label]="label()" />',
+  template: '<org-icon size="4xl" [name]="name()" [color]="color()" [label]="label()" />',
 })
 export class EmptyIndicatorIcon {
   /** the semantic name of the icon to render, passed through to the inner Icon component */

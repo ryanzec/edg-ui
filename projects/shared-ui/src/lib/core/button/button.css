@@ -603,24 +603,24 @@
   /* ===== DARK MODE ===== */
 
   /* filled: use --color-text (light in dark mode) instead of --color-text-inverse (dark in dark mode) */
-  .dark-theme :host([data-variant='filled']) button {
+  .dark :host([data-variant='filled']) button {
     color: var(--color-text);
   }
 
   /* neutral ghost: base text uses --color-neutral-text in dark mode for better readability */
-  .dark-theme :host([data-color='neutral'][data-variant='ghost']) button {
+  .dark :host([data-color='neutral'][data-variant='ghost']) button {
     color: var(--color-neutral-text);
   }
 
   /* ghost: hover/focus/active text uses --color-text (light) in dark mode */
-  .dark-theme :host([data-variant='ghost']) button:not(:disabled):hover,
-  .dark-theme :host([data-variant='ghost']) button:not(:disabled):focus-visible,
-  .dark-theme :host([data-variant='ghost']) button:not(:disabled):active {
+  .dark :host([data-variant='ghost']) button:not(:disabled):hover,
+  .dark :host([data-variant='ghost']) button:not(:disabled):focus-visible,
+  .dark :host([data-variant='ghost']) button:not(:disabled):active {
     color: var(--color-text);
   }
 
   /* text: focus-visible text uses --color-text (light) in dark mode */
-  .dark-theme :host([data-variant='text']) button:not(:disabled):focus-visible {
+  .dark :host([data-variant='text']) button:not(:disabled):focus-visible {
     color: var(--color-text);
   }
 }

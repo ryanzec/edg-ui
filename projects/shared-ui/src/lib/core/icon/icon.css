@@ -4,84 +4,88 @@
   }
 
   :host([data-size='2xs']) svg {
-    width: var(--text-2xs);
-    height: var(--text-2xs);
+    width: var(--icon-size-2xs);
+    height: var(--icon-size-2xs);
   }
 
   :host([data-size='xs']) svg {
-    width: var(--text-xs);
-    height: var(--text-xs);
+    width: var(--icon-size-xs);
+    height: var(--icon-size-xs);
   }
 
   :host([data-size='sm']) svg {
-    width: var(--text-sm);
-    height: var(--text-sm);
+    width: var(--icon-size-sm);
+    height: var(--icon-size-sm);
   }
 
   :host([data-size='base']) svg {
-    width: var(--text-md);
-    height: var(--text-md);
+    width: var(--icon-size-base);
+    height: var(--icon-size-base);
+  }
+
+  :host([data-size='md']) svg {
+    width: var(--icon-size-md);
+    height: var(--icon-size-md);
   }
 
   :host([data-size='lg']) svg {
-    width: var(--text-lg);
-    height: var(--text-lg);
+    width: var(--icon-size-lg);
+    height: var(--icon-size-lg);
   }
 
   :host([data-size='xl']) svg {
-    width: var(--text-xl);
-    height: var(--text-xl);
+    width: var(--icon-size-xl);
+    height: var(--icon-size-xl);
   }
 
   :host([data-size='2xl']) svg {
-    width: var(--text-2xl);
-    height: var(--text-2xl);
+    width: var(--icon-size-2xl);
+    height: var(--icon-size-2xl);
   }
 
   :host([data-size='3xl']) svg {
-    width: var(--text-3xl);
-    height: var(--text-3xl);
+    width: var(--icon-size-3xl);
+    height: var(--icon-size-3xl);
   }
 
   :host([data-size='4xl']) svg {
-    width: var(--text-4xl);
-    height: var(--text-4xl);
+    width: var(--icon-size-4xl);
+    height: var(--icon-size-4xl);
   }
 
-  :host([data-size='5xl']) svg {
-    width: var(--text-5xl);
-    height: var(--text-5xl);
+  :host([data-color='inherit']) svg {
+    color: var(--icon-color-inherit);
   }
 
   :host([data-color='primary']) svg {
-    color: var(--color-primary-text);
+    color: var(--icon-color-primary);
   }
 
   :host([data-color='secondary']) svg {
-    color: var(--color-secondary-text);
+    color: var(--icon-color-secondary);
   }
 
   :host([data-color='neutral']) svg {
-    color: var(--color-neutral-text);
+    color: var(--icon-color-neutral);
   }
 
   :host([data-color='safe']) svg {
-    color: var(--color-safe-text);
+    color: var(--icon-color-safe);
   }
 
   :host([data-color='info']) svg {
-    color: var(--color-info-text);
+    color: var(--icon-color-info);
   }
 
   :host([data-color='caution']) svg {
-    color: var(--color-caution-text);
+    color: var(--icon-color-caution);
   }
 
   :host([data-color='warning']) svg {
-    color: var(--color-warning-text);
+    color: var(--icon-color-warning);
   }
 
   :host([data-color='danger']) svg {
-    color: var(--color-danger-text);
+    color: var(--icon-color-danger);
   }
 }

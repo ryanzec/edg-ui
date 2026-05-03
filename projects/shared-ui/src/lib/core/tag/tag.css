@@ -128,13 +128,13 @@
     border-color: var(--color-danger-background-subtle);
   }
 
-  :host-context(body.dark-theme)[data-variant='strong'] .tag-label,
-  :host-context(body.dark-theme) [data-variant='strong'] .tag-label {
+  :host-context(body.dark)[data-variant='strong'] .tag-label,
+  :host-context(body.dark) [data-variant='strong'] .tag-label {
     color: var(--color-text);
   }
 
-  :host-context(body.dark-theme)[data-variant='weak'] .tag-label,
-  :host-context(body.dark-theme) [data-variant='weak'] .tag-label {
+  :host-context(body.dark)[data-variant='weak'] .tag-label,
+  :host-context(body.dark) [data-variant='weak'] .tag-label {
     color: var(--color-text);
   }
 }

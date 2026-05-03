@@ -230,7 +230,7 @@ export const WithIcon: Story = {
         </org-storybook-example-container-section>
 
         <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li><strong>Icon Size</strong>: Always rendered at the largest size (5xl) regardless of configuration</li>
+          <li><strong>Icon Size</strong>: Always rendered at the largest size (4xl) regardless of configuration</li>
           <li><strong>Icon Color</strong>: Defaults to "inherit" but can be any valid IconColor</li>
           <li><strong>Icon Label</strong>: Optional accessible label; when omitted the icon is treated as decorative</li>
         </ul>

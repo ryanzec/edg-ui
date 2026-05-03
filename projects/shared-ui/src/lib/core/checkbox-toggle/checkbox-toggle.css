@@ -115,12 +115,12 @@
   }
 
   /* Dark theme */
-  .dark-theme :host .checkbox-toggle-thumb {
+  .dark :host .checkbox-toggle-thumb {
     /* thumb remains light in dark theme to keep contrast against the track */
     background-color: var(--color-neutral-100);
   }
 
-  .dark-theme :host .checkbox-toggle-icon {
+  .dark :host .checkbox-toggle-icon {
     /* icon remains dark in dark theme to contrast the always-light thumb */
     color: var(--color-neutral-800);
   }

@@ -1,6 +1,4 @@
-/* chart color tokens */
 :root {
-  /* chart colors - 1 is the primary shade, 2 is the darker shade */
   --color-chart-red-1: var(--color-red-500);
   --color-chart-red-2: var(--color-red-600);
   --color-chart-orange-1: var(--color-orange-500);

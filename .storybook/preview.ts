@@ -25,6 +25,7 @@ import { UiThemeManager } from '@organization/shared-ui';
 let uiThemeManager: UiThemeManager | null = null;
 
 const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+let storybookTheme = systemTheme;
 
 export const globalTypes = {
   theme: {
@@ -42,7 +43,7 @@ export const globalTypes = {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const withThemeDecorator = (Story: any, context: any) => {
   const { globals } = context;
-  const newTheme = globals.theme;
+  storybookTheme = globals.theme;
 
   if (!uiThemeManager) {
     console.log('uiThemeManager not found, returning Story()');
@@ -50,7 +51,7 @@ export const withThemeDecorator = (Story: any, context: any) => {
     return Story();
   }
 
-  uiThemeManager.setDarkMode(newTheme === 'dark');
+  uiThemeManager.setDarkMode(storybookTheme === 'dark');
 
   return Story();
 };
@@ -66,6 +67,7 @@ const preview: Preview = {
         provideRouter([]),
         provideAppInitializer(() => {
           uiThemeManager = inject(UiThemeManager);
+          uiThemeManager.setDarkMode(storybookTheme === 'dark');
           dateUtils.configureTimezone('UTC');
 
           return Promise.resolve();

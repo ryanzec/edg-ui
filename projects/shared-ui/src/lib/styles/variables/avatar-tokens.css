@@ -1,6 +1,4 @@
-/* avatar color tokens */
 :root {
-  /* 12 distinct hues spaced around the color wheel for cycling avatar backgrounds */
   --color-avatar-0: var(--color-red-500);
   --color-avatar-1: var(--color-orange-500);
   --color-avatar-2: var(--color-amber-500);

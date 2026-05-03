@@ -11,17 +11,17 @@ export const allComponentColors = [
 
 export type ComponentColor = (typeof allComponentColors)[number];
 
-export type ComponentSize = '2xs' | 'xs' | 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl' | '5xl';
+export type ComponentSize = '2xs' | 'xs' | 'sm' | 'base' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl';
 
 export const componentSizes = [
   '2xs',
   'xs',
   'sm',
   'base',
+  'md',
   'lg',
   'xl',
   '2xl',
   '3xl',
   '4xl',
-  '5xl',
 ] as const satisfies readonly ComponentSize[];

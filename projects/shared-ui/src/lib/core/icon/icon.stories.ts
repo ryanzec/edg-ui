@@ -27,9 +27,14 @@ const meta: Meta<Icon> = {
   ### Size Options
   - **2xs**: 0.625rem / 10px
   - **xs**: 0.75rem / 12px
-  - **sm**: 0.875rem / 14px
-  - **base**: 1.125rem / 18px - default
-  - **lg**: 1.25rem / 20px
+  - **sm**: 0.8125rem / 13px
+  - **base**: 0.875rem / 14px - default
+  - **md**: 1rem / 16px
+  - **lg**: 1.125rem / 18px
+  - **xl**: 1.25rem / 20px
+  - **2xl**: 1.5rem / 24px
+  - **3xl**: 1.875rem / 30px
+  - **4xl**: 2.25rem / 36px
 
   ### Color Options
   - **inherit**: Inherits text color from parent elements (default)
@@ -113,7 +118,7 @@ export const Sizes: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Comparison of all available size variants (2xs, xs, sm, base, lg).',
+        story: 'Comparison of all available size variants (2xs, xs, sm, base, md, lg, xl, 2xl, 3xl, 4xl).',
       },
     },
   },
@@ -121,7 +126,7 @@ export const Sizes: Story = {
     template: `
       <org-storybook-example-container
         title="Size Variants"
-        currentState="Comparing 2xs, xs, sm, base, and lg sizes"
+        currentState="Comparing 2xs, xs, sm, base, md, lg, xl, 2xl, 3xl, and 4xl sizes"
       >
         <org-storybook-example-container-section label="2 Extra Small">
           <org-icon name="check" size="2xs"></org-icon>
@@ -137,6 +142,10 @@ export const Sizes: Story = {
 
         <org-storybook-example-container-section label="Base - Default">
           <org-icon name="check" size="base"></org-icon>
+        </org-storybook-example-container-section>
+
+        <org-storybook-example-container-section label="Medium">
+          <org-icon name="check" size="md"></org-icon>
         </org-storybook-example-container-section>
 
         <org-storybook-example-container-section label="Large">
@@ -159,16 +168,17 @@ export const Sizes: Story = {
           <org-icon name="check" size="4xl"></org-icon>
         </org-storybook-example-container-section>
 
-        <org-storybook-example-container-section label="5 Extra Large">
-          <org-icon name="check" size="5xl"></org-icon>
-        </org-storybook-example-container-section>
-
         <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
           <li><strong>2xs</strong>: 0.625rem / 10px</li>
           <li><strong>xs</strong>: 0.75rem / 12px</li>
-          <li><strong>sm</strong>: 0.875rem / 14px</li>
-          <li><strong>base</strong>: 1.125rem / 18px - default</li>
-          <li><strong>lg</strong>: 1.25rem / 20px</li>
+          <li><strong>sm</strong>: 0.8125rem / 13px</li>
+          <li><strong>base</strong>: 0.875rem / 14px - default</li>
+          <li><strong>md</strong>: 1rem / 16px</li>
+          <li><strong>lg</strong>: 1.125rem / 18px</li>
+          <li><strong>xl</strong>: 1.25rem / 20px</li>
+          <li><strong>2xl</strong>: 1.5rem / 24px</li>
+          <li><strong>3xl</strong>: 1.875rem / 30px</li>
+          <li><strong>4xl</strong>: 2.25rem / 36px</li>
         </ul>
       </org-storybook-example-container>
     `,
