@@ -360,11 +360,11 @@ export const AllIcons: Story = {
           @for (iconName of allIconNames; track iconName) {
             <button
               type="button"
-              class="cursor-pointer flex flex-col items-center gap-2 rounded border border-border p-3 transition-colors hover:bg-background-hover focus-visible:bg-background-hover"
+              class="cursor-pointer flex flex-col items-center gap-2 rounded border border-default-color p-3 transition-colors hover:bg-hover focus-visible:bg-hover"
               (click)="copyToClipboard(iconName)"
             >
               <org-icon [name]="iconName"></org-icon>
-              <span class="text-xs text-text-color">{{ iconName }}</span>
+              <span class="text-xs text-fg">{{ iconName }}</span>
             </button>
           }
         </div>

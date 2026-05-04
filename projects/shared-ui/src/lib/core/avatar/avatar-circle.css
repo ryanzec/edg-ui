@@ -6,34 +6,34 @@
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    border-radius: var(--radius-full);
+    border-radius: var(--radius-pill);
     background-color: var(--color-avatar-0);
-    color: var(--color-text-inverse);
+    color: var(--color-fg-on-accent);
     font-weight: var(--font-weight-medium);
   }
 
   :host([data-size='sm']) {
     width: var(--spacing-5); /* 20px */
     height: var(--spacing-5); /* 20px */
-    font-size: var(--text-2xs);
-    line-height: var(--text-2xs--line-height);
-    letter-spacing: var(--text-2xs--letter-spacing);
+    font-size: var(--font-size-2xs);
+    line-height: var(--line-height-normal);
+    letter-spacing: var(--letter-spacing-normal);
   }
 
   :host([data-size='base']) {
     width: var(--spacing-7); /* 28px */
     height: var(--spacing-7); /* 28px */
-    font-size: var(--text-sm);
-    line-height: var(--text-sm--line-height);
-    letter-spacing: var(--text-sm--letter-spacing);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-normal);
+    letter-spacing: var(--letter-spacing-normal);
   }
 
   :host([data-size='lg']) {
     width: var(--spacing-10); /* 40px */
     height: var(--spacing-10); /* 40px */
-    font-size: var(--text-md);
-    line-height: var(--text-md--line-height);
-    letter-spacing: var(--text-md--letter-spacing);
+    font-size: var(--font-size-lg);
+    line-height: var(--line-height-normal);
+    letter-spacing: var(--letter-spacing-normal);
   }
 
   :host([data-color-index='0']) {
@@ -68,27 +68,11 @@
     background-color: var(--color-avatar-7);
   }
 
-  :host([data-color-index='8']) {
-    background-color: var(--color-avatar-8);
-  }
-
-  :host([data-color-index='9']) {
-    background-color: var(--color-avatar-9);
-  }
-
-  :host([data-color-index='10']) {
-    background-color: var(--color-avatar-10);
-  }
-
-  :host([data-color-index='11']) {
-    background-color: var(--color-avatar-11);
-  }
-
   :host([data-stacked='true']) {
-    border: var(--border-width-thick) solid var(--color-background);
+    border: var(--border-width-thick) solid var(--color-bg-app);
   }
 
   .dark :host {
-    color: var(--color-text);
+    color: var(--color-fg);
   }
 }

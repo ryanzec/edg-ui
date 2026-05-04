@@ -109,7 +109,7 @@ type Story = StoryObj<AutoScroll>;
           <org-button (click)="setState('forced-disabled')"> Set State: Forced-Disabled </org-button>
         </div>
 
-        <div class="mb-4 rounded border border-border bg-muted/30 p-3 text-sm">
+        <div class="mb-4 rounded border border-default-color bg-muted/30 p-3 text-sm">
           <div>
             <strong>Auto-Scroll Internal State:</strong> <span class="font-mono">{{ getAutoScrollState() }}</span>
           </div>
@@ -124,11 +124,11 @@ type Story = StoryObj<AutoScroll>;
           </div>
         </div>
 
-        <org-scroll-area containerClass="rounded-lg border border-border bg-muted/30" scrollClass="h-2xs">
+        <org-scroll-area containerClass="rounded-lg border border-default-color bg-muted/30" scrollClass="h-2xs">
           <org-auto-scroll #autoScrollComponent [containerClass]="'p-4'">
             @for (item of items(); track item.title) {
-              <div class="mb-2 rounded border border-border bg-card p-3 text-sm">
-                <div class="font-semibold text-primary-text">{{ item.title }}</div>
+              <div class="mb-2 rounded border border-default-color bg-card p-3 text-sm">
+                <div class="font-semibold text-primary">{{ item.title }}</div>
                 <div class="text-muted-foreground">{{ item.timestamp }}</div>
               </div>
             }
@@ -223,7 +223,7 @@ class AutoScrollInteractiveTestComponent {
           <org-button buttonStyle="secondary" (click)="scrollToMiddle()"> Scroll to Middle </org-button>
         </div>
 
-        <div class="mb-4 rounded border border-border bg-muted/30 p-3 text-sm">
+        <div class="mb-4 rounded border border-default-color bg-muted/30 p-3 text-sm">
           <div>
             <strong>Auto-Scroll Internal State:</strong> <span class="font-mono">{{ getState() }}</span>
           </div>
@@ -240,13 +240,13 @@ class AutoScrollInteractiveTestComponent {
 
         <org-scroll-area
           #scrollParentComponent
-          containerClass="rounded-lg border border-border bg-muted/30"
+          containerClass="rounded-lg border border-default-color bg-muted/30"
           scrollClass="h-2xs"
         >
           <org-auto-scroll #scrollContainerComponent [containerClass]="'p-4'">
             @for (item of items(); track item.title) {
-              <div class="mb-2 rounded border border-border bg-card p-3 text-sm">
-                <div class="font-semibold text-primary-text">{{ item.title }}</div>
+              <div class="mb-2 rounded border border-default-color bg-card p-3 text-sm">
+                <div class="font-semibold text-primary">{{ item.title }}</div>
                 <div class="text-muted-foreground">{{ item.content }}</div>
               </div>
             }
@@ -333,7 +333,7 @@ class AutoScrollProgrammaticDemoComponent {
   template: `
     <org-storybook-example-container title="Auto Scroll">
       <org-storybook-example-container-section label="Default">
-        <div class="mb-4 rounded border border-border bg-muted/30 p-3 text-sm">
+        <div class="mb-4 rounded border border-default-color bg-muted/30 p-3 text-sm">
           <div>
             <strong>Auto-Scroll Internal State:</strong> <span class="font-mono">{{ getAutoScrollState() }}</span>
           </div>
@@ -348,61 +348,61 @@ class AutoScrollProgrammaticDemoComponent {
           </div>
         </div>
 
-        <org-scroll-area containerClass="rounded-lg border border-border bg-muted/30" scrollClass="h-2xs">
+        <org-scroll-area containerClass="rounded-lg border border-default-color bg-muted/30" scrollClass="h-2xs">
           <org-auto-scroll #autoScrollComponent [autoScrollEnabled]="autoScrollEnabled()" [containerClass]="'p-4'">
-            <div class="mb-2 rounded border border-border bg-card p-3">
+            <div class="mb-2 rounded border border-default-color bg-card p-3">
               <div class="font-semibold">Message 1</div>
               <div class="text-sm text-muted-foreground">Initial message in the container</div>
             </div>
-            <div class="mb-2 rounded border border-border bg-card p-3">
+            <div class="mb-2 rounded border border-default-color bg-card p-3">
               <div class="font-semibold">Message 2</div>
               <div class="text-sm text-muted-foreground">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
             </div>
-            <div class="mb-2 rounded border border-border bg-card p-3">
+            <div class="mb-2 rounded border border-default-color bg-card p-3">
               <div class="font-semibold">Message 3</div>
               <div class="text-sm text-muted-foreground">
                 Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
               </div>
             </div>
-            <div class="mb-2 rounded border border-border bg-card p-3">
+            <div class="mb-2 rounded border border-default-color bg-card p-3">
               <div class="font-semibold">Message 4</div>
               <div class="text-sm text-muted-foreground">
                 Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.
               </div>
             </div>
-            <div class="mb-2 rounded border border-border bg-card p-3">
+            <div class="mb-2 rounded border border-default-color bg-card p-3">
               <div class="font-semibold">Message 5</div>
               <div class="text-sm text-muted-foreground">
                 Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.
               </div>
             </div>
-            <div class="mb-2 rounded border border-border bg-card p-3">
+            <div class="mb-2 rounded border border-default-color bg-card p-3">
               <div class="font-semibold">Message 6</div>
               <div class="text-sm text-muted-foreground">
                 Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
                 laborum.
               </div>
             </div>
-            <div class="mb-2 rounded border border-border bg-card p-3">
+            <div class="mb-2 rounded border border-default-color bg-card p-3">
               <div class="font-semibold">Message 7</div>
               <div class="text-sm text-muted-foreground">
                 Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.
               </div>
             </div>
-            <div class="mb-2 rounded border border-border bg-card p-3">
+            <div class="mb-2 rounded border border-default-color bg-card p-3">
               <div class="font-semibold">Message 8</div>
               <div class="text-sm text-muted-foreground">
                 Totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta
                 sunt explicabo.
               </div>
             </div>
-            <div class="mb-2 rounded border border-border bg-card p-3">
+            <div class="mb-2 rounded border border-default-color bg-card p-3">
               <div class="font-semibold">Message 9</div>
               <div class="text-sm text-muted-foreground">
                 Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.
               </div>
             </div>
-            <div class="mb-2 rounded border border-border bg-card p-3">
+            <div class="mb-2 rounded border border-default-color bg-card p-3">
               <div class="font-semibold">Message 10</div>
               <div class="text-sm text-muted-foreground">
                 This is the last message at the bottom of the scroll container.
@@ -511,7 +511,7 @@ export const ProgrammaticDemo: Story = {
           <org-button buttonStyle="secondary" (click)="addItem()"> Add Item </org-button>
         </div>
 
-        <div class="mb-4 rounded border border-border bg-muted/30 p-3 text-sm">
+        <div class="mb-4 rounded border border-default-color bg-muted/30 p-3 text-sm">
           <div>
             <strong>Auto-Scroll Internal State:</strong> <span class="font-mono">{{ getAutoScrollState() }}</span>
           </div>
@@ -526,24 +526,24 @@ export const ProgrammaticDemo: Story = {
           </div>
         </div>
 
-        <div class="rounded-lg border border-border bg-muted/30 p-4">
+        <div class="rounded-lg border border-default-color bg-muted/30 p-4">
           @if (showLargeContainer()) {
-            <org-scroll-area containerClass="rounded border border-border bg-background" scrollClass="h-sm">
+            <org-scroll-area containerClass="rounded border border-default-color bg-app" scrollClass="h-sm">
               <org-auto-scroll #autoScrollComponent [containerClass]="'p-4'">
                 @for (item of items(); track item.id) {
-                  <div class="mb-2 rounded border border-border bg-card p-3 text-sm">
-                    <div class="font-semibold text-primary-text">{{ item.title }}</div>
+                  <div class="mb-2 rounded border border-default-color bg-card p-3 text-sm">
+                    <div class="font-semibold text-primary">{{ item.title }}</div>
                     <div class="text-muted-foreground">{{ item.description }}</div>
                   </div>
                 }
               </org-auto-scroll>
             </org-scroll-area>
           } @else {
-            <org-scroll-area containerClass="rounded border border-border bg-background" scrollClass="h-5xs">
+            <org-scroll-area containerClass="rounded border border-default-color bg-app" scrollClass="h-5xs">
               <org-auto-scroll #autoScrollComponent [containerClass]="'p-4'">
                 @for (item of items(); track item.id) {
-                  <div class="mb-2 rounded border border-border bg-card p-3 text-sm">
-                    <div class="font-semibold text-primary-text">{{ item.title }}</div>
+                  <div class="mb-2 rounded border border-default-color bg-card p-3 text-sm">
+                    <div class="font-semibold text-primary">{{ item.title }}</div>
                     <div class="text-muted-foreground">{{ item.description }}</div>
                   </div>
                 }
@@ -638,47 +638,47 @@ export const DynamicParent: Story = {
       currentState="Comparing enabled, disabled, and forced-disabled states"
     >
       <org-storybook-example-container-section label="Enabled (autoScrollEnabled=true)">
-        <div class="mb-2 rounded border border-border bg-muted/30 p-2 text-xs">
+        <div class="mb-2 rounded border border-default-color bg-muted/30 p-2 text-xs">
           <strong>Auto-Scroll Internal State:</strong> <span class="font-mono">{{ getEnabledState() }}</span>
         </div>
 
-        <org-scroll-area containerClass="rounded-lg border border-border bg-muted/30" scrollClass="h-5xs">
+        <org-scroll-area containerClass="rounded-lg border border-default-color bg-muted/30" scrollClass="h-5xs">
           <org-auto-scroll #enabledComponent [autoScrollEnabled]="true" [containerClass]="'p-4'">
-            <div class="mb-2 text-sm font-semibold text-primary-text">State: Enabled</div>
-            <div class="mb-2 rounded border border-border bg-card p-2 text-xs">
+            <div class="mb-2 text-sm font-semibold text-primary">State: Enabled</div>
+            <div class="mb-2 rounded border border-default-color bg-card p-2 text-xs">
               Auto-scrolling is active. If new content is added, it will scroll to bottom automatically.
             </div>
-            <div class="mb-2 rounded border border-border bg-card p-2 text-xs">Message 1</div>
-            <div class="mb-2 rounded border border-border bg-card p-2 text-xs">Message 2</div>
-            <div class="mb-2 rounded border border-border bg-card p-2 text-xs">Message 3</div>
-            <div class="mb-2 rounded border border-border bg-card p-2 text-xs">Message 4</div>
-            <div class="mb-2 rounded border border-border bg-card p-2 text-xs">Message 5</div>
-            <div class="mb-2 rounded border border-border bg-card p-2 text-xs">Message 6</div>
-            <div class="mb-2 rounded border border-border bg-card p-2 text-xs">Message 7</div>
-            <div class="mb-2 rounded border border-border bg-card p-2 text-xs">Message 8 (last)</div>
+            <div class="mb-2 rounded border border-default-color bg-card p-2 text-xs">Message 1</div>
+            <div class="mb-2 rounded border border-default-color bg-card p-2 text-xs">Message 2</div>
+            <div class="mb-2 rounded border border-default-color bg-card p-2 text-xs">Message 3</div>
+            <div class="mb-2 rounded border border-default-color bg-card p-2 text-xs">Message 4</div>
+            <div class="mb-2 rounded border border-default-color bg-card p-2 text-xs">Message 5</div>
+            <div class="mb-2 rounded border border-default-color bg-card p-2 text-xs">Message 6</div>
+            <div class="mb-2 rounded border border-default-color bg-card p-2 text-xs">Message 7</div>
+            <div class="mb-2 rounded border border-default-color bg-card p-2 text-xs">Message 8 (last)</div>
           </org-auto-scroll>
         </org-scroll-area>
       </org-storybook-example-container-section>
 
       <org-storybook-example-container-section label="Forced Disabled (autoScrollEnabled=false)">
-        <div class="mb-2 rounded border border-border bg-muted/30 p-2 text-xs">
+        <div class="mb-2 rounded border border-default-color bg-muted/30 p-2 text-xs">
           <strong>Auto-Scroll Internal State:</strong> <span class="font-mono">{{ getDisabledState() }}</span>
         </div>
 
-        <org-scroll-area containerClass="rounded-lg border border-border bg-muted/30" scrollClass="h-5xs">
+        <org-scroll-area containerClass="rounded-lg border border-default-color bg-muted/30" scrollClass="h-5xs">
           <org-auto-scroll #disabledComponent [autoScrollEnabled]="false" [containerClass]="'p-4'">
             <div class="mb-2 text-sm font-semibold text-destructive">State: Forced Disabled</div>
-            <div class="mb-2 rounded border border-border bg-card p-2 text-xs">
+            <div class="mb-2 rounded border border-default-color bg-card p-2 text-xs">
               Auto-scrolling is disabled via input. Content will not auto-scroll even when added.
             </div>
-            <div class="mb-2 rounded border border-border bg-card p-2 text-xs">Message 1</div>
-            <div class="mb-2 rounded border border-border bg-card p-2 text-xs">Message 2</div>
-            <div class="mb-2 rounded border border-border bg-card p-2 text-xs">Message 3</div>
-            <div class="mb-2 rounded border border-border bg-card p-2 text-xs">Message 4</div>
-            <div class="mb-2 rounded border border-border bg-card p-2 text-xs">Message 5</div>
-            <div class="mb-2 rounded border border-border bg-card p-2 text-xs">Message 6</div>
-            <div class="mb-2 rounded border border-border bg-card p-2 text-xs">Message 7</div>
-            <div class="mb-2 rounded border border-border bg-card p-2 text-xs">Message 8 (last)</div>
+            <div class="mb-2 rounded border border-default-color bg-card p-2 text-xs">Message 1</div>
+            <div class="mb-2 rounded border border-default-color bg-card p-2 text-xs">Message 2</div>
+            <div class="mb-2 rounded border border-default-color bg-card p-2 text-xs">Message 3</div>
+            <div class="mb-2 rounded border border-default-color bg-card p-2 text-xs">Message 4</div>
+            <div class="mb-2 rounded border border-default-color bg-card p-2 text-xs">Message 5</div>
+            <div class="mb-2 rounded border border-default-color bg-card p-2 text-xs">Message 6</div>
+            <div class="mb-2 rounded border border-default-color bg-card p-2 text-xs">Message 7</div>
+            <div class="mb-2 rounded border border-default-color bg-card p-2 text-xs">Message 8 (last)</div>
           </org-auto-scroll>
         </org-scroll-area>
       </org-storybook-example-container-section>

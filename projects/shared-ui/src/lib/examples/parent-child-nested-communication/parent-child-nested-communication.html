@@ -1,9 +1,9 @@
 <div class="flex flex-col gap-4">
-  <div class="rounded border border-border bg-background p-4">
-    <div class="mb-3 text-sm font-medium text-text">
+  <div class="rounded border border-default-color bg-app p-4">
+    <div class="mb-3 text-sm font-medium text-fg">
       When a parent needs access to a nested child's public logic, we use the registry pattern.
     </div>
-    <ul class="list-inside list-disc flex flex-col gap-2 text-sm text-text">
+    <ul class="list-inside list-disc flex flex-col gap-2 text-sm text-fg">
       <li>
         We should add the registry provider as low in the tree as needed in order to avoid issues like memory leaks that
         can happen more easily with root level providers.
@@ -15,8 +15,8 @@
     </ul>
   </div>
 
-  <div class="flex flex-col gap-2 rounded border border-info-border bg-info-background-subtle p-4">
-    <div class="text-sm font-medium text-text">Parent Component (store created here)</div>
+  <div class="flex flex-col gap-2 rounded border border-info bg-info-soft p-4">
+    <div class="text-sm font-medium text-fg">Parent Component (store created here)</div>
     <org-example-nested-1 />
   </div>
 </div>

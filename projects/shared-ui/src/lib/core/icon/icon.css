@@ -24,8 +24,8 @@
   }
 
   :host([data-size='md']) svg {
-    width: var(--icon-size-md);
-    height: var(--icon-size-md);
+    width: var(--icon-size-base);
+    height: var(--icon-size-base);
   }
 
   :host([data-size='lg']) svg {

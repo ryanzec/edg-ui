@@ -24,7 +24,7 @@ import { Button } from '../button/button';
 import { Combobox } from '../combobox/combobox';
 import { type ComboboxOptionInput } from '../combobox-store/combobox-store';
 import { DatePickerInput } from '../date-picker-input/date-picker-input';
-import { FormField } from '../form-field/form-field';
+import { FormField } from '../form-fields/form-field';
 import { FormFields } from '../form-fields/form-fields';
 import { Label } from '../label/label';
 
@@ -153,7 +153,7 @@ const skillOptions: ComboboxOptionInput[] = [
 
       <div class="flex gap-1">
         <!-- form state display -->
-        <div class="rounded-md bg-neutral-background-subtle p-3 text-sm flex flex-col gap-2">
+        <div class="rounded-base bg-neutral-soft p-3 text-sm flex flex-col gap-2">
           <div class="font-medium">Form State:</div>
           <div class="flex flex-col gap-1 text-xs font-mono">
             <div>Valid: {{ form.valid }}</div>
@@ -164,7 +164,7 @@ const skillOptions: ComboboxOptionInput[] = [
         </div>
 
         <!-- current form values display -->
-        <div class="rounded-md bg-info-background-subtle p-3 text-sm flex flex-col gap-2">
+        <div class="rounded-base bg-info-soft p-3 text-sm flex flex-col gap-2">
           <div class="font-medium">Current Form Values:</div>
           <div class="flex flex-col gap-1 text-xs font-mono">
             <div>username: "{{ formValues().username }}"</div>
@@ -413,7 +413,7 @@ class ReactiveFormDemoComponent {
 
       <div class="flex gap-1">
         <!-- form state display -->
-        <div class="rounded-md bg-neutral-background-subtle p-3 text-sm flex flex-col gap-2">
+        <div class="rounded-base bg-neutral-soft p-3 text-sm flex flex-col gap-2">
           <div class="font-medium">Form State:</div>
           <div class="flex flex-col gap-1 text-xs font-mono">
             <div>Valid: {{ isFormValid() }}</div>
@@ -422,7 +422,7 @@ class ReactiveFormDemoComponent {
         </div>
 
         <!-- current form values display -->
-        <div class="rounded-md bg-info-background-subtle p-3 text-sm flex flex-col gap-2">
+        <div class="rounded-base bg-info-soft p-3 text-sm flex flex-col gap-2">
           <div class="font-medium">Current Form Values:</div>
           <div class="flex flex-col gap-1 text-xs font-mono">
             <div>username: "{{ username() }}"</div>
@@ -768,7 +768,7 @@ type PrePopulatedFormData = {
 
       <div class="flex gap-1">
         <!-- form state display -->
-        <div class="rounded-md bg-neutral-background-subtle p-3 text-sm flex flex-col gap-2">
+        <div class="rounded-base bg-neutral-soft p-3 text-sm flex flex-col gap-2">
           <div class="font-medium">Form State:</div>
           <div class="flex flex-col gap-1 text-xs font-mono">
             <div>Valid: {{ form.valid }}</div>
@@ -779,7 +779,7 @@ type PrePopulatedFormData = {
         </div>
 
         <!-- current form values display -->
-        <div class="rounded-md bg-info-background-subtle p-3 text-sm flex flex-col gap-2">
+        <div class="rounded-base bg-info-soft p-3 text-sm flex flex-col gap-2">
           <div class="font-medium">Current Form Values:</div>
           <div class="flex flex-col gap-1 text-xs font-mono">
             <div>username: "{{ formValues().username }}"</div>
@@ -1051,7 +1051,7 @@ class ReactiveFormPrePopulatedDemoComponent {
 
       <div class="flex gap-1">
         <!-- form state display -->
-        <div class="rounded-md bg-neutral-background-subtle p-3 text-sm flex flex-col gap-2">
+        <div class="rounded-base bg-neutral-soft p-3 text-sm flex flex-col gap-2">
           <div class="font-medium">Form State:</div>
           <div class="flex flex-col gap-1 text-xs font-mono">
             <div>Valid: {{ isFormValid() }}</div>
@@ -1060,7 +1060,7 @@ class ReactiveFormPrePopulatedDemoComponent {
         </div>
 
         <!-- current form values display -->
-        <div class="rounded-md bg-info-background-subtle p-3 text-sm flex flex-col gap-2">
+        <div class="rounded-base bg-info-soft p-3 text-sm flex flex-col gap-2">
           <div class="font-medium">Current Form Values:</div>
           <div class="flex flex-col gap-1 text-xs font-mono">
             <div>username: "{{ username() }}"</div>

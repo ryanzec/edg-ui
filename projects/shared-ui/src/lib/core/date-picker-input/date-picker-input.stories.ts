@@ -9,7 +9,7 @@ import { StorybookExampleContainerSection } from '../../private/storybook-exampl
 import { Button } from '../button/button';
 import { JsonPipe } from '@angular/common';
 import { FormFields } from '../form-fields/form-fields';
-import { FormField } from '../form-field/form-field';
+import { FormField } from '../form-fields/form-field';
 import type { CalendarPartialRangeSelectionType } from '../calendar/calendar';
 
 const meta: Meta<DatePickerInput> = {
@@ -1504,8 +1504,8 @@ export const ValidationSpaceReservation: Story = {
 
       <org-storybook-example-container-section label="Keyboard Support">
         <div class="mb-2 text-sm">
-          Press <kbd class="px-1 py-0.5 bg-neutral-background rounded border border-neutral-border">Delete</kbd> or
-          <kbd class="px-1 py-0.5 bg-neutral-background rounded border border-neutral-border">Backspace</kbd>
+          Press <kbd class="px-1 py-0.5 bg-neutral rounded border border-neutral">Delete</kbd> or
+          <kbd class="px-1 py-0.5 bg-neutral rounded border border-neutral">Backspace</kbd>
           while the calendar is focused to clear the selection.
         </div>
         <org-date-picker-input

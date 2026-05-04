@@ -5,11 +5,11 @@
 
   .header-cell {
     padding: var(--spacing-3) var(--spacing-4);
-    font-size: var(--text-sm);
-    line-height: var(--text-sm--line-height);
-    letter-spacing: var(--text-sm--letter-spacing);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-normal);
+    letter-spacing: var(--letter-spacing-normal);
     font-weight: var(--font-weight-semibold);
     text-align: left;
-    background-color: var(--color-background-level2);
+    background-color: var(--color-bg-surface-2);
   }
 }

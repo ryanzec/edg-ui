@@ -9,7 +9,7 @@
     justify-content: space-between;
     gap: var(--spacing-2);
     padding: var(--spacing-2);
-    border-bottom: var(--border-width) solid var(--color-border-subtle);
+    border-bottom: var(--border-width) solid var(--color-border-soft);
   }
 
   .selectors {
@@ -20,21 +20,21 @@
 
   .selector {
     padding: var(--spacing-1) var(--spacing-2);
-    font-size: var(--text-sm);
-    line-height: var(--text-sm--line-height);
-    letter-spacing: var(--text-sm--letter-spacing);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-normal);
+    letter-spacing: var(--letter-spacing-normal);
     border-radius: var(--radius-sm);
-    color: var(--color-text);
+    color: var(--color-fg);
   }
 
   /* select base — kept here because border/bg are overridden by :focus-visible below */
   :host select {
-    border: var(--border-width) solid var(--color-input-border);
-    background-color: var(--color-input-background);
+    border: var(--border-width) solid var(--color-border);
+    background-color: var(--color-bg-surface);
   }
 
   :host select:focus-visible {
-    border-color: var(--color-input-border-focused);
-    background-color: var(--color-background-level1);
+    border-color: var(--color-focus-ring);
+    background-color: var(--color-bg-surface);
   }
 }

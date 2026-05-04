@@ -13,7 +13,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Icon, IconName } from '../icon/icon';
 import { TextDirective, TextSize } from '../text-directive/text-directive';
 import { ComponentSize } from '../types/component-types';
-import { FORM_FIELD_COMPONENT } from '../form-field/form-field';
+import { FORM_FIELD_COMPONENT } from '../form-fields/form-field';
 import { CheckboxBrainDirective } from '../../brain/checkbox-brain/checkbox-brain';
 
 /** all available checkbox size values */
@@ -67,6 +67,7 @@ export class Checkbox implements ControlValueAccessor {
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private _onChange: (value: boolean) => void = () => {};
+
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private _onTouched: () => void = () => {};
 
@@ -94,14 +95,7 @@ export class Checkbox implements ControlValueAccessor {
 
   /** the text size derived from the checkbox size */
   public readonly textSize = computed<TextSize>(() => {
-    switch (this.size()) {
-      case 'base':
-        return 'sm';
-      case 'lg':
-        return 'md';
-      default:
-        return 'xs';
-    }
+    return this.size() === 'lg' ? 'xl' : this.size();
   });
 
   /** the icon name representing the current checkbox state */

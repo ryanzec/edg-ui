@@ -5,6 +5,6 @@
 
   .footer {
     padding: var(--spacing-2);
-    border-top: var(--border-width) solid var(--color-border-subtle);
+    border-top: var(--border-width) solid var(--color-border-soft);
   }
 }

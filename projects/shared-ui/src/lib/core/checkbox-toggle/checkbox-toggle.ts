@@ -4,7 +4,7 @@ import { angularUtils } from '@organization/shared-utils';
 import { Icon, IconName, IconSize } from '../icon/icon';
 import { TextDirective, TextSize } from '../text-directive/text-directive';
 import { ComponentSize } from '../types/component-types';
-import { FORM_FIELD_COMPONENT } from '../form-field/form-field';
+import { FORM_FIELD_COMPONENT } from '../form-fields/form-field';
 import { CheckboxToggleBrainDirective } from '../../brain/checkbox-toggle-brain/checkbox-toggle-brain';
 
 export const allCheckboxToggleSizes = ['sm', 'base', 'lg'] as const satisfies readonly ComponentSize[];
@@ -69,14 +69,7 @@ export class CheckboxToggle implements ControlValueAccessor {
   public readonly isDisabled = computed<boolean>(() => this.brain.isDisabled());
 
   public readonly textSize = computed<TextSize>(() => {
-    switch (this.size()) {
-      case 'base':
-        return 'sm';
-      case 'lg':
-        return 'md';
-      default:
-        return 'xs';
-    }
+    return this.size() === 'lg' ? 'xl' : this.size();
   });
 
   public readonly displayIcon = computed<IconName | undefined>(() => {

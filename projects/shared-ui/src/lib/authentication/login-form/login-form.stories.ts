@@ -346,10 +346,10 @@ class LoginFormPasswordVisibleStory implements AfterViewInit {
 @Component({
   selector: 'story-login-form-interactive-story',
   template: `
-    <div class="flex flex-col gap-6 p-4 max-w-md">
+    <div class="flex flex-col gap-6 p-4 max-w-base">
       <div class="flex flex-col gap-2">
-        <h3 class="text-lg font-semibold">Interactive Login Form</h3>
-        <div class="text-sm text-text-subtle">Fill out the form and submit to see event logging in action.</div>
+        <h3 class="text-xl font-semibold">Interactive Login Form</h3>
+        <div class="text-sm text-muted">Fill out the form and submit to see event logging in action.</div>
       </div>
 
       <org-login-form (loginSubmitted)="onLoginSubmit($event)"></org-login-form>
@@ -357,18 +357,16 @@ class LoginFormPasswordVisibleStory implements AfterViewInit {
       <!-- Event Log -->
       <div class="flex flex-col gap-2">
         <h4 class="font-medium">Event Log:</h4>
-        <div class="p-3 bg-secondary-background-subtle rounded text-sm font-mono max-h-48 overflow-y-auto">
+        <div class="p-3 bg-secondary-soft rounded text-sm font-mono max-h-48 overflow-y-auto">
           @for (event of events(); track $index) {
             <div class="mb-2">
-              <div class="font-bold text-primary-text">{{ event.timestamp }}</div>
-              <div class="text-text-subtle">Email: {{ event.email }}</div>
-              <div class="text-text-subtle">Password: {{ event.password }}</div>
+              <div class="font-bold text-primary">{{ event.timestamp }}</div>
+              <div class="text-muted">Email: {{ event.email }}</div>
+              <div class="text-muted">Password: {{ event.password }}</div>
             </div>
           }
           @if (events().length === 0) {
-            <div class="text-text-subtle">
-              No login attempts yet. Fill out the form and click "Sign In" to see events.
-            </div>
+            <div class="text-muted">No login attempts yet. Fill out the form and click "Sign In" to see events.</div>
           }
         </div>
       </div>

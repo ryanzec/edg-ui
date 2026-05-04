@@ -1,96 +1,66 @@
 @layer utilities {
   /* ==========================================================================
-   Font Size
-   Bundles font-size, line-height, and letter-spacing where variables exist.
-   Note: .text-2xs omits letter-spacing (--text-2xs--letter-spacing not defined)
-   ========================================================================== */
+     font size
+     ========================================================================== */
 
   .text-2xs {
-    font-size: var(--text-2xs);
-    line-height: var(--text-2xs--line-height);
-    letter-spacing: var(--text-2xs--letter-spacing);
+    font-size: var(--font-size-2xs);
   }
 
   .text-xs {
-    font-size: var(--text-xs);
-    line-height: var(--text-xs--line-height);
-    letter-spacing: var(--text-xs--letter-spacing);
+    font-size: var(--font-size-xs);
   }
 
   .text-sm {
-    font-size: var(--text-sm);
-    line-height: var(--text-sm--line-height);
-    letter-spacing: var(--text-sm--letter-spacing);
+    font-size: var(--font-size-sm);
   }
 
-  .text-md {
-    font-size: var(--text-md);
-    line-height: var(--text-md--line-height);
-    letter-spacing: var(--text-md--letter-spacing);
+  .text-base {
+    font-size: var(--font-size-base);
   }
 
   .text-lg {
-    font-size: var(--text-lg);
-    line-height: var(--text-lg--line-height);
-    letter-spacing: var(--text-lg--letter-spacing);
+    font-size: var(--font-size-lg);
   }
 
   .text-xl {
-    font-size: var(--text-xl);
-    line-height: var(--text-xl--line-height);
-    letter-spacing: var(--text-xl--letter-spacing);
+    font-size: var(--font-size-xl);
   }
 
   .text-2xl {
-    font-size: var(--text-2xl);
-    line-height: var(--text-2xl--line-height);
-    letter-spacing: var(--text-2xl--letter-spacing);
+    font-size: var(--font-size-2xl);
   }
 
   .text-3xl {
-    font-size: var(--text-3xl);
-    line-height: var(--text-3xl--line-height);
-    letter-spacing: var(--text-3xl--letter-spacing);
+    font-size: var(--font-size-3xl);
   }
 
   .text-4xl {
-    font-size: var(--text-4xl);
-    line-height: var(--text-4xl--line-height);
-    letter-spacing: var(--text-4xl--letter-spacing);
+    font-size: var(--font-size-4xl);
   }
 
   .text-5xl {
-    font-size: var(--text-5xl);
-    line-height: var(--text-5xl--line-height);
-    letter-spacing: var(--text-5xl--letter-spacing);
+    font-size: var(--font-size-5xl);
   }
 
   /* ==========================================================================
-   Font Family
-   ========================================================================== */
+     font family
+     ========================================================================== */
+
+  .font-sans {
+    font-family: var(--font-sans);
+  }
 
   .font-mono {
-    font-family: monospace;
+    font-family: var(--font-mono);
   }
 
   /* ==========================================================================
-   Font Weight
-   ========================================================================== */
+     font weight
+     ========================================================================== */
 
-  .font-thin {
-    font-weight: var(--font-weight-thin);
-  }
-
-  .font-extralight {
-    font-weight: var(--font-weight-extralight);
-  }
-
-  .font-light {
-    font-weight: var(--font-weight-light);
-  }
-
-  .font-normal {
-    font-weight: var(--font-weight-normal);
+  .font-regular {
+    font-weight: var(--font-weight-regular);
   }
 
   .font-medium {
@@ -105,21 +75,13 @@
     font-weight: var(--font-weight-bold);
   }
 
-  .font-extrabold {
-    font-weight: var(--font-weight-extrabold);
-  }
-
-  .font-black {
-    font-weight: var(--font-weight-black);
-  }
-
   .font-inherit {
     font: inherit;
   }
 
   /* ==========================================================================
-   Font Style
-   ========================================================================== */
+     font style
+     ========================================================================== */
 
   .italic {
     font-style: italic;
@@ -130,8 +92,8 @@
   }
 
   /* ==========================================================================
-   Font Smoothing
-   ========================================================================== */
+     font smoothing
+     ========================================================================== */
 
   .antialiased {
     -webkit-font-smoothing: antialiased;
@@ -144,77 +106,40 @@
   }
 
   /* ==========================================================================
-   Line Height
-   Only --leading-2xs exists as a variable; all others use static values.
-   ========================================================================== */
-
-  .line-height-2xs {
-    line-height: var(--text-2xs--line-height);
-  }
-
-  .line-height-xs {
-    line-height: var(--text-xs--line-height);
-  }
-
-  .line-height-sm {
-    line-height: var(--text-sm--line-height);
-  }
-
-  .line-height-md {
-    line-height: var(--text-md--line-height);
-  }
-
-  .line-height-lg {
-    line-height: var(--text-lg--line-height);
-  }
-
-  .line-height-xl {
-    line-height: var(--text-xl--line-height);
-  }
-
-  .line-height-2xl {
-    line-height: var(--text-2xl--line-height);
-  }
-
-  .line-height-3xl {
-    line-height: var(--text-3xl--line-height);
-  }
-
-  .line-height-4xl {
-    line-height: var(--text-4xl--line-height);
-  }
-
-  .line-height-5xl {
-    line-height: var(--text-5xl--line-height);
-  }
-
-  .line-height-none {
-    line-height: 1;
-  }
+     line height
+     ========================================================================== */
 
   .line-height-tight {
-    line-height: 1.25;
-  }
-
-  .line-height-snug {
-    line-height: 1.375;
+    line-height: var(--line-height-tight);
   }
 
   .line-height-normal {
-    line-height: 1.5;
+    line-height: var(--line-height-normal);
   }
 
   .line-height-relaxed {
-    line-height: 1.625;
-  }
-
-  .line-height-loose {
-    line-height: 2;
+    line-height: var(--line-height-relaxed);
   }
 
   /* ==========================================================================
-   Text Align
-   ========================================================================== */
+     letter spacing
+     ========================================================================== */
+
+  .letter-spacing-tight {
+    letter-spacing: var(--letter-spacing-tight);
+  }
+
+  .letter-spacing-normal {
+    letter-spacing: var(--letter-spacing-normal);
+  }
+
+  .letter-spacing-wide {
+    letter-spacing: var(--letter-spacing-wide);
+  }
+
+  /* ==========================================================================
+     text align
+     ========================================================================== */
 
   .text-left {
     text-align: left;
@@ -241,8 +166,8 @@
   }
 
   /* ==========================================================================
-   Text Transform
-   ========================================================================== */
+     text transform
+     ========================================================================== */
 
   .uppercase {
     text-transform: uppercase;
@@ -261,8 +186,8 @@
   }
 
   /* ==========================================================================
-   Text Decoration
-   ========================================================================== */
+     text decoration
+     ========================================================================== */
 
   .underline {
     text-decoration-line: underline;
@@ -281,8 +206,8 @@
   }
 
   /* ==========================================================================
-   Text Overflow
-   ========================================================================== */
+     text overflow
+     ========================================================================== */
 
   .truncate {
     overflow: hidden;
@@ -299,8 +224,8 @@
   }
 
   /* ==========================================================================
-   Text Wrap
-   ========================================================================== */
+     text wrap
+     ========================================================================== */
 
   .text-wrap {
     text-wrap: wrap;
@@ -319,8 +244,8 @@
   }
 
   /* ==========================================================================
-   Whitespace
-   ========================================================================== */
+     whitespace
+     ========================================================================== */
 
   .whitespace-normal {
     white-space: normal;
@@ -347,8 +272,8 @@
   }
 
   /* ==========================================================================
-   Word Break
-   ========================================================================== */
+     word break
+     ========================================================================== */
 
   .break-normal {
     overflow-wrap: normal;
@@ -368,8 +293,8 @@
   }
 
   /* ==========================================================================
-   Vertical Align
-   ========================================================================== */
+     vertical align
+     ========================================================================== */
 
   .align-baseline {
     vertical-align: baseline;
@@ -404,161 +329,134 @@
   }
 
   /* ==========================================================================
-   Text Color
-   ========================================================================== */
+     foreground / text color
+     ========================================================================== */
 
-  /* Semantic */
-  .text-default-color {
-    color: var(--color-text);
+  /* foreground - semantic */
+  .text-fg {
+    color: var(--color-fg);
   }
 
-  .text-subtle {
-    color: var(--color-text-subtle);
+  .text-muted {
+    color: var(--color-fg-muted);
   }
 
-  .text-disabled {
-    color: var(--color-text-disabled);
+  .text-faint {
+    color: var(--color-fg-faint);
   }
 
-  .text-inverse {
-    color: var(--color-text-inverse);
+  .text-on-accent {
+    color: var(--color-fg-on-accent);
   }
 
-  .text-inverse-subtle {
-    color: var(--color-text-inverse-subtle);
-  }
-
-  /* Component colors */
+  /* component colors */
   .text-primary {
-    color: var(--color-primary-text);
+    color: var(--color-primary);
   }
 
-  .text-primary-subtle {
-    color: var(--color-primary-text-subtle);
-  }
-
-  .text-primary-bold {
-    color: var(--color-primary-text-bold);
+  .text-primary-on {
+    color: var(--color-primary-on);
   }
 
   .text-secondary {
-    color: var(--color-secondary-text);
+    color: var(--color-secondary);
   }
 
-  .text-secondary-subtle {
-    color: var(--color-secondary-text-subtle);
-  }
-
-  .text-secondary-bold {
-    color: var(--color-secondary-text-bold);
+  .text-secondary-on {
+    color: var(--color-secondary-on);
   }
 
   .text-neutral {
-    color: var(--color-neutral-text);
+    color: var(--color-neutral);
   }
 
-  .text-neutral-subtle {
-    color: var(--color-neutral-text-subtle);
-  }
-
-  .text-neutral-bold {
-    color: var(--color-neutral-text-bold);
+  .text-neutral-on {
+    color: var(--color-neutral-on);
   }
 
   .text-safe {
-    color: var(--color-safe-text);
+    color: var(--color-safe);
   }
 
-  .text-safe-subtle {
-    color: var(--color-safe-text-subtle);
-  }
-
-  .text-safe-bold {
-    color: var(--color-safe-text-bold);
+  .text-safe-on {
+    color: var(--color-safe-on);
   }
 
   .text-info {
-    color: var(--color-info-text);
+    color: var(--color-info);
   }
 
-  .text-info-subtle {
-    color: var(--color-info-text-subtle);
-  }
-
-  .text-info-bold {
-    color: var(--color-info-text-bold);
+  .text-info-on {
+    color: var(--color-info-on);
   }
 
   .text-caution {
-    color: var(--color-caution-text);
+    color: var(--color-caution);
   }
 
-  .text-caution-subtle {
-    color: var(--color-caution-text-subtle);
-  }
-
-  .text-caution-bold {
-    color: var(--color-caution-text-bold);
+  .text-caution-on {
+    color: var(--color-caution-on);
   }
 
   .text-warning {
-    color: var(--color-warning-text);
+    color: var(--color-warning);
   }
 
-  .text-warning-subtle {
-    color: var(--color-warning-text-subtle);
-  }
-
-  .text-warning-bold {
-    color: var(--color-warning-text-bold);
+  .text-warning-on {
+    color: var(--color-warning-on);
   }
 
   .text-danger {
-    color: var(--color-danger-text);
+    color: var(--color-danger);
   }
 
-  .text-danger-subtle {
-    color: var(--color-danger-text-subtle);
+  .text-danger-on {
+    color: var(--color-danger-on);
   }
 
-  .text-danger-bold {
-    color: var(--color-danger-text-bold);
+  /* link colors */
+  .text-link {
+    color: var(--color-link);
   }
 
-  /* Background-token-based text colors (for icons / glyphs that need to match background-token saturation) */
-  .text-primary-background {
-    color: var(--color-primary-background);
+  .text-link-disabled {
+    color: var(--color-link-disabled);
   }
 
-  .text-secondary-background {
-    color: var(--color-secondary-background);
+  /* color palette */
+  .text-red {
+    color: var(--color-red);
   }
 
-  .text-neutral-background {
-    color: var(--color-neutral-background);
+  .text-orange {
+    color: var(--color-orange);
   }
 
-  .text-safe-background {
-    color: var(--color-safe-background);
+  .text-yellow {
+    color: var(--color-yellow);
   }
 
-  .text-info-background {
-    color: var(--color-info-background);
+  .text-green {
+    color: var(--color-green);
   }
 
-  .text-caution-background {
-    color: var(--color-caution-background);
+  .text-teal {
+    color: var(--color-teal);
   }
 
-  .text-warning-background {
-    color: var(--color-warning-background);
+  .text-blue {
+    color: var(--color-blue);
   }
 
-  .text-danger-background {
-    color: var(--color-danger-background);
+  .text-purple {
+    color: var(--color-purple);
   }
 
-  /* Special values */
+  .text-pink {
+    color: var(--color-pink);
+  }
+
+  /* special values */
   .text-inherit {
     color: inherit;
   }

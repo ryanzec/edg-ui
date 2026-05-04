@@ -1,0 +1,50 @@
+@layer components {
+  :host {
+    display: flex;
+    flex-direction: column;
+    gap: var(--design-system-demo-section-gap);
+    padding: var(--design-system-demo-section-padding);
+    background-color: var(--design-system-demo-section-background);
+    border: var(--border-width) solid var(--design-system-demo-section-border);
+    border-radius: var(--design-system-demo-section-radius);
+  }
+
+  .header-area {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--design-system-demo-section-body-gap);
+  }
+
+  /* split layout when an annotation slot is provided alongside the stage */
+  :host:has([slot='annotation']) .body {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  }
+
+  .stage {
+    display: flex;
+    flex-direction: column;
+    gap: var(--design-system-demo-section-body-gap);
+    min-width: 0;
+  }
+
+  .annotation-area {
+    min-width: 0;
+  }
+
+  .annotation-area:empty {
+    display: none;
+  }
+
+  /* stack the body vertically on small viewports so the annotation column
+     does not get unreadably narrow */
+  @media (max-width: 48rem) {
+    :host:has([slot='annotation']) .body {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+}

@@ -1,8 +1,8 @@
 @layer components {
   :host {
     display: block;
-    font-size: var(--text-lg);
-    line-height: var(--text-lg--line-height);
-    letter-spacing: var(--text-lg--letter-spacing);
+    font-size: var(--font-size-xl);
+    line-height: var(--line-height-normal);
+    letter-spacing: var(--letter-spacing-normal);
   }
 }

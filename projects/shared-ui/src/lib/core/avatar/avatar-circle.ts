@@ -5,7 +5,7 @@ import { Avatar } from './avatar';
 export const AVATAR_CIRCLE_STACKED_DEFAULT = false;
 
 /** total number of distinct background colors cycled through based on the first label character. */
-const AVATAR_COLOR_COUNT = 12;
+const AVATAR_COLOR_COUNT = 8;
 
 @Component({
   selector: 'org-avatar-circle',
@@ -42,7 +42,7 @@ export class AvatarCircle {
     return (words[0][0] + words[words.length - 1][0]).toUpperCase();
   });
 
-  /** background color index (0-11) derived from the first character of the parent label; falls back to 0 when empty. */
+  /** background color index (0-7) derived from the first character of the parent label; falls back to 0 when empty. */
   protected readonly colorIndex = computed<number>(() => {
     const label = this.avatarComponent.label().trim();
 

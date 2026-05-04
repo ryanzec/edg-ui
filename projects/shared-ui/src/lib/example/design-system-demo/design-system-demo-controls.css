@@ -1,0 +1,12 @@
+@layer components {
+  :host {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--design-system-demo-controls-gap);
+    padding: var(--design-system-demo-controls-padding);
+    background-color: var(--design-system-demo-controls-background);
+    border: var(--border-width) solid var(--design-system-demo-controls-border);
+    border-radius: var(--design-system-demo-controls-radius);
+  }
+}

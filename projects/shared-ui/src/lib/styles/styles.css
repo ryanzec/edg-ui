@@ -3,10 +3,12 @@
  */
 @import './layers.css';
 @import './variables/base-tokens.css';
+@import './variables/button-tokens.css';
 @import './variables/chart-tokens.css';
 @import './variables/scrollbar-tokens.css';
 @import './variables/avatar-tokens.css';
 @import './variables/icon-tokens.css';
+@import './variables/design-system-demo-tokens.css';
 @import './animations.css';
 @import './background-utility.css';
 @import './border-utility.css';
@@ -55,40 +57,40 @@
   }
 
   h1 {
-    font-size: var(--font-size-2xl);
+    font-size: var(--font-size-3xl);
     line-height: var(--line-height-tight);
     letter-spacing: var(--letter-spacing-tight);
     font-weight: var(--font-weight-bold);
   }
 
   h2 {
-    font-size: var(--font-size-2xl);
+    font-size: var(--font-size-3xl);
     line-height: var(--line-height-tight);
     letter-spacing: var(--letter-spacing-tight);
   }
 
   h3 {
-    font-size: var(--font-size-xl);
+    font-size: var(--font-size-2xl);
     line-height: var(--line-height-tight);
     letter-spacing: var(--letter-spacing-tight);
     font-weight: var(--font-weight-bold);
   }
 
   h4 {
-    font-size: var(--font-size-xl);
+    font-size: var(--font-size-2xl);
     line-height: var(--line-height-tight);
     letter-spacing: var(--letter-spacing-tight);
   }
 
   h5 {
-    font-size: var(--font-size-lg);
+    font-size: var(--font-size-xl);
     line-height: var(--line-height-tight);
     letter-spacing: var(--letter-spacing-tight);
     font-weight: var(--font-weight-bold);
   }
 
   h6 {
-    font-size: var(--font-size-lg);
+    font-size: var(--font-size-xl);
     line-height: var(--line-height-tight);
     letter-spacing: var(--letter-spacing-tight);
   }

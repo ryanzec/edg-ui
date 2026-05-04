@@ -10,7 +10,7 @@
     padding: var(--spacing-1) var(--spacing-2);
     min-height: var(--sizing-10xs);
     background-color: transparent;
-    color: var(--color-text-subtle);
+    color: var(--color-fg-muted);
     white-space: nowrap;
     outline: none;
     cursor: pointer;
@@ -21,16 +21,16 @@
   }
 
   .tab-btn:focus-visible {
-    background-color: var(--color-background-level1);
+    background-color: var(--color-bg-surface);
   }
 
   .tab-btn[aria-selected='true'] {
-    border-bottom-color: var(--color-border-bold);
-    color: var(--color-text);
+    border-bottom-color: var(--color-border-strong);
+    color: var(--color-fg);
   }
 
   .tab-btn:not([aria-selected='true']):not([aria-disabled='true']):hover {
-    background-color: var(--color-background-level1);
+    background-color: var(--color-bg-surface);
   }
 
   .tab-btn[aria-disabled='true'] {

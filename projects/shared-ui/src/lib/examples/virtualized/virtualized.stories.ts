@@ -37,7 +37,7 @@ import { Label } from '../../core/label/label';
         <cdk-virtual-scroll-viewport
           #viewport
           [itemSize]="37"
-          class="h-lg w-full border border-neutral-border rounded-md"
+          class="h-lg w-full border border-neutral rounded-base"
           (scrolledIndexChange)="onScrollIndexChange($event)"
         >
           <org-list>
@@ -49,7 +49,7 @@ import { Label } from '../../core/label/label';
       </org-storybook-example-container-section>
 
       <div class="flex gap-2 mt-3">
-        <div class="rounded-md bg-neutral-background-subtle p-3 text-sm flex-1">
+        <div class="rounded-base bg-neutral-soft p-3 text-sm flex-1">
           <div class="font-medium mb-2">Scroll Information:</div>
           <div class="flex flex-col gap-1 text-xs font-mono">
             <div>Total Items: {{ items().length }}</div>
@@ -59,7 +59,7 @@ import { Label } from '../../core/label/label';
         </div>
 
         @if (lastClickedItem(); as clickedId) {
-          <div class="rounded-md bg-info-background-subtle p-3 text-sm flex-1">
+          <div class="rounded-base bg-info-soft p-3 text-sm flex-1">
             <div class="font-medium mb-2">Last Clicked:</div>
             <div class="text-xs font-mono">Item {{ clickedId }}</div>
           </div>
@@ -143,7 +143,7 @@ class FixedSizeVirtualScrollDemoComponent {
           autosize
           [minBufferPx]="500"
           [maxBufferPx]="1000"
-          class="h-lg w-full border border-neutral-border rounded-md"
+          class="h-lg w-full border border-neutral rounded-base"
           (scrolledIndexChange)="onScrollIndexChange($event)"
         >
           <org-list>
@@ -155,7 +155,7 @@ class FixedSizeVirtualScrollDemoComponent {
       </org-storybook-example-container-section>
 
       <div class="flex gap-2 mt-3">
-        <div class="rounded-md bg-neutral-background-subtle p-3 text-sm flex-1">
+        <div class="rounded-base bg-neutral-soft p-3 text-sm flex-1">
           <div class="font-medium mb-2">Scroll Information:</div>
           <div class="flex flex-col gap-1 text-xs font-mono">
             <div>Total Items: {{ items().length }}</div>
@@ -165,11 +165,11 @@ class FixedSizeVirtualScrollDemoComponent {
         </div>
 
         @if (lastClickedItem(); as clickedId) {
-          <div class="rounded-md bg-info-background-subtle p-3 text-sm flex-1">
+          <div class="rounded-base bg-info-soft p-3 text-sm flex-1">
             <div class="font-medium mb-2">Last Clicked:</div>
             <div class="text-xs font-mono">
               <div>Item {{ clickedId }}</div>
-              <div class="mt-1 text-neutral-text-subtle">Lines: {{ getItemLines(clickedId) }}</div>
+              <div class="mt-1 text-neutral">Lines: {{ getItemLines(clickedId) }}</div>
             </div>
           </div>
         }
@@ -298,7 +298,7 @@ class DynamicSizeVirtualScrollDemoComponent {
             (valueChange)="onSearchChange($event)"
             inputClass="flex-1"
           />
-          <span class="text-sm text-neutral-text-subtle whitespace-nowrap">
+          <span class="text-sm text-neutral whitespace-nowrap">
             Showing {{ filteredItems().length }} of {{ items().length }} items
           </span>
         </div>
@@ -314,7 +314,7 @@ class DynamicSizeVirtualScrollDemoComponent {
           autosize
           [minBufferPx]="500"
           [maxBufferPx]="1000"
-          class="h-lg w-full border border-neutral-border rounded-md"
+          class="h-lg w-full border border-neutral rounded-base"
           (scrolledIndexChange)="onScrollIndexChange($event)"
         >
           <org-list>
@@ -326,7 +326,7 @@ class DynamicSizeVirtualScrollDemoComponent {
       </org-storybook-example-container-section>
 
       <div class="flex gap-2 mt-3">
-        <div class="rounded-md bg-neutral-background-subtle p-3 text-sm flex-1">
+        <div class="rounded-base bg-neutral-soft p-3 text-sm flex-1">
           <div class="font-medium mb-2">Scroll Information:</div>
           <div class="flex flex-col gap-1 text-xs font-mono">
             <div>Total Items: {{ items().length }}</div>
@@ -337,11 +337,11 @@ class DynamicSizeVirtualScrollDemoComponent {
         </div>
 
         @if (lastClickedItem(); as clickedId) {
-          <div class="rounded-md bg-info-background-subtle p-3 text-sm flex-1">
+          <div class="rounded-base bg-info-soft p-3 text-sm flex-1">
             <div class="font-medium mb-2">Last Clicked:</div>
             <div class="text-xs font-mono">
               <div>Item {{ clickedId }}</div>
-              <div class="mt-1 text-neutral-text-subtle">Lines: {{ getItemLines(clickedId) }}</div>
+              <div class="mt-1 text-neutral">Lines: {{ getItemLines(clickedId) }}</div>
             </div>
           </div>
         }

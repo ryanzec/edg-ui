@@ -1,0 +1,15 @@
+<org-button-group>
+  @for (item of items(); track item.value) {
+    <org-button
+      variant="soft"
+      [color]="item.buttonColor"
+      [size]="buttonSize()"
+      [isActive]="item.value === currentValue()"
+      [ariaPressed]="item.value === currentValue()"
+      [disabled]="isDisabled() || !!item.buttonDisabled"
+      (clicked)="onItemClicked(item.value)"
+    >
+      {{ item.label }}
+    </org-button>
+  }
+</org-button-group>

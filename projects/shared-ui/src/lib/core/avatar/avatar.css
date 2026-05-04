@@ -22,7 +22,7 @@
   }
 
   :host > button:focus-visible {
-    outline: var(--spacing-0_5) solid var(--color-input-border-focused); /* 2px */
+    outline: var(--spacing-0_5) solid var(--color-focus-ring); /* 2px */
     outline-offset: var(--spacing-0_5); /* 2px */
   }
 }

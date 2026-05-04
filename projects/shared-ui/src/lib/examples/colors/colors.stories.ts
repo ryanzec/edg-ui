@@ -28,8 +28,8 @@ All colors are available as CSS custom properties (variables) and can be used in
 
 \`\`\`css
 .my-element {
-  color: var(--color-text);
-  background-color: var(--color-primary-background);
+  color: var(--color-fg);
+  background-color: var(--color-primary);
   border-color: var(--color-border);
 }
 \`\`\`

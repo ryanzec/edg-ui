@@ -2,7 +2,7 @@
   :host {
     display: flex;
     flex-direction: column;
-    background-color: var(--color-background);
+    background-color: var(--color-bg-app);
     border-right: var(--border-width) solid var(--color-border);
     min-width: var(--sizing-4xs);
     max-width: var(--sizing-4xs);
@@ -46,9 +46,9 @@
   .tooltip-content {
     padding: var(--spacing-1) var(--spacing-2);
     border: var(--border-width) solid var(--color-border);
-    border-radius: var(--radius-md);
-    background-color: var(--color-background-level2);
-    color: var(--color-text);
+    border-radius: var(--radius-base);
+    background-color: var(--color-bg-surface-2);
+    color: var(--color-fg);
   }
 
   .logout-text {

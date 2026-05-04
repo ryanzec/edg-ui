@@ -4,8 +4,8 @@
     max-height: var(--sizing-xs);
     overflow: hidden;
     border: var(--border-width) solid var(--color-border);
-    border-radius: var(--radius-md);
-    background-color: var(--color-input-background);
+    border-radius: var(--radius-base);
+    background-color: var(--color-bg-surface);
   }
 
   .group {
@@ -14,10 +14,10 @@
 
   .group-label {
     padding: var(--spacing-1) var(--spacing-2);
-    font-size: var(--text-sm);
-    line-height: var(--text-sm--line-height);
-    letter-spacing: var(--text-sm--letter-spacing);
-    color: var(--color-text-subtle);
-    background-color: var(--color-neutral-background-subtle);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-normal);
+    letter-spacing: var(--letter-spacing-normal);
+    color: var(--color-fg-muted);
+    background-color: var(--color-neutral-soft);
   }
 }

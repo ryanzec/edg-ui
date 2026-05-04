@@ -37,22 +37,22 @@
   }
 
   :host .checkbox-icon {
-    color: var(--color-neutral-text);
+    color: var(--color-neutral);
   }
 
   :host:not([aria-disabled='true']) .checkbox-label:hover .checkbox-icon {
-    color: var(--color-primary-background);
+    color: var(--color-primary);
   }
 
   :host:not([aria-disabled='true']) .checkbox-label:focus-visible {
-    background-color: var(--color-primary-background-hover);
+    background-color: var(--color-primary-hover);
   }
 
   :host:not([aria-disabled='true']) .checkbox-label:focus-visible .checkbox-icon {
-    color: var(--color-text-inverse);
+    color: var(--color-fg-on-accent);
   }
 
   :host([aria-disabled='true']) .checkbox-icon {
-    color: var(--color-icon-disabled);
+    color: var(--color-fg-faint);
   }
 }

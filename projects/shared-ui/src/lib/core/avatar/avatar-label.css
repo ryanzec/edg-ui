@@ -6,28 +6,28 @@
 
   .label {
     font-weight: var(--font-weight-medium);
-    color: var(--color-text);
-    font-size: var(--text-sm);
-    line-height: var(--text-sm--line-height);
-    letter-spacing: var(--text-sm--letter-spacing);
+    color: var(--color-fg);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-normal);
+    letter-spacing: var(--letter-spacing-normal);
   }
 
   :host([data-size='sm']) .label {
-    font-size: var(--text-xs);
-    line-height: var(--text-xs--line-height);
-    letter-spacing: var(--text-xs--letter-spacing);
+    font-size: var(--font-size-xs);
+    line-height: var(--line-height-normal);
+    letter-spacing: var(--letter-spacing-normal);
   }
 
   .sub-label {
-    color: var(--color-text-subtle);
-    font-size: var(--text-xs);
-    line-height: var(--text-xs--line-height);
-    letter-spacing: var(--text-xs--letter-spacing);
+    color: var(--color-fg-muted);
+    font-size: var(--font-size-xs);
+    line-height: var(--line-height-normal);
+    letter-spacing: var(--letter-spacing-normal);
   }
 
   :host([data-size='sm']) .sub-label {
-    font-size: var(--text-2xs);
-    line-height: var(--text-2xs--line-height);
-    letter-spacing: var(--text-2xs--letter-spacing);
+    font-size: var(--font-size-2xs);
+    line-height: var(--line-height-normal);
+    letter-spacing: var(--letter-spacing-normal);
   }
 }

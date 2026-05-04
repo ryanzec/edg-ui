@@ -304,7 +304,7 @@ export const CustomStyling: Story = {
         currentState="Lists with custom classes and styling"
       >
         <org-storybook-example-container-section label="With Border">
-          <org-list class="border border-border rounded-md overflow-hidden">
+          <org-list class="border border-default-color rounded-base overflow-hidden">
             <org-list-item>Dashboard</org-list-item>
             <org-list-item [isSelected]="true">Projects</org-list-item>
             <org-list-item>Settings</org-list-item>
@@ -321,9 +321,9 @@ export const CustomStyling: Story = {
 
         <org-storybook-example-container-section label="Custom Item Class">
           <org-list>
-            <org-list-item class="rounded-md">Rounded Item 1</org-list-item>
-            <org-list-item class="rounded-md">Rounded Item 2</org-list-item>
-            <org-list-item class="rounded-md" [isSelected]="true">Rounded Selected</org-list-item>
+            <org-list-item class="rounded-base">Rounded Item 1</org-list-item>
+            <org-list-item class="rounded-base">Rounded Item 2</org-list-item>
+            <org-list-item class="rounded-base" [isSelected]="true">Rounded Selected</org-list-item>
           </org-list>
         </org-storybook-example-container-section>
 

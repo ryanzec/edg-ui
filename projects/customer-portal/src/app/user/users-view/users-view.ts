@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, inject, ViewChild, signal } from '@
 import {
   UsersList,
   UsersDataStore,
-  GlobalNotificationManager,
+  NotificationManager,
   UserFormDialog,
   UserDeleteDialog,
   UserFormData,
@@ -25,7 +25,7 @@ import { DialogRef } from '@angular/cdk/dialog';
 })
 export class UsersView {
   private readonly _usersDataStore = inject(UsersDataStore);
-  private readonly _globalNotificationManager = inject(GlobalNotificationManager);
+  private readonly _notificationManager = inject(NotificationManager);
 
   private _selectedUser = signal<User | null>(null);
   private _userFormDialogRef: DialogRef<UserFormDialog, UserFormDialog> | null = null;
@@ -81,7 +81,7 @@ export class UsersView {
     }
 
     if (failureCount === 0) {
-      this._globalNotificationManager.add({
+      this._notificationManager.add({
         message: `Deleted ${successCount} member${successCount === 1 ? '' : 's'}`,
         color: 'safe',
         canClose: true,
@@ -90,7 +90,7 @@ export class UsersView {
       return;
     }
 
-    this._globalNotificationManager.add({
+    this._notificationManager.add({
       message: `Deleted ${successCount} member${successCount === 1 ? '' : 's'}, failed to delete ${failureCount}`,
       color: 'danger',
       canClose: true,
@@ -116,7 +116,7 @@ export class UsersView {
         hasComponentInstance: !!this._userFormDialogRef?.componentInstance,
       });
 
-      this._globalNotificationManager.add({
+      this._notificationManager.add({
         message: `Failed to ${existingUser ? 'update' : 'add'} member`,
         color: 'danger',
         canClose: true,
@@ -150,7 +150,7 @@ export class UsersView {
         hasComponentInstance: !!this._userDeleteDialogRef?.componentInstance,
       });
 
-      this._globalNotificationManager.add({
+      this._notificationManager.add({
         message: 'Failed to delete member',
         color: 'danger',
         canClose: true,
@@ -181,14 +181,14 @@ export class UsersView {
           throw new Error(error.message);
         }
 
-        this._globalNotificationManager.add({
+        this._notificationManager.add({
           message: 'Member updated successfully',
           color: 'safe',
           canClose: true,
         });
       } else {
         await firstValueFrom(this._usersDataStore.create(formData));
-        this._globalNotificationManager.add({
+        this._notificationManager.add({
           message: 'Member added successfully',
           color: 'safe',
           canClose: true,
@@ -206,7 +206,7 @@ export class UsersView {
         error,
       });
 
-      this._globalNotificationManager.add({
+      this._notificationManager.add({
         message: errorMessage,
         color: 'danger',
         canClose: true,
@@ -228,7 +228,7 @@ export class UsersView {
         throw new Error(error?.message);
       }
 
-      this._globalNotificationManager.add({
+      this._notificationManager.add({
         message: 'Member deleted successfully',
         color: 'safe',
         canClose: true,
@@ -242,7 +242,7 @@ export class UsersView {
         error,
       });
 
-      this._globalNotificationManager.add({
+      this._notificationManager.add({
         message: 'Failed to delete member',
         color: 'danger',
         canClose: true,

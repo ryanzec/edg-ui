@@ -1,4 +1,4 @@
-<cdk-virtual-scroll-viewport [itemSize]="40" class="h-lg border border-neutral-border rounded-md">
+<cdk-virtual-scroll-viewport [itemSize]="40" class="h-lg border border-neutral rounded-base">
   <org-list>
     <org-list-item *cdkVirtualFor="let item of items()" asTag="button" (clicked)="onItemClick(item.id)">
       {{ item.content }}
@@ -7,7 +7,5 @@
 </cdk-virtual-scroll-viewport>
 
 @if (lastClickedItem(); as clickedId) {
-  <div class="mt-3 p-2 rounded-md bg-info-background-subtle text-sm">
-    <strong>Last Clicked:</strong> Item {{ clickedId }}
-  </div>
+  <div class="mt-3 p-2 rounded-base bg-info-soft text-sm"><strong>Last Clicked:</strong> Item {{ clickedId }}</div>
 }

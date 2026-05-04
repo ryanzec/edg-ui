@@ -22,8 +22,8 @@ import { StorybookExampleContainerSection } from '../../private/storybook-exampl
       <org-storybook-example-container-section label="Horizontal">
         <div class="splitter-demo">
           <org-splitter direction="horizontal">
-            <ng-template #section><div class="bg-safe-subtle w-full h-full"></div></ng-template>
-            <ng-template #section><div class="bg-danger-subtle w-full h-full"></div></ng-template>
+            <ng-template #section><div class="bg-safe-soft w-full h-full"></div></ng-template>
+            <ng-template #section><div class="bg-danger-soft w-full h-full"></div></ng-template>
           </org-splitter>
         </div>
       </org-storybook-example-container-section>
@@ -31,8 +31,8 @@ import { StorybookExampleContainerSection } from '../../private/storybook-exampl
       <org-storybook-example-container-section label="Vertical">
         <div class="splitter-demo">
           <org-splitter direction="vertical">
-            <ng-template #section><div class="bg-safe-subtle w-full h-full"></div></ng-template>
-            <ng-template #section><div class="bg-danger-subtle w-full h-full"></div></ng-template>
+            <ng-template #section><div class="bg-safe-soft w-full h-full"></div></ng-template>
+            <ng-template #section><div class="bg-danger-soft w-full h-full"></div></ng-template>
           </org-splitter>
         </div>
       </org-storybook-example-container-section>
@@ -67,8 +67,8 @@ class SplitterDirectionStory {}
       <org-storybook-example-container-section label="Horizontal">
         <div class="splitter-demo">
           <org-splitter direction="horizontal" [minimumSize]="minimumSize()">
-            <ng-template #section><div class="bg-safe-subtle w-full h-full"></div></ng-template>
-            <ng-template #section><div class="bg-danger-subtle w-full h-full"></div></ng-template>
+            <ng-template #section><div class="bg-safe-soft w-full h-full"></div></ng-template>
+            <ng-template #section><div class="bg-danger-soft w-full h-full"></div></ng-template>
           </org-splitter>
         </div>
       </org-storybook-example-container-section>
@@ -76,8 +76,8 @@ class SplitterDirectionStory {}
       <org-storybook-example-container-section label="Vertical">
         <div class="splitter-demo">
           <org-splitter direction="vertical" [minimumSize]="minimumSize()">
-            <ng-template #section><div class="bg-safe-subtle w-full h-full"></div></ng-template>
-            <ng-template #section><div class="bg-danger-subtle w-full h-full"></div></ng-template>
+            <ng-template #section><div class="bg-safe-soft w-full h-full"></div></ng-template>
+            <ng-template #section><div class="bg-danger-soft w-full h-full"></div></ng-template>
           </org-splitter>
         </div>
       </org-storybook-example-container-section>
@@ -161,8 +161,8 @@ class SplitterMinimumSizeStory {
       <org-storybook-example-container-section label="Horizontal">
         <div class="splitter-demo">
           <org-splitter direction="horizontal" [isEnabled]="isEnabled()">
-            <ng-template #section><div class="bg-safe-subtle w-full h-full"></div></ng-template>
-            <ng-template #section><div class="bg-danger-subtle w-full h-full"></div></ng-template>
+            <ng-template #section><div class="bg-safe-soft w-full h-full"></div></ng-template>
+            <ng-template #section><div class="bg-danger-soft w-full h-full"></div></ng-template>
           </org-splitter>
         </div>
       </org-storybook-example-container-section>
@@ -170,8 +170,8 @@ class SplitterMinimumSizeStory {
       <org-storybook-example-container-section label="Vertical">
         <div class="splitter-demo">
           <org-splitter direction="vertical" [isEnabled]="isEnabled()">
-            <ng-template #section><div class="bg-safe-subtle w-full h-full"></div></ng-template>
-            <ng-template #section><div class="bg-danger-subtle w-full h-full"></div></ng-template>
+            <ng-template #section><div class="bg-safe-soft w-full h-full"></div></ng-template>
+            <ng-template #section><div class="bg-danger-soft w-full h-full"></div></ng-template>
           </org-splitter>
         </div>
       </org-storybook-example-container-section>
@@ -215,8 +215,8 @@ class SplitterIsEnabledStory {
       <org-storybook-example-container-section label="Horizontal">
         <div class="splitter-demo">
           <org-splitter direction="horizontal" [collapsedSide]="collapsedSide()">
-            <ng-template #section><div class="bg-safe-subtle w-full h-full"></div></ng-template>
-            <ng-template #section><div class="bg-danger-subtle w-full h-full"></div></ng-template>
+            <ng-template #section><div class="bg-safe-soft w-full h-full"></div></ng-template>
+            <ng-template #section><div class="bg-danger-soft w-full h-full"></div></ng-template>
           </org-splitter>
         </div>
       </org-storybook-example-container-section>
@@ -224,8 +224,8 @@ class SplitterIsEnabledStory {
       <org-storybook-example-container-section label="Vertical">
         <div class="splitter-demo">
           <org-splitter direction="vertical" [collapsedSide]="collapsedSide()">
-            <ng-template #section><div class="bg-safe-subtle w-full h-full"></div></ng-template>
-            <ng-template #section><div class="bg-danger-subtle w-full h-full"></div></ng-template>
+            <ng-template #section><div class="bg-safe-soft w-full h-full"></div></ng-template>
+            <ng-template #section><div class="bg-danger-soft w-full h-full"></div></ng-template>
           </org-splitter>
         </div>
       </org-storybook-example-container-section>
@@ -306,8 +306,8 @@ class SplitterCollapsedSideStory {
       <org-storybook-example-container-section label="Horizontal">
         <div class="splitter-demo">
           <org-splitter direction="horizontal" [size]="size()" (sizeChanged)="onSizeChanged($event)">
-            <ng-template #section><div class="bg-safe-subtle w-full h-full"></div></ng-template>
-            <ng-template #section><div class="bg-danger-subtle w-full h-full"></div></ng-template>
+            <ng-template #section><div class="bg-safe-soft w-full h-full"></div></ng-template>
+            <ng-template #section><div class="bg-danger-soft w-full h-full"></div></ng-template>
           </org-splitter>
         </div>
       </org-storybook-example-container-section>
@@ -315,8 +315,8 @@ class SplitterCollapsedSideStory {
       <org-storybook-example-container-section label="Vertical">
         <div class="splitter-demo">
           <org-splitter direction="vertical" [size]="size()" (sizeChanged)="onSizeChanged($event)">
-            <ng-template #section><div class="bg-safe-subtle w-full h-full"></div></ng-template>
-            <ng-template #section><div class="bg-danger-subtle w-full h-full"></div></ng-template>
+            <ng-template #section><div class="bg-safe-soft w-full h-full"></div></ng-template>
+            <ng-template #section><div class="bg-danger-soft w-full h-full"></div></ng-template>
           </org-splitter>
         </div>
       </org-storybook-example-container-section>
@@ -468,8 +468,8 @@ export const Default: Story = {
           [collapsedSide]="collapsedSide"
           [animateResize]="animateResize"
         >
-          <ng-template #section><div class="bg-safe-subtle w-full h-full"></div></ng-template>
-          <ng-template #section><div class="bg-danger-subtle w-full h-full"></div></ng-template>
+          <ng-template #section><div class="bg-safe-soft w-full h-full"></div></ng-template>
+          <ng-template #section><div class="bg-danger-soft w-full h-full"></div></ng-template>
         </org-splitter>
       </div>
     `,

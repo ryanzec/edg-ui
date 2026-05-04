@@ -41,6 +41,7 @@ import {
   LucideCog,
   LucideSearch,
   LucideSend,
+  LucideSparkles,
   type LucideIcon,
   LucideSquareCheckBig,
   LucideCircleCheckBig,
@@ -98,6 +99,7 @@ export const allIconNames = [
   'circle-x',
   'search',
   'send',
+  'sparkles',
 ] as const;
 
 /** the icon name type derived from all registered icon names */
@@ -177,6 +179,7 @@ const iconMap: Record<IconName, LucideIcon> = {
   'circle-x': LucideCircleX,
   search: LucideSearch,
   send: LucideSend,
+  sparkles: LucideSparkles,
 };
 
 @Component({

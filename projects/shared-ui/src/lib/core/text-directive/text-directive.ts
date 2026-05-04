@@ -9,10 +9,10 @@ export type TextColor = ComponentColor;
 export const textColors = allComponentColors;
 
 /** font size options available for the text directive */
-export type TextSize = '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
+export type TextSize = '2xs' | 'xs' | 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl';
 
 /** all valid text size values */
-export const textSizes = ['2xs', 'xs', 'sm', 'md', 'lg', 'xl', '2xl'] as const satisfies readonly TextSize[];
+export const textSizes = ['2xs', 'xs', 'sm', 'base', 'lg', 'xl', '2xl', '3xl'] as const satisfies readonly TextSize[];
 
 /** default value for the textColor input */
 export const TEXT_COLOR_DEFAULT: TextColor | undefined = undefined;

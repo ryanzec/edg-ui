@@ -1,5 +1,6 @@
 export * from './auto-scroll-brain/auto-scroll-brain';
 export * from './button-brain/button-brain';
+export * from './button-toggle-brain/button-toggle-brain';
 export * from './calendar-brain/calendar-brain';
 export * from './chart-brain/chart-brain';
 export * from './checkbox-brain/checkbox-brain';
@@ -12,7 +13,7 @@ export * from './date-picker-input-brain/date-picker-input-brain';
 export * from './dialog-brain/dialog-brain';
 export * from './drop-down-selector-brain/drop-down-selector-brain';
 export * from './file-upload-brain/file-upload-brain';
-export * from './global-notification-brain/global-notification-brain';
+export * from './notification-brain/notification-brain';
 export * from './input-brain/input-brain';
 export * from './list-item-brain/list-item-brain';
 export * from './radio-brain/radio-brain';

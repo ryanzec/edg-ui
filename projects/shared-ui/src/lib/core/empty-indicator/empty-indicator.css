@@ -15,15 +15,15 @@
   }
 
   .header {
-    font-size: var(--text-lg);
-    line-height: var(--text-lg--line-height);
-    letter-spacing: var(--text-lg--letter-spacing);
+    font-size: var(--font-size-xl);
+    line-height: var(--line-height-normal);
+    letter-spacing: var(--letter-spacing-normal);
   }
 
   .description {
-    font-size: var(--text-sm);
-    line-height: var(--text-sm--line-height);
-    letter-spacing: var(--text-sm--letter-spacing);
-    color: var(--color-text-subtle);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-normal);
+    letter-spacing: var(--letter-spacing-normal);
+    color: var(--color-fg-muted);
   }
 }

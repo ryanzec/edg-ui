@@ -14,21 +14,21 @@
     height: 12.5rem; /* 200px */
     padding: 0;
     overflow: hidden;
-    border: var(--border-width-thick) dashed var(--color-border-subtle);
+    border: var(--border-width-thick) dashed var(--color-border-soft);
     border-radius: var(--radius-lg);
-    background-color: var(--color-neutral-background-subtle);
-    color: var(--color-text-subtle);
+    background-color: var(--color-neutral-soft);
+    color: var(--color-fg-muted);
     cursor: pointer;
   }
 
   .file-upload-zone:focus-visible {
     border-color: var(--color-info-border);
-    background-color: var(--color-info-background-subtle);
+    background-color: var(--color-info-soft);
   }
 
   :host([data-hovering]) .file-upload-zone {
     border-color: var(--color-info-border);
-    background-color: var(--color-info-background-subtle);
+    background-color: var(--color-info-soft);
   }
 
   /* Screen-reader only - visually hidden but accessible */
@@ -54,33 +54,33 @@
   }
 
   .primary-text {
-    font-size: var(--text-sm);
-    line-height: var(--text-sm--line-height);
-    letter-spacing: var(--text-sm--letter-spacing);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-normal);
+    letter-spacing: var(--letter-spacing-normal);
     font-weight: var(--font-weight-medium);
   }
 
   .secondary-text {
-    font-size: var(--text-xs);
-    line-height: var(--text-xs--line-height);
-    letter-spacing: var(--text-xs--letter-spacing);
+    font-size: var(--font-size-xs);
+    line-height: var(--line-height-normal);
+    letter-spacing: var(--letter-spacing-normal);
   }
 
   .click-text {
-    color: var(--color-info-text);
+    color: var(--color-info);
     font-weight: var(--font-weight-medium);
   }
 
   .icon-safe {
-    color: var(--color-safe-background);
+    color: var(--color-safe);
   }
 
   .icon-info {
-    color: var(--color-info-background);
+    color: var(--color-info);
   }
 
   .icon-danger {
-    color: var(--color-danger-background);
+    color: var(--color-danger);
   }
 
   .file-upload-error {
@@ -89,9 +89,9 @@
     display: flex;
     align-items: center;
     gap: var(--spacing-2);
-    color: var(--color-danger-text);
-    font-size: var(--text-sm);
-    line-height: var(--text-sm--line-height);
-    letter-spacing: var(--text-sm--letter-spacing);
+    color: var(--color-danger);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-normal);
+    letter-spacing: var(--letter-spacing-normal);
   }
 }

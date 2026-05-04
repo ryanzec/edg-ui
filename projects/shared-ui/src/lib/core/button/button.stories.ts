@@ -1,29 +1,63 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import type { Meta, StoryObj } from '@storybook/angular';
-import { Button } from './button';
+import { ButtonToggle, ButtonToggleItem } from '../button-toggle/button-toggle';
+import { CheckboxToggle } from '../checkbox-toggle/checkbox-toggle';
+import { allComponentColors } from '../types/component-types';
+import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
+import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
+import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
+import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
+import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
+import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
+import { Button, allButtonSizes, allButtonVariants, ButtonColor, ButtonSize, ButtonVariant } from './button';
 import { ButtonIcon } from './button-icon';
 import { ButtonGroup } from './button-group';
-import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
-import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
+
+const liveDemoColorItems: ButtonToggleItem[] = allComponentColors.map((color) => ({
+  label: color,
+  value: color,
+  buttonColor: 'primary',
+}));
+
+const liveDemoVariantItems: ButtonToggleItem[] = allButtonVariants.map((variant) => ({
+  label: variant,
+  value: variant,
+  buttonColor: 'primary',
+}));
+
+const liveDemoSizeItems: ButtonToggleItem[] = allButtonSizes.map((size) => ({
+  label: size,
+  value: size,
+  buttonColor: 'primary',
+}));
+
+type LiveDemoIconChoice = 'none' | 'leading' | 'trailing' | 'both' | 'only';
+
+const allLiveDemoIconChoices = ['none', 'leading', 'trailing', 'both', 'only'] as const;
+
+const liveDemoIconItems: ButtonToggleItem[] = allLiveDemoIconChoices.map((choice) => ({
+  label: choice,
+  value: choice,
+  buttonColor: 'primary',
+}));
 
 @Component({
   selector: 'story-button-pressed-state',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Button, StorybookExampleContainer, StorybookExampleContainerSection],
+  imports: [Button, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
   template: `
-    <org-storybook-example-container
-      title="Pressed State"
-      currentState="Click and hold the button to observe the isPressed computed signal"
-    >
-      <org-storybook-example-container-section label="Hold to Press">
+    <org-design-system-demo>
+      <org-design-system-demo-header slot="header" title="Pressed State" />
+      <org-design-system-demo-canvas slot="canvas">
         <div class="flex flex-col gap-2">
           <org-button #buttonRef>Hold to Press</org-button>
           <p>
             isPressed: <strong>{{ buttonRef.isPressed() }}</strong>
           </p>
         </div>
-      </org-storybook-example-container-section>
-    </org-storybook-example-container>
+      </org-design-system-demo-canvas>
+    </org-design-system-demo>
   `,
 })
 class ButtonPressedStateStory {}
@@ -31,21 +65,19 @@ class ButtonPressedStateStory {}
 @Component({
   selector: 'story-button-focused-state',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Button, StorybookExampleContainer, StorybookExampleContainerSection],
+  imports: [Button, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
   template: `
-    <org-storybook-example-container
-      title="Focused State"
-      currentState="Click or Tab to the button to observe the isFocused computed signal"
-    >
-      <org-storybook-example-container-section label="Click or Tab to Focus">
+    <org-design-system-demo>
+      <org-design-system-demo-header slot="header" title="Focused State" />
+      <org-design-system-demo-canvas slot="canvas">
         <div class="flex flex-col gap-2">
           <org-button #buttonRef>Click or Tab to Focus</org-button>
           <p>
             isFocused: <strong>{{ buttonRef.isFocused() }}</strong>
           </p>
         </div>
-      </org-storybook-example-container-section>
-    </org-storybook-example-container>
+      </org-design-system-demo-canvas>
+    </org-design-system-demo>
   `,
 })
 class ButtonFocusedStateStory {}
@@ -65,7 +97,7 @@ const meta: Meta<Button> = {
 
   ### Features
   - 8 color variants for different semantic meanings
-  - 3 style variants (filled, ghost, text)
+  - 4 style variants (filled, ghost, text, soft)
   - 3 size options (small, base, large)
   - Composable icon support via &lt;org-button-icon /&gt; slotted before/after content
   - Loading state with spinner (replaces the first slotted icon or prepends a spinner when none are slotted)
@@ -160,7 +192,7 @@ export const Default: Story = {
     },
     variant: {
       control: 'select',
-      options: ['filled', 'ghost', 'text'],
+      options: ['filled', 'ghost', 'text', 'soft'],
       description: 'The variant style of the button',
     },
     disabled: {
@@ -224,397 +256,440 @@ export const Default: Story = {
   }),
 };
 
-export const Colors: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Comparison of all 8 color variants for different semantic meanings.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Color Variants"
-        currentState="Comparing all 8 color options"
-      >
-        <org-storybook-example-container-section label="Primary">
-          <org-button color="primary">Primary Button</org-button>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Secondary">
-          <org-button color="secondary">Secondary Button</org-button>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Neutral">
-          <org-button color="neutral">Neutral Button</org-button>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Safe (Success)">
-          <org-button color="safe">Safe Button</org-button>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Info">
-          <org-button color="info">Info Button</org-button>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Caution">
-          <org-button color="caution">Caution Button</org-button>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Warning">
-          <org-button color="warning">Warning Button</org-button>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Danger (Destructive)">
-          <org-button color="danger">Danger Button</org-button>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li><strong>Primary</strong>: Primary color for main actions</li>
-          <li><strong>Secondary</strong>: Secondary accent color for alternative actions</li>
-          <li><strong>Neutral</strong>: Neutral gray for low-emphasis actions</li>
-          <li><strong>Safe</strong>: Green for success/positive actions</li>
-          <li><strong>Info</strong>: Blue for informational actions</li>
-          <li><strong>Caution</strong>: Yellow for caution/warning actions</li>
-          <li><strong>Warning</strong>: Orange for important warnings</li>
-          <li><strong>Danger</strong>: Red for destructive/dangerous actions</li>
-        </ul>
-      </org-storybook-example-container>
+@Component({
+  selector: 'story-button-live-demo',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    ReactiveFormsModule,
+    Button,
+    ButtonIcon,
+    ButtonToggle,
+    CheckboxToggle,
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoControls,
+    DesignSystemDemoControlGroup,
+    DesignSystemDemoCanvas,
+  ],
+  styles: [
+    `
+      :host {
+        display: block;
+      }
+      .canvas-stage {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 6rem; /* 96px */
+      }
     `,
-    moduleMetadata: {
-      imports: [Button, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
+  ],
+  template: `
+    <form [formGroup]="liveDemoForm">
+      <org-design-system-demo>
+        <org-design-system-demo-header
+          slot="header"
+          title="Live demo"
+          description="All buttons below are real and interactive — hover, focus, press, or tab through them to see every state."
+        />
+        <org-design-system-demo-controls slot="controls">
+          <org-design-system-demo-control-group label="Color">
+            <org-button-toggle [items]="colorItems" formControlName="color" buttonSize="sm" />
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Variant">
+            <org-button-toggle [items]="variantItems" formControlName="variant" buttonSize="sm" />
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Size">
+            <org-button-toggle [items]="sizeItems" formControlName="size" buttonSize="sm" />
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Icon">
+            <org-button-toggle [items]="iconItems" formControlName="icon" buttonSize="sm" />
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Disabled">
+            <org-checkbox-toggle name="live-demo-disabled" value="disabled" formControlName="disabled">
+              {{ liveDemoForm.controls.disabled.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Loading">
+            <org-checkbox-toggle name="live-demo-loading" value="loading" formControlName="loading">
+              {{ liveDemoForm.controls.loading.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
+        </org-design-system-demo-controls>
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="canvas-stage">
+            @switch (liveDemoForm.controls.icon.value) {
+              @case ('none') {
+                <org-button
+                  [color]="liveDemoForm.controls.color.value"
+                  [variant]="liveDemoForm.controls.variant.value"
+                  [size]="liveDemoForm.controls.size.value"
+                  [disabled]="liveDemoForm.controls.disabled.value"
+                  [loading]="liveDemoForm.controls.loading.value"
+                >
+                  Save changes
+                </org-button>
+              }
+              @case ('leading') {
+                <org-button
+                  [color]="liveDemoForm.controls.color.value"
+                  [variant]="liveDemoForm.controls.variant.value"
+                  [size]="liveDemoForm.controls.size.value"
+                  [disabled]="liveDemoForm.controls.disabled.value"
+                  [loading]="liveDemoForm.controls.loading.value"
+                >
+                  <org-button-icon name="sparkles" />
+                  Save changes
+                </org-button>
+              }
+              @case ('trailing') {
+                <org-button
+                  [color]="liveDemoForm.controls.color.value"
+                  [variant]="liveDemoForm.controls.variant.value"
+                  [size]="liveDemoForm.controls.size.value"
+                  [disabled]="liveDemoForm.controls.disabled.value"
+                  [loading]="liveDemoForm.controls.loading.value"
+                >
+                  Save changes
+                  <org-button-icon name="sparkles" />
+                </org-button>
+              }
+              @case ('both') {
+                <org-button
+                  [color]="liveDemoForm.controls.color.value"
+                  [variant]="liveDemoForm.controls.variant.value"
+                  [size]="liveDemoForm.controls.size.value"
+                  [disabled]="liveDemoForm.controls.disabled.value"
+                  [loading]="liveDemoForm.controls.loading.value"
+                >
+                  <org-button-icon name="sparkles" />
+                  Save changes
+                  <org-button-icon name="sparkles" />
+                </org-button>
+              }
+              @case ('only') {
+                <org-button
+                  [color]="liveDemoForm.controls.color.value"
+                  [variant]="liveDemoForm.controls.variant.value"
+                  [size]="liveDemoForm.controls.size.value"
+                  [disabled]="liveDemoForm.controls.disabled.value"
+                  [loading]="liveDemoForm.controls.loading.value"
+                  [iconOnly]="true"
+                  ariaLabel="Save changes"
+                >
+                  <org-button-icon name="sparkles" />
+                </org-button>
+              }
+            }
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+    </form>
+  `,
+})
+class ButtonLiveDemoStory {
+  protected readonly colorItems = liveDemoColorItems;
+  protected readonly variantItems = liveDemoVariantItems;
+  protected readonly sizeItems = liveDemoSizeItems;
+  protected readonly iconItems = liveDemoIconItems;
 
-export const Sizes: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Comparison of all 3 size variants (sm, base, lg).',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Size Variants"
-        currentState="Comparing sm, base, and lg sizes"
-      >
-        <org-storybook-example-container-section label="Small">
-          <org-button color="primary" size="sm">Small Button</org-button>
-        </org-storybook-example-container-section>
+  protected readonly liveDemoForm = new FormGroup({
+    color: new FormControl<ButtonColor>('primary', { nonNullable: true }),
+    variant: new FormControl<ButtonVariant>('filled', { nonNullable: true }),
+    size: new FormControl<ButtonSize>('base', { nonNullable: true }),
+    icon: new FormControl<LiveDemoIconChoice>('none', { nonNullable: true }),
+    disabled: new FormControl<boolean>(false, { nonNullable: true }),
+    loading: new FormControl<boolean>(false, { nonNullable: true }),
+  });
+}
 
-        <org-storybook-example-container-section label="Base (Default)">
-          <org-button color="primary" size="base">Base Button</org-button>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Large">
-          <org-button color="primary" size="lg">Large Button</org-button>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li><strong>Small</strong>: Compact button for tight spaces or secondary actions</li>
-          <li><strong>Base</strong>: Standard button size for most use cases (default)</li>
-          <li><strong>Large</strong>: Prominent button for primary/important actions</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [Button, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const IconVariations: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Comparison of different icon configurations: pre-icon, post-icon, both, and icon-only. Icons are composed by slotting org-button-icon children into the button.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Icon Variations"
-        currentState="Comparing different icon placements via composition"
-      >
-        <org-storybook-example-container-section label="Sizes">
-          <org-button color="primary" size="sm">
-            <org-button-icon name="plus" />
-            Add Item
-          </org-button>
-          <org-button color="primary" size="base">
-            <org-button-icon name="plus" />
-            Add Item
-          </org-button>
-          <org-button color="primary" size="lg">
-            <org-button-icon name="plus" />
-            Add Item
-          </org-button>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="With Pre-Icon">
-          <org-button color="primary">
-            <org-button-icon name="plus" />
-            Add Item
-          </org-button>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="With Post-Icon">
-          <org-button color="primary">
-            Continue
-            <org-button-icon name="arrow-right" />
-          </org-button>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="With Both Icons">
-          <org-button color="primary">
-            <org-button-icon name="download" />
-            Download
-            <org-button-icon name="arrow-right" />
-          </org-button>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Icon-Only (with aria-label)">
-          <org-button color="primary" [iconOnly]="true" ariaLabel="Settings">
-            <org-button-icon name="cog" />
-          </org-button>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li><strong>Pre-Icon</strong>: Slot an org-button-icon before the text</li>
-          <li><strong>Post-Icon</strong>: Slot an org-button-icon after the text</li>
-          <li><strong>Both Icons</strong>: Slot icons on both sides for emphasis</li>
-          <li><strong>Icon-Only</strong>: Set [iconOnly]="true" for icon-only padding and always provide an ariaLabel for accessibility</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [Button, ButtonIcon, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const States: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Comparison of different button states: normal, disabled, and loading.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Button States"
-        currentState="Comparing normal, disabled, and loading states"
-      >
-        <org-storybook-example-container-section label="Normal">
-          <org-button color="primary">Normal Button</org-button>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Disabled">
-          <org-button color="primary" [disabled]="true">Disabled Button</org-button>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Loading">
-          <org-button color="primary" [loading]="true">Loading Button</org-button>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Loading with Icon">
-          <org-button color="primary" [loading]="true">
-            <org-button-icon name="upload" />
-            Uploading...
-          </org-button>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Loading Icon-Only">
-          <org-button color="primary" [loading]="true" [iconOnly]="true" ariaLabel="Settings">
-            <org-button-icon name="cog" />
-          </org-button>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li><strong>Normal</strong>: Interactive with hover and focus states</li>
-          <li><strong>Disabled</strong>: Non-interactive, reduced opacity, no hover effects</li>
-          <li><strong>Loading</strong>: Shows spinner, non-interactive during operation</li>
-          <li><strong>Loading with Icon</strong>: The first slotted org-button-icon renders as the spinner</li>
-          <li><strong>Loading Icon-Only</strong>: The icon is replaced by the spinner during loading</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [Button, ButtonIcon, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const Variants: Story = {
+export const LiveDemo: Story = {
   parameters: {
     docs: {
       description: {
         story:
-          'Comparison of filled, ghost, and text variants across all colors. Ghost variant has transparent background in default state but matches filled styling on hover/focus/active. Text variant always has transparent background and border, using color-specific text tokens.',
+          'Fully interactive demo. Use the controls to drive every visual input on the button (color, variant, size, icon position, disabled, loading) and observe the live result in the canvas.',
       },
     },
   },
   render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Button Variants"
-        currentState="Comparing filled, ghost, and text variants for all colors"
-      >
-        <org-storybook-example-container-section label="Primary">
-          <div class="flex gap-2">
-            <org-button color="primary" variant="filled">Filled</org-button>
-            <org-button color="primary" variant="ghost">Ghost</org-button>
-            <org-button color="primary" variant="text">Text</org-button>
-          </div>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Secondary">
-          <div class="flex gap-2">
-            <org-button color="secondary" variant="filled">Filled</org-button>
-            <org-button color="secondary" variant="ghost">Ghost</org-button>
-            <org-button color="secondary" variant="text">Text</org-button>
-          </div>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Neutral">
-          <div class="flex gap-2">
-            <org-button color="neutral" variant="filled">Filled</org-button>
-            <org-button color="neutral" variant="ghost">Ghost</org-button>
-            <org-button color="neutral" variant="text">Text</org-button>
-          </div>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Safe">
-          <div class="flex gap-2">
-            <org-button color="safe" variant="filled">Filled</org-button>
-            <org-button color="safe" variant="ghost">Ghost</org-button>
-            <org-button color="safe" variant="text">Text</org-button>
-          </div>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Info">
-          <div class="flex gap-2">
-            <org-button color="info" variant="filled">Filled</org-button>
-            <org-button color="info" variant="ghost">Ghost</org-button>
-            <org-button color="info" variant="text">Text</org-button>
-          </div>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Caution">
-          <div class="flex gap-2">
-            <org-button color="caution" variant="filled">Filled</org-button>
-            <org-button color="caution" variant="ghost">Ghost</org-button>
-            <org-button color="caution" variant="text">Text</org-button>
-          </div>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Warning">
-          <div class="flex gap-2">
-            <org-button color="warning" variant="filled">Filled</org-button>
-            <org-button color="warning" variant="ghost">Ghost</org-button>
-            <org-button color="warning" variant="text">Text</org-button>
-          </div>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Danger">
-          <div class="flex gap-2">
-            <org-button color="danger" variant="filled">Filled</org-button>
-            <org-button color="danger" variant="ghost">Ghost</org-button>
-            <org-button color="danger" variant="text">Text</org-button>
-          </div>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li><strong>Filled</strong>: Default variant with colored background and border</li>
-          <li><strong>Ghost</strong>: Transparent background and border in default state, colored text</li>
-          <li><strong>Hover/Focus/Active</strong>: Ghost variant matches filled variant styling on interaction</li>
-          <li><strong>Text</strong>: Always transparent background and border, uses color-specific text tokens (e.g., primary-text, danger-text) in default state, bold variant (e.g., primary-text-bold, danger-text-bold) on hover/focus/active</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
+    template: `<story-button-live-demo />`,
     moduleMetadata: {
-      imports: [Button, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [ButtonLiveDemoStory],
     },
   }),
 };
 
-export const ExcludeSpacing: Story = {
+export const Showcase: Story = {
   parameters: {
     docs: {
       description: {
         story:
-          'Comparison of buttons with and without spacing (padding). When excludeSpacing is true, the button has no padding applied.',
+          'Comprehensive showcase of every button variant axis — color, size, icon composition, state, variant style, spacing, and group orientation — in a single scrollable view.',
       },
     },
   },
   render: () => ({
     template: `
-      <org-storybook-example-container
-        title="Exclude Spacing"
-        currentState="Comparing buttons with and without padding"
-      >
-        <org-storybook-example-container-section label="With Spacing (Default)">
-          <div class="flex gap-2 items-baseline">
-            <org-button color="primary" size="sm">Small</org-button>
-            <org-button color="primary" size="base">Base</org-button>
-            <org-button color="primary" size="lg">Large</org-button>
-          </div>
-        </org-storybook-example-container-section>
+      <div class="flex flex-col gap-4">
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Color Variants" />
+          <org-design-system-demo-canvas slot="canvas">
+            <org-button color="primary">Primary Button</org-button>
+            <org-button color="secondary">Secondary Button</org-button>
+            <org-button color="neutral">Neutral Button</org-button>
+            <org-button color="safe">Safe Button</org-button>
+            <org-button color="info">Info Button</org-button>
+            <org-button color="caution">Caution Button</org-button>
+            <org-button color="warning">Warning Button</org-button>
+            <org-button color="danger">Danger Button</org-button>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>Primary</strong>: Primary color for main actions</li>
+            <li><strong>Secondary</strong>: Secondary accent color for alternative actions</li>
+            <li><strong>Neutral</strong>: Neutral gray for low-emphasis actions</li>
+            <li><strong>Safe</strong>: Green for success/positive actions</li>
+            <li><strong>Info</strong>: Blue for informational actions</li>
+            <li><strong>Caution</strong>: Yellow for caution/warning actions</li>
+            <li><strong>Warning</strong>: Orange for important warnings</li>
+            <li><strong>Danger</strong>: Red for destructive/dangerous actions</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
 
-        <org-storybook-example-container-section label="Without Spacing (excludeSpacing=true)">
-          <div class="flex gap-2 items-baseline">
-            <org-button color="primary" size="sm" [excludeSpacing]="true">Small</org-button>
-            <org-button color="primary" size="base" [excludeSpacing]="true">Base</org-button>
-            <org-button color="primary" size="lg" [excludeSpacing]="true">Large</org-button>
-          </div>
-        </org-storybook-example-container-section>
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Size Variants" />
+          <org-design-system-demo-canvas slot="canvas">
+            <org-button color="primary" size="sm">Small Button</org-button>
+            <org-button color="primary" size="base">Base Button</org-button>
+            <org-button color="primary" size="lg">Large Button</org-button>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>Small</strong>: Compact button for tight spaces or secondary actions</li>
+            <li><strong>Base</strong>: Standard button size for most use cases (default)</li>
+            <li><strong>Large</strong>: Prominent button for primary/important actions</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
 
-        <org-storybook-example-container-section label="Icon-Only With Spacing">
-          <div class="flex gap-2 items-baseline">
-            <org-button color="primary" size="sm" [iconOnly]="true" ariaLabel="Settings">
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Icon Variations" />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="flex gap-2 items-baseline">
+              <org-button color="primary" size="sm">
+                <org-button-icon name="plus" />
+                Add Item
+              </org-button>
+              <org-button color="primary" size="base">
+                <org-button-icon name="plus" />
+                Add Item
+              </org-button>
+              <org-button color="primary" size="lg">
+                <org-button-icon name="plus" />
+                Add Item
+              </org-button>
+            </div>
+            <org-button color="primary">
+              <org-button-icon name="plus" />
+              Add Item
+            </org-button>
+            <org-button color="primary">
+              Continue
+              <org-button-icon name="arrow-right" />
+            </org-button>
+            <org-button color="primary">
+              <org-button-icon name="download" />
+              Download
+              <org-button-icon name="arrow-right" />
+            </org-button>
+            <org-button color="primary" [iconOnly]="true" ariaLabel="Settings">
               <org-button-icon name="cog" />
             </org-button>
-            <org-button color="primary" size="base" [iconOnly]="true" ariaLabel="Settings">
-              <org-button-icon name="cog" />
-            </org-button>
-            <org-button color="primary" size="lg" [iconOnly]="true" ariaLabel="Settings">
-              <org-button-icon name="cog" />
-            </org-button>
-          </div>
-        </org-storybook-example-container-section>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>Pre-Icon</strong>: Slot an org-button-icon before the text</li>
+            <li><strong>Post-Icon</strong>: Slot an org-button-icon after the text</li>
+            <li><strong>Both Icons</strong>: Slot icons on both sides for emphasis</li>
+            <li><strong>Icon-Only</strong>: Set [iconOnly]="true" for icon-only padding and always provide an ariaLabel for accessibility</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
 
-        <org-storybook-example-container-section label="Icon-Only Without Spacing">
-          <div class="flex gap-2 items-baseline">
-            <org-button color="primary" size="sm" [iconOnly]="true" ariaLabel="Settings" [excludeSpacing]="true">
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Button States" />
+          <org-design-system-demo-canvas slot="canvas">
+            <org-button color="primary">Normal Button</org-button>
+            <org-button color="primary" [disabled]="true">Disabled Button</org-button>
+            <org-button color="primary" [loading]="true">Loading Button</org-button>
+            <org-button color="primary" [loading]="true">
+              <org-button-icon name="upload" />
+              Uploading...
+            </org-button>
+            <org-button color="primary" [loading]="true" [iconOnly]="true" ariaLabel="Settings">
               <org-button-icon name="cog" />
             </org-button>
-            <org-button color="primary" size="base" [iconOnly]="true" ariaLabel="Settings" [excludeSpacing]="true">
-              <org-button-icon name="cog" />
-            </org-button>
-            <org-button color="primary" size="lg" [iconOnly]="true" ariaLabel="Settings" [excludeSpacing]="true">
-              <org-button-icon name="cog" />
-            </org-button>
-          </div>
-        </org-storybook-example-container-section>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>Normal</strong>: Interactive with hover and focus states</li>
+            <li><strong>Disabled</strong>: Non-interactive, reduced opacity, no hover effects</li>
+            <li><strong>Loading</strong>: Shows spinner, non-interactive during operation</li>
+            <li><strong>Loading with Icon</strong>: The first slotted org-button-icon renders as the spinner</li>
+            <li><strong>Loading Icon-Only</strong>: The icon is replaced by the spinner during loading</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
 
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li><strong>Default</strong>: Button includes padding based on size</li>
-          <li><strong>excludeSpacing=true</strong>: Removes all padding, useful for custom layouts where spacing is controlled externally</li>
-          <li><strong>Text Size</strong>: Font size and gap are preserved regardless of excludeSpacing setting</li>
-          <li><strong>Icon-Only</strong>: Icon-only buttons also respect the excludeSpacing setting</li>
-        </ul>
-      </org-storybook-example-container>
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Button Variants" />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="flex gap-2">
+              <org-button color="primary" variant="filled">Filled</org-button>
+              <org-button color="primary" variant="ghost">Ghost</org-button>
+              <org-button color="primary" variant="text">Text</org-button>
+              <org-button color="primary" variant="soft">Soft</org-button>
+            </div>
+            <div class="flex gap-2">
+              <org-button color="secondary" variant="filled">Filled</org-button>
+              <org-button color="secondary" variant="ghost">Ghost</org-button>
+              <org-button color="secondary" variant="text">Text</org-button>
+              <org-button color="secondary" variant="soft">Soft</org-button>
+            </div>
+            <div class="flex gap-2">
+              <org-button color="neutral" variant="filled">Filled</org-button>
+              <org-button color="neutral" variant="ghost">Ghost</org-button>
+              <org-button color="neutral" variant="text">Text</org-button>
+              <org-button color="neutral" variant="soft">Soft</org-button>
+            </div>
+            <div class="flex gap-2">
+              <org-button color="safe" variant="filled">Filled</org-button>
+              <org-button color="safe" variant="ghost">Ghost</org-button>
+              <org-button color="safe" variant="text">Text</org-button>
+              <org-button color="safe" variant="soft">Soft</org-button>
+            </div>
+            <div class="flex gap-2">
+              <org-button color="info" variant="filled">Filled</org-button>
+              <org-button color="info" variant="ghost">Ghost</org-button>
+              <org-button color="info" variant="text">Text</org-button>
+              <org-button color="info" variant="soft">Soft</org-button>
+            </div>
+            <div class="flex gap-2">
+              <org-button color="caution" variant="filled">Filled</org-button>
+              <org-button color="caution" variant="ghost">Ghost</org-button>
+              <org-button color="caution" variant="text">Text</org-button>
+              <org-button color="caution" variant="soft">Soft</org-button>
+            </div>
+            <div class="flex gap-2">
+              <org-button color="warning" variant="filled">Filled</org-button>
+              <org-button color="warning" variant="ghost">Ghost</org-button>
+              <org-button color="warning" variant="text">Text</org-button>
+              <org-button color="warning" variant="soft">Soft</org-button>
+            </div>
+            <div class="flex gap-2">
+              <org-button color="danger" variant="filled">Filled</org-button>
+              <org-button color="danger" variant="ghost">Ghost</org-button>
+              <org-button color="danger" variant="text">Text</org-button>
+              <org-button color="danger" variant="soft">Soft</org-button>
+            </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>Filled</strong>: Default variant with colored background and border</li>
+            <li><strong>Ghost</strong>: Transparent background and border in default state, colored text</li>
+            <li><strong>Hover/Focus/Active</strong>: Ghost variant matches filled variant styling on interaction</li>
+            <li><strong>Text</strong>: Always transparent background and border, uses color-specific text tokens (e.g., primary-text, danger-text) in default state, bold variant (e.g., primary-text-bold, danger-text-bold) on hover/focus/active</li>
+            <li><strong>Soft</strong>: Mirrors the filled pattern but uses soft color tokens for a low-emphasis tinted background with colored text; hover/focus/active step through the soft state tokens</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Exclude Spacing" />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="flex gap-2 items-baseline">
+              <org-button color="primary" size="sm">Small</org-button>
+              <org-button color="primary" size="base">Base</org-button>
+              <org-button color="primary" size="lg">Large</org-button>
+            </div>
+            <div class="flex gap-2 items-baseline">
+              <org-button color="primary" size="sm" [excludeSpacing]="true">Small</org-button>
+              <org-button color="primary" size="base" [excludeSpacing]="true">Base</org-button>
+              <org-button color="primary" size="lg" [excludeSpacing]="true">Large</org-button>
+            </div>
+            <div class="flex gap-2 items-baseline">
+              <org-button color="primary" size="sm" [iconOnly]="true" ariaLabel="Settings">
+                <org-button-icon name="cog" />
+              </org-button>
+              <org-button color="primary" size="base" [iconOnly]="true" ariaLabel="Settings">
+                <org-button-icon name="cog" />
+              </org-button>
+              <org-button color="primary" size="lg" [iconOnly]="true" ariaLabel="Settings">
+                <org-button-icon name="cog" />
+              </org-button>
+            </div>
+            <div class="flex gap-2 items-baseline">
+              <org-button color="primary" size="sm" [iconOnly]="true" ariaLabel="Settings" [excludeSpacing]="true">
+                <org-button-icon name="cog" />
+              </org-button>
+              <org-button color="primary" size="base" [iconOnly]="true" ariaLabel="Settings" [excludeSpacing]="true">
+                <org-button-icon name="cog" />
+              </org-button>
+              <org-button color="primary" size="lg" [iconOnly]="true" ariaLabel="Settings" [excludeSpacing]="true">
+                <org-button-icon name="cog" />
+              </org-button>
+            </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>Default</strong>: Button includes padding based on size</li>
+            <li><strong>excludeSpacing=true</strong>: Removes all padding, useful for custom layouts where spacing is controlled externally</li>
+            <li><strong>Text Size</strong>: Font size and gap are preserved regardless of excludeSpacing setting</li>
+            <li><strong>Icon-Only</strong>: Icon-only buttons also respect the excludeSpacing setting</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Button Group Orientations" />
+          <org-design-system-demo-canvas slot="canvas">
+            <org-button-group>
+              <org-button color="primary">First</org-button>
+              <org-button color="primary" variant="ghost">Second</org-button>
+              <org-button color="primary" variant="ghost">Third</org-button>
+            </org-button-group>
+            <org-button-group orientation="vertical">
+              <org-button color="primary">First</org-button>
+              <org-button color="primary" variant="ghost">Second</org-button>
+              <org-button color="primary" variant="ghost">Third</org-button>
+            </org-button-group>
+            <org-button-group class="border border-default-color rounded-base p-1">
+              <org-button color="neutral" variant="ghost">Cancel</org-button>
+              <org-button color="primary">Save</org-button>
+            </org-button-group>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>Horizontal</strong>: Buttons arranged in a row (default orientation)</li>
+            <li><strong>Vertical</strong>: Buttons stacked in a column</li>
+            <li><strong>Custom Classes</strong>: Pass a native class attribute to add styles to the group container</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+      </div>
     `,
     moduleMetadata: {
-      imports: [Button, ButtonIcon, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [
+        Button,
+        ButtonIcon,
+        ButtonGroup,
+        DesignSystemDemo,
+        DesignSystemDemoHeader,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
+      ],
     },
   }),
 };
@@ -648,56 +723,6 @@ export const FocusedState: Story = {
     template: `<story-button-focused-state />`,
     moduleMetadata: {
       imports: [ButtonFocusedStateStory],
-    },
-  }),
-};
-
-export const ButtonGroupOrientations: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Demonstrates both orientation options for ButtonGroup: horizontal (default) and vertical.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Button Group Orientations"
-        currentState="Comparing horizontal and vertical button group layouts"
-      >
-        <org-storybook-example-container-section label="Horizontal (Default)">
-          <org-button-group>
-            <org-button color="primary">First</org-button>
-            <org-button color="primary" variant="ghost">Second</org-button>
-            <org-button color="primary" variant="ghost">Third</org-button>
-          </org-button-group>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Vertical">
-          <org-button-group orientation="vertical">
-            <org-button color="primary">First</org-button>
-            <org-button color="primary" variant="ghost">Second</org-button>
-            <org-button color="primary" variant="ghost">Third</org-button>
-          </org-button-group>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Horizontal with Extra Class">
-          <org-button-group class="border border-border rounded-md p-1">
-            <org-button color="neutral" variant="ghost">Cancel</org-button>
-            <org-button color="primary">Save</org-button>
-          </org-button-group>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li><strong>Horizontal</strong>: Buttons arranged in a row (default orientation)</li>
-          <li><strong>Vertical</strong>: Buttons stacked in a column</li>
-          <li><strong>Custom Classes</strong>: Pass a native class attribute to add styles to the group container</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [Button, ButtonGroup, StorybookExampleContainer, StorybookExampleContainerSection],
     },
   }),
 };

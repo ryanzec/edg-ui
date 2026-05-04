@@ -11,18 +11,18 @@
   }
 
   :host([data-status='not-started']) {
-    color: var(--color-neutral-text);
+    color: var(--color-neutral);
   }
 
   :host([data-status='in-progress']) {
-    color: var(--color-info-text);
+    color: var(--color-info);
   }
 
   :host([data-status='valid']) {
-    color: var(--color-safe-text);
+    color: var(--color-safe);
   }
 
   :host([data-status='invalid']) {
-    color: var(--color-danger-text);
+    color: var(--color-danger);
   }
 }

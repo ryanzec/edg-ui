@@ -1,0 +1,21 @@
+@layer components {
+  :host {
+    display: flex;
+    flex-direction: column;
+    gap: var(--design-system-demo-expected-behaviour-gap);
+    padding: var(--design-system-demo-expected-behaviour-padding);
+    background-color: var(--design-system-demo-expected-behaviour-background);
+    border: var(--border-width) solid var(--design-system-demo-expected-behaviour-border);
+    border-radius: var(--design-system-demo-expected-behaviour-radius);
+    color: var(--design-system-demo-expected-behaviour-color);
+    font-size: var(--design-system-demo-expected-behaviour-font-size);
+  }
+
+  .heading {
+    margin: 0;
+    color: var(--design-system-demo-expected-behaviour-heading-color);
+    font-size: var(--design-system-demo-expected-behaviour-heading-font-size);
+    font-weight: var(--design-system-demo-expected-behaviour-heading-font-weight);
+    line-height: var(--line-height-tight);
+  }
+}

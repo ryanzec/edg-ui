@@ -61,14 +61,7 @@ export class Radio implements OnInit {
 
   /** the text size derived from the radio size */
   public readonly textSize = computed<TextSize>(() => {
-    switch (this.size()) {
-      case 'base':
-        return 'md';
-      case 'lg':
-        return 'lg';
-      default:
-        return 'sm';
-    }
+    return this.size() === 'lg' ? 'xl' : this.size();
   });
 
   /** the icon name representing the current checked state */

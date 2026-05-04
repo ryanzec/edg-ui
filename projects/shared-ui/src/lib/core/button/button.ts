@@ -21,7 +21,7 @@ export const allButtonTypes = ['button', 'submit', 'reset'] as const;
 export type ButtonType = (typeof allButtonTypes)[number];
 
 /** all available button variant values */
-export const allButtonVariants = ['filled', 'ghost', 'text'] as const;
+export const allButtonVariants = ['filled', 'ghost', 'text', 'soft'] as const;
 
 /** the visual style variant of the button */
 export type ButtonVariant = (typeof allButtonVariants)[number];
@@ -59,6 +59,12 @@ export const BUTTON_ARIA_LABEL_DEFAULT: string | undefined = undefined;
 /** the default aria-expanded state of the button */
 export const BUTTON_ARIA_EXPANDED_DEFAULT: boolean | undefined = undefined;
 
+/** the default aria-pressed state of the button */
+export const BUTTON_ARIA_PRESSED_DEFAULT: boolean | undefined = undefined;
+
+/** the default isActive state of the button */
+export const BUTTON_IS_ACTIVE_DEFAULT = false;
+
 @Component({
   selector: 'org-button',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -72,6 +78,7 @@ export const BUTTON_ARIA_EXPANDED_DEFAULT: boolean | undefined = undefined;
     '[attr.data-icon-only]': 'iconOnly() ? "" : null',
     '[attr.data-exclude-spacing]': 'excludeSpacing() ? "" : null',
     '[attr.data-loading]': 'loading() ? "" : null',
+    '[attr.data-active]': 'isActive() ? "" : null',
   },
 })
 export class Button {
@@ -116,6 +123,14 @@ export class Button {
   public readonly ariaExpanded = input<boolean | undefined, boolean | null | undefined>(BUTTON_ARIA_EXPANDED_DEFAULT, {
     transform: angularUtils.transformNullToUndefined,
   });
+
+  /** communicates the pressed/selected state when used as a toggle button */
+  public readonly ariaPressed = input<boolean | undefined, boolean | null | undefined>(BUTTON_ARIA_PRESSED_DEFAULT, {
+    transform: angularUtils.transformNullToUndefined,
+  });
+
+  /** when true, the button renders in its active (pressed) visual state and hover/active pseudo states have no effect */
+  public readonly isActive = input<boolean>(BUTTON_IS_ACTIVE_DEFAULT);
 
   /** emitted when the button is clicked while not disabled or loading */
   public readonly clicked = output<void>();

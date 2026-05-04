@@ -456,31 +456,31 @@ class UserFormWithNonAssignableRolesStory {
 @Component({
   selector: 'story-user-form-interactive-story',
   template: `
-    <div class="flex flex-col gap-1.5 p-1 max-w-md">
+    <div class="flex flex-col gap-1.5 p-1 max-w-base">
       <div class="flex flex-col gap-0.5">
-        <h3 class="text-lg font-semibold">Interactive User Form</h3>
-        <div class="text-sm text-text-subtle">Fill out the form and submit to see event logging in action.</div>
+        <h3 class="text-xl font-semibold">Interactive User Form</h3>
+        <div class="text-sm text-muted">Fill out the form and submit to see event logging in action.</div>
       </div>
 
       <org-user-form (formSubmitted)="onFormSubmit($event)"></org-user-form>
 
       <div class="flex flex-col gap-0.5">
         <h4 class="font-medium">Event Log:</h4>
-        <div class="p-0.75 bg-secondary-background-subtle rounded text-sm font-mono max-h-48 overflow-y-auto">
+        <div class="p-0.75 bg-secondary-soft rounded text-sm font-mono max-h-48 overflow-y-auto">
           @for (event of events(); track $index) {
             <div class="mb-0.5">
-              <div class="font-bold text-primary-text">{{ event.timestamp }}</div>
-              <div class="text-text-subtle">Name: {{ event.firstName }} {{ event.lastName }}</div>
-              <div class="text-text-subtle">Email: {{ event.email }}</div>
-              <div class="text-text-subtle">Roles: {{ event.roles.join(', ') }}</div>
-              <div class="text-text-subtle">Permissions: {{ event.permissions.join(', ') }}</div>
+              <div class="font-bold text-primary">{{ event.timestamp }}</div>
+              <div class="text-muted">Name: {{ event.firstName }} {{ event.lastName }}</div>
+              <div class="text-muted">Email: {{ event.email }}</div>
+              <div class="text-muted">Roles: {{ event.roles.join(', ') }}</div>
+              <div class="text-muted">Permissions: {{ event.permissions.join(', ') }}</div>
               @if (event.id) {
-                <div class="text-text-subtle">ID: {{ event.id }}</div>
+                <div class="text-muted">ID: {{ event.id }}</div>
               }
             </div>
           }
           @if (events().length === 0) {
-            <div class="text-text-subtle">No form submissions yet. Fill out the form and click the submit button.</div>
+            <div class="text-muted">No form submissions yet. Fill out the form and click the submit button.</div>
           }
         </div>
       </div>
@@ -560,10 +560,10 @@ class UserFormProcessingStateStory implements AfterViewInit {
 @Component({
   selector: 'story-user-form-processing-state-interactive-story',
   template: `
-    <div class="flex flex-col gap-1.5 p-1 max-w-md">
+    <div class="flex flex-col gap-1.5 p-1 max-w-base">
       <div class="flex flex-col gap-0.5">
-        <h3 class="text-lg font-semibold">Processing State Management</h3>
-        <div class="text-sm text-text-subtle">
+        <h3 class="text-xl font-semibold">Processing State Management</h3>
+        <div class="text-sm text-muted">
           Submit the form to see it enter processing state for 2 seconds, simulating an API call.
         </div>
       </div>
@@ -574,7 +574,7 @@ class UserFormProcessingStateStory implements AfterViewInit {
         <h4 class="font-medium">
           Current State: <span class="font-mono">{{ isProcessing() ? 'Processing' : 'Idle' }}</span>
         </h4>
-        <div class="text-sm text-text-subtle">
+        <div class="text-sm text-muted">
           @if (isProcessing()) {
             Form is locked during processing...
           } @else {
@@ -585,18 +585,18 @@ class UserFormProcessingStateStory implements AfterViewInit {
 
       <div class="flex flex-col gap-0.5">
         <h4 class="font-medium">Event Log:</h4>
-        <div class="p-0.75 bg-secondary-background-subtle rounded text-sm font-mono max-h-48 overflow-y-auto">
+        <div class="p-0.75 bg-secondary-soft rounded text-sm font-mono max-h-48 overflow-y-auto">
           @for (event of events(); track $index) {
             <div class="mb-0.5">
-              <div class="font-bold text-primary-text">{{ event.timestamp }} - {{ event.status }}</div>
-              <div class="text-text-subtle">Name: {{ event.firstName }} {{ event.lastName }}</div>
-              <div class="text-text-subtle">Email: {{ event.email }}</div>
-              <div class="text-text-subtle">Roles: {{ event.roles.join(', ') }}</div>
-              <div class="text-text-subtle">Permissions: {{ event.permissions.join(', ') }}</div>
+              <div class="font-bold text-primary">{{ event.timestamp }} - {{ event.status }}</div>
+              <div class="text-muted">Name: {{ event.firstName }} {{ event.lastName }}</div>
+              <div class="text-muted">Email: {{ event.email }}</div>
+              <div class="text-muted">Roles: {{ event.roles.join(', ') }}</div>
+              <div class="text-muted">Permissions: {{ event.permissions.join(', ') }}</div>
             </div>
           }
           @if (events().length === 0) {
-            <div class="text-text-subtle">No form submissions yet. Fill out the form and click the submit button.</div>
+            <div class="text-muted">No form submissions yet. Fill out the form and click the submit button.</div>
           }
         </div>
       </div>

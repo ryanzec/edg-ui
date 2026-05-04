@@ -2,7 +2,7 @@
   :host {
     display: flex;
     flex-direction: row;
-    gap: var(--spacing-1);
+    gap: var(--button-group-gap);
   }
 
   :host([data-orientation='vertical']) {

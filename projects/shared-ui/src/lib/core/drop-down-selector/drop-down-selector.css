@@ -8,11 +8,11 @@
     align-items: center;
     gap: var(--spacing-2);
     padding: var(--spacing-1) var(--spacing-2);
-    background-color: var(--color-background);
-    color: var(--color-text);
-    border: var(--border-width) solid var(--color-border-subtle);
+    background-color: var(--color-bg-app);
+    color: var(--color-fg);
+    border: var(--border-width) solid var(--color-border-soft);
     border-radius: var(--radius-sm);
-    font-size: var(--text-sm);
+    font-size: var(--font-size-base);
     line-height: 1;
     cursor: pointer;
     outline: none;
@@ -20,21 +20,21 @@
 
   :host([data-size='sm']) .trigger-button {
     padding: var(--spacing-1) var(--spacing-2);
-    font-size: var(--text-xs);
+    font-size: var(--font-size-xs);
   }
 
   :host([data-size='lg']) .trigger-button {
     padding: var(--spacing-2) var(--spacing-3);
-    font-size: var(--text-md);
+    font-size: var(--font-size-lg);
   }
 
   .trigger-button:not(:disabled):hover {
-    background-color: var(--color-neutral-background-subtle-hover);
+    background-color: var(--color-neutral-soft-hover);
     border-color: var(--color-border);
   }
 
   .trigger-button:not(:disabled):focus-visible {
-    background-color: var(--color-neutral-background-subtle-hover);
+    background-color: var(--color-neutral-soft-hover);
     border-color: var(--color-border);
   }
 
@@ -49,7 +49,7 @@
 
   .menu-panel {
     min-width: var(--sizing-5xs);
-    background-color: var(--color-background);
+    background-color: var(--color-bg-app);
     overflow: hidden;
   }
 

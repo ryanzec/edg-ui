@@ -14,76 +14,80 @@
   }
 
   [data-sortable-inactive] {
-    color: var(--color-text-subtle);
+    color: var(--color-fg-muted);
   }
 
   /* org-text directive: text-color driven by input via [attr.data-text-color] */
   [data-text-color='primary'] {
-    color: var(--text-color-primary);
+    color: var(--color-primary);
   }
 
   [data-text-color='secondary'] {
-    color: var(--text-color-secondary);
+    color: var(--color-secondary);
   }
 
   [data-text-color='neutral'] {
-    color: var(--text-color-neutral);
+    color: var(--color-neutral);
   }
 
   [data-text-color='safe'] {
-    color: var(--text-color-safe);
+    color: var(--color-safe);
   }
 
   [data-text-color='info'] {
-    color: var(--text-color-info);
+    color: var(--color-info);
   }
 
   [data-text-color='caution'] {
-    color: var(--text-color-caution);
+    color: var(--color-caution);
   }
 
   [data-text-color='warning'] {
-    color: var(--text-color-warning);
+    color: var(--color-warning);
   }
 
   [data-text-color='danger'] {
-    color: var(--text-color-danger);
+    color: var(--color-danger);
   }
 
   /* org-text directive: text-size driven by input via [attr.data-text-size] */
   [data-text-size='2xs'] {
-    font-size: var(--text-size-2xs);
+    font-size: var(--font-size-2xs);
   }
 
   [data-text-size='xs'] {
-    font-size: var(--text-size-xs);
+    font-size: var(--font-size-xs);
   }
 
   [data-text-size='sm'] {
-    font-size: var(--text-size-sm);
+    font-size: var(--font-size-sm);
   }
 
   [data-text-size='base'] {
-    font-size: var(--text-size-base);
+    font-size: var(--font-size-base);
   }
 
   [data-text-size='lg'] {
-    font-size: var(--text-size-lg);
+    font-size: var(--font-size-lg);
   }
 
   [data-text-size='xl'] {
-    font-size: var(--text-size-xl);
+    font-size: var(--font-size-xl);
   }
 
   [data-text-size='2xl'] {
-    font-size: var(--text-size-2xl);
+    font-size: var(--font-size-2xl);
   }
 
   [data-text-size='3xl'] {
-    font-size: var(--text-size-3xl);
+    font-size: var(--font-size-3xl);
   }
 
   [data-text-size='4xl'] {
-    font-size: var(--text-size-4xl);
+    font-size: var(--font-size-4xl);
+  }
+
+  [data-text-size='5xl'] {
+    font-size: var(--font-size-5xl);
   }
 }

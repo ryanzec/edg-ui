@@ -37,11 +37,11 @@ const DEMO_USERS: User[] = [
         @if (selectionStore.hasSelection()) {
           <div class="flex flex-col gap-1">
             @for (user of selectionStore.selectedItemsArray(); track user.id) {
-              <div class="px-3 py-2 text-sm border rounded-sm bg-info-subtle">{{ user.name }} ({{ user.email }})</div>
+              <div class="px-3 py-2 text-sm border rounded-sm bg-info-soft">{{ user.name }} ({{ user.email }})</div>
             }
           </div>
         } @else {
-          <div class="text-sm text-neutral-subtle">No items selected</div>
+          <div class="text-sm text-neutral">No items selected</div>
         }
       </org-storybook-example-container-section>
 
@@ -50,7 +50,7 @@ const DEMO_USERS: User[] = [
           @for (user of users; track user.id) {
             <button
               class="px-3 py-2 text-sm border rounded-sm cursor-pointer"
-              [class.bg-info-subtle]="selectionStore.isSelected(user)"
+              [class.bg-info-soft]="selectionStore.isSelected(user)"
               (click)="selectionStore.toggle(user)"
             >
               {{ user.name }} ({{ user.email }})
@@ -101,7 +101,7 @@ class DataSelectionDemo {
           @for (user of users; track user.id) {
             <button
               class="px-3 py-2 text-sm border rounded-sm cursor-pointer"
-              [class.bg-info-subtle]="selectionStore.isSelected(user)"
+              [class.bg-info-soft]="selectionStore.isSelected(user)"
               (click)="selectionStore.toggle(user)"
             >
               {{ user.name }} ({{ user.email }})
@@ -146,7 +146,7 @@ class DataSelectionWithSelectionDemo {
           @for (user of users; track user.id) {
             <button
               class="px-3 py-2 text-sm border rounded-sm cursor-pointer"
-              [class.bg-info-subtle]="selectionStore.isSelected(user)"
+              [class.bg-info-soft]="selectionStore.isSelected(user)"
               (click)="selectionStore.toggle(user)"
             >
               {{ user.name }} ({{ user.email }})
@@ -187,7 +187,7 @@ class DataSelectionAllSelectedDemo {
         @for (user of users; track user.id) {
           <button
             class="px-3 py-2 text-sm border rounded-sm cursor-pointer"
-            [class.bg-info-subtle]="selectionStore.isSelected(user)"
+            [class.bg-info-soft]="selectionStore.isSelected(user)"
             (click)="selectionStore.toggle(user)"
           >
             {{ user.name }}

@@ -131,19 +131,19 @@ export const Default: Story = {
       >
         <org-slide-container-item>
           <org-box color="primary" padding="lg">
-            <p class="text-lg font-semibold">Slide 1</p>
+            <p class="text-xl font-semibold">Slide 1</p>
             <p>Horizontal — first slide</p>
           </org-box>
         </org-slide-container-item>
         <org-slide-container-item>
           <org-box color="safe" padding="lg">
-            <p class="text-lg font-semibold">Slide 2</p>
+            <p class="text-xl font-semibold">Slide 2</p>
             <p>Horizontal — second slide</p>
           </org-box>
         </org-slide-container-item>
         <org-slide-container-item>
           <org-box color="caution" padding="lg">
-            <p class="text-lg font-semibold">Slide 3</p>
+            <p class="text-xl font-semibold">Slide 3</p>
             <p>Horizontal — third slide with more content to show stable sizing</p>
             <p>Extra line here</p>
           </org-box>
@@ -186,19 +186,19 @@ class SlideContainerStableHorizontalDemo {
       >
         <org-slide-container-item>
           <org-box color="primary" padding="lg">
-            <p class="text-lg font-semibold">Slide 1</p>
+            <p class="text-xl font-semibold">Slide 1</p>
             <p>Vertical — first slide</p>
           </org-box>
         </org-slide-container-item>
         <org-slide-container-item>
           <org-box color="safe" padding="lg">
-            <p class="text-lg font-semibold">Slide 2</p>
+            <p class="text-xl font-semibold">Slide 2</p>
             <p>Vertical — second slide</p>
           </org-box>
         </org-slide-container-item>
         <org-slide-container-item>
           <org-box color="info" padding="lg">
-            <p class="text-lg font-semibold">Slide 3</p>
+            <p class="text-xl font-semibold">Slide 3</p>
             <p>Vertical — third slide with more content to show stable sizing</p>
             <p>Extra line here</p>
           </org-box>
@@ -276,13 +276,13 @@ export const Stable: Story = {
       >
         <org-slide-container-item>
           <org-box color="primary" padding="lg">
-            <p class="text-lg font-semibold">Slide 1 — short</p>
+            <p class="text-xl font-semibold">Slide 1 — short</p>
             <p>This slide has minimal content.</p>
           </org-box>
         </org-slide-container-item>
         <org-slide-container-item>
           <org-box color="safe" padding="lg">
-            <p class="text-lg font-semibold">Slide 2 — tall</p>
+            <p class="text-xl font-semibold">Slide 2 — tall</p>
             <p>This slide has more content.</p>
             <p>Second line of content.</p>
             <p>Third line of content.</p>
@@ -291,7 +291,7 @@ export const Stable: Story = {
         </org-slide-container-item>
         <org-slide-container-item>
           <org-box color="caution" padding="lg">
-            <p class="text-lg font-semibold">Slide 3 — medium</p>
+            <p class="text-xl font-semibold">Slide 3 — medium</p>
             <p>This slide has a moderate amount of content.</p>
             <p>Second line of content.</p>
           </org-box>
@@ -335,13 +335,13 @@ class SlideContainerDynamicHorizontalDemo {
       >
         <org-slide-container-item>
           <org-box color="primary" padding="lg">
-            <p class="text-lg font-semibold">Slide 1 — short</p>
+            <p class="text-xl font-semibold">Slide 1 — short</p>
             <p>This slide has minimal content.</p>
           </org-box>
         </org-slide-container-item>
         <org-slide-container-item>
           <org-box color="safe" padding="lg">
-            <p class="text-lg font-semibold">Slide 2 — tall</p>
+            <p class="text-xl font-semibold">Slide 2 — tall</p>
             <p>This slide has more content.</p>
             <p>Second line of content.</p>
             <p>Third line of content.</p>
@@ -350,7 +350,7 @@ class SlideContainerDynamicHorizontalDemo {
         </org-slide-container-item>
         <org-slide-container-item>
           <org-box color="info" padding="lg">
-            <p class="text-lg font-semibold">Slide 3 — medium</p>
+            <p class="text-xl font-semibold">Slide 3 — medium</p>
             <p>This slide has a moderate amount of content.</p>
             <p>Second line of content.</p>
           </org-box>
@@ -394,19 +394,19 @@ class SlideContainerDynamicVerticalDemo {
       >
         <org-slide-container-item>
           <org-box color="primary" padding="lg">
-            <p class="text-lg font-semibold">Slide 1</p>
+            <p class="text-xl font-semibold">Slide 1</p>
             <p>Horizontal — wraps from last back to first</p>
           </org-box>
         </org-slide-container-item>
         <org-slide-container-item>
           <org-box color="safe" padding="lg">
-            <p class="text-lg font-semibold">Slide 2</p>
+            <p class="text-xl font-semibold">Slide 2</p>
             <p>Horizontal — second slide</p>
           </org-box>
         </org-slide-container-item>
         <org-slide-container-item>
           <org-box color="caution" padding="lg">
-            <p class="text-lg font-semibold">Slide 3</p>
+            <p class="text-xl font-semibold">Slide 3</p>
             <p>Horizontal — wraps from here back to slide 1</p>
           </org-box>
         </org-slide-container-item>
@@ -449,19 +449,19 @@ class SlideContainerLoopingHorizontalDemo {
       >
         <org-slide-container-item>
           <org-box color="primary" padding="lg">
-            <p class="text-lg font-semibold">Slide 1</p>
+            <p class="text-xl font-semibold">Slide 1</p>
             <p>Vertical — wraps from last back to first</p>
           </org-box>
         </org-slide-container-item>
         <org-slide-container-item>
           <org-box color="info" padding="lg">
-            <p class="text-lg font-semibold">Slide 2</p>
+            <p class="text-xl font-semibold">Slide 2</p>
             <p>Vertical — second slide</p>
           </org-box>
         </org-slide-container-item>
         <org-slide-container-item>
           <org-box color="danger" padding="lg">
-            <p class="text-lg font-semibold">Slide 3</p>
+            <p class="text-xl font-semibold">Slide 3</p>
             <p>Vertical — wraps from here back to slide 1</p>
           </org-box>
         </org-slide-container-item>
@@ -573,13 +573,13 @@ export const Dynamic: Story = {
       >
         <org-slide-container-item>
           <org-box color="primary" padding="lg">
-            <p class="text-lg font-semibold">Slide 1 — short</p>
+            <p class="text-xl font-semibold">Slide 1 — short</p>
             <p>Horizontal — wraps from last back to first</p>
           </org-box>
         </org-slide-container-item>
         <org-slide-container-item>
           <org-box color="safe" padding="lg">
-            <p class="text-lg font-semibold">Slide 2 — tall</p>
+            <p class="text-xl font-semibold">Slide 2 — tall</p>
             <p>Horizontal — second slide</p>
             <p>Second line of content.</p>
             <p>Third line of content.</p>
@@ -588,7 +588,7 @@ export const Dynamic: Story = {
         </org-slide-container-item>
         <org-slide-container-item>
           <org-box color="caution" padding="lg">
-            <p class="text-lg font-semibold">Slide 3 — medium</p>
+            <p class="text-xl font-semibold">Slide 3 — medium</p>
             <p>Horizontal — wraps from here back to slide 1</p>
             <p>Second line of content.</p>
           </org-box>
@@ -633,13 +633,13 @@ class SlideContainerLoopingDynamicHorizontalDemo {
       >
         <org-slide-container-item>
           <org-box color="primary" padding="lg">
-            <p class="text-lg font-semibold">Slide 1 — short</p>
+            <p class="text-xl font-semibold">Slide 1 — short</p>
             <p>Vertical — wraps from last back to first</p>
           </org-box>
         </org-slide-container-item>
         <org-slide-container-item>
           <org-box color="info" padding="lg">
-            <p class="text-lg font-semibold">Slide 2 — tall</p>
+            <p class="text-xl font-semibold">Slide 2 — tall</p>
             <p>Vertical — second slide</p>
             <p>Second line of content.</p>
             <p>Third line of content.</p>
@@ -648,7 +648,7 @@ class SlideContainerLoopingDynamicHorizontalDemo {
         </org-slide-container-item>
         <org-slide-container-item>
           <org-box color="danger" padding="lg">
-            <p class="text-lg font-semibold">Slide 3 — medium</p>
+            <p class="text-xl font-semibold">Slide 3 — medium</p>
             <p>Vertical — wraps from here back to slide 1</p>
             <p>Second line of content.</p>
           </org-box>

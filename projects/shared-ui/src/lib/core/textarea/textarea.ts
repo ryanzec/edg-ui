@@ -19,7 +19,7 @@ import { Tag } from '../tag/tag';
 import { TagIcon } from '../tag/tag-icon';
 import { Subject } from 'rxjs';
 import { outputFromObservable } from '@angular/core/rxjs-interop';
-import { FORM_FIELD_COMPONENT } from '../form-field/form-field';
+import { FORM_FIELD_COMPONENT } from '../form-fields/form-field';
 import { angularUtils, logManager } from '@organization/shared-utils';
 import { TextareaBrainDirective } from '../../brain/textarea-brain/textarea-brain';
 

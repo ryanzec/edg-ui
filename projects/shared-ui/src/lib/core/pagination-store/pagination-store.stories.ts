@@ -27,7 +27,7 @@ import { Button } from '../button/button';
         <div class="flex flex-wrap gap-1">
           @for (page of paginationStore.visiblePageItems(); track $index) {
             @if (page.type === 'page') {
-              <span class="px-2 py-1 text-xs border rounded" [class.bg-info-subtle]="page.isActive">
+              <span class="px-2 py-1 text-xs border rounded" [class.bg-info-soft]="page.isActive">
                 {{ page.value }}
               </span>
             } @else {

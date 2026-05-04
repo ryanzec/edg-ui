@@ -13,7 +13,7 @@
     gap: var(--spacing-2);
     width: 100%;
     outline: none;
-    background-color: var(--color-background);
+    background-color: var(--color-bg-app);
   }
 
   :host button.list-item-content {
@@ -23,12 +23,12 @@
 
   :host([data-size='base']) .list-item-content {
     padding: var(--spacing-2) var(--spacing-2_5); /* 10px */
-    font-size: var(--text-md);
+    font-size: var(--font-size-lg);
   }
 
   :host([data-size='sm']) .list-item-content {
     padding: var(--spacing-1) var(--spacing-1_5); /* 6px */
-    font-size: var(--text-sm);
+    font-size: var(--font-size-base);
   }
 
   :host([data-clickable]) .list-item-content {
@@ -36,16 +36,16 @@
   }
 
   :host([data-clickable]:not([data-selected])) .list-item-content:is(:hover, :focus-visible) {
-    background-color: var(--color-neutral-background-subtle-hover);
+    background-color: var(--color-neutral-soft-hover);
   }
 
   :host([data-selected]) .list-item-content {
-    background-color: var(--color-primary-background-subtle);
+    background-color: var(--color-primary-soft);
   }
 
   :host([aria-disabled='true']) .list-item-content {
-    color: var(--color-text-disabled);
-    background-color: var(--color-neutral-background-subtle);
+    color: var(--color-fg-faint);
+    background-color: var(--color-neutral-soft);
     cursor: not-allowed;
     pointer-events: auto;
   }

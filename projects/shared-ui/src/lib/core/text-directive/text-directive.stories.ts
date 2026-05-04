@@ -18,7 +18,7 @@ const meta: Meta<TextDirective> = {
 
   ### Features
   - Eight semantic color options: primary, secondary, neutral, safe, info, caution, warning, danger
-  - Seven size options: 2xs, xs, sm, md, lg, xl, 2xl
+  - Seven size options: 2xs, xs, sm, lg, xl, 2xl, 3xl
   - Can be used independently or combined
   - Null values use default styling
 
@@ -36,10 +36,10 @@ const meta: Meta<TextDirective> = {
   - **2xs**: 2x extra small (0.625rem / 10px)
   - **xs**: Extra small (0.75rem / 12px)
   - **sm**: Small (0.875rem / 14px)
-  - **md**: Medium (1rem / 16px)
-  - **lg**: Large (1.125rem / 18px)
-  - **xl**: Extra large (1.25rem / 20px)
-  - **2xl**: 2x extra large (1.5rem / 24px)
+  - **lg**: Large (1rem / 16px)
+  - **xl**: Extra large (1.125rem / 18px)
+  - **2xl**: 2x extra large (1.25rem / 20px)
+  - **3xl**: 3x extra large (1.5rem / 24px)
 
   ### Usage Examples
   \`\`\`html
@@ -47,10 +47,10 @@ const meta: Meta<TextDirective> = {
   <div orgText textColor="primary">Primary colored text</div>
 
   <!-- Text with size only -->
-  <div orgText textSize="lg">Large text</div>
+  <div orgText textSize="xl">Large text</div>
 
   <!-- Text with both color and size -->
-  <div orgText textColor="danger" textSize="xl">Danger extra large text</div>
+  <div orgText textColor="danger" textSize="2xl">Danger extra large text</div>
 
   <!-- Text with no styling (uses defaults) -->
   <div orgText>Default text</div>
@@ -196,30 +196,30 @@ export const Sizes: Story = {
           <div orgText textSize="sm">Small text (0.875rem / 14px)</div>
         </org-storybook-example-container-section>
 
-        <org-storybook-example-container-section label="Medium (md)">
-          <div orgText textSize="md">Medium text (1rem / 16px)</div>
-        </org-storybook-example-container-section>
-
         <org-storybook-example-container-section label="Large (lg)">
-          <div orgText textSize="lg">Large text (1.125rem / 18px)</div>
+          <div orgText textSize="lg">Large text (1rem / 16px)</div>
         </org-storybook-example-container-section>
 
         <org-storybook-example-container-section label="Extra Large (xl)">
-          <div orgText textSize="xl">Extra large text (1.25rem / 20px)</div>
+          <div orgText textSize="xl">Extra large text (1.125rem / 18px)</div>
         </org-storybook-example-container-section>
 
         <org-storybook-example-container-section label="2x Extra Large (2xl)">
-          <div orgText textSize="2xl">2xl text (1.5rem / 24px)</div>
+          <div orgText textSize="2xl">2xl text (1.25rem / 20px)</div>
+        </org-storybook-example-container-section>
+
+        <org-storybook-example-container-section label="3x Extra Large (3xl)">
+          <div orgText textSize="3xl">3xl text (1.5rem / 24px)</div>
         </org-storybook-example-container-section>
 
         <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
           <li><strong>2xs</strong>: 0.625rem / 10px</li>
           <li><strong>xs</strong>: 0.75rem / 12px</li>
           <li><strong>sm</strong>: 0.875rem / 14px</li>
-          <li><strong>md</strong>: 1rem / 16px</li>
-          <li><strong>lg</strong>: 1.125rem / 18px</li>
-          <li><strong>xl</strong>: 1.25rem / 20px</li>
-          <li><strong>2xl</strong>: 1.5rem / 24px</li>
+          <li><strong>lg</strong>: 1rem / 16px</li>
+          <li><strong>xl</strong>: 1.125rem / 18px</li>
+          <li><strong>2xl</strong>: 1.25rem / 20px</li>
+          <li><strong>3xl</strong>: 1.5rem / 24px</li>
         </ul>
       </org-storybook-example-container>
     `,
@@ -244,11 +244,11 @@ export const Combined: Story = {
         currentState="Demonstrating color and size combinations"
       >
         <org-storybook-example-container-section label="Primary + Large">
-          <div orgText textColor="primary" textSize="lg">Primary large text</div>
+          <div orgText textColor="primary" textSize="xl">Primary large text</div>
         </org-storybook-example-container-section>
 
         <org-storybook-example-container-section label="Danger + Extra Large">
-          <div orgText textColor="danger" textSize="xl">Danger extra large text</div>
+          <div orgText textColor="danger" textSize="2xl">Danger extra large text</div>
         </org-storybook-example-container-section>
 
         <org-storybook-example-container-section label="Safe + Small">
@@ -256,11 +256,11 @@ export const Combined: Story = {
         </org-storybook-example-container-section>
 
         <org-storybook-example-container-section label="Neutral + Large">
-          <div orgText textColor="neutral" textSize="lg">Neutral large text</div>
+          <div orgText textColor="neutral" textSize="xl">Neutral large text</div>
         </org-storybook-example-container-section>
 
         <org-storybook-example-container-section label="Info + 2xl">
-          <div orgText textColor="info" textSize="2xl">Info 2xl text</div>
+          <div orgText textColor="info" textSize="3xl">Info 2xl text</div>
         </org-storybook-example-container-section>
 
         <org-storybook-example-container-section label="Warning + Extra Small">
@@ -268,7 +268,7 @@ export const Combined: Story = {
         </org-storybook-example-container-section>
 
         <org-storybook-example-container-section label="Secondary + Medium">
-          <div orgText textColor="secondary" textSize="md">Secondary medium text</div>
+          <div orgText textColor="secondary" textSize="lg">Secondary medium text</div>
         </org-storybook-example-container-section>
 
         <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">

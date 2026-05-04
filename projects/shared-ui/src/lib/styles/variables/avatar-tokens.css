@@ -1,14 +1,10 @@
 :root {
-  --color-avatar-0: var(--color-red-500);
-  --color-avatar-1: var(--color-orange-500);
-  --color-avatar-2: var(--color-amber-500);
-  --color-avatar-3: var(--color-lime-500);
-  --color-avatar-4: var(--color-green-500);
-  --color-avatar-5: var(--color-teal-500);
-  --color-avatar-6: var(--color-cyan-500);
-  --color-avatar-7: var(--color-sky-500);
-  --color-avatar-8: var(--color-blue-500);
-  --color-avatar-9: var(--color-indigo-500);
-  --color-avatar-10: var(--color-violet-500);
-  --color-avatar-11: var(--color-fuchsia-500);
+  --color-avatar-0: var(--color-red);
+  --color-avatar-1: var(--color-orange);
+  --color-avatar-2: var(--color-yellow);
+  --color-avatar-3: var(--color-green);
+  --color-avatar-4: var(--color-teal);
+  --color-avatar-5: var(--color-blue);
+  --color-avatar-6: var(--color-purple);
+  --color-avatar-7: var(--color-pink);
 }

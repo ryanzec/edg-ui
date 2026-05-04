@@ -85,7 +85,7 @@ export const Default: Story = {
     },
     scrollClass: {
       control: 'text',
-      description: 'CSS class applied to the scroll area (e.g. "h-md w-xl" to constrain dimensions)',
+      description: 'CSS class applied to the scroll area (e.g. "h-base w-xl" to constrain dimensions)',
     },
   },
   parameters: {
@@ -486,7 +486,7 @@ export class UserDashboardComponent implements OnInit {
             language="typescript"
             [text]="codeText"
             [allowCopy]="true"
-            scrollClass="h-md w-xl"
+            scrollClass="h-base w-xl"
           />
         </org-storybook-example-container-section>
 
@@ -525,7 +525,7 @@ const c = 3;"
           />
         </org-storybook-example-container-section>
 
-        <org-storybook-example-container-section label="scrollClass=&quot;h-sm w-md&quot;">
+        <org-storybook-example-container-section label="scrollClass=&quot;h-sm w-base&quot;">
           <org-code-highlighter
             language="typescript"
             text="const a = 1;
@@ -561,11 +561,11 @@ const c = 3;
 const c = 3;
 const c = 3;
 const c = 3;"
-            scrollClass="h-sm w-md"
+            scrollClass="h-sm w-base"
           />
         </org-storybook-example-container-section>
 
-        <org-storybook-example-container-section label="scrollClass=&quot;h-md w-xl&quot;">
+        <org-storybook-example-container-section label="scrollClass=&quot;h-base w-xl&quot;">
           <org-code-highlighter
             language="typescript"
             text="const a = 1;
@@ -612,7 +612,7 @@ const c = 3;
 const c = 3;
 const c = 3;
 const c = 3;"
-            scrollClass="h-md w-xl"
+            scrollClass="h-base w-xl"
           />
         </org-storybook-example-container-section>
 

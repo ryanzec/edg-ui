@@ -15,11 +15,11 @@
     }
 
     .colors-demo h1 {
-      font-size: var(--text-3xl);
+      font-size: var(--font-size-4xl);
     }
 
     .colors-demo h2 {
-      font-size: var(--text-2xl);
+      font-size: var(--font-size-3xl);
     }
 
     .colors-demo .grid {
@@ -34,7 +34,7 @@
     .colors-demo [class*='min-w-9xs'] {
       min-width: 2.5rem; /* 40px */
       min-height: 2.5rem; /* 40px */
-      font-size: var(--text-sm);
+      font-size: var(--font-size-base);
     }
   }
 }

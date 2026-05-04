@@ -3,7 +3,7 @@ import { Input, allInputVariants, allInputTypes } from './input';
 import { allIconNames } from '../icon/icon';
 import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
 import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
-import { FormField } from '../form-field/form-field';
+import { FormField } from '../form-fields/form-field';
 import { FormFields } from '../form-fields/form-fields';
 
 const meta: Meta<Input> = {

@@ -2,28 +2,4 @@
   .opacity-0 {
     opacity: 0;
   }
-
-  .opacity-skeleton-subtle {
-    opacity: var(--opacity-skeleton-subtle);
-  }
-
-  .opacity-disabled {
-    opacity: var(--opacity-disabled);
-  }
-
-  .opacity-background-subtle {
-    opacity: var(--opacity-background-subtle);
-  }
-
-  .opacity-skeleton {
-    opacity: var(--opacity-skeleton);
-  }
-
-  .opacity-subtle {
-    opacity: var(--opacity-subtle);
-  }
-
-  .opacity-overlay {
-    opacity: var(--opacity-overlay);
-  }
 }

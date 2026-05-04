@@ -109,11 +109,11 @@
 
   /* enabled hover/focus effect conveys draggability */
   :host([data-enabled]) .splitter-divider:hover {
-    background-color: var(--color-primary-background);
+    background-color: var(--color-primary);
   }
 
   :host([data-enabled]) .splitter-divider:focus-visible {
-    background-color: var(--color-primary-background);
+    background-color: var(--color-primary);
   }
 
   /* collapsed or disabled: non-interactive cursor on divider */

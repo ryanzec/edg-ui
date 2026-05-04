@@ -8,7 +8,7 @@ import { StorybookExampleContainer } from '../../private/storybook-example-conta
 import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
 import { Button } from '../button/button';
 import { FormFields } from '../form-fields/form-fields';
-import { FormField } from '../form-field/form-field';
+import { FormField } from '../form-fields/form-field';
 
 const fruitOptions: ComboboxOptionInput[] = [
   { label: 'Apple', value: 'apple', groupLabel: 'Fruits' },

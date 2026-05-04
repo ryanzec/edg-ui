@@ -22,7 +22,7 @@ import { StorybookExampleContainerSection } from '../../private/storybook-exampl
       </org-storybook-example-container-section>
 
       <org-storybook-example-container-section label="Click to Sort">
-        <div class="flex gap-4 p-4 border rounded-md">
+        <div class="flex gap-4 p-4 border rounded-base">
           <span class="font-medium" [orgSortableKey]="'name'">Name</span>
           <span class="font-medium" [orgSortableKey]="'email'">Email</span>
           <span class="font-medium" [orgSortableKey]="'status'">Status</span>
@@ -62,7 +62,7 @@ class SortableDemo {
       </org-storybook-example-container-section>
 
       <org-storybook-example-container-section label="Sortable Headers ({{ enabled() ? 'Enabled' : 'Disabled' }})">
-        <div class="flex gap-4 p-4 border rounded-md">
+        <div class="flex gap-4 p-4 border rounded-base">
           <span class="font-medium" [orgSortableKey]="'name'" [sortableEnabled]="enabled()">Name</span>
           <span class="font-medium" [orgSortableKey]="'email'" [sortableEnabled]="enabled()">Email</span>
           <span class="font-medium" [orgSortableKey]="'status'" [sortableEnabled]="enabled()">Status</span>
@@ -97,7 +97,7 @@ class SortableEnabledDemo {
       </org-storybook-example-container-section>
 
       <org-storybook-example-container-section label="Headers">
-        <div class="flex gap-4 p-4 border rounded-md">
+        <div class="flex gap-4 p-4 border rounded-base">
           <span class="font-medium" [orgSortableKey]="'name'" [sortableEnabled]="true">Name (Enabled)</span>
           <span class="font-medium" [orgSortableKey]="'email'" [sortableEnabled]="false">Email (Disabled)</span>
           <span class="font-medium" [orgSortableKey]="'status'" [sortableEnabled]="true">Status (Enabled)</span>
@@ -127,7 +127,7 @@ class SortableMixedDemo {
       </org-storybook-example-container-section>
 
       <org-storybook-example-container-section label="Headers (Name is preset to asc)">
-        <div class="flex gap-4 p-4 border rounded-md">
+        <div class="flex gap-4 p-4 border rounded-base">
           <span class="font-medium" [orgSortableKey]="'name'">Name</span>
           <span class="font-medium" [orgSortableKey]="'email'">Email</span>
           <span class="font-medium" [orgSortableKey]="'status'">Status</span>
@@ -169,7 +169,7 @@ const meta: Meta<SortableDirective> = {
   - **Dynamic enable/disable** support to add/remove sorting functionality at runtime
 
   ### Visual States
-  - **Not Sorting**: Shows arrows-down-up icon in subtle color (text-text-subtle)
+  - **Not Sorting**: Shows arrows-down-up icon in subtle color (text-muted)
   - **Ascending**: Shows arrow-up icon in default color
   - **Descending**: Shows arrow-down icon in default color
   - **Disabled**: No icon shown, no interactive classes applied
@@ -218,7 +218,7 @@ const meta: Meta<SortableDirective> = {
   - \`cursor-pointer\` class for clickable indication
   - \`select-none\` class to prevent text selection
   - \`flex\`, \`gap-1\`, \`items-center\` classes for layout
-  - \`text-text-subtle\` class on icon when not actively sorting
+  - \`text-muted\` class on icon when not actively sorting
   - \`role="button"\` and \`tabindex="0"\` for keyboard accessibility
 
   When disabled, all classes and attributes are removed and no icon is shown.
@@ -312,7 +312,7 @@ export const Disabled: Story = {
     template: `
       <org-storybook-example-container title="Disabled Sorting">
         <org-storybook-example-container-section label="Headers">
-          <div class="flex gap-4 p-4 border rounded-md">
+          <div class="flex gap-4 p-4 border rounded-base">
             <span class="font-medium" [orgSortableKey]="'name'" [sortableEnabled]="false">Name</span>
             <span class="font-medium" [orgSortableKey]="'email'" [sortableEnabled]="false">Email</span>
             <span class="font-medium" [orgSortableKey]="'status'" [sortableEnabled]="false">Status</span>

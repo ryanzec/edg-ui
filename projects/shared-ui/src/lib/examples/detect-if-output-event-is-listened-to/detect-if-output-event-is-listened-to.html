@@ -1,15 +1,13 @@
-<div class="mx-auto max-w-2xl flex flex-col gap-6 rounded-lg border border-border bg-background p-6">
+<div class="mx-auto max-w-2xl flex flex-col gap-6 rounded-lg border border-default-color bg-app p-6">
   <div class="text-center">
-    <h1 class="mb-2 text-2xl font-bold text-text">Detect Output Event Listeners</h1>
-    <div class="text-text-subtle">
-      Using Subject + outputFromObservable() to detect if an event is being listened to
-    </div>
+    <h1 class="mb-2 text-3xl font-bold text-fg">Detect Output Event Listeners</h1>
+    <div class="text-muted">Using Subject + outputFromObservable() to detect if an event is being listened to</div>
   </div>
 
   <!-- Status Display -->
-  <div class="rounded-lg border border-border bg-background p-4 text-center">
-    <div class="mb-1 text-sm font-medium text-text-subtle">buttonClicked Event Status</div>
-    <div class="text-xl font-bold" [class.text-safe-text]="isListenedTo()" [class.text-danger-text]="!isListenedTo()">
+  <div class="rounded-lg border border-default-color bg-app p-4 text-center">
+    <div class="mb-1 text-sm font-medium text-muted">buttonClicked Event Status</div>
+    <div class="text-2xl font-bold" [class.text-safe]="isListenedTo()" [class.text-danger]="!isListenedTo()">
       {{ isListenedTo() ? '✓ Being Listened To' : '✗ Not Being Listened To' }}
     </div>
   </div>
@@ -17,29 +15,27 @@
   <!-- Interactive Example -->
   <div class="flex flex-col gap-4 text-center">
     <div>
-      <div class="mb-4 text-text">
+      <div class="mb-4 text-fg">
         Notice how the button changes appearance based on whether someone is listening to the
-        <code class="rounded bg-background px-1 py-0.5 text-xs">buttonClicked</code> output:
+        <code class="rounded bg-app px-1 py-0.5 text-xs">buttonClicked</code> output:
       </div>
       <org-button color="primary" (click)="onClick()">Click Me! ({{ clickCount() }} clicks)</org-button>
     </div>
   </div>
 
   <!-- Pattern Explanation -->
-  <div class="rounded-lg border border-info-border bg-info-background-subtle p-4">
-    <h3 class="mb-3 font-semibold text-text">The Pattern:</h3>
-    <div class="flex flex-col gap-2 text-sm font-mono text-text">
+  <div class="rounded-lg border border-info bg-info-soft p-4">
+    <h3 class="mb-3 font-semibold text-fg">The Pattern:</h3>
+    <div class="flex flex-col gap-2 text-sm font-mono text-fg">
+      <div><span class="text-info">1.</span> <code>private _buttonClicked$ = new Subject&lt;string&gt;()</code></div>
       <div>
-        <span class="text-info-text">1.</span> <code>private _buttonClicked$ = new Subject&lt;string&gt;()</code>
-      </div>
-      <div>
-        <span class="text-info-text">2.</span>
+        <span class="text-info">2.</span>
         <code>public buttonClicked = outputFromObservable(this._buttonClicked$)</code>
       </div>
       <div>
-        <span class="text-info-text">3.</span> <code>this._buttonClicked$.observed</code> → true if being listened to
+        <span class="text-info">3.</span> <code>this._buttonClicked$.observed</code> → true if being listened to
       </div>
-      <div><span class="text-info-text">4.</span> <code>this._buttonClicked$.next(value)</code> → emit event</div>
+      <div><span class="text-info">4.</span> <code>this._buttonClicked$.next(value)</code> → emit event</div>
     </div>
   </div>
 

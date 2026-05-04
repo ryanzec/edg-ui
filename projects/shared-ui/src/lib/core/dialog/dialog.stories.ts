@@ -391,9 +391,9 @@ export const EnableEscapeKey: Story = {
       <org-button (click)="openDialog()">Open Dialog</org-button>
 
       @if (closeCount() > 0) {
-        <div class="p-4 bg-secondary-background-subtle rounded-lg">
+        <div class="p-4 bg-secondary-soft rounded-lg">
           <p class="text-sm font-medium">Dialog Closed Events: {{ closeCount() }}</p>
-          <p class="text-xs text-text-subtle mt-1">Open and close the dialog to see the count increase</p>
+          <p class="text-xs text-muted mt-1">Open and close the dialog to see the count increase</p>
         </div>
       }
     </div>
@@ -544,7 +544,7 @@ export const Backdrop: Story = {
           <div class="flex flex-col gap-4">
             <p>{{ data.message }}</p>
 
-            <div class="p-4 bg-secondary-background-subtle rounded-lg">
+            <div class="p-4 bg-secondary-soft rounded-lg">
               <p class="text-sm font-medium mb-2">Close Icon Control</p>
               <org-checkbox-toggle
                 name="showCloseIcon"
@@ -554,7 +554,7 @@ export const Backdrop: Story = {
               >
                 Show Close Icon
               </org-checkbox-toggle>
-              <p class="text-xs text-text-subtle mt-2">
+              <p class="text-xs text-muted mt-2">
                 Toggle this checkbox to show or hide the close icon (X button) in the top-right corner of this dialog in
                 real-time.
               </p>
@@ -679,7 +679,7 @@ export const CloseIcon: Story = {
           <li><strong>Click to Close</strong>: Clicking the X button closes the dialog</li>
           <li><strong>Toggle Inside Dialog</strong>: Use the checkbox inside the dialog to show or hide the close icon in real-time</li>
           <li><strong>Accessibility</strong>: Close icon has proper aria-label for screen readers</li>
-          <li><strong>Styling</strong>: Matches the global-notifications pattern (text variant, neutral color)</li>
+          <li><strong>Styling</strong>: Matches the notifications pattern (text variant, neutral color)</li>
         </ul>
       </org-storybook-example-container>
     `,
@@ -701,7 +701,7 @@ export const CloseIcon: Story = {
           <div class="flex flex-col gap-4">
             <p>{{ data.message }}</p>
 
-            <div class="p-4 bg-secondary-background-subtle rounded-lg">
+            <div class="p-4 bg-secondary-soft rounded-lg">
               <p class="text-sm font-medium mb-2">Dynamic Close Control</p>
               <org-checkbox-toggle
                 name="enableEscapeKey"
@@ -711,7 +711,7 @@ export const CloseIcon: Story = {
               >
                 Enable Escape Key & Close Icon
               </org-checkbox-toggle>
-              <p class="text-xs text-text-subtle mt-2">
+              <p class="text-xs text-muted mt-2">
                 Toggle this checkbox to see the close icon (X button) become enabled/disabled in real-time. When
                 disabled, it appears with reduced opacity and doesn't respond to clicks.
               </p>
@@ -861,7 +861,7 @@ export const DynamicCloseControl: Story = {
           <org-dialog-header title="Template-Based Dialog" />
           <org-dialog-content>
             <p>This dialog content is defined inline as a template reference — no separate component required.</p>
-            <p class="mt-2 text-sm text-text-subtle">{{ context.message }}</p>
+            <p class="mt-2 text-sm text-muted">{{ context.message }}</p>
           </org-dialog-content>
           <org-dialog-footer>
             <org-button color="neutral" (clicked)="onCancel()">Cancel</org-button>

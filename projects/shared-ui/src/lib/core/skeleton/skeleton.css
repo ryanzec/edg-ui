@@ -6,11 +6,11 @@
   .org-skeleton-gradient {
     background: linear-gradient(
       90deg,
-      var(--color-background-level1) 0%,
-      var(--color-background-level2) 25%,
-      var(--color-background-level1) 50%,
-      var(--color-background-level2) 75%,
-      var(--color-background-level1) 100%
+      var(--color-bg-surface) 0%,
+      var(--color-bg-surface-2) 25%,
+      var(--color-bg-surface) 50%,
+      var(--color-bg-surface-2) 75%,
+      var(--color-bg-surface) 100%
     );
     background-size: 200% 100%;
     animation: skeleton-shimmer 2s linear infinite;
@@ -26,7 +26,7 @@
 
   .skeleton-table-bar {
     height: var(--sizing-11xs); /* 16px */
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-base);
   }
 
   .skeleton-table-bar:nth-child(1) {
@@ -55,6 +55,6 @@
     width: 100%;
     height: 12.5rem; /* 200px */
     min-width: 12.5rem; /* 200px */
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-base);
   }
 }

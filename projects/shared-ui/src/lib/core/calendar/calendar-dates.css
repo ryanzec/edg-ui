@@ -22,11 +22,11 @@
     justify-content: center;
     width: var(--sizing-10xs);
     height: var(--sizing-10xs);
-    font-size: var(--text-sm);
-    line-height: var(--text-sm--line-height);
-    letter-spacing: var(--text-sm--letter-spacing);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-normal);
+    letter-spacing: var(--letter-spacing-normal);
     font-weight: var(--font-weight-bold);
-    color: var(--color-text);
+    color: var(--color-fg);
   }
 
   .date-cell {
@@ -42,22 +42,22 @@
     width: var(--sizing-10xs);
     height: var(--sizing-10xs);
     border-radius: var(--radius-sm);
-    font-size: var(--text-sm);
-    line-height: var(--text-sm--line-height);
-    letter-spacing: var(--text-sm--letter-spacing);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-normal);
+    letter-spacing: var(--letter-spacing-normal);
   }
 
   /* date cell base — kept here because border/bg/color/cursor are overridden by state selectors below */
   :host button {
     border: var(--border-width) solid transparent;
     background-color: transparent;
-    color: var(--color-text);
+    color: var(--color-fg);
     cursor: pointer;
   }
 
   /* dates not in the current displayed month */
   :host button:not([data-current-month]):not(:disabled) {
-    opacity: var(--opacity-subtle);
+    opacity: var(--opacity-disabled);
   }
 
   /* disabled dates */
@@ -68,19 +68,19 @@
 
   /* selected dates */
   :host button[aria-selected='true']:not(:disabled) {
-    background-color: var(--color-primary-background);
-    color: var(--color-text-inverse);
+    background-color: var(--color-primary);
+    color: var(--color-fg-on-accent);
   }
 
   /* in-range dates */
   :host button[data-in-range]:not(:disabled):not([aria-selected='true']) {
-    background-color: var(--color-primary-background-subtle);
-    color: var(--color-text);
+    background-color: var(--color-primary-soft);
+    color: var(--color-fg);
   }
 
   /* default hover for non-selected, non-range, non-disabled dates */
   :host button:not(:disabled):not([aria-selected='true']):not([data-in-range]):hover {
-    background-color: var(--color-neutral-background-subtle);
+    background-color: var(--color-neutral-soft);
   }
 
   /* keyboard navigation focused date indicator */
@@ -96,6 +96,6 @@
   /* keyboard focus visible state — distinct border instead of outline */
   :host button:not(:disabled):focus-visible {
     border-color: var(--color-primary-border);
-    background-color: var(--color-neutral-background-subtle);
+    background-color: var(--color-neutral-soft);
   }
 }

@@ -50,12 +50,12 @@ const fruitOptions: ComboboxOptionInput[] = [
 
           <div class="flex flex-col gap-2 max-h-2xs overflow-y-auto border rounded p-2">
             @if (store.filteredOptions().length === 0) {
-              <div class="text-sm text-neutral-text-subtle p-2">No options available</div>
+              <div class="text-sm text-neutral p-2">No options available</div>
             }
             @for (option of store.filteredOptions(); track option.value) {
               <button
-                class="px-3 py-2 text-sm text-left border rounded cursor-pointer hover:bg-neutral-background-subtle"
-                [class.bg-info-background-subtle]="store.selectedValues().includes(option.value)"
+                class="px-3 py-2 text-sm text-left border rounded cursor-pointer hover:bg-neutral-soft"
+                [class.bg-info-soft]="store.selectedValues().includes(option.value)"
                 [class.ring-2]="store.focusedOption()?.value === option.value"
                 [class.ring-primary-border]="store.focusedOption()?.value === option.value"
                 [disabled]="option.disabled"
@@ -64,7 +64,7 @@ const fruitOptions: ComboboxOptionInput[] = [
               >
                 <span [class.opacity-50]="option.disabled">{{ option.label }}</span>
                 @if (option.groupLabel !== 'Uncategorized') {
-                  <span class="text-xs text-neutral-text-subtle ml-2">({{ option.groupLabel }})</span>
+                  <span class="text-xs text-neutral ml-2">({{ option.groupLabel }})</span>
                 }
               </button>
             }
@@ -93,9 +93,7 @@ const fruitOptions: ComboboxOptionInput[] = [
         </div>
         <div class="mt-3">
           <div class="text-sm font-semibold mb-1">Selected Options (JSON):</div>
-          <pre class="text-xs bg-neutral-background-subtle p-2 rounded border overflow-x-auto">{{
-            getSelectedOptionsJson()
-          }}</pre>
+          <pre class="text-xs bg-neutral-soft p-2 rounded border overflow-x-auto">{{ getSelectedOptionsJson() }}</pre>
         </div>
       </org-storybook-example-container-section>
 
@@ -164,17 +162,15 @@ class ComboboxStoreSingleSelectDemo {
       <org-storybook-example-container-section label="Selected Items">
         <div class="flex flex-wrap gap-2 min-h-9xs">
           @if (store.selectedOptions().length === 0) {
-            <div class="text-sm text-neutral-text-subtle">No items selected</div>
+            <div class="text-sm text-neutral">No items selected</div>
           }
           @for (option of store.selectedOptions(); track option.value) {
-            <div class="flex items-center gap-2 px-3 py-1 text-sm border rounded bg-info-background-subtle">
+            <div class="flex items-center gap-2 px-3 py-1 text-sm border rounded bg-info-soft">
               <span>{{ option.label }}</span>
               @if (option.isNew) {
                 <span class="text-xs text-success-text">(New)</span>
               }
-              <button class="text-danger-text hover:text-danger-text-emphasis" (click)="removeSelection(option.value)">
-                ×
-              </button>
+              <button class="text-danger hover:text-danger" (click)="removeSelection(option.value)">×</button>
             </div>
           }
         </div>
@@ -192,14 +188,14 @@ class ComboboxStoreSingleSelectDemo {
 
           <div class="flex flex-col gap-2 max-h-2xs overflow-y-auto border rounded p-2">
             @if (store.filteredOptions().length === 0 && store.inputValue()) {
-              <div class="text-sm text-neutral-text-subtle p-2">
+              <div class="text-sm text-neutral p-2">
                 No matching options. Press Enter to add "{{ store.inputValue() }}"
               </div>
             }
             @for (option of store.filteredOptions(); track option.value) {
               <button
-                class="px-3 py-2 text-sm text-left border rounded cursor-pointer hover:bg-neutral-background-subtle"
-                [class.bg-info-background-subtle]="store.selectedValues().includes(option.value)"
+                class="px-3 py-2 text-sm text-left border rounded cursor-pointer hover:bg-neutral-soft"
+                [class.bg-info-soft]="store.selectedValues().includes(option.value)"
                 [class.ring-2]="store.focusedOption()?.value === option.value"
                 [class.ring-primary-border]="store.focusedOption()?.value === option.value"
                 [disabled]="option.disabled"
@@ -208,7 +204,7 @@ class ComboboxStoreSingleSelectDemo {
               >
                 <span [class.opacity-50]="option.disabled">{{ option.label }}</span>
                 @if (option.groupLabel !== 'Uncategorized') {
-                  <span class="text-xs text-neutral-text-subtle ml-2">({{ option.groupLabel }})</span>
+                  <span class="text-xs text-neutral ml-2">({{ option.groupLabel }})</span>
                 }
               </button>
             }
@@ -244,9 +240,7 @@ class ComboboxStoreSingleSelectDemo {
         </div>
         <div class="mt-3">
           <div class="text-sm font-semibold mb-1">Selected Options (JSON):</div>
-          <pre class="text-xs bg-neutral-background-subtle p-2 rounded border overflow-x-auto">{{
-            getSelectedOptionsJson()
-          }}</pre>
+          <pre class="text-xs bg-neutral-soft p-2 rounded border overflow-x-auto">{{ getSelectedOptionsJson() }}</pre>
         </div>
       </org-storybook-example-container-section>
 
@@ -346,14 +340,14 @@ class ComboboxStoreMultiSelectDemo {
         <div class="flex flex-col gap-4 max-h-sm overflow-y-auto max-w-lg">
           @for (group of store.filteredGroupedOptions(); track group.groupLabel) {
             <div class="border rounded p-3">
-              <div class="text-sm font-semibold mb-2 text-neutral-text-emphasis">
+              <div class="text-sm font-semibold mb-2 text-neutral">
                 {{ group.groupLabel }} ({{ group.options.length }})
               </div>
               <div class="flex flex-col gap-1">
                 @for (option of group.options; track option.value) {
                   <button
-                    class="px-3 py-2 text-sm text-left border rounded cursor-pointer hover:bg-neutral-background-subtle"
-                    [class.bg-info-background-subtle]="store.selectedValues().includes(option.value)"
+                    class="px-3 py-2 text-sm text-left border rounded cursor-pointer hover:bg-neutral-soft"
+                    [class.bg-info-soft]="store.selectedValues().includes(option.value)"
                     [class.ring-2]="store.focusedOption()?.value === option.value"
                     [class.ring-primary-border]="store.focusedOption()?.value === option.value"
                     [disabled]="option.disabled"
@@ -389,9 +383,7 @@ class ComboboxStoreMultiSelectDemo {
         </div>
         <div class="mt-3">
           <div class="text-sm font-semibold mb-1">Selected Options (JSON):</div>
-          <pre class="text-xs bg-neutral-background-subtle p-2 rounded border overflow-x-auto">{{
-            getSelectedOptionsJson()
-          }}</pre>
+          <pre class="text-xs bg-neutral-soft p-2 rounded border overflow-x-auto">{{ getSelectedOptionsJson() }}</pre>
         </div>
       </org-storybook-example-container-section>
 
@@ -457,10 +449,10 @@ class ComboboxStoreGroupedDemo {
       <org-storybook-example-container-section label="Current Selection">
         <div class="flex flex-wrap gap-2 min-h-9xs">
           @if (store.selectedOptions().length === 0) {
-            <div class="text-sm text-neutral-text-subtle">No items selected</div>
+            <div class="text-sm text-neutral">No items selected</div>
           }
           @for (option of store.selectedOptions(); track option.value) {
-            <div class="px-3 py-1 text-sm border rounded bg-info-background-subtle">
+            <div class="px-3 py-1 text-sm border rounded bg-info-soft">
               {{ option.label }}
             </div>
           }
@@ -471,8 +463,8 @@ class ComboboxStoreGroupedDemo {
         <div class="flex flex-col gap-2 max-h-5xs overflow-y-auto border rounded p-2 max-w-lg">
           @for (option of store.options(); track option.value) {
             <button
-              class="px-3 py-2 text-sm text-left border rounded cursor-pointer hover:bg-neutral-background-subtle"
-              [class.bg-info-background-subtle]="store.selectedValues().includes(option.value)"
+              class="px-3 py-2 text-sm text-left border rounded cursor-pointer hover:bg-neutral-soft"
+              [class.bg-info-soft]="store.selectedValues().includes(option.value)"
               (click)="toggleOption(option)"
             >
               {{ option.label }} ({{ option.groupLabel }})
@@ -501,9 +493,7 @@ class ComboboxStoreGroupedDemo {
         </div>
         <div class="mt-3">
           <div class="text-sm font-semibold mb-1">Selected Options (JSON):</div>
-          <pre class="text-xs bg-neutral-background-subtle p-2 rounded border overflow-x-auto">{{
-            getSelectedOptionsJson()
-          }}</pre>
+          <pre class="text-xs bg-neutral-soft p-2 rounded border overflow-x-auto">{{ getSelectedOptionsJson() }}</pre>
         </div>
       </org-storybook-example-container-section>
 
@@ -607,12 +597,12 @@ class ComboboxStoreDynamicOptionsDemo {
           @if (store.isOpened()) {
             <div class="mt-2 flex flex-col gap-2 max-h-2xs overflow-y-auto border rounded p-2 bg-white shadow-lg">
               @if (store.filteredOptions().length === 0) {
-                <div class="text-sm text-neutral-text-subtle p-2">No options available</div>
+                <div class="text-sm text-neutral p-2">No options available</div>
               }
               @for (option of store.filteredOptions(); track option.value) {
                 <button
-                  class="px-3 py-2 text-sm text-left border rounded cursor-pointer hover:bg-neutral-background-subtle"
-                  [class.bg-info-background-subtle]="store.selectedValues().includes(option.value)"
+                  class="px-3 py-2 text-sm text-left border rounded cursor-pointer hover:bg-neutral-soft"
+                  [class.bg-info-soft]="store.selectedValues().includes(option.value)"
                   (click)="selectOption(option)"
                 >
                   {{ option.label }}
@@ -639,7 +629,7 @@ class ComboboxStoreDynamicOptionsDemo {
           <div><strong>Selected Value:</strong> {{ store.selectedValues()[0] ?? 'None' }}</div>
           <div><strong>Input Value:</strong> "{{ store.inputValue() }}"</div>
           <div><strong>Event Log:</strong></div>
-          <div class="text-xs bg-neutral-background-subtle p-2 rounded border max-h-8xs overflow-y-auto">
+          <div class="text-xs bg-neutral-soft p-2 rounded border max-h-8xs overflow-y-auto">
             @for (event of _eventLog(); track $index) {
               <div>{{ event }}</div>
             }

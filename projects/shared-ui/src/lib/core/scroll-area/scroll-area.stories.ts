@@ -22,7 +22,7 @@ const meta: Meta<ScrollArea> = {
 
   - **containerClass** *(ng-scrollbar host)*: Visual container styles such as border, border-radius, and layout.
   Applied alongside \`scrollClass\` on the same \`ng-scrollbar\` host element.
-  Examples: \`rounded-lg border border-border\`, \`flex flex-col\`
+  Examples: \`rounded-lg border border-default-color\`, \`flex flex-col\`
 
   - **scrollClass** *(ng-scrollbar host)*: Sizing and overflow constraints. Applied to the \`ng-scrollbar\` host
   so that relative sizing (e.g. \`h-full\`, \`w-full\`) works correctly within the viewport.
@@ -51,7 +51,7 @@ const meta: Meta<ScrollArea> = {
   \`\`\`html
   <!-- Vertical scrolling with border, fixed height, and inner padding -->
   <org-scroll-area
-    containerClass="rounded-lg border border-border"
+    containerClass="rounded-lg border border-default-color"
     scrollClass="h-3xs"
     spacingClass="p-4"
   >
@@ -61,7 +61,7 @@ const meta: Meta<ScrollArea> = {
   <!-- Horizontal scrolling -->
   <org-scroll-area
     direction="horizontal"
-    containerClass="rounded-lg border border-border"
+    containerClass="rounded-lg border border-default-color"
     scrollClass="w-2xs"
     spacingClass="p-4"
   >
@@ -71,7 +71,7 @@ const meta: Meta<ScrollArea> = {
   <!-- Both directions -->
   <org-scroll-area
     direction="both"
-    containerClass="rounded-lg border border-border"
+    containerClass="rounded-lg border border-default-color"
     scrollClass="h-3xs w-2xs"
     spacingClass="p-4"
   >
@@ -132,7 +132,7 @@ export const Default: Story = {
         [direction]="direction"
         [onlyShowOnHover]="onlyShowOnHover"
         [enabled]="enabled"
-        containerClass="rounded-lg border border-border"
+        containerClass="rounded-lg border border-default-color"
         scrollClass="h-3xs"
         spacingClass="p-4"
       >
@@ -188,7 +188,7 @@ export const NotEnoughContent: Story = {
       <org-scroll-area
         [direction]="direction"
         [onlyShowOnHover]="onlyShowOnHover"
-        containerClass="rounded-lg border border-border"
+        containerClass="rounded-lg border border-default-color"
         scrollClass="h-3xs"
         spacingClass="p-4"
       >
@@ -217,7 +217,7 @@ export const Enabled: Story = {
       >
         <org-storybook-example-container-section label="Enabled (default)">
           <org-scroll-area
-            containerClass="rounded-lg border border-border"
+            containerClass="rounded-lg border border-default-color"
             scrollClass="h-6xs"
             spacingClass="p-4"
           >
@@ -238,7 +238,7 @@ export const Enabled: Story = {
         <org-storybook-example-container-section label="Disabled">
           <org-scroll-area
             [enabled]="false"
-            containerClass="rounded-lg border border-border"
+            containerClass="rounded-lg border border-default-color"
             scrollClass="h-6xs"
             spacingClass="p-4"
           >
@@ -285,7 +285,7 @@ export const Directions: Story = {
         <org-storybook-example-container-section label="Vertical (default)">
           <org-scroll-area
             direction="vertical"
-            containerClass="rounded-lg border border-border"
+            containerClass="rounded-lg border border-default-color"
             scrollClass="h-6xs"
             spacingClass="p-4"
           >
@@ -306,7 +306,7 @@ export const Directions: Story = {
         <org-storybook-example-container-section label="Horizontal">
           <org-scroll-area
             direction="horizontal"
-            containerClass="rounded-lg border border-border"
+            containerClass="rounded-lg border border-default-color"
             scrollClass="w-2xs whitespace-nowrap"
             spacingClass="p-4"
           >
@@ -317,7 +317,7 @@ export const Directions: Story = {
         <org-storybook-example-container-section label="Both">
           <org-scroll-area
             direction="both"
-            containerClass="rounded-lg border border-border"
+            containerClass="rounded-lg border border-default-color"
             scrollClass="h-6xs w-2xs"
             spacingClass="p-4"
           >
@@ -366,7 +366,7 @@ export const VisibilityModes: Story = {
           <org-scroll-area
             direction="vertical"
             [onlyShowOnHover]="false"
-            containerClass="rounded-lg border border-border"
+            containerClass="rounded-lg border border-default-color"
             scrollClass="h-6xs"
             spacingClass="p-4"
           >
@@ -388,7 +388,7 @@ export const VisibilityModes: Story = {
           <org-scroll-area
             direction="both"
             [onlyShowOnHover]="true"
-            containerClass="rounded-lg border border-border"
+            containerClass="rounded-lg border border-default-color"
             scrollClass="h-6xs max-w-2xs"
             spacingClass="p-4"
           >
@@ -396,7 +396,7 @@ export const VisibilityModes: Story = {
             <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
             <div>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div>
             <div>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</div>
-            <div class="w-md">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.</div>
+            <div class="w-base">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.</div>
             <div>Excepteur sint occaecat cupidatat non proident.</div>
             <div>Sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
             <div>Sed ut perspiciatis unde omnis iste natus error sit voluptatem.</div>
@@ -439,7 +439,7 @@ export const SafariSizingBugHandling: Story = {
           <org-scroll-area
             direction="both"
             [onlyShowOnHover]="true"
-            containerClass="rounded-lg border border-border"
+            containerClass="rounded-lg border border-default-color"
             scrollClass="h-6xs max-w-2xs"
             spacingClass="p-4"
           >
@@ -448,7 +448,7 @@ export const SafariSizingBugHandling: Story = {
             <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
             <div>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div>
             <div>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</div>
-            <div class="w-md">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.</div>
+            <div class="w-base">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.</div>
             <div>Excepteur sint occaecat cupidatat non proident.</div>
             <div>Sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
             <div>Sed ut perspiciatis unde omnis iste natus error sit voluptatem.</div>
@@ -462,7 +462,7 @@ export const SafariSizingBugHandling: Story = {
           <org-scroll-area
             direction="vertical"
             [onlyShowOnHover]="true"
-            containerClass="rounded-lg border border-border"
+            containerClass="rounded-lg border border-default-color"
             scrollClass="h-6xs max-w-2xs"
             spacingClass="p-4"
           >
@@ -488,7 +488,7 @@ export const SafariSizingBugHandling: Story = {
           <org-scroll-area
             direction="horizontal"
             [onlyShowOnHover]="true"
-            containerClass="rounded-lg border border-border"
+            containerClass="rounded-lg border border-default-color"
             scrollClass="w-2xs whitespace-nowrap"
             spacingClass="p-4"
           >

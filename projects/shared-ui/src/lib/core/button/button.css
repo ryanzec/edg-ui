@@ -7,36 +7,36 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: var(--spacing-1);
-    padding: var(--spacing-1) var(--spacing-2);
-    border: var(--border-width) solid transparent;
-    border-radius: var(--radius-sm);
-    font-size: var(--text-sm);
-    line-height: 1;
-    letter-spacing: var(--text-sm--letter-spacing);
+    gap: var(--button-gap-base);
+    padding: var(--button-padding-y-base) var(--button-padding-x-base);
+    border: var(--button-border-width) solid transparent;
+    border-radius: var(--button-radius);
+    font-size: var(--button-font-size-base);
+    line-height: var(--button-line-height);
+    letter-spacing: var(--button-letter-spacing-base);
     cursor: pointer;
     outline: none;
   }
 
   /* size variants */
   :host([data-size='sm']) button {
-    gap: var(--spacing-1);
-    padding: var(--spacing-1);
-    font-size: var(--text-xs);
-    letter-spacing: var(--text-xs--letter-spacing);
+    gap: var(--button-gap-sm);
+    padding: var(--button-padding-sm);
+    font-size: var(--button-font-size-sm);
+    letter-spacing: var(--button-letter-spacing-sm);
   }
 
   :host([data-size='lg']) button {
-    gap: var(--spacing-2);
-    padding: var(--spacing-2) var(--spacing-4);
-    font-size: var(--text-lg);
-    letter-spacing: var(--text-lg--letter-spacing);
+    gap: var(--button-gap-lg);
+    padding: var(--button-padding-y-lg) var(--button-padding-x-lg);
+    font-size: var(--button-font-size-lg);
+    letter-spacing: var(--button-letter-spacing-lg);
   }
 
   /* icon-only overrides padding and gap regardless of size */
   :host([data-icon-only]) button {
     gap: 0;
-    padding: var(--spacing-1);
+    padding: var(--button-padding-icon-only);
   }
 
   /* exclude-spacing overrides all padding */
@@ -46,7 +46,7 @@
 
   /* disabled state */
   :host button:disabled {
-    opacity: var(--opacity-disabled);
+    opacity: var(--button-disabled-opacity);
     cursor: not-allowed;
   }
 
@@ -54,178 +54,292 @@
 
   /* primary filled */
   :host([data-color='primary'][data-variant='filled']) button {
-    background-color: var(--color-primary-background);
-    color: var(--color-text-inverse);
-    border-color: var(--color-primary-background);
+    background-color: var(--button-primary-filled-background);
+    color: var(--button-primary-filled-fg);
+    border-color: var(--button-primary-filled-border);
   }
 
-  :host([data-color='primary'][data-variant='filled']) button:not(:disabled):hover {
-    background-color: var(--color-primary-background-hover);
-    border-color: var(--color-primary-background-hover);
-  }
-
+  :host([data-color='primary'][data-variant='filled']) button:not(:disabled):hover,
   :host([data-color='primary'][data-variant='filled']) button:not(:disabled):focus-visible {
-    background-color: var(--color-primary-background-hover);
-    border-color: var(--color-primary-background-hover);
+    background-color: var(--button-primary-filled-background-hover);
+    border-color: var(--button-primary-filled-border-hover);
   }
 
   :host([data-color='primary'][data-variant='filled']) button:not(:disabled):active {
-    background-color: var(--color-primary-background-pressed);
-    border-color: var(--color-primary-background-pressed);
+    background-color: var(--button-primary-filled-background-active);
+    border-color: var(--button-primary-filled-border-active);
   }
 
   /* secondary filled */
   :host([data-color='secondary'][data-variant='filled']) button {
-    background-color: var(--color-secondary-background);
-    color: var(--color-text-inverse);
-    border-color: var(--color-border);
+    background-color: var(--button-secondary-filled-background);
+    color: var(--button-secondary-filled-fg);
+    border-color: var(--button-secondary-filled-border);
   }
 
-  :host([data-color='secondary'][data-variant='filled']) button:not(:disabled):hover {
-    background-color: var(--color-secondary-background-hover);
-    border-color: var(--color-secondary-background-hover);
-  }
-
+  :host([data-color='secondary'][data-variant='filled']) button:not(:disabled):hover,
   :host([data-color='secondary'][data-variant='filled']) button:not(:disabled):focus-visible {
-    background-color: var(--color-secondary-background-hover);
-    border-color: var(--color-secondary-background-hover);
+    background-color: var(--button-secondary-filled-background-hover);
+    border-color: var(--button-secondary-filled-border-hover);
   }
 
   :host([data-color='secondary'][data-variant='filled']) button:not(:disabled):active {
-    background-color: var(--color-secondary-background-pressed);
-    border-color: var(--color-secondary-background-hover);
+    background-color: var(--button-secondary-filled-background-active);
+    border-color: var(--button-secondary-filled-border-active);
   }
 
   /* neutral filled */
   :host([data-color='neutral'][data-variant='filled']) button {
-    background-color: var(--color-neutral-background);
-    color: var(--color-text-inverse);
-    border-color: var(--color-neutral-background);
+    background-color: var(--button-neutral-filled-background);
+    color: var(--button-neutral-filled-fg);
+    border-color: var(--button-neutral-filled-border);
   }
 
-  :host([data-color='neutral'][data-variant='filled']) button:not(:disabled):hover {
-    background-color: var(--color-neutral-background-hover);
-    border-color: var(--color-neutral-background-hover);
-  }
-
+  :host([data-color='neutral'][data-variant='filled']) button:not(:disabled):hover,
   :host([data-color='neutral'][data-variant='filled']) button:not(:disabled):focus-visible {
-    background-color: var(--color-neutral-background-hover);
-    border-color: var(--color-neutral-background-hover);
+    background-color: var(--button-neutral-filled-background-hover);
+    border-color: var(--button-neutral-filled-border-hover);
   }
 
   :host([data-color='neutral'][data-variant='filled']) button:not(:disabled):active {
-    background-color: var(--color-neutral-background-pressed);
-    border-color: var(--color-neutral-background-pressed);
+    background-color: var(--button-neutral-filled-background-active);
+    border-color: var(--button-neutral-filled-border-active);
   }
 
   /* safe filled */
   :host([data-color='safe'][data-variant='filled']) button {
-    background-color: var(--color-safe-background);
-    color: var(--color-text-inverse);
-    border-color: var(--color-safe-background);
+    background-color: var(--button-safe-filled-background);
+    color: var(--button-safe-filled-fg);
+    border-color: var(--button-safe-filled-border);
   }
 
-  :host([data-color='safe'][data-variant='filled']) button:not(:disabled):hover {
-    background-color: var(--color-safe-background-hover);
-    border-color: var(--color-safe-background-hover);
-  }
-
+  :host([data-color='safe'][data-variant='filled']) button:not(:disabled):hover,
   :host([data-color='safe'][data-variant='filled']) button:not(:disabled):focus-visible {
-    background-color: var(--color-safe-background-hover);
-    border-color: var(--color-safe-background-hover);
+    background-color: var(--button-safe-filled-background-hover);
+    border-color: var(--button-safe-filled-border-hover);
   }
 
   :host([data-color='safe'][data-variant='filled']) button:not(:disabled):active {
-    background-color: var(--color-safe-background-pressed);
-    border-color: var(--color-safe-background-pressed);
+    background-color: var(--button-safe-filled-background-active);
+    border-color: var(--button-safe-filled-border-active);
   }
 
   /* info filled */
   :host([data-color='info'][data-variant='filled']) button {
-    background-color: var(--color-info-background);
-    color: var(--color-text-inverse);
-    border-color: var(--color-info-background);
+    background-color: var(--button-info-filled-background);
+    color: var(--button-info-filled-fg);
+    border-color: var(--button-info-filled-border);
   }
 
-  :host([data-color='info'][data-variant='filled']) button:not(:disabled):hover {
-    background-color: var(--color-info-background-hover);
-    border-color: var(--color-info-background-hover);
-  }
-
+  :host([data-color='info'][data-variant='filled']) button:not(:disabled):hover,
   :host([data-color='info'][data-variant='filled']) button:not(:disabled):focus-visible {
-    background-color: var(--color-info-background-hover);
-    border-color: var(--color-info-background-hover);
+    background-color: var(--button-info-filled-background-hover);
+    border-color: var(--button-info-filled-border-hover);
   }
 
   :host([data-color='info'][data-variant='filled']) button:not(:disabled):active {
-    background-color: var(--color-info-background-pressed);
-    border-color: var(--color-info-background-pressed);
+    background-color: var(--button-info-filled-background-active);
+    border-color: var(--button-info-filled-border-active);
   }
 
   /* caution filled */
   :host([data-color='caution'][data-variant='filled']) button {
-    background-color: var(--color-caution-background);
-    color: var(--color-text-inverse);
-    border-color: var(--color-caution-background);
+    background-color: var(--button-caution-filled-background);
+    color: var(--button-caution-filled-fg);
+    border-color: var(--button-caution-filled-border);
   }
 
-  :host([data-color='caution'][data-variant='filled']) button:not(:disabled):hover {
-    background-color: var(--color-caution-background-hover);
-    border-color: var(--color-caution-background-hover);
-  }
-
+  :host([data-color='caution'][data-variant='filled']) button:not(:disabled):hover,
   :host([data-color='caution'][data-variant='filled']) button:not(:disabled):focus-visible {
-    background-color: var(--color-caution-background-hover);
-    border-color: var(--color-caution-background-hover);
+    background-color: var(--button-caution-filled-background-hover);
+    border-color: var(--button-caution-filled-border-hover);
   }
 
   :host([data-color='caution'][data-variant='filled']) button:not(:disabled):active {
-    background-color: var(--color-caution-background-pressed);
-    border-color: var(--color-caution-background-pressed);
+    background-color: var(--button-caution-filled-background-active);
+    border-color: var(--button-caution-filled-border-active);
   }
 
   /* warning filled */
   :host([data-color='warning'][data-variant='filled']) button {
-    background-color: var(--color-warning-background);
-    color: var(--color-text-inverse);
-    border-color: var(--color-warning-background);
+    background-color: var(--button-warning-filled-background);
+    color: var(--button-warning-filled-fg);
+    border-color: var(--button-warning-filled-border);
   }
 
-  :host([data-color='warning'][data-variant='filled']) button:not(:disabled):hover {
-    background-color: var(--color-warning-background-hover);
-    border-color: var(--color-warning-background-hover);
-  }
-
+  :host([data-color='warning'][data-variant='filled']) button:not(:disabled):hover,
   :host([data-color='warning'][data-variant='filled']) button:not(:disabled):focus-visible {
-    background-color: var(--color-warning-background-hover);
-    border-color: var(--color-warning-background-hover);
+    background-color: var(--button-warning-filled-background-hover);
+    border-color: var(--button-warning-filled-border-hover);
   }
 
   :host([data-color='warning'][data-variant='filled']) button:not(:disabled):active {
-    background-color: var(--color-warning-background-pressed);
-    border-color: var(--color-warning-background-pressed);
+    background-color: var(--button-warning-filled-background-active);
+    border-color: var(--button-warning-filled-border-active);
   }
 
   /* danger filled */
   :host([data-color='danger'][data-variant='filled']) button {
-    background-color: var(--color-danger-background);
-    color: var(--color-text-inverse);
-    border-color: var(--color-danger-background);
+    background-color: var(--button-danger-filled-background);
+    color: var(--button-danger-filled-fg);
+    border-color: var(--button-danger-filled-border);
   }
 
-  :host([data-color='danger'][data-variant='filled']) button:not(:disabled):hover {
-    background-color: var(--color-danger-background-hover);
-    border-color: var(--color-danger-background-hover);
-  }
-
+  :host([data-color='danger'][data-variant='filled']) button:not(:disabled):hover,
   :host([data-color='danger'][data-variant='filled']) button:not(:disabled):focus-visible {
-    background-color: var(--color-danger-background-hover);
-    border-color: var(--color-danger-background-hover);
+    background-color: var(--button-danger-filled-background-hover);
+    border-color: var(--button-danger-filled-border-hover);
   }
 
   :host([data-color='danger'][data-variant='filled']) button:not(:disabled):active {
-    background-color: var(--color-danger-background-pressed);
-    border-color: var(--color-danger-background-pressed);
+    background-color: var(--button-danger-filled-background-active);
+    border-color: var(--button-danger-filled-border-active);
+  }
+
+  /* ===== SOFT VARIANT ===== */
+
+  /* primary soft */
+  :host([data-color='primary'][data-variant='soft']) button {
+    background-color: var(--button-primary-soft-background);
+    color: var(--button-primary-soft-fg);
+    border-color: var(--button-primary-soft-border);
+  }
+
+  :host([data-color='primary'][data-variant='soft']) button:not(:disabled):hover,
+  :host([data-color='primary'][data-variant='soft']) button:not(:disabled):focus-visible {
+    background-color: var(--button-primary-soft-background-hover);
+    border-color: var(--button-primary-soft-border-hover);
+  }
+
+  :host([data-color='primary'][data-variant='soft']) button:not(:disabled):active {
+    background-color: var(--button-primary-soft-background-active);
+    border-color: var(--button-primary-soft-border-active);
+  }
+
+  /* secondary soft */
+  :host([data-color='secondary'][data-variant='soft']) button {
+    background-color: var(--button-secondary-soft-background);
+    color: var(--button-secondary-soft-fg);
+    border-color: var(--button-secondary-soft-border);
+  }
+
+  :host([data-color='secondary'][data-variant='soft']) button:not(:disabled):hover,
+  :host([data-color='secondary'][data-variant='soft']) button:not(:disabled):focus-visible {
+    background-color: var(--button-secondary-soft-background-hover);
+    border-color: var(--button-secondary-soft-border-hover);
+  }
+
+  :host([data-color='secondary'][data-variant='soft']) button:not(:disabled):active {
+    background-color: var(--button-secondary-soft-background-active);
+    border-color: var(--button-secondary-soft-border-active);
+  }
+
+  /* neutral soft */
+  :host([data-color='neutral'][data-variant='soft']) button {
+    background-color: var(--button-neutral-soft-background);
+    color: var(--button-neutral-soft-fg);
+    border-color: var(--button-neutral-soft-border);
+  }
+
+  :host([data-color='neutral'][data-variant='soft']) button:not(:disabled):hover,
+  :host([data-color='neutral'][data-variant='soft']) button:not(:disabled):focus-visible {
+    background-color: var(--button-neutral-soft-background-hover);
+    border-color: var(--button-neutral-soft-border-hover);
+  }
+
+  :host([data-color='neutral'][data-variant='soft']) button:not(:disabled):active {
+    background-color: var(--button-neutral-soft-background-active);
+    border-color: var(--button-neutral-soft-border-active);
+  }
+
+  /* safe soft */
+  :host([data-color='safe'][data-variant='soft']) button {
+    background-color: var(--button-safe-soft-background);
+    color: var(--button-safe-soft-fg);
+    border-color: var(--button-safe-soft-border);
+  }
+
+  :host([data-color='safe'][data-variant='soft']) button:not(:disabled):hover,
+  :host([data-color='safe'][data-variant='soft']) button:not(:disabled):focus-visible {
+    background-color: var(--button-safe-soft-background-hover);
+    border-color: var(--button-safe-soft-border-hover);
+  }
+
+  :host([data-color='safe'][data-variant='soft']) button:not(:disabled):active {
+    background-color: var(--button-safe-soft-background-active);
+    border-color: var(--button-safe-soft-border-active);
+  }
+
+  /* info soft */
+  :host([data-color='info'][data-variant='soft']) button {
+    background-color: var(--button-info-soft-background);
+    color: var(--button-info-soft-fg);
+    border-color: var(--button-info-soft-border);
+  }
+
+  :host([data-color='info'][data-variant='soft']) button:not(:disabled):hover,
+  :host([data-color='info'][data-variant='soft']) button:not(:disabled):focus-visible {
+    background-color: var(--button-info-soft-background-hover);
+    border-color: var(--button-info-soft-border-hover);
+  }
+
+  :host([data-color='info'][data-variant='soft']) button:not(:disabled):active {
+    background-color: var(--button-info-soft-background-active);
+    border-color: var(--button-info-soft-border-active);
+  }
+
+  /* caution soft */
+  :host([data-color='caution'][data-variant='soft']) button {
+    background-color: var(--button-caution-soft-background);
+    color: var(--button-caution-soft-fg);
+    border-color: var(--button-caution-soft-border);
+  }
+
+  :host([data-color='caution'][data-variant='soft']) button:not(:disabled):hover,
+  :host([data-color='caution'][data-variant='soft']) button:not(:disabled):focus-visible {
+    background-color: var(--button-caution-soft-background-hover);
+    border-color: var(--button-caution-soft-border-hover);
+  }
+
+  :host([data-color='caution'][data-variant='soft']) button:not(:disabled):active {
+    background-color: var(--button-caution-soft-background-active);
+    border-color: var(--button-caution-soft-border-active);
+  }
+
+  /* warning soft */
+  :host([data-color='warning'][data-variant='soft']) button {
+    background-color: var(--button-warning-soft-background);
+    color: var(--button-warning-soft-fg);
+    border-color: var(--button-warning-soft-border);
+  }
+
+  :host([data-color='warning'][data-variant='soft']) button:not(:disabled):hover,
+  :host([data-color='warning'][data-variant='soft']) button:not(:disabled):focus-visible {
+    background-color: var(--button-warning-soft-background-hover);
+    border-color: var(--button-warning-soft-border-hover);
+  }
+
+  :host([data-color='warning'][data-variant='soft']) button:not(:disabled):active {
+    background-color: var(--button-warning-soft-background-active);
+    border-color: var(--button-warning-soft-border-active);
+  }
+
+  /* danger soft */
+  :host([data-color='danger'][data-variant='soft']) button {
+    background-color: var(--button-danger-soft-background);
+    color: var(--button-danger-soft-fg);
+    border-color: var(--button-danger-soft-border);
+  }
+
+  :host([data-color='danger'][data-variant='soft']) button:not(:disabled):hover,
+  :host([data-color='danger'][data-variant='soft']) button:not(:disabled):focus-visible {
+    background-color: var(--button-danger-soft-background-hover);
+    border-color: var(--button-danger-soft-border-hover);
+  }
+
+  :host([data-color='danger'][data-variant='soft']) button:not(:disabled):active {
+    background-color: var(--button-danger-soft-background-active);
+    border-color: var(--button-danger-soft-border-active);
   }
 
   /* ===== GHOST VARIANT ===== */
@@ -233,201 +347,161 @@
   /* primary ghost */
   :host([data-color='primary'][data-variant='ghost']) button {
     background-color: transparent;
-    color: var(--color-primary-background);
+    color: var(--button-primary-ghost-fg);
     border-color: transparent;
   }
 
-  :host([data-color='primary'][data-variant='ghost']) button:not(:disabled):hover {
-    background-color: var(--color-primary-background-hover);
-    border-color: var(--color-primary-background-hover);
-    color: var(--color-text-inverse);
-  }
-
+  :host([data-color='primary'][data-variant='ghost']) button:not(:disabled):hover,
   :host([data-color='primary'][data-variant='ghost']) button:not(:disabled):focus-visible {
-    background-color: var(--color-primary-background-hover);
-    border-color: var(--color-primary-background-hover);
-    color: var(--color-text-inverse);
+    background-color: var(--button-primary-ghost-background-hover);
+    border-color: var(--button-primary-ghost-border-hover);
+    color: var(--button-primary-ghost-fg-hover);
   }
 
   :host([data-color='primary'][data-variant='ghost']) button:not(:disabled):active {
-    background-color: var(--color-primary-background-pressed);
-    border-color: var(--color-primary-background-pressed);
-    color: var(--color-text-inverse);
+    background-color: var(--button-primary-ghost-background-active);
+    border-color: var(--button-primary-ghost-border-active);
+    color: var(--button-primary-ghost-fg-active);
   }
 
   /* secondary ghost */
   :host([data-color='secondary'][data-variant='ghost']) button {
     background-color: transparent;
-    color: var(--color-text);
+    color: var(--button-secondary-ghost-fg);
     border-color: transparent;
   }
 
-  :host([data-color='secondary'][data-variant='ghost']) button:not(:disabled):hover {
-    background-color: var(--color-secondary-background-hover);
-    border-color: var(--color-secondary-background-hover);
-    color: var(--color-text-inverse);
-  }
-
+  :host([data-color='secondary'][data-variant='ghost']) button:not(:disabled):hover,
   :host([data-color='secondary'][data-variant='ghost']) button:not(:disabled):focus-visible {
-    background-color: var(--color-secondary-background-hover);
-    border-color: var(--color-secondary-background-hover);
-    color: var(--color-text-inverse);
+    background-color: var(--button-secondary-ghost-background-hover);
+    border-color: var(--button-secondary-ghost-border-hover);
+    color: var(--button-secondary-ghost-fg-hover);
   }
 
   :host([data-color='secondary'][data-variant='ghost']) button:not(:disabled):active {
-    background-color: var(--color-secondary-background-pressed);
-    border-color: var(--color-secondary-background-pressed);
-    color: var(--color-text-inverse);
+    background-color: var(--button-secondary-ghost-background-active);
+    border-color: var(--button-secondary-ghost-border-active);
+    color: var(--button-secondary-ghost-fg-active);
   }
 
   /* neutral ghost */
   :host([data-color='neutral'][data-variant='ghost']) button {
     background-color: transparent;
-    color: var(--color-neutral-background);
+    color: var(--button-neutral-ghost-fg);
     border-color: transparent;
   }
 
-  :host([data-color='neutral'][data-variant='ghost']) button:not(:disabled):hover {
-    background-color: var(--color-neutral-background-hover);
-    border-color: var(--color-neutral-background-hover);
-    color: var(--color-text-inverse);
-  }
-
+  :host([data-color='neutral'][data-variant='ghost']) button:not(:disabled):hover,
   :host([data-color='neutral'][data-variant='ghost']) button:not(:disabled):focus-visible {
-    background-color: var(--color-neutral-background-hover);
-    border-color: var(--color-neutral-background-hover);
-    color: var(--color-text-inverse);
+    background-color: var(--button-neutral-ghost-background-hover);
+    border-color: var(--button-neutral-ghost-border-hover);
+    color: var(--button-neutral-ghost-fg-hover);
   }
 
   :host([data-color='neutral'][data-variant='ghost']) button:not(:disabled):active {
-    background-color: var(--color-neutral-background-pressed);
-    border-color: var(--color-neutral-background-pressed);
-    color: var(--color-text-inverse);
+    background-color: var(--button-neutral-ghost-background-active);
+    border-color: var(--button-neutral-ghost-border-active);
+    color: var(--button-neutral-ghost-fg-active);
   }
 
   /* safe ghost */
   :host([data-color='safe'][data-variant='ghost']) button {
     background-color: transparent;
-    color: var(--color-safe-background);
+    color: var(--button-safe-ghost-fg);
     border-color: transparent;
   }
 
-  :host([data-color='safe'][data-variant='ghost']) button:not(:disabled):hover {
-    background-color: var(--color-safe-background-hover);
-    border-color: var(--color-safe-background-hover);
-    color: var(--color-text-inverse);
-  }
-
+  :host([data-color='safe'][data-variant='ghost']) button:not(:disabled):hover,
   :host([data-color='safe'][data-variant='ghost']) button:not(:disabled):focus-visible {
-    background-color: var(--color-safe-background-hover);
-    border-color: var(--color-safe-background-hover);
-    color: var(--color-text-inverse);
+    background-color: var(--button-safe-ghost-background-hover);
+    border-color: var(--button-safe-ghost-border-hover);
+    color: var(--button-safe-ghost-fg-hover);
   }
 
   :host([data-color='safe'][data-variant='ghost']) button:not(:disabled):active {
-    background-color: var(--color-safe-background-pressed);
-    border-color: var(--color-safe-background-pressed);
-    color: var(--color-text-inverse);
+    background-color: var(--button-safe-ghost-background-active);
+    border-color: var(--button-safe-ghost-border-active);
+    color: var(--button-safe-ghost-fg-active);
   }
 
   /* info ghost */
   :host([data-color='info'][data-variant='ghost']) button {
     background-color: transparent;
-    color: var(--color-info-background);
+    color: var(--button-info-ghost-fg);
     border-color: transparent;
   }
 
-  :host([data-color='info'][data-variant='ghost']) button:not(:disabled):hover {
-    background-color: var(--color-info-background-hover);
-    border-color: var(--color-info-background-hover);
-    color: var(--color-text-inverse);
-  }
-
+  :host([data-color='info'][data-variant='ghost']) button:not(:disabled):hover,
   :host([data-color='info'][data-variant='ghost']) button:not(:disabled):focus-visible {
-    background-color: var(--color-info-background-hover);
-    border-color: var(--color-info-background-hover);
-    color: var(--color-text-inverse);
+    background-color: var(--button-info-ghost-background-hover);
+    border-color: var(--button-info-ghost-border-hover);
+    color: var(--button-info-ghost-fg-hover);
   }
 
   :host([data-color='info'][data-variant='ghost']) button:not(:disabled):active {
-    background-color: var(--color-info-background-pressed);
-    border-color: var(--color-info-background-pressed);
-    color: var(--color-text-inverse);
+    background-color: var(--button-info-ghost-background-active);
+    border-color: var(--button-info-ghost-border-active);
+    color: var(--button-info-ghost-fg-active);
   }
 
   /* caution ghost */
   :host([data-color='caution'][data-variant='ghost']) button {
     background-color: transparent;
-    color: var(--color-caution-background);
+    color: var(--button-caution-ghost-fg);
     border-color: transparent;
   }
 
-  :host([data-color='caution'][data-variant='ghost']) button:not(:disabled):hover {
-    background-color: var(--color-caution-background-hover);
-    border-color: var(--color-caution-background-hover);
-    color: var(--color-text-inverse);
-  }
-
+  :host([data-color='caution'][data-variant='ghost']) button:not(:disabled):hover,
   :host([data-color='caution'][data-variant='ghost']) button:not(:disabled):focus-visible {
-    background-color: var(--color-caution-background-hover);
-    border-color: var(--color-caution-background-hover);
-    color: var(--color-text-inverse);
+    background-color: var(--button-caution-ghost-background-hover);
+    border-color: var(--button-caution-ghost-border-hover);
+    color: var(--button-caution-ghost-fg-hover);
   }
 
   :host([data-color='caution'][data-variant='ghost']) button:not(:disabled):active {
-    background-color: var(--color-caution-background-pressed);
-    border-color: var(--color-caution-background-pressed);
-    color: var(--color-text-inverse);
+    background-color: var(--button-caution-ghost-background-active);
+    border-color: var(--button-caution-ghost-border-active);
+    color: var(--button-caution-ghost-fg-active);
   }
 
   /* warning ghost */
   :host([data-color='warning'][data-variant='ghost']) button {
     background-color: transparent;
-    color: var(--color-warning-background);
+    color: var(--button-warning-ghost-fg);
     border-color: transparent;
   }
 
-  :host([data-color='warning'][data-variant='ghost']) button:not(:disabled):hover {
-    background-color: var(--color-warning-background-hover);
-    border-color: var(--color-warning-background-hover);
-    color: var(--color-text-inverse);
-  }
-
+  :host([data-color='warning'][data-variant='ghost']) button:not(:disabled):hover,
   :host([data-color='warning'][data-variant='ghost']) button:not(:disabled):focus-visible {
-    background-color: var(--color-warning-background-hover);
-    border-color: var(--color-warning-background-hover);
-    color: var(--color-text-inverse);
+    background-color: var(--button-warning-ghost-background-hover);
+    border-color: var(--button-warning-ghost-border-hover);
+    color: var(--button-warning-ghost-fg-hover);
   }
 
   :host([data-color='warning'][data-variant='ghost']) button:not(:disabled):active {
-    background-color: var(--color-warning-background-pressed);
-    border-color: var(--color-warning-background-pressed);
-    color: var(--color-text-inverse);
+    background-color: var(--button-warning-ghost-background-active);
+    border-color: var(--button-warning-ghost-border-active);
+    color: var(--button-warning-ghost-fg-active);
   }
 
   /* danger ghost */
   :host([data-color='danger'][data-variant='ghost']) button {
     background-color: transparent;
-    color: var(--color-danger-background);
+    color: var(--button-danger-ghost-fg);
     border-color: transparent;
   }
 
-  :host([data-color='danger'][data-variant='ghost']) button:not(:disabled):hover {
-    background-color: var(--color-danger-background-hover);
-    border-color: var(--color-danger-background-hover);
-    color: var(--color-text-inverse);
-  }
-
+  :host([data-color='danger'][data-variant='ghost']) button:not(:disabled):hover,
   :host([data-color='danger'][data-variant='ghost']) button:not(:disabled):focus-visible {
-    background-color: var(--color-danger-background-hover);
-    border-color: var(--color-danger-background-hover);
-    color: var(--color-text-inverse);
+    background-color: var(--button-danger-ghost-background-hover);
+    border-color: var(--button-danger-ghost-border-hover);
+    color: var(--button-danger-ghost-fg-hover);
   }
 
   :host([data-color='danger'][data-variant='ghost']) button:not(:disabled):active {
-    background-color: var(--color-danger-background-pressed);
-    border-color: var(--color-danger-background-pressed);
-    color: var(--color-text-inverse);
+    background-color: var(--button-danger-ghost-background-active);
+    border-color: var(--button-danger-ghost-border-active);
+    color: var(--button-danger-ghost-fg-active);
   }
 
   /* ===== TEXT VARIANT ===== */
@@ -435,192 +509,430 @@
   /* primary text */
   :host([data-color='primary'][data-variant='text']) button {
     background-color: transparent;
-    color: var(--color-primary-text);
+    color: var(--button-primary-text-fg);
     border-color: transparent;
   }
 
   :host([data-color='primary'][data-variant='text']) button:not(:disabled):hover {
-    color: var(--color-primary-text-bold);
+    color: var(--button-primary-text-fg-hover);
   }
 
   :host([data-color='primary'][data-variant='text']) button:not(:disabled):focus-visible {
-    background-color: var(--color-primary-background-hover);
-    border-color: var(--color-primary-background-hover);
-    color: var(--color-text-inverse);
+    background-color: var(--button-primary-text-background-focus);
+    border-color: var(--button-primary-text-border-focus);
+    color: var(--button-primary-text-fg-focus);
   }
 
   :host([data-color='primary'][data-variant='text']) button:not(:disabled):active {
-    color: var(--color-primary-text-bold);
+    color: var(--button-primary-text-fg-active);
   }
 
   /* secondary text */
   :host([data-color='secondary'][data-variant='text']) button {
     background-color: transparent;
-    color: var(--color-secondary-text);
+    color: var(--button-secondary-text-fg);
     border-color: transparent;
   }
 
   :host([data-color='secondary'][data-variant='text']) button:not(:disabled):hover {
-    color: var(--color-secondary-text-bold);
+    color: var(--button-secondary-text-fg-hover);
   }
 
   :host([data-color='secondary'][data-variant='text']) button:not(:disabled):focus-visible {
-    background-color: var(--color-secondary-background-hover);
-    border-color: var(--color-secondary-background-hover);
-    color: var(--color-text-inverse);
+    background-color: var(--button-secondary-text-background-focus);
+    border-color: var(--button-secondary-text-border-focus);
+    color: var(--button-secondary-text-fg-focus);
   }
 
   :host([data-color='secondary'][data-variant='text']) button:not(:disabled):active {
-    color: var(--color-secondary-text-bold);
+    color: var(--button-secondary-text-fg-active);
   }
 
   /* neutral text */
   :host([data-color='neutral'][data-variant='text']) button {
     background-color: transparent;
-    color: var(--color-neutral-text);
+    color: var(--button-neutral-text-fg);
     border-color: transparent;
   }
 
   :host([data-color='neutral'][data-variant='text']) button:not(:disabled):hover {
-    color: var(--color-neutral-text-bold);
+    color: var(--button-neutral-text-fg-hover);
   }
 
   :host([data-color='neutral'][data-variant='text']) button:not(:disabled):focus-visible {
-    background-color: var(--color-neutral-background-hover);
-    border-color: var(--color-neutral-background-hover);
-    color: var(--color-text-inverse);
+    background-color: var(--button-neutral-text-background-focus);
+    border-color: var(--button-neutral-text-border-focus);
+    color: var(--button-neutral-text-fg-focus);
   }
 
   :host([data-color='neutral'][data-variant='text']) button:not(:disabled):active {
-    color: var(--color-neutral-text-bold);
+    color: var(--button-neutral-text-fg-active);
   }
 
   /* safe text */
   :host([data-color='safe'][data-variant='text']) button {
     background-color: transparent;
-    color: var(--color-safe-text);
+    color: var(--button-safe-text-fg);
     border-color: transparent;
   }
 
   :host([data-color='safe'][data-variant='text']) button:not(:disabled):hover {
-    color: var(--color-safe-text-bold);
+    color: var(--button-safe-text-fg-hover);
   }
 
   :host([data-color='safe'][data-variant='text']) button:not(:disabled):focus-visible {
-    background-color: var(--color-safe-background-hover);
-    border-color: var(--color-safe-background-hover);
-    color: var(--color-text-inverse);
+    background-color: var(--button-safe-text-background-focus);
+    border-color: var(--button-safe-text-border-focus);
+    color: var(--button-safe-text-fg-focus);
   }
 
   :host([data-color='safe'][data-variant='text']) button:not(:disabled):active {
-    color: var(--color-safe-text-bold);
+    color: var(--button-safe-text-fg-active);
   }
 
   /* info text */
   :host([data-color='info'][data-variant='text']) button {
     background-color: transparent;
-    color: var(--color-info-text);
+    color: var(--button-info-text-fg);
     border-color: transparent;
   }
 
   :host([data-color='info'][data-variant='text']) button:not(:disabled):hover {
-    color: var(--color-info-text-bold);
+    color: var(--button-info-text-fg-hover);
   }
 
   :host([data-color='info'][data-variant='text']) button:not(:disabled):focus-visible {
-    background-color: var(--color-info-background-hover);
-    border-color: var(--color-info-background-hover);
-    color: var(--color-text-inverse);
+    background-color: var(--button-info-text-background-focus);
+    border-color: var(--button-info-text-border-focus);
+    color: var(--button-info-text-fg-focus);
   }
 
   :host([data-color='info'][data-variant='text']) button:not(:disabled):active {
-    color: var(--color-info-text-bold);
+    color: var(--button-info-text-fg-active);
   }
 
   /* caution text */
   :host([data-color='caution'][data-variant='text']) button {
     background-color: transparent;
-    color: var(--color-caution-text);
+    color: var(--button-caution-text-fg);
     border-color: transparent;
   }
 
   :host([data-color='caution'][data-variant='text']) button:not(:disabled):hover {
-    color: var(--color-caution-text-bold);
+    color: var(--button-caution-text-fg-hover);
   }
 
   :host([data-color='caution'][data-variant='text']) button:not(:disabled):focus-visible {
-    background-color: var(--color-caution-background-hover);
-    border-color: var(--color-caution-background-hover);
-    color: var(--color-text-inverse);
+    background-color: var(--button-caution-text-background-focus);
+    border-color: var(--button-caution-text-border-focus);
+    color: var(--button-caution-text-fg-focus);
   }
 
   :host([data-color='caution'][data-variant='text']) button:not(:disabled):active {
-    color: var(--color-caution-text-bold);
+    color: var(--button-caution-text-fg-active);
   }
 
   /* warning text */
   :host([data-color='warning'][data-variant='text']) button {
     background-color: transparent;
-    color: var(--color-warning-text);
+    color: var(--button-warning-text-fg);
     border-color: transparent;
   }
 
   :host([data-color='warning'][data-variant='text']) button:not(:disabled):hover {
-    color: var(--color-warning-text-bold);
+    color: var(--button-warning-text-fg-hover);
   }
 
   :host([data-color='warning'][data-variant='text']) button:not(:disabled):focus-visible {
-    background-color: var(--color-warning-background-hover);
-    border-color: var(--color-warning-background-hover);
-    color: var(--color-text-inverse);
+    background-color: var(--button-warning-text-background-focus);
+    border-color: var(--button-warning-text-border-focus);
+    color: var(--button-warning-text-fg-focus);
   }
 
   :host([data-color='warning'][data-variant='text']) button:not(:disabled):active {
-    color: var(--color-warning-text-bold);
+    color: var(--button-warning-text-fg-active);
   }
 
   /* danger text */
   :host([data-color='danger'][data-variant='text']) button {
     background-color: transparent;
-    color: var(--color-danger-text);
+    color: var(--button-danger-text-fg);
     border-color: transparent;
   }
 
   :host([data-color='danger'][data-variant='text']) button:not(:disabled):hover {
-    color: var(--color-danger-text-bold);
+    color: var(--button-danger-text-fg-hover);
   }
 
   :host([data-color='danger'][data-variant='text']) button:not(:disabled):focus-visible {
-    background-color: var(--color-danger-background-hover);
-    border-color: var(--color-danger-background-hover);
-    color: var(--color-text-inverse);
+    background-color: var(--button-danger-text-background-focus);
+    border-color: var(--button-danger-text-border-focus);
+    color: var(--button-danger-text-fg-focus);
   }
 
   :host([data-color='danger'][data-variant='text']) button:not(:disabled):active {
-    color: var(--color-danger-text-bold);
+    color: var(--button-danger-text-fg-active);
   }
 
-  /* ===== DARK MODE ===== */
+  /* ===== ACTIVE STATE OVERRIDES =====
+     when isActive is true, the button renders in its :active (pressed) visual state and
+     :hover / :active pseudo states have no further effect; :focus-visible is intentionally
+     left unchanged so keyboard focus remains visible.
+   */
 
-  /* filled: use --color-text (light in dark mode) instead of --color-text-inverse (dark in dark mode) */
-  .dark :host([data-variant='filled']) button {
-    color: var(--color-text);
+  /* primary filled active */
+  :host([data-active][data-color='primary'][data-variant='filled']) button,
+  :host([data-active][data-color='primary'][data-variant='filled']) button:not(:disabled):hover,
+  :host([data-active][data-color='primary'][data-variant='filled']) button:not(:disabled):active {
+    background-color: var(--button-primary-filled-background-active);
+    border-color: var(--button-primary-filled-border-active);
   }
 
-  /* neutral ghost: base text uses --color-neutral-text in dark mode for better readability */
-  .dark :host([data-color='neutral'][data-variant='ghost']) button {
-    color: var(--color-neutral-text);
+  /* secondary filled active */
+  :host([data-active][data-color='secondary'][data-variant='filled']) button,
+  :host([data-active][data-color='secondary'][data-variant='filled']) button:not(:disabled):hover,
+  :host([data-active][data-color='secondary'][data-variant='filled']) button:not(:disabled):active {
+    background-color: var(--button-secondary-filled-background-active);
+    border-color: var(--button-secondary-filled-border-active);
   }
 
-  /* ghost: hover/focus/active text uses --color-text (light) in dark mode */
-  .dark :host([data-variant='ghost']) button:not(:disabled):hover,
-  .dark :host([data-variant='ghost']) button:not(:disabled):focus-visible,
-  .dark :host([data-variant='ghost']) button:not(:disabled):active {
-    color: var(--color-text);
+  /* neutral filled active */
+  :host([data-active][data-color='neutral'][data-variant='filled']) button,
+  :host([data-active][data-color='neutral'][data-variant='filled']) button:not(:disabled):hover,
+  :host([data-active][data-color='neutral'][data-variant='filled']) button:not(:disabled):active {
+    background-color: var(--button-neutral-filled-background-active);
+    border-color: var(--button-neutral-filled-border-active);
   }
 
-  /* text: focus-visible text uses --color-text (light) in dark mode */
-  .dark :host([data-variant='text']) button:not(:disabled):focus-visible {
-    color: var(--color-text);
+  /* safe filled active */
+  :host([data-active][data-color='safe'][data-variant='filled']) button,
+  :host([data-active][data-color='safe'][data-variant='filled']) button:not(:disabled):hover,
+  :host([data-active][data-color='safe'][data-variant='filled']) button:not(:disabled):active {
+    background-color: var(--button-safe-filled-background-active);
+    border-color: var(--button-safe-filled-border-active);
+  }
+
+  /* info filled active */
+  :host([data-active][data-color='info'][data-variant='filled']) button,
+  :host([data-active][data-color='info'][data-variant='filled']) button:not(:disabled):hover,
+  :host([data-active][data-color='info'][data-variant='filled']) button:not(:disabled):active {
+    background-color: var(--button-info-filled-background-active);
+    border-color: var(--button-info-filled-border-active);
+  }
+
+  /* caution filled active */
+  :host([data-active][data-color='caution'][data-variant='filled']) button,
+  :host([data-active][data-color='caution'][data-variant='filled']) button:not(:disabled):hover,
+  :host([data-active][data-color='caution'][data-variant='filled']) button:not(:disabled):active {
+    background-color: var(--button-caution-filled-background-active);
+    border-color: var(--button-caution-filled-border-active);
+  }
+
+  /* warning filled active */
+  :host([data-active][data-color='warning'][data-variant='filled']) button,
+  :host([data-active][data-color='warning'][data-variant='filled']) button:not(:disabled):hover,
+  :host([data-active][data-color='warning'][data-variant='filled']) button:not(:disabled):active {
+    background-color: var(--button-warning-filled-background-active);
+    border-color: var(--button-warning-filled-border-active);
+  }
+
+  /* danger filled active */
+  :host([data-active][data-color='danger'][data-variant='filled']) button,
+  :host([data-active][data-color='danger'][data-variant='filled']) button:not(:disabled):hover,
+  :host([data-active][data-color='danger'][data-variant='filled']) button:not(:disabled):active {
+    background-color: var(--button-danger-filled-background-active);
+    border-color: var(--button-danger-filled-border-active);
+  }
+
+  /* primary soft active */
+  :host([data-active][data-color='primary'][data-variant='soft']) button,
+  :host([data-active][data-color='primary'][data-variant='soft']) button:not(:disabled):hover,
+  :host([data-active][data-color='primary'][data-variant='soft']) button:not(:disabled):active {
+    background-color: var(--button-primary-soft-background-active);
+    border-color: var(--button-primary-soft-border-active);
+  }
+
+  /* secondary soft active */
+  :host([data-active][data-color='secondary'][data-variant='soft']) button,
+  :host([data-active][data-color='secondary'][data-variant='soft']) button:not(:disabled):hover,
+  :host([data-active][data-color='secondary'][data-variant='soft']) button:not(:disabled):active {
+    background-color: var(--button-secondary-soft-background-active);
+    border-color: var(--button-secondary-soft-border-active);
+  }
+
+  /* neutral soft active */
+  :host([data-active][data-color='neutral'][data-variant='soft']) button,
+  :host([data-active][data-color='neutral'][data-variant='soft']) button:not(:disabled):hover,
+  :host([data-active][data-color='neutral'][data-variant='soft']) button:not(:disabled):active {
+    background-color: var(--button-neutral-soft-background-active);
+    border-color: var(--button-neutral-soft-border-active);
+  }
+
+  /* safe soft active */
+  :host([data-active][data-color='safe'][data-variant='soft']) button,
+  :host([data-active][data-color='safe'][data-variant='soft']) button:not(:disabled):hover,
+  :host([data-active][data-color='safe'][data-variant='soft']) button:not(:disabled):active {
+    background-color: var(--button-safe-soft-background-active);
+    border-color: var(--button-safe-soft-border-active);
+  }
+
+  /* info soft active */
+  :host([data-active][data-color='info'][data-variant='soft']) button,
+  :host([data-active][data-color='info'][data-variant='soft']) button:not(:disabled):hover,
+  :host([data-active][data-color='info'][data-variant='soft']) button:not(:disabled):active {
+    background-color: var(--button-info-soft-background-active);
+    border-color: var(--button-info-soft-border-active);
+  }
+
+  /* caution soft active */
+  :host([data-active][data-color='caution'][data-variant='soft']) button,
+  :host([data-active][data-color='caution'][data-variant='soft']) button:not(:disabled):hover,
+  :host([data-active][data-color='caution'][data-variant='soft']) button:not(:disabled):active {
+    background-color: var(--button-caution-soft-background-active);
+    border-color: var(--button-caution-soft-border-active);
+  }
+
+  /* warning soft active */
+  :host([data-active][data-color='warning'][data-variant='soft']) button,
+  :host([data-active][data-color='warning'][data-variant='soft']) button:not(:disabled):hover,
+  :host([data-active][data-color='warning'][data-variant='soft']) button:not(:disabled):active {
+    background-color: var(--button-warning-soft-background-active);
+    border-color: var(--button-warning-soft-border-active);
+  }
+
+  /* danger soft active */
+  :host([data-active][data-color='danger'][data-variant='soft']) button,
+  :host([data-active][data-color='danger'][data-variant='soft']) button:not(:disabled):hover,
+  :host([data-active][data-color='danger'][data-variant='soft']) button:not(:disabled):active {
+    background-color: var(--button-danger-soft-background-active);
+    border-color: var(--button-danger-soft-border-active);
+  }
+
+  /* primary ghost active */
+  :host([data-active][data-color='primary'][data-variant='ghost']) button,
+  :host([data-active][data-color='primary'][data-variant='ghost']) button:not(:disabled):hover,
+  :host([data-active][data-color='primary'][data-variant='ghost']) button:not(:disabled):active {
+    background-color: var(--button-primary-ghost-background-active);
+    border-color: var(--button-primary-ghost-border-active);
+    color: var(--button-primary-ghost-fg-active);
+  }
+
+  /* secondary ghost active */
+  :host([data-active][data-color='secondary'][data-variant='ghost']) button,
+  :host([data-active][data-color='secondary'][data-variant='ghost']) button:not(:disabled):hover,
+  :host([data-active][data-color='secondary'][data-variant='ghost']) button:not(:disabled):active {
+    background-color: var(--button-secondary-ghost-background-active);
+    border-color: var(--button-secondary-ghost-border-active);
+    color: var(--button-secondary-ghost-fg-active);
+  }
+
+  /* neutral ghost active */
+  :host([data-active][data-color='neutral'][data-variant='ghost']) button,
+  :host([data-active][data-color='neutral'][data-variant='ghost']) button:not(:disabled):hover,
+  :host([data-active][data-color='neutral'][data-variant='ghost']) button:not(:disabled):active {
+    background-color: var(--button-neutral-ghost-background-active);
+    border-color: var(--button-neutral-ghost-border-active);
+    color: var(--button-neutral-ghost-fg-active);
+  }
+
+  /* safe ghost active */
+  :host([data-active][data-color='safe'][data-variant='ghost']) button,
+  :host([data-active][data-color='safe'][data-variant='ghost']) button:not(:disabled):hover,
+  :host([data-active][data-color='safe'][data-variant='ghost']) button:not(:disabled):active {
+    background-color: var(--button-safe-ghost-background-active);
+    border-color: var(--button-safe-ghost-border-active);
+    color: var(--button-safe-ghost-fg-active);
+  }
+
+  /* info ghost active */
+  :host([data-active][data-color='info'][data-variant='ghost']) button,
+  :host([data-active][data-color='info'][data-variant='ghost']) button:not(:disabled):hover,
+  :host([data-active][data-color='info'][data-variant='ghost']) button:not(:disabled):active {
+    background-color: var(--button-info-ghost-background-active);
+    border-color: var(--button-info-ghost-border-active);
+    color: var(--button-info-ghost-fg-active);
+  }
+
+  /* caution ghost active */
+  :host([data-active][data-color='caution'][data-variant='ghost']) button,
+  :host([data-active][data-color='caution'][data-variant='ghost']) button:not(:disabled):hover,
+  :host([data-active][data-color='caution'][data-variant='ghost']) button:not(:disabled):active {
+    background-color: var(--button-caution-ghost-background-active);
+    border-color: var(--button-caution-ghost-border-active);
+    color: var(--button-caution-ghost-fg-active);
+  }
+
+  /* warning ghost active */
+  :host([data-active][data-color='warning'][data-variant='ghost']) button,
+  :host([data-active][data-color='warning'][data-variant='ghost']) button:not(:disabled):hover,
+  :host([data-active][data-color='warning'][data-variant='ghost']) button:not(:disabled):active {
+    background-color: var(--button-warning-ghost-background-active);
+    border-color: var(--button-warning-ghost-border-active);
+    color: var(--button-warning-ghost-fg-active);
+  }
+
+  /* danger ghost active */
+  :host([data-active][data-color='danger'][data-variant='ghost']) button,
+  :host([data-active][data-color='danger'][data-variant='ghost']) button:not(:disabled):hover,
+  :host([data-active][data-color='danger'][data-variant='ghost']) button:not(:disabled):active {
+    background-color: var(--button-danger-ghost-background-active);
+    border-color: var(--button-danger-ghost-border-active);
+    color: var(--button-danger-ghost-fg-active);
+  }
+
+  /* primary text active */
+  :host([data-active][data-color='primary'][data-variant='text']) button,
+  :host([data-active][data-color='primary'][data-variant='text']) button:not(:disabled):hover,
+  :host([data-active][data-color='primary'][data-variant='text']) button:not(:disabled):active {
+    color: var(--button-primary-text-fg-active);
+  }
+
+  /* secondary text active */
+  :host([data-active][data-color='secondary'][data-variant='text']) button,
+  :host([data-active][data-color='secondary'][data-variant='text']) button:not(:disabled):hover,
+  :host([data-active][data-color='secondary'][data-variant='text']) button:not(:disabled):active {
+    color: var(--button-secondary-text-fg-active);
+  }
+
+  /* neutral text active */
+  :host([data-active][data-color='neutral'][data-variant='text']) button,
+  :host([data-active][data-color='neutral'][data-variant='text']) button:not(:disabled):hover,
+  :host([data-active][data-color='neutral'][data-variant='text']) button:not(:disabled):active {
+    color: var(--button-neutral-text-fg-active);
+  }
+
+  /* safe text active */
+  :host([data-active][data-color='safe'][data-variant='text']) button,
+  :host([data-active][data-color='safe'][data-variant='text']) button:not(:disabled):hover,
+  :host([data-active][data-color='safe'][data-variant='text']) button:not(:disabled):active {
+    color: var(--button-safe-text-fg-active);
+  }
+
+  /* info text active */
+  :host([data-active][data-color='info'][data-variant='text']) button,
+  :host([data-active][data-color='info'][data-variant='text']) button:not(:disabled):hover,
+  :host([data-active][data-color='info'][data-variant='text']) button:not(:disabled):active {
+    color: var(--button-info-text-fg-active);
+  }
+
+  /* caution text active */
+  :host([data-active][data-color='caution'][data-variant='text']) button,
+  :host([data-active][data-color='caution'][data-variant='text']) button:not(:disabled):hover,
+  :host([data-active][data-color='caution'][data-variant='text']) button:not(:disabled):active {
+    color: var(--button-caution-text-fg-active);
+  }
+
+  /* warning text active */
+  :host([data-active][data-color='warning'][data-variant='text']) button,
+  :host([data-active][data-color='warning'][data-variant='text']) button:not(:disabled):hover,
+  :host([data-active][data-color='warning'][data-variant='text']) button:not(:disabled):active {
+    color: var(--button-warning-text-fg-active);
+  }
+
+  /* danger text active */
+  :host([data-active][data-color='danger'][data-variant='text']) button,
+  :host([data-active][data-color='danger'][data-variant='text']) button:not(:disabled):hover,
+  :host([data-active][data-color='danger'][data-variant='text']) button:not(:disabled):active {
+    color: var(--button-danger-text-fg-active);
   }
 }

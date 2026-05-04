@@ -3,7 +3,7 @@
     <org-card-header title="Signal without custom equality" />
     <org-card-content>
       <div class="flex flex-col gap-3">
-        <div class="text-sm text-text">
+        <div class="text-sm text-fg">
           By default, updating a signal that tracks a non-scalar value will trigger an effect to be called even if the
           value is effectively the same (like setting an array to a new array with the same values).
         </div>
@@ -11,9 +11,9 @@
           <org-button color="primary" (click)="updateSignalWithValue1()">Update Signal Value 1</org-button>
           <org-button color="primary" (click)="updateSignalWithValue2()">Update Signal Value 2</org-button>
         </div>
-        <div class="rounded border border-border bg-background p-3">
-          <div class="text-sm font-medium text-text">Effect triggered count:</div>
-          <div class="text-2xl font-bold text-text">{{ signalTriggeredCount() }}</div>
+        <div class="rounded border border-default-color bg-app p-3">
+          <div class="text-sm font-medium text-fg">Effect triggered count:</div>
+          <div class="text-3xl font-bold text-fg">{{ signalTriggeredCount() }}</div>
         </div>
       </div>
     </org-card-content>
@@ -22,9 +22,9 @@
     <org-card-header title="Signal with custom equality" />
     <org-card-content class="h-full">
       <div class="flex h-full flex-col gap-3">
-        <div class="text-sm text-text">
-          You can provide a custom <code class="rounded bg-background px-1 py-0.5 text-xs">equal</code> function when
-          creating the signal to avoid this issue.
+        <div class="text-sm text-fg">
+          You can provide a custom <code class="rounded bg-app px-1 py-0.5 text-xs">equal</code> function when creating
+          the signal to avoid this issue.
         </div>
         <div class="mt-auto flex flex-col gap-3">
           <div class="flex gap-2">
@@ -35,9 +35,9 @@
               Update Signal Value 2
             </org-button>
           </div>
-          <div class="rounded border border-border bg-background p-3">
-            <div class="text-sm font-medium text-text">Effect triggered count:</div>
-            <div class="text-2xl font-bold text-text">{{ signalTriggeredCustomEqualityCount() }}</div>
+          <div class="rounded border border-default-color bg-app p-3">
+            <div class="text-sm font-medium text-fg">Effect triggered count:</div>
+            <div class="text-3xl font-bold text-fg">{{ signalTriggeredCustomEqualityCount() }}</div>
           </div>
         </div>
       </div>

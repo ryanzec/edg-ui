@@ -4,7 +4,7 @@
       <div class="flex items-baseline gap-2">
         <h2>Configured</h2>
       </div>
-      <p class="text-subtle">An integration can have multiple connections.</p>
+      <p class="text-muted">An integration can have multiple connections.</p>
     </div>
     @if (configuredIntegrations.length === 0) {
       <org-empty-indicator header="No Configured Integrations" boxBorder="bordered" />
@@ -26,9 +26,9 @@
     <div class="flex items-baseline justify-between gap-4 flex-wrap">
       <div class="flex items-baseline gap-2">
         <h2>Available</h2>
-        <span class="text-subtle">{{ availableCount }} integrations</span>
+        <span class="text-muted">{{ availableCount }} integrations</span>
       </div>
-      <p class="text-subtle">Some integrations support multiple connections.</p>
+      <p class="text-muted">Some integrations support multiple connections.</p>
     </div>
     @if (availableIntegrations.length === 0) {
       <org-empty-indicator header="No Available Integrations" boxBorder="bordered" />

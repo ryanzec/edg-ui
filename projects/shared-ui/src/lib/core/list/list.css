@@ -6,7 +6,7 @@
 
   :host([data-border-variant='outer']) {
     border: var(--border-width) solid var(--color-border);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-base);
     overflow: hidden;
   }
 

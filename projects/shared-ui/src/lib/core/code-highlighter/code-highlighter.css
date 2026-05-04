@@ -23,9 +23,9 @@
     border: none;
     border-radius: var(--radius-sm);
     background-color: transparent;
-    color: var(--color-text);
+    color: var(--color-fg);
     cursor: pointer;
-    z-index: var(--z-index-elevated);
+    z-index: var(--z-index-raised);
   }
 
   .code-highlighter-body {
@@ -33,7 +33,7 @@
     display: block;
     overflow: hidden;
     border: var(--border-width) solid var(--color-border);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-base);
   }
 
   :host([data-variant='block']) .code-highlighter-copy-wrapper {
@@ -58,7 +58,7 @@
     margin: 0;
     border-radius: 0;
     font-family: monospace;
-    font-size: var(--text-sm);
+    font-size: var(--font-size-base);
     line-height: normal;
     /* padding lives here so it scrolls with the content, not around it */
     padding: var(--spacing-2);
@@ -93,10 +93,10 @@
     padding: var(--spacing-2);
     white-space: pre;
     font-family: monospace;
-    font-size: var(--text-sm);
+    font-size: var(--font-size-base);
     line-height: normal;
-    color: var(--color-text);
-    background-color: var(--color-neutral-background-subtle);
+    color: var(--color-fg);
+    background-color: var(--color-neutral-soft);
     min-width: max-content;
   }
 
@@ -105,9 +105,9 @@
     padding-block: var(--spacing-0_5); /* 2px */
     padding-inline: var(--spacing-1_5); /* 6px */
     border-radius: var(--radius-sm);
-    background-color: var(--color-neutral-background-subtle);
+    background-color: var(--color-neutral-soft);
     font-family: monospace;
-    font-size: var(--text-sm);
-    color: var(--color-text);
+    font-size: var(--font-size-base);
+    color: var(--color-fg);
   }
 }

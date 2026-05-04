@@ -254,10 +254,10 @@ class UserFormDialogEditStory {
 @Component({
   selector: 'story-user-form-dialog-interactive-story',
   template: `
-    <div class="flex flex-col gap-1.5 p-1 max-w-md">
+    <div class="flex flex-col gap-1.5 p-1 max-w-base">
       <div class="flex flex-col gap-0.5">
-        <h3 class="text-lg font-semibold">Interactive User Form Dialog</h3>
-        <div class="text-sm text-text-subtle">
+        <h3 class="text-xl font-semibold">Interactive User Form Dialog</h3>
+        <div class="text-sm text-muted">
           Open the dialog, fill out the form, and submit. Check the browser console to see the formSubmitted event.
         </div>
       </div>
@@ -265,7 +265,7 @@ class UserFormDialogEditStory {
       <org-button (click)="openCreateDialog()">Open Create User Dialog</org-button>
       <org-button (click)="openEditDialog()">Open Edit User Dialog</org-button>
 
-      <div class="flex flex-col gap-0.5 p-0.75 bg-info-background-subtle rounded text-sm">
+      <div class="flex flex-col gap-0.5 p-0.75 bg-info-soft rounded text-sm">
         <div class="font-medium">Note:</div>
         <div>
           The formSubmitted event is logged to the browser console. In a real application, the parent component would
@@ -314,10 +314,10 @@ class UserFormDialogInteractiveStory {
 @Component({
   selector: 'story-user-form-dialog-processing-state-story',
   template: `
-    <div class="flex flex-col gap-1.5 p-1 max-w-md">
+    <div class="flex flex-col gap-1.5 p-1 max-w-base">
       <div class="flex flex-col gap-0.5">
-        <h3 class="text-lg font-semibold">Processing State Management</h3>
-        <div class="text-sm text-text-subtle">
+        <h3 class="text-xl font-semibold">Processing State Management</h3>
+        <div class="text-sm text-muted">
           Open the dialog and submit the form to see it enter processing state for 2 seconds, simulating an API call.
           The form will be disabled and escape key/backdrop clicks prevented during processing.
         </div>
@@ -329,7 +329,7 @@ class UserFormDialogInteractiveStory {
         <h4 class="font-medium">
           Current State: <span class="font-mono">{{ isProcessing() ? 'Processing' : 'Idle' }}</span>
         </h4>
-        <div class="text-sm text-text-subtle">
+        <div class="text-sm text-muted">
           @if (isProcessing()) {
             Dialog form is locked during processing...
           } @else {
@@ -340,18 +340,18 @@ class UserFormDialogInteractiveStory {
 
       <div class="flex flex-col gap-0.5">
         <h4 class="font-medium">Event Log:</h4>
-        <div class="p-0.75 bg-secondary-background-subtle rounded text-sm font-mono max-h-48 overflow-y-auto">
+        <div class="p-0.75 bg-secondary-soft rounded text-sm font-mono max-h-48 overflow-y-auto">
           @for (event of events(); track $index) {
             <div class="mb-0.5">
-              <div class="font-bold text-primary-text">{{ event.timestamp }} - {{ event.status }}</div>
-              <div class="text-text-subtle">Name: {{ event.firstName }} {{ event.lastName }}</div>
-              <div class="text-text-subtle">Email: {{ event.email }}</div>
-              <div class="text-text-subtle">Roles: {{ event.roles.join(', ') }}</div>
-              <div class="text-text-subtle">Permissions: {{ event.permissions.join(', ') }}</div>
+              <div class="font-bold text-primary">{{ event.timestamp }} - {{ event.status }}</div>
+              <div class="text-muted">Name: {{ event.firstName }} {{ event.lastName }}</div>
+              <div class="text-muted">Email: {{ event.email }}</div>
+              <div class="text-muted">Roles: {{ event.roles.join(', ') }}</div>
+              <div class="text-muted">Permissions: {{ event.permissions.join(', ') }}</div>
             </div>
           }
           @if (events().length === 0) {
-            <div class="text-text-subtle">No form submissions yet. Open the dialog and submit the form.</div>
+            <div class="text-muted">No form submissions yet. Open the dialog and submit the form.</div>
           }
         </div>
       </div>

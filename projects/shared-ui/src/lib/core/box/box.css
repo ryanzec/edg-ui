@@ -3,8 +3,8 @@
     display: block;
     overflow: hidden;
     border: var(--border-width) solid var(--color-border);
-    border-radius: var(--radius-md);
-    background-color: var(--color-background);
+    border-radius: var(--radius-base);
+    background-color: var(--color-bg-app);
     padding: var(--spacing-2);
   }
 
@@ -24,47 +24,47 @@
   /* color variants - border and background */
   :host([data-color='primary']) {
     border-color: var(--color-primary-border);
-    background-color: var(--color-primary-background-subtle);
+    background-color: var(--color-primary-soft);
   }
 
   :host([data-color='secondary']) {
     border-color: var(--color-secondary-border);
-    background-color: var(--color-secondary-background-subtle);
+    background-color: var(--color-secondary-soft);
   }
 
   :host([data-color='neutral']) {
     border-color: var(--color-neutral-border);
-    background-color: var(--color-neutral-background-subtle);
+    background-color: var(--color-neutral-soft);
   }
 
   :host([data-color='safe']) {
     border-color: var(--color-safe-border);
-    background-color: var(--color-safe-background-subtle);
+    background-color: var(--color-safe-soft);
   }
 
   :host([data-color='info']) {
     border-color: var(--color-info-border);
-    background-color: var(--color-info-background-subtle);
+    background-color: var(--color-info-soft);
   }
 
   :host([data-color='caution']) {
     border-color: var(--color-caution-border);
-    background-color: var(--color-caution-background-subtle);
+    background-color: var(--color-caution-soft);
   }
 
   :host([data-color='warning']) {
     border-color: var(--color-warning-border);
-    background-color: var(--color-warning-background-subtle);
+    background-color: var(--color-warning-soft);
   }
 
   :host([data-color='danger']) {
     border-color: var(--color-danger-border);
-    background-color: var(--color-danger-background-subtle);
+    background-color: var(--color-danger-soft);
   }
 
   /* background=colorless - keep default background regardless of color */
   :host([data-background='colorless']) {
-    background-color: var(--color-background);
+    background-color: var(--color-bg-app);
   }
 
   /* border overrides - must come after color rules to win on border-color */

@@ -1,142 +1,160 @@
 @layer utilities {
-  /* Background color - base */
-  .bg-default-color {
-    background-color: var(--color-background);
+  /* surface backgrounds */
+  .bg-app {
+    background-color: var(--color-bg-app);
   }
 
-  .bg-input-background {
-    background-color: var(--color-input-background);
+  .bg-sidebar {
+    background-color: var(--color-bg-sidebar);
   }
 
-  .bg-level1 {
-    background-color: var(--color-background-level1);
+  .bg-surface {
+    background-color: var(--color-bg-surface);
   }
 
-  .bg-level2 {
-    background-color: var(--color-background-level2);
+  .bg-surface-2 {
+    background-color: var(--color-bg-surface-2);
   }
 
-  .bg-inverse {
-    background-color: var(--color-background-inverse);
+  .bg-hover {
+    background-color: var(--color-bg-hover);
+  }
+
+  .bg-active {
+    background-color: var(--color-bg-active);
   }
 
   .bg-transparent {
     background-color: transparent;
   }
 
-  /* Background color - component colors */
+  /* semantic backgrounds */
   .bg-primary {
-    background-color: var(--color-primary-background);
+    background-color: var(--color-primary);
+  }
+
+  .bg-primary-soft {
+    background-color: var(--color-primary-soft);
   }
 
   .bg-secondary {
-    background-color: var(--color-secondary-background);
+    background-color: var(--color-secondary);
+  }
+
+  .bg-secondary-soft {
+    background-color: var(--color-secondary-soft);
   }
 
   .bg-neutral {
-    background-color: var(--color-neutral-background);
+    background-color: var(--color-neutral);
+  }
+
+  .bg-neutral-soft {
+    background-color: var(--color-neutral-soft);
   }
 
   .bg-safe {
-    background-color: var(--color-safe-background);
+    background-color: var(--color-safe);
+  }
+
+  .bg-safe-soft {
+    background-color: var(--color-safe-soft);
   }
 
   .bg-info {
-    background-color: var(--color-info-background);
+    background-color: var(--color-info);
+  }
+
+  .bg-info-soft {
+    background-color: var(--color-info-soft);
   }
 
   .bg-caution {
-    background-color: var(--color-caution-background);
+    background-color: var(--color-caution);
+  }
+
+  .bg-caution-soft {
+    background-color: var(--color-caution-soft);
   }
 
   .bg-warning {
-    background-color: var(--color-warning-background);
+    background-color: var(--color-warning);
+  }
+
+  .bg-warning-soft {
+    background-color: var(--color-warning-soft);
   }
 
   .bg-danger {
-    background-color: var(--color-danger-background);
+    background-color: var(--color-danger);
   }
 
-  /* Background color - subtle variants */
-  .bg-primary-subtle {
-    background-color: var(--color-primary-background-subtle);
+  .bg-danger-soft {
+    background-color: var(--color-danger-soft);
   }
 
-  .bg-secondary-subtle {
-    background-color: var(--color-secondary-background-subtle);
+  /* color palette */
+  .bg-red {
+    background-color: var(--color-red);
   }
 
-  .bg-neutral-subtle {
-    background-color: var(--color-neutral-background-subtle);
+  .bg-red-soft {
+    background-color: var(--color-red-soft);
   }
 
-  .bg-safe-subtle {
-    background-color: var(--color-safe-background-subtle);
+  .bg-orange {
+    background-color: var(--color-orange);
   }
 
-  .bg-info-subtle {
-    background-color: var(--color-info-background-subtle);
+  .bg-orange-soft {
+    background-color: var(--color-orange-soft);
   }
 
-  .bg-caution-subtle {
-    background-color: var(--color-caution-background-subtle);
+  .bg-yellow {
+    background-color: var(--color-yellow);
   }
 
-  .bg-warning-subtle {
-    background-color: var(--color-warning-background-subtle);
+  .bg-yellow-soft {
+    background-color: var(--color-yellow-soft);
   }
 
-  .bg-danger-subtle {
-    background-color: var(--color-danger-background-subtle);
+  .bg-green {
+    background-color: var(--color-green);
   }
 
-  /* Background color - bold variants */
-  .bg-primary-bold {
-    background-color: var(--color-primary-background-bold);
+  .bg-green-soft {
+    background-color: var(--color-green-soft);
   }
 
-  .bg-secondary-bold {
-    background-color: var(--color-secondary-background-bold);
+  .bg-teal {
+    background-color: var(--color-teal);
   }
 
-  .bg-neutral-bold {
-    background-color: var(--color-neutral-background-bold);
+  .bg-teal-soft {
+    background-color: var(--color-teal-soft);
   }
 
-  .bg-safe-bold {
-    background-color: var(--color-safe-background-bold);
+  .bg-blue {
+    background-color: var(--color-blue);
   }
 
-  .bg-info-bold {
-    background-color: var(--color-info-background-bold);
+  .bg-blue-soft {
+    background-color: var(--color-blue-soft);
   }
 
-  .bg-caution-bold {
-    background-color: var(--color-caution-background-bold);
+  .bg-purple {
+    background-color: var(--color-purple);
   }
 
-  .bg-warning-bold {
-    background-color: var(--color-warning-background-bold);
+  .bg-purple-soft {
+    background-color: var(--color-purple-soft);
   }
 
-  .bg-danger-bold {
-    background-color: var(--color-danger-background-bold);
+  .bg-pink {
+    background-color: var(--color-pink);
   }
 
-  /* Background color - overlay / special */
-  .bg-overlay {
-    background-color: var(--color-overlay-background);
-  }
-
-  .bg-overlay-danger {
-    background-color: var(--color-overlay-danger-background);
-  }
-
-  .bg-skeleton {
-    background-color: var(--color-skeleton-background);
-  }
-
-  .bg-skeleton-subtle {
-    background-color: var(--color-skeleton-background-subtle);
+  .bg-pink-soft {
+    background-color: var(--color-pink-soft);
   }
 }

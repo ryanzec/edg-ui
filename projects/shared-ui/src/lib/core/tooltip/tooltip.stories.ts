@@ -33,7 +33,7 @@ const meta: Meta<Tooltip> = {
   \`\`\`html
   <!-- Basic hover tooltip -->
   <ng-template #tooltipContent>
-    <div class="bg-background-level2 text-text px-2 py-1 rounded-md">
+    <div class="bg-surface-2 text-fg px-2 py-1 rounded-base">
       Tooltip text
     </div>
   </ng-template>
@@ -128,7 +128,7 @@ export const Default: Story = {
     },
     template: `
       <ng-template #tooltipContent>
-        <div class="bg-background-level2 text-text px-2 py-1 rounded-md border border-border">
+        <div class="bg-surface-2 text-fg px-2 py-1 rounded-base border border-default-color">
           This is a tooltip
         </div>
       </ng-template>
@@ -169,7 +169,7 @@ export const TriggerTypes: Story = {
       >
         <org-storybook-example-container-section label="Hover Trigger">
           <ng-template #hoverTooltip>
-            <div class="bg-background-level2 text-text px-2 py-1 rounded-md border border-border">
+            <div class="bg-surface-2 text-fg px-2 py-1 rounded-base border border-default-color">
               Hover trigger tooltip
             </div>
           </ng-template>
@@ -184,7 +184,7 @@ export const TriggerTypes: Story = {
 
         <org-storybook-example-container-section label="Click Trigger">
           <ng-template #clickTooltip>
-            <div class="bg-background-level2 text-text px-2 py-1 rounded-md border border-border">
+            <div class="bg-surface-2 text-fg px-2 py-1 rounded-base border border-default-color">
               Click trigger tooltip
             </div>
           </ng-template>
@@ -225,7 +225,7 @@ export const Delays: Story = {
       >
         <org-storybook-example-container-section label="Default Delays (200ms / 200ms)">
           <ng-template #defaultDelayTooltip>
-            <div class="bg-background-level2 text-text px-2 py-1 rounded-md border border-border">
+            <div class="bg-surface-2 text-fg px-2 py-1 rounded-base border border-default-color">
               Default delays
             </div>
           </ng-template>
@@ -241,7 +241,7 @@ export const Delays: Story = {
 
         <org-storybook-example-container-section label="No Delays (0ms / 0ms)">
           <ng-template #noDelayTooltip>
-            <div class="bg-background-level2 text-text px-2 py-1 rounded-md border border-border">
+            <div class="bg-surface-2 text-fg px-2 py-1 rounded-base border border-default-color">
               Instant tooltip
             </div>
           </ng-template>
@@ -257,7 +257,7 @@ export const Delays: Story = {
 
         <org-storybook-example-container-section label="Slow Open (500ms / 200ms)">
           <ng-template #slowOpenTooltip>
-            <div class="bg-background-level2 text-text px-2 py-1 rounded-md border border-border">
+            <div class="bg-surface-2 text-fg px-2 py-1 rounded-base border border-default-color">
               Slow to appear
             </div>
           </ng-template>
@@ -273,7 +273,7 @@ export const Delays: Story = {
 
         <org-storybook-example-container-section label="Fast Close (200ms / 50ms)">
           <ng-template #fastCloseTooltip>
-            <div class="bg-background-level2 text-text px-2 py-1 rounded-md border border-border">
+            <div class="bg-surface-2 text-fg px-2 py-1 rounded-base border border-default-color">
               Quick to disappear
             </div>
           </ng-template>
@@ -317,7 +317,7 @@ export const KeepOpenOnHover: Story = {
       >
         <org-storybook-example-container-section label="Default (false)">
           <ng-template #normalTooltip>
-            <div class="bg-background-level2 text-text px-2 py-1 rounded-md border border-border">
+            <div class="bg-surface-2 text-fg px-2 py-1 rounded-base border border-default-color">
               This will close when you move away
             </div>
           </ng-template>
@@ -332,7 +332,7 @@ export const KeepOpenOnHover: Story = {
 
         <org-storybook-example-container-section label="Keep Open On Hover (true)">
           <ng-template #keepOpenTooltip>
-            <div class="bg-background-level2 text-text px-2 py-1 rounded-md border border-border">
+            <div class="bg-surface-2 text-fg px-2 py-1 rounded-base border border-default-color">
               Try hovering over this tooltip content!
             </div>
           </ng-template>
@@ -375,7 +375,7 @@ export const RichContent: Story = {
       >
         <org-storybook-example-container-section label="Simple Text">
           <ng-template #simpleTooltip>
-            <div class="bg-background-level2 text-text px-2 py-1 rounded-md border border-border">
+            <div class="bg-surface-2 text-fg px-2 py-1 rounded-base border border-default-color">
               Simple tooltip text
             </div>
           </ng-template>
@@ -387,9 +387,9 @@ export const RichContent: Story = {
 
         <org-storybook-example-container-section label="Multi-line Content">
           <ng-template #multilineTooltip>
-            <div class="bg-background-level2 text-text px-2.5 py-1.5 rounded-md border border-border max-w-5xs">
+            <div class="bg-surface-2 text-fg px-2.5 py-1.5 rounded-base border border-default-color max-w-5xs">
               <div class="font-bold text-sm">Tooltip Title</div>
-              <div class="text-xs text-text-subtle mt-1">
+              <div class="text-xs text-muted mt-1">
                 This is a longer tooltip with multiple lines of content to demonstrate how it handles text wrapping.
               </div>
             </div>
@@ -402,12 +402,12 @@ export const RichContent: Story = {
 
         <org-storybook-example-container-section label="Formatted Content">
           <ng-template #formattedTooltip>
-            <div class="bg-background-level2 text-text px-2.5 py-1.5 rounded-md border border-border max-w-3xs">
-              <div class="font-bold text-md mb-1">User Information</div>
+            <div class="bg-surface-2 text-fg px-2.5 py-1.5 rounded-base border border-default-color max-w-3xs">
+              <div class="font-bold text-lg mb-1">User Information</div>
               <div class="flex flex-col gap-1 text-sm">
-                <div><span class="text-text-subtle">Name:</span> John Doe</div>
-                <div><span class="text-text-subtle">Role:</span> Administrator</div>
-                <div><span class="text-text-subtle">Status:</span> <span class="text-safe-text">Active</span></div>
+                <div><span class="text-muted">Name:</span> John Doe</div>
+                <div><span class="text-muted">Role:</span> Administrator</div>
+                <div><span class="text-muted">Status:</span> <span class="text-safe">Active</span></div>
               </div>
             </div>
           </ng-template>
@@ -419,7 +419,7 @@ export const RichContent: Story = {
 
         <org-storybook-example-container-section label="With Action Button">
           <ng-template #interactiveTooltip>
-            <div class="bg-background-level2 text-text px-2.5 py-1.5 rounded-md border border-border max-w-5xs">
+            <div class="bg-surface-2 text-fg px-2.5 py-1.5 rounded-base border border-default-color max-w-5xs">
               <div class="text-sm mb-1.5">This tooltip has interactive content</div>
               <org-button
                 color="primary"
@@ -468,12 +468,12 @@ export const Positioning: Story = {
       >
         <org-storybook-example-container-section label="Vertical Positions">
           <ng-template #topTooltip>
-            <div class="bg-background-level2 text-text px-2 py-1 rounded-md border border-border">
+            <div class="bg-surface-2 text-fg px-2 py-1 rounded-base border border-default-color">
               Top position
             </div>
           </ng-template>
           <ng-template #bottomTooltip>
-            <div class="bg-background-level2 text-text px-2 py-1 rounded-md border border-border">
+            <div class="bg-surface-2 text-fg px-2 py-1 rounded-base border border-default-color">
               Bottom position
             </div>
           </ng-template>
@@ -491,13 +491,13 @@ export const Positioning: Story = {
 
         <org-storybook-example-container-section label="Horizontal Positions">
           <ng-template #leftTooltip>
-            <div class="bg-background-level2 text-text px-2 py-1 rounded-md border border-border">
+            <div class="bg-surface-2 text-fg px-2 py-1 rounded-base border border-default-color">
               Left position
             </div>
           </ng-template>
 
           <ng-template #rightTooltip>
-            <div class="bg-background-level2 text-text px-2 py-1 rounded-md border border-border">
+            <div class="bg-surface-2 text-fg px-2 py-1 rounded-base border border-default-color">
               Right position
             </div>
           </ng-template>
@@ -518,25 +518,25 @@ export const Positioning: Story = {
 
         <org-storybook-example-container-section label="Combined Positions">
           <ng-template #topLeftTooltip>
-            <div class="bg-background-level2 text-text px-2 py-1 rounded-md border border-border">
+            <div class="bg-surface-2 text-fg px-2 py-1 rounded-base border border-default-color">
               Top Left
             </div>
           </ng-template>
 
           <ng-template #topRightTooltip>
-            <div class="bg-background-level2 text-text px-2 py-1 rounded-md border border-border">
+            <div class="bg-surface-2 text-fg px-2 py-1 rounded-base border border-default-color">
               Top Right
             </div>
           </ng-template>
 
           <ng-template #bottomLeftTooltip>
-            <div class="bg-background-level2 text-text px-2 py-1 rounded-md border border-border">
+            <div class="bg-surface-2 text-fg px-2 py-1 rounded-base border border-default-color">
               Bottom Left
             </div>
           </ng-template>
 
           <ng-template #bottomRightTooltip>
-            <div class="bg-background-level2 text-text px-2 py-1 rounded-md border border-border">
+            <div class="bg-surface-2 text-fg px-2 py-1 rounded-base border border-default-color">
               Bottom Right
             </div>
           </ng-template>
@@ -595,7 +595,7 @@ export const Events: StoryObj<Tooltip> = {
       >
         <org-storybook-example-container-section label="Hover Trigger Events">
           <ng-template #hoverEventTooltip>
-            <div class="bg-background-level2 text-text px-2 py-1 rounded-md border border-border">
+            <div class="bg-surface-2 text-fg px-2 py-1 rounded-base border border-default-color">
               Hover tooltip
             </div>
           </ng-template>
@@ -611,7 +611,7 @@ export const Events: StoryObj<Tooltip> = {
 
         <org-storybook-example-container-section label="Click Trigger Events">
           <ng-template #clickEventTooltip>
-            <div class="bg-background-level2 text-text px-2 py-1 rounded-md border border-border">
+            <div class="bg-surface-2 text-fg px-2 py-1 rounded-base border border-default-color">
               Click tooltip
             </div>
           </ng-template>

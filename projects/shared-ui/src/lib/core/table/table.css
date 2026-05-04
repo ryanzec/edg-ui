@@ -15,8 +15,8 @@
     align-items: center;
     gap: var(--spacing-3);
     padding: var(--spacing-2) var(--spacing-3);
-    background-color: var(--color-info-background-subtle);
-    color: var(--color-info-text);
+    background-color: var(--color-info-soft);
+    color: var(--color-info);
   }
 
   .selected-actions-bar .selected-count {
@@ -65,15 +65,15 @@
   org-table-tr[data-sticky] th {
     position: sticky;
     top: 0;
-    z-index: var(--z-index-elevated);
+    z-index: var(--z-index-raised);
   }
 
   /* body rows */
   org-table-tr[data-variant='body']:not(:last-child) tr {
-    border-bottom: 0.0625rem solid var(--color-border-subtle); /* 1px */
+    border-bottom: 0.0625rem solid var(--color-border-soft); /* 1px */
   }
 
   org-table-tr[data-variant='body'] tr:hover {
-    background-color: var(--color-background-level1);
+    background-color: var(--color-bg-surface);
   }
 }

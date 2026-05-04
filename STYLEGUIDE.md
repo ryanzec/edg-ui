@@ -103,7 +103,7 @@ Make more specific to avoid confusion on if something is a service vs component
 - `*-api`: API services (ex. `users-api`)
 - `*-admin-api`: API services design for only internal usage (ex. `users-admin-api`)
   - This code should be located in the application that is using it to avoid is being mistakenly imported other applications
-- `*-manager`: A service that is used to manage a global level feature (ex. `logger-manager` or `global-notification-manager`, `authentication-store`)
+- `*-manager`: A service that is used to manage a global level feature (ex. `logger-manager` or `notification-manager`, `authentication-store`)
 - `*-store`: Management of a pariticular feature or instance of a feature that has state associated (ex. `pagi`)
   - `[COMPONENT_NAME]-store`: This should be used as a last resort.
 

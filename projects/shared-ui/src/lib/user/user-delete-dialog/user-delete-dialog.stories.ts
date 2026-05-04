@@ -14,9 +14,9 @@ import { ChangeDetectionStrategy, Component, signal, ViewChild } from '@angular/
       <org-button (click)="openDialog()">Open Delete Dialog</org-button>
 
       @if (lastAction()) {
-        <div class="p-4 bg-secondary-background-subtle rounded-lg">
+        <div class="p-4 bg-secondary-soft rounded-lg">
           <p class="text-sm font-medium">Last Action: {{ lastAction() }}</p>
-          <p class="text-xs text-text-subtle mt-1">User: {{ lastUser()?.name }} (ID: {{ lastUser()?.id }})</p>
+          <p class="text-xs text-muted mt-1">User: {{ lastUser()?.name }} (ID: {{ lastUser()?.id }})</p>
         </div>
       }
 
@@ -68,9 +68,9 @@ export class UserDeleteDialogStory {
       <org-button (click)="openDialog()">Open Delete Dialog (Processing State)</org-button>
 
       @if (lastAction()) {
-        <div class="p-4 bg-secondary-background-subtle rounded-lg">
+        <div class="p-4 bg-secondary-soft rounded-lg">
           <p class="text-sm font-medium">Last Action: {{ lastAction() }}</p>
-          <p class="text-xs text-text-subtle mt-1">User: {{ lastUser()?.name }} (ID: {{ lastUser()?.id }})</p>
+          <p class="text-xs text-muted mt-1">User: {{ lastUser()?.name }} (ID: {{ lastUser()?.id }})</p>
         </div>
       }
 

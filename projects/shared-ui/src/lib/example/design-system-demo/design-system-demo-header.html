@@ -1,0 +1,10 @@
+@if (hasEyebrow()) {
+  <div class="eyebrow">{{ eyebrow() }}</div>
+}
+@if (hasTitle()) {
+  <h2 class="title">{{ title() }}</h2>
+}
+@if (hasDescription()) {
+  <p class="description">{{ description() }}</p>
+}
+<ng-content />

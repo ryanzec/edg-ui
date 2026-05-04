@@ -15,7 +15,7 @@ import { Label } from '../../core/label/label';
 import { validationUtils } from '../../utils/validation';
 import { angularUtils, userUtils } from '@organization/shared-utils';
 import { FormFields } from '../../core/form-fields/form-fields';
-import { FormField } from '../../core/form-field/form-field';
+import { FormField } from '../../core/form-fields/form-field';
 import { FormDisabledDirective } from '../../core/form-disabled-directive/form-disabled-directive';
 
 export type UserFormData = {

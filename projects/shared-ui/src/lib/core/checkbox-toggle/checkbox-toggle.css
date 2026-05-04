@@ -55,7 +55,7 @@
     position: relative;
     display: inline-flex;
     align-items: center;
-    border-radius: var(--radius-full);
+    border-radius: var(--radius-pill);
     min-width: var(--toggle-track-width);
     height: var(--toggle-track-height);
     border: var(--spacing-0_5) solid transparent; /* 2px */
@@ -66,29 +66,29 @@
   }
 
   :host([data-checked]) .checkbox-toggle-track {
-    background-color: var(--color-primary-background);
+    background-color: var(--color-primary);
   }
 
   :host([aria-disabled='true']) .checkbox-toggle-track {
-    background-color: var(--color-neutral-border-subtle);
+    background-color: var(--color-neutral-border-soft);
   }
 
   :host:not([aria-disabled='true']) .checkbox-toggle-container:hover .checkbox-toggle-track {
-    background-color: var(--color-neutral-border-bold);
+    background-color: var(--color-neutral-border-strong);
   }
 
   :host([data-checked]):not([aria-disabled='true']) .checkbox-toggle-container:hover .checkbox-toggle-track {
-    background-color: var(--color-primary-background-hover);
+    background-color: var(--color-primary-hover);
   }
 
   :host:not([aria-disabled='true']) .checkbox-toggle-container:focus-visible .checkbox-toggle-track {
-    background-color: var(--color-neutral-border-bold);
-    border-color: var(--color-text);
+    background-color: var(--color-neutral-border-strong);
+    border-color: var(--color-fg);
   }
 
   :host([data-checked]):not([aria-disabled='true']) .checkbox-toggle-container:focus-visible .checkbox-toggle-track {
-    background-color: var(--color-primary-background-hover);
-    border-color: var(--color-text);
+    background-color: var(--color-primary-hover);
+    border-color: var(--color-fg);
   }
 
   .checkbox-toggle-thumb {
@@ -96,11 +96,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: var(--radius-full);
+    border-radius: var(--radius-pill);
     width: var(--toggle-thumb-size);
     height: var(--toggle-thumb-size);
     /* thumb stays near-white in both themes to contrast against the track regardless of theme */
-    background-color: var(--color-neutral-50);
+    background-color: var(--color-bg-surface-2);
     transform: translateX(var(--toggle-thumb-offset));
     transition: transform 200ms;
   }
@@ -111,17 +111,17 @@
 
   /* icon stays dark in both themes for contrast against the always-light thumb */
   .checkbox-toggle-icon {
-    color: var(--color-neutral-700);
+    color: var(--color-neutral-active);
   }
 
   /* Dark theme */
   .dark :host .checkbox-toggle-thumb {
     /* thumb remains light in dark theme to keep contrast against the track */
-    background-color: var(--color-neutral-100);
+    background-color: var(--color-bg-hover);
   }
 
   .dark :host .checkbox-toggle-icon {
     /* icon remains dark in dark theme to contrast the always-light thumb */
-    color: var(--color-neutral-800);
+    color: var(--color-neutral-active);
   }
 }

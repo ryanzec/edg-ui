@@ -20,7 +20,7 @@ type Story = StoryObj<EXAMPLEChildParentCallbackCommunication>;
   imports: [Button],
   template: `
     <div class="flex flex-col gap-2">
-      <div class="text-sm text-text">Child Component (Using output())</div>
+      <div class="text-sm text-fg">Child Component (Using output())</div>
       <org-button color="primary" (click)="messageEmitted.emit('Hello from child via output()!')">
         Send Message via Output
       </org-button>
@@ -38,7 +38,7 @@ class ChildWithOutput {
   imports: [Button],
   template: `
     <div class="flex flex-col gap-2">
-      <div class="text-sm text-text">Child Component (Using callback)</div>
+      <div class="text-sm text-fg">Child Component (Using callback)</div>
       <org-button color="secondary" (click)="onSendMessage()"> Send Message via Callback </org-button>
     </div>
   `,
@@ -68,9 +68,9 @@ class ChildWithCallback {
       <org-storybook-example-container-section label="Using output() (Recommended)">
         <div class="flex flex-col gap-4">
           <story-example-child-with-output (messageEmitted)="onOutputMessage($event)" />
-          <div class="rounded border border-safe-border bg-safe-background-subtle p-3">
-            <div class="text-sm font-medium text-text">Message Received:</div>
-            <div class="text-sm text-text">{{ outputMessage() }}</div>
+          <div class="rounded border border-safe bg-safe-soft p-3">
+            <div class="text-sm font-medium text-fg">Message Received:</div>
+            <div class="text-sm text-fg">{{ outputMessage() }}</div>
           </div>
         </div>
       </org-storybook-example-container-section>
@@ -78,9 +78,9 @@ class ChildWithCallback {
       <org-storybook-example-container-section label="Using Callback (Not Recommended)">
         <div class="flex flex-col gap-4">
           <story-example-child-with-callback [onMessageCallback]="onCallbackMessage" />
-          <div class="rounded border border-caution-border bg-caution-background-subtle p-3">
-            <div class="text-sm font-medium text-text">Message Received:</div>
-            <div class="text-sm text-text">{{ callbackMessage() }}</div>
+          <div class="rounded border border-caution bg-caution-soft p-3">
+            <div class="text-sm font-medium text-fg">Message Received:</div>
+            <div class="text-sm text-fg">{{ callbackMessage() }}</div>
           </div>
         </div>
       </org-storybook-example-container-section>
@@ -135,7 +135,7 @@ export const OutputVsCallback: Story = {
       currentState="Using signal-based output() for child-to-parent communication"
     >
       <org-storybook-example-container-section label="Child Component Code">
-        <pre class="rounded border border-border bg-backgrond p-4 text-xs"><code>@Component({{ '{' }}
+        <pre class="rounded border border-default-color bg-backgrond p-4 text-xs"><code>@Component({{ '{' }}
   selector: 'child-component',
   template: &#96;&lt;button (click)="messageEmitted.emit('Hello!')"&gt;Send&lt;/button&gt;&#96;
 {{ '}' }})
@@ -145,7 +145,7 @@ class ChildComponent {{ '{' }}
       </org-storybook-example-container-section>
 
       <org-storybook-example-container-section label="Parent Component Code">
-        <pre class="rounded border border-border bg-backgrond p-4 text-xs"><code>@Component({{ '{' }}
+        <pre class="rounded border border-default-color bg-backgrond p-4 text-xs"><code>@Component({{ '{' }}
   selector: 'parent-component',
   template: &#96;&lt;child-component (messageEmitted)="onMessage($event)" /&gt;&#96;
 {{ '}' }})
@@ -159,11 +159,11 @@ class ParentComponent {{ '{' }}
       <org-storybook-example-container-section label="Live Example">
         <div class="flex flex-col gap-4">
           <story-example-child-with-output (messageEmitted)="onMessage($event)" />
-          <div class="rounded border border-border bg-background p-3">
-            <div class="text-sm font-medium text-text">Message Received:</div>
-            <div class="text-sm text-text">{{ message() }}</div>
-            <div class="mt-2 text-sm font-medium text-text">Benefits:</div>
-            <ul class="mt-2 list-inside list-disc flex flex-col gap-1 text-sm text-text">
+          <div class="rounded border border-default-color bg-app p-3">
+            <div class="text-sm font-medium text-fg">Message Received:</div>
+            <div class="text-sm text-fg">{{ message() }}</div>
+            <div class="mt-2 text-sm font-medium text-fg">Benefits:</div>
+            <ul class="mt-2 list-inside list-disc flex flex-col gap-1 text-sm text-fg">
               <li>No need to worry about 'this' context</li>
               <li>Better type safety</li>
               <li>Cleaner separation of concerns</li>
@@ -223,7 +223,7 @@ export const CallbackPattern: Story = {
         currentState="Using callback functions for child-to-parent communication"
       >
         <org-storybook-example-container-section label="Child Component Code">
-          <pre class="rounded border border-border bg-backgrond p-4 text-xs"><code>@Component({{ '{' }}
+          <pre class="rounded border border-default-color bg-backgrond p-4 text-xs"><code>@Component({{ '{' }}
   selector: 'child-component',
   template: &#96;&lt;button (click)="onSendMessage()"&gt;Send&lt;/button&gt;&#96;
 {{ '}' }})
@@ -239,7 +239,7 @@ class ChildComponent {{ '{' }}
         </org-storybook-example-container-section>
 
         <org-storybook-example-container-section label="Parent Component Code (Incorrect)">
-          <pre class="rounded border border-danger-border bg-danger-background-subtle p-4 text-xs"><code>@Component({{ '{' }}
+          <pre class="rounded border border-danger bg-danger-soft p-4 text-xs"><code>@Component({{ '{' }}
   selector: 'parent-component',
   template: &#96;&lt;child-component [onMessageCallback]="onMessage" /&gt;&#96;
 {{ '}' }})
@@ -252,7 +252,7 @@ class ParentComponent {{ '{' }}
         </org-storybook-example-container-section>
 
         <org-storybook-example-container-section label="Parent Component Code (Correct but Awkward)">
-          <pre class="rounded border border-border bg-background p-4 text-xs"><code>@Component({{ '{' }}
+          <pre class="rounded border border-default-color bg-app p-4 text-xs"><code>@Component({{ '{' }}
   selector: 'parent-component',
   template: &#96;&lt;child-component [onMessageCallback]="onMessage" /&gt;&#96;
 {{ '}' }})

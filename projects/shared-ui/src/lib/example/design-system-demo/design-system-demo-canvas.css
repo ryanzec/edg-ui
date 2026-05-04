@@ -1,0 +1,12 @@
+@layer components {
+  :host {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-3);
+    min-height: var(--design-system-demo-canvas-min-height);
+    padding: var(--design-system-demo-canvas-padding);
+    background-color: var(--design-system-demo-canvas-background);
+    border: var(--design-system-demo-canvas-border-width) dashed var(--design-system-demo-canvas-border);
+    border-radius: var(--design-system-demo-canvas-radius);
+  }
+}

@@ -13,128 +13,128 @@
 
   :host([data-size='xs']) .tag-label {
     padding: var(--spacing-0_5) var(--spacing-1_5); /* 2px 6px */
-    font-size: var(--text-xs);
+    font-size: var(--font-size-xs);
     gap: var(--spacing-1);
     line-height: var(--spacing-3); /* 12px */
   }
 
   :host([data-size='sm']) .tag-label {
     padding: var(--spacing-1) var(--spacing-2);
-    font-size: var(--text-sm);
+    font-size: var(--font-size-base);
     gap: var(--spacing-1_5); /* 6px */
     line-height: var(--spacing-3_5); /* 14px */
   }
 
   :host([data-size='base']) .tag-label {
     padding: var(--spacing-1) var(--spacing-2_5); /* 10px */
-    font-size: var(--text-md);
+    font-size: var(--font-size-lg);
     gap: var(--spacing-2);
     line-height: var(--spacing-4); /* 16px */
   }
 
   :host([data-color='primary'][data-variant='strong']) .tag-label {
-    background-color: var(--color-primary-background);
-    color: var(--color-text-inverse);
-    border-color: var(--color-primary-background);
+    background-color: var(--color-primary);
+    color: var(--color-fg-on-accent);
+    border-color: var(--color-primary);
   }
 
   :host([data-color='primary'][data-variant='weak']) .tag-label {
-    background-color: var(--color-primary-background-subtle);
-    color: var(--color-primary-text-bold);
-    border-color: var(--color-primary-background-subtle);
+    background-color: var(--color-primary-soft);
+    color: var(--color-primary);
+    border-color: var(--color-primary-soft);
   }
 
   :host([data-color='secondary'][data-variant='strong']) .tag-label {
-    background-color: var(--color-secondary-background);
-    color: var(--color-text);
-    border-color: var(--color-secondary-background);
+    background-color: var(--color-secondary);
+    color: var(--color-fg);
+    border-color: var(--color-secondary);
   }
 
   :host([data-color='secondary'][data-variant='weak']) .tag-label {
-    background-color: var(--color-secondary-background-subtle);
-    color: var(--color-secondary-text-bold);
-    border-color: var(--color-secondary-background-subtle);
+    background-color: var(--color-secondary-soft);
+    color: var(--color-secondary);
+    border-color: var(--color-secondary-soft);
   }
 
   :host([data-color='neutral'][data-variant='strong']) .tag-label {
-    background-color: var(--color-neutral-background);
-    color: var(--color-text-inverse);
-    border-color: var(--color-neutral-background);
+    background-color: var(--color-neutral);
+    color: var(--color-fg-on-accent);
+    border-color: var(--color-neutral);
   }
 
   :host([data-color='neutral'][data-variant='weak']) .tag-label {
-    background-color: var(--color-neutral-background-subtle);
-    color: var(--color-text-bold);
-    border-color: var(--color-neutral-background-subtle);
+    background-color: var(--color-neutral-soft);
+    color: var(--color-fg);
+    border-color: var(--color-neutral-soft);
   }
 
   :host([data-color='safe'][data-variant='strong']) .tag-label {
-    background-color: var(--color-safe-background);
-    color: var(--color-text-inverse);
-    border-color: var(--color-safe-background);
+    background-color: var(--color-safe);
+    color: var(--color-fg-on-accent);
+    border-color: var(--color-safe);
   }
 
   :host([data-color='safe'][data-variant='weak']) .tag-label {
-    background-color: var(--color-safe-background-subtle);
-    color: var(--color-safe-text-bold);
-    border-color: var(--color-safe-background-subtle);
+    background-color: var(--color-safe-soft);
+    color: var(--color-safe);
+    border-color: var(--color-safe-soft);
   }
 
   :host([data-color='info'][data-variant='strong']) .tag-label {
-    background-color: var(--color-info-background);
-    color: var(--color-text-inverse);
-    border-color: var(--color-info-background);
+    background-color: var(--color-info);
+    color: var(--color-fg-on-accent);
+    border-color: var(--color-info);
   }
 
   :host([data-color='info'][data-variant='weak']) .tag-label {
-    background-color: var(--color-info-background-subtle);
-    color: var(--color-info-text-bold);
-    border-color: var(--color-info-background-subtle);
+    background-color: var(--color-info-soft);
+    color: var(--color-info);
+    border-color: var(--color-info-soft);
   }
 
   :host([data-color='caution'][data-variant='strong']) .tag-label {
-    background-color: var(--color-caution-background);
-    color: var(--color-text-inverse);
-    border-color: var(--color-caution-background);
+    background-color: var(--color-caution);
+    color: var(--color-fg-on-accent);
+    border-color: var(--color-caution);
   }
 
   :host([data-color='caution'][data-variant='weak']) .tag-label {
-    background-color: var(--color-caution-background-subtle);
-    color: var(--color-caution-text-bold);
-    border-color: var(--color-caution-background-subtle);
+    background-color: var(--color-caution-soft);
+    color: var(--color-caution);
+    border-color: var(--color-caution-soft);
   }
 
   :host([data-color='warning'][data-variant='strong']) .tag-label {
-    background-color: var(--color-warning-background);
-    color: var(--color-text-inverse);
-    border-color: var(--color-warning-background);
+    background-color: var(--color-warning);
+    color: var(--color-fg-on-accent);
+    border-color: var(--color-warning);
   }
 
   :host([data-color='warning'][data-variant='weak']) .tag-label {
-    background-color: var(--color-warning-background-subtle);
-    color: var(--color-warning-text-bold);
-    border-color: var(--color-warning-background-subtle);
+    background-color: var(--color-warning-soft);
+    color: var(--color-warning);
+    border-color: var(--color-warning-soft);
   }
 
   :host([data-color='danger'][data-variant='strong']) .tag-label {
-    background-color: var(--color-danger-background);
-    color: var(--color-text-inverse);
-    border-color: var(--color-danger-background);
+    background-color: var(--color-danger);
+    color: var(--color-fg-on-accent);
+    border-color: var(--color-danger);
   }
 
   :host([data-color='danger'][data-variant='weak']) .tag-label {
-    background-color: var(--color-danger-background-subtle);
-    color: var(--color-danger-text-bold);
-    border-color: var(--color-danger-background-subtle);
+    background-color: var(--color-danger-soft);
+    color: var(--color-danger);
+    border-color: var(--color-danger-soft);
   }
 
   :host-context(body.dark)[data-variant='strong'] .tag-label,
   :host-context(body.dark) [data-variant='strong'] .tag-label {
-    color: var(--color-text);
+    color: var(--color-fg);
   }
 
   :host-context(body.dark)[data-variant='weak'] .tag-label,
   :host-context(body.dark) [data-variant='weak'] .tag-label {
-    color: var(--color-text);
+    color: var(--color-fg);
   }
 }

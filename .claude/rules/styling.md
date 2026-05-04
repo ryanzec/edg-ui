@@ -36,14 +36,14 @@ Utility css classes **MUST** be used for all other styles:
 - **ALWAYS** use reference images as a rough reference to the structure and over goal but not end goal pixel perfect expection, **ALWAYS** use existing colors and spaces that best matches when is in the image.
 - **ALWAYS** prioritize written instruction over reference images.
 - **ALWAYS** use flexbox for aligning and spacing a group of elements.
-- **ALWAYS** omit passing values to component inputs that has a default value other than `null`.
+- **ALWAYS** omit passing values to component inputs that has a default value other than `null` / `undefined`.
 - **ALWAYS** use `var()` when defining custom css variables
 - ONLY use system level design tokens in css utility classes
 - **ALWAYS** use `aria-*` when available and then fallback to `data-*` attributes for component styling that is based on an input having the input value be the `data-*` attribute value, see `projects/shared-ui/src/lib/core/box` as a reference.
 - **ALWAYS** use the `.dark` for defining dark mode colors.
 - **ALWAYS** use `/* ... */` to comment is CSS.
 - **ALWAYS** wrap css in general component css files (NOT variables component cssfiles) in `@layer components {...}`.
-- ONLY use negative margins as a LAST resort.
+- **ONLY** use negative margins as a LAST resort.
 - **ALWAYS** use `focus-visible` over `focus` pseduo selector.
 - **ALWAYS** use thing like background color change when styling `focus` elements for accessability.
 - **ALWAYS** prevent states based styles from being applied to components when it is disabled.
@@ -59,3 +59,4 @@ Utility css classes **MUST** be used for all other styles:
 - **ALWAYS** make css class name as short as needed but still descripitive since Angular handle encapulation to avoid naming conflict so `header` instead of `integration-card-configured-header`.
 - **ALWAYS** make sure to update the `.moon/scripts/build-typescript-design-token.cjs` script when modifies css variables in `projects/shared-ui/src/lib/styles/variables`.
 - **ALWAYS** make sure to run `moon :build-design-tokens` when css variables in `projects/shared-ui/src/lib/styles/variables` are modified in any way (added / removed / changed).
+- **ALWAYS** prefix component specific design token names with `{component-name}-*` following base the standard base token naming.

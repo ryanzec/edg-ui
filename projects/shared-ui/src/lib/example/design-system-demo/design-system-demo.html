@@ -1,0 +1,12 @@
+<div class="header-area">
+  <ng-content select="[slot=header]" />
+</div>
+<div class="body">
+  <div class="stage">
+    <ng-content select="[slot=controls]" />
+    <ng-content select="[slot=canvas]" />
+  </div>
+  <div class="annotation-area">
+    <ng-content select="[slot=annotation]" />
+  </div>
+</div>

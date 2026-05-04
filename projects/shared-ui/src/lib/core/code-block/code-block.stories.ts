@@ -454,7 +454,7 @@ export class UserDashboardComponent implements OnInit {
               variant="block"
               [text]="codeText"
               [allowCopy]="true"
-              scrollClass="h-md w-xl"
+              scrollClass="h-base w-xl"
             />
         </org-storybook-example-container-section>
 

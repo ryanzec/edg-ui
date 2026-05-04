@@ -12,17 +12,17 @@
   }
 
   .title {
-    font-size: var(--text-md);
-    line-height: var(--text-md--line-height);
-    letter-spacing: var(--text-md--letter-spacing);
+    font-size: var(--font-size-lg);
+    line-height: var(--line-height-normal);
+    letter-spacing: var(--letter-spacing-normal);
     font-weight: var(--font-weight-semibold);
   }
 
   .subtitle {
-    font-size: var(--text-xs);
-    line-height: var(--text-xs--line-height);
-    letter-spacing: var(--text-xs--letter-spacing);
-    color: var(--color-text-subtle);
+    font-size: var(--font-size-xs);
+    line-height: var(--line-height-normal);
+    letter-spacing: var(--letter-spacing-normal);
+    color: var(--color-fg-muted);
     margin-top: calc(-1 * var(--spacing-1));
   }
 }

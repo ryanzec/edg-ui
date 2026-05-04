@@ -17,7 +17,7 @@ import { DatePickerInput } from '../../core/date-picker-input/date-picker-input'
 import { Button } from '../../core/button/button';
 import { ButtonIcon } from '../../core/button/button-icon';
 import { Label } from '../../core/label/label';
-import { FormField } from '../../core/form-field/form-field';
+import { FormField } from '../../core/form-fields/form-field';
 import { FormFields } from '../../core/form-fields/form-fields';
 import { validationUtils } from '../../utils/validation';
 
@@ -86,7 +86,7 @@ const itemSchema = z.object({
     >
       <org-storybook-example-container-section label="Form">
         <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-1 max-w-lg">
-          <div formGroupName="profile" class="rounded-md border border-neutral-border p-3">
+          <div formGroupName="profile" class="rounded-base border border-neutral p-3">
             <div class="text-sm font-semibold mb-1">Profile</div>
 
             <org-form-fields>
@@ -181,7 +181,7 @@ const itemSchema = z.object({
       </org-storybook-example-container-section>
 
       <div class="flex gap-1">
-        <div class="rounded-md bg-neutral-background-subtle p-3 text-sm">
+        <div class="rounded-base bg-neutral-soft p-3 text-sm">
           <div class="font-medium mb-2">Form State:</div>
           <div class="flex flex-col gap-1 text-xs font-mono">
             <div>Valid: {{ form.valid }}</div>
@@ -191,7 +191,7 @@ const itemSchema = z.object({
           </div>
         </div>
 
-        <div class="rounded-md bg-info-background-subtle p-3 text-sm flex-1">
+        <div class="rounded-base bg-info-soft p-3 text-sm flex-1">
           <div class="font-medium mb-2">Current Form Values:</div>
           <div class="flex flex-col gap-1 text-xs font-mono break-words">
             <div>name: "{{ formValues().profile.name }}"</div>
@@ -336,7 +336,7 @@ class NestedObjectDemoComponent {
     >
       <org-storybook-example-container-section label="Form">
         <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-1 max-w-lg">
-          <div formGroupName="profile" class="rounded-md border border-neutral-border p-3">
+          <div formGroupName="profile" class="rounded-base border border-neutral p-3">
             <div class="text-sm font-semibold mb-1">Profile</div>
 
             <org-form-fields>
@@ -435,7 +435,7 @@ class NestedObjectDemoComponent {
       </org-storybook-example-container-section>
 
       <div class="flex gap-1">
-        <div class="rounded-md bg-neutral-background-subtle p-3 text-sm">
+        <div class="rounded-base bg-neutral-soft p-3 text-sm">
           <div class="font-medium mb-2">Form State:</div>
           <div class="flex flex-col gap-1 text-xs font-mono">
             <div>Valid: {{ form.valid }}</div>
@@ -445,7 +445,7 @@ class NestedObjectDemoComponent {
           </div>
         </div>
 
-        <div class="rounded-md bg-info-background-subtle p-3 text-sm flex-1">
+        <div class="rounded-base bg-info-soft p-3 text-sm flex-1">
           <div class="font-medium mb-2">Current Form Values:</div>
           <div class="flex flex-col gap-1 text-xs font-mono break-words">
             <div>name: "{{ formValues().profile.name }}"</div>
@@ -630,7 +630,7 @@ class NestedObjectWithDefaultsDemoComponent {
             }
 
             @if (tags.controls.length === 0) {
-              <div class="text-sm text-neutral-text-subtle py-2">No tags added yet. Click "Add Tag" to start.</div>
+              <div class="text-sm text-neutral py-2">No tags added yet. Click "Add Tag" to start.</div>
             }
           </div>
 
@@ -639,7 +639,7 @@ class NestedObjectWithDefaultsDemoComponent {
       </org-storybook-example-container-section>
 
       <div class="flex gap-1">
-        <div class="rounded-md bg-neutral-background-subtle p-3 text-sm">
+        <div class="rounded-base bg-neutral-soft p-3 text-sm">
           <div class="font-medium mb-2">Form State:</div>
           <div class="flex flex-col gap-1 text-xs font-mono">
             <div>Valid: {{ form.valid }}</div>
@@ -649,7 +649,7 @@ class NestedObjectWithDefaultsDemoComponent {
           </div>
         </div>
 
-        <div class="rounded-md bg-info-background-subtle p-3 text-sm flex-1">
+        <div class="rounded-base bg-info-soft p-3 text-sm flex-1">
           <div class="font-medium mb-2">Current Form Values:</div>
           <div class="flex flex-col gap-1 text-xs font-mono break-words">
             <div>tags ({{ formValues().tags.length }}): {{ formatTags() }}</div>
@@ -781,7 +781,7 @@ class ArrayOfTextDemoComponent {
       </org-storybook-example-container-section>
 
       <div class="flex gap-1">
-        <div class="rounded-md bg-neutral-background-subtle p-3 text-sm">
+        <div class="rounded-base bg-neutral-soft p-3 text-sm">
           <div class="font-medium mb-2">Form State:</div>
           <div class="flex flex-col gap-1 text-xs font-mono">
             <div>Valid: {{ form.valid }}</div>
@@ -791,7 +791,7 @@ class ArrayOfTextDemoComponent {
           </div>
         </div>
 
-        <div class="rounded-md bg-info-background-subtle p-3 text-sm flex-1">
+        <div class="rounded-base bg-info-soft p-3 text-sm flex-1">
           <div class="font-medium mb-2">Current Form Values:</div>
           <div class="flex flex-col gap-1 text-xs font-mono break-words">
             <div>tags ({{ formValues().tags.length }}): {{ formatTags() }}</div>
@@ -922,7 +922,7 @@ class ArrayOfTextWithDefaultsDemoComponent {
 
           <div formArrayName="items" class="flex flex-col gap-3">
             @for (item of items.controls; track $index) {
-              <div [formGroupName]="$index" class="rounded-md border border-neutral-border p-3">
+              <div [formGroupName]="$index" class="rounded-base border border-neutral p-3">
                 <div class="flex items-center justify-between mb-1">
                   <div class="text-sm font-semibold">Item {{ $index + 1 }}</div>
                   <org-button
@@ -1030,7 +1030,7 @@ class ArrayOfTextWithDefaultsDemoComponent {
             }
 
             @if (items.controls.length === 0) {
-              <div class="text-sm text-neutral-text-subtle py-2">No items added yet. Click "Add Item" to start.</div>
+              <div class="text-sm text-neutral py-2">No items added yet. Click "Add Item" to start.</div>
             }
           </div>
 
@@ -1039,7 +1039,7 @@ class ArrayOfTextWithDefaultsDemoComponent {
       </org-storybook-example-container-section>
 
       <div class="flex gap-1">
-        <div class="rounded-md bg-neutral-background-subtle p-3 text-sm">
+        <div class="rounded-base bg-neutral-soft p-3 text-sm">
           <div class="font-medium mb-2">Form State:</div>
           <div class="flex flex-col gap-1 text-xs font-mono">
             <div>Valid: {{ form.valid }}</div>
@@ -1049,7 +1049,7 @@ class ArrayOfTextWithDefaultsDemoComponent {
           </div>
         </div>
 
-        <div class="rounded-md bg-info-background-subtle p-3 text-sm flex-1">
+        <div class="rounded-base bg-info-soft p-3 text-sm flex-1">
           <div class="font-medium mb-2">Current Form Values:</div>
           <div class="flex flex-col gap-1 text-xs font-mono break-words max-h-2xs overflow-y-auto">
             <div>items ({{ formValues().items.length }}): {{ formatItems() }}</div>
@@ -1210,7 +1210,7 @@ class ArrayOfObjectsDemoComponent {
 
           <div formArrayName="items" class="flex flex-col gap-3">
             @for (item of items.controls; track $index) {
-              <div [formGroupName]="$index" class="rounded-md border border-neutral-border p-3">
+              <div [formGroupName]="$index" class="rounded-base border border-neutral p-3">
                 <div class="flex items-center justify-between mb-1">
                   <div class="text-sm font-semibold">Item {{ $index + 1 }}</div>
                   <org-button
@@ -1332,7 +1332,7 @@ class ArrayOfObjectsDemoComponent {
       </org-storybook-example-container-section>
 
       <div class="flex gap-1">
-        <div class="rounded-md bg-neutral-background-subtle p-3 text-sm">
+        <div class="rounded-base bg-neutral-soft p-3 text-sm">
           <div class="font-medium mb-2">Form State:</div>
           <div class="flex flex-col gap-1 text-xs font-mono">
             <div>Valid: {{ form.valid }}</div>
@@ -1342,7 +1342,7 @@ class ArrayOfObjectsDemoComponent {
           </div>
         </div>
 
-        <div class="rounded-md bg-info-background-subtle p-3 text-sm flex-1">
+        <div class="rounded-base bg-info-soft p-3 text-sm flex-1">
           <div class="font-medium mb-2">Current Form Values:</div>
           <div class="flex flex-col gap-1 text-xs font-mono break-words max-h-2xs overflow-y-auto">
             <div>items ({{ formValues().items.length }}): {{ formatItems() }}</div>

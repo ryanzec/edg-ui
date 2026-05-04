@@ -10,7 +10,7 @@ import { CardHeader } from '../../core/card/card-header';
 import { Input } from '../../core/input/input';
 import { Button } from '../../core/button/button';
 import { FormFields } from '../../core/form-fields/form-fields';
-import { FormField } from '../../core/form-field/form-field';
+import { FormField } from '../../core/form-fields/form-field';
 import { Label } from '../../core/label/label';
 import { ButtonGroup } from '../../core/button/button-group';
 import { validationUtils } from '../../utils/validation';
@@ -32,7 +32,7 @@ import { validationUtils } from '../../utils/validation';
   ],
   templateUrl: './login-form.html',
   host: {
-    class: 'block w-md',
+    class: 'block w-base',
   },
 })
 export class LoginForm {

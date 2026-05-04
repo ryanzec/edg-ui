@@ -25,7 +25,7 @@
     border: none;
     border-radius: var(--radius-sm);
     background-color: transparent;
-    color: var(--color-text);
+    color: var(--color-fg);
     cursor: pointer;
   }
 
@@ -33,8 +33,8 @@
     position: relative;
     display: block;
     border: var(--border-width) solid var(--color-border);
-    border-radius: var(--radius-md);
-    background-color: var(--color-neutral-background-subtle);
+    border-radius: var(--radius-base);
+    background-color: var(--color-neutral-soft);
   }
 
   :host([data-variant='block']) .code-block-copy-wrapper {
@@ -58,9 +58,9 @@
     margin: 0;
     white-space: pre;
     font-family: monospace;
-    font-size: var(--text-sm);
+    font-size: var(--font-size-base);
     line-height: normal;
-    color: var(--color-text);
+    color: var(--color-fg);
   }
 
   /* Ellipsis styling */
@@ -80,9 +80,9 @@
     padding-block: var(--spacing-0_5); /* 2px */
     padding-inline: var(--spacing-1_5); /* 6px */
     border-radius: var(--radius-sm);
-    background-color: var(--color-neutral-background-subtle);
+    background-color: var(--color-neutral-soft);
     font-family: monospace;
-    font-size: var(--text-sm);
-    color: var(--color-text);
+    font-size: var(--font-size-base);
+    color: var(--color-fg);
   }
 }

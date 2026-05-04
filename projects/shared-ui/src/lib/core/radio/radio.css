@@ -26,7 +26,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    color: var(--color-neutral-text);
+    color: var(--color-neutral);
   }
 
   :host([aria-disabled='true']) .radio-label {
@@ -35,10 +35,10 @@
   }
 
   :host:not([aria-disabled='true']) .radio-label:hover .radio-icon-container {
-    color: var(--color-primary-background);
+    color: var(--color-primary);
   }
 
   :host:not([aria-disabled='true']) .radio-label:focus-visible .radio-icon-container {
-    color: var(--color-primary-background);
+    color: var(--color-primary);
   }
 }

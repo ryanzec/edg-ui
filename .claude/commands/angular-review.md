@@ -1,3 +1,7 @@
+<!-- 
+Inputs:
+- specific directory for code to review
+-->
 You are tasked to review the referenced code for professional production readness and present your finding without making changes to the code, this review must include, but is not limited to:
 - All rules are properly being followed.
 - General best practices for modern signals-based frontend Angular 21 development are being followed.

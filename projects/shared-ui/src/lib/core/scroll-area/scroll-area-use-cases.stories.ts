@@ -63,7 +63,7 @@ This is the approach used by the \`org-combobox\` component for its options drop
         <org-storybook-example-container-section label="Standard: scrollClass controls size">
           <org-scroll-area
             direction="vertical"
-            containerClass="rounded-lg border border-border"
+            containerClass="rounded-lg border border-default-color"
             scrollClass="h-6xs"
             spacingClass="p-4"
           >
@@ -84,7 +84,7 @@ This is the approach used by the \`org-combobox\` component for its options drop
           <div>
             If you need to control the size of the scroll area with css (need explicit values), then you would apply that to the outer div and set the scroll scroll to 100% (usually using flexbox to prevent the scroll area from overflowing the parent).
           </div>
-          <div class="max-h-6xs max-w-6xs flex flex-col border border-border rounded-md">
+          <div class="max-h-6xs max-w-6xs flex flex-col border border-default-color rounded-base">
             <org-scroll-area
               direction="vertical"
               containerClass="flex flex-col"

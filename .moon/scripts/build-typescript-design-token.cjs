@@ -9,6 +9,11 @@ const CHART_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles
 const SCROLLBAR_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/variables/scrollbar-tokens.css');
 const AVATAR_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/variables/avatar-tokens.css');
 const ICON_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/variables/icon-tokens.css');
+const BUTTON_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/variables/button-tokens.css');
+const DESIGN_SYSTEM_DEMO_TOKENS_CSS = path.join(
+  REPO_ROOT,
+  'projects/shared-ui/src/lib/styles/variables/design-system-demo-tokens.css',
+);
 const OUTPUT_TS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/design-tokens.ts');
 
 /**
@@ -154,7 +159,7 @@ function serializeMap(map) {
  * Generate the full TypeScript file content for the design token system.
  */
 function generateTypeScript(colorLight, colorDark, nonColorTokens) {
-  return `// Auto-generated from base-tokens.css, system-tokens.css, chart-tokens.css, scrollbar-tokens.css, avatar-tokens.css, and icon-tokens.css — do not edit manually.
+  return `// Auto-generated from tokens based css files — do not edit manually.
 // Run the build-typescript-design-token script to regenerate.
 
 type DesignTokenTheme = 'light' | 'dark';
@@ -190,19 +195,21 @@ function main() {
   const scrollbarContent = cleanCss(fs.readFileSync(SCROLLBAR_TOKENS_CSS, 'utf-8'));
   const avatarContent = cleanCss(fs.readFileSync(AVATAR_TOKENS_CSS, 'utf-8'));
   const iconContent = cleanCss(fs.readFileSync(ICON_TOKENS_CSS, 'utf-8'));
+  const buttonContent = cleanCss(fs.readFileSync(BUTTON_TOKENS_CSS, 'utf-8'));
+  const designSystemDemoContent = cleanCss(fs.readFileSync(DESIGN_SYSTEM_DEMO_TOKENS_CSS, 'utf-8'));
 
   // Base tokens: all :root vars; color vars are used only for resolution, non-color vars are also output
   const baseVars = Object.assign({}, ...findBlocks(baseContent, ':root').map(extractVariables));
 
-  // System tokens: :root vars for output, .dark vars for dark theme overrides; chart, scrollbar,
-  // avatar, and icon token files contribute to the same buckets so the resulting design-tokens.ts
-  // stays equivalent regardless of which file a variable lives in
+  // System tokens
   const systemRootVars = Object.assign(
     {},
     ...findBlocks(chartContent, ':root').map(extractVariables),
     ...findBlocks(scrollbarContent, ':root').map(extractVariables),
     ...findBlocks(avatarContent, ':root').map(extractVariables),
     ...findBlocks(iconContent, ':root').map(extractVariables),
+    ...findBlocks(buttonContent, ':root').map(extractVariables),
+    ...findBlocks(designSystemDemoContent, ':root').map(extractVariables),
   );
   const darkVars = Object.assign(
     {},
@@ -211,6 +218,8 @@ function main() {
     ...findBlocks(scrollbarContent, '.dark').map(extractVariables),
     ...findBlocks(avatarContent, '.dark').map(extractVariables),
     ...findBlocks(iconContent, '.dark').map(extractVariables),
+    ...findBlocks(buttonContent, '.dark').map(extractVariables),
+    ...findBlocks(designSystemDemoContent, '.dark').map(extractVariables),
   );
 
   // Resolution maps: base vars are always the foundation

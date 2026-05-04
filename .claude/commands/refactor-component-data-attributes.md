@@ -1,3 +1,7 @@
+<!-- 
+Inputs:
+- specific directory for code to review
+-->
 You are tasked to investigate the referenced code to see if the inputs that are the following simple values:
 - string
 - boolean

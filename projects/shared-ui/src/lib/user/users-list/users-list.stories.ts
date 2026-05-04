@@ -326,9 +326,9 @@ class UsersListLargeHostStory {}
       />
       <div class="flex flex-col gap-0.5">
         <h4 class="font-medium">Event Log:</h4>
-        <div class="p-1 bg-secondary-background-subtle rounded text-sm font-mono max-h-64 overflow-y-auto">
+        <div class="p-1 bg-secondary-soft rounded text-sm font-mono max-h-64 overflow-y-auto">
           @for (event of events(); track $index) {
-            <div class="mb-0.5 pb-0.5 border-b border-neutral-border last:border-b-0">
+            <div class="mb-0.5 pb-0.5 border-b border-neutral last:border-b-0">
               <div class="font-bold">{{ event.timestamp }} - {{ event.action }}</div>
               <div class="whitespace-pre-wrap">{{ event.details }}</div>
             </div>

@@ -1,0 +1,13 @@
+@layer components {
+  :host {
+    display: inline-flex;
+    background-color: var(--button-toggle-background);
+    border: var(--border-width) solid var(--button-toggle-border);
+    border-radius: var(--button-toggle-radius);
+    padding: var(--button-toggle-padding);
+  }
+
+  :host([data-disabled]) {
+    opacity: var(--opacity-disabled);
+  }
+}

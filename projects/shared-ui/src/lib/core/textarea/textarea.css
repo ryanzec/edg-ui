@@ -8,21 +8,21 @@
   }
 
   :host([data-focused]) {
-    box-shadow: 0 0 0 0.0625rem var(--color-input-border-focused); /* 1px */
+    box-shadow: 0 0 0 0.0625rem var(--color-focus-ring); /* 1px */
   }
 
   :host([data-variant='bordered']) {
     border: var(--border-width) solid var(--color-border);
-    border-radius: var(--radius-md);
-    background-color: var(--color-input-background);
+    border-radius: var(--radius-base);
+    background-color: var(--color-bg-surface);
   }
 
   :host([data-variant='bordered'][data-focused]) {
-    border-color: var(--color-input-border-focused);
+    border-color: var(--color-focus-ring);
   }
 
   :host([data-variant='bordered'][aria-disabled='true']) {
-    background-color: var(--color-input-background);
+    background-color: var(--color-bg-surface);
     border-color: var(--color-border);
     cursor: not-allowed;
     opacity: 0.5;
@@ -30,11 +30,11 @@
 
   :host([data-variant='borderless']) {
     border: none;
-    background-color: var(--color-input-background);
+    background-color: var(--color-bg-surface);
   }
 
   :host([data-variant='borderless'][aria-disabled='true']) {
-    background-color: var(--color-input-background);
+    background-color: var(--color-bg-surface);
     cursor: not-allowed;
     opacity: 0.5;
   }
@@ -57,9 +57,9 @@
     background-color: transparent;
     border: none;
     outline: none;
-    font-size: var(--text-sm);
-    line-height: var(--text-sm--line-height);
-    letter-spacing: var(--text-sm--letter-spacing);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-normal);
+    letter-spacing: var(--letter-spacing-normal);
   }
 
   :host textarea {
@@ -67,11 +67,11 @@
   }
 
   :host textarea::placeholder {
-    color: var(--color-text-subtle);
+    color: var(--color-fg-muted);
   }
 
   :host textarea::selection {
-    background-color: var(--color-primary-background-subtle);
+    background-color: var(--color-primary-soft);
   }
 
   :host textarea:disabled {
@@ -85,16 +85,16 @@
   .textarea-icon-btn {
     display: inline-flex;
     flex-shrink: 0;
-    color: var(--color-text-subtle);
+    color: var(--color-fg-muted);
   }
 
   .textarea-icon-btn:focus-visible {
-    background-color: var(--color-primary-background-subtle);
+    background-color: var(--color-primary-soft);
     border-radius: var(--radius-sm);
   }
 
   .textarea-icon-btn:not(:disabled):hover {
-    color: var(--color-text);
+    color: var(--color-fg);
   }
 
   :host([data-pre-icon-align='start']) .textarea-pre-icon-btn {

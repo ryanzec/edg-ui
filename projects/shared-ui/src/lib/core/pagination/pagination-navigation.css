@@ -13,10 +13,10 @@
 
   .ellipsis {
     padding: var(--spacing-1) var(--spacing-2);
-    font-size: var(--text-sm);
-    line-height: var(--text-sm--line-height);
-    letter-spacing: var(--text-sm--letter-spacing);
-    color: var(--color-text-subtle);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-normal);
+    letter-spacing: var(--letter-spacing-normal);
+    color: var(--color-fg-muted);
     user-select: none;
   }
 }

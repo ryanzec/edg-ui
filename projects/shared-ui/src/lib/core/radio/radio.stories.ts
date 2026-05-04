@@ -7,7 +7,7 @@ import { Component, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Label } from '../label/label';
 import { FormFields } from '../form-fields/form-fields';
-import { FormField } from '../form-field/form-field';
+import { FormField } from '../form-fields/form-field';
 import { FormDisabledDirective } from '../form-disabled-directive/form-disabled-directive';
 
 const meta: Meta<Radio> = {
@@ -513,7 +513,7 @@ export const MultipleGroups: Story = {
 
       <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
         <li>Validation message appears below the radio group when provided</li>
-        <li>Message uses <strong>text-danger-text</strong> color (danger/red)</li>
+        <li>Message uses <strong>text-danger</strong> color (danger/red)</li>
         <li>Message is visible only when validationMessage input is provided</li>
         <li>Proper ARIA attributes for accessibility (aria-invalid, aria-describedby)</li>
         <li>Message uses role="alert" and aria-live="polite" for screen readers</li>

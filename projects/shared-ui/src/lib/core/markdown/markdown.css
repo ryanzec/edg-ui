@@ -2,48 +2,48 @@
   .org-markdown-container {
     /* typography */
     & h1 {
-      color: var(--color-text);
-      font-size: var(--text-3xl);
+      color: var(--color-fg);
+      font-size: var(--font-size-4xl);
       font-weight: var(--font-weight-bold);
       margin-bottom: var(--spacing-4); /* 16px */
       margin-top: var(--spacing-6); /* 24px */
     }
 
     & h2 {
-      color: var(--color-text);
-      font-size: var(--text-2xl);
+      color: var(--color-fg);
+      font-size: var(--font-size-3xl);
       font-weight: var(--font-weight-bold);
       margin-bottom: var(--spacing-3_5); /* 14px */
       margin-top: var(--spacing-5); /* 20px */
     }
 
     & h3 {
-      color: var(--color-text);
-      font-size: var(--text-xl);
+      color: var(--color-fg);
+      font-size: var(--font-size-2xl);
       font-weight: var(--font-weight-bold);
       margin-bottom: var(--spacing-3); /* 12px */
       margin-top: 1.125rem; /* 18px */
     }
 
     & h4 {
-      color: var(--color-text);
-      font-size: var(--text-lg);
+      color: var(--color-fg);
+      font-size: var(--font-size-xl);
       font-weight: var(--font-weight-bold);
       margin-bottom: var(--spacing-2_5); /* 10px */
       margin-top: var(--spacing-4); /* 16px */
     }
 
     & h5 {
-      color: var(--color-text);
-      font-size: var(--text-md);
+      color: var(--color-fg);
+      font-size: var(--font-size-lg);
       font-weight: var(--font-weight-bold);
       margin-bottom: var(--spacing-2); /* 8px */
       margin-top: var(--spacing-3_5); /* 14px */
     }
 
     & h6 {
-      color: var(--color-text);
-      font-size: var(--text-sm);
+      color: var(--color-fg);
+      font-size: var(--font-size-base);
       font-weight: var(--font-weight-bold);
       margin-bottom: var(--spacing-1_5); /* 6px */
       margin-top: var(--spacing-3); /* 12px */
@@ -59,7 +59,7 @@
     }
 
     & p {
-      color: var(--color-text);
+      color: var(--color-fg);
       margin-bottom: var(--spacing-4); /* 16px */
     }
 
@@ -92,14 +92,14 @@
       list-style-type: disc;
       list-style-position: inside;
       margin-left: var(--spacing-4); /* 16px */
-      color: var(--color-text);
+      color: var(--color-fg);
     }
 
     & ol {
       list-style-type: decimal;
       list-style-position: inside;
       margin-left: var(--spacing-4); /* 16px */
-      color: var(--color-text);
+      color: var(--color-fg);
     }
 
     & li {
@@ -120,18 +120,18 @@
       padding: var(--spacing-0_5) var(--spacing-1_5); /* 2px 6px */
       border-radius: var(--radius-sm);
       font-family: var(--font-mono);
-      font-size: var(--text-sm);
-      background-color: var(--color-code-block-background);
-      color: var(--color-code-block-text);
+      font-size: var(--font-size-base);
+      background-color: var(--color-bg-surface-2);
+      color: var(--color-fg);
     }
 
     & pre {
       margin-bottom: var(--spacing-4); /* 16px */
       padding: var(--spacing-3); /* 12px */
-      border-radius: var(--radius-md);
-      border: var(--border-width) solid var(--color-code-block-border);
+      border-radius: var(--radius-base);
+      border: var(--border-width) solid var(--color-border);
       overflow-x: auto;
-      background-color: var(--color-code-block-background);
+      background-color: var(--color-bg-surface-2);
     }
 
     & pre code {
@@ -143,8 +143,8 @@
     /* blockquotes */
     & blockquote {
       margin-bottom: var(--spacing-4); /* 16px */
-      border-left: var(--border-width-emphasized) solid var(--color-border);
-      background-color: var(--color-background-level1);
+      border-left: var(--border-width-emphasize) solid var(--color-border);
+      background-color: var(--color-bg-surface);
       padding: var(--spacing-2) var(--spacing-2) var(--spacing-2) var(--spacing-4); /* 8px 8px 8px 16px */
     }
 
@@ -174,7 +174,7 @@
       text-align: left;
       font-weight: var(--font-weight-bold);
       border: var(--border-width) solid var(--color-border);
-      background-color: var(--color-background-level1);
+      background-color: var(--color-bg-surface);
     }
 
     & td {

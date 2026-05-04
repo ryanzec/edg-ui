@@ -3,9 +3,9 @@
     display: inline-flex;
     align-items: center;
     gap: var(--spacing-1);
-    font-size: var(--text-sm);
-    line-height: var(--text-sm--line-height);
-    letter-spacing: var(--text-sm--letter-spacing);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-normal);
+    letter-spacing: var(--letter-spacing-normal);
   }
 
   label,
@@ -16,7 +16,7 @@
   }
 
   .required-marker {
-    color: var(--color-danger-text);
+    color: var(--color-danger);
   }
 
   .sr-only {

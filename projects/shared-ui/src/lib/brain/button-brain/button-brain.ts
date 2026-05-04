@@ -36,6 +36,9 @@ export const BUTTON_ARIA_LABEL_DEFAULT: string | undefined = undefined;
 /** default value for the ariaExpanded input */
 export const BUTTON_ARIA_EXPANDED_DEFAULT: boolean | undefined = undefined;
 
+/** default value for the ariaPressed input */
+export const BUTTON_ARIA_PRESSED_DEFAULT: boolean | undefined = undefined;
+
 /**
  * headless brain directive for the button. owns interaction state (pressed / focused), pointer and touch event
  * handling, focus monitoring via the angular cdk, native disabled binding, and all aria attributes. carries no
@@ -48,6 +51,7 @@ export const BUTTON_ARIA_EXPANDED_DEFAULT: boolean | undefined = undefined;
     '[disabled]': 'isDisabled()',
     '[attr.aria-label]': 'ariaLabel()',
     '[attr.aria-expanded]': 'ariaExpanded()',
+    '[attr.aria-pressed]': 'ariaPressed()',
     '[attr.aria-busy]': 'loading() ? "true" : null',
     '[attr.aria-disabled]': 'isDisabled() ? "true" : null',
     '(click)': 'click()',
@@ -87,6 +91,11 @@ export class ButtonBrainDirective implements OnInit, OnDestroy {
 
   /** communicates whether a controlled element is expanded or collapsed */
   public readonly ariaExpanded = input<boolean | undefined, boolean | null | undefined>(BUTTON_ARIA_EXPANDED_DEFAULT, {
+    transform: angularUtils.transformNullToUndefined,
+  });
+
+  /** communicates the pressed/selected state when used as a toggle button */
+  public readonly ariaPressed = input<boolean | undefined, boolean | null | undefined>(BUTTON_ARIA_PRESSED_DEFAULT, {
     transform: angularUtils.transformNullToUndefined,
   });
 

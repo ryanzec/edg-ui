@@ -207,7 +207,7 @@ export const WithContent: Story = {
               @if (activeTab() === 'home') {
                 <org-card>
                   <org-card-content>
-                    <h3 class="text-lg font-semibold mb-2">Home Content</h3>
+                    <h3 class="text-xl font-semibold mb-2">Home Content</h3>
                     <div>Welcome to the home tab. This is where you'll find the main dashboard and overview.</div>
                   </org-card-content>
                 </org-card>
@@ -216,7 +216,7 @@ export const WithContent: Story = {
               @if (activeTab() === 'profile') {
                 <org-card>
                   <org-card-content>
-                    <h3 class="text-lg font-semibold mb-2">Profile Content</h3>
+                    <h3 class="text-xl font-semibold mb-2">Profile Content</h3>
                     <div>View and edit your profile information here.</div>
                   </org-card-content>
                 </org-card>
@@ -225,7 +225,7 @@ export const WithContent: Story = {
               @if (activeTab() === 'settings') {
                 <org-card>
                   <org-card-content>
-                    <h3 class="text-lg font-semibold mb-2">Settings Content</h3>
+                    <h3 class="text-xl font-semibold mb-2">Settings Content</h3>
                     <div>Adjust your preferences and account settings.</div>
                   </org-card-content>
                 </org-card>

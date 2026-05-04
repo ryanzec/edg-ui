@@ -40,12 +40,12 @@ const meta: Meta<Label> = {
 
   <!-- With slot projection -->
   <org-label htmlFor="username" label="Username">
-    <span class="text-text-subtle">(optional)</span>
+    <span class="text-muted">(optional)</span>
   </org-label>
 
   <!-- Combined features -->
   <org-label htmlFor="processing" label="Processing" [isLoading]="true" [isRequired]="true">
-    <span class="text-text-subtle">(validating)</span>
+    <span class="text-muted">(validating)</span>
   </org-label>
   \`\`\`
 
@@ -212,33 +212,33 @@ export const WithSlotProjection: Story = {
       >
         <org-storybook-example-container-section label="With Optional Text">
           <org-label htmlFor="phone-number" label="Phone Number">
-            <span class="text-text-subtle">(optional)</span>
+            <span class="text-muted">(optional)</span>
           </org-label>
         </org-storybook-example-container-section>
 
         <org-storybook-example-container-section label="With Info Badge">
           <org-label htmlFor="api-key" label="API Key">
-            <span class="rounded-sm bg-info-background-subtle px-1 py-0.5 text-3xs text-info-text">NEW</span>
+            <span class="rounded-sm bg-info-soft px-1 py-0.5 text-3xs text-info">NEW</span>
           </org-label>
         </org-storybook-example-container-section>
 
         <org-storybook-example-container-section label="Required with Help Text">
           <org-label htmlFor="password" label="Password" [isRequired]="true">
-            <span class="text-text-subtle">(8+ chars)</span>
+            <span class="text-muted">(8+ chars)</span>
           </org-label>
         </org-storybook-example-container-section>
 
         <org-storybook-example-container-section label="With Multiple Elements">
           <org-label htmlFor="username" label="Username">
-            <span class="rounded-sm bg-info-background-subtle px-1 py-0.5 text-3xs text-info-text">NEW</span>
-            <span class="text-text-subtle">(3-20 chars)</span>
+            <span class="rounded-sm bg-info-soft px-1 py-0.5 text-3xs text-info">NEW</span>
+            <span class="text-muted">(3-20 chars)</span>
           </org-label>
         </org-storybook-example-container-section>
 
         <org-storybook-example-container-section label="Right Aligned Content">
           <org-label htmlFor="email" label="Email" [isRequired]="true" class="w-full">
             <div class="ml-auto">
-              <span class="text-text-subtle">(verified)</span>
+              <span class="text-muted">(verified)</span>
             </div>
           </org-label>
         </org-storybook-example-container-section>
@@ -278,19 +278,19 @@ export const CombinedFeatures: Story = {
 
         <org-storybook-example-container-section label="Loading with Info">
           <org-label htmlFor="checking-availability" label="Checking availability" [isLoading]="true">
-            <span class="text-text-subtle">(realtime)</span>
+            <span class="text-muted">(realtime)</span>
           </org-label>
         </org-storybook-example-container-section>
 
         <org-storybook-example-container-section label="Required with Slot">
           <org-label htmlFor="password" label="Password" [isRequired]="true">
-            <span class="text-text-subtle">(8+ chars)</span>
+            <span class="text-muted">(8+ chars)</span>
           </org-label>
         </org-storybook-example-container-section>
 
         <org-storybook-example-container-section label="All Features">
           <org-label htmlFor="processing-data" label="Processing data" [isLoading]="true" [isRequired]="true">
-            <span class="rounded-sm bg-caution-background-subtle px-1 py-0.5 text-3xs text-caution-text">BETA</span>
+            <span class="rounded-sm bg-caution-soft px-1 py-0.5 text-3xs text-caution">BETA</span>
           </org-label>
         </org-storybook-example-container-section>
 
@@ -335,7 +335,7 @@ export const FormContexts: Story = {
             <org-label htmlFor="full-name" label="Full Name" [isRequired]="true" />
             <org-label htmlFor="email" label="Email" [isRequired]="true" />
             <org-label htmlFor="company" label="Company">
-              <span class="text-text-subtle">(optional)</span>
+              <span class="text-muted">(optional)</span>
             </org-label>
           </div>
         </org-storybook-example-container-section>
@@ -345,7 +345,7 @@ export const FormContexts: Story = {
             <org-label htmlFor="display-name" label="Display Name" />
             <org-label htmlFor="email-notifications" label="Email Notifications" />
             <org-label htmlFor="two-factor-authentication" label="Two-Factor Authentication">
-              <span class="rounded-sm bg-safe-background-subtle px-1 py-0.5 text-3xs text-safe-text">SECURE</span>
+              <span class="rounded-sm bg-safe-soft px-1 py-0.5 text-3xs text-safe">SECURE</span>
             </org-label>
           </div>
         </org-storybook-example-container-section>
@@ -430,14 +430,14 @@ export const RealWorldExample: Story = {
 
             <div class="flex flex-col gap-1">
               <org-label htmlFor="phone-number" label="Phone Number">
-                <span class="text-text-subtle">(optional)</span>
+                <span class="text-muted">(optional)</span>
               </org-label>
               <org-input name="phone-number" type="tel" placeholder="+1 (555) 000-0000" />
             </div>
 
             <div class="flex flex-col gap-1">
               <org-label htmlFor="company" label="Company">
-                <span class="text-text-subtle">(optional)</span>
+                <span class="text-muted">(optional)</span>
               </org-label>
               <org-input name="company" type="text" placeholder="Acme Inc." />
             </div>

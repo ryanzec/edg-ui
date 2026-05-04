@@ -3,7 +3,7 @@ import { Textarea, allTextareaVariants, allTextareaIconAlignments } from './text
 import { TextareaToolbar } from './textarea-toolbar';
 import { TextareaToolbarItem } from './textarea-toolbar-item';
 import { allIconNames } from '../icon/icon';
-import { FormField } from '../form-field/form-field';
+import { FormField } from '../form-fields/form-field';
 import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
 import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
 import { FormFields } from '../form-fields/form-fields';

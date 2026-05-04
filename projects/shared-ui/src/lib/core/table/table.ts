@@ -19,7 +19,7 @@ import { LoadingSpinner } from '../loading-spinner/loading-spinner';
 import { LoadingBlocker } from '../loading-blocker/loading-blocker';
 import { Button } from '../button/button';
 import { Checkbox } from '../checkbox/checkbox';
-import { FormField } from '../form-field/form-field';
+import { FormField } from '../form-fields/form-field';
 import { DataSelectionStore } from '../data-selection-store/data-selection-store';
 import { TableRow } from './table-row';
 import { TableHeader } from './table-header';

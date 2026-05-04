@@ -24,11 +24,11 @@
 
   .label {
     flex: 1;
-    color: var(--color-text);
+    color: var(--color-fg);
   }
 
   .chevron {
-    color: var(--color-text);
+    color: var(--color-fg);
     flex-shrink: 0;
   }
 
@@ -51,14 +51,14 @@
   }
 
   :host([data-expanded]) {
-    background-color: var(--color-background-level1);
+    background-color: var(--color-bg-surface);
   }
 
   .checklist-item-button:hover {
-    background-color: var(--color-neutral-background-subtle-hover);
+    background-color: var(--color-neutral-soft-hover);
   }
 
   .checklist-item-button:focus-visible {
-    background-color: var(--color-neutral-background-subtle-hover);
+    background-color: var(--color-neutral-soft-hover);
   }
 }
