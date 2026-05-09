@@ -1,18 +1,17 @@
-import { Component, ChangeDetectionStrategy, input, InjectionToken } from '@angular/core';
-import { v4 as uuidv4 } from 'uuid';
+import { Component, ChangeDetectionStrategy, input } from '@angular/core';
 import { DialogCloseButton } from './dialog-close-button';
 
-/** injection token to allow child components to access the dialog instance */
-export const DIALOG_COMPONENT = new InjectionToken<Dialog>('Dialog Component');
+/** all available dialog position values */
+export const allDialogPositions = ['center', 'top', 'bottom', 'left', 'right'] as const;
+
+/** union type of all valid dialog positions */
+export type DialogPosition = (typeof allDialogPositions)[number];
+
+/** default value for the position input */
+export const DIALOG_POSITION_DEFAULT: DialogPosition = 'center';
 
 /** default value for the hasRoundedCorners input */
 export const DIALOG_HAS_ROUNDED_CORNERS_DEFAULT = true;
-
-/** default value for the defaultShowCloseIcon input */
-export const DIALOG_DEFAULT_SHOW_CLOSE_ICON_DEFAULT = true;
-
-/** default value for the defaultCloseIconEnabled input */
-export const DIALOG_DEFAULT_CLOSE_ICON_ENABLED_DEFAULT = true;
 
 @Component({
   selector: 'org-dialog',
@@ -20,22 +19,15 @@ export const DIALOG_DEFAULT_CLOSE_ICON_ENABLED_DEFAULT = true;
   imports: [DialogCloseButton],
   templateUrl: './dialog.html',
   styleUrl: './dialog.css',
-  providers: [{ provide: DIALOG_COMPONENT, useExisting: Dialog }],
   host: {
-    '[attr.aria-labelledby]': 'titleId',
+    '[attr.data-position]': 'position()',
     '[attr.data-has-rounded-corners]': 'hasRoundedCorners() ? "" : null',
   },
 })
 export class Dialog {
-  /** unique id used to link the dialog to its title for accessibility */
-  public readonly titleId: string = uuidv4();
+  /** position of the dialog on screen, drives the cdk-overlay-pane positioning via global :has() css */
+  public readonly position = input<DialogPosition>(DIALOG_POSITION_DEFAULT);
 
   /** controls whether the dialog container has rounded corners */
   public readonly hasRoundedCorners = input<boolean>(DIALOG_HAS_ROUNDED_CORNERS_DEFAULT);
-
-  /** fallback for whether the close icon is visible when not controlled via DIALOG_DATA */
-  public readonly defaultShowCloseIcon = input<boolean>(DIALOG_DEFAULT_SHOW_CLOSE_ICON_DEFAULT);
-
-  /** fallback for whether the close icon is enabled when not controlled via DIALOG_DATA */
-  public readonly defaultCloseIconEnabled = input<boolean>(DIALOG_DEFAULT_CLOSE_ICON_ENABLED_DEFAULT);
 }

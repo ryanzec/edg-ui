@@ -26,151 +26,54 @@ You are an expert Principal Frontend Software Engineer specializing in the moder
 - **ALWAYS** place what you think is the best choice as the first / option a and be **EXPLICIT** with which option is your recommendation and **WHY**.
 
 # Before Completed Protocol
-- **ALWAYS** list out with rule files were included in the context even if they were not directly used in the review.
 - **ALWAYS** output the input token usage / output token usage / and usage cost in US dollars at the end of EVERY message for the current session in a table format (cumulative).
 
 <!-- rules: abbreviations.md -->
 # IMPORTANT: These rules override general typescript / angular rules
 # Abbreviation Patterns
-- **ONLY** and **ALWAYS** use these abbreviations:
+- **ALWAYS** use these abbreviations everywhere:
   - `id` instead of `identifier`.
   - `utils` instead of `utilities`.
   - `config` instead of `configuration`.
+- **ONLY** and **ALWAYS** use these abbreviations for css based code (css classes, selectors, variables, etc.):
   - `xs` instead of `extra small`.
   - `sm` instead of `small`.
   - `md` instead of `medium`.
   - `lg` instead of `large`.
   - `xl` instead of `extra large`.
+  - `bg` instead of `background`.
+  - `fg` instead of `foreground`.
 - **NEVER** use these abbreviations:
   - `bg` for `background`, use `background` instead.
   - `e` for `event`, use `event` instead.
   - `e` for `error`, use `error` instead.
 - **ALWAYS** use abbreviations for initialisms.
 
-<!-- rules: angular/angular-feature-not-to-use.md -->
-# IMPORTANT: These rules override general typescript / angular rules
-# General Angular Component Breakout Patterns
-- **NEVER** use `standalone: true` in the `@Component` decorator.
-- **ALWAYS** have a export default value for each input of the comopnent using the pattern of `{DIRECTORY_NAME}_{INPUT_NAME}_DEFAULT`.
-- **ONLY** use modern signal based features like `input()`, `output()`, `computed()`
-- **ALWAYS** use `computed()` when generating a property from another signal even if it current is not used reactively **ONLY** if it requires **NO** parameters.
-- **ALWAYS** use `rxjs` + `outputFromObservable()` when you need to determine if an output event is being listened to like this:
-```ts
-private _preIconClicked$ = new Subject<void>();
-// ...
-public preIconClicked = outputFromObservable(this._preIconClicked$);
-// ...
-```
-- **ALWAYS** have selector be prefixed with `org-` for components in `projects/shared-ui`.
-- **ALWAYS** explicitly mark members (data) / methods (functions) of the class component `protected` if it need to be accessed by the template
-- **ALWAYS** explicitly mark methods (functions) of the class component as `public` for anything that is request to be part of the public api
-<!-- needed to avoid compiler issues -->
-- **ALWAYS** use explicitly pattern for add `hostDirectives` to components
-```ts
-@Component({
-  //...
-  hostDirectives: [
-    {
-      directive: ComponentColorDirective,
-      inputs: ['orgColor'],
-    },
-  ],
-  //...
-})
-```
-- **ONLY** allow a `containerClass` input if it is applied to the outer most element in the template.
-- **ALWAYS** explicitly define the input(s) that the directive defines on the component itself when adding a `hostDirective` to a component
-- **ALWAYS** add icon to `IconName` in `projects/shared-ui/src/lib/core/icon/icon.ts` if request but not available
-- **ALWAYS** prefix any input with `default*` when it is **ONLY** used to default internal state
-- **ALWAYS** use Reactive forms over of Template-driven ones
-- **ONLY** use `class` attribute for css classes
-- **ONLY** use `style` attribute for inline styles when **100%** needed
-- **ALWAYS** suffix `@ViewChild` member name with `Ref` when it is linked to a native html element and the value for the `@ViewChild` must match:
-```ts
-// MUST DO
-@ViewChild('inputRef')
-  public readonly inputRef!: ElementRef<HTMLInputElement>;
-```
-- **ALWAYS** suffix `@ViewChild` member name with `Component` when it is linked to an Angular component element and the value for the `@ViewChild` must match:
-```ts
-// MUST DO
-@ViewChild('cardComponent')
-  public readonly cardComponent!: Card;
-```
-- **ALWAYS** suffix `@ViewChild` member name with `Directove` when it is linked to an Angular directive element and the value for the `@ViewChild` must match:
-```ts
-// MUST DO
-@ViewChild('autoScrollDirective')
-  public readonly autoScrollDirective!: Card;
-```
-- **ONLY** use `static: true` for `@ViewChild` if the DOM element is **ALWAYS** present (not conditionally rendered) **AND** is accessed in `ngOnInit()`.
-- **ALWAYS** prefix any input that is forwarded as-is to a sub-component (or a native html element) with a semantic name for the inner element it drives, so the api makes clear which inner thing the value is wired to. This applies to **all** inputs (not just `class` pass-throughs), including ones forwarded as values to sub-component inputs.
-```ts
-// MUST DO — class pass-throughs
-public iconClass = input<string>('');
-public inputClass = input<string>('');
-
-// MUST DO — value forwarded to an inner <org-icon>'s color input
-public iconColor = input<IconColor>('inherit');
-
-// MUST DO — value forwarded to an inner <input>'s placeholder attribute
-public inputPlaceholder = input<string>('');
-```
-- **ALWAYS** make sure the form component properly support angular's reactive form system.
-- **ALWAYS** use `zodValidator` when dealing with form validation where a zod schema should be used.
-- **ALWAYS** use the `DialogController` when implementing a dialog component.
-- **ALWAYS** communicate child internal state changes to parent components with an `output()` event unless EXPLICITLY told otherwise.
-- **ALWAYS** use a `model()` instead of a `input()` when the component itself and its parent need acces to modify and / or know when it changes.
-- **ONLY** use `output()` to signal an internal event has happened in the component, NOT for state changing.
-- **ONLY** follow Angular's official naming conventions for internal event handler methods — use descriptive verb-based names (e.g., `save()`, `click()`, `submit()`) without requiring any specific prefix.
-- **ALWAYS** use `toObservable()` on request data that is passed to methods of api or data store services.
-```ts
-export class MyView implements AfterViewInit {
-  // other code...
- 
-  private _fetchRequestData = signal<GetRequest>({
-    limit: 10,
-    offset: 0,
-    orderBy: 'updatedAt',
-    orderDirection: 'desc',
-  });
- 
-  // other code...
- 
-  public ngAfterViewInit(): void {
-    // we run this in here to avoid the init event storm that happens when the children components emit events that
-    // update the fetch request data to prevent unnecessary duplicate fetch requests
-    runInInjectionContext(this._injector, () => {
-      toObservable(this._fetchRequestData)
-        .pipe(
-          debounceTime(0),
-          takeUntilDestroyed(),
-          distinctUntilChanged((previous, current) => JSON.stringify(previous) === JSON.stringify(current))
-        )
-        .subscribe((requestData) => {
-          this._myDataStore.fetch(requestData);
-        });
-    });
-  }
- 
-  protected onSortingChanged(sortingData: MySortingData): void {
-    // code to update _fetchRequestData
-  }
- 
-  protected onFilterChanged(filterData: MyFilterData): void {
-    // code to update _fetchRequestData
-  }
-}
-```
-- **ALWAYS** inject the component intp a sub component when it needs to access property of the parent component.
-- **ALWAYS** use `computed()` is the reference data is a signal.
-
 <!-- rules: angular/brain-directive-component.md -->
 # IMPORTANT: These rules override general typescript / angular rules
-# General Angualr Brain Directive / Component Patterns
-- **ALWAYS** prefer using a directive over a component whenever possible
-- **NEVER** container styling code
-- **ONLY** the input that matches the selector can have the `org` and `brain` in the name, **NOTHING** else in the brain directive / component files can have `org` or `brain` in the name including but not limited to:
+
+# What Must **ALWAYS** Go In An Angular Brain Directive / Component
+The following is a list of logic / state that must **ALWAYS** go into the brain directive / component:
+- state management like opened / closed, checked, focused, active (but **NOT** limited to only those).
+- event handlers (e.g., `keydown`, `click`).
+- focus management (roving tabindex, trapping focus).
+- accessibility attributes (ARIA roles, states, properties, accessibility labels).
+- stylistic attributes that have accessibility or interaction routing concerns, like `orientation` or `direction` (but **NOT** limited to those).
+
+# What Must **NEVER** Go In An Angular Brain Directive / Component
+The following is a list of logic / state that must **NEVER** go into the brain directive / component:
+- sizing attributes.
+- spacing attributes.
+- color / theming attributes.
+- animation / transition attributes.
+- layout logic: while `orientation` or `direction` need to be in the brain to handle keyboard routing, the actual CSS application of `flex-col` vs `flex-row` MUST reside in the core helm component.
+- security related functionality.
+
+# General Angular Brain Directive / Component Patterns
+- **ALWAYS** prefer using a directive over a component whenever possible. Leverage `hostDirectives` to compose complex brain behaviors.
+- **ONLY** contain inputs that are required for the component from a strict logic or accessibility standpoint.
+- **NEVER** contain inputs that are solely for visual styling.
+- **ONLY** the input that matches the selector can have the `org` and `brain` in the name. **NOTHING** else in the brain directive / component files can have `org` or `brain` in the name, including but not limited to:
   - inputs
   - outputs
   - types / interfaces
@@ -230,7 +133,7 @@ public preIconClicked = outputFromObservable(this._preIconClicked$);
 })
 ```
 - **ONLY** allow a `containerClass` input if it is applied to the outer most element in the template.
-- **ALWAYS** explicitly define the input(s) that the directive defines on the component itself when adding a `hostDirective` to a component
+- **ALWAYS** explicitly define the input(s) that the directive defines on the component itself when adding a `hostDirective` to a component and **NOT** as standalone property `input()`'s of the class.
 - If an icon is requested that is not available via `IconName` in `projects/shared-ui/src/lib/core/icon/icon.ts` **ALWAYS** ask before added a newicon, always say which icon you are adding,a nd the icon needs to come from lucide icons.
 - **ALWAYS** prefix any input with `default*` when it is **ONLY** used to default internal state
 - **ALWAYS** use Reactive forms over of Template-driven ones
@@ -316,12 +219,15 @@ export class MyView implements AfterViewInit {
 - **ALWAYS** inject the component intp a sub component when it needs to access property of the parent component.
 - **ALWAYS** use `computed()` is the reference data is a signal.
 - **NEVER** allow `null` as a true value for an input(), instead, **ALWAYS** allow it as a input transform value and transform it to `undefined`.
-- If injecting a component with `inject()`, **ALWAYS** ask if the inject should include `host: true`.
+- When injecting a component with `inject()`, **ALWAYS** default to omitting `{ host: true }`. The default `inject()` behavior walks the element-injector tree (which mirrors the rendered DOM and crosses content-projection boundaries), which is what is needed in nearly all parent-component lookups. `{ host: true }` limits the search to the calling component's own host element view, so injecting a parent component (not on the calling component's own element) with `{ host: true }` will throw `NG0201: No provider for ...` even when the parent is structurally present. **ONLY** add `{ host: true }` when you have a concrete reason it is required (e.g. enforcing the dependency must be on the calling component's own host element, not an ancestor), and in that case **ALWAYS** ask first and explain why.
+- **ALWAYS** default to using content projection when a component wants to allow the parent to provide content that will be placed in a specific location of the component.
+- IF you feel a content projection use case would be better implemented as a Lazy projection via `<ng-template>, **ALWAYS** ask if I would want that vs the standard / simpler content project.
 
 <!-- rules: angular/data-stores.md -->
 # IMPORTANT: These rules override general typescript / angular rules
 # General Data Store Service Patterns
 - **ALWAYS** return the result of api requests from data store method that make api requests as `Observerable<...>`.
+- **NEVER** create stories for these types of services.
 
 <!-- rules: angular/directives.md -->
 # IMPORTANT: These rules override general typescript / angular rules
@@ -373,7 +279,7 @@ logManager.warn({
 ```
 - **ALWAYS** wrap RxJS's `takeUntilDestroyed()` in `runInInjectionContext()` in the `ngAfterViewInit()` or pass in the `DestroyRef` as a parameter.
 - **ALWAYS** explicit pass the generic type when using `computed<>()`.
-- **ONLY** use lazy loading for routes.
+- **ONLY** use lazy loading for routes view directly (shared layout components should not be lazy loaded).
 - **ALWAYS** use `NgOptimizedImage` for all static images.
   - `NgOptimizedImage` does not work for inline base64 images.
 - **ALWAYS** use `computed()` for derived state.
@@ -435,11 +341,13 @@ When you need a low level components / directives / pipes / services, use the co
 - **ONLY** use either use `[selected]` for the option or reactive form binding if a reactive form is needed for select elements values.
 - **ALWAYS** use the async pipe to handle observables.
 - **ALWAYS** use html entity for angular special character in template (such as `&#64;` instead of `@`).
-- **ALWAYS** use the `button` html element when needing to create an element that has clickbility.
+- **ALWAYS** use the `button` html element when needing to create a generic element that has clickbility.
 - **ALWAYS** use the `` directive to apply typing to templates that are passed data. 
 - **NEVER** use `@let` or `as*()` component method to provide typing for templates.
 - **ONLY** use native control flow like `@if`, `@for`, `@switch` in templates.
--
+- **ONLY** use the `class` attribute for applying top level css classes to elements.
+- If an element needs to be selected in the context of testing, add and use the `data-testid` attribute.
+- **ONLY** use the `style` component if the styles are dynamically generated in the typescript code.
 
 <!-- rules: angular/view-components.md -->
 # IMPORTANT: These rules override general typescript / angular / angular components rules
@@ -554,9 +462,15 @@ Utility css classes **MUST** be used for all other styles:
 
 # Styling Patterns
 - **NEVER** add styling to components in `projects/shared-ui/src/lib/brain`.
+- **NEVER** add explicitly height / widths to component is `projects/shared-ui/src/lib/core`, they should **ALWAYS** grow based on the content inside them.
+- If you intend to set an explicit height / width for any component, **ALWAY** make the a question **BEFORE** writing any code.
 - **ALWAYS** use css files for styling components and directives in `projects/shared-ui/src/lib/core` **EXCEPT** for `*stories*` files.
-- **ALWAYS** use css variables from `projects/shared-ui/src/lib/styles/variables/base-tokens.css` or the `{component-name}-tokens.css` file for styling in css files.
+- **ALWAYS** use css variables from `projects/shared-ui/src/lib/styles/tokens/base-tokens.css` or the `{component-name}-tokens.css` file for styling in css files.
 - **ALWAYS** favor css utility based styling for component **OUTSIDE** of `projects/shared-ui/src/lib/core`.
+
+# Layer Patterns
+- **ALWAYS** wrap css in general component css files (NOT variables component cssfiles) in `@layer components {...}` for components in `projects/shared-ui/src/lib/core`.
+- **ALWAYS** wrap css in general component css files (NOT variables component cssfiles) in `@layer application {...}` for components outside of `projects/shared-ui/src/lib/core`.
 
 # General Styling Patterns
 - If you see what you think is a tailwind css, check to see if those css classes are in any of the custom utilities in `projects/shared-ui/src/lib/styles` as tailwind utility classes **ARE NOT USE**, if the utility class does not exist, **ALWAYS** ask if it should be added to an existing one or a new utility class file.
@@ -573,7 +487,6 @@ Utility css classes **MUST** be used for all other styles:
 - **ALWAYS** use `aria-*` when available and then fallback to `data-*` attributes for component styling that is based on an input having the input value be the `data-*` attribute value, see `projects/shared-ui/src/lib/core/box` as a reference.
 - **ALWAYS** use the `.dark` for defining dark mode colors.
 - **ALWAYS** use `/* ... */` to comment is CSS.
-- **ALWAYS** wrap css in general component css files (NOT variables component cssfiles) in `@layer components {...}`.
 - **ONLY** use negative margins as a LAST resort.
 - **ALWAYS** use `focus-visible` over `focus` pseduo selector.
 - **ALWAYS** use thing like background color change when styling `focus` elements for accessability.
@@ -588,8 +501,8 @@ Utility css classes **MUST** be used for all other styles:
 - **NEVER** use ring / outline / box-shadow styles other than to remove it **OR** if it is for a11y.
 - **NEVER** use a default values when using `var(...)`.
 - **ALWAYS** make css class name as short as needed but still descripitive since Angular handle encapulation to avoid naming conflict so `header` instead of `integration-card-configured-header`.
-- **ALWAYS** make sure to update the `.moon/scripts/build-typescript-design-token.cjs` script when modifies css variables in `projects/shared-ui/src/lib/styles/variables`.
-- **ALWAYS** make sure to run `moon :build-design-tokens` when css variables in `projects/shared-ui/src/lib/styles/variables` are modified in any way (added / removed / changed).
+- **ALWAYS** make sure to update the `.moon/scripts/build-typescript-design-token.cjs` script when modifies css variables in `projects/shared-ui/src/lib/styles/tokens`.
+- **ALWAYS** make sure to run `moon :build-design-tokens` when css variables in `projects/shared-ui/src/lib/styles/tokens` are modified in any way (added / removed / changed).
 - **ALWAYS** prefix component specific design token names with `{component-name}-*` following base the standard base token naming.
 
 <!-- rules: testing/unit.md -->
@@ -693,6 +606,11 @@ const logUser = (user: Pick<User, 'name'>) => {
 - If something can not be `null` / `undefined` based on typescript typing, falsey checks are ok **ONLY** if they include a comment above the check indicating it is just a defensive check.
 - **ALWAYS** have a comment in an empty method that is designed to be overriden or set outside of the class to avoid confusion on why there is an empty method + prevent eslint errors
 - **AWLAYS** use the `projects/shared-ui/src/lib/styles/design-tokens.ts` when you need to access css design tokens in typescript code.
+
+<!-- rules: use-cases/css-local-variables.md -->
+## CSS Local Variables
+
+When a component need multiple variants of something (like size, color, etc.) we should be setting the css property **ONCE** using a component design token (css variable) and then to avoid it, we need to override the **DESIGN TOKEN** and **NEVER** override the css property. This reduces the amount of code needs which in general should make the code easier to reason about.
 
 <!-- rules: use-cases/needing-multiple-ng-content-element.md -->
 # Needing Mutliple `<ng-content />` Elements

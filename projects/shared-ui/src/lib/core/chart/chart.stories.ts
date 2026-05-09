@@ -423,8 +423,6 @@ type Story = StoryObj<Chart>;
 
 export const Default: Story = {
   args: {
-    config: null,
-    isLoading: false,
     containerClass: '',
   },
 };

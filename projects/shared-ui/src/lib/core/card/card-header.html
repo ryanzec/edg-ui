@@ -1,7 +1,7 @@
 @if (hasTitle() || hasSubtitle()) {
   <div class="title-container">
     @if (hasTitle()) {
-      @switch (headingLevel()) {
+      @switch (cardHeaderBrainDirective.headingLevel()) {
         @case (1) {
           <h1 class="title">{{ title() }}</h1>
         }

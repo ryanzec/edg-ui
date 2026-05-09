@@ -1,19 +1,11 @@
-import { Component, ChangeDetectionStrategy, input, computed } from '@angular/core';
+import { Component, ChangeDetectionStrategy, computed, inject, input } from '@angular/core';
 import { type DateTime } from 'luxon';
 import { Indicator, type IndicatorColor } from '../indicator/indicator';
 import { LoadingSpinner } from '../loading-spinner/loading-spinner';
 import { DatePipe } from '../date-pipe/date-pipe';
 import { TextDirective } from '../text-directive/text-directive';
 import { DateFormat, TimeFormat } from '@organization/shared-utils';
-
-/** all valid last updated statuses */
-export const lastUpdatedStatuses = ['active', 'inactive'] as const;
-
-/** the status of the last updated indicator */
-export type LastUpdatedStatus = 'active' | 'inactive';
-
-/** default value for the isLoading input */
-export const LAST_UPDATED_IS_LOADING_DEFAULT = false;
+import { LastUpdatedBrainDirective } from '../../brain/last-updated-brain/last-updated-brain';
 
 @Component({
   selector: 'org-last-updated',
@@ -21,19 +13,20 @@ export const LAST_UPDATED_IS_LOADING_DEFAULT = false;
   imports: [Indicator, LoadingSpinner, DatePipe, TextDirective],
   templateUrl: './last-updated.html',
   styleUrl: './last-updated.css',
+  hostDirectives: [
+    {
+      directive: LastUpdatedBrainDirective,
+      inputs: ['status', 'isLoading'],
+    },
+  ],
   host: {
-    role: 'status',
-    '[attr.aria-label]': 'ariaLabel()',
-    '[attr.data-status]': 'status()',
-    '[attr.data-is-loading]': 'isLoading() ? "" : null',
+    '[attr.data-status]': 'brain.status()',
+    '[attr.data-is-loading]': 'brain.isLoading() ? "" : null',
   },
 })
 export class LastUpdated {
-  /** the current status */
-  public status = input.required<LastUpdatedStatus>();
-
-  /** whether the indicator is in a loading state */
-  public isLoading = input<boolean>(LAST_UPDATED_IS_LOADING_DEFAULT);
+  /** reference to the host last-updated brain directive owning status / loading state and the a11y surface */
+  protected readonly brain = inject(LastUpdatedBrainDirective, { self: true });
 
   /** the last time the data was updated */
   public lastUpdatedAt = input.required<DateTime>();
@@ -46,15 +39,6 @@ export class LastUpdated {
 
   /** the indicator color derived from the current status */
   protected readonly indicatorColor = computed<IndicatorColor>(() => {
-    return this.status() === 'active' ? 'safe' : 'neutral';
-  });
-
-  /** accessible label describing the current state for screen readers */
-  protected readonly ariaLabel = computed<string>(() => {
-    if (this.isLoading()) {
-      return 'loading last updated';
-    }
-
-    return `last updated status: ${this.status()}`;
+    return this.brain.status() === 'active' ? 'safe' : 'neutral';
   });
 }

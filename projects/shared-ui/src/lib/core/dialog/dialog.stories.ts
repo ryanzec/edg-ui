@@ -1,10 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/angular';
-import {
-  DIALOG_TRIGGER_BRAIN,
-  DialogBrainDirective,
-  DialogPosition,
-  allDialogPositions,
-} from '../../brain/dialog-brain/dialog-brain';
+import { DIALOG_TRIGGER, DialogBrainDirective } from '../../brain/dialog-brain/dialog-brain';
 import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
 import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
 import { Button } from '../../core/button/button';
@@ -12,7 +7,7 @@ import { ChangeDetectionStrategy, Component, inject, input, ViewChild, signal, T
 import { DialogHeader } from '../../core/dialog/dialog-header';
 import { DialogContent } from '../../core/dialog/dialog-content';
 import { DialogFooter } from '../../core/dialog/dialog-footer';
-import { Dialog } from '../../core/dialog/dialog';
+import { Dialog, DialogPosition, allDialogPositions } from '../../core/dialog/dialog';
 import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { CheckboxToggle } from '../../core/checkbox-toggle/checkbox-toggle';
 import { TypedContextDirective } from '../../core/typed-context-directive/typed-context-directive';
@@ -31,7 +26,7 @@ type EXAMPLEDialogData = {
   imports: [Button, DialogHeader, DialogContent, DialogFooter, Dialog],
   template: `
     @if (isInDialog) {
-      <org-dialog [hasRoundedCorners]="data.hasRoundedCorners ?? true">
+      <org-dialog [position]="position()" [hasRoundedCorners]="hasRoundedCorners()">
         <org-dialog-header [title]="data.title" />
         <org-dialog-content>{{ data.message }}</org-dialog-content>
         <org-dialog-footer>
@@ -44,14 +39,7 @@ type EXAMPLEDialogData = {
   hostDirectives: [
     {
       directive: DialogBrainDirective,
-      inputs: [
-        'position',
-        'hasRoundedCorners',
-        'hasBackdrop',
-        'enableCloseOnClickOutside',
-        'enableEscapeKey',
-        'showCloseIcon',
-      ],
+      inputs: ['hasBackdrop', 'enableCloseOnClickOutside', 'enableEscapeKey', 'showCloseIcon'],
       outputs: ['closed'],
     },
   ],
@@ -59,10 +47,13 @@ type EXAMPLEDialogData = {
 })
 class EXAMPLEDialog {
   private readonly _selfBrain = inject(DialogBrainDirective, { self: true });
-  private readonly _triggerBrain = inject(DIALOG_TRIGGER_BRAIN, { optional: true });
+  private readonly _triggerBrain = inject(DIALOG_TRIGGER, { optional: true });
   private readonly _brain = this._triggerBrain ?? this._selfBrain;
 
   private readonly _dialogRef = inject(DialogRef<EXAMPLEDialog>, { optional: true });
+
+  public readonly position = input<DialogPosition>('center');
+  public readonly hasRoundedCorners = input<boolean>(true);
 
   protected readonly data = inject<EXAMPLEDialogData>(DIALOG_DATA, { optional: true }) ?? {
     title: '',
@@ -538,7 +529,7 @@ export const Backdrop: Story = {
   imports: [Button, DialogHeader, DialogContent, DialogFooter, Dialog, CheckboxToggle],
   template: `
     @if (isInDialog) {
-      <org-dialog [hasRoundedCorners]="data.hasRoundedCorners ?? true">
+      <org-dialog [position]="position()" [hasRoundedCorners]="data.hasRoundedCorners ?? true">
         <org-dialog-header [title]="data.title" />
         <org-dialog-content>
           <div class="flex flex-col gap-4">
@@ -571,24 +562,19 @@ export const Backdrop: Story = {
   hostDirectives: [
     {
       directive: DialogBrainDirective,
-      inputs: [
-        'position',
-        'hasRoundedCorners',
-        'hasBackdrop',
-        'enableCloseOnClickOutside',
-        'enableEscapeKey',
-        'showCloseIcon',
-      ],
+      inputs: ['hasBackdrop', 'enableCloseOnClickOutside', 'enableEscapeKey', 'showCloseIcon'],
       outputs: ['closed'],
     },
   ],
 })
 class EXAMPLEDialogWithCloseIconToggle {
   private readonly _selfBrain = inject(DialogBrainDirective, { self: true });
-  private readonly _triggerBrain = inject(DIALOG_TRIGGER_BRAIN, { optional: true });
+  private readonly _triggerBrain = inject(DIALOG_TRIGGER, { optional: true });
   private readonly _brain = this._triggerBrain ?? this._selfBrain;
 
   private readonly _dialogRef = inject(DialogRef<EXAMPLEDialogWithCloseIconToggle>, { optional: true });
+
+  public readonly position = input<DialogPosition>('center');
 
   protected readonly data = inject<EXAMPLEDialogData>(DIALOG_DATA, { optional: true }) ?? {
     title: '',
@@ -695,7 +681,7 @@ export const CloseIcon: Story = {
   imports: [Button, DialogHeader, DialogContent, DialogFooter, Dialog, CheckboxToggle],
   template: `
     @if (isInDialog) {
-      <org-dialog [hasRoundedCorners]="data.hasRoundedCorners ?? true">
+      <org-dialog [position]="position()" [hasRoundedCorners]="data.hasRoundedCorners ?? true">
         <org-dialog-header [title]="data.title" />
         <org-dialog-content>
           <div class="flex flex-col gap-4">
@@ -728,24 +714,19 @@ export const CloseIcon: Story = {
   hostDirectives: [
     {
       directive: DialogBrainDirective,
-      inputs: [
-        'position',
-        'hasRoundedCorners',
-        'hasBackdrop',
-        'enableCloseOnClickOutside',
-        'enableEscapeKey',
-        'showCloseIcon',
-      ],
+      inputs: ['hasBackdrop', 'enableCloseOnClickOutside', 'enableEscapeKey', 'showCloseIcon'],
       outputs: ['closed'],
     },
   ],
 })
 class EXAMPLEDialogWithEscapeToggle {
   private readonly _selfBrain = inject(DialogBrainDirective, { self: true });
-  private readonly _triggerBrain = inject(DIALOG_TRIGGER_BRAIN, { optional: true });
+  private readonly _triggerBrain = inject(DIALOG_TRIGGER, { optional: true });
   private readonly _brain = this._triggerBrain ?? this._selfBrain;
 
   private readonly _dialogRef = inject(DialogRef<EXAMPLEDialogWithEscapeToggle>, { optional: true });
+
+  public readonly position = input<DialogPosition>('center');
 
   protected readonly data = inject<EXAMPLEDialogData>(DIALOG_DATA, { optional: true }) ?? {
     title: '',
@@ -857,7 +838,7 @@ export const DynamicCloseControl: Story = {
       <org-button (click)="openDialog()">Open Dialog</org-button>
 
       <ng-template [orgTypedContext]="dialogContextType" #dialogTemplateRef let-context>
-        <org-dialog>
+        <org-dialog [position]="position()">
           <org-dialog-header title="Template-Based Dialog" />
           <org-dialog-content>
             <p>This dialog content is defined inline as a template reference — no separate component required.</p>
@@ -871,16 +852,13 @@ export const DynamicCloseControl: Story = {
       </ng-template>
     </div>
   `,
-  hostDirectives: [
-    {
-      directive: DialogBrainDirective,
-      inputs: ['position'],
-    },
-  ],
+  hostDirectives: [DialogBrainDirective],
   host: {},
 })
 class EXAMPLEStoryTemplateDialog {
   private readonly _brain = inject(DialogBrainDirective, { self: true });
+
+  public readonly position = input<DialogPosition>('center');
 
   @ViewChild('dialogTemplateRef')
   public readonly dialogTemplateRef!: TemplateRef<{ $implicit: { message: string } }>;

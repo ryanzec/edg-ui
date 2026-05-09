@@ -1,5 +1,10 @@
 @if (hasNestedItems()) {
-  <button type="button" class="checklist-item-button" (click)="toggle()" [attr.aria-expanded]="isItemExpanded()">
+  <button
+    type="button"
+    class="checklist-item-button"
+    (click)="brain.toggle()"
+    [attr.aria-expanded]="brain.isExpanded()"
+  >
     <org-checklist-status-icon [status]="item().status" />
 
     <span class="label">
@@ -9,7 +14,7 @@
       }
     </span>
 
-    <org-icon [name]="isItemExpanded() ? 'chevron-down' : 'chevron-right'" size="sm" class="chevron" />
+    <org-icon [name]="brain.isExpanded() ? 'chevron-down' : 'chevron-right'" size="sm" class="chevron" />
   </button>
 } @else {
   <div class="checklist-item-row">
@@ -19,7 +24,7 @@
   </div>
 }
 
-@if (hasNestedItems() && isItemExpanded()) {
+@if (hasNestedItems() && brain.isExpanded()) {
   <div class="nested-items" role="list">
     @for (nestedItem of item().items; track nestedItem.id) {
       <div class="nested-item" role="listitem">

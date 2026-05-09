@@ -55,7 +55,12 @@ class StoryCustomUnsavedChangesDialog {
   template: `
     <div [orgUnsavedChanges]="isDirty()" class="flex flex-col gap-3 p-4 border rounded-base">
       <h3 class="font-medium">Standard Dialog View (Guarded)</h3>
-      <org-input [formControl]="nameControl" placeholder="Type something..." data-testid="standard-form-input" />
+      <org-input
+        name="standardFormName"
+        [formControl]="nameControl"
+        placeholder="Type something..."
+        data-testid="standard-form-input"
+      />
       <div class="flex flex-col gap-1 text-sm">
         <div><strong>Last Saved Value:</strong> "{{ lastSavedValue() }}"</div>
         <div><strong>Current Value:</strong> "{{ currentValue() }}"</div>
@@ -93,7 +98,12 @@ class StoryUnsavedChangesStandardDialogView implements UnsavedChangesAware {
   template: `
     <div [orgUnsavedChanges]="isDirty()" class="flex flex-col gap-3 p-4 border rounded-base">
       <h3 class="font-medium">Custom Dialog View (Guarded)</h3>
-      <org-input [formControl]="nameControl" placeholder="Type something..." data-testid="custom-form-input" />
+      <org-input
+        name="customFormName"
+        [formControl]="nameControl"
+        placeholder="Type something..."
+        data-testid="custom-form-input"
+      />
       <div class="flex flex-col gap-1 text-sm">
         <div><strong>Last Saved Value:</strong> "{{ lastSavedValue() }}"</div>
         <div><strong>Current Value:</strong> "{{ currentValue() }}"</div>

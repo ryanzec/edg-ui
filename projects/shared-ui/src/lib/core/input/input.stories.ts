@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/angular';
 import { Input, allInputVariants, allInputTypes } from './input';
-import { allIconNames } from '../icon/icon';
+import { allIconNames } from '../../brain/icon-brain/icon-brain';
 import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
 import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
 import { FormField } from '../form-fields/form-field';

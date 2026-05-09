@@ -1,6 +1,7 @@
 import { Component, ChangeDetectionStrategy, input } from '@angular/core';
 import { Indicator } from '../indicator/indicator';
 import { ComponentColor } from '../types/component-types';
+import { TimelineItemBrainDirective } from '../../brain/timeline-item-brain/timeline-item-brain';
 
 /** color options for the timeline item component */
 export type TimelineItemColor = ComponentColor;
@@ -15,6 +16,11 @@ export const TIMELINE_ITEM_COLOR_DEFAULT: TimelineItemColor = 'primary';
   imports: [Indicator],
   templateUrl: './timeline-item.html',
   styleUrl: './timeline-item.css',
+  hostDirectives: [
+    {
+      directive: TimelineItemBrainDirective,
+    },
+  ],
   host: {
     '[attr.data-color]': 'color()',
   },

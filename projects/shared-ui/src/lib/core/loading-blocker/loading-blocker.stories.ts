@@ -33,15 +33,15 @@ const meta: Meta<LoadingBlocker> = {
     <!-- Your content here -->
   </div>
 
-  <!-- With text -->
+  <!-- With label -->
   <div class="relative h-2xs">
-    <org-loading-blocker [isVisible]="true" text="Loading data..." />
+    <org-loading-blocker [isVisible]="true" label="Loading data..." />
     <!-- Your content here -->
   </div>
 
   <!-- Conditionally visible -->
   <div class="relative h-2xs">
-    <org-loading-blocker [isVisible]="isLoading()" [text]="loadingMessage()" />
+    <org-loading-blocker [isVisible]="isLoading()" [label]="loadingMessage()" />
     <!-- Your content here -->
   </div>
   \`\`\`
@@ -63,23 +63,23 @@ type Story = StoryObj<LoadingBlocker>;
 export const Default: Story = {
   args: {
     isVisible: true,
-    text: '',
+    label: '',
   },
   argTypes: {
     isVisible: {
       control: 'boolean',
       description: 'Controls visibility of the loading blocker',
     },
-    text: {
+    label: {
       control: 'text',
-      description: 'Optional text to display next to the loading spinner',
+      description: 'Optional label to display next to the loading spinner (also used as aria-label)',
     },
   },
   render: (args) => ({
     props: args,
     template: `
       <div class="relative h-2xs border rounded-base p-4">
-        <org-loading-blocker [isVisible]="isVisible" [text]="text" />
+        <org-loading-blocker [isVisible]="isVisible" [label]="label" />
         <div class="flex flex-col gap-4">
           <h3 class="text-2xl font-bold">Sample Content</h3>
           <p>This is some content that would be blocked while loading.</p>
@@ -100,7 +100,7 @@ export const States: Story = {
     props: {},
     template: `
       <org-storybook-example-container>
-        <org-storybook-example-container-section label="Visible Without Text">
+        <org-storybook-example-container-section label="Visible Without Label">
           <div class="relative h-5xs border rounded-base p-4">
             <org-loading-blocker [isVisible]="true" />
             <div>
@@ -110,9 +110,9 @@ export const States: Story = {
           </div>
         </org-storybook-example-container-section>
 
-        <org-storybook-example-container-section label="Visible With Text">
+        <org-storybook-example-container-section label="Visible With Label">
           <div class="relative h-5xs border rounded-base p-4">
-            <org-loading-blocker [isVisible]="true" text="Loading data..." />
+            <org-loading-blocker [isVisible]="true" label="Loading data..." />
             <div>
               <h3 class="text-xl font-bold">Content Area</h3>
               <p>This content is blocked by the loading overlay.</p>
@@ -122,7 +122,7 @@ export const States: Story = {
 
         <org-storybook-example-container-section label="Hidden">
           <div class="relative h-5xs border rounded-base p-4">
-            <org-loading-blocker [isVisible]="false" text="Loading..." />
+            <org-loading-blocker [isVisible]="false" label="Loading..." />
             <div>
               <h3 class="text-xl font-bold">Content Area</h3>
               <p>The loading blocker is not visible, so this content is accessible.</p>
@@ -137,28 +137,28 @@ export const States: Story = {
   }),
 };
 
-export const WithDifferentTextLengths: Story = {
+export const WithDifferentLabelLengths: Story = {
   render: () => ({
     props: {},
     template: `
       <org-storybook-example-container>
-        <org-storybook-example-container-section label="Short Text">
+        <org-storybook-example-container-section label="Short Label">
           <div class="relative h-5xs w-2xs border rounded-base p-4 overflow-hidden">
-            <org-loading-blocker [isVisible]="true" text="Loading..." />
+            <org-loading-blocker [isVisible]="true" label="Loading..." />
             <div>Content</div>
           </div>
         </org-storybook-example-container-section>
 
-        <org-storybook-example-container-section label="Medium Text">
+        <org-storybook-example-container-section label="Medium Label">
           <div class="relative h-5xs w-2xs border rounded-base p-4 overflow-hidden">
-            <org-loading-blocker [isVisible]="true" text="Loading your data, please wait..." />
+            <org-loading-blocker [isVisible]="true" label="Loading your data, please wait..." />
             <div>Content</div>
           </div>
         </org-storybook-example-container-section>
 
-        <org-storybook-example-container-section label="Long Text">
+        <org-storybook-example-container-section label="Long Label">
           <div class="relative h-5xs w-2xs border rounded-base p-4 overflow-hidden">
-            <org-loading-blocker [isVisible]="true" text="Loading your data from the server, this may take a few moments..." />
+            <org-loading-blocker [isVisible]="true" label="Loading your data from the server, this may take a few moments..." />
             <div>Content</div>
           </div>
         </org-storybook-example-container-section>
@@ -171,21 +171,21 @@ export const WithDifferentTextLengths: Story = {
 };
 
 @Component({
-  selector: 'story-dynamic-text-example',
+  selector: 'story-dynamic-label-example',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [LoadingBlocker],
   template: `
     <div class="relative h-2xs border rounded-base p-4">
-      <org-loading-blocker [isVisible]="true" [text]="currentText()" />
+      <org-loading-blocker [isVisible]="true" [label]="currentLabel()" />
       <div class="flex flex-col gap-4">
-        <h3 class="text-2xl font-bold">Dynamic Loading Text</h3>
+        <h3 class="text-2xl font-bold">Dynamic Loading Label</h3>
         <p>Watch the loading message change every second.</p>
-        <p class="text-sm">Current message: {{ currentText() }}</p>
+        <p class="text-sm">Current message: {{ currentLabel() }}</p>
       </div>
     </div>
   `,
 })
-class DynamicTextExampleComponent implements OnInit, OnDestroy {
+class DynamicLabelExampleComponent implements OnInit, OnDestroy {
   private readonly _loadingMessages = [
     'Initializing...',
     'Loading data...',
@@ -198,12 +198,12 @@ class DynamicTextExampleComponent implements OnInit, OnDestroy {
   private _currentIndex = 0;
   private _intervalId: ReturnType<typeof setInterval> | null = null;
 
-  public currentText = signal<string>(this._loadingMessages[0]);
+  public currentLabel = signal<string>(this._loadingMessages[0]);
 
   public ngOnInit(): void {
     this._intervalId = setInterval(() => {
       this._currentIndex = (this._currentIndex + 1) % this._loadingMessages.length;
-      this.currentText.set(this._loadingMessages[this._currentIndex]);
+      this.currentLabel.set(this._loadingMessages[this._currentIndex]);
     }, 1000);
   }
 
@@ -214,12 +214,12 @@ class DynamicTextExampleComponent implements OnInit, OnDestroy {
   }
 }
 
-export const DynamicText: Story = {
+export const DynamicLabel: Story = {
   render: () => ({
     props: {},
-    template: `<story-dynamic-text-example />`,
+    template: `<story-dynamic-label-example />`,
     moduleMetadata: {
-      imports: [DynamicTextExampleComponent],
+      imports: [DynamicLabelExampleComponent],
     },
   }),
 };
@@ -231,21 +231,21 @@ export const DifferentContainerSizes: Story = {
       <org-storybook-example-container>
         <org-storybook-example-container-section label="Small Container">
           <div class="relative h-6xs w-2xs border rounded-base p-4">
-            <org-loading-blocker [isVisible]="true" text="Loading..." />
+            <org-loading-blocker [isVisible]="true" label="Loading..." />
             <div>Small content area</div>
           </div>
         </org-storybook-example-container-section>
 
         <org-storybook-example-container-section label="Medium Container">
           <div class="relative h-5xs w-base border rounded-base p-4">
-            <org-loading-blocker [isVisible]="true" text="Loading your data..." />
+            <org-loading-blocker [isVisible]="true" label="Loading your data..." />
             <div>Medium content area</div>
           </div>
         </org-storybook-example-container-section>
 
         <org-storybook-example-container-section label="Large Container">
           <div class="relative h-sm w-full border rounded-base p-4">
-            <org-loading-blocker [isVisible]="true" text="Loading all records from the database..." />
+            <org-loading-blocker [isVisible]="true" label="Loading all records from the database..." />
             <div>Large content area with more space</div>
           </div>
         </org-storybook-example-container-section>

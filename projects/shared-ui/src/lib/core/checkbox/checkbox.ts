@@ -1,8 +1,8 @@
 import {
   Component,
   ChangeDetectionStrategy,
+  effect,
   input,
-  model,
   computed,
   ViewChild,
   ElementRef,
@@ -10,7 +10,8 @@ import {
   inject,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { Icon, IconName } from '../icon/icon';
+import { IconName } from '../../brain/icon-brain/icon-brain';
+import { Icon } from '../icon/icon';
 import { TextDirective, TextSize } from '../text-directive/text-directive';
 import { ComponentSize } from '../types/component-types';
 import { FORM_FIELD_COMPONENT } from '../form-fields/form-field';
@@ -21,15 +22,6 @@ export const allCheckboxSizes = ['sm', 'base', 'lg'] as const satisfies readonly
 
 /** the size variant of the checkbox */
 export type CheckboxSize = (typeof allCheckboxSizes)[number];
-
-/** default value for the checked input */
-export const CHECKBOX_CHECKED_DEFAULT = false;
-
-/** default value for the indeterminate input */
-export const CHECKBOX_INDETERMINATE_DEFAULT = false;
-
-/** default value for the disabled input */
-export const CHECKBOX_DISABLED_DEFAULT = false;
 
 /** default value for the size input */
 export const CHECKBOX_SIZE_DEFAULT: CheckboxSize = 'base';
@@ -49,9 +41,8 @@ export const CHECKBOX_SIZE_DEFAULT: CheckboxSize = 'base';
   ],
   host: {
     '[attr.data-size]': 'size()',
-    '[attr.data-checked]': 'checked() ? "" : null',
-    '[attr.data-indeterminate]': 'indeterminate() ? "" : null',
-    '[attr.aria-disabled]': 'disabled() ? "true" : null',
+    '[attr.data-checked]': 'brain.checked() ? "" : null',
+    '[attr.data-indeterminate]': 'brain.indeterminate() ? "" : null',
   },
   providers: [
     {
@@ -62,7 +53,7 @@ export const CHECKBOX_SIZE_DEFAULT: CheckboxSize = 'base';
   ],
 })
 export class Checkbox implements ControlValueAccessor {
-  private readonly _formField = inject(FORM_FIELD_COMPONENT, { optional: true, host: true });
+  private readonly _formField = inject(FORM_FIELD_COMPONENT, { optional: true });
   protected readonly brain = inject(CheckboxBrainDirective, { self: true });
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -81,15 +72,6 @@ export class Checkbox implements ControlValueAccessor {
   /** value attribute for the checkbox input */
   public readonly value = input.required<string>();
 
-  /** whether the checkbox is checked */
-  public readonly checked = model<boolean>(CHECKBOX_CHECKED_DEFAULT);
-
-  /** whether the checkbox is in an indeterminate state */
-  public readonly indeterminate = model<boolean>(CHECKBOX_INDETERMINATE_DEFAULT);
-
-  /** whether the checkbox is disabled */
-  public readonly disabled = input<boolean>(CHECKBOX_DISABLED_DEFAULT);
-
   /** the size variant of the checkbox */
   public readonly size = input<CheckboxSize>(CHECKBOX_SIZE_DEFAULT);
 
@@ -100,38 +82,15 @@ export class Checkbox implements ControlValueAccessor {
 
   /** the icon name representing the current checkbox state */
   public readonly currentIcon = computed<IconName>(() => {
-    if (this.checked()) {
+    if (this.brain.checked()) {
       return 'square-check-big';
     }
 
-    if (this.indeterminate()) {
+    if (this.brain.indeterminate()) {
       return 'square-minus';
     }
 
     return 'square';
-  });
-
-  /** whether the parent form field has an active validation message */
-  public readonly hasValidationMessage = computed<boolean>(() => {
-    return !!this._formField?.hasValidationMessage();
-  });
-
-  /** the aria-describedby id linking to the validation message when present */
-  public readonly ariaDescribedBy = computed<string | null>(() => {
-    if (this.hasValidationMessage()) {
-      return `validation-message-${this.name()}`;
-    }
-
-    return null;
-  });
-
-  /** the aria-invalid value when a validation message is present */
-  public readonly ariaInvalid = computed<boolean | null>(() => {
-    if (this.hasValidationMessage()) {
-      return true;
-    }
-
-    return null;
   });
 
   constructor() {
@@ -142,6 +101,15 @@ export class Checkbox implements ControlValueAccessor {
 
     this.brain.touched.subscribe(() => {
       this._onTouched();
+    });
+
+    // syncs form-field validation context into the brain so it can derive aria-invalid / aria-describedby
+    effect(() => {
+      const formFieldBrain = this._formField?.brain;
+      const hasMessage = !!formFieldBrain?.hasValidationMessage();
+      const messageId = hasMessage ? (formFieldBrain?.validationMessageId ?? null) : null;
+
+      this.brain.setValidationContext(hasMessage, messageId);
     });
   }
 
@@ -157,8 +125,8 @@ export class Checkbox implements ControlValueAccessor {
 
   /** sets the checkbox value from the reactive forms api */
   public writeValue(value: boolean): void {
-    this.checked.set(value ?? false);
-    this.indeterminate.set(false);
+    this.brain.setChecked(value ?? false);
+    this.brain.setIndeterminate(false);
   }
 
   /** registers the on-change callback for reactive forms */

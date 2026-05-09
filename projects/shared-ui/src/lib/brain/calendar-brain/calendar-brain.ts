@@ -36,6 +36,22 @@ export type CalendarDateData = {
   isToday: boolean;
 };
 
+/**
+ * day label data structure with short display text and accessible full name
+ */
+export type CalendarDayLabel = {
+  short: string;
+  label: string;
+};
+
+/**
+ * month option data for the month dropdown
+ */
+export type CalendarMonthOption = {
+  value: number;
+  label: string;
+};
+
 /** the internal state shape for the calendar brain directive */
 type CalendarState = {
   displayYear: number;
@@ -82,6 +98,28 @@ export class CalendarBrainDirective {
   });
 
   private readonly _liveAnnouncementSignal = signal<string>('');
+
+  /** day of week labels with accessible full names */
+  public readonly dayLabels: CalendarDayLabel[] = [
+    { short: 'S', label: 'Sunday' },
+    { short: 'M', label: 'Monday' },
+    { short: 'T', label: 'Tuesday' },
+    { short: 'W', label: 'Wednesday' },
+    { short: 'T', label: 'Thursday' },
+    { short: 'F', label: 'Friday' },
+    { short: 'S', label: 'Saturday' },
+  ];
+
+  /** localized month options for the month selector dropdown */
+  public readonly monthOptions: CalendarMonthOption[] = (() => {
+    const months: CalendarMonthOption[] = [];
+
+    for (let month = 1; month <= 12; month++) {
+      months.push({ value: month, label: DateTime.local(2000, month, 1).toFormat('MMMM') });
+    }
+
+    return months;
+  })();
 
   // input properties
   public readonly defaultDisplayDate = input<DateTime>(CALENDAR_DEFAULT_DISPLAY_DATE_DEFAULT);

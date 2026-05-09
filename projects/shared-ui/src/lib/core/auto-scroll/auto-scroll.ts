@@ -21,17 +21,18 @@ import {
   type AutoScrollState,
 } from '../../brain/auto-scroll-brain/auto-scroll-brain';
 
-export type { AutoScrollState, AutoScrollScrollToBottomOptions } from '../../brain/auto-scroll-brain/auto-scroll-brain';
-export { allAutoScrollStates as autoScrollStates } from '../../brain/auto-scroll-brain/auto-scroll-brain';
+export type {
+  AutoScrollState,
+  AutoScrollAriaLive,
+  AutoScrollScrollToBottomOptions,
+} from '../../brain/auto-scroll-brain/auto-scroll-brain';
+export {
+  allAutoScrollStates as autoScrollStates,
+  allAutoScrollAriaLives,
+} from '../../brain/auto-scroll-brain/auto-scroll-brain';
 
 /** the default enabled value for the auto scroll component */
 export const AUTO_SCROLL_ENABLED_DEFAULT = true;
-
-/** valid aria-live values for the auto-scroll content wrapper */
-export type AutoScrollAriaLive = 'off' | 'polite' | 'assertive';
-
-/** the default aria-live value for the auto scroll component */
-export const AUTO_SCROLL_ARIA_LIVE_DEFAULT: AutoScrollAriaLive = 'polite';
 
 @Component({
   selector: 'org-auto-scroll',
@@ -44,7 +45,7 @@ export const AUTO_SCROLL_ARIA_LIVE_DEFAULT: AutoScrollAriaLive = 'polite';
   hostDirectives: [
     {
       directive: AutoScrollBrainDirective,
-      inputs: ['enabled: autoScrollEnabled'],
+      inputs: ['enabled: autoScrollEnabled', 'ariaLive'],
       outputs: ['stateChange', 'ready'],
     },
     {
@@ -58,11 +59,10 @@ export class AutoScroll {
   private readonly _platformId = inject(PLATFORM_ID);
   private readonly _destroyRef = inject(DestroyRef);
   private readonly _cdkObserveContent = inject(CdkObserveContent);
-  private readonly _brain = inject(AutoScrollBrainDirective, { self: true });
+  protected readonly brain = inject(AutoScrollBrainDirective, { self: true });
 
   public readonly autoScrollEnabled = input<boolean>(AUTO_SCROLL_ENABLED_DEFAULT);
   public readonly containerClass = input<string>('');
-  public readonly ariaLive = input<AutoScrollAriaLive>(AUTO_SCROLL_ARIA_LIVE_DEFAULT);
 
   public readonly stateChange = output<AutoScrollState>();
   public readonly ready = output<void>();
@@ -77,29 +77,29 @@ export class AutoScroll {
     if (isPlatformBrowser(this._platformId)) {
       afterNextRender(() => {
         this._warnIfNoScrollableParent();
-        this._brain.setSentinelElement(this._sentinelRef.nativeElement);
-        this._brain.setContentWrapperElement(this._contentWrapperRef.nativeElement);
+        this.brain.setSentinelElement(this._sentinelRef.nativeElement);
+        this.brain.setContentWrapperElement(this._contentWrapperRef.nativeElement);
       });
     }
 
     this._cdkObserveContent.event.pipe(takeUntilDestroyed(this._destroyRef)).subscribe(() => {
-      this._brain.notifyContentChanged();
+      this.brain.notifyContentChanged();
     });
   }
 
   /** updates the brain's auto-scroll state */
   public setAutoScrollState(newState: AutoScrollState): void {
-    this._brain.setAutoScrollState(newState);
+    this.brain.setAutoScrollState(newState);
   }
 
   /** returns the brain's current auto-scroll state */
   public getAutoScrollState(): AutoScrollState {
-    return this._brain.getAutoScrollState();
+    return this.brain.getAutoScrollState();
   }
 
   /** programmatically scrolls to the bottom via the brain */
   public scrollToBottom(options?: AutoScrollScrollToBottomOptions): void {
-    this._brain.scrollToBottom(options);
+    this.brain.scrollToBottom(options);
   }
 
   /** logs a warning when the auto-scroll has no usable scrollable ancestor; matches the original component contract */

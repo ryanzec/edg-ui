@@ -11,11 +11,12 @@ If this component is in `projects/shared-ui/src/lib/core` then you must **ALWAYS
 
 You are to create a new component tokens css file in `projects/shared-ui/src/lib/styles` if needed.
 
-If the image reference design tokens / css variables that are not available, you can create them in the component tokens css files **ALWAYS** using the base tokens from `projects/shared-ui/src/lib/styles/variables/base-tokens.css` and the value for the component tokens (if a value can't be found, use the closest value that is available).
+If the image reference design tokens / css variables that are not available, you can create them in the component tokens css files **ALWAYS** using the base tokens from `projects/shared-ui/src/lib/styles/tokens/base-tokens.css` and the value for the component tokens (if a value can't be found, use the closest value that is available).
 
 # Storybook
 
-**ALWAYS** create stories for the new component. 
+- **ALWAYS** create stories for the new component.
+- **NEVER** create a story that that maps to the referenced anatomy image, the image is **ONLY** provided for context to the implementation.
 
 # MUST ALWAYS FOLLOW
 - **ALL** rules in this repository **ALWAY** override what is in the visual guide if there is a conflict.

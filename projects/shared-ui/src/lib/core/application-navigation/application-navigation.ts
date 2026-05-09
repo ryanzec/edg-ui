@@ -1,7 +1,8 @@
 import { Component, ChangeDetectionStrategy, computed, input, model, output } from '@angular/core';
 import { CdkMenuTrigger } from '@angular/cdk/menu';
 import { ConnectedPosition } from '@angular/cdk/overlay';
-import { Icon, type IconName } from '../icon/icon';
+import { type IconName } from '../../brain/icon-brain/icon-brain';
+import { Icon } from '../icon/icon';
 import { List } from '../list/list';
 import { ListItem } from '../list/list-item';
 import { ListItemIcon } from '../list/list-item-icon';

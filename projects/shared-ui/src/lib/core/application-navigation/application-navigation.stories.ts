@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/angular';
 import { ApplicationNavigation } from './application-navigation';
 import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
 import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
-import { IconName } from '../icon/icon';
+import { IconName } from '../../brain/icon-brain/icon-brain';
 
 const meta: Meta<ApplicationNavigation> = {
   title: 'Core/Components/Application Navigation',

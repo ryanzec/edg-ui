@@ -1,14 +1,15 @@
 <div class="form-field-container">
   <ng-content />
-  @if (finalReserveValidationSpace() || hasValidationMessage()) {
+  @if (finalReserveValidationSpace() || brain.hasValidationMessage()) {
     <div
       class="form-field-validation"
-      [attr.data-has-message]="hasValidationMessage() ? '' : null"
-      aria-live="polite"
-      aria-atomic="true"
+      [id]="brain.validationMessageId"
+      [attr.data-has-message]="brain.hasValidationMessage() ? '' : null"
+      [attr.aria-live]="brain.ariaLive"
+      [attr.aria-atomic]="brain.ariaAtomic"
     >
-      @if (hasValidationMessage()) {
-        {{ validationMessage() }}
+      @if (brain.hasValidationMessage()) {
+        {{ brain.validationMessage() }}
       }
     </div>
   }

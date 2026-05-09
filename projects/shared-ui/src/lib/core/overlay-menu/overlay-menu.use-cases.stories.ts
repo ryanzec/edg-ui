@@ -26,7 +26,7 @@ type TagTriggerMeta = {
           <org-tag-icon name="chevron-down" />
         </org-tag>
         <ng-template #menu>
-          <org-overlay-menu [menuItems]="menuItems" (menuItemClicked)="handleMenuItemClicked($event)" />
+          <org-overlay-menu [items]="menuItems" (itemClicked)="handleMenuItemClicked($event)" />
         </ng-template>
       </org-storybook-example-container-section>
 

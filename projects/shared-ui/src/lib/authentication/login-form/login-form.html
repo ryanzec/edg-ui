@@ -4,7 +4,7 @@
     <form [formGroup]="loginForm" (ngSubmit)="login()">
       <org-form-fields>
         <org-form-field [validationMessage]="getFieldError('email') || ''">
-          <org-label htmlFor="email" [label]="getFieldLabel('email')" />
+          <org-label htmlFor="email" [text]="getFieldLabel('email')" />
           <org-input
             type="email"
             name="email"
@@ -16,7 +16,7 @@
           />
         </org-form-field>
         <org-form-field [validationMessage]="getFieldError('password') || ''">
-          <org-label htmlFor="password" [label]="getFieldLabel('password')" />
+          <org-label htmlFor="password" [text]="getFieldLabel('password')" />
           <org-input
             type="password"
             name="password"

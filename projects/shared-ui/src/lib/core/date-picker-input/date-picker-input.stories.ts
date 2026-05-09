@@ -10,7 +10,7 @@ import { Button } from '../button/button';
 import { JsonPipe } from '@angular/common';
 import { FormFields } from '../form-fields/form-fields';
 import { FormField } from '../form-fields/form-field';
-import type { CalendarPartialRangeSelectionType } from '../calendar/calendar';
+import type { CalendarPartialRangeSelectionType } from '../../brain/calendar-brain/calendar-brain';
 
 const meta: Meta<DatePickerInput> = {
   title: 'Core/Components/Date Picker Input',

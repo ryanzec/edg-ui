@@ -1,7 +1,8 @@
-import { Directive, InjectionToken, TemplateRef, inject, input, output, signal } from '@angular/core';
+import { Directive, InjectionToken, Signal, TemplateRef, inject, input, output, signal } from '@angular/core';
 import { Dialog as CdkDialog, DialogRef } from '@angular/cdk/dialog';
 import { ComponentType } from '@angular/cdk/portal';
 import { take } from 'rxjs';
+import { v4 as uuidv4 } from 'uuid';
 import { logManager } from '@organization/shared-utils';
 
 /**
@@ -9,19 +10,7 @@ import { logManager } from '@organization/shared-utils';
  * setEnableEscapeKey, etc. invoked from inside the overlay reach the brain that actually owns the cdk dialog ref.
  * resolves to undefined when injected outside the overlay context (e.g. from the trigger instance itself).
  */
-export const DIALOG_TRIGGER_BRAIN = new InjectionToken<DialogBrainDirective>('DialogTriggerBrain');
-
-/** all available dialog position values */
-export const allDialogPositions = ['center', 'top', 'bottom', 'left', 'right'] as const;
-
-/** union type of all valid dialog positions */
-export type DialogPosition = (typeof allDialogPositions)[number];
-
-/** default value for the position input */
-export const DIALOG_POSITION_DEFAULT: DialogPosition = 'center';
-
-/** default value for the hasRoundedCorners input */
-export const DIALOG_HAS_ROUNDED_CORNERS_DEFAULT = true;
+export const DIALOG_TRIGGER = new InjectionToken<DialogBrainDirective>('DialogTrigger');
 
 /** default value for the hasBackdrop input */
 export const DIALOG_HAS_BACKDROP_DEFAULT = true;
@@ -37,14 +26,17 @@ export const DIALOG_SHOW_CLOSE_ICON_DEFAULT = true;
 
 /**
  * headless brain directive that wraps the cdk dialog. consumers apply this directive (typically as a host directive
- * on their own dialog component) to gain configuration inputs, escape-key gating, the close-icon and show-close-icon
- * state signals, the panel-class mapping derived from position, and the document keydown.escape host binding.
+ * on their own dialog component) to gain configuration inputs, escape-key gating, the close-icon and close-icon-enabled
+ * state signals, and the dialog accessibility contract (role, aria-modal, aria-labelledby + titleId for header wiring).
  * consumers call openDialog() with their content reference (a component or a template) to open the dialog.
  */
 @Directive({
   selector: '[orgDialogBrain]',
   exportAs: 'orgDialogBrain',
   host: {
+    role: 'dialog',
+    'aria-modal': 'true',
+    '[attr.aria-labelledby]': 'titleId',
     '(document:keydown.escape)': 'onEscapeKey($event)',
   },
 })
@@ -53,14 +45,11 @@ export class DialogBrainDirective {
 
   private _dialogRef: DialogRef<unknown, unknown> | undefined = undefined;
   private _escapeKeyEnabled = true;
-  private _closeIconEnabled = signal<boolean>(true);
-  private _showCloseIcon = signal<boolean>(true);
+  private readonly _closeIconEnabled = signal<boolean>(true);
+  private readonly _showCloseIconState = signal<boolean>(true);
 
-  /** position of the dialog on screen */
-  public readonly position = input<DialogPosition>(DIALOG_POSITION_DEFAULT);
-
-  /** whether the dialog container has rounded corners */
-  public readonly hasRoundedCorners = input<boolean>(DIALOG_HAS_ROUNDED_CORNERS_DEFAULT);
+  /** unique id used to link the dialog to its title for accessibility (read by the dialog header brain) */
+  public readonly titleId: string = uuidv4();
 
   /** whether a backdrop overlay is shown behind the dialog */
   public readonly hasBackdrop = input<boolean>(DIALOG_HAS_BACKDROP_DEFAULT);
@@ -76,6 +65,12 @@ export class DialogBrainDirective {
 
   /** emitted whenever the dialog is closed by any means */
   public readonly closed = output<void>();
+
+  /** readonly signal exposing whether the close icon is currently enabled (read by close-button brain) */
+  public readonly closeIconEnabled: Signal<boolean> = this._closeIconEnabled.asReadonly();
+
+  /** readonly signal exposing whether the close icon is currently visible (read by close-button brain) */
+  public readonly showCloseIconState: Signal<boolean> = this._showCloseIconState.asReadonly();
 
   /** opens the dialog using the provided component or template, with optional data passed to it */
   public openDialog<T>(
@@ -93,40 +88,20 @@ export class DialogBrainDirective {
 
     this._escapeKeyEnabled = this.enableEscapeKey();
     this._closeIconEnabled.set(this._escapeKeyEnabled);
-    this._showCloseIcon.set(this.showCloseIcon());
+    this._showCloseIconState.set(this.showCloseIcon());
 
-    const panelClass = this._getPanelClass();
     const hasBackdrop = this.hasBackdrop();
     const disableClose = this.enableCloseOnClickOutside() === false;
 
-    const providers = [{ provide: DIALOG_TRIGGER_BRAIN, useValue: this }];
+    const providers = [{ provide: DIALOG_TRIGGER, useValue: this }];
 
-    if (content instanceof TemplateRef) {
-      this._dialogRef = this._cdkDialog.open(content, {
-        data,
-        panelClass,
-        hasBackdrop,
-        closeOnNavigation: true,
-        disableClose,
-        providers,
-      }) as DialogRef<unknown, unknown>;
-    } else {
-      const dialogData = {
-        ...data,
-        hasRoundedCorners: this.hasRoundedCorners(),
-        showCloseIcon: this._showCloseIcon,
-        closeIconEnabled: this._closeIconEnabled,
-      };
-
-      this._dialogRef = this._cdkDialog.open(content, {
-        data: dialogData,
-        panelClass,
-        hasBackdrop,
-        closeOnNavigation: true,
-        disableClose,
-        providers,
-      }) as DialogRef<unknown, unknown>;
-    }
+    this._dialogRef = this._cdkDialog.open(content, {
+      data,
+      hasBackdrop,
+      closeOnNavigation: true,
+      disableClose,
+      providers,
+    }) as DialogRef<unknown, unknown>;
 
     this._dialogRef.closed.pipe(take(1)).subscribe(() => {
       this.closed.emit();
@@ -157,7 +132,7 @@ export class DialogBrainDirective {
 
   /** dynamically shows or hides the close icon for the currently open dialog */
   public setShowCloseIcon(show: boolean): void {
-    this._showCloseIcon.set(show);
+    this._showCloseIconState.set(show);
   }
 
   /** handles the document escape key event to close the dialog when appropriate */
@@ -178,22 +153,5 @@ export class DialogBrainDirective {
     // by mistake much more easily then hitting the escape key, keeping the escape key is also needed from an
     // accessibility standpoint
     this._dialogRef.close();
-  }
-
-  private _getPanelClass(): string[] {
-    const position = this.position();
-
-    switch (position) {
-      case 'top':
-        return ['dialog-panel-top'];
-      case 'bottom':
-        return ['dialog-panel-bottom'];
-      case 'left':
-        return ['dialog-panel-left'];
-      case 'right':
-        return ['dialog-panel-right'];
-      default:
-        return ['dialog-panel-center'];
-    }
   }
 }

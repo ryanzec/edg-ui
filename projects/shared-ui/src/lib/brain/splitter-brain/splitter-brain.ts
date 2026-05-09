@@ -1,5 +1,6 @@
 import { Directive, ElementRef, computed, inject, input, model, output, signal } from '@angular/core';
 import { angularUtils } from '@organization/shared-utils';
+import { type DividerDirection } from '../divider-brain/divider-brain';
 
 /** all available splitter direction values */
 export const allSplitterDirections = ['horizontal', 'vertical'] as const;
@@ -42,6 +43,12 @@ type SplitterState = {
 @Directive({
   selector: '[orgSplitterBrain]',
   exportAs: 'orgSplitterBrain',
+  host: {
+    '[attr.data-direction]': 'direction()',
+    '[attr.data-enabled]': 'isEnabled() ? "" : null',
+    '[attr.data-collapsed-side]': 'collapsedSide()',
+    '[attr.data-dragging]': 'isDragging() ? "" : null',
+  },
 })
 export class SplitterBrainDirective {
   private readonly _containerElementRef = inject(ElementRef<HTMLElement>);
@@ -99,6 +106,11 @@ export class SplitterBrainDirective {
   /** whether the divider can be dragged to resize sections */
   public readonly isDraggable = computed<boolean>(() => {
     return this.isEnabled() && this.collapsedSide() === undefined;
+  });
+
+  /** orientation of the divider line, perpendicular to the split axis (horizontal split = vertical line) */
+  public readonly dividerDirection = computed<DividerDirection>(() => {
+    return this.direction() === 'horizontal' ? 'vertical' : 'horizontal';
   });
 
   /** whether the divider is currently being dragged */

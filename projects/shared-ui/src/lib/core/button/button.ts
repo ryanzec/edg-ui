@@ -2,7 +2,16 @@ import { Component, ChangeDetectionStrategy, computed, contentChildren, input, o
 import { angularUtils } from '@organization/shared-utils';
 import { LoadingSpinner } from '../loading-spinner/loading-spinner';
 import { ComponentColor, ComponentSize } from '../types/component-types';
-import { ButtonBrainDirective } from '../../brain/button-brain/button-brain';
+import {
+  ButtonBrainDirective,
+  BUTTON_ACTIVE_DEFAULT,
+  BUTTON_ARIA_EXPANDED_DEFAULT,
+  BUTTON_ARIA_LABEL_DEFAULT,
+  BUTTON_ARIA_PRESSED_DEFAULT,
+  BUTTON_DISABLED_DEFAULT,
+  BUTTON_ICON_ONLY_DEFAULT,
+  BUTTON_LOADING_DEFAULT,
+} from '../../brain/button-brain/button-brain';
 import { ButtonIcon } from './button-icon';
 
 /** the color variant of the button */
@@ -35,15 +44,6 @@ export const BUTTON_SIZE_DEFAULT: ButtonSize = 'base';
 /** the default variant of the button */
 export const BUTTON_VARIANT_DEFAULT: ButtonVariant = 'filled';
 
-/** the default disabled state of the button */
-export const BUTTON_DISABLED_DEFAULT = false;
-
-/** the default loading state of the button */
-export const BUTTON_LOADING_DEFAULT = false;
-
-/** the default icon-only state of the button */
-export const BUTTON_ICON_ONLY_DEFAULT = false;
-
 /** the default html button type */
 export const BUTTON_TYPE_DEFAULT: ButtonType = 'button';
 
@@ -52,18 +52,6 @@ export const BUTTON_EXCLUDE_SPACING_DEFAULT = false;
 
 /** the default css class applied to the inner button element */
 export const BUTTON_BUTTON_CLASS_DEFAULT = '';
-
-/** the default aria-label of the button */
-export const BUTTON_ARIA_LABEL_DEFAULT: string | undefined = undefined;
-
-/** the default aria-expanded state of the button */
-export const BUTTON_ARIA_EXPANDED_DEFAULT: boolean | undefined = undefined;
-
-/** the default aria-pressed state of the button */
-export const BUTTON_ARIA_PRESSED_DEFAULT: boolean | undefined = undefined;
-
-/** the default isActive state of the button */
-export const BUTTON_IS_ACTIVE_DEFAULT = false;
 
 @Component({
   selector: 'org-button',
@@ -130,7 +118,7 @@ export class Button {
   });
 
   /** when true, the button renders in its active (pressed) visual state and hover/active pseudo states have no effect */
-  public readonly isActive = input<boolean>(BUTTON_IS_ACTIVE_DEFAULT);
+  public readonly isActive = input<boolean>(BUTTON_ACTIVE_DEFAULT);
 
   /** emitted when the button is clicked while not disabled or loading */
   public readonly clicked = output<void>();

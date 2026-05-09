@@ -1,15 +1,12 @@
-@if (showCloseIcon()) {
+@if (brain.visible()) {
   <org-button
     [iconOnly]="true"
     variant="text"
     color="neutral"
     [excludeSpacing]="true"
-    [disabled]="!closeIconEnabled()"
-    (clicked)="close()"
+    [disabled]="!brain.enabled()"
+    [ariaLabel]="brain.ariaLabel"
     class="close-button"
-    [class.close-button--disabled]="!closeIconEnabled()"
-    ariaLabel="Close"
-    [attr.aria-disabled]="!closeIconEnabled()"
   >
     <org-button-icon name="x" />
   </org-button>

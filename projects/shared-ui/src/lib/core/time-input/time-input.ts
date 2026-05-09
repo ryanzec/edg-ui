@@ -15,10 +15,13 @@ import {
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { angularUtils } from '@organization/shared-utils';
 import { Input as BaseInput, type InputVariant } from '../input/input';
-import { TimeInputBrainDirective } from '../../brain/time-input-brain/time-input-brain';
-
-/** available time segments for the time input component */
-export type TimeSegment = 'hours' | 'minutes' | 'ampm';
+import {
+  TimeInputBrainDirective,
+  TIME_INPUT_ARIA_LABEL_DEFAULT,
+  TIME_INPUT_AUTO_FOCUS_DEFAULT,
+  TIME_INPUT_DISABLED_DEFAULT,
+  TIME_INPUT_READONLY_DEFAULT,
+} from '../../brain/time-input-brain/time-input-brain';
 
 /** default value for the variant input */
 export const TIME_INPUT_VARIANT_DEFAULT: InputVariant = 'bordered';
@@ -26,20 +29,8 @@ export const TIME_INPUT_VARIANT_DEFAULT: InputVariant = 'bordered';
 /** default value for the placeholder input */
 export const TIME_INPUT_PLACEHOLDER_DEFAULT = 'Enter time';
 
-/** default value for the disabled input */
-export const TIME_INPUT_DISABLED_DEFAULT = false;
-
-/** default value for the readonly input */
-export const TIME_INPUT_READONLY_DEFAULT = false;
-
 /** default value for the defaultValue input */
 export const TIME_INPUT_DEFAULT_VALUE_DEFAULT = '';
-
-/** default value for the autoFocus input */
-export const TIME_INPUT_AUTO_FOCUS_DEFAULT = false;
-
-/** default value for the ariaLabel input */
-export const TIME_INPUT_ARIA_LABEL_DEFAULT: string | undefined = undefined;
 
 @Component({
   selector: 'org-time-input',
@@ -50,7 +41,7 @@ export const TIME_INPUT_ARIA_LABEL_DEFAULT: string | undefined = undefined;
   hostDirectives: [
     {
       directive: TimeInputBrainDirective,
-      inputs: ['disabled', 'readonly'],
+      inputs: ['disabled', 'readonly', 'autoFocus', 'ariaLabel'],
       outputs: ['focused', 'blurred'],
     },
   ],
@@ -67,11 +58,6 @@ export const TIME_INPUT_ARIA_LABEL_DEFAULT: string | undefined = undefined;
 })
 export class TimeInput implements AfterViewInit, ControlValueAccessor {
   protected readonly brain = inject(TimeInputBrainDirective, { self: true });
-
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private _onChange: (value: string) => void = () => {};
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private _onTouched: () => void = () => {};
 
   /**
    * @internal only exposed for testing purposes
@@ -121,18 +107,12 @@ export class TimeInput implements AfterViewInit, ControlValueAccessor {
   protected readonly isDisabled = computed<boolean>(() => this.brain.isDisabled());
 
   constructor() {
-    // forward brain value-change events to the form callbacks and value model
+    // forwards brain value-change events to the public value model so two-way `[(value)]` binding stays in sync
     this.brain.valueChanged.subscribe((newValue) => {
-      this._onChange(newValue);
       this.value.set(newValue);
     });
 
-    // forward brain touched events to the form's onTouched callback
-    this.brain.touched.subscribe(() => {
-      this._onTouched();
-    });
-
-    // parse and apply the externally provided value into the brain when it changes
+    // parses and applies the externally provided value into the brain when it changes
     effect(() => {
       const externalValue = this.value();
       const currentFormatted = untracked(() => this.brain.formattedValue());
@@ -177,24 +157,18 @@ export class TimeInput implements AfterViewInit, ControlValueAccessor {
 
   /** @inheritdoc */
   public writeValue(value: string): void {
-    this.brain.markReceivedCvaValue();
-
-    if (!value) {
-      return;
-    }
-
-    this.brain.parseAndSetValue(value);
+    this.brain.writeValue(value);
     this.value.set(this.brain.formattedValue());
   }
 
   /** @inheritdoc */
   public registerOnChange(fn: (value: string) => void): void {
-    this._onChange = fn;
+    this.brain.setOnChange(fn);
   }
 
   /** @inheritdoc */
   public registerOnTouched(fn: () => void): void {
-    this._onTouched = fn;
+    this.brain.setOnTouched(fn);
   }
 
   /** @inheritdoc */

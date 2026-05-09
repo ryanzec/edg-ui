@@ -18,11 +18,7 @@
         <org-button-icon name="ellipsis" />
       </org-button>
       <ng-template #menu>
-        <org-overlay-menu
-          [menuLabel]="menuLabel"
-          [menuItems]="menuItems()"
-          (menuItemClicked)="onMenuItemClicked($event)"
-        />
+        <org-overlay-menu [label]="menuLabel" [items]="menuItems()" (itemClicked)="onMenuItemClicked($event)" />
       </ng-template>
     </div>
     <p class="m-0">{{ integration().description }}</p>

@@ -30,6 +30,9 @@ export const BUTTON_LOADING_DEFAULT = false;
 /** default value for the iconOnly input */
 export const BUTTON_ICON_ONLY_DEFAULT = false;
 
+/** default value for the active input */
+export const BUTTON_ACTIVE_DEFAULT = false;
+
 /** default value for the ariaLabel input */
 export const BUTTON_ARIA_LABEL_DEFAULT: string | undefined = undefined;
 
@@ -83,6 +86,9 @@ export class ButtonBrainDirective implements OnInit, OnDestroy {
 
   /** whether the host button is rendered in icon-only mode; used to enforce the aria-label requirement */
   public readonly iconOnly = input<boolean>(BUTTON_ICON_ONLY_DEFAULT);
+
+  /** whether the button is rendered in its active (pressed) visual state */
+  public readonly active = input<boolean>(BUTTON_ACTIVE_DEFAULT);
 
   /** accessible label for icon-only buttons or when the visual label needs an override */
   public readonly ariaLabel = input<string | undefined, string | null | undefined>(BUTTON_ARIA_LABEL_DEFAULT, {

@@ -10,7 +10,7 @@ import {
   type DropDownSelectorPosition,
   type DropDownSelectorSize,
 } from './drop-down-selector';
-import { type IconName } from '../icon/icon';
+import { type IconName } from '../../brain/icon-brain/icon-brain';
 import { DataSelectionStore } from '../data-selection-store/data-selection-store';
 import {
   type DropDownSelectorSelectionMode,

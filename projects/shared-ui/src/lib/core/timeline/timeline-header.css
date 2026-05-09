@@ -1,6 +1,9 @@
 @layer components {
   :host {
     display: block;
+  }
+
+  .heading {
     font-size: var(--font-size-xl);
     line-height: var(--line-height-normal);
     letter-spacing: var(--letter-spacing-normal);

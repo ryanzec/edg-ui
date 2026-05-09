@@ -20,7 +20,7 @@ type OverlayMenuPosition = 'below' | 'above' | 'before' | 'after';
 
     <ng-template #menu>
       <org-overlay-menu
-        [menuItems]="[
+        [items]="[
           { id: '1', label: 'Menu Item 1', icon: 'circle' },
           { id: '2', label: 'Menu Item 2', icon: 'circle' },
           { id: '3', label: 'Menu Item 3', icon: 'circle' },
@@ -58,19 +58,19 @@ class EXAMPLEOverlayMenu {
   template: `
     <org-storybook-example-container
       title="Menu Item Clicked"
-      currentState="Click a menu item to observe the menuItemClicked output"
+      currentState="Click a menu item to observe the itemClicked output"
     >
       <org-storybook-example-container-section label="Click a Menu Item">
         <div class="flex flex-col gap-2">
           <org-button [cdkMenuTriggerFor]="menu" color="primary">Open Menu</org-button>
           <ng-template #menu>
             <org-overlay-menu
-              [menuItems]="[
+              [items]="[
                 { id: '1', label: 'Menu Item 1', icon: 'circle' },
                 { id: '2', label: 'Menu Item 2', icon: 'circle' },
                 { id: '3', label: 'Menu Item 3', icon: 'circle' },
               ]"
-              (menuItemClicked)="handleMenuItemClicked($event)"
+              (itemClicked)="handleMenuItemClicked($event)"
             />
           </ng-template>
           @if (lastClickedItem()) {
@@ -84,7 +84,7 @@ class EXAMPLEOverlayMenu {
       <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
         <li>
           Clicking a menu item emits the full <strong>OverlayMenuItem</strong> object via
-          <strong>menuItemClicked</strong>
+          <strong>itemClicked</strong>
         </li>
         <li>The last clicked item's label and id are displayed below the trigger</li>
       </ul>
@@ -117,7 +117,7 @@ type ExampleMeta = {
         <div class="flex flex-col gap-2">
           <org-button [cdkMenuTriggerFor]="menu" color="primary">Open Menu</org-button>
           <ng-template #menu>
-            <org-overlay-menu [menuItems]="menuItems" (menuItemClicked)="handleMenuItemClicked($event)" />
+            <org-overlay-menu [items]="menuItems" (itemClicked)="handleMenuItemClicked($event)" />
           </ng-template>
           @if (selectedItem(); as item) {
             <div class="flex flex-col gap-1">
@@ -136,7 +136,7 @@ type ExampleMeta = {
           <strong>TMeta</strong> generic
         </li>
         <li>
-          Selecting an item emits the full item including <strong>meta</strong> through <strong>menuItemClicked</strong>
+          Selecting an item emits the full item including <strong>meta</strong> through <strong>itemClicked</strong>
         </li>
         <li>The selected item's <strong>meta</strong> is rendered as JSON below the trigger</li>
       </ul>
@@ -314,7 +314,7 @@ export const MenuLabel: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Demonstrates the menuLabel input providing a custom accessible name on the menu container.',
+        story: 'Demonstrates the label input providing a custom accessible name on the menu container.',
       },
     },
   },
@@ -328,8 +328,8 @@ export const MenuLabel: Story = {
           <org-button [cdkMenuTriggerFor]="menu" color="primary">Open Menu</org-button>
           <ng-template #menu>
             <org-overlay-menu
-              menuLabel="Actions"
-              [menuItems]="[
+              label="Actions"
+              [items]="[
                 { id: '1', label: 'Edit', icon: 'circle' },
                 { id: '2', label: 'Duplicate', icon: 'circle' },
                 { id: '3', label: 'Delete', icon: 'circle' },
@@ -354,7 +354,7 @@ export const MenuItemClicked: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Demonstrates the menuItemClicked output event emitting the selected OverlayMenuItem.',
+        story: 'Demonstrates the itemClicked output event emitting the selected OverlayMenuItem.',
       },
     },
   },
@@ -402,7 +402,7 @@ export const Dividers: Story = {
           <org-button [cdkMenuTriggerFor]="menu" color="primary">Open Menu</org-button>
           <ng-template #menu>
             <org-overlay-menu
-              [menuItems]="[
+              [items]="[
                 { id: '1', label: 'Edit', icon: 'circle' },
                 { id: '2', label: 'Duplicate', icon: 'circle' },
                 { id: 'd1', type: 'divider' },
@@ -417,7 +417,7 @@ export const Dividers: Story = {
 
         <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
           <li>Entries with <strong>type: 'divider'</strong> render a horizontal separator instead of a clickable row</li>
-          <li>Dividers are visual only — they do not emit <strong>menuItemClicked</strong> and are not keyboard focusable</li>
+          <li>Dividers are visual only — they do not emit <strong>itemClicked</strong> and are not keyboard focusable</li>
           <li>Item entries (<strong>type: 'item'</strong> or omitted) continue to render as standard menu rows</li>
         </ul>
       </org-storybook-example-container>

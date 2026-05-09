@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { PaginationBrainDirective } from '../../brain/pagination-brain/pagination-brain';
 import { Button } from '../button/button';
 import { ButtonIcon } from '../button/button-icon';
-import { PaginationStore } from '../pagination-store/pagination-store';
 
 @Component({
   selector: 'org-pagination-navigation',
@@ -9,8 +9,11 @@ import { PaginationStore } from '../pagination-store/pagination-store';
   imports: [Button, ButtonIcon],
   templateUrl: './pagination-navigation.html',
   styleUrl: './pagination-navigation.css',
+  host: {
+    '(keydown)': 'brain.handleKeyDown($event)',
+  },
 })
 export class PaginationNavigation {
-  /** the pagination store shared with the parent pagination component. */
-  protected readonly paginationStore = inject(PaginationStore);
+  /** the pagination brain directive applied to the parent org-pagination element */
+  protected readonly brain = inject(PaginationBrainDirective);
 }

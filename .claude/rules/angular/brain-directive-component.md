@@ -1,12 +1,30 @@
 ---
-paths:
-  - projects/shared-ui/src/lib/brain/**
+alwaysApply: true
 ---
 # IMPORTANT: These rules override general typescript / angular rules
-# General Angualr Brain Directive / Component Patterns
-- **ALWAYS** prefer using a directive over a component whenever possible
-- **NEVER** container styling code
-- **ONLY** the input that matches the selector can have the `org` and `brain` in the name, **NOTHING** else in the brain directive / component files can have `org` or `brain` in the name including but not limited to:
+
+# What Must **ALWAYS** Go In An Angular Brain Directive / Component
+The following is a list of logic / state that must **ALWAYS** go into the brain directive / component:
+- state management like opened / closed, checked, focused, active (but **NOT** limited to only those).
+- event handlers (e.g., `keydown`, `click`).
+- focus management (roving tabindex, trapping focus).
+- accessibility attributes (ARIA roles, states, properties, accessibility labels).
+- stylistic attributes that have accessibility or interaction routing concerns, like `orientation` or `direction` (but **NOT** limited to those).
+
+# What Must **NEVER** Go In An Angular Brain Directive / Component
+The following is a list of logic / state that must **NEVER** go into the brain directive / component:
+- sizing attributes.
+- spacing attributes.
+- color / theming attributes.
+- animation / transition attributes.
+- layout logic: while `orientation` or `direction` need to be in the brain to handle keyboard routing, the actual CSS application of `flex-col` vs `flex-row` MUST reside in the core helm component.
+- security related functionality.
+
+# General Angular Brain Directive / Component Patterns
+- **ALWAYS** prefer using a directive over a component whenever possible. Leverage `hostDirectives` to compose complex brain behaviors.
+- **ONLY** contain inputs that are required for the component from a strict logic or accessibility standpoint.
+- **NEVER** contain inputs that are solely for visual styling.
+- **ONLY** the input that matches the selector can have the `org` and `brain` in the name. **NOTHING** else in the brain directive / component files can have `org` or `brain` in the name, including but not limited to:
   - inputs
   - outputs
   - types / interfaces

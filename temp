@@ -1,0 +1,57 @@
+You are now tasked to create a md file with a detailed plan to create the ??????? component in a framework agnostic way.
+
+Assumption to be made:
+- the code will be written in typescript
+- the code will be using css variables
+- all non-component specific design tokens are available in a file called `design-tokens.css`
+- component specific design tokens will need to be created in their own file (seperate from the components css file) using the pattern `{component-name}-tokens.css`
+- all control options for the component will need to be listed out with the valid values and / or typescript type
+- all event the component need to be able to emit will need to be listed out with the parameters that will be passed (assume the dom native event if available will be first)
+
+Only include the following things:
+- High level overview of the component
+- The list of components (if it has sub-components)
+- All the different variants / options / properties it supports
+- The system designed tokens used
+- The new component tokens that need to be created and what system tokens / values they need to be
+- A high level anatomy of the component and any important details for each part for the implmentation
+- Any accessibility notes
+- Explaination of all states for the component and what they mean at a high level (NOT specific implementation details)
+- Validation rules for the component
+- Acceptance criteria
+
+These are the only valid design token / css variable prefixes:
+- spacing (never use space or pad or margin or etc.)
+- sizing (never use width or height or etc.)
+
+Never include the following:
+- specific framework code examples
+- specific coding (typescript / css) patterns
+- context around `className` (this is react specific)
+- react / dom pass through props (this is a specific implementation detail that differs by framework)
+
+This needs to be able to be given to an LLM (specifically claude sonnet / opus) and it can be used to generate a component using any framework (hence why no code examples are included). **NEVER** including specific coding example or guidelines.
+
+Place this file in a folder called (implementation-plans) and name it `{component-name}-plan.md`
+
+
+----
+
+**CLEAR** any context you might have.
+
+You are tasked to take the general look and feel of the existing design system applications and build on top of it that match the same look and feel of them. This is to create a starting point of a design system. It need to make sure to account for light and dark mode. I have attached a document with the details of the components.
+
+We also want to make a collection of design tokens (variables) that will have it own page that is just the token name and the value. As you design each component, either reuse token already available and add new ones when needed. The design tokens should be semantic in naming and avoid being tied to a specific component when possible (if there is a dangerous context that 4 component can have they should all use the same `*danger*` token and not a `*red*` or a token per component whenever possible.
+
+Each component need to be able to showcase all the functionally is has. If it is simpler / quicker / cheaper to make static mock of different states, do that, the generated code will not be used, only the visual output of the code. Each component should have it own page will all variants visible. it must also output as text on the page what the design tokens (css variables) it uses from the main list of design token.
+
+While all the components wanted are included in the document, I want to start with one component and build on from there so you are tasked to design the ?????????????????? component (and sub-components if needed) only (add to the design token page as needed).
+
+ALWAYS ask questions on ambiguous features.
+
+Update all existing components to use this new component if needed.
+
+**DO NOT WRITE AN IMPLEMENTATION PLAN**
+
+- global notifications
+- code highlighter

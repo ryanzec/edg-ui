@@ -1,8 +1,8 @@
-import { Component, ChangeDetectionStrategy, computed, input } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, input } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
-import { outputFromObservable } from '@angular/core/rxjs-interop';
-import { Subject } from 'rxjs';
 import { ComponentSize } from '../types/component-types';
+import { AvatarBrainDirective } from '../../brain/avatar-brain/avatar-brain';
+import { ButtonBrainDirective } from '../../brain/button-brain/button-brain';
 
 /** available size variants for the avatar component. */
 export const allAvatarSizes = ['sm', 'base', 'lg'] as const satisfies readonly ComponentSize[];
@@ -16,32 +16,27 @@ export const AVATAR_SIZE_DEFAULT: AvatarSize = 'base';
 @Component({
   selector: 'org-avatar',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [NgTemplateOutlet],
+  imports: [NgTemplateOutlet, ButtonBrainDirective],
   templateUrl: './avatar.html',
   styleUrl: './avatar.css',
+  hostDirectives: [
+    {
+      directive: AvatarBrainDirective,
+      outputs: ['clicked'],
+    },
+  ],
   host: {
     '[attr.data-size]': 'size()',
-    '[attr.data-clickable]': 'isClickable() ? "true" : null',
+    '[attr.data-clickable]': 'avatarBrainDirective.isClickable() ? "true" : null',
   },
 })
 export class Avatar {
-  /** @internal emits when the avatar is clicked */
-  private readonly _clicked$ = new Subject<MouseEvent>();
+  /** reference to the host avatar brain directive owning click state and the clicked output. */
+  protected readonly avatarBrainDirective = inject(AvatarBrainDirective);
 
   /** the display name shared with child sub-components for initials generation and image alt text. */
   public label = input.required<string>();
 
   /** the size variant shared with child sub-components. */
   public size = input<AvatarSize>(AVATAR_SIZE_DEFAULT);
-
-  /** emitted when the avatar is clicked; binding this output causes the avatar to render as a button. */
-  public readonly clicked = outputFromObservable(this._clicked$);
-
-  /** true when at least one listener is bound to the clicked output. */
-  protected readonly isClickable = computed<boolean>(() => this._clicked$.observed);
-
-  /** forwards native click events on the button wrapper to the clicked output. */
-  protected click(event: MouseEvent): void {
-    this._clicked$.next(event);
-  }
 }

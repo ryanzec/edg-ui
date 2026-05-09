@@ -46,7 +46,7 @@ const meta: Meta<Radio> = {
   <form [formGroup]="myForm">
     <org-form-fields>
       <org-form-field>
-      <org-label [asLabel]="false" [label]="'Notifications'" />
+      <org-label [asLabel]="false" [text]="'Notifications'" />
         <org-radio-group formControlName="preference" name="preference">
           <org-radio value="option1">Option 1</org-radio>
           <org-radio value="option2">Option 2</org-radio>
@@ -78,7 +78,8 @@ const meta: Meta<Radio> = {
 };
 
 export default meta;
-type Story = StoryObj<Radio>;
+/** the brain-forwarded inputs (`value`, `disabled`) are exposed on `<org-radio>` via hostDirectives but are not visible on the `Radio` class type, so the story args type extends `Radio` with them explicitly */
+type Story = StoryObj<Radio & { value: string; disabled: boolean }>;
 
 export const Default: Story = {
   args: {
@@ -297,7 +298,7 @@ export const GroupedRadios: Story = {
         <form [formGroup]="radioForm">
           <org-form-fields>
             <org-form-field>
-              <org-label [asLabel]="false" [label]="'Notifications'" />
+              <org-label [asLabel]="false" [text]="'Notifications'" />
               <org-radio-group formControlName="preference" name="preference">
                 <org-radio value="email">Email notifications</org-radio>
                 <org-radio value="sms">SMS notifications</org-radio>
@@ -422,7 +423,7 @@ export const ReactiveFormIntegration: Story = {
       <form [formGroup]="multiForm">
         <org-form-fields>
           <org-form-field>
-            <org-label [asLabel]="false" [label]="'Shipping Method'" />
+            <org-label [asLabel]="false" [text]="'Shipping Method'" />
             <org-radio-group formControlName="shipping" name="shipping">
               <org-radio value="standard">Standard (5-7 business days)</org-radio>
               <org-radio value="express">Express (2-3 business days)</org-radio>
@@ -430,7 +431,7 @@ export const ReactiveFormIntegration: Story = {
             </org-radio-group>
           </org-form-field>
           <org-form-field>
-            <org-label [asLabel]="false" [label]="'Payment Method'" />
+            <org-label [asLabel]="false" [text]="'Payment Method'" />
             <org-radio-group formControlName="payment" name="payment">
               <org-radio value="credit">Credit Card</org-radio>
               <org-radio value="debit">Debit Card</org-radio>
@@ -494,7 +495,7 @@ export const MultipleGroups: Story = {
       <form [formGroup]="validationForm">
         <org-form-fields>
           <org-form-field validationMessage="Please select an option to continue">
-            <org-label [asLabel]="false" [label]="'Radio Group with Validation Error'" />
+            <org-label [asLabel]="false" [text]="'Radio Group with Validation Error'" />
             <org-radio-group formControlName="option" name="option">
               <org-radio value="option1">Option 1</org-radio>
               <org-radio value="option2">Option 2</org-radio>
@@ -502,7 +503,7 @@ export const MultipleGroups: Story = {
             </org-radio-group>
           </org-form-field>
           <org-form-field>
-            <org-label [asLabel]="false" [label]="'Radio Group with Validation Error'" />
+            <org-label [asLabel]="false" [text]="'Radio Group with Validation Error'" />
             <org-radio-group formControlName="valid" name="valid">
               <org-radio value="yes">Yes</org-radio>
               <org-radio value="no">No</org-radio>

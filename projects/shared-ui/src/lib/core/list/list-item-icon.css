@@ -4,4 +4,15 @@
     align-items: center;
     justify-content: center;
   }
+
+  /* size is inherited from the parent org-list-item's data-size attribute via css */
+  :host-context([data-size='sm']) ::ng-deep svg {
+    width: var(--spacing-4); /* 16px */
+    height: var(--spacing-4); /* 16px */
+  }
+
+  :host-context([data-size='base']) ::ng-deep svg {
+    width: var(--spacing-5); /* 20px */
+    height: var(--spacing-5); /* 20px */
+  }
 }

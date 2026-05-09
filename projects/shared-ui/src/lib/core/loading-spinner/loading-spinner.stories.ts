@@ -1,10 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/angular';
+import { LoadingSpinner, LOADING_SPINNER_SIZE_DEFAULT, LOADING_SPINNER_ICON_COLOR_DEFAULT } from './loading-spinner';
 import {
-  LoadingSpinner,
-  LOADING_SPINNER_SIZE_DEFAULT,
-  LOADING_SPINNER_ICON_COLOR_DEFAULT,
+  LoadingSpinnerBrainDirective,
   LOADING_SPINNER_LABEL_DEFAULT,
-} from './loading-spinner';
+} from '../../brain/loading-spinner-brain/loading-spinner-brain';
 import { allIconSizes, allIconColors } from '../icon/icon';
 import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
 import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
@@ -46,7 +45,7 @@ const meta: Meta<LoadingSpinner> = {
 };
 
 export default meta;
-type Story = StoryObj<LoadingSpinner>;
+type Story = StoryObj<LoadingSpinner & LoadingSpinnerBrainDirective>;
 
 export const Default: Story = {
   args: {

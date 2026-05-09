@@ -88,7 +88,7 @@ export const Default: Story = {
   args: {
     color: null,
     border: 'bordered',
-    padding: 'md',
+    padding: 'base',
     background: 'colored',
   },
   argTypes: {
@@ -381,8 +381,8 @@ export const Padding: Story = {
           <org-box padding="sm">Box with small padding.</org-box>
         </org-storybook-example-container-section>
 
-        <org-storybook-example-container-section label="Medium (Default)">
-          <org-box padding="md">Box with medium padding.</org-box>
+        <org-storybook-example-container-section label="Base (Default)">
+          <org-box padding="base">Box with base padding.</org-box>
         </org-storybook-example-container-section>
 
         <org-storybook-example-container-section label="Large">
@@ -392,7 +392,7 @@ export const Padding: Story = {
         <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
           <li><strong>None</strong>: No internal padding applied</li>
           <li><strong>Small</strong>: Small padding</li>
-          <li><strong>Medium</strong>: Medium padding — the default value</li>
+          <li><strong>Base</strong>: Base padding — the default value</li>
           <li><strong>Large</strong>: Large padding for spacious content areas</li>
         </ul>
       </org-storybook-example-container>

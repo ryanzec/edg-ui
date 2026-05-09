@@ -1,79 +1,70 @@
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   ElementRef,
-  ViewChild,
   computed,
-  inject,
   input,
   output,
+  viewChild,
 } from '@angular/core';
 import { Icon } from '../icon/icon';
-import { FileUploadBrainDirective } from '../../brain/file-upload-brain/file-upload-brain';
+import {
+  FileUploadBrainDirective,
+  FILE_UPLOAD_ARIA_LABEL_DEFAULT,
+  FILE_UPLOAD_FILE_TYPES_DEFAULT,
+} from '../../brain/file-upload-brain/file-upload-brain';
 
-/** default value for the fileTypes input */
-export const FILE_UPLOAD_FILE_TYPES_DEFAULT: string[] = [];
+export { FILE_UPLOAD_ARIA_LABEL_DEFAULT, FILE_UPLOAD_FILE_TYPES_DEFAULT };
 
 @Component({
   selector: 'org-file-upload',
-  imports: [Icon],
+  imports: [Icon, FileUploadBrainDirective],
   templateUrl: './file-upload.html',
   styleUrl: './file-upload.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  hostDirectives: [
-    {
-      directive: FileUploadBrainDirective,
-      inputs: ['fileTypes'],
-    },
-  ],
   host: {
-    '[attr.data-hovering]': 'isHovering() ? "" : null',
-    '[attr.data-has-file]': 'fileName() ? "" : null',
-    '[attr.data-has-error]': 'error() ? "" : null',
+    '[attr.data-hovering]': '_dataHovering()',
+    '[attr.data-has-file]': '_dataHasFile()',
+    '[attr.data-has-error]': '_dataHasError()',
   },
 })
-export class FileUploadComponent {
-  protected readonly brain = inject(FileUploadBrainDirective, { self: true });
-
-  /** emits the selected file when a valid file is chosen */
-  public readonly fileUpload = output<File>();
+export class FileUploadComponent implements AfterViewInit {
+  private readonly _brainDirective = viewChild.required(FileUploadBrainDirective);
+  private readonly _fileInputRef = viewChild.required<ElementRef<HTMLInputElement>>('fileInputRef');
 
   /** accepted file types; supports prefix (e.g. "image/") or exact mime type (e.g. "image/png") */
   public readonly fileTypes = input<string[]>(FILE_UPLOAD_FILE_TYPES_DEFAULT);
 
-  /** the name of the currently selected file (proxied from brain) */
-  protected readonly fileName = computed<string | undefined>(() => this.brain.fileName());
+  /** accessible label applied to the inner drop-zone button */
+  public readonly ariaLabel = input<string>(FILE_UPLOAD_ARIA_LABEL_DEFAULT);
 
-  /** whether the drop zone is currently being hovered (proxied from brain) */
-  protected readonly isHovering = computed<boolean>(() => this.brain.isHovering());
+  /** emits the selected file when a valid file is chosen */
+  public readonly fileSelected = output<File>();
 
-  /** current validation or selection error message (proxied from brain) */
-  protected readonly error = computed<string | undefined>(() => this.brain.error());
+  /** drives the data-hovering style hook on the host */
+  protected readonly _dataHovering = computed<string | null>(() => (this._brainDirective().isHovering() ? '' : null));
 
-  /** comma-separated accepted file types string for the native input accept attribute (proxied from brain) */
-  protected readonly fileTypesAsString = computed<string>(() => this.brain.fileTypesAsString());
+  /** drives the data-has-file style hook on the host */
+  protected readonly _dataHasFile = computed<string | null>(() => (this._brainDirective().fileName() ? '' : null));
 
-  @ViewChild('fileInputRef', { static: true })
-  private readonly _fileInputRef!: ElementRef<HTMLInputElement>;
+  /** drives the data-has-error style hook on the host */
+  protected readonly _dataHasError = computed<string | null>(() => (this._brainDirective().error() ? '' : null));
 
-  constructor() {
-    this.brain.fileSelected.subscribe((file) => this.fileUpload.emit(file));
+  /** @inheritdoc */
+  public ngAfterViewInit(): void {
+    this._brainDirective().setOpenPicker((event) => {
+      // guard against the native input's click event bubbling back into the button and re-triggering open
+      if (event.target === this._fileInputRef().nativeElement) {
+        return;
+      }
+
+      this._fileInputRef().nativeElement.click();
+    });
   }
 
-  /** handles native file input change event by delegating to the brain */
-  protected onFileSelected(event: Event): void {
-    this.brain.handleNativeFileSelected(event);
-  }
-
-  /**
-   * opens the native file picker dialog; guards against the input's click event
-   * bubbling back up to the button and triggering a second open
-   */
-  protected openFileSelector(event: MouseEvent): void {
-    if (event.target === this._fileInputRef.nativeElement) {
-      return;
-    }
-
-    this._fileInputRef.nativeElement.click();
+  /** re-emits the brain's fileSelected as the component's public fileSelected output */
+  protected onBrainFileSelected(file: File): void {
+    this.fileSelected.emit(file);
   }
 }

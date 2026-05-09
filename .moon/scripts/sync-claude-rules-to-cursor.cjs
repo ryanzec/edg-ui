@@ -80,12 +80,19 @@ const getAllFiles = (dir) => {
   return files;
 };
 
+const clearDirectory = (dir, label) => {
+  if (fs.existsSync(dir)) {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+
+  fs.mkdirSync(dir, { recursive: true });
+  console.log(`cleared: ${label}`);
+};
+
 const claudeMdContent = fs.readFileSync(claudeMdFile, 'utf8');
 const agentMdcFile = path.join(targetDir, 'agent.mdc');
 
-if (!fs.existsSync(targetDir)) {
-  fs.mkdirSync(targetDir, { recursive: true });
-}
+clearDirectory(targetDir, '.cursor/rules');
 
 fs.writeFileSync(agentMdcFile, `---\nalwaysApply: true\n---\n${claudeMdContent}`, 'utf8');
 console.log(`synced: agent.mdc`);
@@ -99,9 +106,7 @@ for (const sourceFile of sourceFiles) {
 console.log(`\ndone: synced ${sourceFiles.length} file(s) from .claude/rules to .cursor/rules`);
 
 if (fs.existsSync(commandsSourceDir)) {
-  if (!fs.existsSync(commandsTargetDir)) {
-    fs.mkdirSync(commandsTargetDir, { recursive: true });
-  }
+  clearDirectory(commandsTargetDir, '.cursor/commands');
 
   const commandFiles = getAllFiles(commandsSourceDir);
 

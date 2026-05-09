@@ -1,10 +1,10 @@
-@if (scrollable()) {
+@if (brain.scrollable()) {
   <org-button
     color="neutral"
     variant="ghost"
     [iconOnly]="true"
     [disabled]="!brain.canScrollLeft()"
-    (clicked)="onScrollLeft()"
+    (clicked)="brain.scrollLeft()"
     buttonClass="shrink-0 self-center"
     ariaLabel="Scroll tabs left"
   >
@@ -19,22 +19,22 @@
 -->
 <div
   #tabsContainerRef
-  role="tablist"
+  [attr.role]="brain.tablistRole"
   class="tablist"
-  (scroll)="onScroll()"
-  (scrollend)="onScrollEnd()"
-  (keydown)="onKeyDown($event)"
+  (scroll)="brain.handleContainerScroll($event)"
+  (scrollend)="brain.handleContainerScroll($event)"
+  (keydown)="brain.handleKeyDown($event)"
 >
   <ng-content />
 </div>
 
-@if (scrollable()) {
+@if (brain.scrollable()) {
   <org-button
     color="neutral"
     variant="ghost"
     [iconOnly]="true"
     [disabled]="!brain.canScrollRight()"
-    (clicked)="onScrollRight()"
+    (clicked)="brain.scrollRight()"
     buttonClass="shrink-0 self-center"
     ariaLabel="Scroll tabs right"
   >

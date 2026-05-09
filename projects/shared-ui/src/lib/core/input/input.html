@@ -1,7 +1,7 @@
 @for (item of inlineItems(); track item.id) {
-  <org-tag color="primary" variant="weak">
+  <org-tag color="primary">
     {{ item.label }}
-    @if (!!(item.removable && !isDisabled() && !readonly())) {
+    @if (item.removable && brainRef.canModifyContent()) {
       <org-tag-icon [removable]="true" (removed)="onInlineItemRemove(item)" />
     }
   </org-tag>
@@ -11,7 +11,7 @@
     <button
       type="button"
       class="input-icon-btn"
-      (click)="onPreIconClick($event)"
+      (click)="brainRef.handlePreIconRequest()"
       [disabled]="isDisabled()"
       [attr.aria-label]="preIconAriaLabel()"
     >
@@ -24,43 +24,40 @@
   }
 }
 <input
-  #inputRef
+  orgInputBrain
+  #brainRef="orgInputBrain"
   class="native-input"
-  [type]="currentInputType()"
-  [value]="value()"
-  [placeholder]="placeholder()"
-  [disabled]="isDisabled()"
-  [readonly]="readonly()"
-  (input)="onInputChange($event)"
-  (blur)="onBlur()"
+  [(value)]="value"
+  [type]="type()"
   [name]="name()"
-  [attr.id]="name()"
-  [attr.aria-describedby]="ariaDescribedBy()"
-  [attr.aria-invalid]="ariaInvalid()"
-  [attr.autocomplete]="autocomplete()"
-  [attr.data-ip-ignore]="blockPasswordManager() ? 'true' : null"
-  [attr.role]="inputRole()"
-  [attr.aria-expanded]="ariaExpanded()"
-  [attr.aria-haspopup]="ariaHasPopup()"
-  [attr.aria-autocomplete]="ariaAutoComplete()"
-  [attr.aria-activedescendant]="ariaActiveDescendant()"
-  [attr.aria-controls]="ariaControls()"
-  [attr.aria-label]="ariaLabel()"
+  [disabled]="disabled()"
+  [readonly]="readonly()"
+  [autoFocus]="autoFocus()"
+  [selectAllOnFocus]="selectAllOnFocus()"
+  [showPasswordToggle]="showPasswordToggle()"
+  [autocomplete]="autocomplete()"
+  [blockPasswordManager]="blockPasswordManager()"
+  [ariaExpanded]="ariaExpanded()"
+  [ariaHasPopup]="ariaHasPopup()"
+  [ariaAutoComplete]="ariaAutoComplete()"
+  [ariaActiveDescendant]="ariaActiveDescendant()"
+  [ariaControls]="ariaControls()"
+  [role]="inputRole()"
+  [ariaLabel]="ariaLabel()"
+  [placeholder]="placeholder()"
+  (focused)="onBrainFocused()"
+  (blurred)="onBrainBlurred()"
+  (preIconRequested)="onBrainPreIconRequested()"
+  (postIconRequested)="onBrainPostIconRequested()"
 />
 @if (hasPostIcon()) {
   @if (isPostIconInteractive()) {
     <button
       type="button"
       class="input-icon-btn"
-      (click)="onPostIconClick($event)"
+      (click)="brainRef.handlePostIconRequest()"
       [disabled]="isDisabled()"
-      [attr.aria-label]="
-        showPasswordToggle() && type() === 'password'
-          ? showPassword()
-            ? 'Hide password'
-            : 'Show password'
-          : postIconAriaLabel()
-      "
+      [attr.aria-label]="postIconAriaLabelText()"
     >
       <org-icon [name]="currentPostIcon()!" />
     </button>

@@ -9,6 +9,12 @@ export const allAutoScrollStates = ['enabled', 'disabled', 'forced-disabled'] as
 /** the auto scroll state machine value */
 export type AutoScrollState = (typeof allAutoScrollStates)[number];
 
+/** all valid aria-live values for the auto scroll content wrapper */
+export const allAutoScrollAriaLives = ['off', 'polite', 'assertive'] as const;
+
+/** the aria-live value for the auto scroll content wrapper */
+export type AutoScrollAriaLive = (typeof allAutoScrollAriaLives)[number];
+
 /** options for the public scrollToBottom method */
 export type AutoScrollScrollToBottomOptions = {
   onAfterScroll?: () => void;
@@ -16,6 +22,9 @@ export type AutoScrollScrollToBottomOptions = {
 
 /** default value for the enabled input */
 export const AUTO_SCROLL_ENABLED_DEFAULT = true;
+
+/** default value for the ariaLive input */
+export const AUTO_SCROLL_ARIA_LIVE_DEFAULT: AutoScrollAriaLive = 'polite';
 
 /** the internal state shape for the auto scroll brain directive */
 type AutoScrollDirectiveState = {
@@ -58,6 +67,9 @@ export class AutoScrollBrainDirective {
 
   /** whether auto-scroll-to-bottom is currently enabled by the consumer */
   public readonly enabled = input<boolean>(AUTO_SCROLL_ENABLED_DEFAULT);
+
+  /** the aria-live value to apply to the content-wrapper element rendered by the presentation */
+  public readonly ariaLive = input<AutoScrollAriaLive>(AUTO_SCROLL_ARIA_LIVE_DEFAULT);
 
   /** emitted whenever the internal auto-scroll state changes */
   public readonly stateChange = output<AutoScrollState>();

@@ -32,7 +32,7 @@ public preIconClicked = outputFromObservable(this._preIconClicked$);
 })
 ```
 - **ONLY** allow a `containerClass` input if it is applied to the outer most element in the template.
-- **ALWAYS** explicitly define the input(s) that the directive defines on the component itself when adding a `hostDirective` to a component
+- **ALWAYS** explicitly define the input(s) that the directive defines on the component itself when adding a `hostDirective` to a component and **NOT** as standalone property `input()`'s of the class.
 - If an icon is requested that is not available via `IconName` in `projects/shared-ui/src/lib/core/icon/icon.ts` **ALWAYS** ask before added a newicon, always say which icon you are adding,a nd the icon needs to come from lucide icons.
 - **ALWAYS** prefix any input with `default*` when it is **ONLY** used to default internal state
 - **ALWAYS** use Reactive forms over of Template-driven ones
@@ -118,4 +118,6 @@ export class MyView implements AfterViewInit {
 - **ALWAYS** inject the component intp a sub component when it needs to access property of the parent component.
 - **ALWAYS** use `computed()` is the reference data is a signal.
 - **NEVER** allow `null` as a true value for an input(), instead, **ALWAYS** allow it as a input transform value and transform it to `undefined`.
-- If injecting a component with `inject()`, **ALWAYS** ask if the inject should include `host: true`.
+- When injecting a component with `inject()`, **ALWAYS** default to omitting `{ host: true }`. The default `inject()` behavior walks the element-injector tree (which mirrors the rendered DOM and crosses content-projection boundaries), which is what is needed in nearly all parent-component lookups. `{ host: true }` limits the search to the calling component's own host element view, so injecting a parent component (not on the calling component's own element) with `{ host: true }` will throw `NG0201: No provider for ...` even when the parent is structurally present. **ONLY** add `{ host: true }` when you have a concrete reason it is required (e.g. enforcing the dependency must be on the calling component's own host element, not an ancestor), and in that case **ALWAYS** ask first and explain why.
+- **ALWAYS** default to using content projection when a component wants to allow the parent to provide content that will be placed in a specific location of the component.
+- IF you feel a content projection use case would be better implemented as a Lazy projection via `<ng-template>, **ALWAYS** ask if I would want that vs the standard / simpler content project.

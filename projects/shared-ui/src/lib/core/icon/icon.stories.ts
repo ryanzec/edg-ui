@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/angular';
-import { Icon, allIconNames, allIconColors, allIconSizes } from './icon';
+import { Icon, allIconColors, allIconSizes } from './icon';
+import { allIconNames, type IconName } from '../../brain/icon-brain/icon-brain';
 import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
 import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
 
@@ -20,7 +21,7 @@ const meta: Meta<Icon> = {
   - Uses Lucide Icons library via [\`@lucide/angular\`](https://lucide.dev/guide/packages/angular)
   - Dynamic icon rendering via \`[lucideIcon]\` directive
   - Five size options: 2xs, xs, sm, base (default), lg
-  - Nine color options: inherit (default), primary, secondary, neutral, safe, info, caution, warning, danger
+  - Eleven color options: inherit (default), muted, faint, primary, secondary, neutral, safe, info, caution, warning, danger
   - Inline display for easy integration with text
   - Accessible with aria-hidden attribute
 
@@ -38,6 +39,8 @@ const meta: Meta<Icon> = {
 
   ### Color Options
   - **inherit**: Inherits text color from parent elements (default)
+  - **muted**: Muted foreground — supporting glyphs that shouldn't compete with the label they sit beside
+  - **faint**: Faint foreground — quiet meta affordances (timestamps, helper hints)
   - **primary**: Primary color
   - **secondary**: Secondary accent color
   - **neutral**: Neutral/gray color
@@ -74,7 +77,7 @@ const meta: Meta<Icon> = {
 };
 
 export default meta;
-type Story = StoryObj<Icon>;
+type Story = StoryObj<Icon & { name: IconName; label: string | undefined }>;
 
 export const Default: Story = {
   args: {
@@ -144,10 +147,6 @@ export const Sizes: Story = {
           <org-icon name="check" size="base"></org-icon>
         </org-storybook-example-container-section>
 
-        <org-storybook-example-container-section label="Medium">
-          <org-icon name="check" size="md"></org-icon>
-        </org-storybook-example-container-section>
-
         <org-storybook-example-container-section label="Large">
           <org-icon name="check" size="lg"></org-icon>
         </org-storybook-example-container-section>
@@ -166,6 +165,10 @@ export const Sizes: Story = {
 
         <org-storybook-example-container-section label="4 Extra Large">
           <org-icon name="check" size="4xl"></org-icon>
+        </org-storybook-example-container-section>
+
+        <org-storybook-example-container-section label="5 Extra Large">
+          <org-icon name="check" size="5xl"></org-icon>
         </org-storybook-example-container-section>
 
         <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
@@ -192,7 +195,7 @@ export const Colors: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Comparison of all 9 color variants including inherit (default) and 8 component colors.',
+        story: 'Comparison of all 11 color variants including inherit (default), muted, faint, and 8 component colors.',
       },
     },
   },
@@ -200,10 +203,18 @@ export const Colors: Story = {
     template: `
       <org-storybook-example-container
         title="Color Variants"
-        currentState="Comparing all 9 color options"
+        currentState="Comparing all 11 color options"
       >
         <org-storybook-example-container-section label="Inherit (default)">
           <org-icon name="check" color="inherit"></org-icon>
+        </org-storybook-example-container-section>
+
+        <org-storybook-example-container-section label="Muted">
+          <org-icon name="check" color="muted"></org-icon>
+        </org-storybook-example-container-section>
+
+        <org-storybook-example-container-section label="Faint">
+          <org-icon name="check" color="faint"></org-icon>
         </org-storybook-example-container-section>
 
         <org-storybook-example-container-section label="Primary">
@@ -240,6 +251,8 @@ export const Colors: Story = {
 
         <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
           <li><strong>inherit</strong>: Inherits text color from parent elements (default)</li>
+          <li><strong>muted</strong>: Muted foreground — supporting glyphs that shouldn't compete with the label</li>
+          <li><strong>faint</strong>: Faint foreground — quiet meta affordances (timestamps, helper hints)</li>
           <li><strong>primary</strong>: Primary color</li>
           <li><strong>secondary</strong>: Secondary accent color</li>
           <li><strong>neutral</strong>: Neutral/gray color</li>

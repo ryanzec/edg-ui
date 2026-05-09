@@ -13,7 +13,7 @@
     gap: var(--spacing-2);
     width: 100%;
     outline: none;
-    background-color: var(--color-bg-app);
+    /*background-color: var(--color-bg-app);*/
   }
 
   :host button.list-item-content {
@@ -45,8 +45,17 @@
 
   :host([aria-disabled='true']) .list-item-content {
     color: var(--color-fg-faint);
-    background-color: var(--color-neutral-soft);
     cursor: not-allowed;
     pointer-events: auto;
+  }
+
+  /* single-mode parent list rounds the selected and hovered item content */
+  :host([data-parent-select-mode='single']) .list-item-content {
+    border-radius: var(--radius-base);
+  }
+
+  /* keeps the auto-rendered external-href icon aligned to the rightmost edge of the row */
+  .external-href-icon {
+    margin-left: auto;
   }
 }

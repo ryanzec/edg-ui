@@ -1,21 +1,18 @@
 <label
+  orgCheckboxToggleBrain
   orgText
   [textSize]="textSize()"
+  [checked]="checked()"
+  [disabled]="isDisabled()"
+  (changed)="onBrainChanged($event)"
+  (touched)="onBrainTouched()"
   class="checkbox-toggle-container"
-  (click)="onClick($event)"
-  (keydown)="onKeyDown($event)"
-  [attr.tabindex]="isDisabled() ? -1 : 0"
-  role="switch"
-  [attr.aria-checked]="isChecked()"
-  [attr.aria-disabled]="isDisabled()"
-  [attr.aria-describedby]="ariaDescribedBy()"
-  [attr.aria-invalid]="ariaInvalid()"
 >
   <input
     type="checkbox"
     [name]="name()"
     [value]="value()"
-    [checked]="isChecked()"
+    [checked]="checked()"
     [disabled]="isDisabled()"
     [attr.aria-hidden]="true"
     tabindex="-1"

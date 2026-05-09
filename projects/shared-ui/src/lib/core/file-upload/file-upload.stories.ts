@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/angular';
-import { FileUploadComponent, FILE_UPLOAD_FILE_TYPES_DEFAULT } from './file-upload';
+import { FileUploadComponent, FILE_UPLOAD_ARIA_LABEL_DEFAULT, FILE_UPLOAD_FILE_TYPES_DEFAULT } from './file-upload';
 import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
 import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
 
@@ -22,7 +22,7 @@ const meta: Meta<FileUploadComponent> = {
   - File type validation with prefix or exact match support
   - Visual feedback for hover, success, and error states
   - Keyboard accessible via native button behavior
-  - Emits selected file through \`fileUpload\` output
+  - Emits selected file through \`fileSelected\` output
 
   ### File Type Validation
   - **Empty array**: Accepts all file types
@@ -33,16 +33,19 @@ const meta: Meta<FileUploadComponent> = {
   ### Usage Examples
   \`\`\`html
   <!-- Accept all file types -->
-  <org-file-upload (fileUpload)="onUpload($event)"></org-file-upload>
+  <org-file-upload (fileSelected)="onUpload($event)"></org-file-upload>
 
   <!-- Accept all images -->
-  <org-file-upload [fileTypes]="['image/']" (fileUpload)="onUpload($event)"></org-file-upload>
+  <org-file-upload [fileTypes]="['image/']" (fileSelected)="onUpload($event)"></org-file-upload>
 
   <!-- Accept only PNG images -->
-  <org-file-upload [fileTypes]="['image/png']" (fileUpload)="onUpload($event)"></org-file-upload>
+  <org-file-upload [fileTypes]="['image/png']" (fileSelected)="onUpload($event)"></org-file-upload>
 
   <!-- Accept multiple specific types -->
-  <org-file-upload [fileTypes]="['image/png', 'image/jpeg', 'application/pdf']" (fileUpload)="onUpload($event)"></org-file-upload>
+  <org-file-upload [fileTypes]="['image/png', 'image/jpeg', 'application/pdf']" (fileSelected)="onUpload($event)"></org-file-upload>
+
+  <!-- Override the accessible label -->
+  <org-file-upload ariaLabel="Upload your profile photo" (fileSelected)="onUpload($event)"></org-file-upload>
   \`\`\`
 </div>
         `,
@@ -57,6 +60,7 @@ type Story = StoryObj<FileUploadComponent>;
 export const Default: Story = {
   args: {
     fileTypes: FILE_UPLOAD_FILE_TYPES_DEFAULT,
+    ariaLabel: FILE_UPLOAD_ARIA_LABEL_DEFAULT,
   },
   argTypes: {
     fileTypes: {
@@ -66,6 +70,14 @@ export const Default: Story = {
       table: {
         type: { summary: 'string[]' },
         defaultValue: { summary: '[]' },
+      },
+    },
+    ariaLabel: {
+      control: 'text',
+      description: 'Accessible label applied to the inner drop-zone button',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: FILE_UPLOAD_ARIA_LABEL_DEFAULT },
       },
     },
   },
@@ -78,7 +90,7 @@ export const Default: Story = {
   },
   render: (args) => ({
     props: args,
-    template: `<org-file-upload [fileTypes]="fileTypes"></org-file-upload>`,
+    template: `<org-file-upload [fileTypes]="fileTypes" [ariaLabel]="ariaLabel"></org-file-upload>`,
     moduleMetadata: {
       imports: [FileUploadComponent],
     },

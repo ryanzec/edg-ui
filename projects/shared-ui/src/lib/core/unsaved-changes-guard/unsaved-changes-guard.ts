@@ -23,7 +23,6 @@ export const unsavedChangesGuard: CanDeactivateFn<unknown> = (component): Observ
   // allowed as soft-dismiss paths that resolve to "stay" since they close without a result and the guard's
   // result === true check below treats anything other than an explicit confirm as cancel.
   const dialogRef = dialog.open<boolean>(dialogComponent, {
-    panelClass: ['dialog-panel-center'],
     hasBackdrop: true,
     closeOnNavigation: true,
     disableClose: true,

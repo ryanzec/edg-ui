@@ -42,7 +42,6 @@ import { SortableDirective } from '../../core/sortable-directive/sortable-direct
 import { TextDirective } from '../../core/text-directive/text-directive';
 import { TypedContextDirective } from '../../core/typed-context-directive/typed-context-directive';
 import { Pagination } from '../../core/pagination/pagination';
-import { PaginationStore } from '../../core/pagination-store/pagination-store';
 import { DataSelectionStore } from '../../core/data-selection-store/data-selection-store';
 import { UsersDataStore } from '../users-data-store/users-data-store';
 
@@ -118,7 +117,7 @@ const ROW_ACTIONS_MENU_POSITION = [
     TypedContextDirective,
     Pagination,
   ],
-  providers: [SortingStore, PaginationStore],
+  providers: [SortingStore],
   templateUrl: './users-list.html',
   host: {
     class: 'flex flex-col gap-3 w-full',
@@ -128,8 +127,13 @@ export class UsersList implements AfterViewInit {
   private readonly _injector = inject(Injector);
   private readonly _usersDataStore = inject(UsersDataStore);
   private readonly _sortingStore = inject(SortingStore);
-  private readonly _paginationStore = inject(PaginationStore);
   protected readonly selectionStore = new DataSelectionStore<User>();
+
+  /** model for the active pagination page (two-way bound to org-pagination) */
+  protected readonly currentPage = signal<number>(1);
+
+  /** model for the items-per-page value (two-way bound to org-pagination) */
+  protected readonly itemsPerPage = signal<number>(ITEMS_PER_PAGE_OPTIONS[0]);
 
   // outputs
   public readonly editUser = output<User>();
@@ -200,8 +204,8 @@ export class UsersList implements AfterViewInit {
     const filters = this._filterState();
     const sortKey = this._sortingStore.key();
     const sortDirection = this._sortingStore.direction();
-    const currentPage = this._paginationStore.activePage();
-    const itemsPerPage = this._paginationStore.activeItemsPerPage();
+    const currentPage = this.currentPage();
+    const itemsPerPage = this.itemsPerPage();
 
     const requestData: GetUsersRequest = {
       offset: (currentPage - 1) * itemsPerPage,
@@ -231,12 +235,6 @@ export class UsersList implements AfterViewInit {
   });
 
   constructor() {
-    this._paginationStore.initialize({
-      currentPage: 1,
-      itemsPerPage: ITEMS_PER_PAGE_OPTIONS[0],
-      itemsPerPageOptions: ITEMS_PER_PAGE_OPTIONS,
-    });
-
     // default sort is most-recently created first to match the header sort indicator in the image
     this._sortingStore.setSort('createdAt', 'desc');
 
@@ -345,6 +343,6 @@ export class UsersList implements AfterViewInit {
     }
 
     this._filterState.set(next);
-    this._paginationStore.goToPage(1);
+    this.currentPage.set(1);
   }
 }

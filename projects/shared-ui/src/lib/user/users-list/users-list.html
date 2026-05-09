@@ -79,14 +79,14 @@
       <org-table-td>
         <div class="flex flex-row gap-0.5">
           @for (role of user.roles; track role) {
-            <org-tag [color]="getRoleColor(role)" variant="weak">{{ role }}</org-tag>
+            <org-tag [color]="getRoleColor(role)">{{ role }}</org-tag>
           }
         </div>
       </org-table-td>
       <org-table-td>
         <div class="flex flex-row flex-wrap gap-0.5">
           @for (permission of user.permissions; track permission) {
-            <org-tag color="neutral" variant="weak">{{ permission }}</org-tag>
+            <org-tag color="neutral">{{ permission }}</org-tag>
           }
         </div>
       </org-table-td>
@@ -107,10 +107,7 @@
             <org-button-icon name="ellipsis" />
           </org-button>
           <ng-template #userActionsMenu>
-            <org-overlay-menu
-              [menuItems]="rowActionsMenuItems"
-              (menuItemClicked)="onRowActionMenuItemClick($event, user)"
-            />
+            <org-overlay-menu [items]="rowActionsMenuItems" (itemClicked)="onRowActionMenuItemClick($event, user)" />
           </ng-template>
         </div>
       </org-table-td>
@@ -123,5 +120,10 @@
     </ng-template>
   </org-table>
 
-  <org-pagination [totalItems]="totalItems()" [itemsPerPageOptions]="itemsPerPageOptions" />
+  <org-pagination
+    [totalItems]="totalItems()"
+    [itemsPerPageOptions]="itemsPerPageOptions"
+    [(currentPage)]="currentPage"
+    [(itemsPerPage)]="itemsPerPage"
+  />
 }

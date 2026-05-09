@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
-import { Icon, type IconName } from '../icon/icon';
+import { type IconName } from '../../brain/icon-brain/icon-brain';
+import { Icon } from '../icon/icon';
 import { LoadingSpinner } from '../loading-spinner/loading-spinner';
 import { Button } from './button';
 

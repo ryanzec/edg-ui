@@ -32,12 +32,12 @@ const meta: Meta<FormFields> = {
   <!-- Basic usage with inputs -->
   <org-form-fields>
     <org-form-field>
-      <org-label label="Name" htmlFor="name-input" />
+      <org-label text="Name" htmlFor="name-input" />
       <org-input name="name-input" placeholder="Enter your name" />
     </org-form-field>
 
     <org-form-field>
-      <org-label label="Email" htmlFor="email-input" />
+      <org-label text="Email" htmlFor="email-input" />
       <org-input name="email-input" type="email" placeholder="Enter your email" />
     </org-form-field>
   </org-form-fields>
@@ -45,7 +45,7 @@ const meta: Meta<FormFields> = {
   <!-- With different form elements -->
   <org-form-fields>
     <org-form-field>
-      <org-label label="Description" htmlFor="description-textarea" />
+      <org-label text="Description" htmlFor="description-textarea" />
       <org-textarea name="description-textarea" placeholder="Enter description..." />
     </org-form-field>
 
@@ -69,13 +69,13 @@ const meta: Meta<FormFields> = {
   \`\`\`html
   <!-- basic usage -->
   <org-form-field>
-    <org-label label="Email" htmlFor="email-input" />
+    <org-label text="Email" htmlFor="email-input" />
     <org-input name="email-input" type="email" />
   </org-form-field>
 
   <!-- with validation -->
   <org-form-field validationMessage="Please enter a valid email">
-    <org-label label="Email" htmlFor="email-input" />
+    <org-label text="Email" htmlFor="email-input" />
     <org-input name="email-input" type="email" />
   </org-form-field>
   \`\`\`
@@ -88,7 +88,9 @@ const meta: Meta<FormFields> = {
 
 export default meta;
 type Story = StoryObj<FormFields>;
-type FormFieldStory = StoryObj<FormField>;
+// the validationMessage input comes from the host-directive forwarding on `FormField`, which storybook's
+// signal-input type extraction does not see, so it is augmented onto the args type here.
+type FormFieldStory = StoryObj<FormField & { validationMessage: string | null }>;
 
 export const Default: Story = {
   args: {
@@ -111,17 +113,17 @@ export const Default: Story = {
         <org-storybook-example-container-section label="Basic Text Inputs">
           <org-form-fields>
             <org-form-field>
-              <org-label label="First Name" htmlFor="first-name-input" />
+              <org-label text="First Name" htmlFor="first-name-input" />
               <org-input name="first-name-input" placeholder="Enter your first name" />
             </org-form-field>
 
             <org-form-field>
-              <org-label label="Last Name" htmlFor="last-name-input" />
+              <org-label text="Last Name" htmlFor="last-name-input" />
               <org-input name="last-name-input" placeholder="Enter your last name" />
             </org-form-field>
 
             <org-form-field>
-              <org-label label="Email" htmlFor="email-input" />
+              <org-label text="Email" htmlFor="email-input" />
               <org-input name="email-input" type="email" placeholder="Enter your email" />
             </org-form-field>
           </org-form-fields>
@@ -151,17 +153,17 @@ export const WithMixedFormElements: Story = {
         <org-storybook-example-container-section label="Text Input + Textarea + Checkbox">
           <org-form-fields>
             <org-form-field>
-              <org-label label="Name" htmlFor="name-input-mixed" />
+              <org-label text="Name" htmlFor="name-input-mixed" />
               <org-input name="name-input-mixed" placeholder="Enter your name" />
             </org-form-field>
 
             <org-form-field>
-              <org-label label="Email" htmlFor="email-input-mixed" />
+              <org-label text="Email" htmlFor="email-input-mixed" />
               <org-input name="email-input-mixed" type="email" placeholder="Enter your email" />
             </org-form-field>
 
             <org-form-field>
-              <org-label label="Message" htmlFor="message-textarea-mixed" />
+              <org-label text="Message" htmlFor="message-textarea-mixed" />
               <org-textarea name="message-textarea-mixed" placeholder="Enter your message..." />
             </org-form-field>
 
@@ -210,12 +212,12 @@ export const WithValidation: Story = {
         <org-storybook-example-container-section label="Valid and Invalid Inputs">
           <org-form-fields>
             <org-form-field>
-              <org-label label="Email (Valid)" htmlFor="email-valid-input" />
+              <org-label text="Email (Valid)" htmlFor="email-valid-input" />
               <org-input name="email-valid-input" type="email" placeholder="Enter email" value="user@example.com" />
             </org-form-field>
 
             <org-form-field validationMessage="Please enter a valid email address">
-              <org-label label="Email (Invalid)" htmlFor="email-invalid-input" />
+              <org-label text="Email (Invalid)" htmlFor="email-invalid-input" />
               <org-input
                 name="email-invalid-input"
                 type="email"
@@ -225,7 +227,7 @@ export const WithValidation: Story = {
             </org-form-field>
 
             <org-form-field validationMessage="Password must be at least 8 characters">
-              <org-label label="Password (Invalid)" htmlFor="password-invalid-input" />
+              <org-label text="Password (Invalid)" htmlFor="password-invalid-input" />
               <org-input
                 name="password-invalid-input"
                 type="password"
@@ -268,12 +270,12 @@ export const MultipleGroups: Story = {
               <h3 class="mb-2 font-semibold">Personal Information</h3>
               <org-form-fields>
                 <org-form-field>
-                  <org-label label="First Name" htmlFor="first-name-multi" />
+                  <org-label text="First Name" htmlFor="first-name-multi" />
                   <org-input name="first-name-multi" placeholder="Enter first name" />
                 </org-form-field>
 
                 <org-form-field>
-                  <org-label label="Last Name" htmlFor="last-name-multi" />
+                  <org-label text="Last Name" htmlFor="last-name-multi" />
                   <org-input name="last-name-multi" placeholder="Enter last name" />
                 </org-form-field>
               </org-form-fields>
@@ -283,12 +285,12 @@ export const MultipleGroups: Story = {
               <h3 class="mb-2 font-semibold">Account Details</h3>
               <org-form-fields>
                 <org-form-field>
-                  <org-label label="Username" htmlFor="username-multi" />
+                  <org-label text="Username" htmlFor="username-multi" />
                   <org-input name="username-multi" placeholder="Enter username" />
                 </org-form-field>
 
                 <org-form-field>
-                  <org-label label="Password" htmlFor="password-multi" />
+                  <org-label text="Password" htmlFor="password-multi" />
                   <org-input name="password-multi" type="password" placeholder="Enter password" />
                 </org-form-field>
               </org-form-fields>
@@ -327,17 +329,17 @@ export const ReserveValidationSpace: Story = {
         <org-storybook-example-container-section label="reserveValidationSpace=true (default) — space always reserved">
           <org-form-fields [reserveValidationSpace]="true">
             <org-form-field>
-              <org-label label="First Name" htmlFor="rvs-true-first-name" />
+              <org-label text="First Name" htmlFor="rvs-true-first-name" />
               <org-input name="rvs-true-first-name" placeholder="Enter first name" />
             </org-form-field>
 
             <org-form-field validationMessage="Last name is required">
-              <org-label label="Last Name" htmlFor="rvs-true-last-name" />
+              <org-label text="Last Name" htmlFor="rvs-true-last-name" />
               <org-input name="rvs-true-last-name" placeholder="Enter last name" />
             </org-form-field>
 
             <org-form-field>
-              <org-label label="Email" htmlFor="rvs-true-email" />
+              <org-label text="Email" htmlFor="rvs-true-email" />
               <org-input name="rvs-true-email" type="email" placeholder="Enter email" />
             </org-form-field>
           </org-form-fields>
@@ -346,17 +348,17 @@ export const ReserveValidationSpace: Story = {
         <org-storybook-example-container-section label="reserveValidationSpace=false — space only used when message is present">
           <org-form-fields [reserveValidationSpace]="false">
             <org-form-field>
-              <org-label label="First Name" htmlFor="rvs-false-first-name" />
+              <org-label text="First Name" htmlFor="rvs-false-first-name" />
               <org-input name="rvs-false-first-name" placeholder="Enter first name" />
             </org-form-field>
 
             <org-form-field validationMessage="Last name is required">
-              <org-label label="Last Name" htmlFor="rvs-false-last-name" />
+              <org-label text="Last Name" htmlFor="rvs-false-last-name" />
               <org-input name="rvs-false-last-name" placeholder="Enter last name" />
             </org-form-field>
 
             <org-form-field>
-              <org-label label="Email" htmlFor="rvs-false-email" />
+              <org-label text="Email" htmlFor="rvs-false-email" />
               <org-input name="rvs-false-email" type="email" placeholder="Enter email" />
             </org-form-field>
           </org-form-fields>
@@ -392,17 +394,17 @@ export const WithInputIcons: Story = {
         <org-storybook-example-container-section label="Inputs With Icons">
           <org-form-fields>
             <org-form-field>
-              <org-label label="Search" htmlFor="search-icon-input" />
+              <org-label text="Search" htmlFor="search-icon-input" />
               <org-input name="search-icon-input" preIcon="search" placeholder="Search..." />
             </org-form-field>
 
             <org-form-field>
-              <org-label label="Email" htmlFor="email-icon-input" />
+              <org-label text="Email" htmlFor="email-icon-input" />
               <org-input name="email-icon-input" preIcon="mail" type="email" placeholder="Enter email" />
             </org-form-field>
 
             <org-form-field>
-              <org-label label="Password" htmlFor="password-icon-input" />
+              <org-label text="Password" htmlFor="password-icon-input" />
               <org-input
                 name="password-icon-input"
                 type="password"
@@ -459,7 +461,7 @@ export const FormFieldDefault: FormFieldStory = {
       >
         <org-storybook-example-container-section label="Basic Usage">
           <org-form-field [validationMessage]="validationMessage" [reserveValidationSpace]="reserveValidationSpace">
-            <org-label label="Email" htmlFor="default-email-input" />
+            <org-label text="Email" htmlFor="default-email-input" />
             <org-input name="default-email-input" type="email" placeholder="Enter your email" />
           </org-form-field>
         </org-storybook-example-container-section>
@@ -488,12 +490,12 @@ export const FormFieldValidationMessage: FormFieldStory = {
         <org-storybook-example-container-section label="No Message vs With Message">
           <org-form-fields>
             <org-form-field>
-              <org-label label="Valid Field" htmlFor="valid-field-input" />
+              <org-label text="Valid Field" htmlFor="valid-field-input" />
               <org-input name="valid-field-input" placeholder="No validation error" />
             </org-form-field>
 
             <org-form-field validationMessage="This field is required">
-              <org-label label="Invalid Field" htmlFor="invalid-field-input" />
+              <org-label text="Invalid Field" htmlFor="invalid-field-input" />
               <org-input name="invalid-field-input" placeholder="Has a validation error" />
             </org-form-field>
           </org-form-fields>
@@ -529,12 +531,12 @@ export const FormFieldReserveValidationSpace: FormFieldStory = {
         <org-storybook-example-container-section label="Reserved Space (Default via org-form-fields)">
           <org-form-fields>
             <org-form-field>
-              <org-label label="First Name" htmlFor="reserve-first-name-input" />
+              <org-label text="First Name" htmlFor="reserve-first-name-input" />
               <org-input name="reserve-first-name-input" placeholder="Space reserved below" />
             </org-form-field>
 
             <org-form-field>
-              <org-label label="Last Name" htmlFor="reserve-last-name-input" />
+              <org-label text="Last Name" htmlFor="reserve-last-name-input" />
               <org-input name="reserve-last-name-input" placeholder="Space reserved below" />
             </org-form-field>
           </org-form-fields>
@@ -543,12 +545,12 @@ export const FormFieldReserveValidationSpace: FormFieldStory = {
         <org-storybook-example-container-section label="No Reserved Space (Explicit Override)">
           <org-form-fields>
             <org-form-field [reserveValidationSpace]="false">
-              <org-label label="First Name" htmlFor="no-reserve-first-name-input" />
+              <org-label text="First Name" htmlFor="no-reserve-first-name-input" />
               <org-input name="no-reserve-first-name-input" placeholder="No space reserved below" />
             </org-form-field>
 
             <org-form-field [reserveValidationSpace]="false">
-              <org-label label="Last Name" htmlFor="no-reserve-last-name-input" />
+              <org-label text="Last Name" htmlFor="no-reserve-last-name-input" />
               <org-input name="no-reserve-last-name-input" placeholder="No space reserved below" />
             </org-form-field>
           </org-form-fields>
@@ -556,7 +558,7 @@ export const FormFieldReserveValidationSpace: FormFieldStory = {
 
         <org-storybook-example-container-section label="Reserved Space (Explicit True on Standalone)">
           <org-form-field [reserveValidationSpace]="true">
-            <org-label label="First Name" htmlFor="standalone-reserve-first-name-input" />
+            <org-label text="First Name" htmlFor="standalone-reserve-first-name-input" />
             <org-input name="standalone-reserve-first-name-input" placeholder="Explicit reserveValidationSpace true, no parent org-form-fields" />
           </org-form-field>
         </org-storybook-example-container-section>

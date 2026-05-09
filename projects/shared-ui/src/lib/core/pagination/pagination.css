@@ -16,41 +16,4 @@
     color: var(--color-fg-muted);
     white-space: nowrap;
   }
-
-  .items-per-page-container {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-2);
-    font-size: var(--font-size-base);
-    line-height: var(--line-height-normal);
-    letter-spacing: var(--letter-spacing-normal);
-    white-space: nowrap;
-  }
-
-  .items-per-page-label {
-    color: var(--color-fg-muted);
-  }
-
-  .pagination-select {
-    padding: var(--spacing-1) var(--spacing-2);
-    font-size: var(--font-size-base);
-    line-height: var(--line-height-normal);
-    letter-spacing: var(--letter-spacing-normal);
-    border: var(--border-width) solid var(--color-border);
-    border-radius: var(--radius-base);
-    background-color: var(--color-bg-surface);
-    outline: none;
-    cursor: pointer;
-  }
-
-  .pagination-select:focus-visible {
-    box-shadow: 0 0 0 0.125rem var(--color-focus-ring); /* 2px */
-    border-color: var(--color-focus-ring);
-  }
-
-  .pagination-select:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    background-color: var(--color-secondary-soft);
-  }
 }

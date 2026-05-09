@@ -10,39 +10,27 @@ import {
 } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { angularUtils, logManager } from '@organization/shared-utils';
+import { DividerBrainDirective } from '../../brain/divider-brain/divider-brain';
 import {
-  SPLITTER_COLLAPSED_SIDE_DEFAULT as BRAIN_SPLITTER_COLLAPSED_SIDE_DEFAULT,
-  SPLITTER_IS_ENABLED_DEFAULT as BRAIN_SPLITTER_IS_ENABLED_DEFAULT,
-  SPLITTER_MINIMUM_SIZE_DEFAULT as BRAIN_SPLITTER_MINIMUM_SIZE_DEFAULT,
-  SPLITTER_SIZE_DEFAULT as BRAIN_SPLITTER_SIZE_DEFAULT,
+  SPLITTER_COLLAPSED_SIDE_DEFAULT,
+  SPLITTER_IS_ENABLED_DEFAULT,
+  SPLITTER_MINIMUM_SIZE_DEFAULT,
+  SPLITTER_SIZE_DEFAULT,
   SplitterBrainDirective,
-  type SplitterCollapsedSide as BrainSplitterCollapsedSide,
-  type SplitterDirection as BrainSplitterDirection,
+  type SplitterCollapsedSide,
+  type SplitterDirection,
 } from '../../brain/splitter-brain/splitter-brain';
 
-/** all available splitter direction values */
-export const allSplitterDirections = ['horizontal', 'vertical'] as const;
-
-/** the orientation of the split layout */
-export type SplitterDirection = BrainSplitterDirection;
-
-/** all available splitter collapsed side values */
-export const allSplitterCollapsedSides = ['first', 'second'] as const;
-
-/** which section is collapsed to take up no space */
-export type SplitterCollapsedSide = BrainSplitterCollapsedSide;
-
-/** the default minimum size in pixels for each section */
-export const SPLITTER_MINIMUM_SIZE_DEFAULT: number[] = BRAIN_SPLITTER_MINIMUM_SIZE_DEFAULT;
-
-/** the default size as a percentage for each section */
-export const SPLITTER_SIZE_DEFAULT: number[] = BRAIN_SPLITTER_SIZE_DEFAULT;
-
-/** the default enabled state of the splitter divider */
-export const SPLITTER_IS_ENABLED_DEFAULT = BRAIN_SPLITTER_IS_ENABLED_DEFAULT;
-
-/** the default collapsed side of the splitter */
-export const SPLITTER_COLLAPSED_SIDE_DEFAULT: SplitterCollapsedSide | undefined = BRAIN_SPLITTER_COLLAPSED_SIDE_DEFAULT;
+export {
+  type SplitterDirection,
+  type SplitterCollapsedSide,
+  allSplitterDirections,
+  allSplitterCollapsedSides,
+  SPLITTER_MINIMUM_SIZE_DEFAULT,
+  SPLITTER_SIZE_DEFAULT,
+  SPLITTER_IS_ENABLED_DEFAULT,
+  SPLITTER_COLLAPSED_SIDE_DEFAULT,
+} from '../../brain/splitter-brain/splitter-brain';
 
 /** the default animate-resize state of the splitter */
 export const SPLITTER_ANIMATE_RESIZE_DEFAULT = true;
@@ -50,7 +38,7 @@ export const SPLITTER_ANIMATE_RESIZE_DEFAULT = true;
 @Component({
   selector: 'org-splitter',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [NgTemplateOutlet],
+  imports: [NgTemplateOutlet, DividerBrainDirective],
   templateUrl: './splitter.html',
   styleUrl: './splitter.css',
   hostDirectives: [
@@ -61,10 +49,6 @@ export const SPLITTER_ANIMATE_RESIZE_DEFAULT = true;
     },
   ],
   host: {
-    '[attr.data-direction]': 'direction()',
-    '[attr.data-enabled]': 'isEnabled() ? "" : null',
-    '[attr.data-collapsed-side]': 'collapsedSide()',
-    '[attr.data-dragging]': 'brain.isDragging() ? "" : null',
     '[attr.data-animate-resize]': 'animateResize() ? "" : null',
   },
 })

@@ -1,7 +1,12 @@
-@if (variant() === 'block') {
+@if (brain.variant() === 'block') {
   <div class="code-block-copy-wrapper">
-    @if (allowCopy()) {
-      <button type="button" class="code-block-copy-btn" [cdkCopyToClipboard]="text()" aria-label="Copy code">
+    @if (brain.canCopy()) {
+      <button
+        [type]="brain.copyButtonType"
+        class="code-block-copy-btn"
+        (click)="brain.copy()"
+        [attr.aria-label]="brain.copyAriaLabel()"
+      >
         <org-icon name="copy" />
       </button>
     }
@@ -11,9 +16,9 @@
       <pre
         class="code-block-pre"
         [style]="hasEllipsis() ? { '--ellipsis-lines': ellipsisAt() } : null"
-      ><code>{{ text() }}</code></pre>
+      ><code>{{ brain.text() }}</code></pre>
     </org-scroll-area>
   </div>
-} @else if (variant() === 'inline') {
-  <code class="code-block-inline">{{ text() }}</code>
+} @else if (brain.variant() === 'inline') {
+  <code class="code-block-inline">{{ brain.text() }}</code>
 }

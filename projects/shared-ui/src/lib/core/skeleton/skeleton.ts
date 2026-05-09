@@ -1,4 +1,5 @@
-import { Component, ChangeDetectionStrategy, input, computed } from '@angular/core';
+import { Component, ChangeDetectionStrategy, computed, input } from '@angular/core';
+import { SkeletonBrainDirective } from '../../brain/skeleton-brain/skeleton-brain';
 
 /** available skeleton display types */
 export type SkeletonType = 'table' | 'card';
@@ -12,10 +13,14 @@ export const skeletonTypes: SkeletonType[] = ['table', 'card'];
   imports: [],
   templateUrl: './skeleton.html',
   styleUrl: './skeleton.css',
+  hostDirectives: [
+    {
+      directive: SkeletonBrainDirective,
+      inputs: ['ariaLabel'],
+    },
+  ],
   host: {
     '[attr.data-type]': 'type()',
-    role: 'status',
-    'aria-label': 'loading',
   },
 })
 export class Skeleton {

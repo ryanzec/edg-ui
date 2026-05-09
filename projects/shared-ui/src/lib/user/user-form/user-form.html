@@ -1,7 +1,7 @@
 <form class="flex flex-col gap-1" [formGroup]="userForm" (ngSubmit)="submit()">
   <org-form-fields>
     <org-form-field [validationMessage]="getFieldError('firstName') || ''">
-      <org-label [label]="getFieldLabel('firstName')" htmlFor="firstName" />
+      <org-label [text]="getFieldLabel('firstName')" htmlFor="firstName" />
       <org-input
         type="text"
         name="firstName"
@@ -12,7 +12,7 @@
       />
     </org-form-field>
     <org-form-field [validationMessage]="getFieldError('lastName') || ''">
-      <org-label [label]="getFieldLabel('lastName')" htmlFor="lastName" />
+      <org-label [text]="getFieldLabel('lastName')" htmlFor="lastName" />
       <org-input
         type="text"
         name="lastName"
@@ -23,7 +23,7 @@
       />
     </org-form-field>
     <org-form-field [validationMessage]="getFieldError('email') || ''">
-      <org-label [label]="getFieldLabel('email')" htmlFor="email" />
+      <org-label [text]="getFieldLabel('email')" htmlFor="email" />
       <org-input
         type="email"
         name="email"
@@ -35,7 +35,7 @@
       />
     </org-form-field>
     <org-form-field [validationMessage]="getRoleError() || ''" formGroupName="roles">
-      <org-label [label]="getFieldLabel('roles')" htmlFor="roles" />
+      <org-label [text]="getFieldLabel('roles')" htmlFor="roles" />
       <div class="flex flex-col gap-0.5">
         @for (role of assignableRoles; track role) {
           <org-checkbox
@@ -50,7 +50,7 @@
       </div>
     </org-form-field>
     <org-form-field formGroupName="permissions">
-      <org-label [label]="getFieldLabel('permissions')" htmlFor="permissions" />
+      <org-label [text]="getFieldLabel('permissions')" htmlFor="permissions" />
       <div class="flex flex-col gap-0.5">
         @for (permission of assignablePermissions; track permission) {
           <org-checkbox

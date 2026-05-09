@@ -1,11 +1,11 @@
 <button
   #buttonRef
   type="button"
-  role="tab"
   class="tab-btn"
-  [attr.aria-selected]="isActive() ? 'true' : 'false'"
-  [attr.aria-disabled]="disabled() ? 'true' : null"
-  (click)="onClick()"
+  [attr.role]="brain.tabRole"
+  [attr.aria-selected]="brain.isActive() ? 'true' : 'false'"
+  [attr.aria-disabled]="brain.disabled() ? 'true' : null"
+  (click)="brain.handleClick()"
 >
   <ng-content />
 </button>

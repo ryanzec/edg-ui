@@ -2,8 +2,8 @@
   <ng-content />
 </ng-template>
 
-@if (isClickable()) {
-  <button type="button" [attr.aria-label]="label()" (click)="click($event)">
+@if (avatarBrainDirective.isClickable()) {
+  <button orgButtonBrain type="button" [ariaLabel]="label()" (clicked)="avatarBrainDirective.click()">
     <ng-container [ngTemplateOutlet]="avatarContent" />
   </button>
 } @else {

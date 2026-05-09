@@ -1,22 +1,25 @@
 <button
   type="button"
   class="file-upload-zone"
-  (click)="openFileSelector($event)"
-  aria-label="Upload file — click or drag and drop to select a file"
+  orgFileUploadBrain
+  #brain="orgFileUploadBrain"
+  [fileTypes]="fileTypes()"
+  [ariaLabel]="ariaLabel()"
+  (fileSelected)="onBrainFileSelected($event)"
 >
   <input
     type="file"
     #fileInputRef
     class="native-input"
-    [accept]="fileTypesAsString()"
-    (change)="onFileSelected($event)"
+    [accept]="brain.fileTypesAsString()"
+    (change)="brain.nativeFileSelected($event)"
     data-testid="file-upload-input"
   />
 
-  @if (fileName()) {
+  @if (brain.fileName()) {
     <div class="file-message">
       <org-icon name="check" size="lg" class="icon-safe"></org-icon>
-      <span class="primary-text">{{ fileName() }} ready!</span>
+      <span class="primary-text">{{ brain.fileName() }} ready!</span>
       <small class="secondary-text">Click or drag another file to replace.</small>
     </div>
   } @else {
@@ -27,10 +30,15 @@
     </div>
   }
 
-  @if (error()) {
-    <div class="file-upload-error" role="alert">
+  @if (brain.error()) {
+    <div
+      class="file-upload-error"
+      [id]="brain.errorRegionId"
+      [attr.role]="brain.errorRole"
+      [attr.aria-live]="brain.errorAriaLive"
+    >
       <org-icon name="x" class="icon-danger"></org-icon>
-      <span>{{ error() }}</span>
+      <span>{{ brain.error() }}</span>
     </div>
   }
 </button>

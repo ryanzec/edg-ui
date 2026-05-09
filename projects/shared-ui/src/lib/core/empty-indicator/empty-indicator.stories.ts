@@ -118,7 +118,7 @@ export const Default: Story = {
     },
     boxPadding: {
       control: 'select',
-      options: ['none', 'sm', 'md', 'lg'],
+      options: ['none', 'sm', 'base', 'lg'],
       description: 'The internal padding size applied to the inner Box component',
     },
   },

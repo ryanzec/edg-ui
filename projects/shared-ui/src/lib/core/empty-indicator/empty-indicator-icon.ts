@@ -1,12 +1,13 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { angularUtils } from '@organization/shared-utils';
-import { Icon, ICON_COLOR_DEFAULT, ICON_LABEL_DEFAULT, type IconColor, type IconName } from '../icon/icon';
+import { ICON_BRAIN_LABEL_DEFAULT, type IconName } from '../../brain/icon-brain/icon-brain';
+import { Icon, ICON_COLOR_DEFAULT, type IconColor } from '../icon/icon';
 
 /** default value for the {@link EmptyIndicatorIcon.color} input */
 export const EMPTY_INDICATOR_ICON_COLOR_DEFAULT: IconColor = ICON_COLOR_DEFAULT;
 
 /** default value for the {@link EmptyIndicatorIcon.label} input */
-export const EMPTY_INDICATOR_ICON_LABEL_DEFAULT: string | undefined = ICON_LABEL_DEFAULT;
+export const EMPTY_INDICATOR_ICON_LABEL_DEFAULT: string | undefined = ICON_BRAIN_LABEL_DEFAULT;
 
 @Component({
   selector: 'org-empty-indicator-icon',

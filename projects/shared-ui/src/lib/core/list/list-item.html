@@ -1,5 +1,10 @@
 <ng-template #contentTemplate>
-  <ng-content />
+  <ng-content select="[pre]" />
+  <span [class]="hideLabel() ? 'sr-only' : 'flex-1'">{{ label() }}</span>
+  <ng-content select="[post]" />
+  @if (isExternalHref()) {
+    <org-list-item-icon class="external-href-icon" [name]="externalHrefIconName" />
+  }
 </ng-template>
 
 <li role="presentation">

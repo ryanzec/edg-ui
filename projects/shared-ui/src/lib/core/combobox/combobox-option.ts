@@ -2,21 +2,28 @@ import { ChangeDetectionStrategy, Component, computed, inject, input } from '@an
 import { angularUtils } from '@organization/shared-utils';
 import { List } from '../list/list';
 import { ListItem } from '../list/list-item';
-import { Combobox } from './combobox';
+import { ComboboxOptionBrainDirective } from '../../brain/combobox-option-brain/combobox-option-brain';
 import type { ComboboxOption as ComboboxOptionData } from '../combobox-store/combobox-store';
 
 /** default value for the displayLabelPrefix input */
 export const COMBOBOX_OPTION_DISPLAY_LABEL_PREFIX_DEFAULT: string | undefined = undefined;
 
 /**
- * renders a single option inside the combobox dropdown; reads focused state and forwards
- * mouse events to the parent combobox.
+ * renders a single option inside the combobox dropdown. all interaction state, a11y attributes, and
+ * mouse routing live on the brain (applied as host bindings on this element); this component only owns
+ * the visual presentation.
  */
 @Component({
   selector: 'org-combobox-option',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [ListItem],
   templateUrl: './combobox-option.html',
+  hostDirectives: [
+    {
+      directive: ComboboxOptionBrainDirective,
+      inputs: ['option'],
+    },
+  ],
   // re-provides the parent List so the inner ListItem's host-scoped inject(List, { host: true })
   // can still resolve past this wrapper component
   viewProviders: [
@@ -27,38 +34,26 @@ export const COMBOBOX_OPTION_DISPLAY_LABEL_PREFIX_DEFAULT: string | undefined = 
   ],
 })
 export class ComboboxOption {
-  /** reference to the parent combobox for focused-option state and mouse handlers. */
-  private readonly _comboboxComponent = inject(Combobox);
+  protected readonly brain = inject(ComboboxOptionBrainDirective, { self: true });
 
   /** the option data to render. */
-  public option = input.required<ComboboxOptionData>();
+  public readonly option = input.required<ComboboxOptionData>();
 
   /** optional label-wrapper prefix (e.g. `Add` to produce `Add "label"`); when undefined the raw label is rendered. */
-  public displayLabelPrefix = input<string | undefined, string | null | undefined>(
+  public readonly displayLabelPrefix = input<string | undefined, string | null | undefined>(
     COMBOBOX_OPTION_DISPLAY_LABEL_PREFIX_DEFAULT,
     { transform: angularUtils.transformNullToUndefined }
   );
 
-  /** whether this option matches the currently focused option in the parent combobox. */
-  protected readonly isFocused = computed<boolean>(
-    () => this._comboboxComponent.focusedOption()?.value === this.option().value
-  );
+  /** the resolved display label, applying the optional prefix wrapper around the raw option label. */
+  protected readonly displayLabel = computed<string>(() => {
+    const prefix = this.displayLabelPrefix();
+    const optionLabel = this.option().label;
 
-  /** computed dom id for the rendered option element. */
-  protected readonly optionId = computed<string>(() => `org-combobox-option-${this.option().value}`);
+    if (prefix === undefined) {
+      return optionLabel;
+    }
 
-  /** forwards mousedown to the parent combobox. */
-  protected mouseDown(event: MouseEvent): void {
-    this._comboboxComponent.optionMouseDown(event, this.option());
-  }
-
-  /** forwards mouseenter to the parent combobox. */
-  protected mouseEnter(event: MouseEvent): void {
-    this._comboboxComponent.optionMouseEnter(event, this.option());
-  }
-
-  /** forwards mouseleave to the parent combobox. */
-  protected mouseLeave(event: MouseEvent): void {
-    this._comboboxComponent.optionMouseLeave(event, this.option());
-  }
+    return `${prefix} "${optionLabel}"`;
+  });
 }

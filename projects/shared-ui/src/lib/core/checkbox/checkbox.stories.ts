@@ -93,7 +93,10 @@ const meta: Meta<Checkbox> = {
 };
 
 export default meta;
-type Story = StoryObj<Checkbox>;
+
+// the checked / indeterminate / disabled inputs come from the host-directive forwarding on `Checkbox`, which
+// storybook's signal-input type extraction does not see, so they are augmented onto the args type here.
+type Story = StoryObj<Checkbox & { checked: boolean; indeterminate: boolean; disabled: boolean }>;
 
 export const Default: Story = {
   args: {

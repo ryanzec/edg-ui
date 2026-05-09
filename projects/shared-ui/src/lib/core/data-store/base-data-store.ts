@@ -85,6 +85,13 @@ export abstract class BaseDataStore<T, TMeta = ResponseMeta> {
     return remoteState;
   });
 
+  /** whether the store is currently in a loading or initializing state */
+  public readonly isLoading = computed(() => {
+    const state = this.loadingState();
+
+    return state === 'pending' || state === 'initializing';
+  });
+
   /** the current state of any running mutation */
   public readonly mutationState = computed<DataStoreLoadingState>(() => {
     const remoteState = this._state().remoteState;
@@ -97,18 +104,19 @@ export abstract class BaseDataStore<T, TMeta = ResponseMeta> {
     return remoteState;
   });
 
+  /** whether the store is currently in a mutation state */
+  public readonly isMutating = computed(() => {
+    const remoteType = this._state().remoteType;
+    const state = this.mutationState();
+
+    return remoteType === 'mutation' && state !== 'idle';
+  });
+
   /** the type of the current remote operation */
   public readonly remoteType = computed(() => this._state().remoteType);
 
   /** the raw remote operation state */
   public readonly remoteState = computed(() => this._state().remoteState);
-
-  /** whether the store is currently in a loading or initializing state */
-  public readonly isLoading = computed(() => {
-    const state = this.loadingState();
-
-    return state === 'pending' || state === 'initializing';
-  });
 
   constructor(idField: keyof T | undefined) {
     this._idField = idField;

@@ -16,6 +16,15 @@ export const COMBOBOX_IS_GROUPING_ENABLED_DEFAULT = false;
 /** default value for the disabled input */
 export const COMBOBOX_DISABLED_DEFAULT = false;
 
+/** static a11y role applied to the input element */
+export const COMBOBOX_INPUT_ROLE = 'combobox';
+
+/** static a11y aria-haspopup value applied to the input element */
+export const COMBOBOX_ARIA_HAS_POPUP = 'listbox';
+
+/** static a11y aria-autocomplete value applied to the input element */
+export const COMBOBOX_ARIA_AUTO_COMPLETE = 'list';
+
 /** the internal state shape for the combobox brain directive */
 type ComboboxState = {
   isFocused: boolean;
@@ -26,10 +35,10 @@ type ComboboxState = {
 
 /**
  * headless brain directive for the combobox component. owns the local interaction state, all event handlers
- * (input value / focus / click / blur, keyboard nav, option mouse handlers, inline-item-remove), and the
- * selection / new-option-suggestion derivation. injects the parent-provided `ComboboxStore` via the shared element
- * injector. presentation pushes input-focus / input-blur native callbacks into the brain via setter so the brain
- * stays decoupled from the `Input` component class.
+ * (input value / focus / click / blur, keyboard nav, option mouse handlers, inline-item-remove), the a11y
+ * attribute values applied to the input, and the selection / new-option-suggestion derivation. injects the
+ * parent-provided `ComboboxStore` via the shared element injector. presentation pushes input-focus / input-blur
+ * native callbacks into the brain via setter so the brain stays decoupled from the `Input` component class.
  */
 @Directive({
   selector: '[orgComboboxBrain]',
@@ -68,6 +77,18 @@ export class ComboboxBrainDirective {
   /** whether the combobox is disabled by its consumer (combined with form-controlled disabled state) */
   public readonly disabled = input<boolean>(COMBOBOX_DISABLED_DEFAULT);
 
+  /** unique name used to derive the listbox dom id for aria-controls linking */
+  public readonly name = input.required<string>();
+
+  /** static a11y role applied to the inner input element */
+  public readonly inputRole = COMBOBOX_INPUT_ROLE;
+
+  /** static a11y aria-haspopup value applied to the inner input element */
+  public readonly ariaHasPopup = COMBOBOX_ARIA_HAS_POPUP;
+
+  /** static a11y aria-autocomplete value applied to the inner input element */
+  public readonly ariaAutoComplete = COMBOBOX_ARIA_AUTO_COMPLETE;
+
   /** emitted when the input gains focus */
   public readonly focused = output<void>();
 
@@ -85,6 +106,39 @@ export class ComboboxBrainDirective {
 
   /** the resolved disabled state */
   public readonly isDisabled = computed<boolean>(() => this.disabled() || this._state().isDisabledByForm);
+
+  /** dom id for the listbox element, used by aria-controls on the input and aria-activedescendant resolution */
+  public readonly listboxId = computed<string>(() => `combobox-listbox-${this.name()}`);
+
+  /** dom id of the currently focused option, used as aria-activedescendant on the input */
+  public readonly focusedOptionId = computed<string | null>(() => {
+    const option = this._store.focusedOption();
+
+    if (!option) {
+      return null;
+    }
+
+    return `org-combobox-option-${option.value}`;
+  });
+
+  /** aria-expanded value derived from the open state of the dropdown */
+  public readonly ariaExpanded = computed<boolean>(() => this._store.isOpened());
+
+  /**
+   * the value to display in the input. in single-select mode shows the selected option's label when the input is
+   * not focused; otherwise shows the raw input value.
+   */
+  public readonly currentInputValue = computed<string>(() => {
+    if (this.isMultiSelect()) {
+      return this._store.inputValue();
+    }
+
+    if (!this._state().isFocused && this._store.selectedOptions().length > 0) {
+      return this._store.selectedOptions()[0].label;
+    }
+
+    return this._store.inputValue();
+  });
 
   /**
    * synthetic option to display when allowNewOptions is true and the input doesn't exactly match any existing option

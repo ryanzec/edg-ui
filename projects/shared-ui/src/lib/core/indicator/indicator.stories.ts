@@ -60,7 +60,10 @@ const meta: Meta<Indicator> = {
 };
 
 export default meta;
-type Story = StoryObj<Indicator>;
+
+// the number / ariaLabel inputs come from the host-directive forwarding on `Indicator`, which storybook's
+// signal-input type extraction does not see, so they are augmented onto the args type here.
+type Story = StoryObj<Indicator & { number: number | null; ariaLabel: string | null }>;
 
 export const Default: Story = {
   args: {

@@ -1,7 +1,6 @@
-import { Component, ChangeDetectionStrategy, input, computed, signal } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
-import { outputFromObservable } from '@angular/core/rxjs-interop';
+import { Component, ChangeDetectionStrategy, computed, inject, input } from '@angular/core';
 import { angularUtils } from '@organization/shared-utils';
+import { EmptyIndicatorBrainDirective } from '../../brain/empty-indicator-brain/empty-indicator-brain';
 import { Button } from '../button/button';
 import {
   Box,
@@ -34,27 +33,16 @@ export const EMPTY_INDICATOR_BOX_PADDING_DEFAULT: BoxPadding = BOX_PADDING_DEFAU
   imports: [Button, Box],
   templateUrl: './empty-indicator.html',
   styleUrl: './empty-indicator.css',
-  host: {
-    role: 'status',
-  },
+  hostDirectives: [
+    {
+      directive: EmptyIndicatorBrainDirective,
+      outputs: ['actionTriggered'],
+    },
+  ],
 })
 export class EmptyIndicator {
-  /** tracks the number of active listeners on the actionTriggered output */
-  private readonly _actionTriggeredListenerCount = signal<number>(0);
-
-  /** subject that drives the actionTriggered output */
-  private readonly _actionTriggeredSubject = new Subject<void>();
-
-  /** observable wrapper that keeps _actionTriggeredListenerCount in sync with subscription state */
-  private readonly _actionTriggeredObservable = new Observable<void>((subscriber) => {
-    this._actionTriggeredListenerCount.update((count) => count + 1);
-    const subscription = this._actionTriggeredSubject.subscribe(subscriber);
-
-    return () => {
-      this._actionTriggeredListenerCount.update((count) => count - 1);
-      subscription.unsubscribe();
-    };
-  });
+  /** reference to the host empty-indicator brain directive owning the action event plumbing and a11y role */
+  protected readonly brain = inject(EmptyIndicatorBrainDirective, { self: true });
 
   /** required header text displayed above the description */
   public header = input.required<string>();
@@ -80,16 +68,8 @@ export class EmptyIndicator {
   /** the internal padding size applied to the inner Box component */
   public boxPadding = input<BoxPadding>(EMPTY_INDICATOR_BOX_PADDING_DEFAULT);
 
-  /** emitted when the action button is clicked */
-  public actionTriggered = outputFromObservable(this._actionTriggeredObservable);
-
   /** whether the action button should be rendered */
   protected readonly hasActionButton = computed<boolean>(() => {
-    return !!this.actionLabel() && this._actionTriggeredListenerCount() > 0;
+    return !!this.actionLabel() && this.brain.hasActionListener();
   });
-
-  /** handles the action button click */
-  protected onActionClick(): void {
-    this._actionTriggeredSubject.next();
-  }
 }

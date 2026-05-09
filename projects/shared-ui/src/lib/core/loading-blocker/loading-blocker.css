@@ -10,7 +10,7 @@
     pointer-events: auto;
   }
 
-  :host([data-visible]) {
+  :host([aria-busy='true']) {
     display: flex;
   }
 

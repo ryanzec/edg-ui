@@ -1,20 +1,20 @@
 <ng-template #labelTemplate>
-  {{ label() }}
+  {{ labelBrainDirective.text() }}
 
-  @if (isRequired()) {
-    <span class="required-marker" aria-hidden="true">*</span>
-    <span class="sr-only">required</span>
+  @if (labelBrainDirective.isRequired()) {
+    <span class="required-marker" [attr.aria-hidden]="labelBrainDirective.requiredMarkerAriaHidden">*</span>
+    <span class="sr-only">{{ labelBrainDirective.requiredAccessibilityText }}</span>
   }
 
-  @if (isLoading()) {
+  @if (labelBrainDirective.isLoading()) {
     <org-loading-spinner />
   }
 
   <ng-content />
 </ng-template>
 
-@if (asLabel()) {
-  <label [for]="htmlFor()">
+@if (labelBrainDirective.asLabel()) {
+  <label [for]="labelBrainDirective.htmlFor()">
     <ng-container [ngTemplateOutlet]="labelTemplate" />
   </label>
 } @else {

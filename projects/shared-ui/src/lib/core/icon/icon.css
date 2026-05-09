@@ -23,9 +23,9 @@
     height: var(--icon-size-base);
   }
 
-  :host([data-size='md']) svg {
-    width: var(--icon-size-base);
-    height: var(--icon-size-base);
+  :host([data-size='5xl']) svg {
+    width: var(--icon-size-5xl);
+    height: var(--icon-size-5xl);
   }
 
   :host([data-size='lg']) svg {
@@ -55,6 +55,14 @@
 
   :host([data-color='inherit']) svg {
     color: var(--icon-color-inherit);
+  }
+
+  :host([data-color='muted']) svg {
+    color: var(--icon-color-muted);
+  }
+
+  :host([data-color='faint']) svg {
+    color: var(--icon-color-faint);
   }
 
   :host([data-color='primary']) svg {

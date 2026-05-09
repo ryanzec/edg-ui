@@ -41,9 +41,12 @@ import { Label } from '../../core/label/label';
           (scrolledIndexChange)="onScrollIndexChange($event)"
         >
           <org-list>
-            <org-list-item *cdkVirtualFor="let item of items()" asTag="button" (clicked)="onItemClick(item.id)">
-              {{ item.content }}
-            </org-list-item>
+            <org-list-item
+              *cdkVirtualFor="let item of items()"
+              asTag="button"
+              [label]="item.content"
+              (clicked)="onItemClick(item.id)"
+            />
           </org-list>
         </cdk-virtual-scroll-viewport>
       </org-storybook-example-container-section>
@@ -147,9 +150,12 @@ class FixedSizeVirtualScrollDemoComponent {
           (scrolledIndexChange)="onScrollIndexChange($event)"
         >
           <org-list>
-            <org-list-item *cdkVirtualFor="let item of items()" asTag="button" (clicked)="onItemClick(item.id)">
-              {{ item.content }}
-            </org-list-item>
+            <org-list-item
+              *cdkVirtualFor="let item of items()"
+              asTag="button"
+              [label]="item.content"
+              (clicked)="onItemClick(item.id)"
+            />
           </org-list>
         </cdk-virtual-scroll-viewport>
       </org-storybook-example-container-section>
@@ -290,7 +296,7 @@ class DynamicSizeVirtualScrollDemoComponent {
     >
       <org-storybook-example-container-section label="Virtual Scroll Viewport with Filter">
         <div class="flex items-center gap-2 mb-2">
-          <org-label htmlFor="search-input" label="Search:" />
+          <org-label htmlFor="search-input" text="Search:" />
           <org-input
             name="search-input"
             placeholder="Filter items..."
@@ -318,9 +324,12 @@ class DynamicSizeVirtualScrollDemoComponent {
           (scrolledIndexChange)="onScrollIndexChange($event)"
         >
           <org-list>
-            <org-list-item *cdkVirtualFor="let item of filteredItems()" asTag="button" (clicked)="onItemClick(item.id)">
-              {{ item.content }}
-            </org-list-item>
+            <org-list-item
+              *cdkVirtualFor="let item of filteredItems()"
+              asTag="button"
+              [label]="item.content"
+              (clicked)="onItemClick(item.id)"
+            />
           </org-list>
         </cdk-virtual-scroll-viewport>
       </org-storybook-example-container-section>
@@ -493,9 +502,7 @@ const meta: Meta = {
   // Fixed Size
   <cdk-virtual-scroll-viewport [itemSize]="40" class="h-lg">
     <org-list>
-      <org-list-item *cdkVirtualFor="let item of items()">
-        {{ item }}
-      </org-list-item>
+      <org-list-item *cdkVirtualFor="let item of items()" [label]="item" />
     </org-list>
   </cdk-virtual-scroll-viewport>
 
@@ -506,9 +513,7 @@ const meta: Meta = {
     [maxBufferPx]="1000"
     class="h-lg">
     <org-list>
-      <org-list-item *cdkVirtualFor="let item of items()">
-        {{ item.content }}
-      </org-list-item>
+      <org-list-item *cdkVirtualFor="let item of items()" [label]="item.content" />
     </org-list>
   </cdk-virtual-scroll-viewport>
   \`\`\`

@@ -14,13 +14,14 @@ import {
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { CdkConnectedOverlay, CdkOverlayOrigin } from '@angular/cdk/overlay';
 import { DateTime } from 'luxon';
-import { v4 as uuidv4 } from 'uuid';
 import { Input } from '../input/input';
-import { Calendar, CalendarPartialRangeSelectionType } from '../calendar/calendar';
+import { Calendar } from '../calendar/calendar';
 import { CalendarFooter } from '../calendar/calendar-footer';
 import { Button } from '../button/button';
 import { angularUtils, DateFormat, TimeFormat } from '@organization/shared-utils';
 import { DatePickerInputBrainDirective } from '../../brain/date-picker-input-brain/date-picker-input-brain';
+import { DatePickerInputDialogBrainDirective } from '../../brain/date-picker-input-dialog-brain/date-picker-input-dialog-brain';
+import { type CalendarPartialRangeSelectionType } from '../../brain/calendar-brain/calendar-brain';
 
 export const DATE_PICKER_INPUT_DATE_FORMAT_DEFAULT: DateFormat = DateFormat.STANDARD;
 export const DATE_PICKER_INPUT_TIME_FORMAT_DEFAULT: TimeFormat | undefined = undefined;
@@ -46,7 +47,15 @@ export const DATE_PICKER_INPUT_ALLOW_CLEAR_DEFAULT = true;
 @Component({
   selector: 'org-date-picker-input',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Input, CdkOverlayOrigin, CdkConnectedOverlay, Calendar, CalendarFooter, Button],
+  imports: [
+    Input,
+    CdkOverlayOrigin,
+    CdkConnectedOverlay,
+    Calendar,
+    CalendarFooter,
+    Button,
+    DatePickerInputDialogBrainDirective,
+  ],
   templateUrl: './date-picker-input.html',
   providers: [
     {
@@ -65,15 +74,13 @@ export const DATE_PICKER_INPUT_ALLOW_CLEAR_DEFAULT = true;
         'allowPartialRangeSelection',
         'partialRangeSelectionType',
         'disabled',
+        'allowClear',
+        'autoFocus',
       ],
     },
   ],
   styleUrl: './date-picker-input.css',
   host: {
-    role: 'combobox',
-    'aria-haspopup': 'dialog',
-    '[attr.aria-expanded]': 'isOverlayOpen()',
-    '[attr.aria-controls]': 'overlayId',
     '[attr.data-date-format]': 'dateFormat()',
     '[attr.data-allow-range-selection]': 'allowRangeSelection() ? "" : null',
     '[attr.data-allow-partial-range-selection]': 'allowPartialRangeSelection() ? "" : null',
@@ -90,9 +97,6 @@ export class DatePickerInput implements ControlValueAccessor {
   private _onChange: (value: { startDate: DateTime | null; endDate: DateTime | null }) => void = () => {};
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private _onTouched: () => void = () => {};
-
-  /** unique id for the overlay dialog used for the aria-controls association */
-  protected readonly overlayId = `date-picker-overlay-${uuidv4()}`;
 
   @ViewChild('inputComponent', { static: true })
   protected readonly inputComponent!: Input;
@@ -297,10 +301,6 @@ export class DatePickerInput implements ControlValueAccessor {
 
   protected onInputKeyDown(event: KeyboardEvent): void {
     this.brain.handleInputKeyDown(event);
-  }
-
-  protected onCalendarKeyDown(event: KeyboardEvent): void {
-    this.brain.handleCalendarKeyDown(event, this.allowClear());
   }
 
   protected onClearClick(): void {

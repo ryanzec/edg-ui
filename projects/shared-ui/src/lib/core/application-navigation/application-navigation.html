@@ -25,15 +25,24 @@
             </div>
           </ng-template>
           <org-tooltip [templateRef]="navItemTooltip" xPosition="right" yPosition="center">
-            <org-list-item asTag="a" [routerLink]="item.routePath" (clicked)="onNavigationItemClick(item)">
-              <org-list-item-icon [name]="item.icon" />
-              <span class="sr-only">{{ item.label }}</span>
+            <org-list-item
+              asTag="a"
+              [routerLink]="item.routePath"
+              [label]="item.label"
+              [hideLabel]="true"
+              (clicked)="onNavigationItemClick(item)"
+            >
+              <org-list-item-icon pre [name]="item.icon" />
             </org-list-item>
           </org-tooltip>
         } @else {
-          <org-list-item asTag="a" [routerLink]="item.routePath" (clicked)="onNavigationItemClick(item)">
-            <org-list-item-icon [name]="item.icon" />
-            {{ item.label }}
+          <org-list-item
+            asTag="a"
+            [routerLink]="item.routePath"
+            [label]="item.label"
+            (clicked)="onNavigationItemClick(item)"
+          >
+            <org-list-item-icon pre [name]="item.icon" />
           </org-list-item>
         }
       }
@@ -53,10 +62,11 @@
               [cdkMenuTriggerFor]="settingsMenu"
               [cdkMenuPosition]="menuPosition"
               asTag="button"
+              label="Settings"
+              [hideLabel]="true"
               [forceClickable]="true"
             >
-              <org-list-item-icon name="cog" />
-              <span class="sr-only">Settings</span>
+              <org-list-item-icon pre name="cog" />
             </org-list-item>
           </org-tooltip>
         } @else {
@@ -64,10 +74,10 @@
             [cdkMenuTriggerFor]="settingsMenu"
             [cdkMenuPosition]="menuPosition"
             asTag="button"
+            label="Settings"
             [forceClickable]="true"
           >
-            <org-list-item-icon name="cog" />
-            Settings
+            <org-list-item-icon pre name="cog" />
           </org-list-item>
         }
       }
@@ -76,20 +86,18 @@
           <div class="tooltip-content">Logout</div>
         </ng-template>
         <org-tooltip [templateRef]="logoutTooltip" xPosition="right" yPosition="center">
-          <org-list-item asTag="button" (clicked)="onLogoutClick()">
-            <org-list-item-icon name="log-out" />
-            <span class="sr-only logout-text">Logout</span>
+          <org-list-item asTag="button" label="Logout" [hideLabel]="true" (clicked)="onLogoutClick()">
+            <org-list-item-icon pre name="log-out" />
           </org-list-item>
         </org-tooltip>
       } @else {
-        <org-list-item asTag="button" (clicked)="onLogoutClick()">
-          <org-list-item-icon name="log-out" />
-          <span class="logout-text">Logout</span>
+        <org-list-item asTag="button" label="Logout" (clicked)="onLogoutClick()">
+          <org-list-item-icon pre name="log-out" />
         </org-list-item>
       }
     </org-list>
     <ng-template #settingsMenu>
-      <org-overlay-menu [menuItems]="settingsMenuItems()" (menuItemClicked)="onSettingsMenuItemClick($event)" />
+      <org-overlay-menu [items]="settingsMenuItems()" (itemClicked)="onSettingsMenuItemClick($event)" />
     </ng-template>
   </div>
 </div>

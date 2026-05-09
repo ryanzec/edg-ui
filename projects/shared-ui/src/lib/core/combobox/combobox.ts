@@ -77,7 +77,7 @@ export const COMBOBOX_CONTAINER_CLASS_DEFAULT = '';
   hostDirectives: [
     {
       directive: ComboboxBrainDirective,
-      inputs: ['autoShowOption', 'allowNewOptions', 'isMultiSelect', 'isGroupingEnabled', 'disabled'],
+      inputs: ['autoShowOption', 'allowNewOptions', 'isMultiSelect', 'isGroupingEnabled', 'disabled', 'name'],
       outputs: ['focused', 'blurred'],
     },
   ],
@@ -134,7 +134,6 @@ export class Combobox implements AfterViewInit, ControlValueAccessor {
   public readonly blurred = output<void>();
 
   // computed properties
-  protected readonly isFocused = computed<boolean>(() => this.brain.isFocused());
   public readonly isOpened = computed<boolean>(() => this._store.isOpened());
   public readonly filteredOptions = computed<ComboboxOption[]>(() => this._store.filteredOptions());
   public readonly filteredGroupedOptions = computed<ComboboxGroupedOptions[]>(() =>
@@ -142,15 +141,10 @@ export class Combobox implements AfterViewInit, ControlValueAccessor {
   );
   protected readonly selectedOptions = computed<ComboboxOption[]>(() => this._store.selectedOptions());
   public readonly focusedOption = computed<ComboboxOption | null>(() => this._store.focusedOption());
-  protected readonly inputValue = computed<string>(() => this._store.inputValue());
   protected readonly hasFilteredOptions = computed<boolean>(() => this.filteredOptions().length > 0);
 
   /** synthetic option to display when allowNewOptions is true and input doesn't exactly match any existing option (proxied from brain) */
   public readonly newOptionSuggestion = computed<ComboboxOption | null>(() => this.brain.newOptionSuggestion());
-
-  protected readonly isDisabled = computed<boolean>(() => this.brain.isDisabled());
-
-  public readonly listboxId = computed<string>(() => `combobox-listbox-${this.name()}`);
 
   /**
    * inline items for multi-select display
@@ -165,22 +159,6 @@ export class Combobox implements AfterViewInit, ControlValueAccessor {
       label: option.label,
       removable: true,
     }));
-  });
-
-  /**
-   * input value for the input component
-   */
-  protected readonly currentInputValue = computed<string>(() => {
-    if (this.isMultiSelect()) {
-      return this.inputValue();
-    }
-
-    // in single select mode, show selected option label when not focused
-    if (!this.isFocused() && this.selectedOptions().length > 0) {
-      return this.selectedOptions()[0].label;
-    }
-
-    return this.inputValue();
   });
 
   protected readonly overlayPositions = [
@@ -199,16 +177,6 @@ export class Combobox implements AfterViewInit, ControlValueAccessor {
       offsetY: -4,
     },
   ];
-
-  protected readonly focusedOptionId = computed<string | null>(() => {
-    const option = this.focusedOption();
-
-    if (!option) {
-      return null;
-    }
-
-    return `org-combobox-option-${option.value}`;
-  });
 
   constructor() {
     // initialize store (use untracked to avoid triggering effects during init)
@@ -284,7 +252,7 @@ export class Combobox implements AfterViewInit, ControlValueAccessor {
     // wire input-focus / input-blur callbacks for the brain to call
     this.brain.setInputAccessors(
       () => this.inputComponent.focusInput(),
-      () => this.inputComponent.inputRef.nativeElement.blur()
+      () => this.inputComponent.blurInput()
     );
 
     // mark initialization as complete after view is initialized

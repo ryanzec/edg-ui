@@ -1,33 +1,33 @@
 <div class="table-wrapper">
   @if (showSelectedActions()) {
     <div class="selected-actions-bar">
-      <span class="selected-count">{{ selectedCount() }} selected</span>
+      <span class="selected-count">{{ brain.selectedCount() }} selected</span>
       <div class="actions">
         <ng-container *ngTemplateOutlet="selectedActionsTemplate()!" />
       </div>
-      <org-button variant="text" (clicked)="onClearSelection()">Clear</org-button>
+      <org-button variant="text" (clicked)="brain.clearSelection()">Clear</org-button>
     </div>
   }
   <org-scroll-area
     #scrollAreaComponent
-    [enabled]="isScrollNeeded()"
+    [enabled]="brain.isScrollNeeded()"
     direction="both"
     scrollClass="org-table-scroll block w-full h-full bg-app"
   >
-    <org-loading-blocker [isVisible]="isLoading()" text="Loading data..." />
+    <org-loading-blocker [isVisible]="brain.isLoading()" label="Loading data..." />
     <table class="table">
       @if (headerTemplate()) {
         <thead>
           <org-table-tr variant="header" [isSticky]="stickyHeader()">
-            @if (selectionData()) {
+            @if (brain.selectionData()) {
               <org-table-th>
                 <org-form-field [reserveValidationSpace]="false">
                   <org-checkbox
                     name="select-all"
                     value="select-all"
-                    [checked]="selectionData()!.areAllSelected(asSelectableData(data()))"
-                    [indeterminate]="selectionData()!.areSomeSelected(asSelectableData(data()))"
-                    (checkedChange)="selectionData()!.setMultiple(asSelectableData(data()), $event)"
+                    [checked]="brain.selectionData()!.areAllSelected(asSelectableData(data()))"
+                    [indeterminate]="brain.selectionData()!.areSomeSelected(asSelectableData(data()))"
+                    (checkedChange)="brain.selectionData()!.setMultiple(asSelectableData(data()), $event)"
                   />
                 </org-form-field>
               </org-table-th>
@@ -40,14 +40,14 @@
         <tbody>
           @for (item of data(); track trackByItem(item)) {
             <org-table-tr>
-              @if (selectionData()) {
+              @if (brain.selectionData()) {
                 <org-table-td>
                   <org-form-field [reserveValidationSpace]="false">
                     <org-checkbox
                       [name]="'select-' + asSelectable(item).id"
                       [value]="asSelectable(item).id"
-                      [checked]="selectionData()!.isSelected(asSelectable(item))"
-                      (checkedChange)="selectionData()!.set(asSelectable(item), $event)"
+                      [checked]="brain.selectionData()!.isSelected(asSelectable(item))"
+                      (checkedChange)="brain.selectionData()!.set(asSelectable(item), $event)"
                     />
                   </org-form-field>
                 </org-table-td>
@@ -59,7 +59,7 @@
       }
     </table>
   </org-scroll-area>
-  @if (isBackgroundLoading()) {
+  @if (brain.isBackgroundLoading()) {
     <org-loading-spinner class="background-loader" />
   }
 </div>

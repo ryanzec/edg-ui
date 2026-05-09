@@ -3,8 +3,8 @@
     <org-input
       #inputComponent
       [placeholder]="placeholder()"
-      [value]="currentInputValue()"
-      [disabled]="isDisabled()"
+      [value]="brain.currentInputValue()"
+      [disabled]="brain.isDisabled()"
       [inlineItems]="inlineItems()"
       postIcon="chevron-down"
       (valueChange)="inputValueChange($event)"
@@ -15,12 +15,12 @@
       (click)="inputClick()"
       [name]="name()"
       inputClass="min-w-0"
-      inputRole="combobox"
-      [ariaExpanded]="isOpened()"
-      ariaHasPopup="listbox"
-      ariaAutoComplete="list"
-      [ariaActiveDescendant]="focusedOptionId()"
-      [ariaControls]="listboxId()"
+      [inputRole]="brain.inputRole"
+      [ariaExpanded]="brain.ariaExpanded()"
+      [ariaHasPopup]="brain.ariaHasPopup"
+      [ariaAutoComplete]="brain.ariaAutoComplete"
+      [ariaActiveDescendant]="brain.focusedOptionId()"
+      [ariaControls]="brain.listboxId()"
     />
   </div>
 

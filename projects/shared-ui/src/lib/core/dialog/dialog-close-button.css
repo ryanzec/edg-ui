@@ -5,7 +5,7 @@
     right: var(--spacing-4); /* 16px */
   }
 
-  :host .close-button--disabled {
+  :host([data-disabled]) .close-button {
     opacity: 0.4;
     cursor: not-allowed;
   }

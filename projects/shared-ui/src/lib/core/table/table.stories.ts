@@ -8,7 +8,6 @@ import { StorybookExampleContainerSection } from '../../private/storybook-exampl
 import { SortableDirective } from '../sortable-directive/sortable-directive';
 import { SortingStore } from '../sorting-store/sorting-store';
 import { Pagination } from '../pagination/pagination';
-import { PaginationStore } from '../pagination-store/pagination-store';
 import { DataSelectionStore } from '../data-selection-store/data-selection-store';
 import { Button } from '../button/button';
 import { ButtonIcon } from '../button/button-icon';
@@ -170,7 +169,6 @@ class SortableTableDemo {
   selector: 'story-paginated-table-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [Table, TableHeader, TableCell, Pagination, TypedContextDirective],
-  providers: [PaginationStore],
   template: `
     <div class="flex flex-col gap-4">
       <org-table [data]="paginatedUsers()" [style.maxHeight]="'400px'">
@@ -197,15 +195,13 @@ class SortableTableDemo {
   `,
 })
 class PaginatedTableDemo {
-  protected readonly paginationStore = inject(PaginationStore);
-
   protected readonly users = SAMPLE_USERS;
   protected readonly currentPage = signal(1);
   protected readonly itemsPerPage = signal(5);
 
   protected readonly paginatedUsers = computed<User[]>(() => {
-    const start = this.paginationStore.startIndex();
-    const end = this.paginationStore.endIndex();
+    const start = (this.currentPage() - 1) * this.itemsPerPage();
+    const end = Math.min(start + this.itemsPerPage(), this.users.length);
 
     return this.users.slice(start, end);
   });
@@ -215,7 +211,6 @@ class PaginatedTableDemo {
   selector: 'story-selection-table-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [Table, TableHeader, TableCell, Pagination, Button, ButtonIcon, TypedContextDirective],
-  providers: [PaginationStore],
   template: `
     <div class="flex flex-col gap-4">
       <div class="text-sm"><strong>Selected:</strong> {{ selectionStore.selectedCount() }} user(s)</div>
@@ -254,7 +249,6 @@ class PaginatedTableDemo {
   `,
 })
 class SelectionTableDemo {
-  protected readonly paginationStore = inject(PaginationStore);
   protected readonly selectionStore = new DataSelectionStore<User>();
 
   protected readonly users = SAMPLE_USERS;
@@ -262,8 +256,8 @@ class SelectionTableDemo {
   protected readonly itemsPerPage = signal(5);
 
   protected readonly paginatedUsers = computed<User[]>(() => {
-    const start = this.paginationStore.startIndex();
-    const end = this.paginationStore.endIndex();
+    const start = (this.currentPage() - 1) * this.itemsPerPage();
+    const end = Math.min(start + this.itemsPerPage(), this.users.length);
 
     return this.users.slice(start, end);
   });
@@ -285,7 +279,7 @@ class SelectionTableDemo {
   selector: 'story-full-featured-table-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [Table, TableHeader, TableCell, SortableDirective, Pagination, Button, ButtonIcon, TypedContextDirective],
-  providers: [SortingStore, PaginationStore],
+  providers: [SortingStore],
   template: `
     <div class="flex flex-col gap-4">
       <div class="flex justify-between items-center text-sm">
@@ -338,7 +332,6 @@ class SelectionTableDemo {
   `,
 })
 class FullFeaturedTableDemo {
-  protected readonly paginationStore = inject(PaginationStore);
   protected readonly sortingStore = inject(SortingStore);
   protected readonly selectionStore = new DataSelectionStore<User>();
 
@@ -373,8 +366,8 @@ class FullFeaturedTableDemo {
 
   protected readonly displayUsers = computed<User[]>(() => {
     const sorted = this.sortedUsers();
-    const start = this.paginationStore.startIndex();
-    const end = this.paginationStore.endIndex();
+    const start = (this.currentPage() - 1) * this.itemsPerPage();
+    const end = Math.min(start + this.itemsPerPage(), sorted.length);
 
     return sorted.slice(start, end);
   });
@@ -737,7 +730,17 @@ const meta: Meta<Table> = {
 };
 
 export default meta;
-type Story = StoryObj<Table>;
+
+// the isLoading / isBackgroundLoading / selectionData inputs come from the host-directive forwarding on
+// `Table`, which storybook's signal-input type extraction does not see, so they are augmented onto the args
+// type here.
+type Story = StoryObj<
+  Table & {
+    isLoading: boolean;
+    isBackgroundLoading: boolean;
+    selectionData: DataSelectionStore<{ id: string }> | undefined;
+  }
+>;
 
 export const Default: Story = {
   args: {

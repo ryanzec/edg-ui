@@ -1,67 +1,48 @@
 import {
-  Directive,
-  input,
-  inject,
-  Renderer2,
-  ElementRef,
-  effect,
-  createComponent,
   ComponentRef,
-  computed,
+  Directive,
+  ElementRef,
   EnvironmentInjector,
   OnDestroy,
+  Renderer2,
+  computed,
+  createComponent,
+  effect,
+  inject,
+  input,
 } from '@angular/core';
-import { Icon, IconName } from '../icon/icon';
-import { SortingStore } from '../sorting-store/sorting-store';
-
-/**
- * default value for sortableEnabled input
- */
-export const SORTABLE_ENABLED_DEFAULT = true;
+import { IconName } from '../../brain/icon-brain/icon-brain';
+import { SORTABLE_ENABLED_DEFAULT, SortableBrainDirective } from '../../brain/sortable-brain/sortable-brain';
+import { Icon } from '../icon/icon';
 
 @Directive({
   selector: '[orgSortableKey]',
-  host: {
-    '(click)': 'onClick()',
-    '(keydown.enter)': 'onKeydown($event)',
-    '(keydown.space)': 'onKeydown($event)',
-    '[attr.role]': 'sortableEnabled() ? "button" : null',
-    '[attr.tabindex]': 'sortableEnabled() ? "0" : null',
-    '[attr.data-sortable-enabled]': 'sortableEnabled() ? "" : null',
-  },
+  hostDirectives: [
+    {
+      directive: SortableBrainDirective,
+      inputs: ['orgSortableBrain: orgSortableKey', 'enabled: sortableEnabled'],
+    },
+  ],
 })
 export class SortableDirective implements OnDestroy {
   private readonly _renderer = inject(Renderer2);
   private readonly _elementRef = inject(ElementRef);
   private readonly _environmentInjector = inject(EnvironmentInjector);
-  private readonly _sortingStore = inject(SortingStore);
+  private readonly _brain = inject(SortableBrainDirective);
 
-  /** the dynamically created icon component reference */
   private _iconComponentRef: ComponentRef<Icon> | null = null;
 
-  /** the sort key this directive manages */
-  public orgSortableKey = input.required<string>();
+  /** the sort key this directive manages; forwarded to the brain via host directive input mapping */
+  public readonly orgSortableKey = input.required<string>();
 
-  /**
-   * controls whether sorting functionality is enabled
-   */
-  public sortableEnabled = input<boolean>(SORTABLE_ENABLED_DEFAULT);
+  /** controls whether sorting interaction is enabled; forwarded to the brain via host directive input mapping */
+  public readonly sortableEnabled = input<boolean>(SORTABLE_ENABLED_DEFAULT);
 
-  /** whether this directive's key is the currently active sort key with a direction set */
-  private readonly _isActivelySorting = computed<boolean>(() => {
-    const key = this._sortingStore.key();
-    const direction = this._sortingStore.direction();
-    const selectableValue = this.orgSortableKey();
-
-    return key === selectableValue && direction !== null;
-  });
-
-  /** the icon name reflecting the current sorting state for this key */
+  /** maps the brain's sort direction to the icon name shown by the host element */
   private readonly _iconName = computed<IconName>(() => {
-    const isActivelySorting = this._isActivelySorting();
-    const direction = this._sortingStore.direction();
+    const direction = this._brain.direction();
 
-    if (!isActivelySorting) {
+    if (direction === null) {
       return 'arrow-down-up';
     }
 
@@ -69,16 +50,9 @@ export class SortableDirective implements OnDestroy {
   });
 
   constructor() {
-    // keep icon up-to-date with state updates
+    // create or destroy the visual indicator icon to mirror the brain's enabled state
     effect(() => {
-      this._updateIcon(this._iconName(), this._isActivelySorting());
-    });
-
-    // handle dynamic enable/disable of sorting functionality
-    effect(() => {
-      const enabled = this.sortableEnabled();
-
-      if (enabled) {
+      if (this._brain.enabled()) {
         this._createIcon();
 
         return;
@@ -86,36 +60,18 @@ export class SortableDirective implements OnDestroy {
 
       this._destroyIcon();
     });
+
+    // keep the rendered icon's name and inactive-state styling in sync with the brain
+    effect(() => {
+      this._updateIcon(this._iconName(), this._brain.isActivelySorting());
+    });
   }
 
-  ngOnDestroy(): void {
+  public ngOnDestroy(): void {
     this._iconComponentRef?.destroy();
   }
 
-  /** toggles the sort for this key when the host element is clicked */
-  protected onClick(): void {
-    const enabled = this.sortableEnabled();
-
-    if (!enabled) {
-      return;
-    }
-
-    const selectableValue = this.orgSortableKey();
-
-    if (!selectableValue) {
-      return;
-    }
-
-    this._sortingStore.toggleSort(selectableValue);
-  }
-
-  /** handles keyboard events to trigger sort toggling and prevent default scroll on space */
-  protected onKeydown(event: Event): void {
-    event.preventDefault();
-    this.onClick();
-  }
-
-  /** updates the icon name and active state styling on the injected icon component */
+  /** updates the icon name and inactive-state styling on the injected icon component */
   private _updateIcon(iconName: IconName, isActivelySorting: boolean): void {
     if (!this._iconComponentRef) {
       return;
@@ -138,7 +94,6 @@ export class SortableDirective implements OnDestroy {
 
   /** creates the icon component and appends it to the host element */
   private _createIcon(): void {
-    // don't create if already exists
     if (this._iconComponentRef) {
       return;
     }
@@ -152,7 +107,7 @@ export class SortableDirective implements OnDestroy {
 
     this._renderer.appendChild(hostElement, iconElement);
 
-    this._updateIcon(this._iconName(), this._isActivelySorting());
+    this._updateIcon(this._iconName(), this._brain.isActivelySorting());
   }
 
   /** removes the icon component from the host element and destroys it */

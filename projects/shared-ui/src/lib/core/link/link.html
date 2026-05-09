@@ -1,22 +1,15 @@
-@if (disabled()) {
-  <span class="link" data-disabled="" aria-disabled="true" tabindex="-1">
-    <ng-content />
-  </span>
-} @else {
-  <a
-    class="link"
-    [attr.href]="href() ?? null"
-    [attr.target]="target() ?? null"
-    [attr.rel]="effectiveRel() ?? null"
-    [attr.download]="download() ?? null"
-    [attr.hreflang]="hreflang() ?? null"
-    [attr.referrerpolicy]="referrerPolicy() ?? null"
-    [attr.aria-label]="ariaLabel() ?? null"
-    [attr.role]="isActionLink() ? 'button' : null"
-    [attr.tabindex]="isActionLink() ? 0 : null"
-    (click)="onClick($event)"
-    (keydown)="onKeydown($event)"
-  >
-    <ng-content />
-  </a>
-}
+<a
+  orgLinkBrain
+  class="link"
+  [href]="href()"
+  [target]="target()"
+  [rel]="rel()"
+  [download]="download()"
+  [hreflang]="hreflang()"
+  [referrerPolicy]="referrerPolicy()"
+  [ariaLabel]="ariaLabel()"
+  [disabled]="disabled()"
+  (clicked)="onBrainClicked($event)"
+>
+  <ng-content />
+</a>

@@ -5,17 +5,18 @@
 </div>
 <div
   class="splitter-divider"
-  role="separator"
-  [attr.aria-orientation]="direction() === 'horizontal' ? 'vertical' : 'horizontal'"
-  [attr.aria-valuenow]="brain.firstSectionSize()"
-  aria-valuemin="0"
-  aria-valuemax="100"
-  [attr.tabindex]="brain.isDraggable() ? 0 : -1"
-  (pointerdown)="brain.onDividerPointerDown($event)"
-  (pointermove)="brain.onDividerPointerMove($event)"
-  (pointerup)="brain.onDividerPointerUp($event)"
-  (pointercancel)="brain.onDividerPointerCancel()"
-  (keydown)="brain.onDividerKeyDown($event)"
+  orgDividerBrain
+  [direction]="brain.dividerDirection()"
+  [isResizable]="true"
+  [value]="brain.firstSectionSize()"
+  [min]="0"
+  [max]="100"
+  [isInteractive]="brain.isDraggable()"
+  (pointerDown)="brain.onDividerPointerDown($event)"
+  (pointerMove)="brain.onDividerPointerMove($event)"
+  (pointerUp)="brain.onDividerPointerUp($event)"
+  (pointerCancel)="brain.onDividerPointerCancel()"
+  (keyDown)="brain.onDividerKeyDown($event)"
 ></div>
 <div class="section second-section">
   @if (secondSectionTemplate(); as template) {

@@ -40,7 +40,7 @@ const meta: Meta<UserFormDialog> = {
   @Component({
     template: \`
       <org-button (click)="openUserDialog()">Create User</org-button>
-      <org-user-form-dialog #userFormDialog position="right" />
+      <org-user-form-dialog #userFormDialog />
     \`,
     imports: [Button, UserFormDialog]
   })

@@ -1,140 +1,181 @@
 @layer components {
   :host {
-    display: inline-block;
-  }
-
-  .tag-label {
     display: inline-flex;
     align-items: center;
-    border: var(--border-width) solid var(--color-border);
-    border-radius: var(--radius-xl);
-    font-weight: var(--font-weight-medium);
+    justify-content: center;
+    border: var(--tag-border-width) solid transparent;
+    border-radius: var(--tag-radius);
+    font-family: inherit;
+    font-weight: var(--tag-font-weight);
+    line-height: var(--tag-line-height);
+    letter-spacing: var(--tag-letter-spacing);
+    white-space: nowrap;
+    user-select: none;
+    vertical-align: middle;
   }
 
-  :host([data-size='xs']) .tag-label {
-    padding: var(--spacing-0_5) var(--spacing-1_5); /* 2px 6px */
-    font-size: var(--font-size-xs);
-    gap: var(--spacing-1);
-    line-height: var(--spacing-3); /* 12px */
+  /* sizes */
+  :host([data-size='xs']) {
+    padding-inline: var(--tag-padding-inline-xs);
+    font-size: var(--tag-font-size-xs);
+    gap: var(--tag-gap-xs);
   }
 
-  :host([data-size='sm']) .tag-label {
-    padding: var(--spacing-1) var(--spacing-2);
-    font-size: var(--font-size-base);
-    gap: var(--spacing-1_5); /* 6px */
-    line-height: var(--spacing-3_5); /* 14px */
+  :host([data-size='sm']) {
+    padding-inline: var(--tag-padding-inline-sm);
+    font-size: var(--tag-font-size-sm);
+    gap: var(--tag-gap-sm);
   }
 
-  :host([data-size='base']) .tag-label {
-    padding: var(--spacing-1) var(--spacing-2_5); /* 10px */
-    font-size: var(--font-size-lg);
-    gap: var(--spacing-2);
-    line-height: var(--spacing-4); /* 16px */
+  :host([data-size='base']) {
+    padding-inline: var(--tag-padding-inline-base);
+    font-size: var(--tag-font-size-base);
+    gap: var(--tag-gap-base);
   }
 
-  :host([data-color='primary'][data-variant='strong']) .tag-label {
-    background-color: var(--color-primary);
-    color: var(--color-fg-on-accent);
-    border-color: var(--color-primary);
+  /* color × variant: primary */
+  :host([data-color='primary'][data-variant='strong']) {
+    background-color: var(--tag-primary-strong-bg);
+    color: var(--tag-primary-strong-fg);
+    border-color: var(--tag-primary-strong-border);
   }
 
-  :host([data-color='primary'][data-variant='weak']) .tag-label {
-    background-color: var(--color-primary-soft);
-    color: var(--color-primary);
-    border-color: var(--color-primary-soft);
+  :host([data-color='primary'][data-variant='soft']) {
+    background-color: var(--tag-primary-soft-bg);
+    color: var(--tag-primary-soft-fg);
+    border-color: var(--tag-primary-soft-border);
   }
 
-  :host([data-color='secondary'][data-variant='strong']) .tag-label {
-    background-color: var(--color-secondary);
-    color: var(--color-fg);
-    border-color: var(--color-secondary);
+  /* color × variant: secondary */
+  :host([data-color='secondary'][data-variant='strong']) {
+    background-color: var(--tag-secondary-strong-bg);
+    color: var(--tag-secondary-strong-fg);
+    border-color: var(--tag-secondary-strong-border);
   }
 
-  :host([data-color='secondary'][data-variant='weak']) .tag-label {
-    background-color: var(--color-secondary-soft);
-    color: var(--color-secondary);
-    border-color: var(--color-secondary-soft);
+  :host([data-color='secondary'][data-variant='soft']) {
+    background-color: var(--tag-secondary-soft-bg);
+    color: var(--tag-secondary-soft-fg);
+    border-color: var(--tag-secondary-soft-border);
   }
 
-  :host([data-color='neutral'][data-variant='strong']) .tag-label {
-    background-color: var(--color-neutral);
-    color: var(--color-fg-on-accent);
-    border-color: var(--color-neutral);
+  /* color × variant: neutral */
+  :host([data-color='neutral'][data-variant='strong']) {
+    background-color: var(--tag-neutral-strong-bg);
+    color: var(--tag-neutral-strong-fg);
+    border-color: var(--tag-neutral-strong-border);
   }
 
-  :host([data-color='neutral'][data-variant='weak']) .tag-label {
-    background-color: var(--color-neutral-soft);
-    color: var(--color-fg);
-    border-color: var(--color-neutral-soft);
+  :host([data-color='neutral'][data-variant='soft']) {
+    background-color: var(--tag-neutral-soft-bg);
+    color: var(--tag-neutral-soft-fg);
+    border-color: var(--tag-neutral-soft-border);
   }
 
-  :host([data-color='safe'][data-variant='strong']) .tag-label {
-    background-color: var(--color-safe);
-    color: var(--color-fg-on-accent);
-    border-color: var(--color-safe);
+  /* color × variant: safe */
+  :host([data-color='safe'][data-variant='strong']) {
+    background-color: var(--tag-safe-strong-bg);
+    color: var(--tag-safe-strong-fg);
+    border-color: var(--tag-safe-strong-border);
   }
 
-  :host([data-color='safe'][data-variant='weak']) .tag-label {
-    background-color: var(--color-safe-soft);
-    color: var(--color-safe);
-    border-color: var(--color-safe-soft);
+  :host([data-color='safe'][data-variant='soft']) {
+    background-color: var(--tag-safe-soft-bg);
+    color: var(--tag-safe-soft-fg);
+    border-color: var(--tag-safe-soft-border);
   }
 
-  :host([data-color='info'][data-variant='strong']) .tag-label {
-    background-color: var(--color-info);
-    color: var(--color-fg-on-accent);
-    border-color: var(--color-info);
+  /* color × variant: info */
+  :host([data-color='info'][data-variant='strong']) {
+    background-color: var(--tag-info-strong-bg);
+    color: var(--tag-info-strong-fg);
+    border-color: var(--tag-info-strong-border);
   }
 
-  :host([data-color='info'][data-variant='weak']) .tag-label {
-    background-color: var(--color-info-soft);
-    color: var(--color-info);
-    border-color: var(--color-info-soft);
+  :host([data-color='info'][data-variant='soft']) {
+    background-color: var(--tag-info-soft-bg);
+    color: var(--tag-info-soft-fg);
+    border-color: var(--tag-info-soft-border);
   }
 
-  :host([data-color='caution'][data-variant='strong']) .tag-label {
-    background-color: var(--color-caution);
-    color: var(--color-fg-on-accent);
-    border-color: var(--color-caution);
+  /* color × variant: caution */
+  :host([data-color='caution'][data-variant='strong']) {
+    background-color: var(--tag-caution-strong-bg);
+    color: var(--tag-caution-strong-fg);
+    border-color: var(--tag-caution-strong-border);
   }
 
-  :host([data-color='caution'][data-variant='weak']) .tag-label {
-    background-color: var(--color-caution-soft);
-    color: var(--color-caution);
-    border-color: var(--color-caution-soft);
+  :host([data-color='caution'][data-variant='soft']) {
+    background-color: var(--tag-caution-soft-bg);
+    color: var(--tag-caution-soft-fg);
+    border-color: var(--tag-caution-soft-border);
   }
 
-  :host([data-color='warning'][data-variant='strong']) .tag-label {
-    background-color: var(--color-warning);
-    color: var(--color-fg-on-accent);
-    border-color: var(--color-warning);
+  /* color × variant: warning */
+  :host([data-color='warning'][data-variant='strong']) {
+    background-color: var(--tag-warning-strong-bg);
+    color: var(--tag-warning-strong-fg);
+    border-color: var(--tag-warning-strong-border);
   }
 
-  :host([data-color='warning'][data-variant='weak']) .tag-label {
-    background-color: var(--color-warning-soft);
-    color: var(--color-warning);
-    border-color: var(--color-warning-soft);
+  :host([data-color='warning'][data-variant='soft']) {
+    background-color: var(--tag-warning-soft-bg);
+    color: var(--tag-warning-soft-fg);
+    border-color: var(--tag-warning-soft-border);
   }
 
-  :host([data-color='danger'][data-variant='strong']) .tag-label {
-    background-color: var(--color-danger);
-    color: var(--color-fg-on-accent);
-    border-color: var(--color-danger);
+  /* color × variant: danger */
+  :host([data-color='danger'][data-variant='strong']) {
+    background-color: var(--tag-danger-strong-bg);
+    color: var(--tag-danger-strong-fg);
+    border-color: var(--tag-danger-strong-border);
   }
 
-  :host([data-color='danger'][data-variant='weak']) .tag-label {
-    background-color: var(--color-danger-soft);
-    color: var(--color-danger);
-    border-color: var(--color-danger-soft);
+  :host([data-color='danger'][data-variant='soft']) {
+    background-color: var(--tag-danger-soft-bg);
+    color: var(--tag-danger-soft-fg);
+    border-color: var(--tag-danger-soft-border);
   }
 
-  :host-context(body.dark)[data-variant='strong'] .tag-label,
-  :host-context(body.dark) [data-variant='strong'] .tag-label {
-    color: var(--color-fg);
+  /* built-in remove affordance */
+  .tag-remove {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    appearance: none;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    border-radius: var(--tag-remove-radius);
+    opacity: var(--tag-remove-opacity-default);
+    transition:
+      background var(--tag-remove-transition-duration) var(--tag-remove-transition-easing),
+      opacity var(--tag-remove-transition-duration) var(--tag-remove-transition-easing);
   }
 
-  :host-context(body.dark)[data-variant='weak'] .tag-label,
-  :host-context(body.dark) [data-variant='weak'] .tag-label {
-    color: var(--color-fg);
+  .tag-remove:hover {
+    opacity: var(--tag-remove-opacity-hover);
+    background: var(--tag-remove-bg-hover);
+  }
+
+  .tag-remove:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 var(--tag-remove-focus-ring-width) var(--tag-remove-focus-ring-color);
+    opacity: var(--tag-remove-opacity-hover);
+  }
+
+  /* per-size negative end margin so the X tucks under the pill curve */
+  :host([data-size='xs']) .tag-remove {
+    margin-inline-end: var(--tag-remove-margin-inline-end-xs);
+  }
+
+  :host([data-size='sm']) .tag-remove {
+    margin-inline-end: var(--tag-remove-margin-inline-end-sm);
+  }
+
+  :host([data-size='base']) .tag-remove {
+    margin-inline-end: var(--tag-remove-margin-inline-end-base);
   }
 }

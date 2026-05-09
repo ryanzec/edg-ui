@@ -1,6 +1,7 @@
 import { Directive, computed, effect, input, output, signal } from '@angular/core';
 import { angularUtils } from '@organization/shared-utils';
 import { DateTime } from 'luxon';
+import { v4 as uuidv4 } from 'uuid';
 import type { CalendarPartialRangeSelectionType } from '../calendar-brain/calendar-brain';
 
 /** the per-selection value emitted by the brain when a selection is committed or cancelled */
@@ -26,6 +27,12 @@ export const DATE_PICKER_INPUT_ALLOW_RANGE_SELECTION_DEFAULT = false;
 
 /** default value for the disabled input */
 export const DATE_PICKER_INPUT_DISABLED_DEFAULT = false;
+
+/** default value for the allowClear input */
+export const DATE_PICKER_INPUT_ALLOW_CLEAR_DEFAULT = true;
+
+/** default value for the autoFocus input */
+export const DATE_PICKER_INPUT_AUTO_FOCUS_DEFAULT = false;
 
 /** the internal state shape for the date-picker-input brain directive */
 type DatePickerInputState = {
@@ -59,12 +66,21 @@ type DatePickerInputState = {
 @Directive({
   selector: '[orgDatePickerInputBrain]',
   exportAs: 'orgDatePickerInputBrain',
+  host: {
+    role: 'combobox',
+    'aria-haspopup': 'dialog',
+    '[attr.aria-expanded]': 'isOverlayOpen()',
+    '[attr.aria-controls]': 'overlayId',
+  },
 })
 export class DatePickerInputBrainDirective {
   private readonly _isFormControlled = signal<boolean>(false);
   private readonly _isOverlayOpenSignal = signal<boolean>(false);
-  private _isClosingAfterCommit = false;
+  private readonly _isClosingAfterCommit = signal<boolean>(false);
   private _isDestroyed = false;
+
+  /** stable id used to wire the host's aria-controls to the dialog wrapper rendered inside the overlay */
+  public readonly overlayId = `date-picker-overlay-${uuidv4()}`;
 
   private readonly _state = signal<DatePickerInputState>({
     committedStartDate: null,
@@ -95,6 +111,8 @@ export class DatePickerInputBrainDirective {
     DATE_PICKER_INPUT_PARTIAL_RANGE_SELECTION_TYPE_DEFAULT
   );
   public readonly disabled = input<boolean>(DATE_PICKER_INPUT_DISABLED_DEFAULT);
+  public readonly allowClear = input<boolean>(DATE_PICKER_INPUT_ALLOW_CLEAR_DEFAULT);
+  public readonly autoFocus = input<boolean>(DATE_PICKER_INPUT_AUTO_FOCUS_DEFAULT);
 
   // outputs — abstract events the presentation routes to its public api / cva callbacks
   public readonly dateSelectedNotified = output<DatePickerInputSelection>();
@@ -286,8 +304,8 @@ export class DatePickerInputBrainDirective {
   }
 
   /** handles calendar keyboard events — clears on delete / backspace when allowed */
-  public handleCalendarKeyDown(event: KeyboardEvent, allowClear: boolean): void {
-    if ((event.key === 'Delete' || event.key === 'Backspace') && allowClear && !this.isClearDisabled()) {
+  public handleCalendarKeyDown(event: KeyboardEvent): void {
+    if ((event.key === 'Delete' || event.key === 'Backspace') && this.allowClear() && !this.isClearDisabled()) {
       event.preventDefault();
       this.handleClearClick();
     }
@@ -385,7 +403,7 @@ export class DatePickerInputBrainDirective {
       this.dateSelectedEmitted.emit({ startDate: null, endDate: null });
     }
 
-    this._isClosingAfterCommit = true;
+    this._isClosingAfterCommit.set(true);
     this.closeOverlay();
   }
 
@@ -406,11 +424,11 @@ export class DatePickerInputBrainDirective {
       return;
     }
 
-    if (!this._isClosingAfterCommit) {
+    if (!this._isClosingAfterCommit()) {
       this._revertOrClearSelection();
     }
 
-    this._isClosingAfterCommit = false;
+    this._isClosingAfterCommit.set(false);
     this._isOverlayOpenSignal.set(false);
     this.touchedNotified.emit();
   }
@@ -525,7 +543,7 @@ export class DatePickerInputBrainDirective {
       this.partialRangeSelectionTypeEmitted.emit(inProgressMode);
     }
 
-    this._isClosingAfterCommit = true;
+    this._isClosingAfterCommit.set(true);
     this.closeOverlay();
   }
 }

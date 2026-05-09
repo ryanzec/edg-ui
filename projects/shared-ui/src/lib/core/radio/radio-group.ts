@@ -1,18 +1,10 @@
-import {
-  Component,
-  ChangeDetectionStrategy,
-  forwardRef,
-  contentChildren,
-  effect,
-  inject,
-  input,
-  output,
-  computed,
-  InjectionToken,
-} from '@angular/core';
+import { Component, ChangeDetectionStrategy, forwardRef, inject, input, computed, InjectionToken } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { RadioGroupBrainDirective } from '../../brain/radio-group-brain/radio-group-brain';
-import { Radio } from './radio';
+import {
+  RadioGroupBrainDirective,
+  RadioGroupOrientation,
+  RADIO_GROUP_ORIENTATION_DEFAULT,
+} from '../../brain/radio-group-brain/radio-group-brain';
 
 /** injection token for accessing the radio group component from child components */
 export const RADIO_GROUP_COMPONENT = new InjectionToken<RadioGroup>('RadioGroup Component');
@@ -26,6 +18,9 @@ export const RADIO_GROUP_DISABLED_DEFAULT = false;
 /** default value for the name input */
 export const RADIO_GROUP_NAME_DEFAULT = '';
 
+/** default value for the ariaLabel input */
+export const RADIO_GROUP_ARIA_LABEL_DEFAULT: string | null = null;
+
 @Component({
   selector: 'org-radio-group',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -33,14 +28,13 @@ export const RADIO_GROUP_NAME_DEFAULT = '';
   hostDirectives: [
     {
       directive: RadioGroupBrainDirective,
-      inputs: ['value', 'disabled'],
+      inputs: ['value', 'disabled', 'orientation', 'ariaLabel'],
       outputs: ['valueChange'],
     },
   ],
   styleUrl: './radio-group.css',
   host: {
-    '[attr.aria-disabled]': 'disabled() ? "true" : null',
-    '[attr.data-disabled]': 'disabled() ? "" : null',
+    '[attr.data-orientation]': 'orientation()',
   },
   providers: [
     {
@@ -68,59 +62,21 @@ export class RadioGroup implements ControlValueAccessor {
   /** the name attribute shared across all child radio inputs */
   public readonly name = input<string>(RADIO_GROUP_NAME_DEFAULT);
 
-  /** emits the newly selected value when a radio is selected */
-  public readonly valueChange = output<string>();
+  /** orientation of the group; gates which arrow keys route next/previous */
+  public readonly orientation = input<RadioGroupOrientation>(RADIO_GROUP_ORIENTATION_DEFAULT);
+
+  /** accessibility label exposed on the host as `aria-label` */
+  public readonly ariaLabel = input<string | null>(RADIO_GROUP_ARIA_LABEL_DEFAULT);
 
   /** the resolved current value — proxied from the brain */
   public readonly currentValue = computed<string>(() => this._brain.currentValue());
 
-  /** all descendant radio components */
-  private readonly _radios = contentChildren(
-    forwardRef(() => Radio),
-    { descendants: true }
-  );
-
   constructor() {
-    /** wire the brain's ordered-values provider to the current contentChildren list */
-    this._brain.setOrderedValuesProvider(() => this._radios().map((radio) => radio.value()));
-
-    /** sync selected state on all child radios whenever the current value or radio list changes */
-    effect(() => {
-      const currentValue = this.currentValue();
-      const radios = this._radios();
-
-      radios.forEach((radio) => {
-        radio._setSelected(currentValue === radio.value());
-      });
-    });
-
-    /** forward brain value changes to the reactive-forms callbacks */
+    /** forward brain value changes to the reactive-forms callbacks; auto-cleaned when this component destroys */
     this._brain.valueChange.subscribe((value) => {
       this._onChange(value);
       this._onTouched();
-      this.valueChange.emit(value);
     });
-  }
-
-  /**
-   * @internal called by child Radio when it is selected
-   */
-  public _onRadioSelect(value: string): void {
-    this._brain.selectValue(value);
-  }
-
-  /**
-   * @internal moves selection to the radio after the one with the given value
-   */
-  public _focusNext(currentValue: string): void {
-    this._brain.selectNext(currentValue);
-  }
-
-  /**
-   * @internal moves selection to the radio before the one with the given value
-   */
-  public _focusPrevious(currentValue: string): void {
-    this._brain.selectPrevious(currentValue);
   }
 
   /** sets the selected value from the reactive forms api */

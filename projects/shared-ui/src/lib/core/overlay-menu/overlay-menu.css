@@ -1,9 +1,6 @@
 @layer components {
   :host {
     display: block;
-  }
-
-  .menu-container {
     width: var(--sizing-5xs);
     overflow: hidden;
     background-color: var(--color-bg-surface-2);

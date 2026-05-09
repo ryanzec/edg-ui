@@ -1,58 +1,29 @@
-import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, output, viewChild } from '@angular/core';
 import { angularUtils } from '@organization/shared-utils';
-
-/** all available link target values matching the standard html anchor target attribute */
-export const allLinkTargets = ['_self', '_blank', '_parent', '_top'] as const;
-
-/** the html target attribute value for the link */
-export type LinkTarget = (typeof allLinkTargets)[number];
-
-/** all available referrer policy values matching the standard html anchor referrerpolicy attribute */
-export const allLinkReferrerPolicies = [
-  'no-referrer',
-  'no-referrer-when-downgrade',
-  'origin',
-  'origin-when-cross-origin',
-  'same-origin',
-  'strict-origin',
-  'strict-origin-when-cross-origin',
-  'unsafe-url',
-] as const;
-
-/** the html referrerpolicy attribute value for the link */
-export type LinkReferrerPolicy = (typeof allLinkReferrerPolicies)[number];
-
-/** the default href value for the link */
-export const LINK_HREF_DEFAULT: string | undefined = undefined;
-
-/** the default target value for the link */
-export const LINK_TARGET_DEFAULT: LinkTarget | undefined = undefined;
-
-/** the default rel value for the link */
-export const LINK_REL_DEFAULT: string | undefined = undefined;
-
-/** the default download value for the link */
-export const LINK_DOWNLOAD_DEFAULT: string | undefined = undefined;
-
-/** the default hreflang value for the link */
-export const LINK_HREFLANG_DEFAULT: string | undefined = undefined;
-
-/** the default referrer policy value for the link */
-export const LINK_REFERRER_POLICY_DEFAULT: LinkReferrerPolicy | undefined = undefined;
-
-/** the default aria-label value for the link */
-export const LINK_ARIA_LABEL_DEFAULT: string | undefined = undefined;
-
-/** the default disabled state for the link */
-export const LINK_DISABLED_DEFAULT = false;
+import {
+  LinkBrainDirective,
+  LinkReferrerPolicy,
+  LinkTarget,
+  LINK_ARIA_LABEL_DEFAULT,
+  LINK_DISABLED_DEFAULT,
+  LINK_DOWNLOAD_DEFAULT,
+  LINK_HREFLANG_DEFAULT,
+  LINK_HREF_DEFAULT,
+  LINK_REFERRER_POLICY_DEFAULT,
+  LINK_REL_DEFAULT,
+  LINK_TARGET_DEFAULT,
+} from '../../brain/link-brain/link-brain';
 
 @Component({
   selector: 'org-link',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [LinkBrainDirective],
   templateUrl: './link.html',
   styleUrl: './link.css',
 })
 export class Link {
+  private readonly _linkBrainDirective = viewChild.required(LinkBrainDirective);
+
   /** the url the link navigates to; when omitted the link acts as a clickable action and emits the clicked output */
   public readonly href = input<string | undefined, string | null | undefined>(LINK_HREF_DEFAULT, {
     transform: angularUtils.transformNullToUndefined,
@@ -91,46 +62,17 @@ export class Link {
     transform: angularUtils.transformNullToUndefined,
   });
 
-  /** when true the link renders as a span styled like a disabled link with cursor not-allowed */
+  /** when true the link renders styled as disabled with cursor not-allowed and is non-interactive */
   public readonly disabled = input<boolean>(LINK_DISABLED_DEFAULT);
 
   /** emitted when the link is activated by mouse or keyboard, only when href is not provided so consumers can handle action-style clicks */
   public readonly clicked = output<MouseEvent | KeyboardEvent>();
 
-  /** whether the link should behave as a clickable action because no href is provided */
-  protected readonly isActionLink = computed<boolean>(() => this.href() === undefined);
+  /** whether the link is rendering as an action-link (no href provided) */
+  public readonly isActionLink = computed<boolean>(() => this._linkBrainDirective().isActionLink());
 
-  /** the rel attribute applied to the rendered anchor; defaults to "noopener noreferrer" when target is "_blank" and consumer did not provide one */
-  protected readonly effectiveRel = computed<string | undefined>(() => {
-    const consumerRel = this.rel();
-
-    if (consumerRel !== undefined) {
-      return consumerRel;
-    }
-
-    return this.target() === '_blank' ? 'noopener noreferrer' : undefined;
-  });
-
-  /** handles anchor click; emits clicked when the link is acting as an action link */
-  protected onClick(event: MouseEvent): void {
-    if (!this.isActionLink()) {
-      return;
-    }
-
-    this.clicked.emit(event);
-  }
-
-  /** handles keyboard activation of the action link via Enter or Space */
-  protected onKeydown(event: KeyboardEvent): void {
-    if (!this.isActionLink()) {
-      return;
-    }
-
-    if (event.key !== 'Enter' && event.key !== ' ') {
-      return;
-    }
-
-    event.preventDefault();
+  /** re-emits the brain's clicked event as the component's public clicked output */
+  protected onBrainClicked(event: MouseEvent | KeyboardEvent): void {
     this.clicked.emit(event);
   }
 }

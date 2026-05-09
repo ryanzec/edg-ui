@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/angular';
 import { Textarea, allTextareaVariants, allTextareaIconAlignments } from './textarea';
 import { TextareaToolbar } from './textarea-toolbar';
 import { TextareaToolbarItem } from './textarea-toolbar-item';
-import { allIconNames } from '../icon/icon';
+import { allIconNames } from '../../brain/icon-brain/icon-brain';
 import { FormField } from '../form-fields/form-field';
 import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
 import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
@@ -362,8 +362,8 @@ export const EnterBehavior: Story = {
         </org-storybook-example-container-section>
 
         <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li><strong>Normal</strong>: Enter adds new line, Shift+Enter emits enterPressed event</li>
-          <li><strong>Inverse</strong>: Enter emits enterPressed event, Shift+Enter adds new line</li>
+          <li><strong>Normal</strong>: Enter adds new line, Shift+Enter emits submitKeyPressed event</li>
+          <li><strong>Inverse</strong>: Enter emits submitKeyPressed event, Shift+Enter adds new line</li>
           <li>Useful for chat interfaces or quick-submit forms</li>
         </ul>
       </org-storybook-example-container>
@@ -996,7 +996,7 @@ export const InverseEnter: Story = {
     docs: {
       description: {
         story:
-          'Demonstrates the `inverseEnter` input. When `inverseEnter` is false (default), Shift+Enter emits the `enterPressed` output and Enter inserts a newline. When `inverseEnter` is true, Enter emits the `enterPressed` output and Shift+Enter inserts a newline. Open the browser console to observe when the output fires.',
+          'Demonstrates the `inverseEnter` input. When `inverseEnter` is false (default), Shift+Enter emits the `submitKeyPressed` output and Enter inserts a newline. When `inverseEnter` is true, Enter emits the `submitKeyPressed` output and Shift+Enter inserts a newline. Open the browser console to observe when the output fires.',
       },
     },
   },
@@ -1012,7 +1012,7 @@ export const InverseEnter: Story = {
             placeholder="press Shift+Enter to submit, Enter for newline"
             [rows]="3"
             [inverseEnter]="false"
-            (enterPressed)="onEnterPressed('inverseEnter=false')"
+            (submitKeyPressed)="onSubmitKeyPressed('inverseEnter=false')"
           />
         </org-storybook-example-container-section>
 
@@ -1022,13 +1022,13 @@ export const InverseEnter: Story = {
             placeholder="press Enter to submit, Shift+Enter for newline"
             [rows]="3"
             [inverseEnter]="true"
-            (enterPressed)="onEnterPressed('inverseEnter=true')"
+            (submitKeyPressed)="onSubmitKeyPressed('inverseEnter=true')"
           />
         </org-storybook-example-container-section>
 
         <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li><strong>inverseEnter = false</strong>: Enter inserts a newline; Shift+Enter emits the <strong>enterPressed</strong> output</li>
-          <li><strong>inverseEnter = true</strong>: Enter emits the <strong>enterPressed</strong> output; Shift+Enter inserts a newline</li>
+          <li><strong>inverseEnter = false</strong>: Enter inserts a newline; Shift+Enter emits the <strong>submitKeyPressed</strong> output</li>
+          <li><strong>inverseEnter = true</strong>: Enter emits the <strong>submitKeyPressed</strong> output; Shift+Enter inserts a newline</li>
           <li>Check the browser console to observe when the output fires and which configuration emitted it</li>
           <li>Useful for chat-like interfaces where Enter should submit instead of adding a newline</li>
         </ul>
@@ -1038,7 +1038,7 @@ export const InverseEnter: Story = {
       imports: [Textarea, StorybookExampleContainer, StorybookExampleContainerSection],
     },
     props: {
-      onEnterPressed: (source: string) => console.log('enterPressed fired from', source),
+      onSubmitKeyPressed: (source: string) => console.log('submitKeyPressed fired from', source),
     },
   }),
 };

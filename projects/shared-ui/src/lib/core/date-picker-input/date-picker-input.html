@@ -29,14 +29,7 @@
   (attach)="onOverlayAttach()"
   (detach)="onOverlayDetach()"
 >
-  <div
-    [id]="overlayId"
-    tabindex="0"
-    role="dialog"
-    aria-modal="true"
-    aria-label="Date picker calendar"
-    (keydown)="onCalendarKeyDown($event)"
-  >
+  <div orgDatePickerInputDialogBrain>
     <org-calendar
       #calendarComponent
       [defaultDisplayDate]="defaultDisplayDate()"

@@ -9,7 +9,7 @@
     }
 
     @if (hasActionButton()) {
-      <org-button color="primary" (clicked)="onActionClick()">
+      <org-button color="primary" (clicked)="brain.triggerAction()">
         {{ actionLabel() }}
       </org-button>
     }

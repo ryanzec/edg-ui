@@ -14,21 +14,21 @@
     color: var(--color-link);
   }
 
-  .link:hover {
+  .link:not([aria-disabled='true']):hover {
     color: var(--color-link-hover);
   }
 
-  .link:active {
+  .link:not([aria-disabled='true']):active {
     color: var(--color-link-active);
   }
 
-  .link:focus-visible {
+  .link:not([aria-disabled='true']):focus-visible {
     color: var(--color-link-hover);
     background-color: var(--color-info-soft);
     outline: none;
   }
 
-  .link[data-disabled] {
+  .link[aria-disabled='true'] {
     color: var(--color-fg-faint);
     text-decoration: none;
     cursor: not-allowed;

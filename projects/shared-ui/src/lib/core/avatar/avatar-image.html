@@ -1,3 +1,7 @@
-@if (shouldShowImage()) {
-  <img [src]="imageSrc()" [alt]="effectiveAlt()" (error)="onError()" />
+@if (avatarImageBrainDirective.shouldShowImage()) {
+  <img
+    [src]="avatarImageBrainDirective.imageSrc()"
+    [alt]="effectiveAlt()"
+    (error)="avatarImageBrainDirective.error()"
+  />
 }

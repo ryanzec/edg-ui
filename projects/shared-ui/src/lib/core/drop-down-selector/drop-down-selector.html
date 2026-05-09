@@ -2,11 +2,14 @@
   type="button"
   cdkOverlayOrigin
   #trigger="cdkOverlayOrigin"
-  [disabled]="disabled()"
-  [attr.aria-label]="label()"
+  [disabled]="brain.disabled()"
+  [attr.aria-label]="brain.label()"
   aria-haspopup="listbox"
-  [attr.aria-expanded]="isOpen()"
-  (click)="onTriggerClick()"
+  [attr.aria-expanded]="brain.isOpen()"
+  [attr.aria-controls]="brain.isOpen() ? brain.panelId() : null"
+  [attr.aria-activedescendant]="brain.activeDescendantId()"
+  (click)="brain.handleTriggerClick()"
+  (keydown)="brain.handleTriggerKeyDown($event)"
   class="trigger-button"
 >
   @if (iconName(); as leadingIconName) {
@@ -19,45 +22,43 @@
 <ng-template
   cdkConnectedOverlay
   [cdkConnectedOverlayOrigin]="trigger"
-  [cdkConnectedOverlayOpen]="isOpen()"
+  [cdkConnectedOverlayOpen]="brain.isOpen()"
   [cdkConnectedOverlayPositions]="menuPositions()"
   [cdkConnectedOverlayHasBackdrop]="true"
   [cdkConnectedOverlayBackdropClass]="'cdk-overlay-transparent-backdrop'"
   [cdkConnectedOverlayPanelClass]="'org-drop-down-selector-overlay'"
-  (backdropClick)="onBackdropClick()"
+  (backdropClick)="brain.handleBackdropClick()"
 >
   <div
+    [id]="brain.panelId()"
     role="listbox"
-    tabindex="-1"
-    [attr.aria-label]="label()"
-    [attr.aria-multiselectable]="selectionMode() === 'multiple'"
-    (keydown)="onPanelKeyDown($event)"
+    [attr.aria-label]="brain.label()"
+    [attr.aria-multiselectable]="brain.selectionMode() === 'multiple'"
     class="menu-panel"
   >
     <org-list listRole="none" borderVariant="outer">
-      @for (item of items(); track $index) {
+      @for (item of brain.items(); track $index) {
         @let isItemSelected = brain.isSelected(item);
         <button
           type="button"
           role="option"
+          [id]="brain.getItemId($index)"
           [attr.aria-selected]="isItemSelected"
-          (click)="onItemClick(item)"
+          [attr.data-active]="brain.activeIndex() === $index ? '' : null"
+          (click)="brain.selectItem(item)"
           class="menu-item-button"
         >
-          <org-list-item [forceClickable]="true" [isSelected]="isItemSelected">
-            @if (selectionMode() === 'multiple') {
-              <org-list-item-icon [name]="isItemSelected ? 'square-check-big' : 'square'" />
-            } @else if (isItemSelected) {
-              <org-list-item-icon name="check" />
+          <org-list-item [forceClickable]="true" [isSelected]="isItemSelected" [label]="item.display">
+            @if (getItemPreIcon(isItemSelected); as preIconName) {
+              <org-list-item-icon pre [name]="preIconName" />
             }
-            {{ item.display }}
           </org-list-item>
         </button>
       }
-      @if (brain.hasSelection() && selectionMode() === 'multiple') {
+      @if (brain.hasSelection() && brain.selectionMode() === 'multiple') {
         <org-overlay-menu-divider />
-        <button type="button" (click)="onClearClick()" class="menu-item-button">
-          <org-list-item [forceClickable]="true">Clear</org-list-item>
+        <button type="button" (click)="brain.clearAndClose()" class="menu-item-button">
+          <org-list-item [forceClickable]="true" label="Clear" />
         </button>
       }
     </org-list>

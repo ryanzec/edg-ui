@@ -38,9 +38,6 @@ export class ComboboxOptions {
   @ViewChild('optionsScrollAreaComponent')
   protected readonly optionsScrollAreaComponent?: ScrollArea;
 
-  /** whether the options container needs scrolling (proxied from brain). */
-  protected readonly isScrollNeeded = computed<boolean>(() => this.brain.isScrollNeeded());
-
   /** filtered options from the parent combobox (used when grouping is disabled). */
   protected readonly filteredOptions = computed<ComboboxOptionData[]>(() => this._comboboxComponent.filteredOptions());
 
@@ -59,9 +56,6 @@ export class ComboboxOptions {
   protected readonly newOptionSuggestion = computed<ComboboxOptionData | null>(() =>
     this._comboboxComponent.newOptionSuggestion()
   );
-
-  /** dom id for the listbox element. */
-  protected readonly listboxId = computed<string>(() => this._comboboxComponent.listboxId());
 
   constructor() {
     // scroll the focused option into view when it changes while the dropdown is open

@@ -427,7 +427,7 @@ export const Clickable: Story = {
     docs: {
       description: {
         story:
-          'When a (clicked) event listener is bound, the avatar renders as a <button> with cursor: pointer and data-clickable="true" on the host. Without a listener, it renders as a non-interactive <div>.',
+          'When a (clicked) event listener is bound, the avatar renders as a <button> with cursor: pointer and data-clickable="true" on the host. Without a listener, it renders as a non-interactive <div>. The clicked output is now void (no MouseEvent payload).',
       },
     },
   },
@@ -438,7 +438,7 @@ export const Clickable: Story = {
         currentState="Comparing clickable and non-clickable avatars"
       >
         <org-storybook-example-container-section label="With Click Handler (button)">
-          <org-avatar label="John Doe" (clicked)="onClicked($event)">
+          <org-avatar label="John Doe" (clicked)="onClicked()">
             <org-avatar-circle />
             <org-avatar-label />
           </org-avatar>
@@ -458,7 +458,7 @@ export const Clickable: Story = {
       </org-storybook-example-container>
     `,
     props: {
-      onClicked: (event: MouseEvent) => console.log('avatar clicked', event),
+      onClicked: () => console.log('avatar clicked'),
     },
     moduleMetadata: {
       imports: [Avatar, AvatarCircle, AvatarLabel, StorybookExampleContainer, StorybookExampleContainerSection],

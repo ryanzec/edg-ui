@@ -1,3 +1,11 @@
-<span class="tag-label">
-  <ng-content />
-</span>
+<ng-content />
+@if (brain.removable()) {
+  <button
+    [type]="brain.removeButtonType"
+    class="tag-remove"
+    [attr.aria-label]="brain.resolvedRemoveAriaLabel()"
+    (click)="brain.remove()"
+  >
+    <org-icon name="x" [size]="removeIconSize()" />
+  </button>
+}

@@ -19,7 +19,7 @@ logManager.warn({
 ```
 - **ALWAYS** wrap RxJS's `takeUntilDestroyed()` in `runInInjectionContext()` in the `ngAfterViewInit()` or pass in the `DestroyRef` as a parameter.
 - **ALWAYS** explicit pass the generic type when using `computed<>()`.
-- **ONLY** use lazy loading for routes.
+- **ONLY** use lazy loading for routes view directly (shared layout components should not be lazy loaded).
 - **ALWAYS** use `NgOptimizedImage` for all static images.
   - `NgOptimizedImage` does not work for inline base64 images.
 - **ALWAYS** use `computed()` for derived state.

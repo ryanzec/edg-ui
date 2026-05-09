@@ -4,15 +4,16 @@ const fs = require('fs');
 const path = require('path');
 
 const REPO_ROOT = path.resolve(__dirname, '..', '..');
-const BASE_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/variables/base-tokens.css');
-const CHART_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/variables/chart-tokens.css');
-const SCROLLBAR_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/variables/scrollbar-tokens.css');
-const AVATAR_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/variables/avatar-tokens.css');
-const ICON_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/variables/icon-tokens.css');
-const BUTTON_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/variables/button-tokens.css');
+const BASE_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/base-tokens.css');
+const CHART_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/chart-tokens.css');
+const SCROLLBAR_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/scrollbar-tokens.css');
+const AVATAR_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/avatar-tokens.css');
+const ICON_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/icon-tokens.css');
+const TAG_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/tag-tokens.css');
+const BUTTON_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/button-tokens.css');
 const DESIGN_SYSTEM_DEMO_TOKENS_CSS = path.join(
   REPO_ROOT,
-  'projects/shared-ui/src/lib/styles/variables/design-system-demo-tokens.css',
+  'projects/shared-ui/src/lib/styles/tokens/design-system-demo-tokens.css',
 );
 const OUTPUT_TS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/design-tokens.ts');
 
@@ -195,6 +196,7 @@ function main() {
   const scrollbarContent = cleanCss(fs.readFileSync(SCROLLBAR_TOKENS_CSS, 'utf-8'));
   const avatarContent = cleanCss(fs.readFileSync(AVATAR_TOKENS_CSS, 'utf-8'));
   const iconContent = cleanCss(fs.readFileSync(ICON_TOKENS_CSS, 'utf-8'));
+  const tagContent = cleanCss(fs.readFileSync(TAG_TOKENS_CSS, 'utf-8'));
   const buttonContent = cleanCss(fs.readFileSync(BUTTON_TOKENS_CSS, 'utf-8'));
   const designSystemDemoContent = cleanCss(fs.readFileSync(DESIGN_SYSTEM_DEMO_TOKENS_CSS, 'utf-8'));
 
@@ -208,6 +210,7 @@ function main() {
     ...findBlocks(scrollbarContent, ':root').map(extractVariables),
     ...findBlocks(avatarContent, ':root').map(extractVariables),
     ...findBlocks(iconContent, ':root').map(extractVariables),
+    ...findBlocks(tagContent, ':root').map(extractVariables),
     ...findBlocks(buttonContent, ':root').map(extractVariables),
     ...findBlocks(designSystemDemoContent, ':root').map(extractVariables),
   );
@@ -218,6 +221,7 @@ function main() {
     ...findBlocks(scrollbarContent, '.dark').map(extractVariables),
     ...findBlocks(avatarContent, '.dark').map(extractVariables),
     ...findBlocks(iconContent, '.dark').map(extractVariables),
+    ...findBlocks(tagContent, '.dark').map(extractVariables),
     ...findBlocks(buttonContent, '.dark').map(extractVariables),
     ...findBlocks(designSystemDemoContent, '.dark').map(extractVariables),
   );

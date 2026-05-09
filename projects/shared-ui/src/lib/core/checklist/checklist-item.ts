@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
+import { ChecklistItemBrainDirective } from '../../brain/checklist-item-brain/checklist-item-brain';
 import { Icon } from '../icon/icon';
-import { Checklist, type ChecklistItemData } from './checklist';
+import { type ChecklistItemData } from './checklist';
 import { ChecklistStatusIcon } from './checklist-status-icon';
 
 @Component({
@@ -9,17 +10,25 @@ import { ChecklistStatusIcon } from './checklist-status-icon';
   imports: [Icon, ChecklistStatusIcon],
   templateUrl: './checklist-item.html',
   styleUrl: './checklist-item.css',
+  hostDirectives: [
+    {
+      directive: ChecklistItemBrainDirective,
+      inputs: ['id: itemId'],
+    },
+  ],
   host: {
     role: 'listitem',
-    '[attr.data-expanded]': 'isItemExpanded() ? "" : null',
+    '[attr.data-expanded]': 'brain.isExpanded() ? "" : null',
   },
 })
 export class ChecklistItem {
-  /** @internal reference to the parent checklist for shared expand state. */
-  private readonly _checklistComponent = inject(Checklist, { host: true });
+  protected readonly brain = inject(ChecklistItemBrainDirective, { self: true });
 
   /** the item data to render. */
   public readonly item = input.required<ChecklistItemData>();
+
+  /** the id of this item, forwarded to the brain to derive its expanded state */
+  public readonly itemId = input.required<string>();
 
   /** true when the item has nested sub-items. */
   protected readonly hasNestedItems = computed<boolean>(() => {
@@ -30,14 +39,4 @@ export class ChecklistItem {
 
   /** number of nested sub-items for this item. */
   protected readonly nestedItemCount = computed<number>(() => this.item().items?.length ?? 0);
-
-  /** true when this item is currently expanded. */
-  protected readonly isItemExpanded = computed<boolean>(() =>
-    this._checklistComponent.expandedIds().has(this.item().id)
-  );
-
-  /** toggles the expanded state of this item. */
-  protected toggle(): void {
-    this._checklistComponent.toggleExpanded(this.item().id);
-  }
 }

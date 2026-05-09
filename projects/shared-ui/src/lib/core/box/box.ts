@@ -22,7 +22,7 @@ export const allBoxBorders = ['bordered', 'borderless', 'border-thick', 'border-
 export type BoxBorder = (typeof allBoxBorders)[number];
 
 /** all available box padding values */
-export const allBoxPaddings = ['none', 'sm', 'md', 'lg'] as const;
+export const allBoxPaddings = ['none', 'sm', 'base', 'lg'] as const;
 
 /** the internal padding size type for the box component */
 export type BoxPadding = (typeof allBoxPaddings)[number];
@@ -45,7 +45,7 @@ export const BOX_COLOR_DEFAULT: BoxColor | undefined = undefined;
 export const BOX_BORDER_DEFAULT: BoxBorder = 'bordered';
 
 /** default value for the box padding input */
-export const BOX_PADDING_DEFAULT: BoxPadding = 'md';
+export const BOX_PADDING_DEFAULT: BoxPadding = 'base';
 
 /** default value for the box background input */
 export const BOX_BACKGROUND_DEFAULT: BoxBackground = 'colored';

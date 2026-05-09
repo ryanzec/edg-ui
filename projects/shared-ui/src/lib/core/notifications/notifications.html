@@ -1,3 +1,12 @@
 @for (notification of notifications(); track notification.id) {
-  <org-notification-item [notification]="notification" (closed)="onClosed($event)" />
+  <org-notification-item
+    [id]="notification.id"
+    [autoCloseIn]="notification.autoCloseIn"
+    [color]="notification.color"
+    [message]="notification.message"
+    [contentTemplate]="notification.contentTemplate"
+    [canClose]="notification.canClose"
+    [animationDuration]="notification.animationDuration"
+    (closed)="onClosed($event)"
+  />
 }

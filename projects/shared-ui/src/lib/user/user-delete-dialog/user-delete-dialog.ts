@@ -6,7 +6,7 @@ import { DialogHeader } from '../../core/dialog/dialog-header';
 import { DialogContent } from '../../core/dialog/dialog-content';
 import { DialogFooter } from '../../core/dialog/dialog-footer';
 import { Button } from '../../core/button/button';
-import { DIALOG_TRIGGER_BRAIN, DialogBrainDirective } from '../../brain/dialog-brain/dialog-brain';
+import { DIALOG_TRIGGER, DialogBrainDirective } from '../../brain/dialog-brain/dialog-brain';
 
 export type UserDeleteData = Pick<User, 'id'> & { name: string };
 
@@ -24,14 +24,7 @@ export type UserDeleteDialogData = {
   hostDirectives: [
     {
       directive: DialogBrainDirective,
-      inputs: [
-        'position',
-        'hasRoundedCorners',
-        'hasBackdrop',
-        'enableCloseOnClickOutside',
-        'enableEscapeKey',
-        'showCloseIcon',
-      ],
+      inputs: ['hasBackdrop', 'enableCloseOnClickOutside', 'enableEscapeKey', 'showCloseIcon'],
       outputs: ['closed'],
     },
   ],
@@ -42,7 +35,7 @@ export class UserDeleteDialog {
   // that actually owns the dialog ref. when rendered as the trigger instance, fall back to the self brain (which is
   // the same brain that opens the dialog).
   private readonly _selfBrain = inject(DialogBrainDirective, { self: true });
-  private readonly _triggerBrain = inject(DIALOG_TRIGGER_BRAIN, { optional: true });
+  private readonly _triggerBrain = inject(DIALOG_TRIGGER, { optional: true });
   private readonly _brain = this._triggerBrain ?? this._selfBrain;
 
   private readonly _dialogRef = inject(DialogRef<UserDeleteDialog>, { optional: true });

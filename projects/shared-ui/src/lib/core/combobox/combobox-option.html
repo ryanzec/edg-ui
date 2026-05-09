@@ -1,16 +1,1 @@
-<org-list-item
-  asTag="button"
-  [isSelected]="isFocused()"
-  [attr.data-option-value]="option().value"
-  [attr.id]="optionId()"
-  (mousedown)="mouseDown($event)"
-  (mouseenter)="mouseEnter($event)"
-  (mouseleave)="mouseLeave($event)"
-  [disabled]="option().disabled"
->
-  @if (displayLabelPrefix(); as prefix) {
-    {{ prefix }} "{{ option().label }}"
-  } @else {
-    {{ option().label }}
-  }
-</org-list-item>
+<org-list-item [isSelected]="brain.isFocused()" [disabled]="option().disabled" [label]="displayLabel()" />

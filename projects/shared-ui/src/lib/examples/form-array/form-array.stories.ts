@@ -91,7 +91,7 @@ const itemSchema = z.object({
 
             <org-form-fields>
               <org-form-field [validationMessage]="getFieldError('profile.name')">
-                <org-label htmlFor="nested-profile-name" class="text-sm font-medium" label="Name" [isRequired]="true" />
+                <org-label htmlFor="nested-profile-name" class="text-sm font-medium" text="Name" [isRequired]="true" />
                 <org-input formControlName="name" name="nested-profile-name" placeholder="Enter name" />
               </org-form-field>
 
@@ -99,7 +99,7 @@ const itemSchema = z.object({
                 <org-label
                   htmlFor="nested-profile-description"
                   class="text-sm font-medium"
-                  label="Description"
+                  text="Description"
                   [isRequired]="true"
                 />
                 <org-textarea
@@ -114,7 +114,7 @@ const itemSchema = z.object({
                 <org-label
                   htmlFor="nested-profile-category"
                   class="text-sm font-medium"
-                  label="Category"
+                  text="Category"
                   [isRequired]="true"
                 />
                 <org-combobox
@@ -149,7 +149,7 @@ const itemSchema = z.object({
                 <org-label
                   htmlFor="nested-profile-priority"
                   class="text-sm font-medium"
-                  label="Priority"
+                  text="Priority"
                   [isRequired]="true"
                 />
                 <org-radio-group formControlName="priority" name="nested-profile-priority">
@@ -163,7 +163,7 @@ const itemSchema = z.object({
                 <org-label
                   htmlFor="nested-profile-dateRange"
                   class="text-sm font-medium"
-                  label="Date Range"
+                  text="Date Range"
                   [isRequired]="true"
                 />
                 <org-date-picker-input
@@ -344,7 +344,7 @@ class NestedObjectDemoComponent {
                 <org-label
                   htmlFor="nested-defaults-profile-name"
                   class="text-sm font-medium"
-                  label="Name"
+                  text="Name"
                   [isRequired]="true"
                 />
                 <org-input formControlName="name" name="nested-defaults-profile-name" placeholder="Enter name" />
@@ -354,7 +354,7 @@ class NestedObjectDemoComponent {
                 <org-label
                   htmlFor="nested-defaults-profile-description"
                   class="text-sm font-medium"
-                  label="Description"
+                  text="Description"
                   [isRequired]="true"
                 />
                 <org-textarea
@@ -369,7 +369,7 @@ class NestedObjectDemoComponent {
                 <org-label
                   htmlFor="nested-defaults-profile-category"
                   class="text-sm font-medium"
-                  label="Category"
+                  text="Category"
                   [isRequired]="true"
                 />
                 <org-combobox
@@ -403,7 +403,7 @@ class NestedObjectDemoComponent {
                 <org-label
                   htmlFor="nested-defaults-profile-priority"
                   class="text-sm font-medium"
-                  label="Priority"
+                  text="Priority"
                   [isRequired]="true"
                 />
                 <org-radio-group formControlName="priority" name="nested-defaults-profile-priority">
@@ -417,7 +417,7 @@ class NestedObjectDemoComponent {
                 <org-label
                   htmlFor="nested-defaults-profile-dateRange"
                   class="text-sm font-medium"
-                  label="Date Range"
+                  text="Date Range"
                   [isRequired]="true"
                 />
                 <org-date-picker-input
@@ -943,7 +943,7 @@ class ArrayOfTextWithDefaultsDemoComponent {
                     <org-label
                       [htmlFor]="'item-' + $index + '-name'"
                       class="text-sm font-medium"
-                      label="Name"
+                      text="Name"
                       [isRequired]="true"
                     />
                     <org-input formControlName="name" [name]="'item-' + $index + '-name'" placeholder="Enter name" />
@@ -953,7 +953,7 @@ class ArrayOfTextWithDefaultsDemoComponent {
                     <org-label
                       [htmlFor]="'item-' + $index + '-description'"
                       class="text-sm font-medium"
-                      label="Description"
+                      text="Description"
                       [isRequired]="true"
                     />
                     <org-textarea
@@ -968,7 +968,7 @@ class ArrayOfTextWithDefaultsDemoComponent {
                     <org-label
                       [htmlFor]="'item-' + $index + '-category'"
                       class="text-sm font-medium"
-                      label="Category"
+                      text="Category"
                       [isRequired]="true"
                     />
                     <org-combobox
@@ -1002,7 +1002,7 @@ class ArrayOfTextWithDefaultsDemoComponent {
                     <org-label
                       [htmlFor]="'item-' + $index + '-priority'"
                       class="text-sm font-medium"
-                      label="Priority"
+                      text="Priority"
                       [isRequired]="true"
                     />
                     <org-radio-group formControlName="priority" [name]="'item-' + $index + '-priority'">
@@ -1016,7 +1016,7 @@ class ArrayOfTextWithDefaultsDemoComponent {
                     <org-label
                       [htmlFor]="'item-' + $index + '-date'"
                       class="text-sm font-medium"
-                      label="Date"
+                      text="Date"
                       [isRequired]="true"
                     />
                     <org-date-picker-input
@@ -1231,7 +1231,7 @@ class ArrayOfObjectsDemoComponent {
                     <org-label
                       [htmlFor]="'item-defaults-' + $index + '-name'"
                       class="text-sm font-medium"
-                      label="Name"
+                      text="Name"
                       [isRequired]="true"
                     />
                     <org-input
@@ -1245,7 +1245,7 @@ class ArrayOfObjectsDemoComponent {
                     <org-label
                       [htmlFor]="'item-defaults-' + $index + '-description'"
                       class="text-sm font-medium"
-                      label="Description"
+                      text="Description"
                       [isRequired]="true"
                     />
                     <org-textarea
@@ -1260,7 +1260,7 @@ class ArrayOfObjectsDemoComponent {
                     <org-label
                       [htmlFor]="'item-defaults-' + $index + '-category'"
                       class="text-sm font-medium"
-                      label="Category"
+                      text="Category"
                       [isRequired]="true"
                     />
                     <org-combobox
@@ -1299,7 +1299,7 @@ class ArrayOfObjectsDemoComponent {
                     <org-label
                       [htmlFor]="'item-defaults-' + $index + '-priority'"
                       class="text-sm font-medium"
-                      label="Priority"
+                      text="Priority"
                       [isRequired]="true"
                     />
                     <org-radio-group formControlName="priority" [name]="'item-defaults-' + $index + '-priority'">
@@ -1313,7 +1313,7 @@ class ArrayOfObjectsDemoComponent {
                     <org-label
                       [htmlFor]="'item-defaults-' + $index + '-date'"
                       class="text-sm font-medium"
-                      label="Date"
+                      text="Date"
                       [isRequired]="true"
                     />
                     <org-date-picker-input

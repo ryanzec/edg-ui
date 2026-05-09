@@ -1,25 +1,25 @@
 <div [class]="containerClasses()">
-  @if (isLoading()) {
+  @if (brain.isLoading()) {
     <div class="state-container">
       <org-loading-spinner size="lg" />
     </div>
   }
 
-  @if (isEmpty()) {
+  @if (brain.isEmpty()) {
     <div class="state-container">
       <org-empty-indicator header="no chart data available" />
     </div>
   }
 
-  @if (hasError()) {
+  @if (brain.hasError()) {
     <div class="error-container" role="alert">
-      <p class="error-message">{{ error() }}</p>
+      <p class="error-message">{{ brain.error() }}</p>
     </div>
   }
 
-  @if (shouldShowChart()) {
+  @if (brain.shouldShowChart()) {
     <div class="canvas-container">
-      <canvas #canvasRef role="img" [attr.aria-label]="canvasAriaLabel()"></canvas>
+      <canvas #canvasRef></canvas>
     </div>
   }
 </div>

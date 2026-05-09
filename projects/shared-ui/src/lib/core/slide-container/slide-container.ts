@@ -1,7 +1,9 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  InjectionToken,
+  ElementRef,
+  Injector,
+  afterNextRender,
   computed,
   contentChildren,
   effect,
@@ -12,32 +14,32 @@ import {
 import {
   SLIDE_CONTAINER_ACTIVE_INDEX_DEFAULT,
   SLIDE_CONTAINER_ALLOW_LOOPING_DEFAULT,
+  SLIDE_CONTAINER_ARIA_LABEL_DEFAULT,
   SLIDE_CONTAINER_ORIENTATION_DEFAULT,
-  SLIDE_CONTAINER_SIZE_DEFAULT,
   SlideContainerBrainDirective,
   allSlideContainerOrientations,
-  allSlideContainerSizes,
+  type SlideContainerDirection,
   type SlideContainerOrientation,
-  type SlideContainerSize,
 } from '../../brain/slide-container-brain/slide-container-brain';
 import { SlideContainerItem } from './slide-container-item';
 
 export {
   SLIDE_CONTAINER_ACTIVE_INDEX_DEFAULT,
   SLIDE_CONTAINER_ALLOW_LOOPING_DEFAULT,
+  SLIDE_CONTAINER_ARIA_LABEL_DEFAULT,
   SLIDE_CONTAINER_ORIENTATION_DEFAULT,
-  SLIDE_CONTAINER_SIZE_DEFAULT,
   allSlideContainerOrientations,
-  allSlideContainerSizes,
   type SlideContainerOrientation,
-  type SlideContainerSize,
 };
 
-/** injection token for accessing the slide container from child components */
-export const SLIDE_CONTAINER = new InjectionToken<SlideContainer>('SlideContainer');
+/** all valid size values for the slide container */
+export const allSlideContainerSizes = ['stable', 'dynamic'] as const;
 
-/** default value for the ariaLabel input */
-export const SLIDE_CONTAINER_ARIA_LABEL_DEFAULT = 'Slide container';
+/** size mode for the slide container — stable keeps the largest slide height; dynamic resizes to the active slide */
+export type SlideContainerSize = (typeof allSlideContainerSizes)[number];
+
+/** default value for the size input */
+export const SLIDE_CONTAINER_SIZE_DEFAULT: SlideContainerSize = 'stable';
 
 @Component({
   selector: 'org-slide-container',
@@ -45,26 +47,23 @@ export const SLIDE_CONTAINER_ARIA_LABEL_DEFAULT = 'Slide container';
   imports: [],
   template: '<ng-content />',
   styleUrl: './slide-container.css',
-  providers: [{ provide: SLIDE_CONTAINER, useExisting: SlideContainer }],
   hostDirectives: [
     {
       directive: SlideContainerBrainDirective,
-      inputs: ['orientation', 'size', 'allowLooping', 'activeIndex'],
+      inputs: ['orientation', 'allowLooping', 'activeIndex', 'ariaLabel'],
       outputs: ['activeIndexChange'],
     },
   ],
   host: {
-    role: 'region',
-    'aria-live': 'polite',
     '[attr.data-orientation]': 'orientation()',
     '[attr.data-size]': 'size()',
     '[attr.data-allow-looping]': 'allowLooping() ? "" : null',
-    '[attr.aria-roledescription]': '"carousel"',
-    '[attr.aria-label]': 'ariaLabel()',
   },
 })
 export class SlideContainer {
   private readonly _brain = inject(SlideContainerBrainDirective, { self: true });
+  private readonly _elementRef = inject(ElementRef<HTMLElement>);
+  private readonly _injector = inject(Injector);
 
   /** content-projected slide items */
   private readonly _slideItems = contentChildren(SlideContainerItem);
@@ -91,7 +90,7 @@ export class SlideContainer {
   public readonly displayActiveIndex = computed<number>(() => this._brain.displayActiveIndex());
 
   /** current navigation direction (proxied from brain) */
-  public readonly navigationDirection = computed<'forward' | 'backward'>(() => this._brain.navigationDirection());
+  public readonly navigationDirection = computed<SlideContainerDirection>(() => this._brain.navigationDirection());
 
   /** previously displayed index (proxied from brain) */
   public readonly previousDisplayIndex = computed<number>(() => this._brain.previousDisplayIndex());
@@ -107,25 +106,35 @@ export class SlideContainer {
       });
     });
 
-    // request a dynamic-height measurement whenever the active slide changes
+    // measure the active slide's height and apply it as a css variable when in dynamic mode
     effect(() => {
       const activeIndex = this._brain.displayActiveIndex();
 
-      this._brain.scheduleDynamicHeightUpdate(() => {
-        const items = this._slideItems();
+      if (this.size() !== 'dynamic') {
+        return;
+      }
 
-        if (!items.length) {
-          return null;
-        }
+      afterNextRender(
+        () => {
+          const items = this._slideItems();
 
-        const activeItem = items[activeIndex];
+          if (!items.length) {
+            return;
+          }
 
-        if (!activeItem) {
-          return null;
-        }
+          const activeItem = items[activeIndex];
 
-        return activeItem.getContentHeight();
-      });
+          if (!activeItem) {
+            return;
+          }
+
+          this._elementRef.nativeElement.style.setProperty(
+            '--slide-container-active-height',
+            `${activeItem.getContentHeight()}px`
+          );
+        },
+        { injector: this._injector }
+      );
     });
   }
 }

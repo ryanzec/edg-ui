@@ -1,9 +1,12 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
-import { Icon, type IconName } from '../icon/icon';
+import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
+import { type IconName } from '../../brain/icon-brain/icon-brain';
+import { Icon } from '../icon/icon';
 import { ListItem } from './list-item';
-import type { ListSize } from './list';
 
-/** renders an icon inside a list item; sized from the parent list item */
+/**
+ * renders an icon inside a list item; size is inherited from the parent list item via css — must be used inside
+ * an org-list-item (instantiation fails if missing)
+ */
 @Component({
   selector: 'org-list-item-icon',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -12,12 +15,12 @@ import type { ListSize } from './list';
   styleUrl: './list-item-icon.css',
 })
 export class ListItemIcon {
-  /** @internal reference to the parent list item component for size inheritance */
-  private readonly _listItemComponent = inject(ListItem, { host: true });
+  /**
+   * @internal required parent list item — instantiation fails if used outside an org-list-item; the value is
+   * unused at runtime because sizing is driven by css `:host-context()` reading the parent's data-size attribute
+   */
+  private readonly _listItemComponent = inject(ListItem);
 
   /** the icon to render inside the list item */
   public name = input.required<IconName>();
-
-  /** resolved size, inherited from the parent list item */
-  protected readonly size = computed<ListSize>(() => this._listItemComponent.finalSize());
 }

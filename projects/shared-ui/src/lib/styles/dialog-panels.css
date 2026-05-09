@@ -1,31 +1,31 @@
 /*
- * panel-class styles for the dialog brain directive — applied to the cdk overlay panel which lives outside the
- * component tree, so they must be defined globally rather than scoped to a component.
+ * positioning styles for the cdk-overlay-pane that wraps the dialog brain's overlay. the dialog core component
+ * sets data-position on its host, and these :has() rules pull that value up the dom tree to position the pane.
  */
 
 @layer components {
-  .dialog-panel-center {
+  .cdk-overlay-pane:has(org-dialog[data-position='center']) {
     position: fixed !important;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
   }
 
-  .dialog-panel-top {
+  .cdk-overlay-pane:has(org-dialog[data-position='top']) {
     position: fixed !important;
     top: var(--spacing-5); /* 20px */
     left: 50%;
     transform: translateX(-50%);
   }
 
-  .dialog-panel-bottom {
+  .cdk-overlay-pane:has(org-dialog[data-position='bottom']) {
     position: fixed !important;
     bottom: var(--spacing-5); /* 20px */
     left: 50%;
     transform: translateX(-50%);
   }
 
-  .dialog-panel-left {
+  .cdk-overlay-pane:has(org-dialog[data-position='left']) {
     position: fixed !important;
     left: 0;
     top: 0;
@@ -33,7 +33,7 @@
     bottom: 0;
   }
 
-  .dialog-panel-right {
+  .cdk-overlay-pane:has(org-dialog[data-position='right']) {
     position: fixed !important;
     right: 0;
     top: 0;

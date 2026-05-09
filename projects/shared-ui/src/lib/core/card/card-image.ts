@@ -1,6 +1,7 @@
-import { Component, ChangeDetectionStrategy, input } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, input } from '@angular/core';
 import { NgOptimizedImage } from '@angular/common';
 import { angularUtils } from '@organization/shared-utils';
+import { CardImageBrainDirective } from '../../brain/card-image-brain/card-image-brain';
 
 /** default value for the card image full width input */
 export const CARD_IMAGE_FULL_WIDTH_DEFAULT = true;
@@ -21,17 +22,20 @@ export const CARD_IMAGE_PRIORITY_DEFAULT = false;
   imports: [NgOptimizedImage],
   templateUrl: './card-image.html',
   styleUrl: './card-image.css',
+  hostDirectives: [
+    {
+      directive: CardImageBrainDirective,
+      inputs: ['src', 'alt'],
+    },
+  ],
   host: {
     '[attr.data-full-width]': 'fullWidth() ? "" : null',
     '[attr.data-priority]': 'priority() ? "" : null',
   },
 })
 export class CardImage {
-  /** the image source url */
-  public src = input.required<string>();
-
-  /** the alternative text description for the image */
-  public alt = input.required<string>();
+  /** reference to the host card image brain directive owning src and alt inputs */
+  protected readonly cardImageBrainDirective = inject(CardImageBrainDirective);
 
   /** whether the image should stretch to fill the full width of the card */
   public fullWidth = input<boolean>(CARD_IMAGE_FULL_WIDTH_DEFAULT);

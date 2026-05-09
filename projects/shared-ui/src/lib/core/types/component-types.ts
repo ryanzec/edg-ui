@@ -11,14 +11,14 @@ export const allComponentColors = [
 
 export type ComponentColor = (typeof allComponentColors)[number];
 
-export type ComponentSize = '2xs' | 'xs' | 'sm' | 'base' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl';
+export type ComponentSize = '2xs' | 'xs' | 'sm' | 'base' | '5xl' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl';
 
 export const componentSizes = [
   '2xs',
   'xs',
   'sm',
   'base',
-  'md',
+  '5xl',
   'lg',
   'xl',
   '2xl',

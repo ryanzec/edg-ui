@@ -1,18 +1,21 @@
-<div cdkMenu [attr.aria-label]="menuLabel()" class="menu-container">
-  <org-list listRole="none" borderVariant="outer">
-    @for (item of menuItems(); track item.id) {
-      @if (item.type === 'divider') {
-        <org-overlay-menu-divider />
-      } @else {
-        <button type="button" cdkMenuItem (cdkMenuItemTriggered)="onMenuItemClick(item)" class="menu-item-button">
-          <org-list-item [forceClickable]="true">
-            @if (item.icon; as icon) {
-              <org-list-item-icon [name]="icon" />
-            }
-            {{ item.label }}
-          </org-list-item>
-        </button>
-      }
+<org-list listRole="none" borderVariant="outer">
+  @for (item of brain.items(); track item.id) {
+    @if (item.type === 'divider') {
+      <org-overlay-menu-divider />
+    } @else {
+      <button
+        type="button"
+        orgOverlayMenuItemBrain
+        [item]="item"
+        (triggered)="onItemTriggered($event)"
+        class="menu-item-button"
+      >
+        <org-list-item [forceClickable]="true" [label]="item.label">
+          @if (item.icon; as iconName) {
+            <org-list-item-icon pre [name]="iconName" />
+          }
+        </org-list-item>
+      </button>
     }
-  </org-list>
-</div>
+  }
+</org-list>

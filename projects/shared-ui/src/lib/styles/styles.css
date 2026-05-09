@@ -2,13 +2,14 @@
  * in order to ensure the layers are orders correctly, this MUST be the first import in this file.
  */
 @import './layers.css';
-@import './variables/base-tokens.css';
-@import './variables/button-tokens.css';
-@import './variables/chart-tokens.css';
-@import './variables/scrollbar-tokens.css';
-@import './variables/avatar-tokens.css';
-@import './variables/icon-tokens.css';
-@import './variables/design-system-demo-tokens.css';
+@import './tokens/base-tokens.css';
+@import './tokens/button-tokens.css';
+@import './tokens/chart-tokens.css';
+@import './tokens/scrollbar-tokens.css';
+@import './tokens/avatar-tokens.css';
+@import './tokens/icon-tokens.css';
+@import './tokens/tag-tokens.css';
+@import './tokens/design-system-demo-tokens.css';
 @import './animations.css';
 @import './background-utility.css';
 @import './border-utility.css';

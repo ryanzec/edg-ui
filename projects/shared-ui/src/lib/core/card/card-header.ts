@@ -1,5 +1,6 @@
-import { Component, ChangeDetectionStrategy, input, computed } from '@angular/core';
+import { Component, ChangeDetectionStrategy, computed, inject, input } from '@angular/core';
 import { angularUtils } from '@organization/shared-utils';
+import { CardHeaderBrainDirective } from '../../brain/card-header-brain/card-header-brain';
 
 /** default value for the card header title input */
 export const CARD_HEADER_TITLE_DEFAULT: string | undefined = undefined;
@@ -7,16 +8,22 @@ export const CARD_HEADER_TITLE_DEFAULT: string | undefined = undefined;
 /** default value for the card header subtitle input */
 export const CARD_HEADER_SUBTITLE_DEFAULT: string | undefined = undefined;
 
-/** default value for the card header heading level input */
-export const CARD_HEADER_HEADING_LEVEL_DEFAULT = 3;
-
 @Component({
   selector: 'org-card-header',
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './card-header.html',
   styleUrl: './card-header.css',
+  hostDirectives: [
+    {
+      directive: CardHeaderBrainDirective,
+      inputs: ['headingLevel'],
+    },
+  ],
 })
 export class CardHeader {
+  /** reference to the host card header brain directive owning the headingLevel input */
+  protected readonly cardHeaderBrainDirective = inject(CardHeaderBrainDirective);
+
   /** the title text displayed in the card header */
   public title = input<string | undefined, string | null | undefined>(CARD_HEADER_TITLE_DEFAULT, {
     transform: angularUtils.transformNullToUndefined,
@@ -26,9 +33,6 @@ export class CardHeader {
   public subtitle = input<string | undefined, string | null | undefined>(CARD_HEADER_SUBTITLE_DEFAULT, {
     transform: angularUtils.transformNullToUndefined,
   });
-
-  /** the html heading level (1-6) used for the title element */
-  public headingLevel = input<number>(CARD_HEADER_HEADING_LEVEL_DEFAULT);
 
   /** whether the title has a non-empty value */
   protected readonly hasTitle = computed<boolean>(() => !!this.title());

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { ChecklistBrainDirective } from '../../brain/checklist-brain/checklist-brain';
 import { ChecklistItem } from './checklist-item';
 
@@ -32,16 +32,6 @@ export type ChecklistItemData = BaseChecklistItemData & {
   },
 })
 export class Checklist {
-  private readonly _brain = inject(ChecklistBrainDirective, { self: true });
-
   /** array of checklist items to display */
   public readonly items = input.required<ChecklistItemData[]>();
-
-  /** the set of currently expanded item ids; exposed for sub-component access (proxied from brain). */
-  public readonly expandedIds = computed<ReadonlySet<string>>(() => this._brain.expandedIds());
-
-  /** toggles the expanded state of the item with the given id */
-  public toggleExpanded(id: string): void {
-    this._brain.toggleExpanded(id);
-  }
 }

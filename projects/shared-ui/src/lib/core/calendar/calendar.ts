@@ -16,40 +16,9 @@ import { CalendarDates } from './calendar-dates';
 import { CalendarPartialRangeSelector } from './calendar-partial-range-selector';
 import {
   CalendarBrainDirective,
-  type CalendarDateData as BrainCalendarDateData,
-  type CalendarPartialRangeSelectionType as BrainCalendarPartialRangeSelectionType,
+  type CalendarDateData,
+  type CalendarPartialRangeSelectionType,
 } from '../../brain/calendar-brain/calendar-brain';
-
-/**
- * array of all partial range selection types
- */
-export const allPartialRangeSelectionTypes = ['range', 'onOrBefore', 'onOrAfter'] as const;
-
-/**
- * partial range selection type
- */
-export type CalendarPartialRangeSelectionType = BrainCalendarPartialRangeSelectionType;
-
-/**
- * data structure for a calendar date cell
- */
-export type CalendarDateData = BrainCalendarDateData;
-
-/**
- * day label data structure with short display text and accessible full name
- */
-export type CalendarDayLabel = {
-  short: string;
-  label: string;
-};
-
-/**
- * month option data for the month dropdown
- */
-export type CalendarMonthOption = {
-  value: number;
-  label: string;
-};
 
 // input defaults
 export const CALENDAR_DEFAULT_DISPLAY_DATE_DEFAULT = DateTime.now();
@@ -164,28 +133,11 @@ export class Calendar {
     return this.allowRangeSelection() && this.allowPartialRangeSelection();
   });
 
-  /** generates array of months for dropdown */
-  public readonly monthOptions: CalendarMonthOption[] = (() => {
-    const months: CalendarMonthOption[] = [];
+  /** localized month options for the month selector dropdown (proxied from brain) */
+  public readonly monthOptions = this.brain.monthOptions;
 
-    for (let month = 1; month <= 12; month++) {
-      const date = DateTime.local(2000, month, 1);
-      months.push({ value: month, label: date.toFormat('MMMM') });
-    }
-
-    return months;
-  })();
-
-  /** day of week labels with accessible full names */
-  public readonly dayLabels: CalendarDayLabel[] = [
-    { short: 'S', label: 'Sunday' },
-    { short: 'M', label: 'Monday' },
-    { short: 'T', label: 'Tuesday' },
-    { short: 'W', label: 'Wednesday' },
-    { short: 'T', label: 'Thursday' },
-    { short: 'F', label: 'Friday' },
-    { short: 'S', label: 'Saturday' },
-  ];
+  /** day of week labels with accessible full names (proxied from brain) */
+  public readonly dayLabels = this.brain.dayLabels;
 
   /** live region announcement text for screen readers when the displayed month changes (proxied from brain) */
   protected readonly _liveAnnouncement = computed<string>(() => this.brain.liveAnnouncement());

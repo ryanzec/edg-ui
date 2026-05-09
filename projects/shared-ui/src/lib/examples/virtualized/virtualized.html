@@ -1,8 +1,11 @@
 <cdk-virtual-scroll-viewport [itemSize]="40" class="h-lg border border-neutral rounded-base">
   <org-list>
-    <org-list-item *cdkVirtualFor="let item of items()" asTag="button" (clicked)="onItemClick(item.id)">
-      {{ item.content }}
-    </org-list-item>
+    <org-list-item
+      *cdkVirtualFor="let item of items()"
+      asTag="button"
+      [label]="item.content"
+      (clicked)="onItemClick(item.id)"
+    />
   </org-list>
 </cdk-virtual-scroll-viewport>
 

@@ -5,7 +5,7 @@ import { Dialog } from '../../core/dialog/dialog';
 import { DialogHeader } from '../../core/dialog/dialog-header';
 import { DialogContent } from '../../core/dialog/dialog-content';
 import { UserForm, type UserFormData } from '../user-form/user-form';
-import { DIALOG_TRIGGER_BRAIN, DialogBrainDirective } from '../../brain/dialog-brain/dialog-brain';
+import { DIALOG_TRIGGER, DialogBrainDirective } from '../../brain/dialog-brain/dialog-brain';
 
 export type UserFormDialogData = {
   existingUser?: User | null;
@@ -20,14 +20,7 @@ export type UserFormDialogData = {
   hostDirectives: [
     {
       directive: DialogBrainDirective,
-      inputs: [
-        'position',
-        'hasRoundedCorners',
-        'hasBackdrop',
-        'enableCloseOnClickOutside',
-        'enableEscapeKey',
-        'showCloseIcon',
-      ],
+      inputs: ['hasBackdrop', 'enableCloseOnClickOutside', 'enableEscapeKey', 'showCloseIcon'],
       outputs: ['closed'],
     },
   ],
@@ -40,7 +33,7 @@ export class UserFormDialog {
   // that actually owns the dialog ref. when rendered as the trigger instance, fall back to the self brain (which is
   // the same brain that opens the dialog).
   private readonly _selfBrain = inject(DialogBrainDirective, { self: true });
-  private readonly _triggerBrain = inject(DIALOG_TRIGGER_BRAIN, { optional: true });
+  private readonly _triggerBrain = inject(DIALOG_TRIGGER, { optional: true });
   private readonly _brain = this._triggerBrain ?? this._selfBrain;
 
   private readonly _dialogRef = inject(DialogRef<UserFormDialog>, { optional: true });

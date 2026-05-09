@@ -1,0 +1,11 @@
+@layer components {
+  :host {
+    display: block;
+    padding-block: var(--spacing-1);
+    padding-inline: var(--spacing-2);
+    background-color: var(--color-bg-surface-2);
+    color: var(--color-fg);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-base);
+  }
+}

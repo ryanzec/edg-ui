@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { Calendar, type CalendarDateData } from './calendar';
+import { Calendar } from './calendar';
+import { type CalendarDateData } from '../../brain/calendar-brain/calendar-brain';
 
 /**
  * calendar dates grid component

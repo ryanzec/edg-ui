@@ -2,7 +2,8 @@ import { ChangeDetectionStrategy, Component, computed, input, output } from '@an
 import { Box } from '../../../core/box/box';
 import { Button } from '../../../core/button/button';
 import { ButtonIcon } from '../../../core/button/button-icon';
-import { Icon, type IconName } from '../../../core/icon/icon';
+import { type IconName } from '../../../brain/icon-brain/icon-brain';
+import { Icon } from '../../../core/icon/icon';
 import { Tag, type TagColor } from '../../../core/tag/tag';
 
 /** the maximum number of tags rendered before the remaining tags are collapsed into a +N overflow tag */

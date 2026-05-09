@@ -2,8 +2,10 @@ import { Component, ChangeDetectionStrategy, computed, effect, inject, input } f
 import { NgTemplateOutlet } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { angularUtils, logManager } from '@organization/shared-utils';
-import { List, type ListSize } from './list';
 import { ListItemBrainDirective } from '../../brain/list-item-brain/list-item-brain';
+import { List, type ListSize } from './list';
+import { ListItemIcon } from './list-item-icon';
+import type { IconName } from '../../brain/icon-brain/icon-brain';
 
 /** all available list item tag values */
 export const allListItemTags = ['a', 'button'] as const;
@@ -35,10 +37,16 @@ export const LIST_ITEM_OVERRIDE_SIZE_DEFAULT: ListSize | undefined = undefined;
 /** the default force clickable state of the list item */
 export const LIST_ITEM_FORCE_CLICKABLE_DEFAULT = false;
 
+/** the default hide-label state of the list item */
+export const LIST_ITEM_HIDE_LABEL_DEFAULT = false;
+
+/** the icon auto-rendered as a trailing indicator when isExternalHref is true */
+const EXTERNAL_HREF_ICON_NAME: IconName = 'arrow-up-right';
+
 @Component({
   selector: 'org-list-item',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [NgTemplateOutlet, RouterLink, RouterLinkActive],
+  imports: [NgTemplateOutlet, RouterLink, RouterLinkActive, ListItemIcon],
   templateUrl: './list-item.html',
   styleUrl: './list-item.css',
   hostDirectives: [
@@ -59,11 +67,12 @@ export const LIST_ITEM_FORCE_CLICKABLE_DEFAULT = false;
     ['[attr.data-is-external-href]']: 'isExternalHref() ? "" : null',
     ['[attr.data-override-size]']: 'overrideSize()',
     ['[attr.data-force-clickable]']: 'forceClickable() ? "" : null',
+    ['[attr.data-parent-select-mode]']: 'parentList.selectMode() ?? null',
   },
 })
 export class ListItem {
-  /** @internal reference to the parent list component for size inheritance */
-  private readonly _listComponent = inject(List, { host: true });
+  /** reference to the parent list component for size and select-mode inheritance */
+  protected readonly parentList = inject(List);
 
   protected readonly brain = inject(ListItemBrainDirective, { self: true });
 
@@ -88,7 +97,7 @@ export class ListItem {
     transform: angularUtils.transformNullToUndefined,
   });
 
-  /** whether the href is an external url that should open in a new tab */
+  /** whether the href is an external url that should open in a new tab; auto-renders a trailing external-link icon */
   public readonly isExternalHref = input<boolean>(LIST_ITEM_IS_EXTERNAL_HREF_DEFAULT);
 
   /** overrides the size inherited from the parent list component for this item only */
@@ -102,6 +111,15 @@ export class ListItem {
    * useful when the clickable interaction is handled by a child element rather than the item itself
    */
   public readonly forceClickable = input<boolean>(LIST_ITEM_FORCE_CLICKABLE_DEFAULT);
+
+  /** the main text content of the list item */
+  public readonly label = input.required<string>();
+
+  /**
+   * visually hides the label while keeping it in the dom for screen readers; useful when only the
+   * projected pre content conveys the visible meaning (e.g. collapsed navigation rows)
+   */
+  public readonly hideLabel = input<boolean>(LIST_ITEM_HIDE_LABEL_DEFAULT);
 
   /** the resolved selected state combining the external isSelected input and the router link active state */
   protected readonly isActuallySelected = computed<boolean>(() => this.isSelected() || this.brain.isRouterLinkActive());
@@ -126,8 +144,11 @@ export class ListItem {
       return this.overrideSize()!;
     }
 
-    return this._listComponent.size();
+    return this.parentList.size();
   });
+
+  /** the icon name auto-rendered as a trailing indicator when isExternalHref is true */
+  protected readonly externalHrefIconName: IconName = EXTERNAL_HREF_ICON_NAME;
 
   constructor() {
     // validates that href or routerLink is provided when asTag is set to a

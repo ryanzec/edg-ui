@@ -1,11 +1,11 @@
 <div class="options-panel">
   <org-scroll-area
     #optionsScrollAreaComponent
-    [enabled]="isScrollNeeded()"
+    [enabled]="brain.isScrollNeeded()"
     direction="vertical"
     scrollClass="h-full w-full"
   >
-    <div [attr.id]="listboxId()" role="listbox" aria-label="Options">
+    <div [attr.id]="brain.listboxId()" [attr.role]="brain.listboxRole" [attr.aria-label]="brain.listboxAriaLabel">
       @if (hasFilteredOptions()) {
         @if (!isGroupingEnabled()) {
           <org-list>
@@ -15,7 +15,7 @@
           </org-list>
         } @else {
           @for (group of filteredGroupedOptions(); track group.groupLabel) {
-            <div class="group" role="group" [attr.aria-label]="group.groupLabel">
+            <div class="group" [attr.role]="brain.groupRole" [attr.aria-label]="group.groupLabel">
               <div class="group-label">{{ group.groupLabel }}</div>
               <org-list>
                 @for (option of group.options; track option.value) {
@@ -35,7 +35,7 @@
 
       @if (!hasFilteredOptions() && !newOptionSuggestion()) {
         <org-list>
-          <org-list-item> No options available </org-list-item>
+          <org-list-item label="No options available" />
         </org-list>
       }
     </div>

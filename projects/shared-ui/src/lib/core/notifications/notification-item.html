@@ -1,19 +1,19 @@
-<org-card [color]="notification().color ?? null">
+<org-card [color]="color() ?? null">
   <org-card-content>
     <div class="content-row">
       <div class="message">
-        @if (notification().contentTemplate; as contentTemplate) {
-          <ng-container *ngTemplateOutlet="contentTemplate; context: { $implicit: notification().id }" />
+        @if (contentTemplate(); as template) {
+          <ng-container *ngTemplateOutlet="template; context: { $implicit: brain.id() }" />
         } @else {
-          {{ notification().message }}
+          {{ message() }}
         }
       </div>
-      @if (notification().canClose) {
+      @if (canClose()) {
         <org-button
           variant="text"
           color="neutral"
           [excludeSpacing]="true"
-          aria-label="Close notification"
+          [attr.aria-label]="brain.closeButtonAriaLabel()"
           (click)="startClose()"
         >
           <org-button-icon name="x" />

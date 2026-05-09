@@ -43,6 +43,30 @@ export class ChartBrainDirective implements OnDestroy {
   /** the current error message if chart rendering failed, null otherwise */
   public readonly error = computed<string | null>(() => this._state().error);
 
+  /** true when not loading and no config is provided */
+  public readonly isEmpty = computed<boolean>(() => !this.isLoading() && !this.config());
+
+  /** true when an error has occurred during chart rendering */
+  public readonly hasError = computed<boolean>(() => !!this.error());
+
+  /** true when the chart should be visible (not loading, not empty, no error) */
+  public readonly shouldShowChart = computed<boolean>(() => !this.isLoading() && !this.isEmpty() && !this.hasError());
+
+  /** aria-label value for the canvas element, derived from the chart title when available */
+  public readonly canvasAriaLabel = computed<string>(() => {
+    const titleText = this.config()?.options?.plugins?.title?.text;
+
+    if (Array.isArray(titleText)) {
+      return titleText.join(' ');
+    }
+
+    if (typeof titleText === 'string' && titleText.trim()) {
+      return titleText;
+    }
+
+    return 'chart';
+  });
+
   constructor() {
     // create, update, or destroy the chart instance in response to config, loading, and canvas availability changes
     effect(() => {
@@ -72,6 +96,17 @@ export class ChartBrainDirective implements OnDestroy {
         }));
       }
     });
+
+    // keep the canvas accessibility label in sync with the derived aria-label whenever either side changes
+    effect(() => {
+      const canvasElement = this._canvasElement();
+
+      if (!canvasElement) {
+        return;
+      }
+
+      canvasElement.setAttribute('aria-label', this.canvasAriaLabel());
+    });
   }
 
   /** @inheritdoc */
@@ -79,8 +114,12 @@ export class ChartBrainDirective implements OnDestroy {
     this._destroyChart();
   }
 
-  /** registers the canvas element so the brain can attach the chart instance to it */
+  /** registers the canvas element so the brain can attach the chart instance to it and own its accessibility attributes */
   public setCanvasElement(canvas: HTMLCanvasElement | null): void {
+    if (canvas) {
+      canvas.setAttribute('role', 'img');
+    }
+
     this._canvasElement.set(canvas);
   }
 

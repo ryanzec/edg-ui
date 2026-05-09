@@ -1,0 +1,102 @@
+:root {
+  /* layout */
+  --tag-radius: var(--radius-pill);
+  --tag-border-width: var(--border-width);
+  --tag-font-weight: var(--font-weight-medium);
+  --tag-line-height: 1;
+  --tag-letter-spacing: var(--letter-spacing-normal);
+
+  /* size: xs */
+  --tag-padding-inline-xs: var(--spacing-1_5); /* 6px */
+  --tag-font-size-xs: var(--font-size-2xs); /* 10px */
+  --tag-gap-xs: var(--spacing-1); /* 4px */
+
+  /* size: sm */
+  --tag-padding-inline-sm: var(--spacing-2); /* 8px */
+  --tag-font-size-sm: var(--font-size-2xs); /* 10px */
+  --tag-gap-sm: var(--spacing-1); /* 4px */
+
+  /* size: base */
+  --tag-padding-inline-base: var(--spacing-2_5); /* 10px */
+  --tag-font-size-base: var(--font-size-xs); /* 12px */
+  --tag-gap-base: var(--spacing-1_5); /* 6px */
+
+  /* remove button affordance */
+  --tag-remove-radius: var(--radius-pill);
+  --tag-remove-opacity-default: 0.75;
+  --tag-remove-opacity-hover: 1;
+  --tag-remove-bg-hover: rgb(0 0 0 / 0.08);
+  --tag-remove-focus-ring-width: 0.1875rem; /* 3px */
+  --tag-remove-focus-ring-color: var(--color-focus-ring);
+  --tag-remove-transition-duration: var(--motion-duration-base);
+  --tag-remove-transition-easing: var(--motion-ease-standard);
+
+  /* remove button negative end margin: -0.4 × per-size padding-inline so the X tucks under the pill curve */
+  --tag-remove-margin-inline-end-xs: calc(var(--tag-padding-inline-xs) * -0.4); /* -2.4px */
+  --tag-remove-margin-inline-end-sm: calc(var(--tag-padding-inline-sm) * -0.4); /* -3.2px */
+  --tag-remove-margin-inline-end-base: calc(var(--tag-padding-inline-base) * -0.4); /* -4px */
+
+  /* color × variant: primary */
+  --tag-primary-strong-bg: var(--color-primary);
+  --tag-primary-strong-fg: var(--color-primary-on);
+  --tag-primary-strong-border: var(--color-primary);
+  --tag-primary-soft-bg: var(--color-primary-soft);
+  --tag-primary-soft-fg: var(--color-primary);
+  --tag-primary-soft-border: var(--color-primary-soft);
+
+  /* color × variant: secondary */
+  --tag-secondary-strong-bg: var(--color-secondary);
+  --tag-secondary-strong-fg: var(--color-secondary-on);
+  --tag-secondary-strong-border: var(--color-secondary);
+  --tag-secondary-soft-bg: var(--color-secondary-soft);
+  --tag-secondary-soft-fg: var(--color-secondary);
+  --tag-secondary-soft-border: var(--color-secondary-soft);
+
+  /* color × variant: neutral */
+  --tag-neutral-strong-bg: var(--color-neutral);
+  --tag-neutral-strong-fg: var(--color-neutral-on);
+  --tag-neutral-strong-border: var(--color-neutral);
+  --tag-neutral-soft-bg: var(--color-neutral-soft);
+  --tag-neutral-soft-fg: var(--color-fg);
+  --tag-neutral-soft-border: var(--color-neutral-soft);
+
+  /* color × variant: safe */
+  --tag-safe-strong-bg: var(--color-safe);
+  --tag-safe-strong-fg: var(--color-safe-on);
+  --tag-safe-strong-border: var(--color-safe);
+  --tag-safe-soft-bg: var(--color-safe-soft);
+  --tag-safe-soft-fg: var(--color-safe);
+  --tag-safe-soft-border: var(--color-safe-soft);
+
+  /* color × variant: info */
+  --tag-info-strong-bg: var(--color-info);
+  --tag-info-strong-fg: var(--color-info-on);
+  --tag-info-strong-border: var(--color-info);
+  --tag-info-soft-bg: var(--color-info-soft);
+  --tag-info-soft-fg: var(--color-info);
+  --tag-info-soft-border: var(--color-info-soft);
+
+  /* color × variant: caution */
+  --tag-caution-strong-bg: var(--color-caution);
+  --tag-caution-strong-fg: var(--color-caution-on);
+  --tag-caution-strong-border: var(--color-caution);
+  --tag-caution-soft-bg: var(--color-caution-soft);
+  --tag-caution-soft-fg: var(--color-caution);
+  --tag-caution-soft-border: var(--color-caution-soft);
+
+  /* color × variant: warning */
+  --tag-warning-strong-bg: var(--color-warning);
+  --tag-warning-strong-fg: var(--color-warning-on);
+  --tag-warning-strong-border: var(--color-warning);
+  --tag-warning-soft-bg: var(--color-warning-soft);
+  --tag-warning-soft-fg: var(--color-warning);
+  --tag-warning-soft-border: var(--color-warning-soft);
+
+  /* color × variant: danger */
+  --tag-danger-strong-bg: var(--color-danger);
+  --tag-danger-strong-fg: var(--color-danger-on);
+  --tag-danger-strong-border: var(--color-danger);
+  --tag-danger-soft-bg: var(--color-danger-soft);
+  --tag-danger-soft-fg: var(--color-danger);
+  --tag-danger-soft-border: var(--color-danger-soft);
+}

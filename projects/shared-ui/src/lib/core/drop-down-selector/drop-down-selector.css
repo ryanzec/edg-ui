@@ -62,4 +62,8 @@
     text-align: left;
     outline: none;
   }
+
+  .menu-item-button[data-active] {
+    background-color: var(--color-neutral-soft-hover);
+  }
 }

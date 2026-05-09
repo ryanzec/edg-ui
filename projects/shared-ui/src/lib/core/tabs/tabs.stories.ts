@@ -91,7 +91,7 @@ export const Default: Story = {
     },
   },
   render: (args) => {
-    const activeTab = signal(args.value);
+    const activeTab = signal((args as unknown as { value: string }).value);
 
     return {
       props: {

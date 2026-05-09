@@ -45,11 +45,6 @@ export {
       outputs: ['opened', 'closed'],
     },
   ],
-  host: {
-    '[attr.data-trigger-type]': 'triggerType()',
-    '[attr.data-x-position]': 'xPosition()',
-    '[attr.data-y-position]': 'yPosition()',
-  },
 })
 export class Tooltip {
   /** how the tooltip is triggered */

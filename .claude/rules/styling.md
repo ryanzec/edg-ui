@@ -23,9 +23,15 @@ Utility css classes **MUST** be used for all other styles:
 
 # Styling Patterns
 - **NEVER** add styling to components in `projects/shared-ui/src/lib/brain`.
+- **NEVER** add explicitly height / widths to component is `projects/shared-ui/src/lib/core`, they should **ALWAYS** grow based on the content inside them.
+- If you intend to set an explicit height / width for any component, **ALWAY** make the a question **BEFORE** writing any code.
 - **ALWAYS** use css files for styling components and directives in `projects/shared-ui/src/lib/core` **EXCEPT** for `*stories*` files.
-- **ALWAYS** use css variables from `projects/shared-ui/src/lib/styles/variables/base-tokens.css` or the `{component-name}-tokens.css` file for styling in css files.
+- **ALWAYS** use css variables from `projects/shared-ui/src/lib/styles/tokens/base-tokens.css` or the `{component-name}-tokens.css` file for styling in css files.
 - **ALWAYS** favor css utility based styling for component **OUTSIDE** of `projects/shared-ui/src/lib/core`.
+
+# Layer Patterns
+- **ALWAYS** wrap css in general component css files (NOT variables component cssfiles) in `@layer components {...}` for components in `projects/shared-ui/src/lib/core`.
+- **ALWAYS** wrap css in general component css files (NOT variables component cssfiles) in `@layer application {...}` for components outside of `projects/shared-ui/src/lib/core`.
 
 # General Styling Patterns
 - If you see what you think is a tailwind css, check to see if those css classes are in any of the custom utilities in `projects/shared-ui/src/lib/styles` as tailwind utility classes **ARE NOT USE**, if the utility class does not exist, **ALWAYS** ask if it should be added to an existing one or a new utility class file.
@@ -42,7 +48,6 @@ Utility css classes **MUST** be used for all other styles:
 - **ALWAYS** use `aria-*` when available and then fallback to `data-*` attributes for component styling that is based on an input having the input value be the `data-*` attribute value, see `projects/shared-ui/src/lib/core/box` as a reference.
 - **ALWAYS** use the `.dark` for defining dark mode colors.
 - **ALWAYS** use `/* ... */` to comment is CSS.
-- **ALWAYS** wrap css in general component css files (NOT variables component cssfiles) in `@layer components {...}`.
 - **ONLY** use negative margins as a LAST resort.
 - **ALWAYS** use `focus-visible` over `focus` pseduo selector.
 - **ALWAYS** use thing like background color change when styling `focus` elements for accessability.
@@ -57,6 +62,6 @@ Utility css classes **MUST** be used for all other styles:
 - **NEVER** use ring / outline / box-shadow styles other than to remove it **OR** if it is for a11y.
 - **NEVER** use a default values when using `var(...)`.
 - **ALWAYS** make css class name as short as needed but still descripitive since Angular handle encapulation to avoid naming conflict so `header` instead of `integration-card-configured-header`.
-- **ALWAYS** make sure to update the `.moon/scripts/build-typescript-design-token.cjs` script when modifies css variables in `projects/shared-ui/src/lib/styles/variables`.
-- **ALWAYS** make sure to run `moon :build-design-tokens` when css variables in `projects/shared-ui/src/lib/styles/variables` are modified in any way (added / removed / changed).
+- **ALWAYS** make sure to update the `.moon/scripts/build-typescript-design-token.cjs` script when modifies css variables in `projects/shared-ui/src/lib/styles/tokens`.
+- **ALWAYS** make sure to run `moon :build-design-tokens` when css variables in `projects/shared-ui/src/lib/styles/tokens` are modified in any way (added / removed / changed).
 - **ALWAYS** prefix component specific design token names with `{component-name}-*` following base the standard base token naming.

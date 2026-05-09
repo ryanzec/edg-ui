@@ -68,13 +68,13 @@ const skillOptions: ComboboxOptionInput[] = [
         <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-1 max-w-lg">
           <org-form-fields>
             <org-form-field [validationMessage]="getFieldError('username')">
-              <org-label label="Username" htmlFor="username" [isRequired]="true" />
+              <org-label text="Username" htmlFor="username" [isRequired]="true" />
               <org-input formControlName="username" name="username" placeholder="Enter your username" />
             </org-form-field>
 
             <!-- email input field -->
             <org-form-field [validationMessage]="getFieldError('email')">
-              <org-label label="Email" htmlFor="email" [isRequired]="true" />
+              <org-label text="Email" htmlFor="email" [isRequired]="true" />
               <org-input
                 type="email"
                 formControlName="email"
@@ -86,7 +86,7 @@ const skillOptions: ComboboxOptionInput[] = [
 
             <!-- textarea field -->
             <org-form-field [validationMessage]="getFieldError('bio')">
-              <org-label label="Bio (max 200 chars)" htmlFor="bio" />
+              <org-label text="Bio (max 200 chars)" htmlFor="bio" />
               <org-textarea formControlName="bio" name="bio" placeholder="Tell us about yourself..." [rows]="4" />
             </org-form-field>
 
@@ -114,7 +114,7 @@ const skillOptions: ComboboxOptionInput[] = [
 
             <!-- radio group -->
             <org-form-field [validationMessage]="getFieldError('contactMethod')">
-              <org-label label="Preferred Contact Method" htmlFor="contactMethod" [isRequired]="true" />
+              <org-label text="Preferred Contact Method" htmlFor="contactMethod" [isRequired]="true" />
               <org-radio-group formControlName="contactMethod" name="contactMethod">
                 <org-radio value="email">Email</org-radio>
                 <org-radio value="phone">Phone</org-radio>
@@ -124,7 +124,7 @@ const skillOptions: ComboboxOptionInput[] = [
 
             <!-- combobox field -->
             <org-form-field [validationMessage]="getFieldError('skills')">
-              <org-label label="Skills" htmlFor="skills" [isRequired]="true" />
+              <org-label text="Skills" htmlFor="skills" [isRequired]="true" />
               <org-combobox
                 formControlName="skills"
                 [options]="skillOptions"
@@ -136,7 +136,7 @@ const skillOptions: ComboboxOptionInput[] = [
 
             <!-- date range field -->
             <org-form-field [validationMessage]="getFieldError('dateRange')">
-              <org-label label="Date Range" htmlFor="dateRange" [isRequired]="true" />
+              <org-label text="Date Range" htmlFor="dateRange" [isRequired]="true" />
               <org-date-picker-input
                 formControlName="dateRange"
                 [allowRangeSelection]="true"
@@ -332,19 +332,19 @@ class ReactiveFormDemoComponent {
         <form (submit)="onSubmit($event)" class="flex flex-col gap-1 max-w-lg">
           <org-form-fields>
             <org-form-field [validationMessage]="usernameError()">
-              <org-label label="Username" htmlFor="username" [isRequired]="true" />
+              <org-label text="Username" htmlFor="username" [isRequired]="true" />
               <org-input [(value)]="username" name="username" placeholder="Enter your username" />
             </org-form-field>
 
             <!-- email input field -->
             <org-form-field [validationMessage]="emailError()">
-              <org-label label="Email" htmlFor="email" [isRequired]="true" />
+              <org-label text="Email" htmlFor="email" [isRequired]="true" />
               <org-input type="email" [(value)]="email" name="email" placeholder="Enter your email" preIcon="mail" />
             </org-form-field>
 
             <!-- textarea field -->
             <org-form-field [validationMessage]="bioError()">
-              <org-label label="Bio" htmlFor="bio" [isRequired]="true" />
+              <org-label text="Bio" htmlFor="bio" [isRequired]="true" />
               <org-textarea [(value)]="bio" name="bio" placeholder="Tell us about yourself..." [rows]="4" />
             </org-form-field>
 
@@ -372,7 +372,7 @@ class ReactiveFormDemoComponent {
 
             <!-- radio group -->
             <org-form-field [validationMessage]="contactMethodError()">
-              <org-label label="Preferred Contact Method" htmlFor="contactMethod" [isRequired]="true" />
+              <org-label text="Preferred Contact Method" htmlFor="contactMethod" [isRequired]="true" />
               <org-radio-group [(value)]="contactMethod" name="contactMethod" class="flex flex-col gap-2">
                 <org-radio value="email">Email</org-radio>
                 <org-radio value="phone">Phone</org-radio>
@@ -382,7 +382,7 @@ class ReactiveFormDemoComponent {
 
             <!-- combobox field -->
             <org-form-field [validationMessage]="skillsError()">
-              <org-label label="Skills" htmlFor="skills" [isRequired]="true" />
+              <org-label text="Skills" htmlFor="skills" [isRequired]="true" />
               <org-combobox
                 [options]="skillOptions"
                 [isMultiSelect]="true"
@@ -394,7 +394,7 @@ class ReactiveFormDemoComponent {
 
             <!-- date range field -->
             <org-form-field [validationMessage]="dateRangeError()">
-              <org-label label="Date Range" htmlFor="dateRange" [isRequired]="true" />
+              <org-label text="Date Range" htmlFor="dateRange" [isRequired]="true" />
               <org-date-picker-input
                 [allowRangeSelection]="true"
                 [selectedStartDate]="startDate()"
@@ -683,13 +683,13 @@ type PrePopulatedFormData = {
           <org-form-fields>
             <!-- input field -->
             <org-form-field [validationMessage]="getFieldError('username')">
-              <org-label label="Username" htmlFor="username" [isRequired]="true" />
+              <org-label text="Username" htmlFor="username" [isRequired]="true" />
               <org-input formControlName="username" name="username" placeholder="Enter your username" />
             </org-form-field>
 
             <!-- email input field -->
             <org-form-field [validationMessage]="getFieldError('email')">
-              <org-label label="Email" htmlFor="email" [isRequired]="true" />
+              <org-label text="Email" htmlFor="email" [isRequired]="true" />
               <org-input
                 type="email"
                 formControlName="email"
@@ -701,7 +701,7 @@ type PrePopulatedFormData = {
 
             <!-- textarea field -->
             <org-form-field [validationMessage]="getFieldError('bio')">
-              <org-label label="Bio (max 200 chars)" htmlFor="bio" />
+              <org-label text="Bio (max 200 chars)" htmlFor="bio" />
               <org-textarea formControlName="bio" name="bio" placeholder="Tell us about yourself..." [rows]="4" />
             </org-form-field>
 
@@ -729,7 +729,7 @@ type PrePopulatedFormData = {
 
             <!-- radio group -->
             <org-form-field [validationMessage]="getFieldError('contactMethod')">
-              <org-label label="Preferred Contact Method" htmlFor="contactMethod" [isRequired]="true" />
+              <org-label text="Preferred Contact Method" htmlFor="contactMethod" [isRequired]="true" />
               <org-radio-group formControlName="contactMethod" name="contactMethod">
                 <org-radio value="email">Email</org-radio>
                 <org-radio value="phone">Phone</org-radio>
@@ -739,7 +739,7 @@ type PrePopulatedFormData = {
 
             <!-- combobox field -->
             <org-form-field [validationMessage]="getFieldError('skills')">
-              <org-label label="Skills" htmlFor="skills" [isRequired]="true" />
+              <org-label text="Skills" htmlFor="skills" [isRequired]="true" />
               <org-combobox
                 formControlName="skills"
                 [options]="skillOptions"
@@ -751,7 +751,7 @@ type PrePopulatedFormData = {
 
             <!-- date range field -->
             <org-form-field [validationMessage]="getFieldError('dateRange')">
-              <org-label label="Date Range" htmlFor="dateRange" [isRequired]="true" />
+              <org-label text="Date Range" htmlFor="dateRange" [isRequired]="true" />
               <org-date-picker-input
                 formControlName="dateRange"
                 [allowRangeSelection]="true"
@@ -969,19 +969,19 @@ class ReactiveFormPrePopulatedDemoComponent {
           <org-form-fields>
             <!-- input field -->
             <org-form-field [validationMessage]="usernameError()">
-              <org-label label="Username" htmlFor="username" [isRequired]="true" />
+              <org-label text="Username" htmlFor="username" [isRequired]="true" />
               <org-input [(value)]="username" name="username" placeholder="Enter your username" />
             </org-form-field>
 
             <!-- email input field -->
             <org-form-field [validationMessage]="emailError()">
-              <org-label label="Email" htmlFor="email" [isRequired]="true" />
+              <org-label text="Email" htmlFor="email" [isRequired]="true" />
               <org-input type="email" [(value)]="email" name="email" placeholder="Enter your email" preIcon="mail" />
             </org-form-field>
 
             <!-- textarea field -->
             <org-form-field [validationMessage]="bioError()">
-              <org-label label="Bio" htmlFor="bio" [isRequired]="true" />
+              <org-label text="Bio" htmlFor="bio" [isRequired]="true" />
               <org-textarea [(value)]="bio" name="bio" placeholder="Tell us about yourself..." [rows]="4" />
             </org-form-field>
 
@@ -1009,7 +1009,7 @@ class ReactiveFormPrePopulatedDemoComponent {
 
             <!-- radio group -->
             <org-form-field [validationMessage]="contactMethodError()">
-              <org-label label="Preferred Contact Method" htmlFor="contactMethod" [isRequired]="true" />
+              <org-label text="Preferred Contact Method" htmlFor="contactMethod" [isRequired]="true" />
               <org-radio-group [(value)]="contactMethod" name="contactMethod" class="flex flex-col gap-2">
                 <org-radio value="email">Email</org-radio>
                 <org-radio value="phone">Phone</org-radio>
@@ -1019,7 +1019,7 @@ class ReactiveFormPrePopulatedDemoComponent {
 
             <!-- combobox field -->
             <org-form-field [validationMessage]="skillsError()">
-              <org-label label="Skills" htmlFor="skills" [isRequired]="true" />
+              <org-label text="Skills" htmlFor="skills" [isRequired]="true" />
               <org-combobox
                 #skillsComponent
                 [options]="skillOptions"
@@ -1032,7 +1032,7 @@ class ReactiveFormPrePopulatedDemoComponent {
 
             <!-- date range field -->
             <org-form-field [validationMessage]="dateRangeError()">
-              <org-label label="Date Range" htmlFor="dateRange" [isRequired]="true" />
+              <org-label text="Date Range" htmlFor="dateRange" [isRequired]="true" />
               <org-date-picker-input
                 [allowRangeSelection]="true"
                 [selectedStartDate]="startDate()"

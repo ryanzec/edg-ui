@@ -46,7 +46,7 @@
     padding: var(--spacing-1);
   }
 
-  :host([aria-disabled='true']) .checkbox-toggle-container {
+  :host([data-disabled]) .checkbox-toggle-container {
     opacity: var(--opacity-disabled);
     cursor: not-allowed;
   }
@@ -69,24 +69,24 @@
     background-color: var(--color-primary);
   }
 
-  :host([aria-disabled='true']) .checkbox-toggle-track {
+  :host([data-disabled]) .checkbox-toggle-track {
     background-color: var(--color-neutral-border-soft);
   }
 
-  :host:not([aria-disabled='true']) .checkbox-toggle-container:hover .checkbox-toggle-track {
+  :host:not([data-disabled]) .checkbox-toggle-container:hover .checkbox-toggle-track {
     background-color: var(--color-neutral-border-strong);
   }
 
-  :host([data-checked]):not([aria-disabled='true']) .checkbox-toggle-container:hover .checkbox-toggle-track {
+  :host([data-checked]):not([data-disabled]) .checkbox-toggle-container:hover .checkbox-toggle-track {
     background-color: var(--color-primary-hover);
   }
 
-  :host:not([aria-disabled='true']) .checkbox-toggle-container:focus-visible .checkbox-toggle-track {
+  :host:not([data-disabled]) .checkbox-toggle-container:focus-visible .checkbox-toggle-track {
     background-color: var(--color-neutral-border-strong);
     border-color: var(--color-fg);
   }
 
-  :host([data-checked]):not([aria-disabled='true']) .checkbox-toggle-container:focus-visible .checkbox-toggle-track {
+  :host([data-checked]):not([data-disabled]) .checkbox-toggle-container:focus-visible .checkbox-toggle-track {
     background-color: var(--color-primary-hover);
     border-color: var(--color-fg);
   }

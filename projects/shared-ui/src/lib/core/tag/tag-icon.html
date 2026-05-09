@@ -1,12 +1,11 @@
-@if (hasIcon()) {
+@if (brain.hasIcon() && !isSuppressedByParent()) {
   <button
-    type="button"
+    [type]="brain.buttonType"
     class="tag-icon-btn"
-    [attr.data-clickable]="isClickable() ? '' : null"
-    [disabled]="!isClickable()"
-    (click)="click($event)"
-    [attr.aria-label]="resolvedAriaLabel()"
+    [attr.data-clickable]="brain.isClickable() ? '' : null"
+    [disabled]="!brain.isClickable()"
+    [attr.aria-label]="brain.resolvedAriaLabel()"
   >
-    <org-icon [name]="resolvedIconName()!" [size]="size()" />
+    <org-icon [name]="brain.resolvedIconName()!" [size]="size()" />
   </button>
 }

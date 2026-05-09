@@ -1,6 +1,6 @@
 <svg
-  [lucideIcon]="lucideIcon()"
-  [attr.aria-hidden]="!label() ? true : null"
-  [attr.aria-label]="label() || null"
-  [attr.role]="label() ? 'img' : null"
+  [lucideIcon]="iconBrainDirective.lucideIcon()"
+  [attr.aria-hidden]="iconBrainDirective.ariaHidden()"
+  [attr.aria-label]="iconBrainDirective.ariaLabel()"
+  [attr.role]="iconBrainDirective.role()"
 ></svg>

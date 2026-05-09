@@ -1,15 +1,24 @@
-import { Component, ChangeDetectionStrategy, input, computed, forwardRef, inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, computed, forwardRef, input, model, signal } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { angularUtils } from '@organization/shared-utils';
-import { Icon, IconName, IconSize } from '../icon/icon';
+import { IconName } from '../../brain/icon-brain/icon-brain';
+import { Icon, IconSize } from '../icon/icon';
 import { TextDirective, TextSize } from '../text-directive/text-directive';
 import { ComponentSize } from '../types/component-types';
-import { FORM_FIELD_COMPONENT } from '../form-fields/form-field';
 import { CheckboxToggleBrainDirective } from '../../brain/checkbox-toggle-brain/checkbox-toggle-brain';
 
 export const allCheckboxToggleSizes = ['sm', 'base', 'lg'] as const satisfies readonly ComponentSize[];
 
 export type CheckboxToggleSize = (typeof allCheckboxToggleSizes)[number];
+
+/** default value for the checked model */
+export const CHECKBOX_TOGGLE_CHECKED_DEFAULT = false;
+
+/** default value for the disabled input */
+export const CHECKBOX_TOGGLE_DISABLED_DEFAULT = false;
+
+/** default value for the size input */
+export const CHECKBOX_TOGGLE_SIZE_DEFAULT: CheckboxToggleSize = 'base';
 
 /** default value for the onIcon input */
 export const CHECKBOX_TOGGLE_ON_ICON_DEFAULT: IconName | undefined = undefined;
@@ -20,20 +29,13 @@ export const CHECKBOX_TOGGLE_OFF_ICON_DEFAULT: IconName | undefined = undefined;
 @Component({
   selector: 'org-checkbox-toggle',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Icon, TextDirective],
+  imports: [Icon, TextDirective, CheckboxToggleBrainDirective],
   templateUrl: './checkbox-toggle.html',
   styleUrl: './checkbox-toggle.css',
-  hostDirectives: [
-    {
-      directive: CheckboxToggleBrainDirective,
-      inputs: ['checked', 'disabled'],
-      outputs: ['changed: checkedChange'],
-    },
-  ],
   host: {
     '[attr.data-size]': 'size()',
-    '[attr.data-checked]': 'isChecked() ? "" : null',
-    '[attr.aria-disabled]': 'isDisabled() ? "true" : null',
+    '[attr.data-checked]': 'checked() ? "" : null',
+    '[attr.data-disabled]': 'isDisabled() ? "" : null',
   },
   providers: [
     {
@@ -44,20 +46,19 @@ export const CHECKBOX_TOGGLE_OFF_ICON_DEFAULT: IconName | undefined = undefined;
   ],
 })
 export class CheckboxToggle implements ControlValueAccessor {
-  private readonly _formField = inject(FORM_FIELD_COMPONENT, { optional: true, host: true });
-  protected readonly brain = inject(CheckboxToggleBrainDirective, { self: true });
-
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private _onChange: (value: boolean) => void = () => {};
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private _onTouched: () => void = () => {};
 
+  private readonly _formDisabled = signal<boolean>(false);
+
   public readonly name = input.required<string>();
   public readonly value = input.required<string>();
 
-  public readonly checked = input<boolean>(false);
-  public readonly disabled = input<boolean>(false);
-  public readonly size = input<CheckboxToggleSize>('base');
+  public readonly checked = model<boolean>(CHECKBOX_TOGGLE_CHECKED_DEFAULT);
+  public readonly disabled = input<boolean>(CHECKBOX_TOGGLE_DISABLED_DEFAULT);
+  public readonly size = input<CheckboxToggleSize>(CHECKBOX_TOGGLE_SIZE_DEFAULT);
   public readonly onIcon = input<IconName | undefined, IconName | null | undefined>(CHECKBOX_TOGGLE_ON_ICON_DEFAULT, {
     transform: angularUtils.transformNullToUndefined,
   });
@@ -65,15 +66,14 @@ export class CheckboxToggle implements ControlValueAccessor {
     transform: angularUtils.transformNullToUndefined,
   });
 
-  public readonly isChecked = computed<boolean>(() => this.brain.isChecked());
-  public readonly isDisabled = computed<boolean>(() => this.brain.isDisabled());
+  public readonly isDisabled = computed<boolean>(() => this.disabled() || this._formDisabled());
 
   public readonly textSize = computed<TextSize>(() => {
     return this.size() === 'lg' ? 'xl' : this.size();
   });
 
   public readonly displayIcon = computed<IconName | undefined>(() => {
-    if (this.isChecked()) {
+    if (this.checked()) {
       return this.onIcon();
     }
 
@@ -91,50 +91,20 @@ export class CheckboxToggle implements ControlValueAccessor {
     }
   });
 
-  public readonly hasValidationMessage = computed<boolean>(() => {
-    return !!this._formField?.hasValidationMessage();
-  });
-
-  public readonly ariaDescribedBy = computed<string | null>(() => {
-    if (this.hasValidationMessage()) {
-      return `validation-message-${this.name()}`;
-    }
-
-    return null;
-  });
-
-  public readonly ariaInvalid = computed<boolean | null>(() => {
-    if (this.hasValidationMessage()) {
-      return true;
-    }
-
-    return null;
-  });
-
-  constructor() {
-    this.brain.changed.subscribe((value) => {
-      this._onChange(value);
-    });
-
-    this.brain.touched.subscribe(() => {
-      this._onTouched();
-    });
+  protected onBrainChanged(value: boolean): void {
+    this.checked.set(value);
+    this._onChange(value);
   }
 
-  protected onClick(event: Event): void {
-    this.brain.handleClick(event);
-  }
-
-  protected onKeyDown(event: KeyboardEvent): void {
-    this.brain.handleKeyDown(event);
+  protected onBrainTouched(): void {
+    this._onTouched();
   }
 
   public writeValue(value: boolean): void {
-    this.brain.setInternalChecked(value);
+    this.checked.set(value ?? false);
   }
 
   public registerOnChange(fn: (value: boolean) => void): void {
-    this.brain.setFormControlled();
     this._onChange = fn;
   }
 
@@ -143,6 +113,6 @@ export class CheckboxToggle implements ControlValueAccessor {
   }
 
   public setDisabledState(isDisabled: boolean): void {
-    this.brain.setFormDisabled(isDisabled);
+    this._formDisabled.set(isDisabled);
   }
 }

@@ -1,6 +1,7 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import type { Meta, StoryObj } from '@storybook/angular';
-import { Link, allLinkTargets } from './link';
+import { Link } from './link';
+import { allLinkTargets } from '../../brain/link-brain/link-brain';
 import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
 import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
 
@@ -52,11 +53,11 @@ const meta: Meta<Link> = {
   A standard hyperlink with optional support for action-style behavior when no href is provided.
 
   ### Features
-  - Renders as an anchor when not disabled
+  - Always renders as a single anchor element
   - Standard html anchor attributes exposed as typed inputs (href, target, rel, download, hreflang, referrerPolicy, ariaLabel)
   - Auto-applies rel="noopener noreferrer" when target="_blank" and consumer did not provide a rel value
   - Action-link mode when href is omitted: emits clicked, focusable, keyboard-activated via Enter or Space
-  - Disabled state renders a span with cursor not-allowed in place of the anchor
+  - Disabled state strips href, sets aria-disabled / tabindex=-1, and styles as not-allowed; element stays an anchor
 
   ### Usage Examples
   \`\`\`html
@@ -69,7 +70,7 @@ const meta: Meta<Link> = {
   <!-- action link, emits clicked -->
   <org-link (clicked)="handleAction()">Run action</org-link>
 
-  <!-- disabled, renders as a span -->
+  <!-- disabled, anchor with aria-disabled and not-allowed cursor -->
   <org-link href="https://example.com" [disabled]="true">Example</org-link>
   \`\`\`
 </div>
@@ -100,7 +101,7 @@ export const Default: Story = {
     },
     disabled: {
       control: 'boolean',
-      description: 'when true renders a span styled as a disabled link',
+      description: 'when true the anchor is non-interactive with disabled styling',
     },
   },
   parameters: {
@@ -143,7 +144,7 @@ export const Disabled: Story = {
 
         <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
           <li><strong>Enabled</strong>: Renders as an anchor with link styling and pointer cursor</li>
-          <li><strong>Disabled</strong>: Renders as a span with disabled styling and cursor not-allowed</li>
+          <li><strong>Disabled</strong>: Same anchor with aria-disabled, no href, tabindex -1 and cursor not-allowed</li>
         </ul>
       </org-storybook-example-container>
     `,

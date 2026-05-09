@@ -64,7 +64,10 @@ const meta: Meta<LastUpdated> = {
 };
 
 export default meta;
-type Story = StoryObj<LastUpdated>;
+
+// the status / isLoading inputs come from the host-directive forwarding on `LastUpdated`, which storybook's
+// signal-input type extraction does not see, so they are augmented onto the args type here.
+type Story = StoryObj<LastUpdated & { status: 'active' | 'inactive'; isLoading: boolean }>;
 
 export const Default: Story = {
   args: {

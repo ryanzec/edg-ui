@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/angular';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Pagination } from './pagination';
-import { PaginationStore } from '../pagination-store/pagination-store';
 import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
 import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
 
@@ -9,7 +8,6 @@ import { StorybookExampleContainerSection } from '../../private/storybook-exampl
   selector: 'story-pagination-dataset-small-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [Pagination],
-  providers: [PaginationStore],
   template: `<org-pagination [totalItems]="25" />`,
 })
 class PaginationDatasetSmallDemo {}
@@ -18,7 +16,6 @@ class PaginationDatasetSmallDemo {}
   selector: 'story-pagination-dataset-medium-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [Pagination],
-  providers: [PaginationStore],
   template: `<org-pagination [totalItems]="100" />`,
 })
 class PaginationDatasetMediumDemo {}
@@ -27,7 +24,6 @@ class PaginationDatasetMediumDemo {}
   selector: 'story-pagination-dataset-large-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [Pagination],
-  providers: [PaginationStore],
   template: `<org-pagination [totalItems]="1000" [currentPage]="25" />`,
 })
 class PaginationDatasetLargeDemo {}
@@ -36,7 +32,6 @@ class PaginationDatasetLargeDemo {}
   selector: 'story-pagination-page-position-first-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [Pagination],
-  providers: [PaginationStore],
   template: `<org-pagination [totalItems]="500" [currentPage]="1" />`,
 })
 class PaginationPagePositionFirstDemo {}
@@ -45,7 +40,6 @@ class PaginationPagePositionFirstDemo {}
   selector: 'story-pagination-page-position-middle-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [Pagination],
-  providers: [PaginationStore],
   template: `<org-pagination [totalItems]="500" [currentPage]="25" />`,
 })
 class PaginationPagePositionMiddleDemo {}
@@ -54,7 +48,6 @@ class PaginationPagePositionMiddleDemo {}
   selector: 'story-pagination-page-position-last-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [Pagination],
-  providers: [PaginationStore],
   template: `<org-pagination [totalItems]="500" [currentPage]="50" />`,
 })
 class PaginationPagePositionLastDemo {}
@@ -63,7 +56,6 @@ class PaginationPagePositionLastDemo {}
   selector: 'story-pagination-visible-pages-5-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [Pagination],
-  providers: [PaginationStore],
   template: `<org-pagination [totalItems]="500" [currentPage]="25" [visiblePages]="5" />`,
 })
 class PaginationVisiblePages5Demo {}
@@ -72,7 +64,6 @@ class PaginationVisiblePages5Demo {}
   selector: 'story-pagination-visible-pages-7-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [Pagination],
-  providers: [PaginationStore],
   template: `<org-pagination [totalItems]="500" [currentPage]="25" [visiblePages]="7" />`,
 })
 class PaginationVisiblePages7Demo {}
@@ -81,7 +72,6 @@ class PaginationVisiblePages7Demo {}
   selector: 'story-pagination-visible-pages-11-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [Pagination],
-  providers: [PaginationStore],
   template: `<org-pagination [totalItems]="500" [currentPage]="25" [visiblePages]="11" />`,
 })
 class PaginationVisiblePages11Demo {}
@@ -90,7 +80,6 @@ class PaginationVisiblePages11Demo {}
   selector: 'story-pagination-items-per-page-standard-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [Pagination],
-  providers: [PaginationStore],
   template: `<org-pagination [totalItems]="300" [itemsPerPageOptions]="[5, 10, 20, 50]" />`,
 })
 class PaginationItemsPerPageStandardDemo {}
@@ -99,7 +88,6 @@ class PaginationItemsPerPageStandardDemo {}
   selector: 'story-pagination-items-per-page-custom-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [Pagination],
-  providers: [PaginationStore],
   template: `<org-pagination [totalItems]="300" [itemsPerPage]="25" [itemsPerPageOptions]="[10, 25, 50, 100]" />`,
 })
 class PaginationItemsPerPageCustomDemo {}
@@ -108,7 +96,6 @@ class PaginationItemsPerPageCustomDemo {}
   selector: 'story-pagination-items-per-page-fewer-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [Pagination],
-  providers: [PaginationStore],
   template: `<org-pagination [totalItems]="300" [itemsPerPageOptions]="[10, 50]" />`,
 })
 class PaginationItemsPerPageFewerDemo {}
@@ -117,7 +104,6 @@ class PaginationItemsPerPageFewerDemo {}
   selector: 'story-pagination-state-normal-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [Pagination],
-  providers: [PaginationStore],
   template: `<org-pagination [totalItems]="100" [currentPage]="5" />`,
 })
 class PaginationStateNormalDemo {}
@@ -126,7 +112,6 @@ class PaginationStateNormalDemo {}
   selector: 'story-pagination-state-disabled-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [Pagination],
-  providers: [PaginationStore],
   template: `<org-pagination [totalItems]="100" [currentPage]="5" [disabled]="true" />`,
 })
 class PaginationStateDisabledDemo {}
@@ -135,7 +120,6 @@ class PaginationStateDisabledDemo {}
   selector: 'story-pagination-zero-items-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [Pagination],
-  providers: [PaginationStore],
   template: `<org-pagination [totalItems]="0" />`,
 })
 class PaginationZeroItemsDemo {}
@@ -172,18 +156,7 @@ A flexible pagination component for navigating through large datasets with custo
 - **currentPage**: Initial active page (default: 1)
 - **disabled**: Disables all pagination interactions
 
-### Provider Requirement
-The parent component **must** provide \`PaginationStore\` so that \`org-pagination\` and any sibling consumers share the same store instance. This allows parent components to read pagination state (e.g. \`startIndex\`, \`endIndex\`) directly from the store.
-
 ### Usage Examples
-\`\`\`typescript
-@Component({
-  // ...
-  providers: [PaginationStore],
-})
-export class MyView {}
-\`\`\`
-
 \`\`\`html
 <!-- Basic pagination -->
 <org-pagination
@@ -283,7 +256,6 @@ export const Default: Story = {
     `,
     moduleMetadata: {
       imports: [Pagination],
-      providers: [PaginationStore],
     },
   }),
 };
