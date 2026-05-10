@@ -39,6 +39,7 @@
 @import './tokens/skeleton-tokens.css';
 @import './tokens/table-tokens.css';
 @import './tokens/textarea-tokens.css';
+@import './tokens/time-input-tokens.css';
 @import './animations.css';
 @import './background-utility.css';
 @import './border-utility.css';
@@ -55,6 +56,7 @@
 @import './spacing-utility.css';
 @import './z-index-utility.css';
 @import '../core/table/table.css';
+@import '../core/time-input/time-input.css';
 @import './core-directives.css';
 @import './dialog-panels.css';
 @import './scrollbar.css';

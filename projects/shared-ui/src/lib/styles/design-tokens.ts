@@ -58,6 +58,9 @@ const colorLight: Record<string, string> = {
   'tabs.tab.fg': 'oklch(0.46 0.008 260)',
   'tabs.tab.fg.active': 'oklch(0.22 0.008 260)',
   'tabs.tab.fg.hover': 'oklch(0.22 0.008 260)',
+  'time.input.segment.active.bg': 'oklch(0.56 0.13 240)',
+  'time.input.segment.active.fg': 'oklch(0.985 0.003 95)',
+  'time.input.separator': 'oklch(0.46 0.008 260)',
 };
 
 const colorDark: Record<string, string> = {
@@ -722,6 +725,7 @@ const nonColorTokens: Record<string, string> = {
   'motion.spinner.duration': '0.9s',
   'motion.tabs.duration': '150ms',
   'motion.tabs.easing': 'cubic-bezier(0.3, 0.7, 0.4, 1)',
+  'motion.time.input.duration': '150ms',
   'notification.accent.caution': 'oklch(0.68 0.14 90)',
   'notification.accent.danger': 'oklch(0.55 0.18 25)',
   'notification.accent.info': 'oklch(0.56 0.13 240)',
@@ -811,6 +815,7 @@ const nonColorTokens: Record<string, string> = {
   'radius.sm': '0.375rem',
   'radius.tabs.enclosed.top': '0.375rem',
   'radius.tabs.pill': '0.375rem',
+  'radius.time.input.segment': '0.25rem',
   'radius.xl': '1rem',
   'radius.xs': '0.25rem',
   'scrollbar.color': 'transparent',
@@ -868,6 +873,7 @@ const nonColorTokens: Record<string, string> = {
   'sizing.tabs.row.h.base': '2rem',
   'sizing.tabs.row.h.lg': '2rem',
   'sizing.tabs.row.h.sm': '1.5rem',
+  'sizing.time.input.segment.meridiem': '1.5rem',
   'sizing.xl': '36rem',
   'sizing.xs': '20rem',
   'spacing.0': '0',
@@ -921,6 +927,9 @@ const nonColorTokens: Record<string, string> = {
   'spacing.tabs.tab.x.base': '0.75rem',
   'spacing.tabs.tab.x.lg': '1rem',
   'spacing.tabs.tab.x.sm': '0.5rem',
+  'spacing.time.input.meridiem.gap': '0.375rem',
+  'spacing.time.input.segment.gap': '0',
+  'spacing.time.input.segment.x': '0.25rem',
   'table.bg': 'oklch(1 0 0)',
   'table.body.font.weight': '400',
   'table.body.line.height': '1.45',

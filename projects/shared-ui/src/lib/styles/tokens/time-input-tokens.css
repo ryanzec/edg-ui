@@ -1,0 +1,22 @@
+:root {
+  /* segment selection band — the "this segment takes keystrokes" highlight */
+  --color-time-input-segment-active-bg: var(--color-info);
+  --color-time-input-segment-active-fg: var(--color-info-on);
+
+  /* literal separators (colon between hh / mm) */
+  --color-time-input-separator: var(--color-fg-muted);
+
+  /* spacing inside / between segments */
+  --spacing-time-input-segment-x: var(--spacing-1); /* 4px */
+  --spacing-time-input-segment-gap: 0;
+  --spacing-time-input-meridiem-gap: var(--spacing-1_5); /* 6px */
+
+  /* segment chip radius */
+  --radius-time-input-segment: var(--radius-xs); /* 4px */
+
+  /* transition duration applied to segment bg / fg */
+  --motion-time-input-duration: var(--motion-duration-base);
+
+  /* min-width for the meridiem segment so "AM" / "PM" sit at the same width */
+  --sizing-time-input-segment-meridiem: var(--sizing-11xs); /* 24px */
+}

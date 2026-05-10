@@ -1,15 +1,41 @@
-<org-input
-  #inputComponent
-  [variant]="variant()"
-  [placeholder]="placeholder()"
-  [value]="formattedValue()"
-  [disabled]="isDisabled()"
-  [readonly]="readonly()"
-  [name]="name()"
-  [ariaLabel]="brain.ariaLabel()"
-  type="text"
-  (keydown)="onKeyDown($event)"
-  (focused)="onFocus()"
-  (blurred)="onBlur()"
-  (click)="onClick()"
-/>
+<span class="org-input-leading">
+  <org-icon name="clock" />
+</span>
+
+<div class="org-input-track">
+  <span
+    class="org-time-input-segment"
+    data-segment="hh"
+    [attr.data-selected]="brain.activeSegment() === 'hours' ? '1' : null"
+    [attr.data-empty]="brain.isHoursEmpty() ? '1' : null"
+    (mousedown)="selectSegment('hours', $event)"
+  >
+    {{ hoursDisplay() }}
+  </span>
+
+  <span class="org-time-input-separator">:</span>
+
+  <span
+    class="org-time-input-segment"
+    data-segment="mm"
+    [attr.data-selected]="brain.activeSegment() === 'minutes' ? '1' : null"
+    [attr.data-empty]="brain.isMinutesEmpty() ? '1' : null"
+    (mousedown)="selectSegment('minutes', $event)"
+  >
+    {{ minutesDisplay() }}
+  </span>
+
+  @if (showMeridiem()) {
+    <span
+      class="org-time-input-segment"
+      data-segment="meridiem"
+      [attr.data-selected]="brain.activeSegment() === 'meridiem' ? '1' : null"
+      [attr.data-empty]="brain.isMeridiemEmpty() ? '1' : null"
+      (mousedown)="selectSegment('meridiem', $event)"
+    >
+      {{ meridiemDisplay() }}
+    </span>
+  }
+</div>
+
+<input type="hidden" [attr.name]="name()" [value]="hiddenInputValue()" />

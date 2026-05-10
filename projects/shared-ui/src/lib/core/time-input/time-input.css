@@ -1,6 +1,201 @@
 @layer components {
-  :host {
-    display: block;
+  /* === Shell — applied to .org-input[data-time-input="1"] (set on the TimeInput host or raw showcase markup) === */
+
+  .org-input[data-time-input='1'] {
+    display: inline-flex;
+    align-items: stretch;
     width: 100%;
+    max-width: 22rem;
+    min-height: var(--input-height);
+    padding: 0;
+    border-radius: var(--input-radius);
+    border: var(--input-border-width) solid var(--input-border-color);
+    background-color: var(--input-bg);
+    color: var(--input-fg);
+    font-family: var(--font-sans);
+    font-size: var(--input-font-size);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--input-line-height);
+    letter-spacing: var(--input-letter-spacing);
+    cursor: default;
+    outline: none;
+    transition:
+      background-color var(--motion-duration-base) var(--motion-ease-standard),
+      border-color var(--motion-duration-base) var(--motion-ease-standard),
+      color var(--motion-duration-base) var(--motion-ease-standard);
+  }
+
+  /* leading slot — the clock icon */
+  .org-input[data-time-input='1'] .org-input-leading {
+    display: inline-flex;
+    align-items: center;
+    flex: 0 0 auto;
+    gap: var(--input-slot-gap);
+    color: var(--input-fg-muted);
+    font-size: var(--input-font-size);
+    line-height: 1;
+    padding-left: var(--input-pad-x);
+  }
+
+  /* track owns the segment row */
+  .org-input[data-time-input='1'] .org-input-track {
+    display: inline-flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    flex: 1 1 auto;
+    gap: var(--spacing-time-input-segment-gap);
+    padding-inline: var(--input-pad-x);
+    font-variant-numeric: tabular-nums;
+    min-width: 0;
+  }
+
+  /* leading slot owns the start padding, track drops its start padding */
+  .org-input[data-time-input='1'][data-has-leading='1'] .org-input-track {
+    padding-inline-start: var(--input-pad-x-tight);
+  }
+
+  /* segments */
+  .org-input[data-time-input='1'] .org-time-input-segment {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding-inline: var(--spacing-time-input-segment-x);
+    border-radius: var(--radius-time-input-segment);
+    color: inherit;
+    background: transparent;
+    cursor: pointer;
+    user-select: none;
+    line-height: var(--line-height-tight);
+    transition:
+      background-color var(--motion-time-input-duration) var(--motion-ease-standard),
+      color var(--motion-time-input-duration) var(--motion-ease-standard);
+  }
+
+  .org-input[data-time-input='1'] .org-time-input-segment:focus-visible {
+    outline: none;
+  }
+
+  /* meridiem-specific tracking + start margin */
+  .org-input[data-time-input='1'] .org-time-input-segment[data-segment='meridiem'] {
+    min-width: var(--sizing-time-input-segment-meridiem);
+    letter-spacing: var(--letter-spacing-wide);
+    margin-inline-start: calc(var(--spacing-time-input-meridiem-gap) - var(--spacing-time-input-segment-gap));
+  }
+
+  /* selected highlight — only paints when the shell itself owns focus */
+  .org-input[data-time-input='1'][data-focused='1'] .org-time-input-segment[data-selected='1'] {
+    background-color: var(--color-time-input-segment-active-bg);
+    color: var(--color-time-input-segment-active-fg);
+  }
+
+  /* empty / placeholder ghost */
+  .org-input[data-time-input='1'] .org-time-input-segment[data-empty='1'] {
+    color: var(--color-fg-faint);
+  }
+
+  /* a selected empty segment in a focused field gets a stronger tone */
+  .org-input[data-time-input='1'][data-focused='1']
+    .org-time-input-segment[data-empty='1'][data-selected='1'] {
+    color: var(--color-time-input-segment-active-fg);
+  }
+
+  /* separators are pointer-inert and use a softer tone */
+  .org-input[data-time-input='1'] .org-time-input-separator {
+    color: var(--color-time-input-separator);
+    user-select: none;
+    pointer-events: none;
+    line-height: var(--line-height-tight);
+  }
+
+  /* readonly flips segment cursor back to default */
+  .org-input[data-time-input='1'][data-readonly] .org-time-input-segment {
+    cursor: default;
+  }
+
+  /* === STATES (mirrors input shell behaviour) === */
+
+  .org-input[data-time-input='1']:hover:not([data-state='error']):not([data-disabled]) {
+    background-color: var(--input-bg-hover);
+    border-color: var(--input-border-color-hover);
+  }
+
+  .org-input[data-time-input='1'][data-focused='1']:not([data-state='error']):not([data-disabled]) {
+    background-color: var(--input-bg-focus);
+    border-color: var(--input-border-color-focus);
+  }
+
+  .org-input[data-time-input='1'][data-state='error'] {
+    border-color: var(--input-border-color-error);
+  }
+
+  .org-input[data-time-input='1'][data-disabled] {
+    opacity: var(--input-disabled-opacity);
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  .org-input[data-time-input='1'][data-readonly]:not([data-variant='inline']) {
+    --input-bg: var(--color-bg-surface-2);
+    --input-bg-hover: var(--color-bg-surface-2);
+  }
+
+  /* === VARIANTS (mirrors input shell) === */
+
+  .org-input[data-time-input='1'][data-variant='bordered'] {
+    --input-bg: var(--color-bg-surface);
+    --input-bg-hover: var(--color-bg-surface);
+    --input-bg-focus: var(--color-bg-surface);
+    --input-border-color: var(--color-border);
+    --input-border-color-hover: var(--color-info);
+    --input-border-color-focus: var(--color-info);
+  }
+
+  .org-input[data-time-input='1'][data-variant='borderless'] {
+    --input-bg: transparent;
+    --input-bg-hover: var(--color-bg-surface-2);
+    --input-bg-focus: transparent;
+    --input-border-color: transparent;
+    --input-border-color-hover: transparent;
+    --input-border-color-focus: var(--color-info);
+    --input-pad-x: var(--spacing-1_5);
+  }
+
+  .org-input[data-time-input='1'][data-variant='inline'] {
+    min-height: auto;
+    height: auto;
+    padding: 0;
+    border-width: 0;
+    border-bottom: var(--border-width) solid transparent;
+    border-radius: 0;
+    color: var(--color-fg-muted);
+    width: auto;
+    max-width: none;
+    background-color: transparent;
+  }
+
+  .org-input[data-time-input='1'][data-variant='inline'] .org-input-track,
+  .org-input[data-time-input='1'][data-variant='inline'] .org-input-leading {
+    padding: 0;
+    height: auto;
+    width: auto;
+  }
+
+  .org-input[data-time-input='1'][data-variant='inline']:hover:not([data-state='error']):not([data-disabled]) {
+    color: var(--color-fg);
+    background-color: transparent;
+    border-color: transparent;
+  }
+
+  .org-input[data-time-input='1'][data-variant='inline'][data-focused='1']:not([data-state='error']):not(
+      [data-disabled]
+    ) {
+    color: var(--color-fg);
+    border-bottom-color: var(--color-info);
+    background-color: transparent;
+  }
+
+  .org-input[data-time-input='1'][data-variant='inline'][data-state='error'] {
+    border-bottom-color: var(--color-danger);
+    color: var(--color-fg);
   }
 }

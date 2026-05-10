@@ -1,10 +1,31 @@
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import type { Meta, StoryObj } from '@storybook/angular';
-import { TimeInput } from './time-input';
+import { ButtonToggle, ButtonToggleItem } from '../button-toggle/button-toggle';
+import { CheckboxToggle } from '../checkbox-toggle/checkbox-toggle';
+import { DatePickerInput } from '../date-picker-input/date-picker-input';
+import { Icon } from '../icon/icon';
+import { Label } from '../label/label';
 import { allInputVariants } from '../input/input';
-import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
-import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { Component, signal } from '@angular/core';
+import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
+import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
+import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
+import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
+import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
+import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
+import { TimeInput, allTimeInputFormats, type InputVariant, type TimeInputFormat } from './time-input';
+
+const liveDemoFormatItems: ButtonToggleItem[] = allTimeInputFormats.map((format) => ({
+  label: format,
+  value: format,
+  buttonColor: 'primary',
+}));
+
+const liveDemoVariantItems: ButtonToggleItem[] = allInputVariants.map((variant) => ({
+  label: variant,
+  value: variant,
+  buttonColor: 'primary',
+}));
 
 const meta: Meta<TimeInput> = {
   title: 'Core/Components/TimeInput',
@@ -17,60 +38,31 @@ const meta: Meta<TimeInput> = {
 <div class="docs-top-level-overview">
   ## TimeInput Component
 
-  A specialized time input component that provides an intuitive interface for entering times in 12-hour format with keyboard navigation and segment-based editing.
+  A segmented time-picking field built on top of the org-input shell. Each segment (hours, minutes, optional meridiem) is its own click + keyboard target. The shell is the single tab stop; arrow keys move the active segment marker; digits / A / P keys mutate the focused segment.
 
   ### Features
-  - 12-hour time format (hh:mm am/pm)
-  - Keyboard navigation with arrow keys
-  - Smart digit entry with auto-advancement
-  - Up/Down arrow keys to increment/decrement values
-  - Segment-based selection (hours, minutes, am/pm)
-  - Support for both reactive forms and two-way model binding
-  - Two visual variants: bordered and borderless
-  - Disabled and readonly states
+  - 12-hour and 24-hour layouts
+  - Real DOM segments (no native text input) with per-segment highlight band
+  - Empty-state placeholder dashes — the field reads as time-shaped at rest
+  - Keyboard model: ←/→ between segments, ↑/↓ step the focused segment, A/P set the meridiem, digits with smart auto-advancement
+  - Tab moves focus out of the field — it does not cycle segments
+  - Bordered / borderless / inline variants inherited from the Input shell
+  - Disabled, readonly, and error states inherited from the Input shell
+  - Form-association via reactive forms (ControlValueAccessor) AND two-way \`[(value)]\` model binding
 
-  ### Time Format
-  - Hours: 01-12 with leading zero
-  - Minutes: 00-59 with leading zero
-  - Period: am or pm (lowercase)
-  - Example: "03:45 pm"
+  ### Value Format
+  - 12-hour emits \`"hh:mm am/pm"\` (e.g. \`"09:41 am"\`)
+  - 24-hour emits \`"HH:mm"\` (e.g. \`"14:30"\`)
+  - Partial / unset state emits an empty string
 
   ### Keyboard Interactions
-  - **Focus**: Hours segment is automatically selected
-  - **Left/Right Arrow**: Navigate between segments (hours ↔ minutes ↔ am/pm)
-  - **Up/Down Arrow**: Increment/decrement current segment with looping
-  - **Number Keys**: Smart digit entry with auto-advancement
-    - Hours: 0-1 waits for second digit, 2-9 auto-adds leading 0
-    - Minutes: 0-5 waits for second digit, 6-9 auto-adds leading 0
-  - **A/P Keys**: In am/pm segment, set to am or pm respectively
-  - **Delete/Backspace**: Ignored (format is always maintained)
-
-  ### Usage Examples
-  \`\`\`html
-  <!-- Basic time input -->
-  <org-time-input name="time-input" />
-
-  <!-- With default value -->
-  <org-time-input name="time-input" [defaultValue]="'02:30 pm'" />
-
-  <!-- Two-way model binding -->
-  <org-time-input name="time-input" [(value)]="myTime" />
-
-  <!-- Borderless variant -->
-  <org-time-input name="time-input" variant="borderless" />
-
-  <!-- Disabled state -->
-  <org-time-input name="time-input" [disabled]="true" />
-
-  <!-- Readonly state -->
-  <org-time-input name="time-input" [readonly]="true" [defaultValue]="'09:15 am'" />
-
-  <!-- Reactive form binding -->
-  <org-time-input name="time-input" [formControl]="timeControl" />
-
-  <!-- With accessible label -->
-  <org-time-input name="time-input" ariaLabel="Appointment time (12-hour format)" />
-  \`\`\`
+  - **Focus**: hours segment is automatically selected
+  - **Left/Right arrow**: move between segments and wrap at the edges (12-hour: left-from-hours → meridiem, right-from-meridiem → hours)
+  - **Up/Down arrow**: step the focused segment by one, looping at 12 / 23 / 59 / am↔pm
+  - **Digit keys**: smart auto-advancement — 12-hour hours waits on 0–1; 24-hour hours waits on 0–2; minutes waits on 0–5
+  - **A / P**: set the meridiem directly when the meridiem segment is focused
+  - **Backspace / Delete**: clear the focused segment
+  - **Tab**: leaves the field (does not cycle segments)
 </div>
         `,
       },
@@ -84,363 +76,578 @@ type Story = StoryObj<TimeInput>;
 export const Default: Story = {
   args: {
     name: 'time-input',
+    format: '12-hour',
     variant: 'bordered',
-    placeholder: 'Enter time',
     disabled: false,
     readonly: false,
+    error: false,
     defaultValue: '',
     autoFocus: false,
-    ariaLabel: null,
+    ariaLabel: undefined,
   },
   argTypes: {
     name: {
       control: 'text',
-      description: 'The name attribute for the input element',
+      description: 'name attribute applied to the hidden form-value input',
+    },
+    format: {
+      control: 'select',
+      options: allTimeInputFormats,
+      description: 'clock format — 12-hour shows three segments, 24-hour shows two',
     },
     variant: {
       control: 'select',
       options: allInputVariants,
-      description: 'The visual variant of the input',
-    },
-    placeholder: {
-      control: 'text',
-      description: 'Placeholder text for the input',
+      description: 'visual variant of the field shell',
     },
     disabled: {
       control: 'boolean',
-      description: 'Whether the input is disabled',
+      description: 'whether the field is disabled',
     },
     readonly: {
       control: 'boolean',
-      description: 'Whether the input is readonly',
+      description: 'whether the field is readonly',
+    },
+    error: {
+      control: 'boolean',
+      description: 'whether the field renders an error border',
     },
     defaultValue: {
       control: 'text',
-      description: 'Default time value in format "hh:mm am/pm", only applied when no reactive form value is present',
+      description: 'initial value applied at init when no reactive form value is present',
     },
     autoFocus: {
       control: 'boolean',
-      description: 'Whether the input should automatically receive focus',
+      description: 'whether the field should automatically receive focus on mount',
     },
     ariaLabel: {
       control: 'text',
-      description: 'Accessible label passed through to the native input element',
+      description: 'accessible label for the shell',
     },
   },
   parameters: {
     docs: {
       description: {
-        story: 'Default time input with bordered variant. Use the controls below to interact with the component.',
+        story: 'Default time input. Use the controls below to interact with every input on the component.',
       },
     },
   },
-};
-
-export const Variants: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Comparison of bordered and borderless variants.',
-      },
-    },
-  },
-  render: () => ({
+  render: (args) => ({
+    props: args,
     template: `
-      <org-storybook-example-container
-        title="Variant Comparison"
-        currentState="Comparing bordered and borderless variants"
-      >
-        <org-storybook-example-container-section label="Bordered (default)">
-          <org-time-input name="bordered-time-input" variant="bordered" [defaultValue]="'09:30 am'" />
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Borderless">
-          <org-time-input name="borderless-time-input" variant="borderless" [defaultValue]="'02:45 pm'" />
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li><strong>bordered</strong>: Standard input with visible border (default)</li>
-          <li><strong>borderless</strong>: Minimal styling without border</li>
-        </ul>
-      </org-storybook-example-container>
+      <org-time-input
+        [name]="name"
+        [format]="format"
+        [variant]="variant"
+        [disabled]="disabled"
+        [readonly]="readonly"
+        [error]="error"
+        [defaultValue]="defaultValue"
+        [autoFocus]="autoFocus"
+        [ariaLabel]="ariaLabel"
+      />
     `,
     moduleMetadata: {
-      imports: [TimeInput, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [TimeInput],
     },
   }),
 };
 
-export const States: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Comparison of disabled, readonly, and normal states.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Input States"
-        currentState="Comparing disabled, readonly, and normal states"
-      >
-        <org-storybook-example-container-section label="Normal (enabled)">
-          <org-time-input name="normal-time-input" [defaultValue]="'10:15 am'" />
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Disabled">
-          <org-time-input name="disabled-time-input" [disabled]="true" [defaultValue]="'03:30 pm'" />
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Readonly">
-          <org-time-input name="readonly-time-input" [readonly]="true" [defaultValue]="'11:45 am'" />
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li><strong>Normal</strong>: Fully interactive with keyboard navigation</li>
-          <li><strong>Disabled</strong>: Cannot focus, edit, or interact</li>
-          <li><strong>Readonly</strong>: Can focus but cannot edit</li>
-        </ul>
-      </org-storybook-example-container>
+@Component({
+  selector: 'story-time-input-live-demo',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    ReactiveFormsModule,
+    TimeInput,
+    ButtonToggle,
+    CheckboxToggle,
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoControls,
+    DesignSystemDemoControlGroup,
+    DesignSystemDemoCanvas,
+  ],
+  styles: [
+    `
+      :host {
+        display: block;
+      }
+      .canvas-stage {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 6rem;
+      }
     `,
-    moduleMetadata: {
-      imports: [TimeInput, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
+  ],
+  template: `
+    <form [formGroup]="liveDemoForm">
+      <org-design-system-demo>
+        <org-design-system-demo-header
+          slot="header"
+          title="Live demo"
+          description="A working time picker. Focusing the field auto-selects the first segment; from there, click a segment or use arrows to move between them. ↑/↓ step the focused segment by one. ←/→ move between segments and wrap at the ends — left from hours jumps to the meridiem, right from meridiem comes back to hours. Tab moves focus out of the field entirely (natural form traversal), it does not cycle segments. In 12-hour mode, A and P set the meridiem directly. Switch Format to compare 12-hour and 24-hour layouts."
+        />
+        <org-design-system-demo-controls slot="controls">
+          <org-design-system-demo-control-group label="Format">
+            <org-button-toggle [items]="formatItems" formControlName="format" buttonSize="sm" />
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Variant">
+            <org-button-toggle [items]="variantItems" formControlName="variant" buttonSize="sm" />
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Disabled">
+            <org-checkbox-toggle name="live-demo-disabled" value="disabled" formControlName="disabled">
+              {{ liveDemoForm.controls.disabled.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Readonly">
+            <org-checkbox-toggle name="live-demo-readonly" value="readonly" formControlName="readonly">
+              {{ liveDemoForm.controls.readonly.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Error">
+            <org-checkbox-toggle name="live-demo-error" value="error" formControlName="error">
+              {{ liveDemoForm.controls.error.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
+        </org-design-system-demo-controls>
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="canvas-stage">
+            <org-time-input
+              name="live-demo-time-input"
+              [format]="liveDemoForm.controls.format.value"
+              [variant]="liveDemoForm.controls.variant.value"
+              [disabled]="liveDemoForm.controls.disabled.value"
+              [readonly]="liveDemoForm.controls.readonly.value"
+              [error]="liveDemoForm.controls.error.value"
+              [defaultValue]="'02:30 pm'"
+            />
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+    </form>
+  `,
+})
+class TimeInputLiveDemoStory {
+  protected readonly formatItems = liveDemoFormatItems;
+  protected readonly variantItems = liveDemoVariantItems;
 
-export const KeyboardNavigation: Story = {
+  protected readonly liveDemoForm = new FormGroup({
+    format: new FormControl<TimeInputFormat>('12-hour', { nonNullable: true }),
+    variant: new FormControl<InputVariant>('bordered', { nonNullable: true }),
+    disabled: new FormControl<boolean>(false, { nonNullable: true }),
+    readonly: new FormControl<boolean>(false, { nonNullable: true }),
+    error: new FormControl<boolean>(false, { nonNullable: true }),
+  });
+}
+
+export const LiveDemo: Story = {
   parameters: {
     docs: {
       description: {
         story:
-          'Demonstrates keyboard navigation features. Click in the input and use arrow keys to navigate between segments (hours, minutes, am/pm).',
+          'Fully interactive demo. Use the controls to flip every visual input on the time field and observe the result in the canvas.',
       },
     },
   },
   render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Keyboard Navigation"
-        currentState="Try using arrow keys to navigate and edit the time"
-      >
-        <org-storybook-example-container-section label="Interactive time input">
-          <org-time-input name="keyboard-nav-time-input" [defaultValue]="'12:00 pm'" />
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li><strong>Left/Right Arrow</strong>: Navigate between hours, minutes, and am/pm segments</li>
-          <li><strong>Up/Down Arrow</strong>: Increment or decrement the current segment</li>
-          <li><strong>Number Keys</strong>: Enter digits with smart auto-advancement</li>
-          <li><strong>A/P Keys</strong>: When on am/pm segment, set to am or pm</li>
-          <li><strong>Focus</strong>: Hours segment is automatically selected</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
+    template: '<story-time-input-live-demo />',
     moduleMetadata: {
-      imports: [TimeInput, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [TimeInputLiveDemoStory],
     },
   }),
 };
 
-export const DefaultValues: Story = {
+export const Showcase: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Time inputs with various default values.',
+        story:
+          'Comprehensive showcase mirroring the design reference — format comparison (12-hour and 24-hour), per-segment selection states, field-level chrome states (focus / error / disabled / readonly), and the field embedded in real form contexts.',
       },
     },
   },
   render: () => ({
     template: `
-      <org-storybook-example-container
-        title="Default Values"
-        currentState="Comparing inputs with different default times"
-      >
-        <org-storybook-example-container-section label="No default (empty)">
-          <org-time-input name="no-default-time-input" />
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Morning time (09:00 am)">
-          <org-time-input name="morning-time-input" [defaultValue]="'09:00 am'" />
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Afternoon time (02:30 pm)">
-          <org-time-input name="afternoon-time-input" [defaultValue]="'02:30 pm'" />
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Evening time (08:45 pm)">
-          <org-time-input name="evening-time-input" [defaultValue]="'08:45 pm'" />
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li>default values must be in format: "hh:mm am/pm"</li>
-          <li>hours must be 01-12, minutes 00-59</li>
-          <li>invalid values will be ignored and component will start with default state</li>
-          <li>defaultValue is ignored when a reactive form value is present</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [TimeInput, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const AutoFocus: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Time input with autoFocus enabled. The input receives focus automatically on mount.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Auto Focus"
-        currentState="Time input automatically focused on mount"
-      >
-        <org-storybook-example-container-section label="Auto-focused input">
-          <org-time-input name="auto-focus-time-input" [autoFocus]="true" [defaultValue]="'08:30 am'" />
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li>the input receives focus automatically when the story loads</li>
-          <li>the hours segment is selected on initial focus</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [TimeInput, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const AriaLabel: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Time input with a custom aria-label for screen reader accessibility.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Aria Label"
-        currentState="Time input with custom accessible label"
-      >
-        <org-storybook-example-container-section label="With ariaLabel">
-          <org-time-input
-            name="aria-label-time-input"
-            ariaLabel="Appointment time (12-hour format)"
-            [defaultValue]="'10:00 am'"
+      <div class="flex flex-col gap-4">
+        <org-design-system-demo>
+          <org-design-system-demo-header
+            slot="header"
+            title="Format · 12-hour and 24-hour"
+            description="12-hour mode stamps three segments with the meridiem at the end; 24-hour mode stamps two and drops the meridiem entirely. The track decides its own width from its segments — there is no fixed minimum — so both formats sit cleanly inside a max-width-constrained field."
           />
-        </org-storybook-example-container-section>
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="flex flex-col gap-2">
+              <div class="flex gap-2 flex-wrap">
+                <org-time-input name="format-12h-empty" format="12-hour" />
+                <org-time-input name="format-12h-value" format="12-hour" [defaultValue]="'09:41 am'" />
+                <org-time-input name="format-12h-midnight" format="12-hour" [defaultValue]="'12:00 am'" />
+              </div>
+              <div class="flex gap-2 flex-wrap">
+                <org-time-input name="format-24h-empty" format="24-hour" />
+                <org-time-input name="format-24h-value" format="24-hour" [defaultValue]="'14:30'" />
+                <org-time-input name="format-24h-evening" format="24-hour" [defaultValue]="'22:05'" />
+              </div>
+            </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>12-hour</strong>: three segments (hh / mm / meridiem); empty fields show <code>--:-- --</code></li>
+            <li><strong>24-hour</strong>: two segments (HH / mm); no meridiem; empty fields show <code>--:--</code></li>
+            <li>both formats render the same shell chrome (height, padding, border, focus border)</li>
+            <li>the value model emits the format-appropriate string only when every segment is filled</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
 
-        <org-storybook-example-container-section label="Without ariaLabel">
-          <org-time-input name="no-aria-label-time-input" [defaultValue]="'10:00 am'" />
-        </org-storybook-example-container-section>
+        <org-design-system-demo>
+          <org-design-system-demo-header
+            slot="header"
+            title="Selection"
+            description="Exactly one segment carries data-selected at a time; the highlight band signals which segment is taking your keystrokes. The band only paints while the field itself is focused — at rest the field reads as a value-shaped input with no selected segment. A selected empty segment still shows the band when focused; the dashes pull from fg-faint to fg-muted so they read as 'you are about to type here' rather than competing with a real value."
+          />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="flex flex-col gap-2">
+              <div class="flex gap-2 flex-wrap">
+                <div
+                  class="org-input"
+                  data-time-input="1"
+                  data-variant="bordered"
+                  data-format="12-hour"
+                  data-focused="1"
+                  data-has-leading="1"
+                  role="group"
+                  aria-label="Hours focused"
+                >
+                  <span class="org-input-leading"><org-icon name="clock" /></span>
+                  <div class="org-input-track">
+                    <span class="org-time-input-segment" data-segment="hh" data-selected="1">09</span>
+                    <span class="org-time-input-separator">:</span>
+                    <span class="org-time-input-segment" data-segment="mm">41</span>
+                    <span class="org-time-input-segment" data-segment="meridiem">AM</span>
+                  </div>
+                </div>
+                <div
+                  class="org-input"
+                  data-time-input="1"
+                  data-variant="bordered"
+                  data-format="12-hour"
+                  data-focused="1"
+                  data-has-leading="1"
+                  role="group"
+                  aria-label="Minutes focused"
+                >
+                  <span class="org-input-leading"><org-icon name="clock" /></span>
+                  <div class="org-input-track">
+                    <span class="org-time-input-segment" data-segment="hh">09</span>
+                    <span class="org-time-input-separator">:</span>
+                    <span class="org-time-input-segment" data-segment="mm" data-selected="1">41</span>
+                    <span class="org-time-input-segment" data-segment="meridiem">AM</span>
+                  </div>
+                </div>
+                <div
+                  class="org-input"
+                  data-time-input="1"
+                  data-variant="bordered"
+                  data-format="12-hour"
+                  data-focused="1"
+                  data-has-leading="1"
+                  role="group"
+                  aria-label="Meridiem focused"
+                >
+                  <span class="org-input-leading"><org-icon name="clock" /></span>
+                  <div class="org-input-track">
+                    <span class="org-time-input-segment" data-segment="hh">09</span>
+                    <span class="org-time-input-separator">:</span>
+                    <span class="org-time-input-segment" data-segment="mm">41</span>
+                    <span class="org-time-input-segment" data-segment="meridiem" data-selected="1">AM</span>
+                  </div>
+                </div>
+              </div>
+              <div class="flex gap-2 flex-wrap">
+                <div
+                  class="org-input"
+                  data-time-input="1"
+                  data-variant="bordered"
+                  data-format="12-hour"
+                  data-focused="1"
+                  data-has-leading="1"
+                  role="group"
+                  aria-label="Hours focused, empty"
+                >
+                  <span class="org-input-leading"><org-icon name="clock" /></span>
+                  <div class="org-input-track">
+                    <span class="org-time-input-segment" data-segment="hh" data-selected="1" data-empty="1">--</span>
+                    <span class="org-time-input-separator">:</span>
+                    <span class="org-time-input-segment" data-segment="mm" data-empty="1">--</span>
+                    <span class="org-time-input-segment" data-segment="meridiem" data-empty="1">--</span>
+                  </div>
+                </div>
+                <div
+                  class="org-input"
+                  data-time-input="1"
+                  data-variant="bordered"
+                  data-format="12-hour"
+                  data-focused="1"
+                  data-has-leading="1"
+                  role="group"
+                  aria-label="Minutes focused, partial"
+                >
+                  <span class="org-input-leading"><org-icon name="clock" /></span>
+                  <div class="org-input-track">
+                    <span class="org-time-input-segment" data-segment="hh">09</span>
+                    <span class="org-time-input-separator">:</span>
+                    <span class="org-time-input-segment" data-segment="mm" data-selected="1" data-empty="1">--</span>
+                    <span class="org-time-input-segment" data-segment="meridiem" data-empty="1">--</span>
+                  </div>
+                </div>
+                <div
+                  class="org-input"
+                  data-time-input="1"
+                  data-variant="bordered"
+                  data-format="12-hour"
+                  data-focused="1"
+                  data-has-leading="1"
+                  role="group"
+                  aria-label="Meridiem focused, empty"
+                >
+                  <span class="org-input-leading"><org-icon name="clock" /></span>
+                  <div class="org-input-track">
+                    <span class="org-time-input-segment" data-segment="hh">09</span>
+                    <span class="org-time-input-separator">:</span>
+                    <span class="org-time-input-segment" data-segment="mm">41</span>
+                    <span class="org-time-input-segment" data-segment="meridiem" data-selected="1" data-empty="1">--</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li>the selection band only paints when the field itself is focused</li>
+            <li>only one segment carries <code>data-selected="1"</code> at a time</li>
+            <li>a selected empty segment reads with a stronger tone (the field's on-info foreground)</li>
+            <li>unselected empty segments stay in the <code>fg-faint</code> ghost tone</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
 
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li>screen readers will announce the ariaLabel value when the input is focused</li>
-          <li>use ariaLabel to describe the purpose and expected format of the time input</li>
-          <li>inspect the native input element to verify the aria-label attribute is applied</li>
-        </ul>
-      </org-storybook-example-container>
+        <org-design-system-demo>
+          <org-design-system-demo-header
+            slot="header"
+            title="Field states"
+            description="The field inherits every Input state — focus border, validity, disabled, readonly — without TimeInput re-implementing any of them. Disabled drops opacity and pointer events on the whole shell, including the segments inside; readonly keeps the field readable but flips the segment cursor back to default so the affordance reads as 'this is the value, not a control'."
+          />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="flex gap-2 flex-wrap">
+              <org-time-input name="state-focus" [defaultValue]="'09:41 am'" [autoFocus]="true" />
+              <org-time-input name="state-error" [error]="true" />
+              <org-time-input name="state-disabled" [disabled]="true" [defaultValue]="'09:41 am'" />
+              <org-time-input name="state-readonly" [readonly]="true" [defaultValue]="'09:41 am'" />
+            </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>Focus</strong>: the shell paints the focus border and exposes the segment highlight band</li>
+            <li><strong>Error</strong>: the shell paints the danger border; selection still works while the band stays focus-only</li>
+            <li><strong>Disabled</strong>: opacity drops, pointer events are suppressed, the segments inherit the muted treatment</li>
+            <li><strong>Readonly</strong>: the field stays focusable but segment cursors flip to default — the value reads as data, not a control</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header
+            slot="header"
+            title="In context"
+            description="Wrapped in org-label with helper / error text below — the same field-wrapper rhythm any text Input uses. Because the trigger IS an Input, a TimeInput row in a stacked form lines up with a free-text Input row exactly, and pairs cleanly next to a DatePickerInput in a date-and-time pair."
+          />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="flex gap-4 flex-wrap items-start">
+              <div class="flex flex-col gap-1">
+                <org-label text="Start time" htmlFor="in-context-start" />
+                <org-time-input name="in-context-start" [defaultValue]="'09:30 am'" />
+                <span class="text-xs text-fg-muted">Local time. Past times today are not allowed.</span>
+              </div>
+              <div class="flex flex-col gap-1">
+                <org-label text="Departure time" htmlFor="in-context-departure" [isRequired]="true" />
+                <org-time-input name="in-context-departure" [error]="true" />
+                <span class="text-xs text-danger">Departure time is required.</span>
+              </div>
+              <div class="flex flex-col gap-1">
+                <org-label text="Reminder" htmlFor="in-context-reminder" />
+                <div class="flex gap-2 items-center">
+                  <org-date-picker-input name="in-context-reminder-date" />
+                  <org-time-input name="in-context-reminder" [defaultValue]="'09:30 am'" />
+                </div>
+                <span class="text-xs text-fg-muted">
+                  DatePickerInput on the left, TimeInput on the right — same Input shell, same rhythm.
+                </span>
+              </div>
+            </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li>TimeInput composes the same shell chrome as Input — labels, helper text, and error text wrap it identically</li>
+            <li>required labels and error text behave the same as on a free-text Input row</li>
+            <li>a date-and-time pair lines up cleanly because both fields share the same shell tokens</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+      </div>
     `,
     moduleMetadata: {
-      imports: [TimeInput, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [
+        TimeInput,
+        DatePickerInput,
+        Icon,
+        Label,
+        DesignSystemDemo,
+        DesignSystemDemoHeader,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
+      ],
     },
   }),
 };
 
 @Component({
-  selector: 'story-time-input-reactive-form-story',
+  selector: 'story-time-input-non-form-usage',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [TimeInput, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas, DesignSystemDemoExpectedBehaviour],
+  styles: [
+    `
+      :host {
+        display: block;
+      }
+      .canvas-stage {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: flex-start;
+        min-height: 6rem;
+      }
+    `,
+  ],
   template: `
-    <org-storybook-example-container title="Reactive Form Binding" currentState="Time input bound to FormControl">
-      <org-storybook-example-container-section label="Time Input with FormControl">
-        <org-time-input name="reactive-form-time-input" [formControl]="timeControl()" />
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Form Value">
-        <div class="flex flex-col gap-2">
-          <div><strong>Current Value:</strong> {{ timeControl().value || 'empty' }}</div>
-          <div><strong>Valid:</strong> {{ timeControl().valid }}</div>
-          <div><strong>Touched:</strong> {{ timeControl().touched }}</div>
-          <div><strong>Dirty:</strong> {{ timeControl().dirty }}</div>
-        </div>
-      </org-storybook-example-container-section>
-
-      <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-        <li>component implements ControlValueAccessor for reactive form integration</li>
-        <li>form value updates as you edit the time</li>
-        <li>supports all standard form control features (validation, dirty, touched, etc.)</li>
-      </ul>
-    </org-storybook-example-container>
+    <div class="flex flex-col gap-4">
+      <org-design-system-demo>
+        <org-design-system-demo-header
+          slot="header"
+          title="Non-form usage"
+          description="Drive the TimeInput's value via two-way [(value)] binding without any reactive form on top."
+        />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="canvas-stage">
+            <org-time-input name="non-form-time-input" [(value)]="currentValue" />
+            <div class="text-sm">
+              <strong>Current value:</strong>
+              <code>{{ currentValue() || '(empty)' }}</code>
+            </div>
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="list-inside list-disc flex flex-col gap-1">
+          <li><code>[(value)]</code> is a two-way model binding</li>
+          <li>parent value updates in real time as the user types</li>
+          <li>partial state emits an empty string until every segment is filled</li>
+        </ul>
+      </org-design-system-demo-expected-behaviour>
+    </div>
   `,
-  imports: [TimeInput, StorybookExampleContainer, StorybookExampleContainerSection, ReactiveFormsModule],
 })
-class TimeInputReactiveFormStoryComponent {
-  public timeControl = signal(new FormControl('03:15 pm'));
+class TimeInputNonFormUsageStory {
+  protected readonly currentValue = signal<string>('12:00 pm');
 }
 
-export const ReactiveFormBinding: Story = {
+export const NonFormUsage: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Time input integrated with Angular reactive forms using FormControl.',
+        story: 'Two-way binding via the value model() signal — no reactive form required.',
       },
     },
   },
   render: () => ({
+    template: '<story-time-input-non-form-usage />',
     moduleMetadata: {
-      imports: [TimeInputReactiveFormStoryComponent],
+      imports: [TimeInputNonFormUsageStory],
     },
-    template: '<story-time-input-reactive-form-story />',
   }),
 };
 
 @Component({
-  selector: 'story-time-input-value-model-story',
+  selector: 'story-time-input-reactive-form-integration',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    ReactiveFormsModule,
+    TimeInput,
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoCanvas,
+    DesignSystemDemoExpectedBehaviour,
+  ],
+  styles: [
+    `
+      :host {
+        display: block;
+      }
+      .canvas-stage {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: flex-start;
+        min-height: 6rem;
+      }
+    `,
+  ],
   template: `
-    <org-storybook-example-container title="Two-Way Model Binding" currentState="Time input bound via model()">
-      <org-storybook-example-container-section label="Time Input">
-        <org-time-input name="value-model-time-input" [(value)]="currentValue" />
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Bound Value">
-        <div class="flex flex-col gap-2">
-          <div><strong>Current Value:</strong> {{ currentValue }}</div>
-        </div>
-      </org-storybook-example-container-section>
-
-      <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-        <li><strong>value</strong> supports two-way binding via <code>[(value)]</code></li>
-        <li>the parent value updates in real time as the time is edited</li>
-        <li>the bound value is always in format "hh:mm am/pm"</li>
-      </ul>
-    </org-storybook-example-container>
+    <div class="flex flex-col gap-4">
+      <org-design-system-demo>
+        <org-design-system-demo-header
+          slot="header"
+          title="Reactive form integration"
+          description="TimeInput implements ControlValueAccessor — bind a FormControl and the field participates in validation, dirty / touched tracking, and disabled propagation."
+        />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="canvas-stage">
+            <org-time-input name="reactive-form-time-input" [formControl]="timeControl" />
+            <div class="text-sm flex flex-col gap-1">
+              <div><strong>Value:</strong> <code>{{ timeControl.value || '(empty)' }}</code></div>
+              <div><strong>Valid:</strong> {{ timeControl.valid }}</div>
+              <div><strong>Touched:</strong> {{ timeControl.touched }}</div>
+              <div><strong>Dirty:</strong> {{ timeControl.dirty }}</div>
+            </div>
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="list-inside list-disc flex flex-col gap-1">
+          <li>form value updates as the user edits the time</li>
+          <li>standard form-control flags (valid, dirty, touched) behave like any other input</li>
+          <li><code>setDisabledState</code> propagates to the brain and gates all interaction</li>
+        </ul>
+      </org-design-system-demo-expected-behaviour>
+    </div>
   `,
-  imports: [TimeInput, StorybookExampleContainer, StorybookExampleContainerSection],
 })
-class TimeInputValueModelStoryComponent {
-  public currentValue = '12:00 pm';
+class TimeInputReactiveFormIntegrationStory {
+  protected readonly timeControl = new FormControl('03:15 pm');
 }
 
-export const ValueModelBinding: Story = {
+export const ReactiveFormIntegration: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Demonstrates two-way binding via the value model() signal.',
+        story: 'Reactive-form integration via ControlValueAccessor and FormControl.',
       },
     },
   },
   render: () => ({
+    template: '<story-time-input-reactive-form-integration />',
     moduleMetadata: {
-      imports: [TimeInputValueModelStoryComponent],
+      imports: [TimeInputReactiveFormIntegrationStory],
     },
-    template: '<story-time-input-value-model-story />',
   }),
 };
