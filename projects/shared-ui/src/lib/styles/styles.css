@@ -31,6 +31,8 @@
 @import './tokens/input-tokens.css';
 @import './tokens/overlay-menu-tokens.css';
 @import './tokens/pagination-tokens.css';
+@import './tokens/radio-tokens.css';
+@import './tokens/radio-group-tokens.css';
 @import './tokens/skeleton-tokens.css';
 @import './tokens/table-tokens.css';
 @import './animations.css';

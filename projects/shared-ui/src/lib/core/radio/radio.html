@@ -1,15 +1,23 @@
-<input
-  type="radio"
-  [name]="finalName()"
-  [value]="brain.value()"
-  [checked]="isChecked()"
-  [attr.aria-hidden]="true"
-  tabindex="-1"
-  class="native-input"
-/>
-<div class="radio-icon-container">
-  <org-icon [name]="currentIcon()" [size]="size()" />
-</div>
-<span orgText [textSize]="textSize()" class="radio-content">
-  <ng-content />
-</span>
+<label class="label">
+  <input
+    #inputRef
+    type="radio"
+    class="native"
+    [name]="finalName()"
+    [value]="brain.value()"
+    [checked]="brain.isChecked()"
+    [disabled]="brain.effectiveDisabled()"
+    [attr.aria-invalid]="brain.ariaInvalid()"
+    [attr.aria-describedby]="brain.ariaDescribedBy()"
+    (change)="onChange()"
+  />
+  <span class="indicator"></span>
+  <span class="body">
+    <span class="label-text" orgText [textSize]="textSize()">
+      <ng-content />
+    </span>
+    @if (description()) {
+      <span class="description">{{ description() }}</span>
+    }
+  </span>
+</label>

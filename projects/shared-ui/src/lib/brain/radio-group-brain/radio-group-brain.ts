@@ -1,27 +1,13 @@
 import { Directive, computed, input, output, signal } from '@angular/core';
 
-/** all available radio group orientation values */
-export const allRadioGroupOrientations = ['horizontal', 'vertical'] as const;
-
-/** the orientation of the radio group, used for keyboard arrow navigation */
-export type RadioGroupOrientation = (typeof allRadioGroupOrientations)[number];
-
 /**
  * shape required of any radio that wants to register with the radio group brain. kept free of any
- * `org` / `brain` naming so it stays a generic contract.
+ * `org` / `brain` naming so it stays a generic contract. registrants drive their own selected-state by
+ * reading the group brain's `currentValue()` reactively, so the group never has to call back into them.
  */
 export type RegisterableRadio = {
   /** the value the radio represents */
   value(): string;
-
-  /** sets the selected state on the radio */
-  setSelected(selected: boolean): void;
-
-  /** moves dom focus to the radio */
-  focus(): void;
-
-  /** the radio's host element, used to sort registrants in dom order */
-  hostElement(): HTMLElement;
 };
 
 /** default value for the value input */
@@ -30,16 +16,16 @@ export const RADIO_GROUP_VALUE_DEFAULT = '';
 /** default value for the disabled input */
 export const RADIO_GROUP_DISABLED_DEFAULT = false;
 
-/** default value for the orientation input */
-export const RADIO_GROUP_ORIENTATION_DEFAULT: RadioGroupOrientation = 'vertical';
-
-/** default value for the ariaLabel input */
-export const RADIO_GROUP_ARIA_LABEL_DEFAULT: string | null = null;
-
 /**
- * headless brain directive for the radio-group component. owns the selected value state, the form-controlled flag,
- * the orientation that drives keyboard arrow routing, and a registry of child radio brains so it can drive their
- * selected state and dom focus directly without depending on any specific child component type.
+ * headless brain directive for the radio-group component. owns the selected value state, the form-controlled
+ * flag, the validation context that cascades to children, and a registry of child radio brains for bookkeeping.
+ *
+ * arrow-key navigation is intentionally NOT handled here — the presentation renders real `<input type="radio">`
+ * elements that share a `name`, and the browser handles arrow-key routing within that name natively.
+ *
+ * child radios drive their own selected-state by reactively reading `currentValue()`, so this brain never has
+ * to call back into them — that avoids reading required inputs (like a child's `value`) at registration time,
+ * which would throw NG0950.
  */
 @Directive({
   selector: '[orgRadioGroupBrain]',
@@ -47,7 +33,6 @@ export const RADIO_GROUP_ARIA_LABEL_DEFAULT: string | null = null;
   host: {
     '[attr.role]': '"radiogroup"',
     '[attr.aria-disabled]': 'disabled() ? "true" : null',
-    '[attr.aria-label]': 'ariaLabel()',
   },
 })
 export class RadioGroupBrainDirective {
@@ -57,20 +42,20 @@ export class RadioGroupBrainDirective {
   /** internal signal holding the currently selected value */
   private readonly _internalValue = signal<string>(RADIO_GROUP_VALUE_DEFAULT);
 
-  /** registered child radios; iterated in dom order via `compareDocumentPosition` */
+  /** registered child radios; bookkeeping only — children drive their own selected state reactively */
   private readonly _registered = new Set<RegisterableRadio>();
+
+  /** validation message presence (driven by the presentation from a parent form-field) */
+  private readonly _hasValidationMessage = signal<boolean>(false);
+
+  /** validation message dom id (driven by the presentation from a parent form-field) */
+  private readonly _validationMessageId = signal<string | null>(null);
 
   /** the externally bound value input (used in non-form binding) */
   public readonly value = input<string>(RADIO_GROUP_VALUE_DEFAULT);
 
   /** whether all radios in the group are disabled */
   public readonly disabled = input<boolean>(RADIO_GROUP_DISABLED_DEFAULT);
-
-  /** orientation of the group; gates which arrow keys route next/previous */
-  public readonly orientation = input<RadioGroupOrientation>(RADIO_GROUP_ORIENTATION_DEFAULT);
-
-  /** accessibility label exposed on the host as `aria-label` */
-  public readonly ariaLabel = input<string | null>(RADIO_GROUP_ARIA_LABEL_DEFAULT);
 
   /** emits the newly selected value when a radio is selected via this brain */
   public readonly valueChange = output<string>();
@@ -84,10 +69,15 @@ export class RadioGroupBrainDirective {
     return this.value();
   });
 
-  /** registers a child radio so the group can drive its selected state and dom focus */
+  /** whether the group currently has a validation message (used by child radios for aria-invalid cascade) */
+  public readonly hasValidationMessage = computed<boolean>(() => this._hasValidationMessage());
+
+  /** the validation message dom id (used by child radios for aria-describedby cascade) */
+  public readonly validationMessageId = computed<string | null>(() => this._validationMessageId());
+
+  /** registers a child radio for bookkeeping; the child syncs its own selected state via an effect */
   public registerRadio(radio: RegisterableRadio): void {
     this._registered.add(radio);
-    radio.setSelected(radio.value() === this.currentValue());
   }
 
   /** unregisters a previously-registered child radio */
@@ -103,7 +93,6 @@ export class RadioGroupBrainDirective {
   /** sets the internal value (used by writeValue from reactive forms) */
   public setInternalValue(value: string): void {
     this._internalValue.set(value ?? RADIO_GROUP_VALUE_DEFAULT);
-    this._syncSelectedStates();
   }
 
   /** selects the given value and emits the change; gated by disabled */
@@ -114,68 +103,11 @@ export class RadioGroupBrainDirective {
 
     this._internalValue.set(value);
     this.valueChange.emit(value);
-    this._syncSelectedStates();
   }
 
-  /** moves selection AND dom focus to the registrant after the given current value, wrapping around */
-  public focusNext(currentValue: string): void {
-    if (this.disabled()) {
-      return;
-    }
-
-    const ordered = this._orderedRegistered();
-
-    if (ordered.length === 0) {
-      return;
-    }
-
-    const currentIndex = ordered.findIndex((radio) => radio.value() === currentValue);
-    const next = ordered[(currentIndex + 1) % ordered.length];
-    this.selectValue(next.value());
-    next.focus();
-  }
-
-  /** moves selection AND dom focus to the registrant before the given current value, wrapping around */
-  public focusPrevious(currentValue: string): void {
-    if (this.disabled()) {
-      return;
-    }
-
-    const ordered = this._orderedRegistered();
-
-    if (ordered.length === 0) {
-      return;
-    }
-
-    const currentIndex = ordered.findIndex((radio) => radio.value() === currentValue);
-    const previous = ordered[(currentIndex - 1 + ordered.length) % ordered.length];
-    this.selectValue(previous.value());
-    previous.focus();
-  }
-
-  /** pushes the current selected state to every registrant */
-  private _syncSelectedStates(): void {
-    const current = this.currentValue();
-
-    this._registered.forEach((radio) => {
-      radio.setSelected(radio.value() === current);
-    });
-  }
-
-  /** sorts registrants by dom position so navigation order matches the rendered tree */
-  private _orderedRegistered(): RegisterableRadio[] {
-    return [...this._registered].sort((first, second) => {
-      const position = first.hostElement().compareDocumentPosition(second.hostElement());
-
-      if (position & Node.DOCUMENT_POSITION_FOLLOWING) {
-        return -1;
-      }
-
-      if (position & Node.DOCUMENT_POSITION_PRECEDING) {
-        return 1;
-      }
-
-      return 0;
-    });
+  /** sets the validation context that cascades to all registered child radios */
+  public setValidationContext(hasMessage: boolean, messageId: string | null): void {
+    this._hasValidationMessage.set(hasMessage);
+    this._validationMessageId.set(messageId);
   }
 }

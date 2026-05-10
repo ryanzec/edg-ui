@@ -47,6 +47,11 @@ const DROP_DOWN_SELECTOR_TOKENS_CSS = path.join(
 );
 const OVERLAY_MENU_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/overlay-menu-tokens.css');
 const PAGINATION_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/pagination-tokens.css');
+const RADIO_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/radio-tokens.css');
+const RADIO_GROUP_TOKENS_CSS = path.join(
+  REPO_ROOT,
+  'projects/shared-ui/src/lib/styles/tokens/radio-group-tokens.css',
+);
 const SKELETON_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/skeleton-tokens.css');
 const TABLE_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/table-tokens.css');
 const EMPTY_INDICATOR_TOKENS_CSS = path.join(
@@ -259,6 +264,8 @@ async function main() {
   const inputContent = cleanCss(fs.readFileSync(INPUT_TOKENS_CSS, 'utf-8'));
   const overlayMenuContent = cleanCss(fs.readFileSync(OVERLAY_MENU_TOKENS_CSS, 'utf-8'));
   const paginationContent = cleanCss(fs.readFileSync(PAGINATION_TOKENS_CSS, 'utf-8'));
+  const radioContent = cleanCss(fs.readFileSync(RADIO_TOKENS_CSS, 'utf-8'));
+  const radioGroupContent = cleanCss(fs.readFileSync(RADIO_GROUP_TOKENS_CSS, 'utf-8'));
   const skeletonContent = cleanCss(fs.readFileSync(SKELETON_TOKENS_CSS, 'utf-8'));
   const tableContent = cleanCss(fs.readFileSync(TABLE_TOKENS_CSS, 'utf-8'));
 
@@ -296,6 +303,8 @@ async function main() {
     ...findBlocks(inputContent, ':root').map(extractVariables),
     ...findBlocks(overlayMenuContent, ':root').map(extractVariables),
     ...findBlocks(paginationContent, ':root').map(extractVariables),
+    ...findBlocks(radioContent, ':root').map(extractVariables),
+    ...findBlocks(radioGroupContent, ':root').map(extractVariables),
     ...findBlocks(skeletonContent, ':root').map(extractVariables),
     ...findBlocks(tableContent, ':root').map(extractVariables),
   );
@@ -330,6 +339,8 @@ async function main() {
     ...findBlocks(inputContent, '.dark').map(extractVariables),
     ...findBlocks(overlayMenuContent, '.dark').map(extractVariables),
     ...findBlocks(paginationContent, '.dark').map(extractVariables),
+    ...findBlocks(radioContent, '.dark').map(extractVariables),
+    ...findBlocks(radioGroupContent, '.dark').map(extractVariables),
     ...findBlocks(skeletonContent, '.dark').map(extractVariables),
     ...findBlocks(tableContent, '.dark').map(extractVariables),
   );

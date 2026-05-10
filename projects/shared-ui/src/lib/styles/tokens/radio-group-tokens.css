@@ -1,0 +1,16 @@
+:root {
+  /* spacing */
+  --radio-group-header-stack: var(--spacing-1_5);
+  --radio-group-options-stack: var(--spacing-1);
+  --radio-group-options-stack-card: var(--spacing-2);
+
+  /* legend / description typography */
+  --radio-group-legend-font-size: var(--font-size-base);
+  --radio-group-legend-font-weight: var(--font-weight-semibold);
+  --radio-group-description-font-size: var(--font-size-xs);
+  --radio-group-description-color: var(--color-fg-muted);
+
+  /* required marker */
+  --radio-group-required-color: var(--color-danger);
+  --radio-group-required-gap: var(--spacing-0_5);
+}

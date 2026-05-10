@@ -1,11 +1,20 @@
-import { Component, ChangeDetectionStrategy, input, computed, inject, OnInit } from '@angular/core';
-import { IconName } from '../../brain/icon-brain/icon-brain';
-import { Icon } from '../icon/icon';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  computed,
+  effect,
+  ElementRef,
+  inject,
+  input,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+import { logManager } from '@organization/shared-utils';
 import { TextDirective, TextSize } from '../text-directive/text-directive';
 import { ComponentSize } from '../types/component-types';
-import { RADIO_GROUP_COMPONENT } from './radio-group';
-import { logManager } from '@organization/shared-utils';
+import { FORM_FIELD_COMPONENT } from '../form-fields/form-field';
 import { RadioBrainDirective } from '../../brain/radio-brain/radio-brain';
+import { RADIO_GROUP_COMPONENT } from './radio-group';
 
 /** all available radio size values */
 export const allRadioSizes = ['sm', 'base', 'lg'] as const satisfies readonly ComponentSize[];
@@ -13,33 +22,64 @@ export const allRadioSizes = ['sm', 'base', 'lg'] as const satisfies readonly Co
 /** the size variant of the radio */
 export type RadioSize = (typeof allRadioSizes)[number];
 
+/** all available radio color values */
+export const allRadioColors = ['primary', 'danger'] as const;
+
+/** the color variant of the radio */
+export type RadioColor = (typeof allRadioColors)[number];
+
+/** all available radio variant values */
+export const allRadioVariants = ['default', 'card'] as const;
+
+/** the visual variant of the radio */
+export type RadioVariant = (typeof allRadioVariants)[number];
+
 /** default value for the name input */
 export const RADIO_NAME_DEFAULT = '';
 
 /** default value for the size input */
-export const RADIO_SIZE_DEFAULT: RadioSize = 'sm';
+export const RADIO_SIZE_DEFAULT: RadioSize = 'base';
+
+/** default value for the color input */
+export const RADIO_COLOR_DEFAULT: RadioColor = 'primary';
+
+/** default value for the variant input */
+export const RADIO_VARIANT_DEFAULT: RadioVariant = 'default';
+
+/** default value for the description input */
+export const RADIO_DESCRIPTION_DEFAULT = '';
 
 @Component({
   selector: 'org-radio',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Icon, TextDirective],
+  imports: [TextDirective],
   templateUrl: './radio.html',
   styleUrl: './radio.css',
   hostDirectives: [
     {
       directive: RadioBrainDirective,
       inputs: ['disabled', 'value'],
+      outputs: ['selectionRequested'],
     },
   ],
   host: {
     '[attr.data-size]': 'size()',
-    '[attr.data-checked]': 'isChecked() ? "" : null',
+    '[attr.data-color]': 'color()',
+    '[attr.data-variant]': 'variant()',
+    '[attr.data-checked]': 'brain.isChecked() ? "" : null',
+    '[attr.data-disabled]': 'brain.effectiveDisabled() ? "1" : null',
+    '[attr.data-state]': 'brain.ariaInvalid() ? "error" : null',
   },
 })
 export class Radio implements OnInit {
   private readonly _radioGroup = inject(RADIO_GROUP_COMPONENT, { optional: true });
+  private readonly _formField = inject(FORM_FIELD_COMPONENT, { optional: true });
 
   protected readonly brain = inject(RadioBrainDirective, { self: true });
+
+  /** @ViewChild reference to the hidden native input element */
+  @ViewChild('inputRef', { static: true })
+  public readonly inputRef!: ElementRef<HTMLInputElement>;
 
   /** the name attribute for the radio input (required when not inside a radio group) */
   public readonly name = input<string>(RADIO_NAME_DEFAULT);
@@ -47,11 +87,14 @@ export class Radio implements OnInit {
   /** the size variant of the radio */
   public readonly size = input<RadioSize>(RADIO_SIZE_DEFAULT);
 
-  /** whether this radio is currently selected */
-  public readonly isChecked = computed<boolean>(() => this.brain.isChecked());
+  /** the color variant of the radio */
+  public readonly color = input<RadioColor>(RADIO_COLOR_DEFAULT);
 
-  /** the resolved disabled state for this radio (local OR parent group disabled) */
-  public readonly isDisabled = computed<boolean>(() => this.brain.effectiveDisabled());
+  /** the visual variant of the radio (default row, or bordered card tile) */
+  public readonly variant = input<RadioVariant>(RADIO_VARIANT_DEFAULT);
+
+  /** optional description sub-line rendered beneath the label */
+  public readonly description = input<string>(RADIO_DESCRIPTION_DEFAULT);
 
   /** the resolved name — prefers group name over local name input */
   public readonly finalName = computed<string>(() => this._radioGroup?.name() ?? this.name());
@@ -61,14 +104,20 @@ export class Radio implements OnInit {
     return this.size() === 'lg' ? 'xl' : this.size();
   });
 
-  /** the icon name representing the current checked state */
-  public readonly currentIcon = computed<IconName>(() => {
-    if (this.isChecked()) {
-      return 'circle-check-big';
-    }
+  constructor() {
+    /**
+     * syncs validation context from a parent form-field (when the radio is used standalone in a form-field)
+     * into the brain so it can derive aria-invalid / aria-describedby. when the radio is inside a radio group,
+     * the group itself owns this wiring and pushes the context down through the group brain.
+     */
+    effect(() => {
+      const formFieldBrain = this._formField?.brain;
+      const hasMessage = !!formFieldBrain?.hasValidationMessage();
+      const messageId = hasMessage ? (formFieldBrain?.validationMessageId ?? null) : null;
 
-    return 'circle';
-  });
+      this.brain.setValidationContext(hasMessage, messageId);
+    });
+  }
 
   /** @inheritdoc */
   public ngOnInit(): void {
@@ -81,5 +130,10 @@ export class Radio implements OnInit {
         message: 'radio component requires a name either directly on the radio or from a parent radio-group',
       });
     }
+  }
+
+  /** routes the native input's `change` event into the brain so selection is recorded */
+  protected onChange(): void {
+    this.brain.handleNativeChange();
   }
 }

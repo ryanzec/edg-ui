@@ -1,31 +1,29 @@
-import { Directive, DestroyRef, ElementRef, computed, inject, input, output, signal } from '@angular/core';
+import { Directive, DestroyRef, ElementRef, computed, effect, inject, input, output, signal } from '@angular/core';
 import { RadioGroupBrainDirective, RegisterableRadio } from '../radio-group-brain/radio-group-brain';
 
 /** default value for the disabled input */
 export const RADIO_DISABLED_DEFAULT = false;
 
 /**
- * headless brain directive for the radio component. owns the local selected state, host a11y attributes
- * (role, aria-checked, aria-disabled, tabindex), and the click / keyboard event handlers. when nested in a
- * `RadioGroupBrainDirective` it registers itself so the group can drive its selected state and dom focus
- * directly; standalone usage manages local state and emits `selectionRequested` for external consumers.
+ * headless brain directive for the radio component. owns the registration with the group, the local selected
+ * state, and the resolved disabled / validation context the presentation needs to drive its visual states.
+ *
+ * a11y, focus, and click/keyboard activation are intentionally NOT handled here — the presentation renders a
+ * real `<input type="radio">` inside a wrapping `<label>`, and the native input owns role, aria-checked,
+ * focus, space/enter activation, and arrow-key routing within shared `name`. the brain only listens for the
+ * native `change` event (via `handleNativeChange`) so it can route selection to the group or emit
+ * `selectionRequested` for standalone consumers.
  */
 @Directive({
   selector: '[orgRadioBrain]',
   exportAs: 'orgRadioBrain',
-  host: {
-    '[attr.role]': '"radio"',
-    '[attr.aria-checked]': 'isChecked()',
-    '[attr.aria-disabled]': 'effectiveDisabled() ? "true" : null',
-    '[attr.tabindex]': 'effectiveDisabled() ? -1 : 0',
-    '(click)': 'handleClick($event)',
-    '(keydown)': 'handleKeyDown($event)',
-  },
 })
 export class RadioBrainDirective implements RegisterableRadio {
   private readonly _elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly _groupBrain = inject(RadioGroupBrainDirective, { optional: true });
   private readonly _selected = signal<boolean>(false);
+  private readonly _hasValidationMessage = signal<boolean>(false);
+  private readonly _validationMessageId = signal<string | null>(null);
 
   /** the value this radio represents */
   public readonly value = input.required<string>();
@@ -41,22 +39,51 @@ export class RadioBrainDirective implements RegisterableRadio {
     return this.disabled() || (this._groupBrain?.disabled() ?? false);
   });
 
-  /** emitted when the user activates this radio via click, space, or enter (only meaningful for standalone use) */
+  /** the resolved aria-invalid value — true when this radio (or its group) has a validation message */
+  public readonly ariaInvalid = computed<boolean | null>(() => {
+    if (this._hasValidationMessage() || (this._groupBrain?.hasValidationMessage() ?? false)) {
+      return true;
+    }
+
+    return null;
+  });
+
+  /** the resolved aria-describedby value — uses the local message id when present, falling back to the group's */
+  public readonly ariaDescribedBy = computed<string | null>(() => {
+    if (this._hasValidationMessage()) {
+      return this._validationMessageId();
+    }
+
+    if (this._groupBrain?.hasValidationMessage()) {
+      return this._groupBrain.validationMessageId();
+    }
+
+    return null;
+  });
+
+  /** emitted when the user activates this radio (only meaningful for standalone use; group-mode is driven by the group) */
   public readonly selectionRequested = output<void>();
 
   constructor() {
-    if (this._groupBrain) {
-      this._groupBrain.registerRadio(this);
-      inject(DestroyRef).onDestroy(() => this._groupBrain?.unregisterRadio(this));
+    const groupBrain = this._groupBrain;
+
+    if (groupBrain) {
+      groupBrain.registerRadio(this);
+      inject(DestroyRef).onDestroy(() => groupBrain.unregisterRadio(this));
+
+      /**
+       * reactively syncs the local selected state to the group's current value. running inside an effect
+       * (rather than reading `value()` synchronously in the constructor) is required because the `value`
+       * required-input is not yet bound at constructor time — angular 21 throws NG0950 if you read it then.
+       * effects first-run during the next change-detection pass, after inputs have been bound.
+       */
+      effect(() => {
+        this._selected.set(this.value() === groupBrain.currentValue());
+      });
     }
   }
 
-  /** sets the local selected state; called by the group brain to sync selection */
-  public setSelected(selected: boolean): void {
-    this._selected.set(selected);
-  }
-
-  /** moves dom focus to the host element */
+  /** moves dom focus to the host element (used by the group brain when programmatically syncing focus) */
   public focus(): void {
     this._elementRef.nativeElement.focus();
   }
@@ -66,65 +93,18 @@ export class RadioBrainDirective implements RegisterableRadio {
     return this._elementRef.nativeElement;
   }
 
-  /** handles click interaction; routes selection to the group when present, else manages local state */
-  public handleClick(event: Event): void {
-    event.preventDefault();
+  /** sets the validation context driving aria-invalid / aria-describedby for this radio */
+  public setValidationContext(hasMessage: boolean, messageId: string | null): void {
+    this._hasValidationMessage.set(hasMessage);
+    this._validationMessageId.set(messageId);
+  }
 
+  /** routes a native `change` event from the presentation's `<input type="radio">` into the brain's selection logic */
+  public handleNativeChange(): void {
     if (this.effectiveDisabled()) {
       return;
     }
 
-    this._handleSelectionActivation();
-  }
-
-  /** handles keyboard interaction; space / enter selects, arrow keys navigate within a group */
-  public handleKeyDown(event: KeyboardEvent): void {
-    if (this.effectiveDisabled()) {
-      return;
-    }
-
-    if (event.key === ' ' || event.key === 'Enter') {
-      event.preventDefault();
-      this._handleSelectionActivation();
-
-      return;
-    }
-
-    if (!this._groupBrain) {
-      return;
-    }
-
-    const orientation = this._groupBrain.orientation();
-
-    if (orientation === 'vertical' && event.key === 'ArrowDown') {
-      event.preventDefault();
-      this._groupBrain.focusNext(this.value());
-
-      return;
-    }
-
-    if (orientation === 'vertical' && event.key === 'ArrowUp') {
-      event.preventDefault();
-      this._groupBrain.focusPrevious(this.value());
-
-      return;
-    }
-
-    if (orientation === 'horizontal' && event.key === 'ArrowRight') {
-      event.preventDefault();
-      this._groupBrain.focusNext(this.value());
-
-      return;
-    }
-
-    if (orientation === 'horizontal' && event.key === 'ArrowLeft') {
-      event.preventDefault();
-      this._groupBrain.focusPrevious(this.value());
-    }
-  }
-
-  /** routes a selection trigger to the group brain when present, else updates local state */
-  private _handleSelectionActivation(): void {
     if (this._groupBrain) {
       this._groupBrain.selectValue(this.value());
 

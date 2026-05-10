@@ -1,37 +1,230 @@
 @layer components {
   :host {
     display: inline-flex;
-    align-items: center;
-    gap: var(--spacing-1);
-    cursor: pointer;
+    flex-direction: column;
   }
 
-  :host([aria-disabled='true']) {
-    opacity: var(--opacity-disabled);
+  /* base layout — properties applied once using slot tokens */
+  :host .label {
+    display: inline-flex;
+    align-items: flex-start;
+    gap: var(--radio-gap);
+    cursor: pointer;
+    position: relative;
+  }
+
+  /* native radio input — visually hidden, fully functional, sized to overlay the indicator */
+  :host .native {
+    position: absolute;
+    width: var(--radio-indicator-size);
+    height: var(--radio-indicator-size);
+    margin: 0;
+    padding: 0;
+    opacity: 0;
+    cursor: inherit;
+    pointer-events: none;
+    top: var(--radio-indicator-top);
+    left: 0;
+  }
+
+  /* indicator (ring + inner dot) */
+  :host .indicator {
+    position: relative;
+    flex: 0 0 auto;
+    width: var(--radio-indicator-size);
+    height: var(--radio-indicator-size);
+    border-radius: var(--radio-radius);
+    border: var(--radio-border-width) solid var(--radio-border-color);
+    background: var(--radio-bg);
+    box-sizing: border-box;
+    margin-top: var(--radio-indicator-top);
+    transition:
+      border-color var(--motion-duration-base) var(--motion-ease-standard),
+      background-color var(--motion-duration-base) var(--motion-ease-standard),
+      box-shadow var(--motion-duration-base) var(--motion-ease-standard);
+  }
+
+  /* inner dot — scales 0 -> 1 when checked for a positive confirmation */
+  :host .indicator::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: var(--radio-mark-size);
+    height: var(--radio-mark-size);
+    border-radius: var(--radio-radius);
+    background: var(--radio-mark-color);
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform var(--motion-duration-base) var(--motion-ease-entrance);
+  }
+
+  :host .body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--radio-body-gap);
+    min-width: 0;
+  }
+
+  :host .label-text {
+    color: var(--color-fg);
+    font-size: var(--radio-label-font-size);
+    line-height: var(--line-height-normal);
+  }
+
+  :host .description {
+    color: var(--radio-description-color);
+    font-size: var(--radio-description-font-size);
+    line-height: var(--line-height-normal);
+  }
+
+  /* hover (not disabled) — indicator border deepens */
+  :host(:not([data-disabled='1'])) .label:hover .indicator {
+    border-color: var(--radio-border-color-hover);
+    background: var(--radio-bg-hover);
+  }
+
+  /* focus-visible (a11y) — focus ring on the indicator, driven from the native input */
+  :host(:not([data-disabled='1'])) .native:focus-visible + .indicator {
+    border-color: var(--radio-fill);
+    box-shadow: 0 0 0 var(--radio-focus-ring-width) var(--radio-focus-ring-color);
+  }
+
+  /* checked — ring becomes the fill color, dot scales in */
+  :host([data-checked]) .indicator {
+    border-color: var(--radio-fill);
+    background: var(--radio-fill);
+  }
+
+  :host([data-checked]) .indicator::after {
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  /* hover / active on a checked radio */
+  :host([data-checked]:not([data-disabled='1'])) .label:hover .indicator {
+    border-color: var(--radio-fill-hover);
+    background: var(--radio-fill-hover);
+  }
+
+  :host([data-checked]:not([data-disabled='1'])) .label:active .indicator {
+    border-color: var(--radio-fill-active);
+    background: var(--radio-fill-active);
+  }
+
+  /* disabled */
+  :host([data-disabled='1']) .label {
+    opacity: var(--radio-disabled-opacity);
     cursor: not-allowed;
   }
 
-  .native-input {
-    position: absolute;
-    width: 0.0625rem; /* 1px */
-    height: 0.0625rem; /* 1px */
-    padding: 0;
-    margin: -0.0625rem; /* 1px */
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border-width: 0;
+  :host([data-disabled='1']) .native {
+    pointer-events: none;
   }
 
-  .radio-icon-container {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--color-neutral);
+  /* ===== SIZE VARIANTS ===== */
+
+  :host([data-size='sm']) {
+    --radio-indicator-size: 0.875rem; /* 14px */
+    --radio-mark-size: 0.4375rem; /* 7px */
+    --radio-gap: var(--spacing-1_5);
+    --radio-label-font-size: var(--font-size-sm);
+    --radio-description-font-size: var(--font-size-xs);
+    --radio-indicator-top: 0.0625rem; /* 1px */
   }
 
-  :host:not([aria-disabled='true']):hover .radio-icon-container,
-  :host:not([aria-disabled='true']):focus-visible .radio-icon-container {
-    color: var(--color-primary);
+  :host([data-size='base']) {
+    --radio-indicator-size: 1rem; /* 16px */
+    --radio-mark-size: 0.5rem; /* 8px */
+    --radio-gap: var(--spacing-2);
+    --radio-label-font-size: var(--font-size-base);
+    --radio-description-font-size: var(--font-size-xs);
+    --radio-indicator-top: 0.125rem; /* 2px */
+  }
+
+  :host([data-size='lg']) {
+    --radio-indicator-size: 1.25rem; /* 20px */
+    --radio-mark-size: 0.625rem; /* 10px */
+    --radio-gap: var(--spacing-3);
+    --radio-label-font-size: var(--font-size-lg);
+    --radio-description-font-size: var(--font-size-sm);
+    --radio-indicator-top: 0.1875rem; /* 3px */
+  }
+
+  /* ===== COLOR VARIANTS ===== */
+
+  :host([data-color='primary']) {
+    --radio-fill: var(--color-primary);
+    --radio-fill-hover: var(--color-primary-hover);
+    --radio-fill-active: var(--color-primary-active);
+    --radio-mark-color: var(--color-primary-on);
+    --radio-card-border-selected: var(--color-primary);
+  }
+
+  :host([data-color='danger']) {
+    --radio-fill: var(--color-danger);
+    --radio-fill-hover: var(--color-danger-hover);
+    --radio-fill-active: var(--color-danger-active);
+    --radio-mark-color: var(--color-danger-on);
+    --radio-card-border-selected: var(--color-danger);
+  }
+
+  /* ===== ERROR STATE ===== */
+  /* error overrides whatever color was selected to use danger tokens; layered after hover/focus so it wins */
+
+  :host([data-state='error']) {
+    --radio-border-color: var(--color-danger);
+    --radio-border-color-hover: var(--color-danger);
+    --radio-fill: var(--color-danger);
+    --radio-fill-hover: var(--color-danger-hover);
+    --radio-fill-active: var(--color-danger-active);
+    --radio-mark-color: var(--color-danger-on);
+    --radio-card-border-selected: var(--color-danger);
+  }
+
+  /* ===== VARIANT: card ===== */
+  :host([data-variant='card']) .label {
+    align-items: flex-start;
+    width: 100%;
+    padding: var(--radio-card-padding);
+    background: var(--radio-card-bg);
+    border: var(--radio-border-width) solid var(--radio-card-border);
+    border-radius: var(--radio-card-radius);
+    transition:
+      background-color var(--motion-duration-base) var(--motion-ease-standard),
+      border-color var(--motion-duration-base) var(--motion-ease-standard),
+      box-shadow var(--motion-duration-base) var(--motion-ease-standard);
+  }
+
+  :host([data-variant='card']:not([data-disabled='1'])) .label:hover {
+    background: var(--radio-card-bg-hover);
+    border-color: var(--radio-card-border-hover);
+  }
+
+  /*
+   * card selected state — the doubled border emphasis is drawn with an inset box-shadow, NOT a fake border.
+   * the real `border` carries 1px; the inset shadow adds the second px optically. this avoids changing the
+   * box model on selection.
+   */
+  :host([data-variant='card'][data-checked]) .label,
+  :host([data-variant='card'][data-state='error']) .label {
+    border-color: var(--radio-card-border-selected);
+    box-shadow: inset 0 0 0 var(--radio-border-width) var(--radio-card-border-selected);
+  }
+
+  /* card focus stacks the focus ring with the inner ring */
+  :host([data-variant='card']:not([data-disabled='1'])) .native:focus-visible ~ .indicator {
+    box-shadow: 0 0 0 var(--radio-focus-ring-width) var(--radio-focus-ring-color);
+  }
+
+  /* card variant size overrides — override the design token, not the property */
+  :host([data-variant='card'][data-size='sm']) {
+    --radio-card-padding: var(--spacing-2_5); /* 10px */
+  }
+
+  :host([data-variant='card'][data-size='base']) {
+    --radio-card-padding: var(--spacing-3); /* 12px */
+  }
+
+  :host([data-variant='card'][data-size='lg']) {
+    --radio-card-padding: var(--spacing-4); /* 16px */
   }
 }
