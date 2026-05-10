@@ -3,29 +3,41 @@ import { Component, ChangeDetectionStrategy, input, computed } from '@angular/co
 /** default value for the ellipsisLines input */
 export const TABLE_CELL_ELLIPSIS_LINES_DEFAULT = 0;
 
+/** default value for the numeric input */
+export const TABLE_CELL_NUMERIC_DEFAULT = false;
+
+/** default value for the muted input */
+export const TABLE_CELL_MUTED_DEFAULT = false;
+
+/** default value for the faint input */
+export const TABLE_CELL_FAINT_DEFAULT = false;
+
+/** default value for the selectCol input */
+export const TABLE_CELL_SELECT_COL_DEFAULT = false;
+
 @Component({
   selector: 'org-table-td',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [],
-  template: `
-    <td class="cell">
-      <div
-        [class]="useEllipsis() ? 'org-table-ellipsis' : null"
-        [style]="useEllipsis() ? { '--ellipsis-lines': ellipsisLines() } : null"
-      >
-        <ng-content />
-      </div>
-    </td>
-  `,
+  templateUrl: './table-cell.html',
   styleUrl: './table-cell.css',
-  host: {
-    '[attr.data-ellipsis-lines]': 'ellipsisLines()',
-  },
 })
 export class TableCell {
   /** number of lines before text is truncated with ellipsis; 0 disables ellipsis */
-  public ellipsisLines = input<number>(TABLE_CELL_ELLIPSIS_LINES_DEFAULT);
+  public readonly ellipsisLines = input<number>(TABLE_CELL_ELLIPSIS_LINES_DEFAULT);
+
+  /** whether the cell renders the numeric layout — right-align + tabular numerals */
+  public readonly numeric = input<boolean>(TABLE_CELL_NUMERIC_DEFAULT);
+
+  /** whether the cell text is rendered in the muted (less-prominent) tone */
+  public readonly muted = input<boolean>(TABLE_CELL_MUTED_DEFAULT);
+
+  /** whether the cell text is rendered in the faint (least-prominent) tone */
+  public readonly faint = input<boolean>(TABLE_CELL_FAINT_DEFAULT);
+
+  /** whether the cell is the leading checkbox-selection column (fixed-width, centered) */
+  public readonly selectCol = input<boolean>(TABLE_CELL_SELECT_COL_DEFAULT);
 
   /** whether ellipsis truncation is active */
-  protected useEllipsis = computed<boolean>(() => this.ellipsisLines() > 0);
+  protected readonly useEllipsis = computed<boolean>(() => this.ellipsisLines() > 0);
 }

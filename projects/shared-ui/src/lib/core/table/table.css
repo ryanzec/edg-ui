@@ -1,8 +1,44 @@
 @layer components {
+  /* ============================================================================
+   * org-table — host + component-internal styles
+   * ========================================================================= */
+
   :host {
     display: block;
     position: relative;
     height: 100%;
+    background: var(--table-bg);
+    color: var(--table-fg);
+
+    /* default to base — overridden by :host([data-size]) below */
+    --table-row-h: var(--table-row-height-base);
+    --table-header-h: var(--table-header-height-base);
+    --table-cell-py: var(--table-cell-padding-y-base);
+    --table-cell-px: var(--table-cell-padding-x-base);
+    --table-edge-x: var(--table-edge-inset-base);
+    --table-cell-fs: var(--table-cell-font-size-base);
+  }
+
+  :host([data-size='sm']) {
+    --table-row-h: var(--table-row-height-sm);
+    --table-header-h: var(--table-header-height-sm);
+    --table-cell-py: var(--table-cell-padding-y-sm);
+    --table-cell-px: var(--table-cell-padding-x-sm);
+    --table-edge-x: var(--table-edge-inset-sm);
+    --table-cell-fs: var(--table-cell-font-size-sm);
+  }
+
+  :host([data-size='lg']) {
+    --table-row-h: var(--table-row-height-lg);
+    --table-header-h: var(--table-header-height-lg);
+    --table-cell-py: var(--table-cell-padding-y-lg);
+    --table-cell-px: var(--table-cell-padding-x-lg);
+    --table-edge-x: var(--table-edge-inset-lg);
+    --table-cell-fs: var(--table-cell-font-size-lg);
+  }
+
+  :host([data-bordered]) {
+    border-top: var(--table-border-width) solid var(--table-border);
   }
 
   .table-wrapper {
@@ -17,6 +53,7 @@
     padding: var(--spacing-2) var(--spacing-3);
     background-color: var(--color-info-soft);
     color: var(--color-info);
+    border-bottom: var(--table-border-width) solid var(--table-border);
   }
 
   .selected-actions-bar .selected-count {
@@ -32,16 +69,32 @@
 
   .table {
     width: 100%;
+    table-layout: auto;
+    border-collapse: separate;
+    border-spacing: 0;
+    text-align: left;
+    line-height: var(--table-body-line-height);
+    font-size: var(--table-cell-fs);
   }
 
   .background-loader {
     position: absolute;
     top: var(--spacing-2);
     right: var(--spacing-2);
-    z-index: 10;
+    z-index: var(--z-index-raised);
   }
 
-  /* ellipsis support using css variables */
+  /* the empty-state cell — owned by org-table and projected into the empty <tr> via <ng-content> */
+  .empty-cell {
+    padding-block: var(--table-empty-padding-y);
+    padding-inline: var(--table-edge-x);
+    color: var(--table-empty-fg);
+    font-size: var(--table-empty-font-size);
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  /* ellipsis support — global utility class set on the inner div by org-table-td */
   .org-table-ellipsis {
     --ellipsis-lines: 1;
 
@@ -55,25 +108,106 @@
     word-break: break-word;
   }
 
-  /* table element — no utilities for border-collapse / border-spacing */
-  org-table table {
-    border-collapse: collapse;
-    border-spacing: 0;
+  /* ============================================================================
+   * cross-component rules (apply globally via styles.css @import)
+   * ========================================================================= */
+
+  /* edge inset — first / last cell of every row pulls a touch wider */
+  org-table tr > org-table-th:first-child > th,
+  org-table tr > org-table-td:first-child > td {
+    padding-left: var(--table-edge-x);
   }
 
-  /* sticky header */
-  org-table-tr[data-sticky] th {
+  org-table tr > org-table-th:last-child > th,
+  org-table tr > org-table-td:last-child > td {
+    padding-right: var(--table-edge-x);
+  }
+
+  /* row separator — top hairline on every body row except the first */
+  org-table tbody > org-table-tr:not(:first-child) > tr > org-table-td > td,
+  org-table tbody > org-table-tr:not(:first-child) > tr > org-table-th > th {
+    border-top: var(--table-border-width) solid var(--table-border-soft);
+  }
+
+  /* striped rows — every even non-selected, non-empty body row */
+  org-table[data-striped] tbody > org-table-tr:nth-child(even) > tr:not([data-selected]):not([data-empty]) > org-table-td > td {
+    background-color: var(--table-row-bg-stripe);
+  }
+
+  /* hover rows — when opted in, body rows tint on hover unless empty / selected */
+  org-table[data-hover] tbody > org-table-tr > tr[data-variant='body']:not([data-selected]):not([data-empty]):hover > org-table-td > td {
+    background-color: var(--table-row-bg-hover);
+  }
+
+  /* selected + hover combination wins over plain hover */
+  org-table[data-hover] tbody > org-table-tr > tr[data-variant='body'][data-selected]:hover > org-table-td > td {
+    background-color: var(--table-row-bg-selected-hover);
+  }
+
+  /* selected row — fill propagates to every cell so the row reads as one band */
+  org-table tbody > org-table-tr > tr[data-variant='body'][data-selected] > org-table-td > td {
+    background-color: var(--table-row-bg-selected);
+  }
+
+  /* emphasize-first — the first non-select-col cell of each body row carries the lifted weight + tone */
+  org-table[data-emphasize-first] tbody > org-table-tr > tr[data-variant='body'] > org-table-td:first-child:not(:has(td[data-select-col])) > td,
+  org-table[data-emphasize-first] tbody > org-table-tr > tr[data-variant='body'] > org-table-td:first-child:has(td[data-select-col]) + org-table-td > td {
+    font-weight: var(--table-emphasize-first-font-weight);
+    color: var(--table-fg);
+  }
+
+  /* sticky header — pin every <th> when the table opts in */
+  org-table[data-sticky-header] thead > org-table-tr > tr > org-table-th > th {
     position: sticky;
     top: 0;
     z-index: var(--z-index-raised);
   }
 
-  /* body rows */
-  org-table-tr[data-variant='body']:not(:last-child) tr {
-    border-bottom: 0.0625rem solid var(--color-border-soft); /* 1px */
+  /* sticky first column — pin the leading cell of every row */
+  org-table[data-sticky-first-column] tr > org-table-th:first-child > th,
+  org-table[data-sticky-first-column] tr > org-table-td:first-child > td {
+    position: sticky;
+    left: 0;
+    z-index: var(--z-index-raised);
+    background-color: var(--table-bg);
+    border-right: var(--table-border-width) solid var(--table-border);
   }
 
-  org-table-tr[data-variant='body'] tr:hover {
-    background-color: var(--color-bg-surface);
+  /* the corner cell (sticky header + sticky first column) lifts above both axes */
+  org-table[data-sticky-header][data-sticky-first-column] thead > org-table-tr > tr > org-table-th:first-child > th {
+    z-index: calc(var(--z-index-raised) + 1);
+  }
+
+  /* repaint the sticky first cell with the row's current state surface so the column reads through scroll */
+  org-table[data-sticky-first-column][data-striped] tbody > org-table-tr:nth-child(even) > tr:not([data-selected]):not([data-empty]) > org-table-td:first-child > td {
+    background-color: var(--table-row-bg-stripe);
+  }
+
+  org-table[data-sticky-first-column][data-hover] tbody > org-table-tr > tr[data-variant='body']:not([data-selected]):not([data-empty]):hover > org-table-td:first-child > td {
+    background-color: var(--table-row-bg-hover);
+  }
+
+  org-table[data-sticky-first-column] tbody > org-table-tr > tr[data-variant='body'][data-selected] > org-table-td:first-child > td {
+    background-color: var(--table-row-bg-selected);
+  }
+
+  org-table[data-sticky-first-column][data-hover] tbody > org-table-tr > tr[data-variant='body'][data-selected]:hover > org-table-td:first-child > td {
+    background-color: var(--table-row-bg-selected-hover);
+  }
+
+  /* row state transitions — drop them when the user prefers reduced motion */
+  org-table tbody > org-table-tr > tr[data-variant='body'] > org-table-td > td {
+    transition: background-color var(--table-row-transition-duration) var(--table-row-transition-easing);
+  }
+
+  /* hide the SortableDirective's own appended icon when used inside org-table-th — the header renders its own chevron */
+  org-table-th [data-sortable-enabled] > org-icon {
+    display: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    org-table tbody > org-table-tr > tr[data-variant='body'] > org-table-td > td {
+      transition: none;
+    }
   }
 }

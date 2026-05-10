@@ -18,9 +18,9 @@
     <table class="table">
       @if (headerTemplate()) {
         <thead>
-          <org-table-tr variant="header" [isSticky]="stickyHeader()">
+          <org-table-tr variant="header">
             @if (brain.selectionData()) {
-              <org-table-th>
+              <org-table-th [selectCol]="true">
                 <org-form-field [reserveValidationSpace]="false">
                   <org-checkbox
                     name="select-all"
@@ -38,22 +38,34 @@
       }
       @if (bodyTemplate()) {
         <tbody>
-          @for (item of data(); track trackByItem(item)) {
-            <org-table-tr>
-              @if (brain.selectionData()) {
-                <org-table-td>
-                  <org-form-field [reserveValidationSpace]="false">
-                    <org-checkbox
-                      [name]="'select-' + asSelectable(item).id"
-                      [value]="asSelectable(item).id"
-                      [checked]="brain.selectionData()!.isSelected(asSelectable(item))"
-                      (checkedChange)="brain.selectionData()!.set(asSelectable(item), $event)"
-                    />
-                  </org-form-field>
-                </org-table-td>
-              }
-              <ng-container *ngTemplateOutlet="bodyTemplate()!; context: { $implicit: item }" />
+          @if (isEmpty() && emptyTemplate()) {
+            <org-table-tr [empty]="true">
+              <td class="empty-cell" [attr.colspan]="100">
+                <ng-container *ngTemplateOutlet="emptyTemplate()!" />
+              </td>
             </org-table-tr>
+          } @else {
+            @for (item of data(); track trackByItem(item)) {
+              <org-table-tr
+                [selected]="isItemSelected(item)"
+                [clickable]="hasRowClickedListener()"
+                (clicked)="onRowClicked(item)"
+              >
+                @if (brain.selectionData()) {
+                  <org-table-td [selectCol]="true">
+                    <org-form-field [reserveValidationSpace]="false">
+                      <org-checkbox
+                        [name]="'select-' + asSelectable(item).id"
+                        [value]="asSelectable(item).id"
+                        [checked]="brain.selectionData()!.isSelected(asSelectable(item))"
+                        (checkedChange)="brain.selectionData()!.set(asSelectable(item), $event)"
+                      />
+                    </org-form-field>
+                  </org-table-td>
+                }
+                <ng-container *ngTemplateOutlet="bodyTemplate()!; context: { $implicit: item }" />
+              </org-table-tr>
+            }
           }
         </tbody>
       }

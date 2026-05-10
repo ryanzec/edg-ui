@@ -4,9 +4,36 @@
   }
 
   .cell {
-    padding: var(--spacing-3) var(--spacing-4);
-    font-size: var(--font-size-base);
-    line-height: var(--line-height-normal);
-    letter-spacing: var(--letter-spacing-normal);
+    padding: var(--table-cell-py) var(--table-cell-px);
+    color: var(--table-fg);
+    vertical-align: middle;
+  }
+
+  .cell[data-numeric] {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .cell[data-muted] {
+    color: var(--table-fg-muted);
+  }
+
+  .cell[data-faint] {
+    color: var(--table-fg-faint);
+  }
+
+  .cell[data-select-col] {
+    width: 2.5rem; /* 40px */
+    padding-left: 0;
+    padding-right: 0;
+    text-align: center;
+  }
+
+  /* the inner wrapper must become a flex container for the select-col case so block-level checkbox /
+     form-field children center deterministically (text-align alone only centers inline-level content) */
+  .cell[data-select-col] .cell-inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }

@@ -28,7 +28,8 @@ export class SortableDirective implements OnDestroy {
   private readonly _renderer = inject(Renderer2);
   private readonly _elementRef = inject(ElementRef);
   private readonly _environmentInjector = inject(EnvironmentInjector);
-  private readonly _brain = inject(SortableBrainDirective);
+  /** the headless brain driving this sortable; exposed so host components (e.g. `org-table-th`) can mirror sort state */
+  public readonly brain = inject(SortableBrainDirective);
 
   private _iconComponentRef: ComponentRef<Icon> | null = null;
 
@@ -40,7 +41,7 @@ export class SortableDirective implements OnDestroy {
 
   /** maps the brain's sort direction to the icon name shown by the host element */
   private readonly _iconName = computed<IconName>(() => {
-    const direction = this._brain.direction();
+    const direction = this.brain.direction();
 
     if (direction === null) {
       return 'arrow-down-up';
@@ -52,7 +53,7 @@ export class SortableDirective implements OnDestroy {
   constructor() {
     // create or destroy the visual indicator icon to mirror the brain's enabled state
     effect(() => {
-      if (this._brain.enabled()) {
+      if (this.brain.enabled()) {
         this._createIcon();
 
         return;
@@ -63,7 +64,7 @@ export class SortableDirective implements OnDestroy {
 
     // keep the rendered icon's name and inactive-state styling in sync with the brain
     effect(() => {
-      this._updateIcon(this._iconName(), this._brain.isActivelySorting());
+      this._updateIcon(this._iconName(), this.brain.isActivelySorting());
     });
   }
 
@@ -107,7 +108,7 @@ export class SortableDirective implements OnDestroy {
 
     this._renderer.appendChild(hostElement, iconElement);
 
-    this._updateIcon(this._iconName(), this._brain.isActivelySorting());
+    this._updateIcon(this._iconName(), this.brain.isActivelySorting());
   }
 
   /** removes the icon component from the host element and destroys it */

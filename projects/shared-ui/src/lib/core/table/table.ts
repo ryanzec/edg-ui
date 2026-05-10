@@ -12,6 +12,8 @@ import {
   contentChild,
   viewChild,
 } from '@angular/core';
+import { outputFromObservable } from '@angular/core/rxjs-interop';
+import { Subject } from 'rxjs';
 import { NgTemplateOutlet } from '@angular/common';
 import { ScrollArea } from '../scroll-area/scroll-area';
 import { LoadingSpinner } from '../loading-spinner/loading-spinner';
@@ -24,8 +26,32 @@ import { TableHeader } from './table-header';
 import { TableCell } from './table-cell';
 import { TableBrainDirective } from '../../brain/table-brain/table-brain';
 
+/** all available table size values */
+export const allTableSizes = ['sm', 'base', 'lg'] as const;
+
+/** the size variant of the table; controls row height, cell padding, and font size */
+export type TableSize = (typeof allTableSizes)[number];
+
+/** default value for the size input */
+export const TABLE_SIZE_DEFAULT: TableSize = 'base';
+
+/** default value for the bordered input */
+export const TABLE_BORDERED_DEFAULT = true;
+
+/** default value for the striped input */
+export const TABLE_STRIPED_DEFAULT = false;
+
+/** default value for the hover input */
+export const TABLE_HOVER_DEFAULT = true;
+
 /** default value for the stickyHeader input */
 export const TABLE_STICKY_HEADER_DEFAULT = true;
+
+/** default value for the stickyFirstColumn input */
+export const TABLE_STICKY_FIRST_COLUMN_DEFAULT = false;
+
+/** default value for the emphasizeFirst input */
+export const TABLE_EMPHASIZE_FIRST_DEFAULT = false;
 
 /** default track-by function that uses item identity */
 export const TABLE_TRACK_BY_DEFAULT = (item: unknown): unknown => item;
@@ -56,20 +82,50 @@ export const TABLE_TRACK_BY_DEFAULT = (item: unknown): unknown => item;
   host: {
     '[attr.data-loading]': 'brain.isLoading() ? "" : null',
     '[attr.data-background-loading]': 'brain.isBackgroundLoading() ? "" : null',
+    '[attr.data-empty]': 'isEmpty() ? "" : null',
+    '[attr.data-size]': 'size()',
+    '[attr.data-bordered]': 'bordered() ? "" : null',
+    '[attr.data-striped]': 'striped() ? "" : null',
+    '[attr.data-hover]': 'hover() ? "" : null',
+    '[attr.data-sticky-header]': 'stickyHeader() ? "" : null',
+    '[attr.data-sticky-first-column]': 'stickyFirstColumn() ? "" : null',
+    '[attr.data-emphasize-first]': 'emphasizeFirst() ? "" : null',
   },
 })
 export class Table<T = unknown> {
   private readonly _injector = inject(Injector);
   protected readonly brain = inject(TableBrainDirective, { self: true });
+  private readonly _rowClicked$ = new Subject<T>();
 
   /** array of data items to render in the table body */
   public readonly data = input.required<T[]>();
 
-  /** whether the auto-rendered header row should be sticky */
+  /** the size variant of the table; controls row height, cell padding, and font size */
+  public readonly size = input<TableSize>(TABLE_SIZE_DEFAULT);
+
+  /** whether the table draws its own top hairline + surface; turn off when wrapped by a card or shell */
+  public readonly bordered = input<boolean>(TABLE_BORDERED_DEFAULT);
+
+  /** whether even body rows are tinted with the same lifted surface as the header shelf */
+  public readonly striped = input<boolean>(TABLE_STRIPED_DEFAULT);
+
+  /** whether body rows tint on hover */
+  public readonly hover = input<boolean>(TABLE_HOVER_DEFAULT);
+
+  /** whether the auto-rendered header row is sticky to the top of the scroll viewport */
   public readonly stickyHeader = input<boolean>(TABLE_STICKY_HEADER_DEFAULT);
+
+  /** whether the first column is pinned to the leading edge during horizontal scroll */
+  public readonly stickyFirstColumn = input<boolean>(TABLE_STICKY_FIRST_COLUMN_DEFAULT);
+
+  /** whether the first body cell of each row is rendered with the emphasized weight + tone */
+  public readonly emphasizeFirst = input<boolean>(TABLE_EMPHASIZE_FIRST_DEFAULT);
 
   /** function used to track items in the for loop for optimal re-rendering */
   public readonly trackBy = input<(item: T) => unknown>(TABLE_TRACK_BY_DEFAULT as (item: T) => unknown);
+
+  /** emitted when a body row is clicked; binding this output makes every body row clickable + focusable */
+  public readonly rowClicked = outputFromObservable(this._rowClicked$);
 
   protected readonly headerTemplate = contentChild<TemplateRef<void>>('header');
 
@@ -77,10 +133,18 @@ export class Table<T = unknown> {
 
   protected readonly selectedActionsTemplate = contentChild<TemplateRef<void>>('selectedActions');
 
-  /** whether the selected actions bar should render (selection active and template provided) */
+  protected readonly emptyTemplate = contentChild<TemplateRef<void>>('empty');
+
+  /** whether the auto-rendered selected actions bar should render (selection active and template provided) */
   protected readonly showSelectedActions = computed<boolean>(
     () => this.brain.hasSelection() && !!this.selectedActionsTemplate()
   );
+
+  /** whether the data array is currently empty (no rows to render) */
+  protected readonly isEmpty = computed<boolean>(() => this.data().length === 0);
+
+  /** whether any consumer is listening to rowClicked; rows render as clickable when true */
+  protected readonly hasRowClickedListener = computed<boolean>(() => this._rowClicked$.observed);
 
   private readonly _scrollAreaComponent = viewChild<ScrollArea>('scrollAreaComponent');
 
@@ -117,5 +181,15 @@ export class Table<T = unknown> {
   /** template helper that narrows the data array to the `{ id: string }[]` shape required by the selection store */
   protected asSelectableData(items: T[]): (T & { id: string })[] {
     return items as (T & { id: string })[];
+  }
+
+  /** whether the given item is currently selected via the selection store */
+  protected isItemSelected(item: T): boolean {
+    return this.brain.selectionData()?.isSelected(this.asSelectable(item)) ?? false;
+  }
+
+  /** dispatches the rowClicked output for the given item */
+  protected onRowClicked(item: T): void {
+    this._rowClicked$.next(item);
   }
 }

@@ -1,654 +1,683 @@
 import type { Meta, StoryObj } from '@storybook/angular';
 import { Component, ChangeDetectionStrategy, signal, inject, computed } from '@angular/core';
-import { Table } from './table';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { Table, allTableSizes, TableSize } from './table';
 import { TableHeader } from './table-header';
 import { TableCell } from './table-cell';
-import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
-import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
+import { ButtonToggle, ButtonToggleItem } from '../button-toggle/button-toggle';
+import { CheckboxToggle } from '../checkbox-toggle/checkbox-toggle';
 import { SortableDirective } from '../sortable-directive/sortable-directive';
 import { SortingStore } from '../sorting-store/sorting-store';
 import { Pagination } from '../pagination/pagination';
 import { DataSelectionStore } from '../data-selection-store/data-selection-store';
 import { Button } from '../button/button';
+import { Tag } from '../tag/tag';
+import { Avatar } from '../avatar/avatar';
+import { Link } from '../link/link';
 import { TypedContextDirective } from '../typed-context-directive/typed-context-directive';
+import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
+import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
+import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
+import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
+import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
+import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
 
 type User = {
   id: string;
   name: string;
-  email: string;
-  organizationId: string;
-  roles: string;
+  owner: string;
+  status: 'active' | 'in-review' | 'draft' | 'blocked';
+  updated: string;
+  records: number;
 };
 
 const SAMPLE_USERS: User[] = [
+  { id: '1', name: 'Aurora — Mobile redesign', owner: 'P. Shah', status: 'active', updated: '2h ago', records: 1204 },
+  { id: '2', name: 'Beacon — Billing v2', owner: 'D. Nakamura', status: 'in-review', updated: '5h ago', records: 342 },
+  { id: '3', name: 'Cinder — Internal docs', owner: 'L. Wexler', status: 'draft', updated: '1d ago', records: 87 },
+  { id: '4', name: 'Drift — Onboarding flow', owner: 'M. Ali', status: 'blocked', updated: '2d ago', records: 512 },
   {
-    id: '1',
-    name: 'Alice Johnson',
-    email: 'alice.johnson@example.com',
-    organizationId: 'ORG-001',
-    roles: 'Admin, Editor',
+    id: '5',
+    name: 'Ember — Pricing experiments',
+    owner: 'R. Aoki',
+    status: 'active',
+    updated: '14m ago',
+    records: 2098,
   },
-  { id: '2', name: 'Bob Smith', email: 'bob.smith@example.com', organizationId: 'ORG-002', roles: 'Editor' },
-  { id: '3', name: 'Charlie Brown', email: 'charlie.brown@example.com', organizationId: 'ORG-001', roles: 'Viewer' },
-  { id: '4', name: 'Diana Prince', email: 'diana.prince@example.com', organizationId: 'ORG-003', roles: 'Admin' },
-  { id: '5', name: 'Ethan Hunt', email: 'ethan.hunt@example.com', organizationId: 'ORG-002', roles: 'Editor, Viewer' },
-  {
-    id: '6',
-    name: 'Fiona Gallagher',
-    email: 'fiona.gallagher@example.com',
-    organizationId: 'ORG-001',
-    roles: 'Viewer',
-  },
-  {
-    id: '7',
-    name: 'George Washington',
-    email: 'george.washington@example.com',
-    organizationId: 'ORG-004',
-    roles: 'Admin',
-  },
-  { id: '8', name: 'Hannah Montana', email: 'hannah.montana@example.com', organizationId: 'ORG-003', roles: 'Editor' },
-  { id: '9', name: 'Isaac Newton', email: 'isaac.newton@example.com', organizationId: 'ORG-002', roles: 'Viewer' },
-  {
-    id: '10',
-    name: 'Julia Roberts',
-    email: 'julia.roberts@example.com',
-    organizationId: 'ORG-001',
-    roles: 'Admin, Editor',
-  },
-  { id: '11', name: 'Kevin Hart', email: 'kevin.hart@example.com', organizationId: 'ORG-004', roles: 'Editor' },
-  { id: '12', name: 'Laura Croft', email: 'laura.croft@example.com', organizationId: 'ORG-003', roles: 'Viewer' },
-  { id: '13', name: 'Michael Scott', email: 'michael.scott@example.com', organizationId: 'ORG-002', roles: 'Admin' },
-  { id: '14', name: 'Nancy Drew', email: 'nancy.drew@example.com', organizationId: 'ORG-001', roles: 'Editor, Viewer' },
-  { id: '15', name: 'Oscar Wilde', email: 'oscar.wilde@example.com', organizationId: 'ORG-004', roles: 'Viewer' },
-  { id: '16', name: 'Penny Lane', email: 'penny.lane@example.com', organizationId: 'ORG-003', roles: 'Admin' },
-  { id: '17', name: 'Quincy Jones', email: 'quincy.jones@example.com', organizationId: 'ORG-002', roles: 'Editor' },
-  { id: '18', name: 'Rachel Green', email: 'rachel.green@example.com', organizationId: 'ORG-001', roles: 'Viewer' },
-  {
-    id: '19',
-    name: 'Steve Rogers',
-    email: 'steve.rogers@example.com',
-    organizationId: 'ORG-004',
-    roles: 'Admin, Editor',
-  },
-  { id: '20', name: 'Tina Turner', email: 'tina.turner@example.com', organizationId: 'ORG-003', roles: 'Editor' },
+  { id: '6', name: 'Foundry — Compliance v3', owner: 'K. Quinn', status: 'in-review', updated: '4d ago', records: 124 },
+  { id: '7', name: 'Gravity — Search index', owner: 'T. Park', status: 'active', updated: '6h ago', records: 904 },
+  { id: '8', name: 'Hearth — Settings refresh', owner: 'V. Chen', status: 'draft', updated: '3d ago', records: 56 },
 ];
 
+const STATUS_TAG_COLOR: Record<User['status'], 'safe' | 'info' | 'neutral' | 'warning'> = {
+  active: 'safe',
+  'in-review': 'info',
+  draft: 'neutral',
+  blocked: 'warning',
+};
+
+const STATUS_LABEL: Record<User['status'], string> = {
+  active: 'Active',
+  'in-review': 'In review',
+  draft: 'Draft',
+  blocked: 'Blocked',
+};
+
+type LiveDemoState = 'default' | 'loading' | 'loading-overlay' | 'empty';
+
+const allLiveDemoStates = ['default', 'loading', 'loading-overlay', 'empty'] as const satisfies readonly LiveDemoState[];
+
+const liveDemoSizeItems: ButtonToggleItem[] = allTableSizes.map((size) => ({
+  label: size,
+  value: size,
+  buttonColor: 'primary',
+}));
+
+const liveDemoStateItems: ButtonToggleItem[] = allLiveDemoStates.map((state) => ({
+  label: state === 'loading-overlay' ? 'loading + overlay' : state,
+  value: state,
+  buttonColor: 'primary',
+}));
+
 @Component({
-  selector: 'story-basic-table-demo',
+  selector: 'story-table-live-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Table, TableHeader, TableCell, TypedContextDirective],
+  imports: [
+    ReactiveFormsModule,
+    Table,
+    TableHeader,
+    TableCell,
+    SortableDirective,
+    TypedContextDirective,
+    ButtonToggle,
+    CheckboxToggle,
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoControls,
+    DesignSystemDemoControlGroup,
+    DesignSystemDemoCanvas,
+  ],
+  providers: [SortingStore],
+  styles: [
+    `
+      :host {
+        display: block;
+      }
+      .canvas-stage {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+    `,
+  ],
   template: `
-    <org-table [data]="users" [style.maxHeight]="'400px'">
+    <form [formGroup]="liveDemoForm">
+      <org-design-system-demo>
+        <org-design-system-demo-header
+          slot="header"
+          title="Live demo"
+          description="Toggle the modifiers. Density swaps the row min-height and cell padding scale; striping, hover, selectable rows, sortable headers, the sticky first column and the sticky header are independent flags that compose freely."
+        />
+        <org-design-system-demo-controls slot="controls">
+          <org-design-system-demo-control-group label="Size">
+            <org-button-toggle [items]="sizeItems" formControlName="size" buttonSize="sm" />
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="State">
+            <org-button-toggle [items]="stateItems" formControlName="state" buttonSize="sm" />
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Striped">
+            <org-checkbox-toggle name="live-demo-striped" value="striped" formControlName="striped">
+              {{ liveDemoForm.controls.striped.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Hover">
+            <org-checkbox-toggle name="live-demo-hover" value="hover" formControlName="hover">
+              {{ liveDemoForm.controls.hover.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Selectable rows">
+            <org-checkbox-toggle name="live-demo-selectable" value="selectable" formControlName="selectable">
+              {{ liveDemoForm.controls.selectable.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Sortable">
+            <org-checkbox-toggle name="live-demo-sortable" value="sortable" formControlName="sortable">
+              {{ liveDemoForm.controls.sortable.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Sticky 1st col">
+            <org-checkbox-toggle name="live-demo-sticky-first" value="sticky-first" formControlName="stickyFirstColumn">
+              {{ liveDemoForm.controls.stickyFirstColumn.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Sticky header">
+            <org-checkbox-toggle name="live-demo-sticky-header" value="sticky-header" formControlName="stickyHeader">
+              {{ liveDemoForm.controls.stickyHeader.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
+        </org-design-system-demo-controls>
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="canvas-stage">
+            <org-table
+              [data]="data()"
+              [size]="liveDemoForm.controls.size.value!"
+              [striped]="liveDemoForm.controls.striped.value!"
+              [hover]="liveDemoForm.controls.hover.value!"
+              [stickyFirstColumn]="liveDemoForm.controls.stickyFirstColumn.value!"
+              [stickyHeader]="liveDemoForm.controls.stickyHeader.value!"
+              [selectionData]="selectionDataValue()"
+              [isLoading]="isLoading()"
+              [isBackgroundLoading]="isBackgroundLoading()"
+              [style.maxHeight]="'18rem'"
+            >
+              <ng-template #header>
+                <org-table-th>
+                  @if (liveDemoForm.controls.sortable.value) {
+                    <div [orgSortableKey]="'name'">Project</div>
+                  } @else {
+                    Project
+                  }
+                </org-table-th>
+                <org-table-th>
+                  @if (liveDemoForm.controls.sortable.value) {
+                    <div [orgSortableKey]="'owner'">Owner</div>
+                  } @else {
+                    Owner
+                  }
+                </org-table-th>
+                <org-table-th>
+                  @if (liveDemoForm.controls.sortable.value) {
+                    <div [orgSortableKey]="'updated'">Updated</div>
+                  } @else {
+                    Updated
+                  }
+                </org-table-th>
+                <org-table-th [numeric]="true">
+                  @if (liveDemoForm.controls.sortable.value) {
+                    <div [orgSortableKey]="'records'">Records</div>
+                  } @else {
+                    Records
+                  }
+                </org-table-th>
+              </ng-template>
+              <ng-template #empty>
+                No projects match the current filter. Try a different status, or reset filters.
+              </ng-template>
+              <ng-template [orgTypedContext]="data()" #body let-user>
+                <org-table-td>{{ user.name }}</org-table-td>
+                <org-table-td [muted]="true">{{ user.owner }}</org-table-td>
+                <org-table-td [faint]="true">{{ user.updated }}</org-table-td>
+                <org-table-td [numeric]="true">{{ user.records }}</org-table-td>
+              </ng-template>
+            </org-table>
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+    </form>
+  `,
+})
+class TableLiveDemo {
+  protected readonly sizeItems = liveDemoSizeItems;
+  protected readonly stateItems = liveDemoStateItems;
+
+  protected readonly liveDemoForm = new FormGroup({
+    size: new FormControl<TableSize>('base', { nonNullable: true }),
+    state: new FormControl<LiveDemoState>('default', { nonNullable: true }),
+    striped: new FormControl<boolean>(false, { nonNullable: true }),
+    hover: new FormControl<boolean>(true, { nonNullable: true }),
+    selectable: new FormControl<boolean>(false, { nonNullable: true }),
+    sortable: new FormControl<boolean>(false, { nonNullable: true }),
+    stickyFirstColumn: new FormControl<boolean>(false, { nonNullable: true }),
+    stickyHeader: new FormControl<boolean>(false, { nonNullable: true }),
+  });
+
+  protected readonly selectionStore = new DataSelectionStore<User>();
+
+  private readonly _stateValue = signal<LiveDemoState>('default');
+  private readonly _selectableValue = signal<boolean>(false);
+
+  protected readonly data = computed<User[]>(() => (this._stateValue() === 'empty' ? [] : SAMPLE_USERS));
+
+  protected readonly isLoading = computed<boolean>(() => this._stateValue() === 'loading');
+
+  protected readonly isBackgroundLoading = computed<boolean>(() => this._stateValue() === 'loading-overlay');
+
+  protected readonly selectionDataValue = computed<DataSelectionStore<User> | undefined>(() =>
+    this._selectableValue() ? this.selectionStore : undefined
+  );
+
+  constructor() {
+    this.liveDemoForm.controls.state.valueChanges.subscribe((value) => this._stateValue.set(value!));
+    this.liveDemoForm.controls.selectable.valueChanges.subscribe((value) => this._selectableValue.set(value!));
+  }
+}
+
+@Component({
+  selector: 'story-table-anatomy-demo',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [Table, TableHeader, TableCell, Tag, TypedContextDirective],
+  template: `
+    <org-table [data]="users" [hover]="false">
       <ng-template #header>
-        <org-table-th>Name</org-table-th>
-        <org-table-th>Email</org-table-th>
-        <org-table-th>Organization ID</org-table-th>
-        <org-table-th>Roles</org-table-th>
+        <org-table-th>Project</org-table-th>
+        <org-table-th>Owner</org-table-th>
+        <org-table-th>Status</org-table-th>
+        <org-table-th>Updated</org-table-th>
+        <org-table-th [numeric]="true">Records</org-table-th>
       </ng-template>
       <ng-template [orgTypedContext]="users" #body let-user>
         <org-table-td>{{ user.name }}</org-table-td>
-        <org-table-td>{{ user.email }}</org-table-td>
-        <org-table-td>{{ user.organizationId }}</org-table-td>
-        <org-table-td>{{ user.roles }}</org-table-td>
+        <org-table-td>{{ user.owner }}</org-table-td>
+        <org-table-td>
+          <org-tag [color]="statusColor(user.status)" variant="soft">{{ statusLabel(user.status) }}</org-tag>
+        </org-table-td>
+        <org-table-td [faint]="true">{{ user.updated }}</org-table-td>
+        <org-table-td [numeric]="true">{{ user.records }}</org-table-td>
       </ng-template>
     </org-table>
   `,
 })
-class BasicTableDemo {
-  protected readonly users = SAMPLE_USERS.slice(0, 10);
+class TableAnatomyDemo {
+  protected readonly users = SAMPLE_USERS.slice(0, 3);
+
+  protected statusColor(status: User['status']): 'safe' | 'info' | 'neutral' | 'warning' {
+    return STATUS_TAG_COLOR[status];
+  }
+
+  protected statusLabel(status: User['status']): string {
+    return STATUS_LABEL[status];
+  }
 }
 
 @Component({
-  selector: 'story-sortable-table-demo',
+  selector: 'story-table-sizes-demo',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [Table, TableHeader, TableCell, TypedContextDirective],
+  styles: [
+    `
+      :host {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+    `,
+  ],
+  template: `
+    <org-table [data]="smallUsers" size="sm" [hover]="false">
+      <ng-template #header>
+        <org-table-th>Project</org-table-th>
+        <org-table-th>Owner</org-table-th>
+        <org-table-th>Updated</org-table-th>
+        <org-table-th [numeric]="true">Records</org-table-th>
+      </ng-template>
+      <ng-template [orgTypedContext]="smallUsers" #body let-user>
+        <org-table-td>{{ user.shortName }}</org-table-td>
+        <org-table-td>{{ user.owner }}</org-table-td>
+        <org-table-td [faint]="true">{{ user.updated }}</org-table-td>
+        <org-table-td [numeric]="true">{{ user.records }}</org-table-td>
+      </ng-template>
+    </org-table>
+    <org-table [data]="baseUsers" size="base" [hover]="false">
+      <ng-template #header>
+        <org-table-th>Project</org-table-th>
+        <org-table-th>Owner</org-table-th>
+        <org-table-th>Updated</org-table-th>
+        <org-table-th [numeric]="true">Records</org-table-th>
+      </ng-template>
+      <ng-template [orgTypedContext]="baseUsers" #body let-user>
+        <org-table-td>{{ user.name }}</org-table-td>
+        <org-table-td>{{ user.owner }}</org-table-td>
+        <org-table-td [faint]="true">{{ user.updated }}</org-table-td>
+        <org-table-td [numeric]="true">{{ user.records }}</org-table-td>
+      </ng-template>
+    </org-table>
+    <org-table [data]="largeUsers" size="lg" [hover]="false">
+      <ng-template #header>
+        <org-table-th>Project</org-table-th>
+        <org-table-th>Owner</org-table-th>
+        <org-table-th>Updated</org-table-th>
+        <org-table-th [numeric]="true">Records</org-table-th>
+      </ng-template>
+      <ng-template [orgTypedContext]="largeUsers" #body let-user>
+        <org-table-td>{{ user.name }}</org-table-td>
+        <org-table-td>{{ user.owner }}</org-table-td>
+        <org-table-td [faint]="true">{{ user.updated }}</org-table-td>
+        <org-table-td [numeric]="true">{{ user.records }}</org-table-td>
+      </ng-template>
+    </org-table>
+  `,
+})
+class TableSizesDemo {
+  protected readonly smallUsers = SAMPLE_USERS.slice(0, 4).map((user) => ({
+    ...user,
+    shortName: user.name.split(' — ')[0],
+  }));
+  protected readonly baseUsers = SAMPLE_USERS.slice(0, 4);
+  protected readonly largeUsers = SAMPLE_USERS.slice(0, 3);
+}
+
+@Component({
+  selector: 'story-table-row-states-demo',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [Table, TableHeader, TableCell, Tag, TypedContextDirective],
+  styles: [
+    `
+      :host {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+    `,
+  ],
+  template: `
+    <org-table [data]="users" [selectionData]="selectionStore" [hover]="true">
+      <ng-template #header>
+        <org-table-th>Project</org-table-th>
+        <org-table-th>Owner</org-table-th>
+        <org-table-th>Status</org-table-th>
+        <org-table-th [numeric]="true">Records</org-table-th>
+      </ng-template>
+      <ng-template [orgTypedContext]="users" #body let-user>
+        <org-table-td>{{ user.name }}</org-table-td>
+        <org-table-td>{{ user.owner }}</org-table-td>
+        <org-table-td>
+          <org-tag [color]="statusColor(user.status)" variant="soft">{{ statusLabel(user.status) }}</org-tag>
+        </org-table-td>
+        <org-table-td [numeric]="true">{{ user.records }}</org-table-td>
+      </ng-template>
+    </org-table>
+    <org-table [data]="regions" [striped]="true" [hover]="false">
+      <ng-template #header>
+        <org-table-th>Region</org-table-th>
+        <org-table-th>Plan</org-table-th>
+        <org-table-th [numeric]="true">Seats</org-table-th>
+        <org-table-th [numeric]="true">MRR</org-table-th>
+      </ng-template>
+      <ng-template [orgTypedContext]="regions" #body let-region>
+        <org-table-td>{{ region.name }}</org-table-td>
+        <org-table-td>{{ region.plan }}</org-table-td>
+        <org-table-td [numeric]="true">{{ region.seats }}</org-table-td>
+        <org-table-td [numeric]="true">{{ region.mrrLabel }}</org-table-td>
+      </ng-template>
+    </org-table>
+  `,
+})
+class TableRowStatesDemo {
+  protected readonly users = SAMPLE_USERS.slice(0, 4);
+  protected readonly selectionStore = new DataSelectionStore<User>();
+
+  protected readonly regions = [
+    { id: 'na', name: 'North America', plan: 'Enterprise', seats: 2140, mrrLabel: '$184,200' },
+    { id: 'emea', name: 'EMEA', plan: 'Enterprise', seats: 1802, mrrLabel: '$148,910' },
+    { id: 'apac', name: 'APAC', plan: 'Team', seats: 920, mrrLabel: '$56,400' },
+    { id: 'latam', name: 'LATAM', plan: 'Team', seats: 412, mrrLabel: '$22,140' },
+    { id: 'other', name: 'Other', plan: 'Free', seats: 3019, mrrLabel: '$0' },
+    { id: 'total', name: 'Total', plan: '', seats: 8293, mrrLabel: '$411,650' },
+  ];
+
+  constructor() {
+    this.selectionStore.set(this.users[1], true);
+  }
+
+  protected statusColor(status: User['status']): 'safe' | 'info' | 'neutral' | 'warning' {
+    return STATUS_TAG_COLOR[status];
+  }
+
+  protected statusLabel(status: User['status']): string {
+    return STATUS_LABEL[status];
+  }
+}
+
+@Component({
+  selector: 'story-table-sortable-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [Table, TableHeader, TableCell, SortableDirective, TypedContextDirective],
   providers: [SortingStore],
   template: `
-    <div class="flex flex-col gap-4">
-      <div class="text-sm">
-        <strong>Sorting:</strong> {{ sortingStore.key() || 'None' }}
-        @if (sortingStore.direction()) {
-          <span>({{ sortingStore.direction() }})</span>
-        }
-      </div>
-      <org-table [data]="sortedUsers()" [style.maxHeight]="'400px'">
-        <ng-template #header>
-          <org-table-th>
-            <div [orgSortableKey]="'name'">Name</div>
-          </org-table-th>
-          <org-table-th>
-            <div [orgSortableKey]="'email'">Email</div>
-          </org-table-th>
-          <org-table-th>
-            <div [orgSortableKey]="'organizationId'">Organization ID</div>
-          </org-table-th>
-          <org-table-th>Roles</org-table-th>
-        </ng-template>
-        <ng-template [orgTypedContext]="sortedUsers()" #body let-user>
-          <org-table-td>{{ user.name }}</org-table-td>
-          <org-table-td>{{ user.email }}</org-table-td>
-          <org-table-td>{{ user.organizationId }}</org-table-td>
-          <org-table-td>{{ user.roles }}</org-table-td>
-        </ng-template>
-      </org-table>
-    </div>
-  `,
-})
-class SortableTableDemo {
-  protected readonly sortingStore = inject(SortingStore);
-  private readonly _users = signal<User[]>(SAMPLE_USERS.slice(0, 15));
-
-  protected readonly sortedUsers = computed<User[]>(() => {
-    const users = [...this._users()];
-    const key = this.sortingStore.key();
-    const direction = this.sortingStore.direction();
-
-    if (!key || !direction) {
-      return users;
-    }
-
-    return users.sort((a, b) => {
-      const aValue = a[key as keyof User];
-      const bValue = b[key as keyof User];
-
-      if (aValue < bValue) {
-        return direction === 'asc' ? -1 : 1;
-      }
-
-      if (aValue > bValue) {
-        return direction === 'asc' ? 1 : -1;
-      }
-
-      return 0;
-    });
-  });
-}
-
-@Component({
-  selector: 'story-paginated-table-demo',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Table, TableHeader, TableCell, Pagination, TypedContextDirective],
-  template: `
-    <div class="flex flex-col gap-4">
-      <org-table [data]="paginatedUsers()" [style.maxHeight]="'400px'">
-        <ng-template #header>
-          <org-table-th>Name</org-table-th>
-          <org-table-th>Email</org-table-th>
-          <org-table-th>Organization ID</org-table-th>
-          <org-table-th>Roles</org-table-th>
-        </ng-template>
-        <ng-template [orgTypedContext]="paginatedUsers()" #body let-user>
-          <org-table-td>{{ user.name }}</org-table-td>
-          <org-table-td>{{ user.email }}</org-table-td>
-          <org-table-td>{{ user.organizationId }}</org-table-td>
-          <org-table-td>{{ user.roles }}</org-table-td>
-        </ng-template>
-      </org-table>
-      <org-pagination
-        [(currentPage)]="currentPage"
-        [totalItems]="users.length"
-        [(itemsPerPage)]="itemsPerPage"
-        [itemsPerPageOptions]="[5, 10, 15]"
-      />
-    </div>
-  `,
-})
-class PaginatedTableDemo {
-  protected readonly users = SAMPLE_USERS;
-  protected readonly currentPage = signal(1);
-  protected readonly itemsPerPage = signal(5);
-
-  protected readonly paginatedUsers = computed<User[]>(() => {
-    const start = (this.currentPage() - 1) * this.itemsPerPage();
-    const end = Math.min(start + this.itemsPerPage(), this.users.length);
-
-    return this.users.slice(start, end);
-  });
-}
-
-@Component({
-  selector: 'story-selection-table-demo',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Table, TableHeader, TableCell, Pagination, Button, TypedContextDirective],
-  template: `
-    <div class="flex flex-col gap-4">
-      <div class="text-sm"><strong>Selected:</strong> {{ selectionStore.selectedCount() }} user(s)</div>
-      <org-table [data]="paginatedUsers()" [selectionData]="selectionStore" [style.maxHeight]="'400px'">
-        <ng-template #selectedActions>
-          <org-button label="Resend invite" preIcon="mail" (clicked)="onResendInvite()" />
-          <org-button label="Restore" (clicked)="onRestore()" />
-          <org-button color="danger" label="Delete" preIcon="trash" (clicked)="onDelete()" />
-        </ng-template>
-        <ng-template #header>
-          <org-table-th>Name</org-table-th>
-          <org-table-th>Email</org-table-th>
-          <org-table-th>Organization ID</org-table-th>
-          <org-table-th>Roles</org-table-th>
-        </ng-template>
-        <ng-template [orgTypedContext]="paginatedUsers()" #body let-user>
-          <org-table-td>{{ user.name }}</org-table-td>
-          <org-table-td>{{ user.email }}</org-table-td>
-          <org-table-td>{{ user.organizationId }}</org-table-td>
-          <org-table-td>{{ user.roles }}</org-table-td>
-        </ng-template>
-      </org-table>
-      <org-pagination
-        [(currentPage)]="currentPage"
-        [totalItems]="users.length"
-        [(itemsPerPage)]="itemsPerPage"
-        [itemsPerPageOptions]="[5, 10, 15]"
-      />
-    </div>
-  `,
-})
-class SelectionTableDemo {
-  protected readonly selectionStore = new DataSelectionStore<User>();
-
-  protected readonly users = SAMPLE_USERS;
-  protected readonly currentPage = signal(1);
-  protected readonly itemsPerPage = signal(5);
-
-  protected readonly paginatedUsers = computed<User[]>(() => {
-    const start = (this.currentPage() - 1) * this.itemsPerPage();
-    const end = Math.min(start + this.itemsPerPage(), this.users.length);
-
-    return this.users.slice(start, end);
-  });
-
-  protected onResendInvite(): void {
-    console.log('Resend invite for selected users:', this.selectionStore.selectedItemsArray());
-  }
-
-  protected onRestore(): void {
-    console.log('Restore selected users:', this.selectionStore.selectedItemsArray());
-  }
-
-  protected onDelete(): void {
-    console.log('Delete selected users:', this.selectionStore.selectedItemsArray());
-  }
-}
-
-@Component({
-  selector: 'story-full-featured-table-demo',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Table, TableHeader, TableCell, SortableDirective, Pagination, Button, TypedContextDirective],
-  providers: [SortingStore],
-  template: `
-    <div class="flex flex-col gap-4">
-      <div class="flex justify-between items-center text-sm">
-        <div><strong>Selected:</strong> {{ selectionStore.selectedCount() }} user(s)</div>
-        <div>
-          <strong>Sorting:</strong> {{ sortingStore.key() || 'None' }}
-          @if (sortingStore.direction()) {
-            <span>({{ sortingStore.direction() }})</span>
-          }
-        </div>
-      </div>
-      <org-table [data]="displayUsers()" [selectionData]="selectionStore" [style.maxHeight]="'400px'">
-        <ng-template #selectedActions>
-          <org-button label="Resend invite" preIcon="mail" (clicked)="onResendInvite()" />
-          <org-button label="Restore" (clicked)="onRestore()" />
-          <org-button color="danger" label="Delete" preIcon="trash" (clicked)="onDelete()" />
-        </ng-template>
-        <ng-template #header>
-          <org-table-th>
-            <div [orgSortableKey]="'name'">Name</div>
-          </org-table-th>
-          <org-table-th>
-            <div [orgSortableKey]="'email'">Email</div>
-          </org-table-th>
-          <org-table-th>
-            <div [orgSortableKey]="'organizationId'">Organization ID</div>
-          </org-table-th>
-          <org-table-th>Roles</org-table-th>
-        </ng-template>
-        <ng-template [orgTypedContext]="displayUsers()" #body let-user>
-          <org-table-td>{{ user.name }}</org-table-td>
-          <org-table-td>{{ user.email }}</org-table-td>
-          <org-table-td>{{ user.organizationId }}</org-table-td>
-          <org-table-td>{{ user.roles }}</org-table-td>
-        </ng-template>
-      </org-table>
-      <org-pagination
-        [(currentPage)]="currentPage"
-        [totalItems]="users.length"
-        [(itemsPerPage)]="itemsPerPage"
-        [itemsPerPageOptions]="[5, 10, 15]"
-      />
-    </div>
-  `,
-})
-class FullFeaturedTableDemo {
-  protected readonly sortingStore = inject(SortingStore);
-  protected readonly selectionStore = new DataSelectionStore<User>();
-
-  protected readonly users = SAMPLE_USERS;
-  protected readonly currentPage = signal(1);
-  protected readonly itemsPerPage = signal(5);
-
-  protected readonly sortedUsers = computed<User[]>(() => {
-    const users = [...this.users];
-    const key = this.sortingStore.key();
-    const direction = this.sortingStore.direction();
-
-    if (!key || !direction) {
-      return users;
-    }
-
-    return users.sort((a, b) => {
-      const aValue = a[key as keyof User];
-      const bValue = b[key as keyof User];
-
-      if (aValue < bValue) {
-        return direction === 'asc' ? -1 : 1;
-      }
-
-      if (aValue > bValue) {
-        return direction === 'asc' ? 1 : -1;
-      }
-
-      return 0;
-    });
-  });
-
-  protected readonly displayUsers = computed<User[]>(() => {
-    const sorted = this.sortedUsers();
-    const start = (this.currentPage() - 1) * this.itemsPerPage();
-    const end = Math.min(start + this.itemsPerPage(), sorted.length);
-
-    return sorted.slice(start, end);
-  });
-
-  protected onResendInvite(): void {
-    console.log('Resend invite for selected users:', this.selectionStore.selectedItemsArray());
-  }
-
-  protected onRestore(): void {
-    console.log('Restore selected users:', this.selectionStore.selectedItemsArray());
-  }
-
-  protected onDelete(): void {
-    console.log('Delete selected users:', this.selectionStore.selectedItemsArray());
-  }
-}
-
-type EllipsisUser = User & { description: string };
-
-@Component({
-  selector: 'story-ellipsis-table-demo',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Table, TableHeader, TableCell, TypedContextDirective],
-  template: `
-    <div class="flex flex-col gap-4">
-      <div class="text-sm">This table shows ellipsis for content that exceeds 2 lines in cells.</div>
-      <org-table [data]="users" [style.maxHeight]="'400px'">
-        <ng-template #header>
-          <org-table-th>Name</org-table-th>
-          <org-table-th>Email</org-table-th>
-          <org-table-th>Long Description</org-table-th>
-        </ng-template>
-        <ng-template [orgTypedContext]="users" #body let-user>
-          <org-table-td [ellipsisLines]="2">{{ user.name }}</org-table-td>
-          <org-table-td [ellipsisLines]="2">{{ user.email }}</org-table-td>
-          <org-table-td [ellipsisLines]="2">{{ user.description }}</org-table-td>
-        </ng-template>
-      </org-table>
-    </div>
-  `,
-})
-class EllipsisTableDemo {
-  protected readonly users: EllipsisUser[] = SAMPLE_USERS.slice(0, 10).map((user) => ({
-    ...user,
-    description: 'This is a very long description that will be truncated with ellipsis after two lines. '.repeat(3),
-  }));
-}
-
-@Component({
-  selector: 'story-dynamic-width-table-demo',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Table, TableHeader, TableCell, TypedContextDirective],
-  template: `
-    <div class="flex flex-col gap-4">
-      <div class="text-sm">This table demonstrates dynamic column widths with fixed and flexible columns.</div>
-      <org-table [data]="users" [style.maxHeight]="'400px'">
-        <ng-template #header>
-          <org-table-th [style.width]="'3.125rem'">ID</org-table-th
-          ><!-- 50px -->
-          <org-table-th [style.width]="'30%'">Name</org-table-th>
-          <org-table-th [style.width]="'40%'">Email</org-table-th>
-          <org-table-th>Organization ID</org-table-th>
-          <org-table-th>Roles</org-table-th>
-        </ng-template>
-        <ng-template [orgTypedContext]="users" #body let-user>
-          <org-table-td>{{ user.id }}</org-table-td>
-          <org-table-td>{{ user.name }}</org-table-td>
-          <org-table-td>{{ user.email }}</org-table-td>
-          <org-table-td>{{ user.organizationId }}</org-table-td>
-          <org-table-td>{{ user.roles }}</org-table-td>
-        </ng-template>
-      </org-table>
-    </div>
-  `,
-})
-class DynamicWidthTableDemo {
-  protected readonly users = SAMPLE_USERS.slice(0, 10);
-}
-
-type ScrollingUser = User & { department: string; location: string; status: string };
-
-@Component({
-  selector: 'story-scrolling-table-demo',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Table, TableHeader, TableCell, TypedContextDirective],
-  template: `
-    <div class="flex flex-col gap-4">
-      <div class="text-sm">
-        This table demonstrates both vertical and horizontal scrolling with many rows and columns.
-      </div>
-      <org-table [data]="users" [style]="{ height: '400px', maxWidth: '800px' }">
-        <ng-template #header>
-          <org-table-th>ID</org-table-th>
-          <org-table-th>Name</org-table-th>
-          <org-table-th>Email</org-table-th>
-          <org-table-th>Organization ID</org-table-th>
-          <org-table-th>Roles</org-table-th>
-          <org-table-th>Department</org-table-th>
-          <org-table-th>Location</org-table-th>
-          <org-table-th>Status</org-table-th>
-        </ng-template>
-        <ng-template [orgTypedContext]="users" #body let-user>
-          <org-table-td>{{ user.id }}</org-table-td>
-          <org-table-td>{{ user.name }}</org-table-td>
-          <org-table-td>{{ user.email }}</org-table-td>
-          <org-table-td>{{ user.organizationId }}</org-table-td>
-          <org-table-td>{{ user.roles }}</org-table-td>
-          <org-table-td>{{ user.department }}</org-table-td>
-          <org-table-td>{{ user.location }}</org-table-td>
-          <org-table-td>{{ user.status }}</org-table-td>
-        </ng-template>
-      </org-table>
-    </div>
-  `,
-})
-class ScrollingTableDemo {
-  protected readonly users: ScrollingUser[] = SAMPLE_USERS.map((user, index) => ({
-    ...user,
-    department: ['Engineering', 'Sales', 'Marketing', 'Support', 'HR'][index % 5],
-    location: ['New York', 'San Francisco', 'London', 'Tokyo', 'Sydney'][index % 5],
-    status: ['Active', 'Inactive', 'Pending'][index % 3],
-  }));
-}
-
-@Component({
-  selector: 'story-loading-table-demo',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Table, TableHeader, TableCell, Button, TypedContextDirective],
-  template: `
-    <div class="flex flex-col gap-4">
-      <div class="flex items-center gap-4">
-        <org-button [label]="isLoading() ? 'Stop Loading' : 'Start Loading'" (clicked)="toggleLoading()" />
-        <div class="text-sm"><strong>Status:</strong> {{ isLoading() ? 'Loading...' : 'Ready' }}</div>
-      </div>
-      <org-table [data]="users" [isLoading]="isLoading()" [style.maxHeight]="'400px'">
-        <ng-template #header>
-          <org-table-th>Name</org-table-th>
-          <org-table-th>Email</org-table-th>
-          <org-table-th>Organization ID</org-table-th>
-          <org-table-th>Roles</org-table-th>
-        </ng-template>
-        <ng-template [orgTypedContext]="users" #body let-user>
-          <org-table-td>{{ user.name }}</org-table-td>
-          <org-table-td>{{ user.email }}</org-table-td>
-          <org-table-td>{{ user.organizationId }}</org-table-td>
-          <org-table-td>{{ user.roles }}</org-table-td>
-        </ng-template>
-      </org-table>
-    </div>
-  `,
-})
-class LoadingTableDemo {
-  protected readonly users = SAMPLE_USERS.slice(0, 10);
-  protected readonly isLoading = signal<boolean>(false);
-
-  protected toggleLoading(): void {
-    this.isLoading.set(!this.isLoading());
-  }
-}
-
-@Component({
-  selector: 'story-background-loading-table-demo',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Table, TableHeader, TableCell, Button, TypedContextDirective],
-  template: `
-    <div class="flex flex-col gap-4">
-      <div class="flex items-center gap-4">
-        <org-button
-          [label]="isBackgroundLoading() ? 'Stop Background Loading' : 'Start Background Loading'"
-          (clicked)="toggleBackgroundLoading()"
-        />
-        <div class="text-sm">
-          <strong>Status:</strong> {{ isBackgroundLoading() ? 'Refreshing data in background...' : 'Ready' }}
-        </div>
-      </div>
-      <org-table [data]="users" [isBackgroundLoading]="isBackgroundLoading()" [style.maxHeight]="'400px'">
-        <ng-template #header>
-          <org-table-th>Name</org-table-th>
-          <org-table-th>Email</org-table-th>
-          <org-table-th>Organization ID</org-table-th>
-          <org-table-th>Roles</org-table-th>
-        </ng-template>
-        <ng-template [orgTypedContext]="users" #body let-user>
-          <org-table-td>{{ user.name }}</org-table-td>
-          <org-table-td>{{ user.email }}</org-table-td>
-          <org-table-td>{{ user.organizationId }}</org-table-td>
-          <org-table-td>{{ user.roles }}</org-table-td>
-        </ng-template>
-      </org-table>
-    </div>
-  `,
-})
-class BackgroundLoadingTableDemo {
-  protected readonly users = SAMPLE_USERS.slice(0, 10);
-  protected readonly isBackgroundLoading = signal<boolean>(false);
-
-  protected toggleBackgroundLoading(): void {
-    this.isBackgroundLoading.set(!this.isBackgroundLoading());
-  }
-}
-
-@Component({
-  selector: 'story-combined-loading-table-demo',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Table, TableHeader, TableCell, Button, TypedContextDirective],
-  template: `
-    <div class="flex flex-col gap-4">
-      <div class="flex items-center gap-4">
-        <org-button label="Simulate Initial Load" (clicked)="simulateInitialLoad()" />
-        <org-button label="Simulate Refresh" (clicked)="simulateRefresh()" />
-        <div class="text-sm">
-          <strong>Status:</strong>
-          @if (isLoading()) {
-            <span>Loading initial data...</span>
-          } @else if (isBackgroundLoading()) {
-            <span>Refreshing data in background...</span>
-          } @else {
-            <span>Ready</span>
-          }
-        </div>
-      </div>
-      <org-table
-        [data]="displayUsers()"
-        [isLoading]="isLoading()"
-        [isBackgroundLoading]="isBackgroundLoading()"
-        [style.maxHeight]="'400px'"
-      >
-        <ng-template #header>
-          <org-table-th>Name</org-table-th>
-          <org-table-th>Email</org-table-th>
-          <org-table-th>Organization ID</org-table-th>
-          <org-table-th>Roles</org-table-th>
-        </ng-template>
-        <ng-template [orgTypedContext]="displayUsers()" #body let-user>
-          <org-table-td>{{ user.name }}</org-table-td>
-          <org-table-td>{{ user.email }}</org-table-td>
-          <org-table-td>{{ user.organizationId }}</org-table-td>
-          <org-table-td>{{ user.roles }}</org-table-td>
-        </ng-template>
-      </org-table>
-    </div>
-  `,
-})
-class CombinedLoadingTableDemo {
-  private readonly _users = signal<User[]>([]);
-  protected readonly isLoading = signal<boolean>(false);
-  protected readonly isBackgroundLoading = signal<boolean>(false);
-
-  protected readonly displayUsers = this._users.asReadonly();
-
-  protected simulateInitialLoad(): void {
-    this.isLoading.set(true);
-    this._users.set([]);
-
-    setTimeout(() => {
-      this._users.set(SAMPLE_USERS.slice(0, 10));
-      this.isLoading.set(false);
-    }, 2000);
-  }
-
-  protected simulateRefresh(): void {
-    this.isBackgroundLoading.set(true);
-
-    setTimeout(() => {
-      const shuffled = [...SAMPLE_USERS].sort(() => Math.random() - 0.5);
-      this._users.set(shuffled.slice(0, 10));
-      this.isBackgroundLoading.set(false);
-    }, 2000);
-  }
-}
-
-@Component({
-  selector: 'story-empty-state-table-demo',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Table, TableHeader, TableCell, TypedContextDirective],
-  template: `
-    <org-table [data]="users" [style.maxHeight]="'400px'">
+    <org-table [data]="sortedUsers()" [hover]="false">
       <ng-template #header>
-        <org-table-th>Name</org-table-th>
-        <org-table-th>Email</org-table-th>
-        <org-table-th>Organization ID</org-table-th>
-        <org-table-th>Roles</org-table-th>
+        <org-table-th>
+          <div [orgSortableKey]="'name'">Project</div>
+        </org-table-th>
+        <org-table-th>
+          <div [orgSortableKey]="'owner'">Owner</div>
+        </org-table-th>
+        <org-table-th>
+          <div [orgSortableKey]="'updated'">Updated</div>
+        </org-table-th>
+        <org-table-th [numeric]="true">
+          <div [orgSortableKey]="'records'">Records</div>
+        </org-table-th>
       </ng-template>
-      <ng-template [orgTypedContext]="users" #body let-user>
+      <ng-template [orgTypedContext]="sortedUsers()" #body let-user>
         <org-table-td>{{ user.name }}</org-table-td>
-        <org-table-td>{{ user.email }}</org-table-td>
-        <org-table-td>{{ user.organizationId }}</org-table-td>
-        <org-table-td>{{ user.roles }}</org-table-td>
+        <org-table-td>{{ user.owner }}</org-table-td>
+        <org-table-td [faint]="true">{{ user.updated }}</org-table-td>
+        <org-table-td [numeric]="true">{{ user.records }}</org-table-td>
       </ng-template>
     </org-table>
   `,
 })
-class EmptyStateTableDemo {
-  protected readonly users: User[] = [];
+class TableSortableDemo {
+  protected readonly sortingStore = inject(SortingStore);
+
+  private readonly _users = SAMPLE_USERS.slice(0, 5);
+
+  protected readonly sortedUsers = computed<User[]>(() => {
+    const key = this.sortingStore.key();
+    const direction = this.sortingStore.direction();
+
+    if (!key || !direction) {
+      return this._users;
+    }
+
+    const sorted = [...this._users];
+
+    sorted.sort((a, b) => {
+      const aValue = (a as unknown as Record<string, unknown>)[key];
+      const bValue = (b as unknown as Record<string, unknown>)[key];
+
+      if (typeof aValue === 'number' && typeof bValue === 'number') {
+        return direction === 'asc' ? aValue - bValue : bValue - aValue;
+      }
+
+      const aString = String(aValue);
+      const bString = String(bValue);
+
+      return direction === 'asc' ? aString.localeCompare(bString) : bString.localeCompare(aString);
+    });
+
+    return sorted;
+  });
+}
+
+type WideUser = User & {
+  region: string;
+  created: string;
+  lastDeploy: string;
+  members: number;
+  storage: number;
+};
+
+@Component({
+  selector: 'story-table-sticky-first-column-demo',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [Table, TableHeader, TableCell, Tag, TypedContextDirective],
+  template: `
+    <org-table
+      [data]="users"
+      [stickyFirstColumn]="true"
+      [hover]="false"
+      [style]="{ maxWidth: '38rem' }"
+    >
+      <ng-template #header>
+        <org-table-th>Project</org-table-th>
+        <org-table-th>Owner</org-table-th>
+        <org-table-th>Region</org-table-th>
+        <org-table-th>Status</org-table-th>
+        <org-table-th>Created</org-table-th>
+        <org-table-th>Updated</org-table-th>
+        <org-table-th>Last deploy</org-table-th>
+        <org-table-th [numeric]="true">Records</org-table-th>
+        <org-table-th [numeric]="true">Members</org-table-th>
+        <org-table-th [numeric]="true">Storage (GB)</org-table-th>
+      </ng-template>
+      <ng-template [orgTypedContext]="users" #body let-user>
+        <org-table-td>{{ user.name }}</org-table-td>
+        <org-table-td>{{ user.owner }}</org-table-td>
+        <org-table-td>{{ user.region }}</org-table-td>
+        <org-table-td>
+          <org-tag [color]="statusColor(user.status)" variant="soft">{{ statusLabel(user.status) }}</org-tag>
+        </org-table-td>
+        <org-table-td [faint]="true">{{ user.created }}</org-table-td>
+        <org-table-td [faint]="true">{{ user.updated }}</org-table-td>
+        <org-table-td [faint]="true">{{ user.lastDeploy }}</org-table-td>
+        <org-table-td [numeric]="true">{{ user.records }}</org-table-td>
+        <org-table-td [numeric]="true">{{ user.members }}</org-table-td>
+        <org-table-td [numeric]="true">{{ user.storage }}</org-table-td>
+      </ng-template>
+    </org-table>
+  `,
+})
+class TableStickyFirstColumnDemo {
+  protected readonly users: WideUser[] = SAMPLE_USERS.slice(0, 5).map((user, index) => ({
+    ...user,
+    region: ['NA', 'EMEA', 'NA', 'APAC', 'EMEA'][index] ?? 'NA',
+    created: ['Mar 12, 2025', 'Jan 04, 2025', 'Feb 21, 2025', 'Mar 30, 2025', 'Apr 11, 2025'][index] ?? '—',
+    lastDeploy: ['12m ago', '3d ago', '—', '8d ago', '14m ago'][index] ?? '—',
+    members: [8, 5, 3, 4, 12][index] ?? 0,
+    storage: [14.2, 3.8, 0.4, 2.1, 22.8][index] ?? 0,
+  }));
+
+  protected statusColor(status: User['status']): 'safe' | 'info' | 'neutral' | 'warning' {
+    return STATUS_TAG_COLOR[status];
+  }
+
+  protected statusLabel(status: User['status']): string {
+    return STATUS_LABEL[status];
+  }
+}
+
+@Component({
+  selector: 'story-table-loading-empty-demo',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [Table, TableHeader, TableCell, TypedContextDirective],
+  styles: [
+    `
+      :host {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+    `,
+  ],
+  template: `
+    <org-table [data]="loadingUsers" [isLoading]="true" [hover]="false">
+      <ng-template #header>
+        <org-table-th>Project</org-table-th>
+        <org-table-th>Owner</org-table-th>
+        <org-table-th>Updated</org-table-th>
+        <org-table-th [numeric]="true">Records</org-table-th>
+      </ng-template>
+      <ng-template [orgTypedContext]="loadingUsers" #body let-user>
+        <org-table-td>{{ user.name }}</org-table-td>
+        <org-table-td>{{ user.owner }}</org-table-td>
+        <org-table-td [faint]="true">{{ user.updated }}</org-table-td>
+        <org-table-td [numeric]="true">{{ user.records }}</org-table-td>
+      </ng-template>
+    </org-table>
+    <org-table [data]="emptyUsers" [hover]="false">
+      <ng-template #header>
+        <org-table-th>Project</org-table-th>
+        <org-table-th>Owner</org-table-th>
+        <org-table-th>Updated</org-table-th>
+        <org-table-th [numeric]="true">Records</org-table-th>
+      </ng-template>
+      <ng-template #empty> No projects match the current filter. Try a different status, or reset filters. </ng-template>
+      <ng-template [orgTypedContext]="emptyUsers" #body let-user>
+        <org-table-td>{{ user.name }}</org-table-td>
+        <org-table-td>{{ user.owner }}</org-table-td>
+        <org-table-td [faint]="true">{{ user.updated }}</org-table-td>
+        <org-table-td [numeric]="true">{{ user.records }}</org-table-td>
+      </ng-template>
+    </org-table>
+  `,
+})
+class TableLoadingEmptyDemo {
+  protected readonly loadingUsers = SAMPLE_USERS.slice(0, 4);
+  protected readonly emptyUsers: User[] = [];
+}
+
+@Component({
+  selector: 'story-table-in-context-demo',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [Table, TableHeader, TableCell, Tag, Avatar, Link, Pagination, Button, TypedContextDirective],
+  styles: [
+    `
+      :host {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+    `,
+  ],
+  template: `
+    <org-table [data]="paginatedUsers()" [selectionData]="selectionStore" [hover]="true">
+      <ng-template #selectedActions>
+        <org-button label="Resend invite" preIcon="mail" />
+        <org-button label="Restore" />
+        <org-button color="danger" label="Delete" preIcon="trash" />
+      </ng-template>
+      <ng-template #header>
+        <org-table-th>Project</org-table-th>
+        <org-table-th>Owner</org-table-th>
+        <org-table-th>Status</org-table-th>
+        <org-table-th>Updated</org-table-th>
+        <org-table-th [numeric]="true">Records</org-table-th>
+      </ng-template>
+      <ng-template [orgTypedContext]="paginatedUsers()" #body let-user>
+        <org-table-td>
+          <org-link href="#">{{ user.name }}</org-link>
+        </org-table-td>
+        <org-table-td>
+          <org-avatar size="sm" [label]="user.owner" [showLabel]="true" />
+        </org-table-td>
+        <org-table-td>
+          <org-tag [color]="statusColor(user.status)" variant="soft">{{ statusLabel(user.status) }}</org-tag>
+        </org-table-td>
+        <org-table-td [faint]="true">{{ user.updated }}</org-table-td>
+        <org-table-td [numeric]="true">{{ user.records }}</org-table-td>
+      </ng-template>
+    </org-table>
+    <org-pagination
+      [(currentPage)]="currentPage"
+      [totalItems]="users.length"
+      [(itemsPerPage)]="itemsPerPage"
+      [itemsPerPageOptions]="[5, 10]"
+    />
+  `,
+})
+class TableInContextDemo {
+  protected readonly selectionStore = new DataSelectionStore<User>();
+
+  protected readonly users = SAMPLE_USERS;
+  protected readonly currentPage = signal(1);
+  protected readonly itemsPerPage = signal(5);
+
+  protected readonly paginatedUsers = computed<User[]>(() => {
+    const start = (this.currentPage() - 1) * this.itemsPerPage();
+    const end = Math.min(start + this.itemsPerPage(), this.users.length);
+
+    return this.users.slice(start, end);
+  });
+
+  protected statusColor(status: User['status']): 'safe' | 'info' | 'neutral' | 'warning' {
+    return STATUS_TAG_COLOR[status];
+  }
+
+  protected statusLabel(status: User['status']): string {
+    return STATUS_LABEL[status];
+  }
 }
 
 const meta: Meta<Table> = {
@@ -662,52 +691,17 @@ const meta: Meta<Table> = {
 <div class="docs-top-level-overview">
   ## Table Component
 
-  A flexible, medium-complexity table component with sorting, pagination, selection, and scrolling support.
+  A real \`<table>\` element. Owns row rhythm, cell padding, the header shelf, hover/selected/striped tints, and an optional sticky first column.
 
   ### Features
-  - Template-based header and body rendering (the table auto-wraps each in an \`<org-table-tr>\`)
-  - Horizontal and vertical scrolling support
-  - Dynamic column widths (fixed and percentage-based)
-  - Built-in row selection column driven by a \`DataSelectionStore\`
-  - Sortable columns
-  - Pagination support
-  - Text ellipsis for long content
-  - Sticky header (toggleable)
-  - Hover effects on rows
-  - Light and dark mode support
-
-  ### Usage Example
-  \`\`\`html
-  <org-table [data]="users" [style.maxHeight]="'400px'">
-    <ng-template #header>
-      <org-table-th>Name</org-table-th>
-      <org-table-th>Email</org-table-th>
-      <org-table-th>Organization ID</org-table-th>
-      <org-table-th>Roles</org-table-th>
-    </ng-template>
-    <ng-template [orgTypedContext]="users" #body let-user>
-      <org-table-td>{{ user.name }}</org-table-td>
-      <org-table-td>{{ user.email }}</org-table-td>
-      <org-table-td>{{ user.organizationId }}</org-table-td>
-      <org-table-td>{{ user.roles }}</org-table-td>
-    </ng-template>
-  </org-table>
-  \`\`\`
-
-  ### Sub-components
-  - **org-table-tr**: Row component with variant (header/body) and sticky support — auto-rendered by \`org-table\` around each template
-  - **org-table-th**: Header cell component with default styling
-  - **org-table-td**: Body cell component with ellipsis support
-
-  ### Advanced Features
-  - **Sorting**: Use \`sortableKey\` directive on table headers wrapped in divs
-  - **Pagination**: Integrate with \`org-pagination\` component
-  - **Selection**: Instantiate a \`DataSelectionStore\` directly (\`new DataSelectionStore<T>()\` where \`T extends { id: string }\`) and pass it via \`[selectionData]\`. The table renders the select-all and per-row checkboxes automatically.
-  - **Selected Actions Bar**: Provide a \`<ng-template #selectedActions>\` for the actions slot. The bar shows automatically when the selection store has at least one selected item, and the built-in Clear button calls \`selectionData.clear()\`.
-  - **Ellipsis**: Set \`[ellipsisLines]="2"\` on \`org-table-td\` to enable text truncation (ellipsis is automatically enabled when ellipsisLines > 0)
-  - **Dynamic Widths**: Apply inline styles directly on \`org-table-th\` elements (e.g., \`[style.width]="'50px'"\`)
-  - **Sticky Header**: Header is sticky by default; pass \`[stickyHeader]="false"\` to opt out
-  - **Loading States**: Use \`isLoading\` for initial loads (blocks table), \`isBackgroundLoading\` for refreshes (shows spinner)
+  - Three size variants (\`sm\`, \`base\`, \`lg\`) tracking the same control ramp as Button and Input
+  - Visual modifiers: \`bordered\`, \`striped\`, \`hover\`, \`stickyHeader\`, \`stickyFirstColumn\`, \`emphasizeFirst\`
+  - Per-cell modifiers on \`<org-table-td>\` and \`<org-table-th>\`: \`numeric\`, \`muted\`, \`faint\`, \`selectCol\`
+  - Row state: selected (auto-driven by \`selectionData\`), clickable (auto-enabled when \`(rowClicked)\` is bound), empty
+  - Sortable headers via the existing \`[orgSortableKey]\` directive — the chevron + \`aria-sort\` are owned by the header
+  - Auto-rendered selection column when a \`DataSelectionStore\` is supplied via \`selectionData\`
+  - Loading state with \`<org-loading-blocker>\` overlay (\`isLoading\`) and a corner spinner for refreshes (\`isBackgroundLoading\`)
+  - Empty-state row when \`data().length === 0\` and a \`<ng-template #empty>\` is provided
 </div>
         `,
       },
@@ -717,9 +711,8 @@ const meta: Meta<Table> = {
 
 export default meta;
 
-// the isLoading / isBackgroundLoading / selectionData inputs come from the host-directive forwarding on
-// `Table`, which storybook's signal-input type extraction does not see, so they are augmented onto the args
-// type here.
+// inputs forwarded via host directives (isLoading / isBackgroundLoading / selectionData) are not visible to
+// storybook's signal-input type extraction, so they are augmented onto the args type here.
 type Story = StoryObj<
   Table & {
     isLoading: boolean;
@@ -731,28 +724,61 @@ type Story = StoryObj<
 export const Default: Story = {
   args: {
     data: SAMPLE_USERS.slice(0, 5),
+    size: 'base',
+    bordered: true,
+    striped: false,
+    hover: true,
+    stickyHeader: true,
+    stickyFirstColumn: false,
+    emphasizeFirst: false,
+    isLoading: false,
+    isBackgroundLoading: false,
   },
   argTypes: {
     data: {
       control: 'object',
       description: 'Array of data to display in the table',
     },
-    isLoading: {
-      control: 'boolean',
-      description: 'Shows loading blocker overlay when table is loading (e.g., initial data fetch)',
+    size: {
+      control: 'select',
+      options: ['sm', 'base', 'lg'],
+      description: 'The size variant; controls row height, cell padding, and font size',
     },
-    isBackgroundLoading: {
+    bordered: {
       control: 'boolean',
-      description: 'Shows loading spinner in top-right corner during background operations (e.g., data refresh)',
+      description: 'Whether the table draws its own top hairline + surface',
     },
-    selectionData: {
-      control: false,
-      description:
-        'Optional `DataSelectionStore` instance that drives the built-in selection column and selected actions bar',
+    striped: {
+      control: 'boolean',
+      description: 'Whether even body rows are tinted with the lifted surface',
+    },
+    hover: {
+      control: 'boolean',
+      description: 'Whether body rows tint on hover',
     },
     stickyHeader: {
       control: 'boolean',
-      description: 'Whether the auto-rendered header row should be sticky',
+      description: 'Whether the auto-rendered header row is sticky to the top of the scroll viewport',
+    },
+    stickyFirstColumn: {
+      control: 'boolean',
+      description: 'Whether the first column is pinned during horizontal scroll',
+    },
+    emphasizeFirst: {
+      control: 'boolean',
+      description: 'Whether the first body cell of each row is rendered with the emphasized weight + tone',
+    },
+    isLoading: {
+      control: 'boolean',
+      description: 'Shows the loading-blocker overlay (e.g. initial data fetch)',
+    },
+    isBackgroundLoading: {
+      control: 'boolean',
+      description: 'Shows a small spinner in the top-right (e.g. background refresh)',
+    },
+    selectionData: {
+      control: false,
+      description: 'Optional DataSelectionStore that drives the selection column and selected actions bar',
     },
   },
   render: (args) => ({
@@ -760,19 +786,28 @@ export const Default: Story = {
     template: `
       <org-table
         [data]="data"
-        [style.maxHeight]="'400px'"
+        [size]="size"
+        [bordered]="bordered"
+        [striped]="striped"
+        [hover]="hover"
+        [stickyHeader]="stickyHeader"
+        [stickyFirstColumn]="stickyFirstColumn"
+        [emphasizeFirst]="emphasizeFirst"
+        [isLoading]="isLoading"
+        [isBackgroundLoading]="isBackgroundLoading"
+        [style.maxHeight]="'18rem'"
       >
         <ng-template #header>
-          <org-table-th>Name</org-table-th>
-          <org-table-th>Email</org-table-th>
-          <org-table-th>Organization ID</org-table-th>
-          <org-table-th>Roles</org-table-th>
+          <org-table-th>Project</org-table-th>
+          <org-table-th>Owner</org-table-th>
+          <org-table-th>Updated</org-table-th>
+          <org-table-th [numeric]="true">Records</org-table-th>
         </ng-template>
         <ng-template [orgTypedContext]="data" #body let-user>
           <org-table-td>{{ user.name }}</org-table-td>
-          <org-table-td>{{ user.email }}</org-table-td>
-          <org-table-td>{{ user.organizationId }}</org-table-td>
-          <org-table-td>{{ user.roles }}</org-table-td>
+          <org-table-td>{{ user.owner }}</org-table-td>
+          <org-table-td [faint]="true">{{ user.updated }}</org-table-td>
+          <org-table-td [numeric]="true">{{ user.records }}</org-table-td>
         </ng-template>
       </org-table>
     `,
@@ -782,398 +817,180 @@ export const Default: Story = {
   }),
 };
 
-export const BasicTable: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Basic table with scrollable content and sticky header.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Basic Table"
-        currentState="Displaying user data with scrolling support"
-      >
-        <org-storybook-example-container-section label="Basic Implementation">
-          <story-basic-table-demo />
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc space-y-1">
-          <li>Header remains sticky when scrolling vertically</li>
-          <li>Horizontal scrolling is supported for wide content</li>
-          <li>Rows have hover effects for better UX</li>
-          <li>Table takes full width of container</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [BasicTableDemo, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const WithSorting: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Table with sortable columns using the sortable directive.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Table with Sorting"
-        currentState="Click column headers to sort (Name, Email, Organization ID are sortable)"
-      >
-        <org-storybook-example-container-section label="Sortable Columns">
-          <story-sortable-table-demo />
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc space-y-1">
-          <li>Click on sortable headers to toggle sort direction (asc → desc → none)</li>
-          <li>Visual indicator shows current sort state with icons</li>
-          <li>Only one column can be sorted at a time</li>
-          <li>Sorting is maintained until changed or cleared</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [SortableTableDemo, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const WithPagination: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Table with pagination controls to navigate through large datasets.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Table with Pagination"
-        currentState="Navigate through pages using pagination controls"
-      >
-        <org-storybook-example-container-section label="Paginated Table">
-          <story-paginated-table-demo />
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc space-y-1">
-          <li>Pagination controls allow navigation through data</li>
-          <li>Items per page can be adjusted dynamically</li>
-          <li>Current page and total items are displayed</li>
-          <li>Previous/Next buttons are disabled at boundaries</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [PaginatedTableDemo, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const WithSelection: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Table with row selection that persists across pagination.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Table with Selection"
-        currentState="Select rows using checkboxes - selections persist when changing pages"
-      >
-        <org-storybook-example-container-section label="Selectable Rows">
-          <story-selection-table-demo />
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc space-y-1">
-          <li>Checkboxes allow individual row selection</li>
-          <li>Header checkbox selects/deselects all rows on current page</li>
-          <li>Header checkbox shows indeterminate state when some rows are selected</li>
-          <li>Selections persist when navigating between pages</li>
-          <li>Selected count is displayed and updates in real-time</li>
-          <li>Selected actions bar appears above the table header when rows are selected</li>
-          <li>Action buttons (Resend invite, Restore, Delete) log the selected items to the console</li>
-          <li>Clear button resets the selection</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [SelectionTableDemo, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const FullFeatured: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Table combining all features: sorting, pagination, and selection.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Full-Featured Table"
-        currentState="Complete table with sorting, pagination, and selection working together"
-      >
-        <org-storybook-example-container-section label="All Features Combined">
-          <story-full-featured-table-demo />
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc space-y-1">
-          <li>All features work together seamlessly</li>
-          <li>Sorting applies to entire dataset, not just current page</li>
-          <li>Selections persist when sorting or paginating</li>
-          <li>Visual feedback for all interactive elements</li>
-          <li>Header remains sticky during scrolling</li>
-          <li>Selected actions bar appears above the table header when rows are selected</li>
-          <li>Action buttons (Resend invite, Restore, Delete) log the selected items to the console</li>
-          <li>Clear button resets the selection</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [FullFeaturedTableDemo, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const WithEllipsis: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Table with text ellipsis for cells with long content.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Table with Ellipsis"
-        currentState="Long content is truncated with ellipsis after 2 lines"
-      >
-        <org-storybook-example-container-section label="Ellipsis Support">
-          <story-ellipsis-table-demo />
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc space-y-1">
-          <li>Set <code>[ellipsisLines]</code> input to control number of lines before truncation (ellipsis is automatically enabled when > 0)</li>
-          <li>Ellipsis preserves layout consistency</li>
-          <li>Works with both horizontal and vertical scrolling</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [EllipsisTableDemo, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const DynamicWidths: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Table with dynamic column widths using fixed and percentage-based sizing.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Dynamic Column Widths"
-        currentState="Columns use a mix of fixed widths, percentages, and auto-sizing"
-      >
-        <org-storybook-example-container-section label="Mixed Width Columns">
-          <story-dynamic-width-table-demo />
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc space-y-1">
-          <li>ID column has fixed width of 50px</li>
-          <li>Name column takes 30% of available space</li>
-          <li>Email column takes 40% of available space</li>
-          <li>Remaining columns share the rest of the space</li>
-          <li>Horizontal scrolling activates when content exceeds container</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [DynamicWidthTableDemo, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const VerticalAndHorizontalScrolling: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Table demonstrating both vertical and horizontal scrolling with many rows and columns.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Vertical and Horizontal Scrolling"
-        currentState="Table with many rows and wide columns enabling both scroll directions"
-      >
-        <org-storybook-example-container-section label="Bidirectional Scrolling">
-          <story-scrolling-table-demo />
-        </org-storybook-example-container-section>
-        <ul expected-behaviour class="mt-1 list-inside list-disc space-y-1">
-          <li>Container has fixed height (400px) and max width (800px)</li>
-          <li>Vertical scrolling enabled with 20 rows of data</li>
-          <li>Horizontal scrolling enabled with 8 columns and minimum widths</li>
-          <li>Header remains sticky when scrolling vertically</li>
-          <li>Smooth scrolling experience in both directions</li>
-          <li>Scroll indicators appear when content overflows</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [ScrollingTableDemo, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const WithLoading: Story = {
+export const LiveDemo: Story = {
   parameters: {
     docs: {
       description: {
         story:
-          'Table with loading state that shows a blocking overlay with spinner and message. Used for initial data loads.',
+          'Live, interactive table — toggle every modifier in real time. Density, state, striping, hover, selectable rows, sortable headers, sticky 1st column and sticky header are independent flags that compose freely.',
       },
     },
   },
   render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Table with Loading State"
-        currentState="Toggle loading to see the blocking overlay with spinner and message"
-      >
-        <org-storybook-example-container-section label="Loading State">
-          <story-loading-table-demo />
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc space-y-1">
-          <li>Loading blocker appears as an overlay covering the entire table</li>
-          <li>Shows loading spinner with "Loading data..." message</li>
-          <li>Table content is not interactable while loading</li>
-          <li>Focus is trapped within the loading blocker for accessibility</li>
-          <li>Used for initial data fetches or when table content needs to be completely replaced</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
+    template: `<story-table-live-demo />`,
     moduleMetadata: {
-      imports: [LoadingTableDemo, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [TableLiveDemo],
     },
   }),
 };
 
-export const WithBackgroundLoading: Story = {
+export const Showcase: Story = {
   parameters: {
     docs: {
       description: {
         story:
-          'Table with background loading state that shows a small spinner in the top-right corner. Used for data refreshes.',
+          'Comprehensive showcase of every Table axis — anatomy, sizes, row states, sortable headers, sticky first column, loading + empty, and a fully composed in-context example with pagination, selection, and composed cells.',
       },
     },
   },
   render: () => ({
     template: `
-      <org-storybook-example-container
-        title="Table with Background Loading"
-        currentState="Toggle background loading to see the spinner in the top-right corner"
-      >
-        <org-storybook-example-container-section label="Background Loading State">
-          <story-background-loading-table-demo />
-        </org-storybook-example-container-section>
+      <div class="flex flex-col gap-4">
+        <org-design-system-demo>
+          <org-design-system-demo-header
+            slot="header"
+            title="Anatomy"
+            description="A real <table> with three groups: thead, tbody, and an optional tfoot. The header sits on a quiet shelf — same surface as the body, faint uppercase eyebrow type. Body rows are separated by a soft hairline; the trailing inset on the first and last cell makes the table edge read as a margin."
+          />
+          <org-design-system-demo-canvas slot="canvas">
+            <story-table-anatomy-demo />
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li>The header is its own visual band, not a floating row</li>
+            <li>Row separators sit on the TOP edge of cells — the first body row drops its top border</li>
+            <li>The first / last cell of every row pulls a touch wider via the size's edge inset</li>
+            <li>Numeric columns (records) right-align and use tabular numerals</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
 
-        <ul expected-behaviour class="mt-1 list-inside list-disc space-y-1">
-          <li>Loading spinner appears in the top-right corner of the table</li>
-          <li>Table remains fully interactable during background loading</li>
-          <li>Spinner is positioned absolutely and doesn't affect layout</li>
-          <li>Used for background data refreshes, polling, or auto-updates</li>
-          <li>Provides visual feedback without blocking user interaction</li>
-        </ul>
-      </org-storybook-example-container>
+        <org-design-system-demo>
+          <org-design-system-demo-header
+            slot="header"
+            title="Sizes"
+            description="Three densities. Small for dense data tables (admin, settings); base as the default; large for marketing-adjacent product surfaces with generous breathing room. Row min-height tracks the same control ramp as Button and Input so a Table row aligns with neighbouring controls at every density."
+          />
+          <org-design-system-demo-canvas slot="canvas">
+            <story-table-sizes-demo />
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li>Small: 24px row · dense data</li>
+            <li>Base: 32px row · default</li>
+            <li>Large: 40px row · roomy</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header
+            slot="header"
+            title="Row states"
+            description="Three dispositions for body rows. Hover tints when [hover] is on. Selected rows pick up a soft neutral tint via the auto-rendered selection column; selected wins over hover. Striped tables tint every even body row with the same lifted surface as the header so the rhythm reads as one piece."
+          />
+          <org-design-system-demo-canvas slot="canvas">
+            <story-table-row-states-demo />
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li>Hover tint applies only to non-selected, non-empty body rows</li>
+            <li>Selected row tint is driven by the supplied DataSelectionStore</li>
+            <li>Selected + hover combines to a darker neutral surface</li>
+            <li>Striped tint is independent of selection / hover</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header
+            slot="header"
+            title="Sortable headers"
+            description="Wrap any header label in a [orgSortableKey] directive and provide a SortingStore. The header reads the active sort state and sets data-sortable + aria-sort itself; the chevron lifts to fg + a single direction when the column is the active sort. Click a header to walk the cycle."
+          />
+          <org-design-system-demo-canvas slot="canvas">
+            <story-table-sortable-demo />
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li>Click a header to toggle sort: asc → desc → none</li>
+            <li>Active sort lifts both the label color and the chevron</li>
+            <li>aria-sort on the &lt;th&gt; reflects the current direction for screen readers</li>
+            <li>Numeric sortable columns place the chevron on the leading edge so the number stays flush right</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header
+            slot="header"
+            title="Sticky first column"
+            description="[stickyFirstColumn] pins the leading column when the body scrolls horizontally — the column shares the body surface but draws a trailing hairline so it reads as a pinned rail. Striping, hover, and selection all carry over to the sticky cell."
+          />
+          <org-design-system-demo-canvas slot="canvas">
+            <story-table-sticky-first-column-demo />
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li>The first column is pinned during horizontal scroll</li>
+            <li>The pinned cell repaints with the row's current state surface so striping / hover / selection still read</li>
+            <li>The header's first cell stays on the header tone</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header
+            slot="header"
+            title="Loading & empty"
+            description="A loading table reuses the Skeleton bar primitive inside <td>s — the row rhythm holds while data resolves. An empty table opts in via a #empty template; the row sits in <tbody> with a generous vertical pad and centers its message."
+          />
+          <org-design-system-demo-canvas slot="canvas">
+            <story-table-loading-empty-demo />
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li>Skeleton bars compose into cells without breaking the row rhythm</li>
+            <li>Empty rows skip the hover and stripe state</li>
+            <li>For initial data fetches that should block the entire surface, use [isLoading] (renders an org-loading-blocker)</li>
+            <li>For background refreshes, use [isBackgroundLoading] (renders a small corner spinner without blocking)</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header
+            slot="header"
+            title="In context"
+            description="A fully composed table — selection, pagination, avatars, links, status tags. The Table component owns the surface; pagination is a sibling. Composed cell content (Avatar, Tag, Link) carries its existing system treatment without re-wrapping."
+          />
+          <org-design-system-demo-canvas slot="canvas">
+            <story-table-in-context-demo />
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li>Selecting any row lifts the actions bar above the table header</li>
+            <li>The selection state persists across page changes</li>
+            <li>Cell content composes existing core components directly — no table-specific wrappers</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+      </div>
     `,
     moduleMetadata: {
-      imports: [BackgroundLoadingTableDemo, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const LoadingStates: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Demonstrates the difference between loading and background loading states with realistic scenarios.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Combined Loading States"
-        currentState="Simulate different loading scenarios to see how they work"
-      >
-        <org-storybook-example-container-section label="Loading Scenarios">
-          <story-combined-loading-table-demo />
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc space-y-1">
-          <li><strong>Initial Load:</strong> Shows blocking overlay while data is empty/loading for the first time</li>
-          <li><strong>Refresh:</strong> Shows background spinner while existing data is being updated</li>
-          <li>Loading state takes precedence over background loading if both are true</li>
-          <li>Data updates are reflected immediately after loading completes</li>
-          <li>Both loading states provide appropriate UX for their use cases</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [CombinedLoadingTableDemo, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const EmptyState: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Table with no data rows, showing how the component renders when the data array is empty.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Empty State"
-        currentState="Table with an empty data array"
-      >
-        <org-storybook-example-container-section label="No Data">
-          <story-empty-state-table-demo />
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc space-y-1">
-          <li>Header row is still rendered when no data rows are present</li>
-          <li>Table body is empty with no rows rendered</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [EmptyStateTableDemo, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [
+        TableAnatomyDemo,
+        TableSizesDemo,
+        TableRowStatesDemo,
+        TableSortableDemo,
+        TableStickyFirstColumnDemo,
+        TableLoadingEmptyDemo,
+        TableInContextDemo,
+        DesignSystemDemo,
+        DesignSystemDemoHeader,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
+      ],
     },
   }),
 };

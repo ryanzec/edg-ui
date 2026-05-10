@@ -2,4 +2,30 @@
   :host {
     display: contents;
   }
+
+  tr {
+    background-color: var(--table-row-bg);
+    vertical-align: middle;
+  }
+
+  tr[data-variant='header'] {
+    height: var(--table-header-h);
+  }
+
+  tr[data-variant='body'] {
+    height: var(--table-row-h);
+  }
+
+  tr[data-variant='body'][data-selected] {
+    background-color: var(--table-row-bg-selected);
+  }
+
+  tr[data-clickable] {
+    cursor: pointer;
+  }
+
+  tr[data-clickable]:focus-visible {
+    outline: var(--table-clickable-focus-ring-width) solid var(--table-clickable-focus-ring);
+    outline-offset: calc(-1 * var(--table-clickable-focus-ring-width));
+  }
 }

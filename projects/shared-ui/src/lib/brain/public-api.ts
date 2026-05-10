@@ -55,6 +55,7 @@ export * from './splitter-brain/splitter-brain';
 export * from './tab-brain/tab-brain';
 export * from './table-brain/table-brain';
 export * from './table-header-brain/table-header-brain';
+export * from './table-row-brain/table-row-brain';
 export * from './tabs-brain/tabs-brain';
 export * from './tag-brain/tag-brain';
 export * from './tag-icon-brain/tag-icon-brain';

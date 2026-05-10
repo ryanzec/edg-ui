@@ -1,0 +1,16 @@
+<th
+  class="header-cell"
+  [attr.scope]="brain.scope() ?? null"
+  [attr.data-sortable]="brain.sortable() ? '' : null"
+  [attr.aria-sort]="brain.ariaSort()"
+  [attr.data-numeric]="numeric() ? '' : null"
+  [attr.data-select-col]="selectCol() ? '' : null"
+  [attr.data-actively-sorting]="brain.isActivelySorting() ? '' : null"
+>
+  <span class="cell-content">
+    <ng-content />
+    @if (brain.sortable()) {
+      <org-icon class="sort-chevron" [name]="sortIconName()" size="xs" />
+    }
+  </span>
+</th>

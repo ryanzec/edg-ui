@@ -1,15 +1,20 @@
-import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, computed, contentChild, effect, inject, input } from '@angular/core';
 import { TableHeaderBrainDirective } from '../../brain/table-header-brain/table-header-brain';
+import { SortableDirective } from '../sortable-directive/sortable-directive';
+import { Icon } from '../icon/icon';
+import { type IconName } from '../../brain/icon-brain/icon-brain';
+
+/** default value for the numeric input */
+export const TABLE_HEADER_NUMERIC_DEFAULT = false;
+
+/** default value for the selectCol input */
+export const TABLE_HEADER_SELECT_COL_DEFAULT = false;
 
 @Component({
   selector: 'org-table-th',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [],
-  template: `
-    <th class="header-cell" [attr.scope]="brain.scope() ?? null">
-      <ng-content />
-    </th>
-  `,
+  imports: [Icon],
+  templateUrl: './table-header.html',
   styleUrl: './table-header.css',
   hostDirectives: [
     {
@@ -20,4 +25,38 @@ import { TableHeaderBrainDirective } from '../../brain/table-header-brain/table-
 })
 export class TableHeader {
   protected readonly brain = inject(TableHeaderBrainDirective, { self: true });
+
+  /** the projected sortable directive whose brain this header mirrors (when present) */
+  private readonly _sortable = contentChild(SortableDirective, { descendants: true });
+
+  /** whether the cell renders the numeric layout — right-align + tabular numerals */
+  public readonly numeric = input<boolean>(TABLE_HEADER_NUMERIC_DEFAULT);
+
+  /** whether the cell is the leading checkbox-selection column (fixed-width, centered) */
+  public readonly selectCol = input<boolean>(TABLE_HEADER_SELECT_COL_DEFAULT);
+
+  /** the icon name shown in the sort chevron based on the active sort direction */
+  protected readonly sortIconName = computed<IconName>(() => {
+    const direction = this.brain.sortDirection();
+
+    if (direction === 'asc') {
+      return 'arrow-up';
+    }
+
+    if (direction === 'desc') {
+      return 'arrow-down';
+    }
+
+    return 'arrow-down-up';
+  });
+
+  constructor() {
+    // mirror the projected sortable directive's brain into the header brain so `aria-sort` /
+    // `data-sortable` / the chevron all reflect the active sort state
+    effect(() => {
+      const sortable = this._sortable();
+
+      this.brain.registerSortable(sortable?.brain ?? null);
+    });
+  }
 }

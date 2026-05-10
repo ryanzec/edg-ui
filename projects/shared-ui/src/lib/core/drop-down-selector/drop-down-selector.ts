@@ -69,16 +69,7 @@ const POSITION_CONFIGURATIONS: Record<DropDownSelectorPosition, ConnectedPositio
 @Component({
   selector: 'org-drop-down-selector',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    CdkOverlayOrigin,
-    CdkConnectedOverlay,
-    Icon,
-    List,
-    ListItem,
-    ListItemIcon,
-    OverlayMenuDivider,
-    ScrollArea,
-  ],
+  imports: [CdkOverlayOrigin, CdkConnectedOverlay, Icon, List, ListItem, ListItemIcon, OverlayMenuDivider, ScrollArea],
   templateUrl: './drop-down-selector.html',
   styleUrl: './drop-down-selector.css',
   hostDirectives: [

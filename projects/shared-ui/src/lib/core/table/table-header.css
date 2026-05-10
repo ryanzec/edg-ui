@@ -4,12 +4,80 @@
   }
 
   .header-cell {
-    padding: var(--spacing-3) var(--spacing-4);
-    font-size: var(--font-size-base);
-    line-height: var(--line-height-normal);
-    letter-spacing: var(--letter-spacing-normal);
-    font-weight: var(--font-weight-semibold);
+    height: var(--table-header-h);
+    padding: var(--table-cell-py) var(--table-cell-px);
+    background-color: var(--table-header-bg);
+    color: var(--table-header-fg);
+    font-size: var(--table-header-font-size);
+    font-weight: var(--table-header-font-weight);
+    letter-spacing: var(--table-header-letter-spacing);
+    text-transform: var(--table-header-text-transform);
+    line-height: var(--table-header-line-height);
     text-align: left;
-    background-color: var(--color-bg-surface-2);
+    white-space: nowrap;
+    vertical-align: middle;
+    border-bottom: var(--table-border-width) solid var(--table-border);
+  }
+
+  .header-cell[data-numeric] {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .header-cell[data-select-col] {
+    width: 2.5rem; /* 40px */
+    padding-left: 0;
+    padding-right: 0;
+    text-align: center;
+  }
+
+  /* the cell-content wrapper must become a flex container for the select-col case so block-level
+     checkbox / form-field children center deterministically (text-align alone only centers inline content) */
+  .header-cell[data-select-col] .cell-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .header-cell[data-sortable] {
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .header-cell[data-sortable]:hover,
+  .header-cell[data-actively-sorting] {
+    color: var(--table-header-fg-active);
+  }
+
+  .cell-content {
+    display: contents;
+  }
+
+  .header-cell[data-sortable] .cell-content {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--table-sort-gap);
+  }
+
+  .header-cell[data-sortable][data-numeric] .cell-content {
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+  }
+
+  .sort-chevron {
+    flex-shrink: 0;
+    color: var(--table-sort-fg-rest);
+    transition: color var(--motion-duration-fast) var(--motion-ease-standard);
+  }
+
+  .header-cell[data-sortable]:hover .sort-chevron,
+  .header-cell[data-actively-sorting] .sort-chevron {
+    color: var(--table-sort-fg-active);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sort-chevron {
+      transition: none;
+    }
   }
 }

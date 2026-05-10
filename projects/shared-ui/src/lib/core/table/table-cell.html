@@ -1,0 +1,15 @@
+<td
+  class="cell"
+  [attr.data-numeric]="numeric() ? '' : null"
+  [attr.data-muted]="muted() ? '' : null"
+  [attr.data-faint]="faint() ? '' : null"
+  [attr.data-select-col]="selectCol() ? '' : null"
+>
+  <div
+    class="cell-inner"
+    [class.org-table-ellipsis]="useEllipsis()"
+    [style]="useEllipsis() ? { '--ellipsis-lines': ellipsisLines() } : null"
+  >
+    <ng-content />
+  </div>
+</td>

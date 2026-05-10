@@ -1,0 +1,89 @@
+:root {
+  /* layout */
+  --table-radius: var(--radius-base);
+  --table-border-width: var(--border-width);
+
+  /* size: sm */
+  --table-row-height-sm: var(--spacing-6); /* 24px */
+  --table-header-height-sm: var(--spacing-6); /* 24px */
+  --table-cell-padding-y-sm: var(--spacing-1_5); /* 6px */
+  --table-cell-padding-x-sm: var(--spacing-2_5); /* 10px */
+  --table-edge-inset-sm: var(--spacing-3); /* 12px */
+  --table-cell-font-size-sm: var(--font-size-sm); /* 13px */
+
+  /* size: base (default) */
+  --table-row-height-base: var(--spacing-8); /* 32px */
+  --table-header-height-base: var(--spacing-7); /* 28px */
+  --table-cell-padding-y-base: var(--spacing-2); /* 8px */
+  --table-cell-padding-x-base: var(--spacing-3); /* 12px */
+  --table-edge-inset-base: var(--spacing-4); /* 16px */
+  --table-cell-font-size-base: var(--font-size-base); /* 14px */
+
+  /* size: lg */
+  --table-row-height-lg: var(--spacing-10); /* 40px */
+  --table-header-height-lg: var(--spacing-8); /* 32px */
+  --table-cell-padding-y-lg: var(--spacing-3); /* 12px */
+  --table-cell-padding-x-lg: var(--spacing-4); /* 16px */
+  --table-edge-inset-lg: var(--spacing-5); /* 20px */
+  --table-cell-font-size-lg: var(--font-size-lg); /* 16px */
+
+  /* current size slot tokens (defaults to base) */
+  --table-row-height: var(--table-row-height-base);
+  --table-header-height: var(--table-header-height-base);
+  --table-cell-padding-y: var(--table-cell-padding-y-base);
+  --table-cell-padding-x: var(--table-cell-padding-x-base);
+  --table-edge-inset: var(--table-edge-inset-base);
+  --table-cell-font-size: var(--table-cell-font-size-base);
+
+  /* header typography */
+  --table-header-font-size: var(--font-size-xs); /* 12px */
+  --table-header-font-weight: var(--font-weight-semibold);
+  --table-header-letter-spacing: var(--letter-spacing-wide);
+  --table-header-text-transform: uppercase;
+  --table-header-line-height: var(--line-height-normal);
+
+  /* body typography */
+  --table-body-line-height: var(--line-height-normal);
+  --table-body-font-weight: var(--font-weight-regular);
+  --table-emphasize-first-font-weight: var(--font-weight-medium);
+
+  /* surfaces */
+  --table-bg: var(--color-bg-surface);
+  --table-fg: var(--color-fg);
+  --table-fg-muted: var(--color-fg-muted);
+  --table-fg-faint: var(--color-fg-faint);
+
+  /* header */
+  --table-header-bg: var(--color-bg-surface-2);
+  --table-header-fg: var(--color-fg-muted);
+  --table-header-fg-active: var(--color-fg);
+
+  /* row state */
+  --table-row-bg: transparent;
+  --table-row-bg-hover: var(--color-bg-hover);
+  --table-row-bg-stripe: var(--color-bg-surface-2);
+  --table-row-bg-selected: var(--color-neutral-soft);
+  --table-row-bg-selected-hover: var(--color-neutral-soft-hover);
+
+  /* borders */
+  --table-border: var(--color-border);
+  --table-border-soft: var(--color-border-soft);
+
+  /* clickable focus ring */
+  --table-clickable-focus-ring: var(--color-focus-ring);
+  --table-clickable-focus-ring-width: var(--border-width-thick);
+
+  /* empty state */
+  --table-empty-fg: var(--color-fg-muted);
+  --table-empty-padding-y: var(--spacing-8); /* 32px */
+  --table-empty-font-size: var(--font-size-sm);
+
+  /* sortable chevron */
+  --table-sort-gap: var(--spacing-1_5); /* 6px */
+  --table-sort-fg-rest: var(--color-fg-faint);
+  --table-sort-fg-active: var(--color-fg);
+
+  /* motion */
+  --table-row-transition-duration: var(--motion-duration-fast);
+  --table-row-transition-easing: var(--motion-ease-standard);
+}

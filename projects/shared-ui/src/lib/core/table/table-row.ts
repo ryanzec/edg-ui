@@ -1,37 +1,35 @@
-import { Component, ChangeDetectionStrategy, input } from '@angular/core';
-
-export const allTableRowVariants = ['header', 'body'] as const;
-
-/**
- * variant for table row component
- */
-export type TableRowVariant = (typeof allTableRowVariants)[number];
-
-/** default value for the variant input */
-export const TABLE_ROW_VARIANT_DEFAULT: TableRowVariant = 'body';
-
-/** default value for the isSticky input */
-export const TABLE_ROW_IS_STICKY_DEFAULT = false;
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
+import { TableRowBrainDirective } from '../../brain/table-row-brain/table-row-brain';
 
 @Component({
   selector: 'org-table-tr',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [],
   template: `
-    <tr>
+    <tr
+      [attr.data-variant]="brain.variant()"
+      [attr.data-selected]="brain.selected() ? '' : null"
+      [attr.data-clickable]="brain.clickable() ? '' : null"
+      [attr.data-empty]="brain.empty() ? '' : null"
+      [attr.aria-selected]="brain.ariaSelected()"
+      [attr.tabindex]="brain.clickable() ? 0 : null"
+      [attr.role]="brain.clickable() ? 'button' : null"
+      (click)="brain.activate()"
+      (keydown.enter)="brain.handleKeydown($event)"
+      (keydown.space)="brain.handleKeydown($event)"
+    >
       <ng-content />
     </tr>
   `,
   styleUrl: './table-row.css',
-  host: {
-    '[attr.data-variant]': 'variant()',
-    '[attr.data-sticky]': 'isSticky() ? "" : null',
-  },
+  hostDirectives: [
+    {
+      directive: TableRowBrainDirective,
+      inputs: ['variant', 'selected', 'clickable', 'empty'],
+      outputs: ['clicked'],
+    },
+  ],
 })
 export class TableRow {
-  /** the visual and semantic variant of the row */
-  public variant = input<TableRowVariant>(TABLE_ROW_VARIANT_DEFAULT);
-
-  /** whether the row is sticky (used for header rows) */
-  public isSticky = input<boolean>(TABLE_ROW_IS_STICKY_DEFAULT);
+  protected readonly brain = inject(TableRowBrainDirective, { self: true });
 }
