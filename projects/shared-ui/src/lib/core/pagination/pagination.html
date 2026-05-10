@@ -1,13 +1,86 @@
-<div class="pagination-nav">
-  <div class="result-text">{{ resultText() }}</div>
-  <org-pagination-navigation />
-  <org-drop-down-selector
-    size="sm"
-    selectionMode="single"
-    [label]="brain.itemsPerPageAriaLabel()"
-    [items]="brain.itemsPerPageSelectionItems()"
-    [selectedItems]="brain.itemsPerPageSelectedItems()"
-    [disabled]="brain.itemsPerPageSelectDisabled()"
-    (selectedItemsChange)="brain.handleItemsPerPageSelectionChange($event)"
-  />
+<span class="result">
+  @if (displayTotal() > 0) {
+    <span class="result-em">{{ displayStart() }}&#8211;{{ displayEnd() }}</span>
+    <span> of </span>
+    <span class="result-em">{{ displayTotal() }}</span>
+  } @else {
+    <span>No results found</span>
+  }
+</span>
+<div class="flex">
+  <div class="nav" role="group" (keydown)="brain.handleKeyDown($event)">
+    <org-button
+      size="sm"
+      color="neutral"
+      variant="text"
+      [iconOnly]="true"
+      [label]="brain.firstPageAriaLabel()"
+      [ariaLabel]="brain.firstPageAriaLabel()"
+      preIcon="chevron-first"
+      [disabled]="brain.firstPageDisabled()"
+      (clicked)="brain.goToFirstPage()"
+    />
+    <org-button
+      size="sm"
+      color="neutral"
+      variant="text"
+      [iconOnly]="true"
+      [label]="brain.previousPageAriaLabel()"
+      [ariaLabel]="brain.previousPageAriaLabel()"
+      preIcon="chevron-left"
+      [disabled]="brain.previousPageDisabled()"
+      (clicked)="brain.goToPreviousPage()"
+    />
+    @for (page of brain.visiblePageItems(); track page.value || 'ellipsis-' + $index) {
+      @if (page.type === 'ellipsis') {
+        <span class="ellipsis" [attr.aria-hidden]="brain.ellipsisAriaHidden">&#8230;</span>
+      } @else {
+        <org-button
+          size="sm"
+          color="neutral"
+          [variant]="page.isActive ? 'soft' : 'text'"
+          [disabled]="brain.disabled()"
+          [attr.aria-current]="page.isActive ? 'page' : null"
+          [label]="page.value!.toString()"
+          [ariaLabel]="brain.pageButtonAriaLabel(page.value!)"
+          (clicked)="brain.goToPage(page.value!)"
+        />
+      }
+    }
+    <org-button
+      size="sm"
+      color="neutral"
+      variant="text"
+      [iconOnly]="true"
+      [label]="brain.nextPageAriaLabel()"
+      [ariaLabel]="brain.nextPageAriaLabel()"
+      preIcon="chevron-right"
+      [disabled]="brain.nextPageDisabled()"
+      (clicked)="brain.goToNextPage()"
+    />
+    <org-button
+      size="sm"
+      color="neutral"
+      variant="text"
+      [iconOnly]="true"
+      [label]="brain.lastPageAriaLabel()"
+      [ariaLabel]="brain.lastPageAriaLabel()"
+      preIcon="chevron-last"
+      [disabled]="brain.lastPageDisabled()"
+      (clicked)="brain.goToLastPage()"
+    />
+  </div>
+  <div class="info">
+    <span class="label">{{ brain.itemsPerPageAriaLabel() }}</span>
+    <org-drop-down-selector
+      class="items-select"
+      size="sm"
+      selectionMode="single"
+      [label]="brain.itemsPerPageAriaLabel()"
+      [items]="brain.itemsPerPageSelectionItems()"
+      [selectedItems]="brain.itemsPerPageSelectedItems()"
+      [disabled]="brain.itemsPerPageSelectDisabled()"
+      (selectedItemsChange)="brain.handleItemsPerPageSelectionChange($event)"
+    />
+  </div>
 </div>

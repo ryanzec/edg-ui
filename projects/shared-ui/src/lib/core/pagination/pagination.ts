@@ -1,12 +1,12 @@
 import { Component, ChangeDetectionStrategy, computed, inject } from '@angular/core';
 import { PaginationBrainDirective } from '../../brain/pagination-brain/pagination-brain';
+import { Button } from '../button/button';
 import { DropDownSelector } from '../drop-down-selector/drop-down-selector';
-import { PaginationNavigation } from './pagination-navigation';
 
 @Component({
   selector: 'org-pagination',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [PaginationNavigation, DropDownSelector],
+  imports: [Button, DropDownSelector],
   templateUrl: './pagination.html',
   styleUrl: './pagination.css',
   hostDirectives: [
@@ -37,17 +37,18 @@ import { PaginationNavigation } from './pagination-navigation';
 export class Pagination {
   protected readonly brain = inject(PaginationBrainDirective, { self: true });
 
-  /** formatted text describing the current result range, e.g. "result 1 - 10 of 250" */
-  protected readonly resultText = computed<string>(() => {
-    const total = this.brain.totalItems();
-
-    if (total === 0) {
-      return 'result 0 - 0 of 0';
+  /** the 1-based starting index of the current page, or 0 when totalItems is 0 */
+  protected readonly displayStart = computed<number>(() => {
+    if (this.brain.totalItems() === 0) {
+      return 0;
     }
 
-    const start = this.brain.startIndex() + 1;
-    const end = this.brain.endIndex();
-
-    return `result ${start} - ${end} of ${total}`;
+    return this.brain.startIndex() + 1;
   });
+
+  /** the 1-based ending index of the current page (clamped to totalItems) */
+  protected readonly displayEnd = computed<number>(() => this.brain.endIndex());
+
+  /** the total number of items in the dataset */
+  protected readonly displayTotal = computed<number>(() => this.brain.totalItems());
 }

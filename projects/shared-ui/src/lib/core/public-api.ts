@@ -66,7 +66,6 @@ export * from './loading-spinner/loading-spinner';
 export * from './markdown/markdown';
 export * from './overlay-menu/overlay-menu';
 export * from './pagination/pagination';
-export * from './pagination/pagination-navigation';
 export * from './scroll-area/scroll-area';
 export * from './slide-container/slide-container';
 export * from './slide-container/slide-container-item';

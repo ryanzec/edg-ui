@@ -36,7 +36,7 @@ export const PAGINATION_NEXT_PAGE_ARIA_LABEL_DEFAULT = 'Next page';
 export const PAGINATION_LAST_PAGE_ARIA_LABEL_DEFAULT = 'Last page';
 
 /** default value for the itemsPerPageAriaLabel input */
-export const PAGINATION_ITEMS_PER_PAGE_ARIA_LABEL_DEFAULT = 'Items per page';
+export const PAGINATION_ITEMS_PER_PAGE_ARIA_LABEL_DEFAULT = 'Rows per page';
 
 /** default value for the pageAriaLabelFn input */
 export const PAGINATION_PAGE_ARIA_LABEL_FN_DEFAULT: (page: number) => string = (page) => `Page ${page}`;

@@ -1,19 +1,82 @@
 @layer components {
   :host {
-    display: block;
-  }
-
-  .pagination-nav {
     display: flex;
     align-items: center;
-    gap: var(--spacing-4);
+    flex-wrap: wrap;
+    gap: var(--spacing-pagination-row-gap);
+    font-size: var(--font-size-pagination);
+    font-variant-numeric: var(--font-variant-pagination);
+    color: var(--color-pagination-result);
+    width: 100%;
   }
 
-  .result-text {
-    font-size: var(--font-size-base);
-    line-height: var(--line-height-normal);
-    letter-spacing: var(--letter-spacing-normal);
-    color: var(--color-fg-muted);
+  .info {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-pagination-group-gap);
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .label {
+    font-size: var(--font-size-pagination-label);
+    font-weight: var(--font-weight-pagination-label);
+    color: var(--color-pagination-label);
     white-space: nowrap;
+  }
+
+  .items-select {
+    width: var(--sizing-pagination-select);
+    min-width: var(--sizing-pagination-select);
+    flex: 0 0 auto;
+  }
+
+  .result {
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--spacing-1);
+    white-space: nowrap;
+    font-weight: var(--font-weight-pagination-result);
+    margin-right: auto;
+  }
+
+  .result-em {
+    font-weight: var(--font-weight-pagination-emphasis);
+    color: var(--color-pagination-result-emphasis);
+  }
+
+  .nav {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-pagination-button-gap);
+    flex: 0 0 auto;
+  }
+
+  .ellipsis {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: var(--sizing-pagination-ellipsis);
+    height: var(--sizing-pagination-ellipsis);
+    color: var(--color-pagination-ellipsis);
+    user-select: none;
+    line-height: 1;
+  }
+
+  /* below 32rem of available container width, stack info + nav vertically */
+  @container (max-width: 32rem) {
+    :host {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .info {
+      flex-wrap: wrap;
+    }
+
+    .nav {
+      align-self: flex-end;
+    }
   }
 }

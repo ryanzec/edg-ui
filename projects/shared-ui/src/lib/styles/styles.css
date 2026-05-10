@@ -28,6 +28,7 @@
 @import './tokens/divider-tokens.css';
 @import './tokens/empty-indicator-tokens.css';
 @import './tokens/overlay-menu-tokens.css';
+@import './tokens/pagination-tokens.css';
 @import './tokens/skeleton-tokens.css';
 @import './animations.css';
 @import './background-utility.css';
