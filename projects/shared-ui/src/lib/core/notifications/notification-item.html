@@ -1,25 +1,45 @@
-<org-card [color]="color() ?? null">
-  <org-card-content>
-    <div class="content-row">
-      <div class="message">
-        @if (contentTemplate(); as template) {
-          <ng-container *ngTemplateOutlet="template; context: { $implicit: brain.id() }" />
-        } @else {
-          {{ message() }}
-        }
-      </div>
-      @if (canClose()) {
-        <org-button
-          variant="text"
-          color="neutral"
-          [iconOnly]="true"
-          [excludeSpacing]="true"
-          [label]="brain.closeButtonAriaLabel()"
-          [ariaLabel]="brain.closeButtonAriaLabel()"
-          preIcon="x"
-          (click)="startClose()"
-        />
-      }
+@if (hasAvatar() || !contentTemplate()) {
+  <div class="media">
+    @if (hasAvatar()) {
+      <img class="avatar" [src]="avatarUrl()" alt="" />
+    } @else {
+      <org-icon class="icon" [name]="resolvedIcon()" />
+    }
+  </div>
+}
+
+<div class="body">
+  @if (contentTemplate(); as template) {
+    <ng-container *ngTemplateOutlet="template; context: { $implicit: brain.id() }" />
+  } @else {
+    @if (title(); as titleText) {
+      <h4 class="title">{{ titleText }}</h4>
+    }
+    @if (message(); as messageText) {
+      <p class="description">{{ messageText }}</p>
+    }
+  }
+  @if (actionsTemplate(); as template) {
+    <div class="actions">
+      <ng-container *ngTemplateOutlet="template; context: { $implicit: brain.id() }" />
     </div>
-  </org-card-content>
-</org-card>
+  }
+</div>
+
+@if (canClose()) {
+  <org-button
+    class="close"
+    variant="text"
+    color="neutral"
+    [iconOnly]="true"
+    [excludeSpacing]="true"
+    preIcon="x"
+    [label]="brain.closeButtonAriaLabel()"
+    [ariaLabel]="brain.closeButtonAriaLabel()"
+    (click)="startClose()"
+  />
+}
+
+@if (hasProgress()) {
+  <div class="progress" aria-hidden="true"></div>
+}

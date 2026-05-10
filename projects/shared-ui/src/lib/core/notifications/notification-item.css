@@ -1,16 +1,169 @@
 @layer components {
   :host {
+    --_accent: var(--notification-accent-info);
+
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: start;
+    gap: var(--notification-media-gap);
+    width: 100%;
+
+    padding: var(--notification-pad-y) var(--notification-pad-x);
+    padding-left: calc(var(--notification-pad-x) + var(--notification-rail-width));
+    padding-right: calc(var(--notification-pad-x) + var(--notification-close-size));
+
+    background: var(--notification-surface);
+    color: var(--notification-fg);
+
+    border: var(--border-width) solid var(--notification-border);
+    border-left-width: var(--notification-rail-width);
+    border-left-color: var(--_accent);
+
+    border-radius: var(--notification-radius);
+    box-shadow: var(--notification-shadow);
+
+    font-family: var(--font-sans);
+    overflow: hidden;
+
+    animation: notification-enter-top var(--notification-motion-duration) var(--notification-motion-ease) both;
+  }
+
+  :host-context(org-notifications[data-position^='bottom']) {
+    animation-name: notification-enter-bottom;
+  }
+
+  :host([data-color='info']) {
+    --_accent: var(--notification-accent-info);
+  }
+
+  :host([data-color='safe']) {
+    --_accent: var(--notification-accent-safe);
+  }
+
+  :host([data-color='caution']) {
+    --_accent: var(--notification-accent-caution);
+  }
+
+  :host([data-color='warning']) {
+    --_accent: var(--notification-accent-warning);
+  }
+
+  :host([data-color='danger']) {
+    --_accent: var(--notification-accent-danger);
+  }
+
+  :host([data-color='primary']) {
+    --_accent: var(--notification-accent-primary);
+  }
+
+  :host([data-color='secondary']) {
+    --_accent: var(--notification-accent-secondary);
+  }
+
+  :host([data-color='neutral']) {
+    --_accent: var(--notification-accent-neutral);
+  }
+
+  :host([data-state='leaving']) {
+    pointer-events: none;
+    animation: notification-leave var(--notification-motion-duration) var(--notification-motion-ease-exit) both;
+  }
+
+  .media {
+    grid-column: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    height: var(--notification-title-line-height);
+    color: var(--_accent);
+  }
+
+  .media:has(> .avatar) {
+    height: auto;
+  }
+
+  .icon {
+    --icon-size: var(--notification-icon-size);
+  }
+
+  .avatar {
+    width: var(--notification-avatar-size);
+    height: var(--notification-avatar-size);
+    border-radius: var(--radius-pill);
+    object-fit: cover;
     display: block;
   }
 
-  .content-row {
+  .body {
+    grid-column: 2;
     display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: var(--spacing-2);
+    flex-direction: column;
+    gap: var(--notification-stack-y);
+    min-width: 0;
   }
 
-  .message {
-    flex: 1;
+  /* when there is no leading media slot, the body spans both columns so the surface stays balanced */
+  :host:not(:has(> .media)) .body {
+    grid-column: 1 / -1;
+  }
+
+  .title {
+    margin: 0;
+    font-size: var(--notification-title-font-size);
+    font-weight: var(--notification-title-font-weight);
+    line-height: var(--notification-title-line-height);
+    color: var(--notification-fg);
+    letter-spacing: var(--letter-spacing-tight);
+  }
+
+  .description {
+    margin: 0;
+    font-size: var(--notification-description-font-size);
+    line-height: var(--notification-description-line-height);
+    color: var(--notification-fg-muted);
+  }
+
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: var(--notification-actions-gap);
+    margin-top: calc(var(--notification-actions-y) - var(--notification-stack-y));
+  }
+
+  .close {
+    position: absolute;
+    top: var(--notification-close-inset);
+    right: var(--notification-close-inset);
+    z-index: 1;
+  }
+
+  .progress {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: var(--notification-progress-height);
+    background: var(--notification-progress-track);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .progress::after {
+    content: '';
+    display: block;
+    height: 100%;
+    width: var(--_progress, 100%);
+    background: var(--_accent);
+  }
+
+  /* under reduced motion the animation still runs (so animationend fires and the close lifecycle completes), but at
+     an imperceptible 1ms duration so the visual jump is effectively instant */
+  @media (prefers-reduced-motion: reduce) {
+    :host,
+    :host([data-state='leaving']) {
+      animation-duration: 1ms;
+    }
   }
 }

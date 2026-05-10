@@ -1,0 +1,53 @@
+:root {
+  /* surface */
+  --notification-surface: var(--color-bg-surface);
+  --notification-fg: var(--color-fg);
+  --notification-fg-muted: var(--color-fg-muted);
+  --notification-border: var(--color-border);
+  --notification-radius: var(--radius-base);
+  --notification-shadow: var(--shadow-base);
+
+  /* progress rail */
+  --notification-progress-track: var(--color-bg-surface-2);
+
+  /* per-intent accent (drives the left rail + leading icon color) */
+  --notification-accent-info: var(--color-info);
+  --notification-accent-safe: var(--color-safe);
+  --notification-accent-caution: var(--color-caution);
+  --notification-accent-warning: var(--color-warning);
+  --notification-accent-danger: var(--color-danger);
+  --notification-accent-primary: var(--color-primary);
+  --notification-accent-secondary: var(--color-secondary);
+  --notification-accent-neutral: var(--color-neutral);
+
+  /* sizing */
+  --notification-stack-width: var(--sizing-base);
+  --notification-stack-inset: var(--spacing-4);
+  --notification-rail-width: var(--spacing-1);
+  --notification-close-size: var(--sizing-11xs);
+  --notification-icon-size: var(--font-size-lg);
+  --notification-avatar-size: var(--sizing-10xs);
+  --notification-progress-height: var(--spacing-0_5);
+
+  /* spacing */
+  --notification-pad-x: var(--spacing-3);
+  --notification-pad-y: var(--spacing-3);
+  --notification-stack-gap: var(--spacing-2);
+  --notification-stack-y: var(--spacing-1);
+  --notification-media-gap: var(--spacing-3);
+  --notification-actions-gap: var(--spacing-2);
+  --notification-actions-y: var(--spacing-2);
+  --notification-close-inset: var(--spacing-1_5);
+
+  /* typography */
+  --notification-title-font-size: var(--font-size-base);
+  --notification-title-font-weight: var(--font-weight-semibold);
+  --notification-title-line-height: var(--line-height-tight);
+  --notification-description-font-size: var(--font-size-sm);
+  --notification-description-line-height: var(--line-height-normal);
+
+  /* motion */
+  --notification-motion-duration: var(--motion-duration-slow);
+  --notification-motion-ease: var(--motion-ease-entrance);
+  --notification-motion-ease-exit: var(--motion-ease-exit);
+}

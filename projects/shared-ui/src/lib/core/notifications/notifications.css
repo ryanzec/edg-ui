@@ -3,31 +3,46 @@
     position: fixed;
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-2);
-    width: var(--sizing-xs);
+    gap: var(--notification-stack-gap);
+    width: var(--notification-stack-width);
+    max-width: calc(100vw - (var(--notification-stack-inset) * 2));
     z-index: var(--z-index-toast);
     pointer-events: none;
   }
 
-  :host([data-x-position='left']) {
-    left: var(--spacing-4); /* 16px */
+  :host([data-position='top-left']) {
+    top: var(--notification-stack-inset);
+    left: var(--notification-stack-inset);
   }
 
-  :host([data-x-position='center']) {
+  :host([data-position='top-center']) {
+    top: var(--notification-stack-inset);
     left: 50%;
     transform: translateX(-50%);
   }
 
-  :host([data-x-position='right']) {
-    right: var(--spacing-4); /* 16px */
+  :host([data-position='top-right']) {
+    top: var(--notification-stack-inset);
+    right: var(--notification-stack-inset);
   }
 
-  :host([data-y-position='top']) {
-    top: var(--spacing-4); /* 16px */
+  :host([data-position='bottom-left']) {
+    bottom: var(--notification-stack-inset);
+    left: var(--notification-stack-inset);
+    flex-direction: column-reverse;
   }
 
-  :host([data-y-position='bottom']) {
-    bottom: var(--spacing-4); /* 16px */
+  :host([data-position='bottom-center']) {
+    bottom: var(--notification-stack-inset);
+    left: 50%;
+    transform: translateX(-50%);
+    flex-direction: column-reverse;
+  }
+
+  :host([data-position='bottom-right']) {
+    bottom: var(--notification-stack-inset);
+    right: var(--notification-stack-inset);
+    flex-direction: column-reverse;
   }
 
   :host > * {

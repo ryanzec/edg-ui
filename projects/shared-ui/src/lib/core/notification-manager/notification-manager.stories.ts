@@ -1,10 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/angular';
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
-import {
-  NotificationManager,
-  NOTIFICATION_MANAGER_ANIMATION_DURATION_DEFAULT,
-  NOTIFICATION_MANAGER_AUTO_CLOSE_IN_DEFAULT,
-} from './notification-manager';
+import { NotificationManager, NOTIFICATION_MANAGER_AUTO_CLOSE_IN_DEFAULT } from './notification-manager';
 import { Button } from '../button/button';
 import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
 import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
@@ -46,7 +42,6 @@ import { StorybookExampleContainerSection } from '../../private/storybook-exampl
         <li><strong>Add Permanent</strong>: no auto-close, must be removed manually</li>
         <li><strong>Remove</strong>: immediately removes a single notification by id</li>
         <li><strong>Clear All</strong>: removes all notifications at once</li>
-        <li><strong>Default animation duration</strong>: {{ defaultAnimationDuration }}s</li>
       </ul>
     </org-storybook-example-container>
   `,
@@ -54,7 +49,6 @@ import { StorybookExampleContainerSection } from '../../private/storybook-exampl
 class NotificationManagerDemo {
   public readonly manager = inject(NotificationManager);
   public readonly defaultAutoCloseIn = NOTIFICATION_MANAGER_AUTO_CLOSE_IN_DEFAULT;
-  public readonly defaultAnimationDuration = NOTIFICATION_MANAGER_ANIMATION_DURATION_DEFAULT;
 
   public addInfo(): void {
     this.manager.add({
@@ -121,7 +115,6 @@ const meta: Meta<NotificationManager> = {
   - **clear()**: dequeue all notifications
 
   ### Default Values
-  - **animationDuration**: ${NOTIFICATION_MANAGER_ANIMATION_DURATION_DEFAULT}s
   - **autoCloseIn**: ${NOTIFICATION_MANAGER_AUTO_CLOSE_IN_DEFAULT}ms
 
   ### Usage Example

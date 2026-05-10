@@ -3,10 +3,14 @@
     [id]="notification.id"
     [autoCloseIn]="notification.autoCloseIn"
     [color]="notification.color"
+    [title]="notification.title"
     [message]="notification.message"
     [contentTemplate]="notification.contentTemplate"
+    [actionsTemplate]="notification.actionsTemplate"
+    [icon]="notification.icon"
+    [avatarUrl]="notification.avatarUrl"
     [canClose]="notification.canClose"
-    [animationDuration]="notification.animationDuration"
+    [resetTimerOnHover]="notification.resetTimerOnHover ?? false"
     (closed)="onClosed($event)"
   />
 }

@@ -1,9 +1,7 @@
 import { Injectable, signal, computed, type TemplateRef } from '@angular/core';
 import { v4 as uuidv4 } from 'uuid';
 import type { CardColor } from '../card/card';
-
-/** default animation duration in seconds for notification enter/exit transitions */
-export const NOTIFICATION_MANAGER_ANIMATION_DURATION_DEFAULT = 0.3;
+import type { IconName } from '../../brain/icon-brain/icon-brain';
 
 /** default auto-close delay in milliseconds */
 export const NOTIFICATION_MANAGER_AUTO_CLOSE_IN_DEFAULT = 3000;
@@ -11,18 +9,20 @@ export const NOTIFICATION_MANAGER_AUTO_CLOSE_IN_DEFAULT = 3000;
 /** data shape for a notification stored in the manager */
 export type NotificationData = {
   id: string;
+  title?: string;
   message?: string;
   contentTemplate?: TemplateRef<{ $implicit: string }>;
+  actionsTemplate?: TemplateRef<{ $implicit: string }>;
+  icon?: IconName;
+  avatarUrl?: string;
   autoCloseIn?: number;
   color?: CardColor;
   canClose: boolean;
-  animationDuration: number;
+  resetTimerOnHover?: boolean;
 };
 
-/** data shape for adding a new notification — id and animationDuration are managed internally */
-export type AddNotificationData = Omit<NotificationData, 'id' | 'animationDuration'> & {
-  animationDuration?: number;
-};
+/** data shape for adding a new notification — id is managed internally */
+export type AddNotificationData = Omit<NotificationData, 'id'>;
 
 /** partial update shape for an existing notification identified by id */
 export type UpdateNotificationData = Partial<Omit<NotificationData, 'id'>>;
@@ -53,7 +53,6 @@ export class NotificationManager {
   public add(notification: AddNotificationData): string {
     const id = uuidv4();
     const newNotification: NotificationData = {
-      animationDuration: NOTIFICATION_MANAGER_ANIMATION_DURATION_DEFAULT,
       autoCloseIn: NOTIFICATION_MANAGER_AUTO_CLOSE_IN_DEFAULT,
       ...notification,
       id,

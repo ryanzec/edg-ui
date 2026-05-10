@@ -21,6 +21,10 @@ const LOADING_BLOCKER_TOKENS_CSS = path.join(
   REPO_ROOT,
   'projects/shared-ui/src/lib/styles/tokens/loading-blocker-tokens.css',
 );
+const NOTIFICATION_TOKENS_CSS = path.join(
+  REPO_ROOT,
+  'projects/shared-ui/src/lib/styles/tokens/notification-tokens.css',
+);
 const TABS_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/tabs-tokens.css');
 const TAG_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/tag-tokens.css');
 const TOOLTIP_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/tooltip-tokens.css');
@@ -247,6 +251,7 @@ async function main() {
   const lastUpdatedContent = cleanCss(fs.readFileSync(LAST_UPDATED_TOKENS_CSS, 'utf-8'));
   const linkContent = cleanCss(fs.readFileSync(LINK_TOKENS_CSS, 'utf-8'));
   const loadingBlockerContent = cleanCss(fs.readFileSync(LOADING_BLOCKER_TOKENS_CSS, 'utf-8'));
+  const notificationContent = cleanCss(fs.readFileSync(NOTIFICATION_TOKENS_CSS, 'utf-8'));
   const tabsContent = cleanCss(fs.readFileSync(TABS_TOKENS_CSS, 'utf-8'));
   const tagContent = cleanCss(fs.readFileSync(TAG_TOKENS_CSS, 'utf-8'));
   const tooltipContent = cleanCss(fs.readFileSync(TOOLTIP_TOKENS_CSS, 'utf-8'));
@@ -288,6 +293,7 @@ async function main() {
     ...findBlocks(lastUpdatedContent, ':root').map(extractVariables),
     ...findBlocks(linkContent, ':root').map(extractVariables),
     ...findBlocks(loadingBlockerContent, ':root').map(extractVariables),
+    ...findBlocks(notificationContent, ':root').map(extractVariables),
     ...findBlocks(tabsContent, ':root').map(extractVariables),
     ...findBlocks(tagContent, ':root').map(extractVariables),
     ...findBlocks(tooltipContent, ':root').map(extractVariables),
@@ -326,6 +332,7 @@ async function main() {
     ...findBlocks(lastUpdatedContent, '.dark').map(extractVariables),
     ...findBlocks(linkContent, '.dark').map(extractVariables),
     ...findBlocks(loadingBlockerContent, '.dark').map(extractVariables),
+    ...findBlocks(notificationContent, '.dark').map(extractVariables),
     ...findBlocks(tabsContent, '.dark').map(extractVariables),
     ...findBlocks(tagContent, '.dark').map(extractVariables),
     ...findBlocks(tooltipContent, '.dark').map(extractVariables),
