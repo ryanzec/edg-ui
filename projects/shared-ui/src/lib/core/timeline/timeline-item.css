@@ -1,66 +1,115 @@
 @layer components {
   :host {
-    display: flex;
-    flex-direction: row;
-    gap: var(--spacing-3);
+    display: grid;
+    grid-template-columns: var(--timeline-rail-width) 1fr;
+    column-gap: var(--timeline-gutter);
+    color: var(--timeline-item-color);
   }
 
-  .indicator-column {
+  :host(:not(:first-child)) {
+    margin-top: var(--timeline-row-stack);
+  }
+
+  .marker {
     position: relative;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    top: 0.3125rem; /* 5px */
+    justify-content: center;
+    align-items: flex-start;
   }
 
-  .content-column {
-    display: flex;
-    flex-direction: column;
-    padding-bottom: var(--spacing-4);
+  /* connector running below the dot down to the next item's dot */
+  .marker::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: var(--timeline-connector-width);
+    top: var(--timeline-dot-size);
+    bottom: calc(-1 * var(--timeline-row-stack) - var(--timeline-marker-padding-top));
+    background: var(--timeline-item-color);
   }
 
-  .indicator-line {
-    flex: 1;
-    width: 0.0625rem; /* 1px */
+  /* when the dot hosts an icon the dot is larger so the connector starts further down */
+  :host([data-has-icon]) .marker::before {
+    top: calc(var(--timeline-marker-padding-top) + var(--timeline-dot-icon-host-size));
   }
 
-  :host(:last-child) .indicator-line {
+  /* the last item never paints a trailing connector */
+  :host(:last-child) .marker::before {
     display: none;
   }
 
-  :host(:last-child) .content-column {
-    padding-bottom: 0;
+  .dot {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--timeline-dot-size);
+    height: var(--timeline-dot-size);
+    border-radius: var(--timeline-dot-radius);
+    background: var(--timeline-item-color);
+    color: var(--timeline-item-icon-color);
+    transition:
+      background var(--timeline-motion-duration),
+      width var(--timeline-motion-duration),
+      height var(--timeline-motion-duration);
   }
 
-  :host([data-color='primary']) .indicator-line {
-    background-color: var(--color-primary-border);
+  :host([data-has-icon]) .dot {
+    width: var(--timeline-dot-icon-host-size);
+    height: var(--timeline-dot-icon-host-size);
   }
 
-  :host([data-color='secondary']) .indicator-line {
-    background-color: var(--color-secondary-border);
+  .content {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
   }
 
-  :host([data-color='neutral']) .indicator-line {
-    background-color: var(--color-neutral-border);
+  /* per-color overrides — set the local design tokens, never the property directly */
+  :host([data-color='neutral']) {
+    --timeline-item-color: var(--color-neutral);
+    --timeline-item-icon-color: var(--color-neutral-on);
   }
 
-  :host([data-color='safe']) .indicator-line {
-    background-color: var(--color-safe-border);
+  :host([data-color='primary']) {
+    --timeline-item-color: var(--color-primary);
+    --timeline-item-icon-color: var(--color-primary-on);
   }
 
-  :host([data-color='info']) .indicator-line {
-    background-color: var(--color-info-border);
+  :host([data-color='secondary']) {
+    --timeline-item-color: var(--color-secondary);
+    --timeline-item-icon-color: var(--color-secondary-on);
   }
 
-  :host([data-color='caution']) .indicator-line {
-    background-color: var(--color-caution-border);
+  :host([data-color='safe']) {
+    --timeline-item-color: var(--color-safe);
+    --timeline-item-icon-color: var(--color-safe-on);
   }
 
-  :host([data-color='warning']) .indicator-line {
-    background-color: var(--color-warning-border);
+  :host([data-color='info']) {
+    --timeline-item-color: var(--color-info);
+    --timeline-item-icon-color: var(--color-info-on);
   }
 
-  :host([data-color='danger']) .indicator-line {
-    background-color: var(--color-danger-border);
+  :host([data-color='caution']) {
+    --timeline-item-color: var(--color-caution);
+    --timeline-item-icon-color: var(--color-caution-on);
+  }
+
+  :host([data-color='warning']) {
+    --timeline-item-color: var(--color-warning);
+    --timeline-item-icon-color: var(--color-warning-on);
+  }
+
+  :host([data-color='danger']) {
+    --timeline-item-color: var(--color-danger);
+    --timeline-item-icon-color: var(--color-danger-on);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dot {
+      transition: none;
+    }
   }
 }

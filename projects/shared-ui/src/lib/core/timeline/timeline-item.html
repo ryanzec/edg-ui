@@ -1,7 +1,10 @@
-<div class="indicator-column">
-  <org-indicator size="sm" [color]="color()" />
-  <div class="indicator-line"></div>
+<div class="marker">
+  <span class="dot">
+    @if (dotIcon(); as iconName) {
+      <org-icon [name]="iconName" size="2xs" />
+    }
+  </span>
 </div>
-<div class="content-column">
+<div class="content">
   <ng-content />
 </div>

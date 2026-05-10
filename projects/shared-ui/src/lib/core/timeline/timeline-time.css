@@ -1,6 +1,13 @@
 @layer components {
   :host {
     display: block;
-    color: var(--color-fg-muted);
+    font-size: var(--timeline-time-font-size);
+    font-weight: var(--timeline-time-font-weight);
+    letter-spacing: var(--timeline-time-letter-spacing);
+    color: var(--timeline-time-color);
+    text-transform: uppercase;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    margin-bottom: var(--timeline-time-margin-bottom);
   }
 }

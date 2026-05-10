@@ -1,0 +1,36 @@
+:root {
+  /* layout */
+  --timeline-rail-width: var(--sizing-12xs); /* 16px */
+  --timeline-gutter: var(--spacing-3); /* 12px */
+  --timeline-row-stack: var(--spacing-4); /* 16px */
+  --timeline-marker-padding-top: var(--spacing-1_5); /* 6px */
+  --timeline-content-padding-bottom: var(--spacing-1); /* 4px */
+
+  /* dot */
+  --timeline-dot-size: 0.6875rem; /* 11px */
+  --timeline-dot-icon-host-size: 1.125rem; /* 18px */
+  --timeline-dot-radius: var(--radius-pill);
+
+  /* connector */
+  --timeline-connector-width: var(--border-width); /* 1px */
+
+  /* time eyebrow */
+  --timeline-time-font-size: var(--font-size-xs);
+  --timeline-time-font-weight: var(--font-weight-medium);
+  --timeline-time-letter-spacing: var(--letter-spacing-wide);
+  --timeline-time-color: var(--color-fg-muted);
+  --timeline-time-margin-bottom: var(--spacing-1);
+
+  /* header */
+  --timeline-header-font-size: var(--font-size-base);
+  --timeline-header-font-weight: var(--font-weight-semibold);
+  --timeline-header-line-height: var(--line-height-tight);
+  --timeline-header-color: var(--color-fg);
+
+  /* per-item color (defaults to neutral, overridden via data-color) */
+  --timeline-item-color: var(--color-neutral);
+  --timeline-item-icon-color: var(--color-neutral-on);
+
+  /* motion */
+  --timeline-motion-duration: var(--motion-duration-base);
+}

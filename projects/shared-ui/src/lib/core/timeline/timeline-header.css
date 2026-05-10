@@ -4,8 +4,13 @@
   }
 
   .heading {
-    font-size: var(--font-size-xl);
-    line-height: var(--line-height-normal);
-    letter-spacing: var(--letter-spacing-normal);
+    font-size: var(--timeline-header-font-size);
+    font-weight: var(--timeline-header-font-weight);
+    line-height: var(--timeline-header-line-height);
+    color: var(--timeline-header-color);
+
+    &:first-child {
+      line-height: 1;
+    }
   }
 }

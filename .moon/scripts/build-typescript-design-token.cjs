@@ -27,6 +27,7 @@ const NOTIFICATION_TOKENS_CSS = path.join(
 );
 const TABS_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/tabs-tokens.css');
 const TAG_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/tag-tokens.css');
+const TIMELINE_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/timeline-tokens.css');
 const TOOLTIP_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/tooltip-tokens.css');
 const BUTTON_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/button-tokens.css');
 const CALENDAR_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/calendar-tokens.css');
@@ -254,6 +255,7 @@ async function main() {
   const notificationContent = cleanCss(fs.readFileSync(NOTIFICATION_TOKENS_CSS, 'utf-8'));
   const tabsContent = cleanCss(fs.readFileSync(TABS_TOKENS_CSS, 'utf-8'));
   const tagContent = cleanCss(fs.readFileSync(TAG_TOKENS_CSS, 'utf-8'));
+  const timelineContent = cleanCss(fs.readFileSync(TIMELINE_TOKENS_CSS, 'utf-8'));
   const tooltipContent = cleanCss(fs.readFileSync(TOOLTIP_TOKENS_CSS, 'utf-8'));
   const buttonContent = cleanCss(fs.readFileSync(BUTTON_TOKENS_CSS, 'utf-8'));
   const calendarContent = cleanCss(fs.readFileSync(CALENDAR_TOKENS_CSS, 'utf-8'));
@@ -296,6 +298,7 @@ async function main() {
     ...findBlocks(notificationContent, ':root').map(extractVariables),
     ...findBlocks(tabsContent, ':root').map(extractVariables),
     ...findBlocks(tagContent, ':root').map(extractVariables),
+    ...findBlocks(timelineContent, ':root').map(extractVariables),
     ...findBlocks(tooltipContent, ':root').map(extractVariables),
     ...findBlocks(buttonContent, ':root').map(extractVariables),
     ...findBlocks(calendarContent, ':root').map(extractVariables),
@@ -335,6 +338,7 @@ async function main() {
     ...findBlocks(notificationContent, '.dark').map(extractVariables),
     ...findBlocks(tabsContent, '.dark').map(extractVariables),
     ...findBlocks(tagContent, '.dark').map(extractVariables),
+    ...findBlocks(timelineContent, '.dark').map(extractVariables),
     ...findBlocks(tooltipContent, '.dark').map(extractVariables),
     ...findBlocks(buttonContent, '.dark').map(extractVariables),
     ...findBlocks(calendarContent, '.dark').map(extractVariables),
