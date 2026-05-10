@@ -19,7 +19,7 @@ import { angularUtils } from '@organization/shared-utils';
 import { FORM_FIELD_COMPONENT } from '../../core/form-fields/form-field';
 
 /** all input types supported by the brain */
-export const allInputTypes = ['text', 'password', 'email', 'number', 'tel', 'url'] as const;
+export const allInputTypes = ['text', 'password', 'email', 'number', 'tel', 'url', 'search'] as const;
 
 /** union type of all supported input types */
 export type InputType = (typeof allInputTypes)[number];
@@ -238,6 +238,9 @@ export class InputBrainDirective implements OnInit, OnDestroy {
   /** whether the user is allowed to modify content (combines disabled and readonly) */
   public readonly canModifyContent = computed<boolean>(() => !this.isDisabled() && !this.readonly());
 
+  /** whether the input currently has a non-empty value (used to drive clear-button visibility) */
+  public readonly hasValue = computed<boolean>(() => this.value().length > 0);
+
   /** whether the post-icon should route to the password toggle action when clicked */
   public readonly isPasswordToggleActive = computed<boolean>(() => {
     return this.showPasswordToggle() && this.type() === 'password';
@@ -368,6 +371,43 @@ export class InputBrainDirective implements OnInit, OnDestroy {
   /** programmatically blurs the native input element */
   public blurInput(): void {
     this.elementRef.nativeElement.blur();
+  }
+
+  /** clears the current value, syncs the form callback, and refocuses the native input */
+  public clearValue(): void {
+    if (!this.canModifyContent()) {
+      return;
+    }
+
+    this.value.set('');
+    this._onChange('');
+    this.elementRef.nativeElement.focus();
+  }
+
+  /** routes the number stepper increment, delegating to native stepUp so min/max/step are honored */
+  public incrementNumber(): void {
+    if (!this.canModifyContent() || this.type() !== 'number') {
+      return;
+    }
+
+    const native = this.elementRef.nativeElement;
+
+    native.stepUp();
+    this.value.set(native.value);
+    this._onChange(native.value);
+  }
+
+  /** routes the number stepper decrement, delegating to native stepDown so min/max/step are honored */
+  public decrementNumber(): void {
+    if (!this.canModifyContent() || this.type() !== 'number') {
+      return;
+    }
+
+    const native = this.elementRef.nativeElement;
+
+    native.stepDown();
+    this.value.set(native.value);
+    this._onChange(native.value);
   }
 
   /** sets the form-controlled disabled state (called by setDisabledState from reactive forms) */

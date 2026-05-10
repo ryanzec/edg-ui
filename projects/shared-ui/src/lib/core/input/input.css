@@ -1,82 +1,360 @@
 @layer components {
   :host {
-    position: relative;
     display: inline-flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--spacing-1);
+    align-items: stretch;
     width: 100%;
-    padding: 0 var(--spacing-2);
-    min-height: 1.875rem; /* 30px */
+    max-width: 22rem;
+    min-height: var(--input-height);
+    padding: 0;
+    border-radius: var(--input-radius);
+    border: var(--input-border-width) solid var(--input-border-color);
+    background-color: var(--input-bg);
+    color: var(--input-fg);
+    font-family: var(--font-sans);
+    font-size: var(--input-font-size);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--input-line-height);
+    letter-spacing: var(--input-letter-spacing);
+    cursor: text;
+    transition:
+      background-color var(--motion-duration-base) var(--motion-ease-standard),
+      border-color var(--motion-duration-base) var(--motion-ease-standard),
+      color var(--motion-duration-base) var(--motion-ease-standard);
   }
 
-  :host:focus-within {
-    box-shadow: 0 0 0 0.0625rem var(--color-focus-ring); /* 1px */
-  }
-
-  :host([data-variant='bordered']) {
-    border: var(--border-width) solid var(--color-border);
-    border-radius: var(--radius-base);
-    background-color: var(--color-bg-surface);
-  }
-
-  :host([data-variant='bordered']:focus-within) {
-    border-color: var(--color-focus-ring);
-  }
-
-  :host([data-variant='bordered'][aria-disabled='true']) {
-    background-color: var(--color-bg-surface);
-    border-color: var(--color-border);
-    cursor: not-allowed;
-    opacity: 0.5;
-  }
-
-  :host([data-variant='borderless']) {
-    border: none;
-    background-color: var(--color-bg-surface);
-  }
-
-  :host([data-variant='borderless'][aria-disabled='true']) {
-    background-color: var(--color-bg-surface);
-    cursor: not-allowed;
-    opacity: 0.5;
-  }
-
-  .native-input {
-    flex: 1;
-    background-color: transparent;
-    border: none;
+  /* native control */
+  .native {
+    flex: 1 1 8ch;
+    min-width: 8ch;
+    width: auto;
+    margin: 0;
+    border: 0;
     outline: none;
-    font-size: var(--font-size-base);
-    line-height: var(--line-height-normal);
-    letter-spacing: var(--letter-spacing-normal);
+    background-color: transparent;
+    color: inherit;
+    font: inherit;
+    letter-spacing: inherit;
+    cursor: inherit;
+    padding: calc((var(--input-height) - 1em * var(--input-line-height)) / 2 - var(--input-border-width))
+      var(--input-pad-x);
   }
 
-  :host input::placeholder {
-    color: var(--color-fg-muted);
+  .native::placeholder {
+    color: var(--input-fg-placeholder);
+    opacity: 1;
   }
 
-  :host input::selection {
+  .native::selection {
     background-color: var(--color-primary-soft);
   }
 
-  :host input:disabled,
-  :host input[readonly] {
+  .native:disabled,
+  .native[readonly] {
     cursor: not-allowed;
   }
 
-  .input-icon-btn {
-    display: inline-flex;
-    flex-shrink: 0;
-    color: var(--color-fg-muted);
+  /* neutralise webkit autofill so the yellow flash never appears and colors stay aligned */
+  .native:-webkit-autofill,
+  .native:-webkit-autofill:hover,
+  .native:-webkit-autofill:focus {
+    -webkit-text-fill-color: var(--input-fg);
+    caret-color: var(--input-fg);
+    transition: background-color 9999s ease-in-out 0s;
   }
 
-  .input-icon-btn:focus-visible {
+  /* hide the browser's native search clear cross — the shell owns clear */
+  .native[type='search']::-webkit-search-cancel-button,
+  .native[type='search']::-webkit-search-decoration {
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  /* hide the browser's native number spinners — the shell owns the stepper */
+  .native[type='number'] {
+    appearance: textfield;
+    -moz-appearance: textfield;
+  }
+
+  .native[type='number']::-webkit-outer-spin-button,
+  .native[type='number']::-webkit-inner-spin-button {
+    appearance: none;
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* slots */
+  .pre,
+  .post {
+    display: inline-flex;
+    align-items: center;
+    flex: 0 0 auto;
+    gap: var(--input-slot-gap);
+    color: var(--input-fg-muted);
+    font-size: var(--input-font-size);
+    line-height: 1;
+  }
+
+  .pre {
+    padding-left: var(--input-pad-x);
+  }
+
+  .post {
+    padding-right: var(--input-pad-x);
+  }
+
+  :host(:not([data-has-pre])) .pre {
+    display: none;
+  }
+
+  :host(:not([data-has-post])) .post {
+    display: none;
+  }
+
+  :host([data-has-pre]) .native {
+    padding-left: var(--input-pad-x-tight);
+  }
+
+  :host([data-has-post]) .native {
+    padding-right: var(--input-pad-x-tight);
+  }
+
+  /* track holds chips and the native input */
+  .track {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    flex: 1 1 auto;
+    min-width: 0;
+    gap: var(--input-chip-gap);
+  }
+
+  /* when chips are present the track owns vertical padding so click-empty-space-to-focus still works */
+  :host([data-has-chips]) .track {
+    padding-block: calc((var(--input-height) - var(--input-chip-height)) / 2 - var(--input-border-width));
+    padding-inline-start: var(--input-pad-x);
+    row-gap: var(--input-chip-row-gap);
+  }
+
+  :host([data-has-chips]) .native {
+    padding-block: 0;
+    padding-inline: 0;
+  }
+
+  :host([data-has-pre][data-has-chips]) .track {
+    padding-inline-start: var(--input-pad-x-tight);
+  }
+
+  /* chips list participates in the track flex layout directly via display: contents */
+  .chips {
+    display: contents;
+  }
+
+  /* pin chip size by overriding tag tokens — input track owns the rhythm regardless of any data-size on children */
+  :host([data-has-chips]) .track {
+    --tag-padding-block: 0;
+    --tag-padding-inline: var(--spacing-2);
+    --tag-font-size: var(--font-size-xs);
+    --tag-gap: var(--spacing-1);
+  }
+
+  /* trailing-slot ordering — spinner first, stepper last, others (clear / password toggle / post icon) middle */
+  .post org-loading-spinner {
+    order: -1;
+  }
+
+  .post .stepper {
+    order: 1;
+  }
+
+  /* icon button used for clickable / decorative pre & post icons (not the org-button-based clear / password toggle) */
+  .icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: var(--input-fg-muted);
+    background-color: transparent;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+  }
+
+  .icon-btn:focus-visible {
     background-color: var(--color-primary-soft);
     border-radius: var(--radius-sm);
   }
 
-  .input-icon-btn:not(:disabled):hover {
+  .icon-btn:not(:disabled):hover {
+    color: var(--input-fg);
+  }
+
+  .icon-btn:disabled {
+    cursor: not-allowed;
+  }
+
+  /* clear / password-toggle wrappers — the org-button inside owns its own size */
+  .clear,
+  .password-toggle {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  /* clear button visibility */
+  .clear {
+    display: none;
+  }
+
+  :host([data-show-clear='always'][data-has-value]) .clear {
+    display: inline-flex;
+  }
+
+  :host([data-show-clear='active'][data-has-value]:hover) .clear,
+  :host([data-show-clear='active'][data-has-value]:focus-within) .clear {
+    display: inline-flex;
+  }
+
+  /* number stepper */
+  .stepper {
+    display: inline-flex;
+    flex-direction: column;
+    width: var(--input-stepper-width);
+    height: calc(var(--input-height) - 0.25rem);
+    border-radius: var(--radius-xs);
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .stepper-up,
+  .stepper-down {
+    appearance: none;
+    -webkit-appearance: none;
+    border: 0;
+    background-color: transparent;
+    color: var(--input-fg-muted);
+    cursor: pointer;
+    height: var(--input-stepper-button-height);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+  }
+
+  .stepper-up:not(:disabled):hover,
+  .stepper-down:not(:disabled):hover {
+    background-color: var(--input-stepper-bg-hover);
+    color: var(--input-fg);
+  }
+
+  .stepper-up:not(:disabled):active,
+  .stepper-down:not(:disabled):active {
+    background-color: var(--input-stepper-bg-active);
+  }
+
+  .stepper-up:disabled,
+  .stepper-down:disabled {
+    cursor: not-allowed;
+  }
+
+  /* loading spinner color */
+  :host([data-loading]) org-loading-spinner {
+    color: var(--input-fg-muted);
+  }
+
+  /* type-specific: search leading icon explicitly muted */
+  :host([data-type='search']) .pre {
+    color: var(--input-fg-muted);
+  }
+
+  /* === STATES === */
+
+  :host(:hover:not([data-state='error']):not([data-disabled])),
+  :host(.is-hover:not([data-state='error']):not([data-disabled])) {
+    background-color: var(--input-bg-hover);
+    border-color: var(--input-border-color-hover);
+  }
+
+  :host(:focus-within:not([data-state='error']):not([data-disabled])),
+  :host(.is-focus:not([data-state='error']):not([data-disabled])) {
+    background-color: var(--input-bg-focus);
+    border-color: var(--input-border-color-focus);
+  }
+
+  :host([data-state='error']) {
+    border-color: var(--input-border-color-error);
+  }
+
+  :host([data-disabled]) {
+    opacity: var(--input-disabled-opacity);
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  :host([data-readonly]:not([data-variant='inline'])) {
+    --input-bg: var(--color-bg-surface-2);
+    --input-bg-hover: var(--color-bg-surface-2);
+  }
+
+  /* === VARIANTS === */
+
+  /* bordered (default) — uses base token values */
+  :host([data-variant='bordered']) {
+    --input-bg: var(--color-bg-surface);
+    --input-bg-hover: var(--color-bg-surface);
+    --input-bg-focus: var(--color-bg-surface);
+    --input-border-color: var(--color-border);
+    --input-border-color-hover: var(--color-info);
+    --input-border-color-focus: var(--color-info);
+  }
+
+  /* borderless: no chrome until interacted with — meant to live inside another bordered surface */
+  :host([data-variant='borderless']) {
+    --input-bg: transparent;
+    --input-bg-hover: var(--color-bg-surface-2);
+    --input-bg-focus: transparent;
+    --input-border-color: transparent;
+    --input-border-color-hover: transparent;
+    --input-border-color-focus: var(--color-info);
+    --input-pad-x: var(--spacing-1_5);
+  }
+
+  /* inline: hugs its text, focused = single underline. Looks like editable inline copy */
+  :host([data-variant='inline']) {
+    min-height: auto;
+    height: auto;
+    padding: 0;
+    border-width: 0;
+    border-bottom: var(--border-width) solid transparent;
+    border-radius: 0;
+    color: var(--color-fg-muted);
+    width: auto;
+    max-width: none;
+    background-color: transparent;
+  }
+
+  :host([data-variant='inline']) .native,
+  :host([data-variant='inline']) .pre,
+  :host([data-variant='inline']) .post {
+    padding: 0;
+    height: auto;
+    width: auto;
+  }
+
+  :host([data-variant='inline']:hover:not([data-state='error']):not([data-disabled])) {
+    color: var(--color-fg);
+    background-color: transparent;
+    border-color: transparent;
+  }
+
+  :host([data-variant='inline']:focus-within:not([data-state='error']):not([data-disabled])),
+  :host([data-variant='inline'].is-focus:not([data-state='error']):not([data-disabled])) {
+    color: var(--color-fg);
+    border-bottom-color: var(--color-info);
+    background-color: transparent;
+  }
+
+  :host([data-variant='inline'][data-state='error']) {
+    border-bottom-color: var(--color-danger);
     color: var(--color-fg);
   }
 }

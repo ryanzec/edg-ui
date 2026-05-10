@@ -492,6 +492,26 @@
     --button-border-active: transparent;
   }
 
+  /* ===== PLAIN VARIANT =====
+     color-agnostic; standard border, transparent background, inherited foreground.
+     hover / focus / active slots are intentionally identical to the base slots so the button
+     does not change colour on interaction.
+   */
+  :host([data-variant='plain']) {
+    --button-bg: transparent;
+    --button-fg: var(--color-fg);
+    --button-border: var(--color-border);
+    --button-bg-hover: var(--color-neutral-soft-hover);
+    --button-fg-hover: var(--color-fg);
+    --button-border-hover: var(--color-border);
+    --button-bg-focus: var(--color-neutral-soft-active);
+    --button-fg-focus: var(--color-fg);
+    --button-border-focus: var(--color-border);
+    --button-bg-active: var(--color-neutral-soft-active);
+    --button-fg-active: var(--color-fg);
+    --button-border-active: var(--color-border);
+  }
+
   /* ===== ACTIVE STATE OVERRIDES =====
      when isActive is true, the button renders in its active (pressed) visual state for the base
      and :hover states; :focus-visible is intentionally left to its own *-focus slots so keyboard

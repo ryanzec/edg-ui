@@ -2,12 +2,14 @@ import { ChangeDetectionStrategy, Component, computed, inject, input } from '@an
 import { CdkConnectedOverlay, CdkOverlayOrigin, type ConnectedPosition } from '@angular/cdk/overlay';
 import { angularUtils } from '@organization/shared-utils';
 import { type IconName } from '../../brain/icon-brain/icon-brain';
+import { Button } from '../button/button';
 import { Icon, type IconSize } from '../icon/icon';
 import { List } from '../list/list';
 import { ListItem } from '../list/list-item';
 import { ListItemIcon } from '../list/list-item-icon';
 import { OverlayMenuDivider } from '../overlay-menu/overlay-menu-divider';
 import { ScrollArea } from '../scroll-area/scroll-area';
+import { Tag } from '../tag/tag';
 import { ComponentSize } from '../types/component-types';
 import {
   DROP_DOWN_SELECTOR_DISABLED_DEFAULT as BRAIN_DROP_DOWN_SELECTOR_DISABLED_DEFAULT,
@@ -44,6 +46,9 @@ export const DROP_DOWN_SELECTOR_POSITION_DEFAULT: DropDownSelectorPosition = 'be
 /** default value for the iconName input */
 export const DROP_DOWN_SELECTOR_ICON_NAME_DEFAULT: IconName | undefined = undefined;
 
+/** default value for the showLabelWithValue input */
+export const DROP_DOWN_SELECTOR_SHOW_LABEL_WITH_VALUE_DEFAULT = false;
+
 /** the icon size used for each supported drop-down selector trigger size */
 const TRIGGER_ICON_SIZE_BY_TRIGGER_SIZE: Record<DropDownSelectorSize, IconSize> = {
   sm: 'xs',
@@ -69,7 +74,18 @@ const POSITION_CONFIGURATIONS: Record<DropDownSelectorPosition, ConnectedPositio
 @Component({
   selector: 'org-drop-down-selector',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CdkOverlayOrigin, CdkConnectedOverlay, Icon, List, ListItem, ListItemIcon, OverlayMenuDivider, ScrollArea],
+  imports: [
+    Button,
+    CdkOverlayOrigin,
+    CdkConnectedOverlay,
+    Icon,
+    List,
+    ListItem,
+    ListItemIcon,
+    OverlayMenuDivider,
+    ScrollArea,
+    Tag,
+  ],
   templateUrl: './drop-down-selector.html',
   styleUrl: './drop-down-selector.css',
   hostDirectives: [
@@ -81,8 +97,9 @@ const POSITION_CONFIGURATIONS: Record<DropDownSelectorPosition, ConnectedPositio
   ],
   host: {
     '[attr.data-selection-mode]': 'brain.selectionMode()',
-    '[attr.data-has-selection]': 'brain.hasSelection() ? "" : null',
+    '[attr.data-has-value]': 'brain.hasSelection() ? "" : null',
     '[attr.data-size]': 'size()',
+    '[attr.data-state]': 'brain.isOpen() ? "open" : "closed"',
     '[attr.aria-disabled]': 'brain.disabled() ? "true" : null',
   },
 })
@@ -103,22 +120,36 @@ export class DropDownSelector<TValue = unknown> {
     { transform: angularUtils.transformNullToUndefined }
   );
 
+  /**
+   * when true, the label remains visible inside the trigger even after a value is picked, separated from
+   * the value by a hairline; when false (default), the label is hidden once a value is selected and only
+   * the value or count chip is shown
+   */
+  public readonly showLabelWithValue = input<boolean>(DROP_DOWN_SELECTOR_SHOW_LABEL_WITH_VALUE_DEFAULT);
+
   /** the icon size to use for icons rendered inside the trigger, derived from the trigger size variant */
   protected readonly triggerIconSize = computed<IconSize>(() => TRIGGER_ICON_SIZE_BY_TRIGGER_SIZE[this.size()]);
 
   /** the resolved cdk overlay positions for the dropdown menu */
   protected readonly menuPositions = computed<ConnectedPosition[]>(() => POSITION_CONFIGURATIONS[this.position()]);
 
-  /** the composed trigger label combining the brain-owned label and the brain-derived display value text */
-  protected readonly displayLabel = computed<string>(() => {
-    const valueText = this.brain.displayValueText();
+  /** whether the label text should render inside the trigger */
+  protected readonly showLabel = computed<boolean>(() => !this.brain.hasSelection() || this.showLabelWithValue());
 
-    if (valueText === null) {
-      return this.brain.label();
-    }
+  /** whether the hairline separator between label and value should render */
+  protected readonly showSeparator = computed<boolean>(() => this.brain.hasSelection() && this.showLabelWithValue());
 
-    return `${this.brain.label()}: ${valueText}`;
-  });
+  /** whether the multi-mode count chip should render — shown when more than one item is selected */
+  protected readonly showCountChip = computed<boolean>(() => this.brain.selectionCount() > 1);
+
+  /** whether the single-value text should render — shown when exactly one item is selected */
+  protected readonly showSingleValue = computed<boolean>(() => this.brain.selectionCount() === 1);
+
+  /** the display text for the single-selected item, or empty string when nothing is selected */
+  protected readonly singleValueText = computed<string>(() => this.brain.selectedItems()[0]?.display ?? '');
+
+  /** the display text rendered inside the multi-mode count chip */
+  protected readonly countChipText = computed<string>(() => `${this.brain.selectionCount()} selected`);
 
   /** resolves the menu item pre-icon based on selection mode and selected state */
   protected getItemPreIcon(isSelected: boolean): IconName | undefined {

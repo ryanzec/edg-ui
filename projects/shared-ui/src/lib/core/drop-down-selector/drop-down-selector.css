@@ -1,59 +1,75 @@
 @layer components {
   :host {
-    display: inline-block;
-  }
-
-  .trigger-button {
     display: inline-flex;
-    align-items: center;
-    gap: var(--spacing-2);
-    padding: var(--spacing-1) var(--spacing-2);
-    background-color: var(--color-bg-app);
-    color: var(--color-fg);
-    border: var(--border-width) solid var(--color-border-soft);
-    border-radius: var(--radius-sm);
-    font-size: var(--font-size-base);
-    line-height: 1;
-    cursor: pointer;
-    outline: none;
+    max-width: var(--sizing-drop-down-selector-max-width);
   }
 
-  :host([data-size='sm']) .trigger-button {
-    padding: var(--spacing-1) var(--spacing-2);
-    font-size: var(--font-size-xs);
-  }
-
-  :host([data-size='lg']) .trigger-button {
-    padding: var(--spacing-2) var(--spacing-3);
-    font-size: var(--font-size-lg);
-  }
-
-  .trigger-button:not(:disabled):hover {
-    background-color: var(--color-neutral-soft-hover);
-    border-color: var(--color-border);
-  }
-
-  .trigger-button:not(:disabled):focus-visible {
-    background-color: var(--color-neutral-soft-hover);
-    border-color: var(--color-border);
-  }
-
-  :host([aria-disabled='true']) .trigger-button {
-    opacity: var(--opacity-disabled);
-    cursor: not-allowed;
+  /* armed state — open trigger reads as a soft neutral surface while keeping the standard border */
+  :host([data-state='open']:not([aria-disabled='true'])) org-button {
+    --button-bg: var(--color-neutral-soft);
+    --button-bg-hover: var(--color-neutral-soft-hover);
   }
 
   .trigger-label {
-    text-align: left;
+    color: var(--color-drop-down-selector-label);
+    font-weight: var(--font-weight-regular);
+    flex: 0 0 auto;
+  }
+
+  /* when no value is picked, the label stands in for the entire trigger label and reads at full weight */
+  :host(:not([data-has-value])) .trigger-label {
+    color: var(--color-drop-down-selector-value);
+    font-weight: var(--font-weight-medium);
+  }
+
+  .trigger-separator {
+    flex: 0 0 var(--border-width);
+    align-self: stretch;
+    margin-block: var(--spacing-drop-down-selector-separator-y);
+    background-color: var(--color-drop-down-selector-separator);
+  }
+
+  .trigger-value {
+    color: var(--color-drop-down-selector-value);
+    font-weight: var(--font-weight-medium);
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .trigger-count {
+    flex: 0 0 auto;
+  }
+
+  .trigger-chevron {
+    flex: 0 0 auto;
+    transition: transform var(--motion-duration-fast) var(--motion-ease-standard);
+  }
+
+  :host([data-state='open']) .trigger-chevron {
+    transform: rotate(180deg);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .trigger-chevron {
+      transition-duration: 0ms;
+    }
   }
 
   .menu-panel {
-    min-width: var(--sizing-5xs);
-    max-height: var(--sizing-lg);
-    background-color: var(--color-bg-app);
-    border: var(--border-width) solid var(--color-border);
-    border-radius: var(--radius-base);
+    min-width: var(--sizing-drop-down-selector-panel-min-width);
+    max-width: var(--sizing-drop-down-selector-panel-max-width);
+    max-height: var(--sizing-drop-down-selector-panel-max-height);
+    background-color: var(--color-drop-down-selector-panel-surface);
+    border: var(--border-width) solid var(--color-drop-down-selector-panel-border);
+    border-radius: var(--radius-drop-down-selector-panel);
+    box-shadow: var(--shadow-drop-down-selector-panel);
+    padding: var(--spacing-drop-down-selector-panel-pad);
     overflow: hidden;
+    color: var(--color-fg);
+    z-index: var(--z-index-popover);
   }
 
   .menu-item-button {
@@ -68,5 +84,13 @@
 
   .menu-item-button[data-active] {
     background-color: var(--color-neutral-soft-hover);
+  }
+
+  .menu-item-clear {
+    color: var(--color-drop-down-selector-clear);
+  }
+
+  .menu-item-clear:hover {
+    color: var(--color-fg);
   }
 }

@@ -9,6 +9,9 @@
   [ariaLabel]="ariaLabel()"
   [ariaExpanded]="ariaExpanded()"
   [ariaPressed]="ariaPressed()"
+  [ariaHaspopup]="ariaHaspopup()"
+  [ariaControls]="ariaControls()"
+  [ariaActivedescendant]="ariaActivedescendant()"
   (clicked)="onBrainClicked()"
 >
   @if (loading()) {
@@ -21,7 +24,11 @@
     }
   }
   @if (iconOnly() === false) {
-    <span>{{ label() }}</span>
+    @if (contentTemplate(); as projectedContent) {
+      <ng-container [ngTemplateOutlet]="projectedContent" />
+    } @else {
+      <span>{{ label() }}</span>
+    }
   }
   @if (!loading()) {
     @if (postTemplate()) {

@@ -41,6 +41,10 @@ const DESIGN_SYSTEM_DEMO_TOKENS_CSS = path.join(
   'projects/shared-ui/src/lib/styles/tokens/design-system-demo-tokens.css',
 );
 const DIVIDER_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/divider-tokens.css');
+const DROP_DOWN_SELECTOR_TOKENS_CSS = path.join(
+  REPO_ROOT,
+  'projects/shared-ui/src/lib/styles/tokens/drop-down-selector-tokens.css',
+);
 const OVERLAY_MENU_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/overlay-menu-tokens.css');
 const PAGINATION_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/pagination-tokens.css');
 const SKELETON_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/skeleton-tokens.css');
@@ -49,6 +53,7 @@ const EMPTY_INDICATOR_TOKENS_CSS = path.join(
   REPO_ROOT,
   'projects/shared-ui/src/lib/styles/tokens/empty-indicator-tokens.css',
 );
+const INPUT_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/input-tokens.css');
 const OUTPUT_TS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/design-tokens.ts');
 
 /**
@@ -249,7 +254,9 @@ async function main() {
   const dialogContent = cleanCss(fs.readFileSync(DIALOG_TOKENS_CSS, 'utf-8'));
   const designSystemDemoContent = cleanCss(fs.readFileSync(DESIGN_SYSTEM_DEMO_TOKENS_CSS, 'utf-8'));
   const dividerContent = cleanCss(fs.readFileSync(DIVIDER_TOKENS_CSS, 'utf-8'));
+  const dropDownSelectorContent = cleanCss(fs.readFileSync(DROP_DOWN_SELECTOR_TOKENS_CSS, 'utf-8'));
   const emptyIndicatorContent = cleanCss(fs.readFileSync(EMPTY_INDICATOR_TOKENS_CSS, 'utf-8'));
+  const inputContent = cleanCss(fs.readFileSync(INPUT_TOKENS_CSS, 'utf-8'));
   const overlayMenuContent = cleanCss(fs.readFileSync(OVERLAY_MENU_TOKENS_CSS, 'utf-8'));
   const paginationContent = cleanCss(fs.readFileSync(PAGINATION_TOKENS_CSS, 'utf-8'));
   const skeletonContent = cleanCss(fs.readFileSync(SKELETON_TOKENS_CSS, 'utf-8'));
@@ -284,7 +291,9 @@ async function main() {
     ...findBlocks(dialogContent, ':root').map(extractVariables),
     ...findBlocks(designSystemDemoContent, ':root').map(extractVariables),
     ...findBlocks(dividerContent, ':root').map(extractVariables),
+    ...findBlocks(dropDownSelectorContent, ':root').map(extractVariables),
     ...findBlocks(emptyIndicatorContent, ':root').map(extractVariables),
+    ...findBlocks(inputContent, ':root').map(extractVariables),
     ...findBlocks(overlayMenuContent, ':root').map(extractVariables),
     ...findBlocks(paginationContent, ':root').map(extractVariables),
     ...findBlocks(skeletonContent, ':root').map(extractVariables),
@@ -316,7 +325,9 @@ async function main() {
     ...findBlocks(dialogContent, '.dark').map(extractVariables),
     ...findBlocks(designSystemDemoContent, '.dark').map(extractVariables),
     ...findBlocks(dividerContent, '.dark').map(extractVariables),
+    ...findBlocks(dropDownSelectorContent, '.dark').map(extractVariables),
     ...findBlocks(emptyIndicatorContent, '.dark').map(extractVariables),
+    ...findBlocks(inputContent, '.dark').map(extractVariables),
     ...findBlocks(overlayMenuContent, '.dark').map(extractVariables),
     ...findBlocks(paginationContent, '.dark').map(extractVariables),
     ...findBlocks(skeletonContent, '.dark').map(extractVariables),

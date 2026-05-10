@@ -1,23 +1,34 @@
 import type { Meta, StoryObj } from '@storybook/angular';
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import {
   DROP_DOWN_SELECTOR_DISABLED_DEFAULT,
   DROP_DOWN_SELECTOR_ICON_NAME_DEFAULT,
   DROP_DOWN_SELECTOR_POSITION_DEFAULT,
   DROP_DOWN_SELECTOR_SELECTION_MODE_DEFAULT,
+  DROP_DOWN_SELECTOR_SHOW_LABEL_WITH_VALUE_DEFAULT,
   DROP_DOWN_SELECTOR_SIZE_DEFAULT,
   DropDownSelector,
+  allDropDownSelectorPositions,
+  allDropDownSelectorSizes,
   type DropDownSelectorPosition,
   type DropDownSelectorSize,
 } from './drop-down-selector';
+import { ButtonToggle, type ButtonToggleItem } from '../button-toggle/button-toggle';
+import { CheckboxToggle } from '../checkbox-toggle/checkbox-toggle';
 import { type IconName } from '../../brain/icon-brain/icon-brain';
 import { DataSelectionStore } from '../data-selection-store/data-selection-store';
 import {
+  allDropDownSelectorSelectionModes,
   type DropDownSelectorSelectionMode,
   type SelectionValue,
 } from '../../brain/drop-down-selector-brain/drop-down-selector-brain';
-import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
-import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
+import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
+import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
+import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
+import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
+import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
+import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
 
 const STATUS_ITEMS: SelectionValue<string>[] = [
   { value: 'active', display: 'Active only' },
@@ -30,6 +41,18 @@ const ROLE_ITEMS: SelectionValue<string>[] = [
   { value: 'admin', display: 'Admin' },
   { value: 'owner', display: 'Owner' },
   { value: 'viewer', display: 'Viewer' },
+];
+
+const SORT_ITEMS: SelectionValue<string>[] = [
+  { value: 'last-updated', display: 'Last updated' },
+  { value: 'name-asc', display: 'Name (A → Z)' },
+  { value: 'created-date', display: 'Created date' },
+  { value: 'owner', display: 'Owner' },
+];
+
+const LONG_VALUE_ITEMS: SelectionValue<string>[] = [
+  { value: 'aurora', display: 'Aurora — Mobile redesign initiative' },
+  { value: 'beacon', display: 'Beacon — Billing v2 platform refresh' },
 ];
 
 const MANY_ITEMS: SelectionValue<string>[] = Array.from({ length: 40 }, (_, index) => ({
@@ -50,6 +73,7 @@ const MANY_ITEMS: SelectionValue<string>[] = Array.from({ length: 40 }, (_, inde
       [size]="size()"
       [position]="position()"
       [iconName]="iconName()"
+      [showLabelWithValue]="showLabelWithValue()"
       [selectedItems]="selectedItems()"
       (selectedItemsChange)="onSelectedItemsChange($event)"
     />
@@ -65,6 +89,7 @@ class DropDownSelectorHost {
   public readonly size = input<DropDownSelectorSize>(DROP_DOWN_SELECTOR_SIZE_DEFAULT);
   public readonly position = input<DropDownSelectorPosition>(DROP_DOWN_SELECTOR_POSITION_DEFAULT);
   public readonly iconName = input<IconName | undefined>(DROP_DOWN_SELECTOR_ICON_NAME_DEFAULT);
+  public readonly showLabelWithValue = input<boolean>(DROP_DOWN_SELECTOR_SHOW_LABEL_WITH_VALUE_DEFAULT);
   public readonly initialSelection = input<SelectionValue<string>[]>([]);
 
   protected readonly selectedItems = computed<SelectionValue<string>[]>(() => this.selectionStore.selectedItemsArray());
@@ -96,20 +121,21 @@ const meta: Meta<DropDownSelectorHost> = {
   ## Drop Down Selector Component
 
   A button-like trigger that opens an overlay menu of selectable options. Selection logic is owned by the
-  headless \`DropDownSelectorBrainDirective\`, while the presentation layer renders the trigger button and
-  CDK menu overlay. The trigger displays a chevron icon and updates its label to reflect the current
-  selection state.
+  headless \`DropDownSelectorBrainDirective\`, while the presentation layer composes the trigger as a real
+  \`<org-button>\` with a projected \`#content\` template, an overlay panel surfaced via the CDK overlay,
+  and \`<org-list-item>\` rows. The trigger displays a chevron, an optional leading icon, an optional label
+  (controlled by \`showLabelWithValue\`), and either the selected value text (single mode / one selection)
+  or an \`<org-tag>\` count chip (multi mode with two or more selections).
 
   ### Features
   - Single (\`'single'\`) and multiple (\`'multiple'\`) selection modes via the \`selectionMode\` input
   - Two-way bindable \`selectedItems\` model using the \`SelectionValue<TValue>\` shape
-  - Trigger label updates to \`"label"\` when empty, \`"label: value"\` when one is selected, and
-    \`"label: N selected"\` when more than one is selected
+  - When a value is picked, the trigger shows the value text (single selection) or a count chip (2+ selections)
+  - The label can be kept visible alongside the value via \`showLabelWithValue\`; otherwise it is hidden once a value is picked
   - Single-select mode shows a check icon next to the selected item
-  - Multi-select mode shows a checkbox visual next to each item plus a \`Clear\` action when at least one
-    item is selected
+  - Multi-select mode shows a checkbox visual next to each item plus a \`Clear selection\` action when at least one item is selected
   - Size variants (\`'sm'\`, \`'base'\`, \`'lg'\`) and configurable position (\`'below'\`, \`'above'\`, \`'before'\`, \`'after'\`)
-  - Built on Angular CDK Menu for keyboard navigation, focus management, and click-outside-to-close
+  - Built on Angular CDK overlay for click-outside-to-close, anchored positioning, and keyboard navigation
 
   ### Data Shape
   \`\`\`typescript
@@ -125,6 +151,7 @@ const meta: Meta<DropDownSelectorHost> = {
     [items]="items"
     label="Status"
     selectionMode="multiple"
+    [showLabelWithValue]="true"
     [(selectedItems)]="selectedItems"
   />
   \`\`\`
@@ -145,6 +172,7 @@ export const Default: Story = {
     disabled: DROP_DOWN_SELECTOR_DISABLED_DEFAULT,
     size: DROP_DOWN_SELECTOR_SIZE_DEFAULT,
     position: DROP_DOWN_SELECTOR_POSITION_DEFAULT,
+    showLabelWithValue: DROP_DOWN_SELECTOR_SHOW_LABEL_WITH_VALUE_DEFAULT,
   },
   argTypes: {
     label: {
@@ -170,6 +198,10 @@ export const Default: Story = {
       options: ['below', 'above', 'before', 'after'],
       description: 'The position of the dropdown menu relative to the trigger',
     },
+    showLabelWithValue: {
+      control: 'boolean',
+      description: 'Whether the label remains visible alongside the value once a selection is made',
+    },
   },
   parameters: {
     docs: {
@@ -188,6 +220,7 @@ export const Default: Story = {
         [disabled]="disabled"
         [size]="size"
         [position]="position"
+        [showLabelWithValue]="showLabelWithValue"
       />
     `,
     moduleMetadata: {
@@ -196,115 +229,161 @@ export const Default: Story = {
   }),
 };
 
-export const SelectionModes: Story = {
+type LiveDemoIconChoice = 'none' | 'settings' | 'search' | 'eye' | 'filter';
+
+const allLiveDemoIconChoices = ['none', 'settings', 'search', 'eye', 'filter'] as const;
+
+const liveDemoSelectionModeItems: ButtonToggleItem[] = allDropDownSelectorSelectionModes.map((mode) => ({
+  label: mode,
+  value: mode,
+  buttonColor: 'primary',
+}));
+
+const liveDemoSizeItems: ButtonToggleItem[] = allDropDownSelectorSizes.map((size) => ({
+  label: size,
+  value: size,
+  buttonColor: 'primary',
+}));
+
+const liveDemoPositionItems: ButtonToggleItem[] = allDropDownSelectorPositions.map((position) => ({
+  label: position,
+  value: position,
+  buttonColor: 'primary',
+}));
+
+const liveDemoIconItems: ButtonToggleItem[] = allLiveDemoIconChoices.map((choice) => ({
+  label: choice,
+  value: choice,
+  buttonColor: 'primary',
+}));
+
+@Component({
+  selector: 'story-drop-down-selector-live-demo',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    ReactiveFormsModule,
+    ButtonToggle,
+    CheckboxToggle,
+    DropDownSelectorHost,
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoControls,
+    DesignSystemDemoControlGroup,
+    DesignSystemDemoCanvas,
+  ],
+  styles: [
+    `
+      :host {
+        display: block;
+      }
+      .canvas-stage {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 6rem; /* 96px */
+      }
+    `,
+  ],
+  template: `
+    <form [formGroup]="liveDemoForm">
+      <org-design-system-demo>
+        <org-design-system-demo-header
+          slot="header"
+          title="Live demo"
+          description="The drop-down selector below is real and interactive — open it, pick items, and use the controls to drive every visual axis."
+        />
+        <org-design-system-demo-controls slot="controls">
+          <org-design-system-demo-control-group label="Selection Mode">
+            <org-button-toggle [items]="selectionModeItems" formControlName="selectionMode" buttonSize="sm" />
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Size">
+            <org-button-toggle [items]="sizeItems" formControlName="size" buttonSize="sm" />
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Position">
+            <org-button-toggle [items]="positionItems" formControlName="position" buttonSize="sm" />
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Icon">
+            <org-button-toggle [items]="iconItems" formControlName="icon" buttonSize="sm" />
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="With Value">
+            <org-checkbox-toggle name="live-demo-with-value" value="with-value" formControlName="showLabelWithValue">
+              {{ liveDemoForm.controls.showLabelWithValue.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Disabled">
+            <org-checkbox-toggle name="live-demo-disabled" value="disabled" formControlName="disabled">
+              {{ liveDemoForm.controls.disabled.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
+        </org-design-system-demo-controls>
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="canvas-stage">
+            <story-drop-down-selector-host
+              [items]="items"
+              label="Status"
+              [selectionMode]="liveDemoForm.controls.selectionMode.value"
+              [size]="liveDemoForm.controls.size.value"
+              [position]="liveDemoForm.controls.position.value"
+              [iconName]="resolvedIconName()"
+              [showLabelWithValue]="liveDemoForm.controls.showLabelWithValue.value"
+              [disabled]="liveDemoForm.controls.disabled.value"
+            />
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+    </form>
+  `,
+})
+class DropDownSelectorLiveDemoStory {
+  protected readonly selectionModeItems = liveDemoSelectionModeItems;
+  protected readonly sizeItems = liveDemoSizeItems;
+  protected readonly positionItems = liveDemoPositionItems;
+  protected readonly iconItems = liveDemoIconItems;
+  protected readonly items = STATUS_ITEMS;
+
+  protected readonly liveDemoForm = new FormGroup({
+    selectionMode: new FormControl<DropDownSelectorSelectionMode>('single', { nonNullable: true }),
+    size: new FormControl<DropDownSelectorSize>('base', { nonNullable: true }),
+    position: new FormControl<DropDownSelectorPosition>('below', { nonNullable: true }),
+    icon: new FormControl<LiveDemoIconChoice>('none', { nonNullable: true }),
+    showLabelWithValue: new FormControl<boolean>(false, { nonNullable: true }),
+    disabled: new FormControl<boolean>(false, { nonNullable: true }),
+  });
+
+  protected resolvedIconName(): IconName | undefined {
+    const choice = this.liveDemoForm.controls.icon.value;
+
+    if (choice === 'none') {
+      return undefined;
+    }
+
+    return choice;
+  }
+}
+
+export const LiveDemo: Story = {
   parameters: {
     docs: {
       description: {
         story:
-          'Comparison of single (`single`) and multiple (`multiple`) selection modes. Single mode replaces the selection on click and shows a check icon next to the selected item. Multiple mode toggles each clicked item, displays a checkbox visual, and reveals a `Clear` action when at least one item is selected.',
+          'Fully interactive demo. Use the controls to drive selection mode, size, position, leading icon, label visibility, and disabled state on a live drop-down selector.',
       },
     },
   },
   render: () => ({
-    props: { statusItems: STATUS_ITEMS, roleItems: ROLE_ITEMS },
-    template: `
-      <org-storybook-example-container
-        title="Selection Modes"
-        currentState="Open each trigger to compare single vs multiple selection behavior"
-      >
-        <org-storybook-example-container-section label="Single Selection (single)">
-          <story-drop-down-selector-host [items]="statusItems" label="Status" selectionMode="single" />
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Multiple Selection (multiple)">
-          <story-drop-down-selector-host [items]="roleItems" label="Role" selectionMode="multiple" />
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li><strong>Single</strong>: Trigger label becomes <code>Status: Active only</code> after a selection and the menu closes on click</li>
-          <li><strong>Multiple</strong>: Trigger label becomes <code>Role: 1 selected</code> when 1 is selected and <code>Role: 2 selected</code> when more</li>
-          <li><strong>Multiple</strong>: Menu stays open across selections and shows a <strong>Clear</strong> action once anything is selected</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
+    template: `<story-drop-down-selector-live-demo />`,
     moduleMetadata: {
-      imports: [DropDownSelectorHost, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [DropDownSelectorLiveDemoStory],
     },
   }),
 };
 
-export const Sizes: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Comparison of all three size variants for the trigger button.',
-      },
-    },
-  },
-  render: () => ({
-    props: { statusItems: STATUS_ITEMS },
-    template: `
-      <org-storybook-example-container title="Trigger Sizes" currentState="Comparing small, base, and large sizes">
-        <org-storybook-example-container-section label="Small">
-          <story-drop-down-selector-host [items]="statusItems" label="Status" size="sm" />
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Base (default)">
-          <story-drop-down-selector-host [items]="statusItems" label="Status" size="base" />
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Large">
-          <story-drop-down-selector-host [items]="statusItems" label="Status" size="lg" />
-        </org-storybook-example-container-section>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [DropDownSelectorHost, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const Positions: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Demonstration of the four supported menu positions relative to the trigger.',
-      },
-    },
-  },
-  render: () => ({
-    props: { statusItems: STATUS_ITEMS },
-    template: `
-      <org-storybook-example-container title="Menu Positions" currentState="Open each trigger to see how the menu aligns">
-        <org-storybook-example-container-section label="Below (default)">
-          <story-drop-down-selector-host [items]="statusItems" label="Status" position="below" />
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Above">
-          <story-drop-down-selector-host [items]="statusItems" label="Status" position="above" />
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Before (left)">
-          <story-drop-down-selector-host [items]="statusItems" label="Status" position="before" />
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="After (right)">
-          <story-drop-down-selector-host [items]="statusItems" label="Status" position="after" />
-        </org-storybook-example-container-section>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [DropDownSelectorHost, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const WithExistingSelection: Story = {
+export const Showcase: Story = {
   parameters: {
     docs: {
       description: {
         story:
-          'Drop-down selectors initialized with existing selection state via the `DataSelectionStore` instance owned by the host component.',
+          'Comprehensive showcase of every drop-down selector variant axis — trigger states, selection modes, sizes, positions, leading icons, existing selection, overflow scrolling, and disabled state — in a single scrollable view.',
       },
     },
   },
@@ -312,160 +391,241 @@ export const WithExistingSelection: Story = {
     props: {
       statusItems: STATUS_ITEMS,
       roleItems: ROLE_ITEMS,
-      singleInitial: [STATUS_ITEMS[1]],
-      multipleInitial: [ROLE_ITEMS[0], ROLE_ITEMS[1]],
+      sortItems: SORT_ITEMS,
+      longValueItems: LONG_VALUE_ITEMS,
+      manyItems: MANY_ITEMS,
+      singleStatusInitial: [STATUS_ITEMS[0]],
+      multipleRoleInitial: [ROLE_ITEMS[0], ROLE_ITEMS[1], ROLE_ITEMS[2]],
+      singleSortInitial: [SORT_ITEMS[0]],
+      singleLongInitial: [LONG_VALUE_ITEMS[0]],
+      preselectedStatus: [STATUS_ITEMS[0]],
     },
     template: `
-      <org-storybook-example-container
-        title="With Existing Selection"
-        currentState="Both selectors are pre-populated via the data selection store"
-      >
-        <org-storybook-example-container-section label="Single Selection (Deleted only)">
-          <story-drop-down-selector-host
-            [items]="statusItems"
-            label="Status"
-            selectionMode="single"
-            [initialSelection]="singleInitial"
-          />
-        </org-storybook-example-container-section>
+      <div class="flex flex-col gap-4">
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Trigger States" />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="flex gap-2 flex-wrap">
+              <story-drop-down-selector-host [items]="statusItems" label="Status" />
+              <story-drop-down-selector-host
+                [items]="statusItems"
+                label="Status"
+                [showLabelWithValue]="true"
+                [initialSelection]="singleStatusInitial"
+              />
+              <story-drop-down-selector-host
+                [items]="roleItems"
+                label="Owner"
+                iconName="user"
+                [showLabelWithValue]="true"
+                [initialSelection]="[roleItems[0]]"
+              />
+              <story-drop-down-selector-host
+                [items]="roleItems"
+                label="Labels"
+                selectionMode="multiple"
+                [showLabelWithValue]="true"
+                [initialSelection]="multipleRoleInitial"
+              />
+              <story-drop-down-selector-host
+                [items]="sortItems"
+                label="Sort by"
+                [showLabelWithValue]="true"
+                [initialSelection]="singleSortInitial"
+              />
+              <story-drop-down-selector-host [items]="statusItems" label="Status" [disabled]="true" />
+              <story-drop-down-selector-host
+                [items]="longValueItems"
+                label="Workspace"
+                [showLabelWithValue]="true"
+                [initialSelection]="singleLongInitial"
+              />
+            </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>Empty</strong>: Trigger reads as a normal Button — label and chevron only</li>
+            <li><strong>With value (showLabelWithValue=true)</strong>: Label drops to muted, hairline divides label and value, value carries the visual weight</li>
+            <li><strong>Multi · count chip</strong>: When two or more items are picked, the value is replaced by an <code>org-tag</code> count chip</li>
+            <li><strong>Disabled</strong>: Trigger cannot be opened or interacted with and the surface is dimmed</li>
+            <li><strong>Long value · truncates</strong>: The value text ellipses inside the trigger's max-width cap</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
 
-        <org-storybook-example-container-section label="Multiple Selection (User &amp; Admin)">
-          <story-drop-down-selector-host
-            [items]="roleItems"
-            label="Role"
-            selectionMode="multiple"
-            [initialSelection]="multipleInitial"
-          />
-        </org-storybook-example-container-section>
-      </org-storybook-example-container>
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Selection Modes" />
+          <org-design-system-demo-canvas slot="canvas">
+            <story-drop-down-selector-host [items]="sortItems" label="Sort by" selectionMode="single" />
+            <story-drop-down-selector-host [items]="statusItems" label="Status" selectionMode="multiple" />
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>Single</strong>: Picking a row replaces the selection and closes the panel; the picked row shows a check icon</li>
+            <li><strong>Multiple</strong>: Picking a row toggles its selection and the panel stays open; rows show a checkbox visual</li>
+            <li><strong>Multiple · clear</strong>: A <strong>Clear selection</strong> footer row appears once at least one item is picked</li>
+            <li>The trigger swaps the value text for a count chip once two or more items are picked</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Trigger Sizes" />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="flex gap-2 items-baseline">
+              <story-drop-down-selector-host [items]="statusItems" label="Status" size="sm" />
+              <story-drop-down-selector-host [items]="statusItems" label="Status" size="base" />
+              <story-drop-down-selector-host [items]="statusItems" label="Status" size="lg" />
+            </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>Small</strong>: Compact trigger for dense toolbars</li>
+            <li><strong>Base</strong>: Standard trigger size for most use cases (default)</li>
+            <li><strong>Large</strong>: Prominent trigger for primary surfaces</li>
+            <li>The leading icon and chevron sizes scale with the trigger size variant</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Menu Positions" />
+          <org-design-system-demo-canvas slot="canvas">
+            <story-drop-down-selector-host [items]="statusItems" label="Status" position="below" />
+            <story-drop-down-selector-host [items]="statusItems" label="Status" position="above" />
+            <story-drop-down-selector-host [items]="statusItems" label="Status" position="before" />
+            <story-drop-down-selector-host [items]="statusItems" label="Status" position="after" />
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>Below (default)</strong>: Panel anchors directly under the trigger</li>
+            <li><strong>Above</strong>: Useful when the trigger sits at the bottom of a viewport or footer bar</li>
+            <li><strong>Before / After</strong>: Useful when the trigger sits inline next to a label and the panel needs to flow horizontally</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Leading Icon" />
+          <org-design-system-demo-canvas slot="canvas">
+            <story-drop-down-selector-host [items]="statusItems" label="Status" size="sm" iconName="settings" />
+            <story-drop-down-selector-host [items]="statusItems" label="Status" size="base" iconName="settings" />
+            <story-drop-down-selector-host [items]="statusItems" label="Status" size="lg" iconName="settings" />
+            <story-drop-down-selector-host
+              [items]="statusItems"
+              label="Status"
+              iconName="search"
+              [showLabelWithValue]="true"
+              [initialSelection]="preselectedStatus"
+            />
+            <story-drop-down-selector-host
+              [items]="roleItems"
+              label="Role"
+              selectionMode="multiple"
+              iconName="eye"
+            />
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li>The <code>iconName</code> input renders an icon before the label and scales with the trigger size</li>
+            <li>The icon stays in place whether or not a value is picked</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Label Visibility With Value" />
+          <org-design-system-demo-canvas slot="canvas">
+            <story-drop-down-selector-host
+              [items]="statusItems"
+              label="Status"
+              [initialSelection]="preselectedStatus"
+            />
+            <story-drop-down-selector-host
+              [items]="statusItems"
+              label="Status"
+              [showLabelWithValue]="true"
+              [initialSelection]="preselectedStatus"
+            />
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>showLabelWithValue=false</strong> (default): Once a value is picked, only the value text is shown; the label is hidden</li>
+            <li><strong>showLabelWithValue=true</strong>: The label remains visible alongside the value, separated by a hairline</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Existing Selection" />
+          <org-design-system-demo-canvas slot="canvas">
+            <story-drop-down-selector-host
+              [items]="statusItems"
+              label="Status"
+              selectionMode="single"
+              [showLabelWithValue]="true"
+              [initialSelection]="singleStatusInitial"
+            />
+            <story-drop-down-selector-host
+              [items]="roleItems"
+              label="Role"
+              selectionMode="multiple"
+              [showLabelWithValue]="true"
+              [initialSelection]="multipleRoleInitial"
+            />
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li>Both selectors are pre-populated via the <code>DataSelectionStore</code> instance owned by the host component</li>
+            <li>The single-mode trigger reflects the picked value, the multi-mode trigger shows the count chip</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Overflow Scrolling" />
+          <org-design-system-demo-canvas slot="canvas">
+            <story-drop-down-selector-host [items]="manyItems" label="Item" selectionMode="single" />
+            <story-drop-down-selector-host [items]="manyItems" label="Item" selectionMode="multiple" />
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li>The overlay menu caps at 32rem tall and scrolls when content exceeds that height via <code>org-scroll-area</code></li>
+            <li>The compact overlay scrollbar only renders when overflow is present</li>
+            <li>In <strong>multiple</strong> mode, the <strong>Clear selection</strong> action sits at the end of the scroll list</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Disabled State" />
+          <org-design-system-demo-canvas slot="canvas">
+            <story-drop-down-selector-host [items]="statusItems" label="Status" [disabled]="true" />
+            <story-drop-down-selector-host
+              [items]="statusItems"
+              label="Status"
+              [disabled]="true"
+              [showLabelWithValue]="true"
+              [initialSelection]="preselectedStatus"
+            />
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li>Disabled selectors cannot be opened or interacted with</li>
+            <li>The trigger surface is dimmed and pointer interactions are gated</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+      </div>
     `,
     moduleMetadata: {
-      imports: [DropDownSelectorHost, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const WithIcon: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Drop-down selectors with a leading icon rendered before the label via the `iconName` input. The icon size scales with the trigger size variant.',
-      },
-    },
-  },
-  render: () => ({
-    props: { statusItems: STATUS_ITEMS, roleItems: ROLE_ITEMS, preselected: [STATUS_ITEMS[0]] },
-    template: `
-      <org-storybook-example-container
-        title="With Leading Icon"
-        currentState="Each trigger renders a leading icon that scales with the trigger size"
-      >
-        <org-storybook-example-container-section label="Small Trigger (filter icon)">
-          <story-drop-down-selector-host [items]="statusItems" label="Status" size="sm" iconName="settings" />
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Base Trigger (settings icon)">
-          <story-drop-down-selector-host [items]="statusItems" label="Status" size="base" iconName="settings" />
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Large Trigger (settings icon)">
-          <story-drop-down-selector-host [items]="statusItems" label="Status" size="lg" iconName="settings" />
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="With Selection (search icon)">
-          <story-drop-down-selector-host
-            [items]="statusItems"
-            label="Status"
-            iconName="search"
-            [initialSelection]="preselected"
-          />
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Multiple Selection (eye icon)">
-          <story-drop-down-selector-host
-            [items]="roleItems"
-            label="Role"
-            selectionMode="multiple"
-            iconName="eye"
-          />
-        </org-storybook-example-container-section>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [DropDownSelectorHost, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const WithManyItems: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'When the menu content exceeds the panel max height (`--sizing-lg`, 32rem / 512px), the overlay scrolls vertically via `org-scroll-area`. The compact overlay scrollbar only appears when content overflows.',
-      },
-    },
-  },
-  render: () => ({
-    props: { manyItems: MANY_ITEMS },
-    template: `
-      <org-storybook-example-container
-        title="Overflow Scrolling"
-        currentState="Open the trigger to see the overlay menu scroll when items exceed the max height"
-      >
-        <org-storybook-example-container-section label="Single Selection (40 items)">
-          <story-drop-down-selector-host [items]="manyItems" label="Item" selectionMode="single" />
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Multiple Selection (40 items)">
-          <story-drop-down-selector-host [items]="manyItems" label="Item" selectionMode="multiple" />
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li>The overlay menu caps at 512px tall and scrolls when content exceeds that height</li>
-          <li>The compact overlay scrollbar only renders when overflow is present</li>
-          <li>In <strong>multiple</strong> mode, the <strong>Clear</strong> action sits at the end of the scroll list</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [DropDownSelectorHost, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const Disabled: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Disabled drop-down selector cannot be opened or interacted with.',
-      },
-    },
-  },
-  render: () => ({
-    props: {
-      statusItems: STATUS_ITEMS,
-      preselected: [STATUS_ITEMS[0]],
-    },
-    template: `
-      <org-storybook-example-container title="Disabled State" currentState="Disabled selectors cannot be opened">
-        <org-storybook-example-container-section label="Disabled Without Selection">
-          <story-drop-down-selector-host [items]="statusItems" label="Status" [disabled]="true" />
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Disabled With Selection">
-          <story-drop-down-selector-host
-            [items]="statusItems"
-            label="Status"
-            [disabled]="true"
-            [initialSelection]="preselected"
-          />
-        </org-storybook-example-container-section>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [DropDownSelectorHost, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [
+        DropDownSelectorHost,
+        DesignSystemDemo,
+        DesignSystemDemoHeader,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
+      ],
     },
   }),
 };

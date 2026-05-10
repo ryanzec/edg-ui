@@ -1,0 +1,30 @@
+:root {
+  /* color */
+  --color-drop-down-selector-label: var(--color-fg-muted);
+  --color-drop-down-selector-value: var(--color-fg);
+  --color-drop-down-selector-separator: var(--color-border-soft);
+  --color-drop-down-selector-clear: var(--color-fg-muted);
+
+  /* spacing — inner trigger rhythm + open-state vertical inset for the separator */
+  --spacing-drop-down-selector-gap: var(--spacing-1_5);
+  --spacing-drop-down-selector-gap-sm: var(--spacing-1);
+  --spacing-drop-down-selector-gap-lg: var(--spacing-2);
+  --spacing-drop-down-selector-separator-y: var(--spacing-1);
+
+  /* sizing — trigger min-width per size and count chip height */
+  --sizing-drop-down-selector-min-width-sm: 6rem; /* 96px */
+  --sizing-drop-down-selector-min-width: 7.5rem; /* 120px */
+  --sizing-drop-down-selector-min-width-lg: 9rem; /* 144px */
+  --sizing-drop-down-selector-max-width: var(--sizing-2xs);
+  --sizing-drop-down-selector-count: var(--sizing-11xs);
+
+  /* panel — re-uses the overlay-menu surface tokens for visual coherence */
+  --color-drop-down-selector-panel-surface: var(--color-overlay-menu-surface);
+  --color-drop-down-selector-panel-border: var(--color-overlay-menu-border);
+  --radius-drop-down-selector-panel: var(--radius-overlay-menu);
+  --shadow-drop-down-selector-panel: var(--shadow-overlay-menu);
+  --spacing-drop-down-selector-panel-pad: var(--spacing-overlay-menu-pad);
+  --sizing-drop-down-selector-panel-min-width: var(--sizing-overlay-menu-min-width);
+  --sizing-drop-down-selector-panel-max-width: var(--sizing-overlay-menu-max-width);
+  --sizing-drop-down-selector-panel-max-height: var(--sizing-lg);
+}

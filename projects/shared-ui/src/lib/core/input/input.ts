@@ -1,21 +1,26 @@
 import {
-  Component,
   ChangeDetectionStrategy,
-  computed,
+  Component,
   ElementRef,
+  TemplateRef,
+  computed,
+  contentChild,
   forwardRef,
   input,
   model,
   output,
   viewChild,
 } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Subject } from 'rxjs';
+import { outputFromObservable } from '@angular/core/rxjs-interop';
 import { angularUtils } from '@organization/shared-utils';
 import { type IconName } from '../../brain/icon-brain/icon-brain';
 import { Icon } from '../icon/icon';
 import { Tag } from '../tag/tag';
-import { Subject } from 'rxjs';
-import { outputFromObservable } from '@angular/core/rxjs-interop';
+import { Button } from '../button/button';
+import { LoadingSpinner } from '../loading-spinner/loading-spinner';
 import {
   allInputTypes,
   InputBrainDirective,
@@ -38,8 +43,26 @@ import {
   INPUT_TYPE_DEFAULT,
 } from '../../brain/input-brain/input-brain';
 
+/** all available visual variants for the input component */
+export const allInputVariants = ['bordered', 'borderless', 'inline'] as const;
+
+/** union type of all available visual variants */
+export type InputVariant = (typeof allInputVariants)[number];
+
+/** all available clear-button visibility modes */
+export const allInputShowClearModes = ['never', 'active', 'always'] as const;
+
+/** union type of all available clear-button visibility modes */
+export type InputShowClearMode = (typeof allInputShowClearModes)[number];
+
 /** default value for the variant input */
 export const INPUT_VARIANT_DEFAULT: InputVariant = 'bordered';
+
+/** default value for the showClear input */
+export const INPUT_SHOW_CLEAR_DEFAULT: InputShowClearMode = 'never';
+
+/** default value for the loading input */
+export const INPUT_LOADING_DEFAULT = false;
 
 /** default value for the placeholder input */
 export const INPUT_PLACEHOLDER_DEFAULT = '';
@@ -62,12 +85,6 @@ export const INPUT_POST_ICON_ARIA_LABEL_DEFAULT: string | undefined = undefined;
 /** default value for the inlineItems input */
 export const INPUT_INLINE_ITEMS_DEFAULT: InputInlineItem[] = [];
 
-/** available visual variants for the input component */
-export const allInputVariants = ['bordered', 'borderless'] as const;
-
-/** union type of all available visual variants */
-export type InputVariant = (typeof allInputVariants)[number];
-
 // re-export the brain's input type union for consumer convenience
 export { allInputTypes, type InputType };
 
@@ -81,12 +98,21 @@ export type InputInlineItem = {
 @Component({
   selector: 'org-input',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Icon, Tag, InputBrainDirective],
+  imports: [Icon, Tag, Button, LoadingSpinner, NgTemplateOutlet, InputBrainDirective],
   templateUrl: './input.html',
   styleUrl: './input.css',
   host: {
     '[attr.data-variant]': 'variant()',
-    '[attr.data-show-password-toggle]': 'showPasswordToggle() ? "" : null',
+    '[attr.data-type]': 'type()',
+    '[attr.data-state]': 'isError() ? "error" : null',
+    '[attr.data-disabled]': 'isDisabled() ? "" : null',
+    '[attr.data-readonly]': 'isReadonly() ? "" : null',
+    '[attr.data-loading]': 'loading() ? "" : null',
+    '[attr.data-show-clear]': 'showClear()',
+    '[attr.data-has-pre]': 'hasPreSlot() ? "" : null',
+    '[attr.data-has-post]': 'hasPostSlot() ? "" : null',
+    '[attr.data-has-chips]': 'hasInputInlineItems() ? "" : null',
+    '[attr.data-has-value]': 'hasValue() ? "" : null',
     '[attr.aria-disabled]': 'isDisabled() ? "true" : null',
   },
   providers: [
@@ -102,6 +128,15 @@ export class Input implements ControlValueAccessor {
 
   private readonly _preIconClicked$ = new Subject<void>();
   private readonly _postIconClicked$ = new Subject<void>();
+
+  /** projected template for the pre slot — when provided, takes precedence over the preIcon input */
+  protected readonly preTemplate = contentChild<TemplateRef<unknown>>('pre');
+
+  /** projected template for the post slot — when provided, takes precedence over the postIcon input */
+  protected readonly postTemplate = contentChild<TemplateRef<unknown>>('post');
+
+  /** projected template for an individual inline chip — receives the InputInlineItem as the implicit context */
+  protected readonly chipTemplate = contentChild<TemplateRef<{ $implicit: InputInlineItem }>>('chip');
 
   /** visual variant of the input */
   public readonly variant = input<InputVariant>(INPUT_VARIANT_DEFAULT);
@@ -132,6 +167,12 @@ export class Input implements ControlValueAccessor {
 
   /** whether to expose a password visibility toggle, forwarded to the brain */
   public readonly showPasswordToggle = input<boolean>(INPUT_SHOW_PASSWORD_TOGGLE_DEFAULT);
+
+  /** whether the input is in a loading state — renders the spinner and forces the native input readonly */
+  public readonly loading = input<boolean>(INPUT_LOADING_DEFAULT);
+
+  /** clear-button visibility mode (`never` default, `active` shows on hover/focus when non-empty, `always` shows whenever non-empty) */
+  public readonly showClear = input<InputShowClearMode>(INPUT_SHOW_CLEAR_DEFAULT);
 
   /** native autocomplete attribute, forwarded to the brain */
   public readonly autocomplete = input<string>(INPUT_AUTOCOMPLETE_DEFAULT);
@@ -176,7 +217,7 @@ export class Input implements ControlValueAccessor {
     transform: angularUtils.transformNullToUndefined,
   });
 
-  /** icon displayed before the input text */
+  /** icon displayed before the input text (ignored when a projected #pre template is provided) */
   public readonly preIcon = input<IconName | undefined, IconName | null | undefined>(INPUT_PRE_ICON_DEFAULT, {
     transform: angularUtils.transformNullToUndefined,
   });
@@ -187,7 +228,7 @@ export class Input implements ControlValueAccessor {
     { transform: angularUtils.transformNullToUndefined }
   );
 
-  /** icon displayed after the input text */
+  /** icon displayed after the input text (ignored when a projected #post template is provided) */
   public readonly postIcon = input<IconName | undefined, IconName | null | undefined>(INPUT_POST_ICON_DEFAULT, {
     transform: angularUtils.transformNullToUndefined,
   });
@@ -216,8 +257,23 @@ export class Input implements ControlValueAccessor {
   /** emitted when an inline item's remove button is clicked */
   public readonly inlineItemRemoved = output<InputInlineItem>();
 
+  /** emitted when the clear button is clicked and the value is wiped */
+  public readonly cleared = output<void>();
+
   /** the resolved disabled state from the brain (used for the host data-attribute selector in styling) */
   protected readonly isDisabled = computed<boolean>(() => this._brain().isDisabled());
+
+  /** whether the host should expose the readonly data attribute (consumer readonly only — loading uses its own visual treatment) */
+  protected readonly isReadonly = computed<boolean>(() => this.readonly());
+
+  /** the readonly value forwarded to the brain — combines consumer readonly with the loading state */
+  protected readonly effectiveReadonly = computed<boolean>(() => this.readonly() || this.loading());
+
+  /** whether the host should expose the error data-state — driven by the form-field validation message */
+  protected readonly isError = computed<boolean>(() => this._brain().hasValidationMessage());
+
+  /** whether the input currently has a non-empty value, mirrored from the brain */
+  protected readonly hasValue = computed<boolean>(() => this._brain().hasValue());
 
   /** the effective post icon, swapping to eye/eye-off when the password toggle is active */
   protected readonly currentPostIcon = computed<IconName | undefined>(() => {
@@ -230,11 +286,25 @@ export class Input implements ControlValueAccessor {
     return this.postIcon();
   });
 
-  /** whether a pre-icon is present */
-  protected readonly hasPreIcon = computed<boolean>(() => !!this.preIcon());
+  /** whether a pre slot is being rendered (projected template OR a preIcon input) */
+  protected readonly hasPreSlot = computed<boolean>(() => !!this.preTemplate() || !!this.preIcon());
 
-  /** whether a post-icon is present */
-  protected readonly hasPostIcon = computed<boolean>(() => !!this.currentPostIcon());
+  /** whether a post slot is being rendered (any of: projected template, post icon, password toggle, clear, stepper, spinner) */
+  protected readonly hasPostSlot = computed<boolean>(() => {
+    if (this.postTemplate() || this.currentPostIcon() || this.loading()) {
+      return true;
+    }
+
+    if (this.showClear() !== 'never' && this.hasValue()) {
+      return true;
+    }
+
+    if (this.type() === 'number') {
+      return true;
+    }
+
+    return false;
+  });
 
   /** whether any inline items are present */
   protected readonly hasInputInlineItems = computed<boolean>(() => this.inlineItems().length > 0);
@@ -257,6 +327,9 @@ export class Input implements ControlValueAccessor {
 
     return this.postIconAriaLabel();
   });
+
+  /** whether the number stepper should render (only for type=number) */
+  protected readonly showStepper = computed<boolean>(() => this.type() === 'number');
 
   /** forwards the brain's focused emission to the public output */
   protected onBrainFocused(): void {
@@ -285,6 +358,16 @@ export class Input implements ControlValueAccessor {
     }
 
     this.inlineItemRemoved.emit(item);
+  }
+
+  /** handles the clear button click, wiping the value through the brain and emitting the public cleared event */
+  protected onClearClick(): void {
+    if (!this._brain().canModifyContent()) {
+      return;
+    }
+
+    this._brain().clearValue();
+    this.cleared.emit();
   }
 
   /** programmatically focuses the native input */

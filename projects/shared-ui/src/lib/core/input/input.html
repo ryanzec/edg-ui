@@ -1,70 +1,134 @@
-@for (item of inlineItems(); track item.id) {
-  <org-tag
-    color="primary"
-    [removable]="item.removable && brainRef.canModifyContent()"
-    (removed)="onInlineItemRemove(item)"
-  >
-    {{ item.label }}
-  </org-tag>
-}
-@if (hasPreIcon()) {
-  @if (isPreIconClickable()) {
-    <button
-      type="button"
-      class="input-icon-btn"
-      (click)="brainRef.handlePreIconRequest()"
-      [disabled]="isDisabled()"
-      [attr.aria-label]="preIconAriaLabel()"
-    >
-      <org-icon [name]="preIcon()!" />
-    </button>
-  } @else {
-    <span class="input-icon-btn" aria-hidden="true">
-      <org-icon [name]="preIcon()!" />
+<span class="pre">
+  @if (preTemplate()) {
+    <ng-container [ngTemplateOutlet]="preTemplate()!" />
+  } @else if (preIcon()) {
+    @if (isPreIconClickable()) {
+      <button
+        type="button"
+        class="icon-btn"
+        (click)="brainRef.handlePreIconRequest()"
+        [disabled]="isDisabled()"
+        [attr.aria-label]="preIconAriaLabel()"
+      >
+        <org-icon [name]="preIcon()!" />
+      </button>
+    } @else {
+      <span class="icon-btn" aria-hidden="true">
+        <org-icon [name]="preIcon()!" />
+      </span>
+    }
+  }
+</span>
+
+<div class="track">
+  <div class="chips">
+    @for (item of inlineItems(); track item.id) {
+      @if (chipTemplate(); as projectedChip) {
+        <ng-container [ngTemplateOutlet]="projectedChip" [ngTemplateOutletContext]="{ $implicit: item }" />
+      } @else {
+        <org-tag
+          color="primary"
+          variant="soft"
+          [removable]="!!item.removable && brainRef.canModifyContent()"
+          (removed)="onInlineItemRemove(item)"
+        >
+          {{ item.label }}
+        </org-tag>
+      }
+    }
+  </div>
+  <input
+    orgInputBrain
+    #brainRef="orgInputBrain"
+    class="native"
+    [(value)]="value"
+    [type]="type()"
+    [name]="name()"
+    [disabled]="disabled()"
+    [readonly]="effectiveReadonly()"
+    [autoFocus]="autoFocus()"
+    [selectAllOnFocus]="selectAllOnFocus()"
+    [showPasswordToggle]="showPasswordToggle()"
+    [autocomplete]="autocomplete()"
+    [blockPasswordManager]="blockPasswordManager()"
+    [ariaExpanded]="ariaExpanded()"
+    [ariaHasPopup]="ariaHasPopup()"
+    [ariaAutoComplete]="ariaAutoComplete()"
+    [ariaActiveDescendant]="ariaActiveDescendant()"
+    [ariaControls]="ariaControls()"
+    [role]="inputRole()"
+    [ariaLabel]="ariaLabel()"
+    [placeholder]="placeholder()"
+    (focused)="onBrainFocused()"
+    (blurred)="onBrainBlurred()"
+    (preIconRequested)="onBrainPreIconRequested()"
+    (postIconRequested)="onBrainPostIconRequested()"
+  />
+</div>
+
+<span class="post">
+  @if (loading()) {
+    <org-loading-spinner size="sm" />
+  }
+
+  @if (showClear() !== 'never') {
+    <span class="clear">
+      <org-button
+        variant="text"
+        color="neutral"
+        size="sm"
+        [iconOnly]="true"
+        preIcon="x"
+        label="Clear input"
+        ariaLabel="Clear input"
+        [disabled]="isDisabled()"
+        (clicked)="onClearClick()"
+      />
     </span>
   }
-}
-<input
-  orgInputBrain
-  #brainRef="orgInputBrain"
-  class="native-input"
-  [(value)]="value"
-  [type]="type()"
-  [name]="name()"
-  [disabled]="disabled()"
-  [readonly]="readonly()"
-  [autoFocus]="autoFocus()"
-  [selectAllOnFocus]="selectAllOnFocus()"
-  [showPasswordToggle]="showPasswordToggle()"
-  [autocomplete]="autocomplete()"
-  [blockPasswordManager]="blockPasswordManager()"
-  [ariaExpanded]="ariaExpanded()"
-  [ariaHasPopup]="ariaHasPopup()"
-  [ariaAutoComplete]="ariaAutoComplete()"
-  [ariaActiveDescendant]="ariaActiveDescendant()"
-  [ariaControls]="ariaControls()"
-  [role]="inputRole()"
-  [ariaLabel]="ariaLabel()"
-  [placeholder]="placeholder()"
-  (focused)="onBrainFocused()"
-  (blurred)="onBrainBlurred()"
-  (preIconRequested)="onBrainPreIconRequested()"
-  (postIconRequested)="onBrainPostIconRequested()"
-/>
-@if (hasPostIcon()) {
-  @if (isPostIconInteractive()) {
-    <button
-      type="button"
-      class="input-icon-btn"
-      (click)="brainRef.handlePostIconRequest()"
-      [disabled]="isDisabled()"
-      [attr.aria-label]="postIconAriaLabelText()"
-    >
-      <org-icon [name]="currentPostIcon()!" />
-    </button>
-  } @else {
-    <span class="input-icon-btn" aria-hidden="true">
-      <org-icon [name]="currentPostIcon()!" />
+
+  @if (postTemplate()) {
+    <ng-container [ngTemplateOutlet]="postTemplate()!" />
+  } @else if (currentPostIcon()) {
+    @if (isPostIconInteractive()) {
+      <button
+        type="button"
+        class="icon-btn"
+        (click)="brainRef.handlePostIconRequest()"
+        [disabled]="isDisabled()"
+        [attr.aria-label]="postIconAriaLabelText()"
+      >
+        <org-icon [name]="currentPostIcon()!" />
+      </button>
+    } @else {
+      <span class="icon-btn" aria-hidden="true">
+        <org-icon [name]="currentPostIcon()!" />
+      </span>
+    }
+  }
+
+  @if (showStepper()) {
+    <span class="stepper">
+      <button
+        type="button"
+        class="stepper-up"
+        (click)="brainRef.incrementNumber()"
+        [disabled]="isDisabled() || isReadonly()"
+        aria-label="Increment value"
+        tabindex="-1"
+      >
+        <org-icon name="chevron-up" size="2xs" />
+      </button>
+      <button
+        type="button"
+        class="stepper-down"
+        (click)="brainRef.decrementNumber()"
+        [disabled]="isDisabled() || isReadonly()"
+        aria-label="Decrement value"
+        tabindex="-1"
+      >
+        <org-icon name="chevron-down" size="2xs" />
+      </button>
     </span>
   }
-}
+</span>

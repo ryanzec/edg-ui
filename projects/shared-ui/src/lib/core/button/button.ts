@@ -18,7 +18,10 @@ import { ComponentColor, ComponentSize } from '../types/component-types';
 import {
   ButtonBrainDirective,
   BUTTON_ACTIVE_DEFAULT,
+  BUTTON_ARIA_ACTIVEDESCENDANT_DEFAULT,
+  BUTTON_ARIA_CONTROLS_DEFAULT,
   BUTTON_ARIA_EXPANDED_DEFAULT,
+  BUTTON_ARIA_HASPOPUP_DEFAULT,
   BUTTON_ARIA_LABEL_DEFAULT,
   BUTTON_ARIA_PRESSED_DEFAULT,
   BUTTON_DISABLED_DEFAULT,
@@ -42,7 +45,7 @@ export const allButtonTypes = ['button', 'submit', 'reset'] as const;
 export type ButtonType = (typeof allButtonTypes)[number];
 
 /** all available button variant values */
-export const allButtonVariants = ['filled', 'ghost', 'text', 'soft'] as const;
+export const allButtonVariants = ['filled', 'ghost', 'text', 'soft', 'plain'] as const;
 
 /** the visual style variant of the button */
 export type ButtonVariant = (typeof allButtonVariants)[number];
@@ -95,6 +98,12 @@ export class Button {
 
   /** projected template for the post slot — when provided, takes precedence over the postIcon input */
   protected readonly postTemplate = contentChild<TemplateRef<unknown>>('post');
+
+  /**
+   * projected template for the main content slot — when provided, takes precedence over the label input;
+   * use this when the visible content needs more structure than a single text label can express
+   */
+  protected readonly contentTemplate = contentChild<TemplateRef<unknown>>('content');
 
   /** the color variant applied to the button */
   public readonly color = input<ButtonColor>(BUTTON_COLOR_DEFAULT);
@@ -150,6 +159,22 @@ export class Button {
   public readonly ariaPressed = input<boolean | undefined, boolean | null | undefined>(BUTTON_ARIA_PRESSED_DEFAULT, {
     transform: angularUtils.transformNullToUndefined,
   });
+
+  /** communicates that the button opens a popup (e.g. `'listbox'`, `'menu'`, `'dialog'`) */
+  public readonly ariaHaspopup = input<string | undefined, string | null | undefined>(BUTTON_ARIA_HASPOPUP_DEFAULT, {
+    transform: angularUtils.transformNullToUndefined,
+  });
+
+  /** identifies the element controlled by this button (e.g. the panel id) */
+  public readonly ariaControls = input<string | undefined, string | null | undefined>(BUTTON_ARIA_CONTROLS_DEFAULT, {
+    transform: angularUtils.transformNullToUndefined,
+  });
+
+  /** identifies the currently active descendant for composite widgets (e.g. listbox option ids) */
+  public readonly ariaActivedescendant = input<string | undefined, string | null | undefined>(
+    BUTTON_ARIA_ACTIVEDESCENDANT_DEFAULT,
+    { transform: angularUtils.transformNullToUndefined }
+  );
 
   /** when true, the button renders in its active (pressed) visual state and hover/active pseudo states have no effect */
   public readonly isActive = input<boolean>(BUTTON_ACTIVE_DEFAULT);

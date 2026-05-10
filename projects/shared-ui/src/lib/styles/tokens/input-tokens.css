@@ -1,0 +1,36 @@
+:root {
+  /* layout */
+  --input-radius: var(--radius-sm);
+  --input-border-width: var(--border-width);
+  --input-line-height: var(--line-height-tight);
+  --input-letter-spacing: var(--letter-spacing-normal);
+  --input-disabled-opacity: var(--opacity-disabled);
+
+  /* size: base (default) */
+  --input-height: 1.875rem; /* 30px */
+  --input-pad-x: var(--spacing-2);
+  --input-pad-x-tight: var(--spacing-1_5);
+  --input-slot-gap: var(--spacing-1);
+  --input-chip-gap: var(--spacing-1);
+  --input-chip-row-gap: var(--spacing-1_5);
+  --input-chip-height: var(--sizing-11xs); /* 24px */
+  --input-font-size: var(--font-size-base);
+
+  /* color × variant slot tokens (defaults to bordered) */
+  --input-bg: var(--color-bg-surface);
+  --input-bg-hover: var(--color-bg-surface);
+  --input-bg-focus: var(--color-bg-surface);
+  --input-border-color: var(--color-border);
+  --input-border-color-hover: var(--color-info);
+  --input-border-color-focus: var(--color-info);
+  --input-border-color-error: var(--color-danger);
+  --input-fg: var(--color-fg);
+  --input-fg-placeholder: var(--color-fg-faint);
+  --input-fg-muted: var(--color-fg-muted);
+
+  /* number stepper */
+  --input-stepper-width: var(--spacing-5); /* 20px */
+  --input-stepper-button-height: calc(var(--input-height) / 2);
+  --input-stepper-bg-hover: var(--color-bg-hover);
+  --input-stepper-bg-active: var(--color-bg-active);
+}
