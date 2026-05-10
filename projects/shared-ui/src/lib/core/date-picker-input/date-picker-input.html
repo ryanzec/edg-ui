@@ -1,4 +1,4 @@
-<div cdkOverlayOrigin #trigger="cdkOverlayOrigin">
+<div cdkOverlayOrigin #trigger="cdkOverlayOrigin" class="org-date-picker-input-anchor">
   <org-input
     #inputComponent
     [value]="displayValue()"
@@ -7,14 +7,41 @@
     [disabled]="isDisabled()"
     [readonly]="true"
     preIcon="calendar"
-    postIcon="chevron-down"
+    [postIcon]="allowTriggerClear() ? null : 'chevron-down'"
+    [class.is-focus]="isOverlayOpen()"
     (postIconClicked)="onPostIconClick()"
     (click)="onInputClick()"
     (keydown)="onInputKeyDown($event)"
     (focused)="onInputFocused()"
     (blurred)="onInputBlurred()"
     [name]="name()"
-  />
+  >
+    @if (allowTriggerClear()) {
+      <ng-template #post>
+        @if (showTriggerClearButton()) {
+          <org-button
+            variant="text"
+            color="neutral"
+            size="sm"
+            [iconOnly]="true"
+            preIcon="x"
+            label="Clear date"
+            ariaLabel="Clear date"
+            (click)="onTriggerClearClick($event)"
+          />
+        }
+        <button
+          type="button"
+          class="trigger-chevron"
+          (click)="onTriggerChevronClick($event)"
+          [disabled]="isDisabled()"
+          aria-label="Toggle calendar"
+        >
+          <org-icon name="chevron-down" />
+        </button>
+      </ng-template>
+    }
+  </org-input>
 </div>
 
 <ng-template
@@ -29,7 +56,7 @@
   (attach)="onOverlayAttach()"
   (detach)="onOverlayDetach()"
 >
-  <div orgDatePickerInputDialogBrain>
+  <div orgDatePickerInputDialogBrain class="org-date-picker-input-popover" [attr.data-state]="isOverlayOpen() ? 'open' : 'closed'">
     <org-calendar
       #calendarComponent
       [defaultDisplayDate]="defaultDisplayDate()"
@@ -47,10 +74,40 @@
       (dateSelected)="onDateSelected($event)"
       (partialRangeSelectionTypeChange)="onPartialRangeSelectionTypeChange($event)"
     >
-      @if (allowClear()) {
+      @if (allowClear() || isManualCommitMode()) {
         <org-calendar-footer>
           <div class="footer-actions">
-            <org-button color="neutral" label="Clear" [disabled]="isClearDisabled()" (clicked)="onClearClick()" />
+            <div class="footer-actions-left">
+              @if (allowClear()) {
+                <org-button
+                  variant="ghost"
+                  color="neutral"
+                  size="sm"
+                  label="Clear"
+                  [disabled]="isClearDisabled()"
+                  (clicked)="onClearClick()"
+                />
+              }
+            </div>
+            <div class="footer-actions-right">
+              @if (isManualCommitMode()) {
+                <org-button
+                  variant="ghost"
+                  color="neutral"
+                  size="sm"
+                  label="Cancel"
+                  (clicked)="onCancelClick()"
+                />
+                <org-button
+                  variant="filled"
+                  color="primary"
+                  size="sm"
+                  label="Apply"
+                  [disabled]="!canApply()"
+                  (clicked)="onApplyClick()"
+                />
+              }
+            </div>
           </div>
         </org-calendar-footer>
       }

@@ -1,12 +1,100 @@
 @layer components {
   :host {
+    /* internal locals — read once from the date-picker-input design tokens */
+    --_anchor-gap: var(--spacing-date-picker-input-anchor-gap);
+    --_popover-radius: var(--radius-date-picker-input-popover);
+    --_popover-shadow: var(--shadow-date-picker-input-popover);
+    --_motion-dur: var(--motion-date-picker-input-duration);
+    --_footer-gap: var(--spacing-date-picker-input-footer-gap);
+
     position: relative;
     display: block;
     width: 100%;
   }
 
+  .org-date-picker-input-anchor {
+    display: block;
+    width: 100%;
+  }
+
+  /* trigger-edge chevron button rendered inside the projected post slot when allowTriggerClear is on */
+  .trigger-chevron {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: var(--color-fg-muted);
+    background-color: transparent;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    transition: transform var(--_motion-dur) var(--motion-ease-standard);
+  }
+
+  .trigger-chevron:not(:disabled):hover {
+    color: var(--color-fg);
+  }
+
+  .trigger-chevron:disabled {
+    cursor: not-allowed;
+  }
+
+  /* chevron rotates 180° when the popover is open — mirrors the open relationship visually */
+  :host([data-state='open']) .trigger-chevron {
+    transform: rotate(180deg);
+  }
+
+  /* popover wrapper — owns the radius / shadow / motion; the inner org-calendar paints its own surface */
+  .org-date-picker-input-popover {
+    display: block;
+    width: max-content;
+    border-radius: var(--_popover-radius);
+    box-shadow: var(--_popover-shadow);
+    z-index: var(--z-index-popover);
+    transition:
+      opacity var(--_motion-dur) var(--motion-ease-standard),
+      transform var(--_motion-dur) var(--motion-ease-standard);
+  }
+
+  .org-date-picker-input-popover[data-state='closed'] {
+    opacity: 0;
+    transform: translateY(-0.125rem); /* 2px */
+    pointer-events: none;
+  }
+
+  .org-date-picker-input-popover[data-state='open'] {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* footer layout for Clear (left) + Cancel / Apply (right) — split via space-between */
   .footer-actions {
     display: flex;
-    justify-content: flex-end;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--_footer-gap);
+  }
+
+  .footer-actions-left,
+  .footer-actions-right {
+    display: flex;
+    align-items: center;
+    gap: var(--_footer-gap);
+  }
+
+  /* respect the user's reduced-motion preference — drop both the slide and the chevron rotation */
+  @media (prefers-reduced-motion: reduce) {
+    .org-date-picker-input-popover {
+      transition-duration: 0ms;
+    }
+
+    .org-date-picker-input-popover[data-state='closed'],
+    .org-date-picker-input-popover[data-state='open'] {
+      transform: none;
+    }
+
+    .trigger-chevron {
+      transition-duration: 0ms;
+    }
   }
 }

@@ -1,4 +1,4 @@
-import { Directive, computed, effect, input, output, signal } from '@angular/core';
+import { Directive, computed, effect, input, output, signal, untracked } from '@angular/core';
 import { angularUtils } from '@organization/shared-utils';
 import { DateTime } from 'luxon';
 import { v4 as uuidv4 } from 'uuid';
@@ -9,6 +9,12 @@ export type DatePickerInputSelection = {
   startDate: DateTime | null;
   endDate: DateTime | null;
 };
+
+/** all available commit modes for the date-picker-input brain */
+export const allDatePickerInputCommitModes = ['auto', 'manual'] as const;
+
+/** union type of all available commit modes */
+export type DatePickerInputCommitMode = (typeof allDatePickerInputCommitModes)[number];
 
 /** default value for the allowPartialRangeSelection input */
 export const DATE_PICKER_INPUT_ALLOW_PARTIAL_RANGE_SELECTION_DEFAULT = false;
@@ -33,6 +39,12 @@ export const DATE_PICKER_INPUT_ALLOW_CLEAR_DEFAULT = true;
 
 /** default value for the autoFocus input */
 export const DATE_PICKER_INPUT_AUTO_FOCUS_DEFAULT = false;
+
+/** default value for the commitMode input */
+export const DATE_PICKER_INPUT_COMMIT_MODE_DEFAULT: DatePickerInputCommitMode = 'auto';
+
+/** default value for the resetOnModeChange input */
+export const DATE_PICKER_INPUT_RESET_ON_MODE_CHANGE_DEFAULT = true;
 
 /** the internal state shape for the date-picker-input brain directive */
 type DatePickerInputState = {
@@ -71,6 +83,7 @@ type DatePickerInputState = {
     'aria-haspopup': 'dialog',
     '[attr.aria-expanded]': 'isOverlayOpen()',
     '[attr.aria-controls]': 'overlayId',
+    '[attr.data-state]': 'isOverlayOpen() ? "open" : "closed"',
   },
 })
 export class DatePickerInputBrainDirective {
@@ -113,6 +126,13 @@ export class DatePickerInputBrainDirective {
   public readonly disabled = input<boolean>(DATE_PICKER_INPUT_DISABLED_DEFAULT);
   public readonly allowClear = input<boolean>(DATE_PICKER_INPUT_ALLOW_CLEAR_DEFAULT);
   public readonly autoFocus = input<boolean>(DATE_PICKER_INPUT_AUTO_FOCUS_DEFAULT);
+  public readonly commitMode = input<DatePickerInputCommitMode>(DATE_PICKER_INPUT_COMMIT_MODE_DEFAULT);
+  /**
+   * when true, switching the mode-related inputs (allowRangeSelection, allowPartialRangeSelection,
+   * partialRangeSelectionType) clears the committed and in-progress selection and notifies the
+   * parent so a bound form / signal can reflect the cleared state
+   */
+  public readonly resetOnModeChange = input<boolean>(DATE_PICKER_INPUT_RESET_ON_MODE_CHANGE_DEFAULT);
 
   // outputs — abstract events the presentation routes to its public api / cva callbacks
   public readonly dateSelectedNotified = output<DatePickerInputSelection>();
@@ -176,6 +196,15 @@ export class DatePickerInputBrainDirective {
     () => this.committedStartDate() === null && this.committedEndDate() === null
   );
 
+  /**
+   * whether the apply action is enabled in manual commit mode — true when the in-progress selection
+   * meets the same completeness criteria the auto-commit path uses (single date in single mode, both
+   * dates in full range mode, the relevant date in partial-range mode)
+   */
+  public readonly canApply = computed<boolean>(() =>
+    this._isSelectionComplete(this._state().inProgressStartDate, this._state().inProgressEndDate)
+  );
+
   constructor() {
     // sync the partialRangeSelectionType input to internal state for form-controlled components
     effect(() => {
@@ -186,6 +215,29 @@ export class DatePickerInputBrainDirective {
         inProgressPartialRangeSelectionType: type,
         snapshotPartialRangeSelectionType: type,
       }));
+    });
+
+    // clear the selection whenever the mode-related inputs change; the first run is skipped so
+    // initial input bindings (e.g. selectedStartDate) are preserved on mount
+    let isFirstModeRun = true;
+
+    effect(() => {
+      // track the mode-related signals so the effect re-runs when they change
+      this.allowRangeSelection();
+      this.allowPartialRangeSelection();
+      this.partialRangeSelectionType();
+
+      if (isFirstModeRun) {
+        isFirstModeRun = false;
+
+        return;
+      }
+
+      if (!untracked(() => this.resetOnModeChange())) {
+        return;
+      }
+
+      untracked(() => this._resetSelectionForModeChange());
     });
   }
 
@@ -348,9 +400,30 @@ export class DatePickerInputBrainDirective {
       inProgressEndDate: dates.endDate,
     }));
 
+    // in manual commit mode the user must press Apply — auto-commit is intentionally skipped
+    if (this.commitMode() === 'manual') {
+      return;
+    }
+
     if (this._isSelectionComplete(dates.startDate, dates.endDate)) {
       this._commitSelection(dates.startDate, dates.endDate);
     }
+  }
+
+  /** handles the Apply action in manual commit mode — commits the current in-progress selection if complete */
+  public handleApplyClick(): void {
+    if (!this.canApply()) {
+      return;
+    }
+
+    const state = this._state();
+
+    this._commitSelection(state.inProgressStartDate, state.inProgressEndDate);
+  }
+
+  /** handles the Cancel action in manual commit mode — closes the overlay and lets the detach hook revert */
+  public handleCancelClick(): void {
+    this.closeOverlay();
   }
 
   /** handles partial range type change from the calendar; updates in-progress only (commits later) */
@@ -431,6 +504,32 @@ export class DatePickerInputBrainDirective {
     this._isClosingAfterCommit.set(false);
     this._isOverlayOpenSignal.set(false);
     this.touchedNotified.emit();
+  }
+
+  /**
+   * clears the committed (form-controlled only) and in-progress selection in response to a
+   * mode-related input change; emits the appropriate cleared event so a bound form / parent
+   * signal stays in sync
+   */
+  private _resetSelectionForModeChange(): void {
+    const isFormControlled = this._isFormControlled();
+
+    this._state.update((state) => ({
+      ...state,
+      committedStartDate: isFormControlled ? null : state.committedStartDate,
+      committedEndDate: isFormControlled ? null : state.committedEndDate,
+      inProgressStartDate: null,
+      inProgressEndDate: null,
+      hasFirstRangeSelection: false,
+    }));
+
+    if (isFormControlled) {
+      this.dateSelectedNotified.emit({ startDate: null, endDate: null });
+
+      return;
+    }
+
+    this.dateSelectedEmitted.emit({ startDate: null, endDate: null });
   }
 
   private _isSelectionComplete(startDate: DateTime | null, endDate: DateTime | null): boolean {

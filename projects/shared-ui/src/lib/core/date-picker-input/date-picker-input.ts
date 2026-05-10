@@ -19,9 +19,15 @@ import { Calendar } from '../calendar/calendar';
 import { CalendarFooter } from '../calendar/calendar-footer';
 import { Button } from '../button/button';
 import { angularUtils, DateFormat, TimeFormat } from '@organization/shared-utils';
-import { DatePickerInputBrainDirective } from '../../brain/date-picker-input-brain/date-picker-input-brain';
+import {
+  DatePickerInputBrainDirective,
+  type DatePickerInputCommitMode,
+  DATE_PICKER_INPUT_COMMIT_MODE_DEFAULT,
+  DATE_PICKER_INPUT_RESET_ON_MODE_CHANGE_DEFAULT,
+} from '../../brain/date-picker-input-brain/date-picker-input-brain';
 import { DatePickerInputDialogBrainDirective } from '../../brain/date-picker-input-dialog-brain/date-picker-input-dialog-brain';
 import { type CalendarPartialRangeSelectionType } from '../../brain/calendar-brain/calendar-brain';
+import { Icon } from '../icon/icon';
 
 export const DATE_PICKER_INPUT_DATE_FORMAT_DEFAULT: DateFormat = DateFormat.STANDARD;
 export const DATE_PICKER_INPUT_TIME_FORMAT_DEFAULT: TimeFormat | undefined = undefined;
@@ -40,6 +46,10 @@ export const DATE_PICKER_INPUT_DISABLE_AFTER_DEFAULT: DateTime | undefined = und
 export const DATE_PICKER_INPUT_ALLOWED_DATE_RANGE_DEFAULT = 0;
 export const DATE_PICKER_INPUT_DISABLED_DEFAULT = false;
 export const DATE_PICKER_INPUT_ALLOW_CLEAR_DEFAULT = true;
+export const DATE_PICKER_INPUT_ALLOW_TRIGGER_CLEAR_DEFAULT = false;
+
+// re-export the brain's commit-mode public surface so consumers can import from the presentation entry point
+export { type DatePickerInputCommitMode, DATE_PICKER_INPUT_COMMIT_MODE_DEFAULT, DATE_PICKER_INPUT_RESET_ON_MODE_CHANGE_DEFAULT };
 
 /**
  * date picker input component for date selection in forms
@@ -54,6 +64,7 @@ export const DATE_PICKER_INPUT_ALLOW_CLEAR_DEFAULT = true;
     Calendar,
     CalendarFooter,
     Button,
+    Icon,
     DatePickerInputDialogBrainDirective,
   ],
   templateUrl: './date-picker-input.html',
@@ -76,6 +87,8 @@ export const DATE_PICKER_INPUT_ALLOW_CLEAR_DEFAULT = true;
         'disabled',
         'allowClear',
         'autoFocus',
+        'commitMode',
+        'resetOnModeChange',
       ],
     },
   ],
@@ -86,6 +99,8 @@ export const DATE_PICKER_INPUT_ALLOW_CLEAR_DEFAULT = true;
     '[attr.data-allow-partial-range-selection]': 'allowPartialRangeSelection() ? "" : null',
     '[attr.data-partial-range-selection-type]': 'partialRangeSelectionType()',
     '[attr.data-allow-clear]': 'allowClear() ? "" : null',
+    '[attr.data-allow-trigger-clear]': 'allowTriggerClear() ? "" : null',
+    '[attr.data-commit-mode]': 'commitMode()',
   },
 })
 export class DatePickerInput implements ControlValueAccessor {
@@ -149,6 +164,12 @@ export class DatePickerInput implements ControlValueAccessor {
   // additional input properties
   public readonly disabled = input<boolean>(DATE_PICKER_INPUT_DISABLED_DEFAULT);
   public readonly allowClear = input<boolean>(DATE_PICKER_INPUT_ALLOW_CLEAR_DEFAULT);
+  /** when true, renders an inline clear button at the trigger's trailing edge that wipes the value without opening the popover */
+  public readonly allowTriggerClear = input<boolean>(DATE_PICKER_INPUT_ALLOW_TRIGGER_CLEAR_DEFAULT);
+  /** auto commits on completion of the calendar selection; manual requires the user to press Apply in the popover footer */
+  public readonly commitMode = input<DatePickerInputCommitMode>(DATE_PICKER_INPUT_COMMIT_MODE_DEFAULT);
+  /** when true, switching the mode-related inputs clears the current selection and notifies the parent */
+  public readonly resetOnModeChange = input<boolean>(DATE_PICKER_INPUT_RESET_ON_MODE_CHANGE_DEFAULT);
 
   // output events - proxied from input
   public readonly focused = output<void>();
@@ -169,6 +190,12 @@ export class DatePickerInput implements ControlValueAccessor {
     this.brain.inProgressPartialRangeSelectionType()
   );
   protected readonly isClearDisabled = computed<boolean>(() => this.brain.isClearDisabled());
+  protected readonly canApply = computed<boolean>(() => this.brain.canApply());
+  protected readonly isManualCommitMode = computed<boolean>(() => this.commitMode() === 'manual');
+  /** true when the trailing trigger clear-button slot should render (opt-in via allowTriggerClear, gated by value + disabled) */
+  protected readonly showTriggerClearButton = computed<boolean>(
+    () => this.allowTriggerClear() && !this.isClearDisabled() && !this.isDisabled()
+  );
 
   /** formatted display value for the input (uses committed values only) */
   protected readonly displayValue = computed<string>(() => {
@@ -198,7 +225,8 @@ export class DatePickerInput implements ControlValueAccessor {
         return `On or after ${startDate.toFormat(format)}`;
       }
 
-      return `${startDate.toFormat(format)} - `;
+      // in-progress / pending end — trailing em-dash reads as "and ..."
+      return `${startDate.toFormat(format)} —`;
     }
 
     if (!startDate && endDate) {
@@ -206,10 +234,11 @@ export class DatePickerInput implements ControlValueAccessor {
         return `On or before ${endDate.toFormat(format)}`;
       }
 
-      return ` - ${endDate.toFormat(format)}`;
+      return `— ${endDate.toFormat(format)}`;
     }
 
-    return `${startDate!.toFormat(format)} - ${endDate!.toFormat(format)}`;
+    // committed range — right arrow separator
+    return `${startDate!.toFormat(format)} → ${endDate!.toFormat(format)}`;
   });
 
   /** overlay position configurations */
@@ -305,6 +334,37 @@ export class DatePickerInput implements ControlValueAccessor {
 
   protected onClearClick(): void {
     this.brain.handleClearClick();
+  }
+
+  protected onTriggerClearClick(event: Event): void {
+    // prevent click from bubbling to the trigger and re-opening the overlay
+    event.stopPropagation();
+    this.brain.handleClearClick();
+  }
+
+  protected onTriggerChevronClick(event: Event): void {
+    // prevent click from bubbling to the trigger; chevron-only buttons must drive a single toggle action
+    event.stopPropagation();
+
+    if (this.isDisabled()) {
+      return;
+    }
+
+    if (this.isOverlayOpen()) {
+      this.brain.closeOverlay();
+
+      return;
+    }
+
+    this.brain.openOverlay();
+  }
+
+  protected onApplyClick(): void {
+    this.brain.handleApplyClick();
+  }
+
+  protected onCancelClick(): void {
+    this.brain.handleCancelClick();
   }
 
   protected onBackdropClick(): void {

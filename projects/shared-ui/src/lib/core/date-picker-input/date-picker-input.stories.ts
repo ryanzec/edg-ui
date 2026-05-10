@@ -1,16 +1,906 @@
 import type { Meta, StoryObj } from '@storybook/angular';
-import { Component, ChangeDetectionStrategy, signal, computed } from '@angular/core';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { DateTime } from 'luxon';
-import { DatePickerInput } from './date-picker-input';
-import { DateFormat, TimeFormat } from '@organization/shared-utils';
-import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
-import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
-import { Button } from '../button/button';
+import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { JsonPipe } from '@angular/common';
-import { FormFields } from '../form-fields/form-fields';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { map } from 'rxjs';
+import { DateTime } from 'luxon';
+import { DatePickerInput, type DatePickerInputCommitMode } from './date-picker-input';
+import { DateFormat, TimeFormat } from '@organization/shared-utils';
+import { Button } from '../button/button';
+import { ButtonToggle, type ButtonToggleItem } from '../button-toggle/button-toggle';
+import { CheckboxToggle } from '../checkbox-toggle/checkbox-toggle';
 import { FormField } from '../form-fields/form-field';
+import { FormFields } from '../form-fields/form-fields';
+import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
+import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
+import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
+import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
+import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
+import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
 import type { CalendarPartialRangeSelectionType } from '../../brain/calendar-brain/calendar-brain';
+
+type LiveDemoMode = 'single' | 'range' | 'partial-range';
+type LiveDemoTimeFormat = TimeFormat | 'none';
+
+const liveDemoModeItems: ButtonToggleItem[] = [
+  { label: 'Single', value: 'single', buttonColor: 'primary' },
+  { label: 'Range', value: 'range', buttonColor: 'primary' },
+  { label: 'Partial Range', value: 'partial-range', buttonColor: 'primary' },
+];
+
+const liveDemoCommitModeItems: ButtonToggleItem[] = [
+  { label: 'Auto', value: 'auto', buttonColor: 'primary' },
+  { label: 'Manual', value: 'manual', buttonColor: 'primary' },
+];
+
+const liveDemoDateFormatItems: ButtonToggleItem[] = [
+  { label: 'M/D/YY', value: DateFormat.STANDARD, buttonColor: 'primary' },
+  { label: 'YYYY-MM-DD', value: DateFormat.SQL, buttonColor: 'primary' },
+  { label: 'MMM YYYY', value: DateFormat.MONTH_YEAR, buttonColor: 'primary' },
+];
+
+const liveDemoTimeFormatItems: ButtonToggleItem[] = [
+  { label: 'None', value: 'none', buttonColor: 'primary' },
+  { label: 'h:mm a', value: TimeFormat.STANDARD, buttonColor: 'primary' },
+  { label: 'h:mm:ss a', value: TimeFormat.STANDARD_WITH_SECONDS, buttonColor: 'primary' },
+];
+
+const liveDemoPartialTypeItems: ButtonToggleItem[] = [
+  { label: 'Range', value: 'range', buttonColor: 'primary' },
+  { label: 'On or Before', value: 'onOrBefore', buttonColor: 'primary' },
+  { label: 'On or After', value: 'onOrAfter', buttonColor: 'primary' },
+];
+
+@Component({
+  selector: 'story-date-picker-input-live-demo',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    DatePickerInput,
+    ButtonToggle,
+    CheckboxToggle,
+    ReactiveFormsModule,
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoControls,
+    DesignSystemDemoControlGroup,
+    DesignSystemDemoCanvas,
+  ],
+  styles: [
+    `
+      :host {
+        display: block;
+      }
+      .canvas-stage {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 6rem; /* 96px */
+      }
+      .picker-width {
+        width: 18rem; /* 288px */
+      }
+    `,
+  ],
+  template: `
+    <form [formGroup]="liveDemoForm">
+      <org-design-system-demo>
+        <org-design-system-demo-header
+          slot="header"
+          title="Live demo"
+          description="All date picker inputs below are real and interactive — open the popover, switch modes, toggle Apply/Cancel, and watch every visual axis."
+        />
+        <org-design-system-demo-controls slot="controls">
+          <org-design-system-demo-control-group label="Mode">
+            <org-button-toggle [items]="modeItems" formControlName="mode" buttonSize="sm" />
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Commit mode">
+            <org-button-toggle [items]="commitModeItems" formControlName="commitMode" buttonSize="sm" />
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Date format">
+            <org-button-toggle [items]="dateFormatItems" formControlName="dateFormat" buttonSize="sm" />
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Time format">
+            <org-button-toggle [items]="timeFormatItems" formControlName="timeFormat" buttonSize="sm" />
+          </org-design-system-demo-control-group>
+          @if (mode() === 'partial-range') {
+            <org-design-system-demo-control-group label="Partial type">
+              <org-button-toggle [items]="partialTypeItems" formControlName="partialRangeType" buttonSize="sm" />
+            </org-design-system-demo-control-group>
+          }
+          <org-design-system-demo-control-group label="Disabled">
+            <org-checkbox-toggle name="live-demo-disabled" value="disabled" formControlName="disabled">
+              {{ liveDemoForm.controls.disabled.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Allow popover clear">
+            <org-checkbox-toggle name="live-demo-allow-clear" value="allow-clear" formControlName="allowClear">
+              {{ liveDemoForm.controls.allowClear.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Allow trigger clear">
+            <org-checkbox-toggle
+              name="live-demo-allow-trigger-clear"
+              value="allow-trigger-clear"
+              formControlName="allowTriggerClear"
+            >
+              {{ liveDemoForm.controls.allowTriggerClear.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Reset on mode change">
+            <org-checkbox-toggle
+              name="live-demo-reset-on-mode-change"
+              value="reset-on-mode-change"
+              formControlName="resetOnModeChange"
+            >
+              {{ liveDemoForm.controls.resetOnModeChange.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
+        </org-design-system-demo-controls>
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="canvas-stage">
+            <div class="picker-width">
+              <org-date-picker-input
+                name="live-demo"
+                placeholder="Select a date..."
+                [dateFormat]="liveDemoForm.controls.dateFormat.value"
+                [timeFormat]="resolvedTimeFormat()"
+                [allowRangeSelection]="mode() !== 'single'"
+                [allowPartialRangeSelection]="mode() === 'partial-range'"
+                [partialRangeSelectionType]="liveDemoForm.controls.partialRangeType.value"
+                [allowClear]="liveDemoForm.controls.allowClear.value"
+                [allowTriggerClear]="liveDemoForm.controls.allowTriggerClear.value"
+                [commitMode]="liveDemoForm.controls.commitMode.value"
+                [resetOnModeChange]="liveDemoForm.controls.resetOnModeChange.value"
+                [disabled]="liveDemoForm.controls.disabled.value"
+                [selectedStartDate]="startDate()"
+                [selectedEndDate]="endDate()"
+                (dateSelected)="onDateSelected($event)"
+              />
+            </div>
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+    </form>
+  `,
+})
+class DatePickerInputLiveDemoStory {
+  protected readonly modeItems = liveDemoModeItems;
+  protected readonly commitModeItems = liveDemoCommitModeItems;
+  protected readonly dateFormatItems = liveDemoDateFormatItems;
+  protected readonly timeFormatItems = liveDemoTimeFormatItems;
+  protected readonly partialTypeItems = liveDemoPartialTypeItems;
+
+  protected readonly startDate = signal<DateTime | null>(null);
+  protected readonly endDate = signal<DateTime | null>(null);
+
+  protected readonly liveDemoForm = new FormGroup({
+    mode: new FormControl<LiveDemoMode>('single', { nonNullable: true }),
+    commitMode: new FormControl<DatePickerInputCommitMode>('auto', { nonNullable: true }),
+    dateFormat: new FormControl<DateFormat>(DateFormat.STANDARD, { nonNullable: true }),
+    timeFormat: new FormControl<LiveDemoTimeFormat>('none', { nonNullable: true }),
+    partialRangeType: new FormControl<CalendarPartialRangeSelectionType>('range', { nonNullable: true }),
+    disabled: new FormControl<boolean>(false, { nonNullable: true }),
+    allowClear: new FormControl<boolean>(true, { nonNullable: true }),
+    allowTriggerClear: new FormControl<boolean>(false, { nonNullable: true }),
+    resetOnModeChange: new FormControl<boolean>(true, { nonNullable: true }),
+  });
+
+  protected readonly mode = toSignal(this.liveDemoForm.controls.mode.valueChanges, {
+    initialValue: this.liveDemoForm.controls.mode.value,
+  });
+
+  protected readonly resolvedTimeFormat = computed<TimeFormat | null>(() => {
+    const value = this.timeFormatValue();
+
+    if (value === 'none') {
+      return null;
+    }
+
+    return value;
+  });
+
+  private readonly timeFormatValue = toSignal(this.liveDemoForm.controls.timeFormat.valueChanges, {
+    initialValue: this.liveDemoForm.controls.timeFormat.value,
+  });
+
+  protected onDateSelected(dates: { startDate: DateTime | null; endDate: DateTime | null }): void {
+    this.startDate.set(dates.startDate);
+    this.endDate.set(dates.endDate);
+  }
+}
+
+@Component({
+  selector: 'story-date-picker-input-showcase',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    DatePickerInput,
+    FormField,
+    FormFields,
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoCanvas,
+    DesignSystemDemoExpectedBehaviour,
+  ],
+  styles: [
+    `
+      :host {
+        display: block;
+      }
+      .picker-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+      .picker-cell {
+        width: 18rem; /* 288px */
+      }
+    `,
+  ],
+  template: `
+    <div class="flex flex-col gap-4">
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Single Date Selection" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="picker-row">
+            <div class="picker-cell">
+              <org-date-picker-input
+                name="showcase-single-empty"
+                placeholder="Pick a date"
+                [selectedStartDate]="singleEmpty()"
+                (dateSelected)="onSingleEmptyChanged($event)"
+              />
+            </div>
+            <div class="picker-cell">
+              <org-date-picker-input
+                name="showcase-single-value"
+                [selectedStartDate]="singleValue()"
+                (dateSelected)="onSingleValueChanged($event)"
+              />
+            </div>
+            <div class="picker-cell">
+              <org-date-picker-input name="showcase-single-disabled" [disabled]="true" [selectedStartDate]="now" />
+            </div>
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="list-inside list-disc flex flex-col gap-1">
+          <li>Empty input reads the placeholder at the muted foreground color</li>
+          <li>Clicking the trigger or the chevron opens the popover; selecting a date commits and closes</li>
+          <li>Disabled trigger is non-interactive and rendered at reduced opacity</li>
+        </ul>
+      </org-design-system-demo-expected-behaviour>
+
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Range Selection" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="picker-row">
+            <div class="picker-cell">
+              <org-date-picker-input
+                name="showcase-range-empty"
+                placeholder="Pick a range"
+                [allowRangeSelection]="true"
+                [selectedStartDate]="rangeEmptyStart()"
+                [selectedEndDate]="rangeEmptyEnd()"
+                (dateSelected)="onRangeEmptyChanged($event)"
+              />
+            </div>
+            <div class="picker-cell">
+              <org-date-picker-input
+                name="showcase-range-value"
+                [allowRangeSelection]="true"
+                [selectedStartDate]="rangeValueStart()"
+                [selectedEndDate]="rangeValueEnd()"
+                (dateSelected)="onRangeValueChanged($event)"
+              />
+            </div>
+            <div class="picker-cell">
+              <org-date-picker-input
+                name="showcase-range-in-progress"
+                [allowRangeSelection]="true"
+                [selectedStartDate]="rangeInProgressStart"
+                [selectedEndDate]="null"
+              />
+            </div>
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="list-inside list-disc flex flex-col gap-1">
+          <li>Committed ranges render as <strong>start → end</strong></li>
+          <li>An in-progress range (start picked, end pending) renders as <strong>start —</strong></li>
+          <li>Selecting the second date commits the range and closes the popover</li>
+        </ul>
+      </org-design-system-demo-expected-behaviour>
+
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Partial Range Selection" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="picker-row">
+            <div class="picker-cell">
+              <org-date-picker-input
+                name="showcase-partial-on-or-after"
+                [allowRangeSelection]="true"
+                [allowPartialRangeSelection]="true"
+                partialRangeSelectionType="onOrAfter"
+                [selectedStartDate]="now"
+                [selectedEndDate]="null"
+              />
+            </div>
+            <div class="picker-cell">
+              <org-date-picker-input
+                name="showcase-partial-on-or-before"
+                [allowRangeSelection]="true"
+                [allowPartialRangeSelection]="true"
+                partialRangeSelectionType="onOrBefore"
+                [selectedStartDate]="null"
+                [selectedEndDate]="nowPlus7"
+              />
+            </div>
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="list-inside list-disc flex flex-col gap-1">
+          <li><strong>On or after</strong> commits a start-only selection and reads as "On or after {{ '{date}' }}"</li>
+          <li><strong>On or before</strong> commits an end-only selection and reads as "On or before {{ '{date}' }}"</li>
+          <li>The calendar exposes a radio selector to switch modes inside the popover</li>
+        </ul>
+      </org-design-system-demo-expected-behaviour>
+
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Popover Clear Action" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="picker-row">
+            <div class="picker-cell">
+              <org-date-picker-input
+                name="showcase-clear-on"
+                [allowClear]="true"
+                [selectedStartDate]="clearOnDate()"
+                (dateSelected)="onClearOnChanged($event)"
+              />
+            </div>
+            <div class="picker-cell">
+              <org-date-picker-input
+                name="showcase-clear-off"
+                [allowClear]="false"
+                [selectedStartDate]="clearOffDate()"
+                (dateSelected)="onClearOffChanged($event)"
+              />
+            </div>
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="list-inside list-disc flex flex-col gap-1">
+          <li>When <strong>allowClear</strong> is true, the calendar footer renders a Clear button</li>
+          <li>The Clear button is disabled while no date is selected</li>
+          <li>Pressing Delete or Backspace while the calendar is focused triggers the same clear path</li>
+        </ul>
+      </org-design-system-demo-expected-behaviour>
+
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Trigger-Edge Clear Button" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="picker-row">
+            <div class="picker-cell">
+              <org-date-picker-input
+                name="showcase-trigger-clear"
+                [allowTriggerClear]="true"
+                [selectedStartDate]="triggerClearDate()"
+                (dateSelected)="onTriggerClearChanged($event)"
+              />
+            </div>
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="list-inside list-disc flex flex-col gap-1">
+          <li>The inline X button appears only when a value is present and the trigger is not disabled</li>
+          <li>Clicking the X clears the value <strong>without</strong> opening the popover</li>
+          <li>The chevron toggles the popover even when the trigger-edge clear is on</li>
+        </ul>
+      </org-design-system-demo-expected-behaviour>
+
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Manual Commit Mode (Apply / Cancel)" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="picker-row">
+            <div class="picker-cell">
+              <org-date-picker-input
+                name="showcase-manual-single"
+                commitMode="manual"
+                [selectedStartDate]="manualSingleDate()"
+                (dateSelected)="onManualSingleChanged($event)"
+              />
+            </div>
+            <div class="picker-cell">
+              <org-date-picker-input
+                name="showcase-manual-range"
+                commitMode="manual"
+                [allowRangeSelection]="true"
+                [selectedStartDate]="manualRangeStart()"
+                [selectedEndDate]="manualRangeEnd()"
+                (dateSelected)="onManualRangeChanged($event)"
+              />
+            </div>
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="list-inside list-disc flex flex-col gap-1">
+          <li>Auto-commit is disabled — picking dates only stages an in-progress selection</li>
+          <li><strong>Apply</strong> commits the staged selection and closes the popover</li>
+          <li><strong>Cancel</strong> closes the popover and reverts to the previously committed value</li>
+          <li>Apply is disabled until the staged selection is complete (both dates in range mode)</li>
+        </ul>
+      </org-design-system-demo-expected-behaviour>
+
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Prepopulated Values" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="picker-row">
+            <div class="picker-cell">
+              <org-date-picker-input
+                name="showcase-prepop-single"
+                [selectedStartDate]="now"
+                (dateSelected)="onPrepopSingleChanged($event)"
+              />
+            </div>
+            <div class="picker-cell">
+              <org-date-picker-input
+                name="showcase-prepop-range"
+                [allowRangeSelection]="true"
+                [selectedStartDate]="now"
+                [selectedEndDate]="nowPlus7"
+                (dateSelected)="onPrepopRangeChanged($event)"
+              />
+            </div>
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="list-inside list-disc flex flex-col gap-1">
+          <li>Initial values render in the trigger immediately on first mount</li>
+          <li>Opening the popover surfaces the same dates as the in-progress selection</li>
+        </ul>
+      </org-design-system-demo-expected-behaviour>
+
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Validation" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="picker-row">
+            <div class="picker-cell">
+              <org-form-field validationMessage="Date is required">
+                <org-date-picker-input name="showcase-validation-single" placeholder="Select a date" />
+              </org-form-field>
+            </div>
+            <div class="picker-cell">
+              <org-form-field validationMessage="At least one date is required">
+                <org-date-picker-input
+                  name="showcase-validation-either"
+                  placeholder="Select at least one date"
+                  [allowRangeSelection]="true"
+                  [allowPartialRangeSelection]="true"
+                />
+              </org-form-field>
+            </div>
+            <div class="picker-cell">
+              <org-form-field validationMessage="Both start and end dates are required">
+                <org-date-picker-input
+                  name="showcase-validation-both"
+                  placeholder="Select both dates"
+                  [allowRangeSelection]="true"
+                />
+              </org-form-field>
+            </div>
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="list-inside list-disc flex flex-col gap-1">
+          <li>Validation messages surface beneath the trigger via the form-field wrapper</li>
+          <li>The trigger renders the error border treatment while a validation message is present</li>
+        </ul>
+      </org-design-system-demo-expected-behaviour>
+
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Validation Space Reservation" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="picker-row">
+            <div class="picker-cell">
+              <org-form-fields>
+                <org-form-field [reserveValidationSpace]="true">
+                  <org-date-picker-input name="reserve-true-1" placeholder="No error" />
+                </org-form-field>
+                <org-form-field [reserveValidationSpace]="true" validationMessage="This field has an error">
+                  <org-date-picker-input name="reserve-true-2" placeholder="With error" />
+                </org-form-field>
+                <org-form-field [reserveValidationSpace]="true">
+                  <org-date-picker-input name="reserve-true-3" placeholder="No error" />
+                </org-form-field>
+              </org-form-fields>
+            </div>
+            <div class="picker-cell">
+              <org-form-fields>
+                <org-form-field [reserveValidationSpace]="false">
+                  <org-date-picker-input name="reserve-false-1" placeholder="No error" />
+                </org-form-field>
+                <org-form-field [reserveValidationSpace]="false" validationMessage="This field has an error">
+                  <org-date-picker-input name="reserve-false-2" placeholder="With error" />
+                </org-form-field>
+                <org-form-field [reserveValidationSpace]="false">
+                  <org-date-picker-input name="reserve-false-3" placeholder="No error" />
+                </org-form-field>
+              </org-form-fields>
+            </div>
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="list-inside list-disc flex flex-col gap-1">
+          <li><strong>reserveValidationSpace=true</strong> always reserves space so layout never shifts</li>
+          <li><strong>reserveValidationSpace=false</strong> collapses to the trigger height when no message is shown</li>
+        </ul>
+      </org-design-system-demo-expected-behaviour>
+    </div>
+  `,
+})
+class DatePickerInputShowcaseStory {
+  protected readonly now = DateTime.now().startOf('day');
+  protected readonly nowPlus7 = DateTime.now().plus({ days: 7 }).endOf('day');
+  // intentionally a plain DateTime — the in-progress range cell demonstrates the trigger's "start —" treatment
+  protected readonly rangeInProgressStart = DateTime.now().startOf('day');
+
+  protected readonly singleEmpty = signal<DateTime | null>(null);
+  protected readonly singleValue = signal<DateTime | null>(DateTime.now().startOf('day'));
+  protected readonly rangeEmptyStart = signal<DateTime | null>(null);
+  protected readonly rangeEmptyEnd = signal<DateTime | null>(null);
+  protected readonly rangeValueStart = signal<DateTime | null>(DateTime.now().startOf('day'));
+  protected readonly rangeValueEnd = signal<DateTime | null>(DateTime.now().plus({ days: 7 }).endOf('day'));
+  protected readonly clearOnDate = signal<DateTime | null>(DateTime.now().startOf('day'));
+  protected readonly clearOffDate = signal<DateTime | null>(DateTime.now().startOf('day'));
+  protected readonly triggerClearDate = signal<DateTime | null>(DateTime.now().startOf('day'));
+  protected readonly manualSingleDate = signal<DateTime | null>(null);
+  protected readonly manualRangeStart = signal<DateTime | null>(null);
+  protected readonly manualRangeEnd = signal<DateTime | null>(null);
+
+  protected onSingleEmptyChanged(dates: { startDate: DateTime | null; endDate: DateTime | null }): void {
+    this.singleEmpty.set(dates.startDate);
+  }
+
+  protected onSingleValueChanged(dates: { startDate: DateTime | null; endDate: DateTime | null }): void {
+    this.singleValue.set(dates.startDate);
+  }
+
+  protected onRangeEmptyChanged(dates: { startDate: DateTime | null; endDate: DateTime | null }): void {
+    this.rangeEmptyStart.set(dates.startDate);
+    this.rangeEmptyEnd.set(dates.endDate);
+  }
+
+  protected onRangeValueChanged(dates: { startDate: DateTime | null; endDate: DateTime | null }): void {
+    this.rangeValueStart.set(dates.startDate);
+    this.rangeValueEnd.set(dates.endDate);
+  }
+
+  protected onClearOnChanged(dates: { startDate: DateTime | null; endDate: DateTime | null }): void {
+    this.clearOnDate.set(dates.startDate);
+  }
+
+  protected onClearOffChanged(dates: { startDate: DateTime | null; endDate: DateTime | null }): void {
+    this.clearOffDate.set(dates.startDate);
+  }
+
+  protected onTriggerClearChanged(dates: { startDate: DateTime | null; endDate: DateTime | null }): void {
+    this.triggerClearDate.set(dates.startDate);
+  }
+
+  protected onManualSingleChanged(dates: { startDate: DateTime | null; endDate: DateTime | null }): void {
+    this.manualSingleDate.set(dates.startDate);
+  }
+
+  protected onManualRangeChanged(dates: { startDate: DateTime | null; endDate: DateTime | null }): void {
+    this.manualRangeStart.set(dates.startDate);
+    this.manualRangeEnd.set(dates.endDate);
+  }
+
+  protected onPrepopSingleChanged(_dates: { startDate: DateTime | null; endDate: DateTime | null }): void {
+    // showcase keeps the prepopulated cell static — handler exists so the brain treats this as non-form
+  }
+
+  protected onPrepopRangeChanged(_dates: { startDate: DateTime | null; endDate: DateTime | null }): void {
+    // same — keeps the prepopulated range cell static for the showcase snapshot
+  }
+}
+
+@Component({
+  selector: 'story-date-picker-input-reactive-form',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    DatePickerInput,
+    Button,
+    FormField,
+    FormFields,
+    ReactiveFormsModule,
+    JsonPipe,
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoCanvas,
+    DesignSystemDemoExpectedBehaviour,
+  ],
+  styles: [
+    `
+      :host {
+        display: block;
+      }
+      .picker-width {
+        width: 18rem; /* 288px */
+      }
+    `,
+  ],
+  template: `
+    <div class="flex flex-col gap-4">
+      <org-design-system-demo>
+        <org-design-system-demo-header
+          slot="header"
+          title="Reactive Form Integration"
+          [description]="'Form value: ' + formValueDisplay()"
+        />
+        <org-design-system-demo-canvas slot="canvas">
+          <form [formGroup]="form">
+            <org-form-fields>
+              <org-form-field>
+                <div class="picker-width">
+                  <org-date-picker-input
+                    name="reactive-form-single-date"
+                    formControlName="singleDate"
+                    placeholder="Select a date"
+                  />
+                </div>
+              </org-form-field>
+              <org-form-field>
+                <div class="picker-width">
+                  <org-date-picker-input
+                    name="reactive-form-range"
+                    formControlName="range"
+                    [allowRangeSelection]="true"
+                    placeholder="Select a range"
+                  />
+                </div>
+              </org-form-field>
+              <org-form-field>
+                <div class="picker-width">
+                  <org-date-picker-input
+                    name="reactive-form-partial-range"
+                    formControlName="partialRange"
+                    [allowRangeSelection]="true"
+                    [allowPartialRangeSelection]="true"
+                    placeholder="Select a partial range"
+                  />
+                </div>
+              </org-form-field>
+            </org-form-fields>
+            <div class="flex flex-wrap gap-2 mt-2">
+              <org-button color="primary" size="sm" label="Set Single to Today" (clicked)="setSingleToday()" />
+              <org-button color="primary" size="sm" label="Set Range to This Week" (clicked)="setRangeThisWeek()" />
+              <org-button color="primary" size="sm" label="Set Partial to On or After" (clicked)="setPartialAfter()" />
+              <org-button color="neutral" size="sm" label="Clear All" (clicked)="clearAll()" />
+              <org-button color="neutral" size="sm" label="Disable All" (clicked)="disableAll()" />
+              <org-button color="neutral" size="sm" label="Enable All" (clicked)="enableAll()" />
+            </div>
+            <pre class="mt-2 p-2 bg-app rounded-sm text-xs">{{ form.value | json }}</pre>
+          </form>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="list-inside list-disc flex flex-col gap-1">
+          <li>The component implements <strong>ControlValueAccessor</strong> and pairs with <code>formControlName</code></li>
+          <li>Each form control value is an object with <code>startDate</code> and <code>endDate</code> properties</li>
+          <li>Form value updates immediately when the selection commits</li>
+          <li>The form is marked as touched when the popover closes for any reason</li>
+          <li><code>form.disable()</code> / <code>form.enable()</code> reflect in the trigger</li>
+        </ul>
+      </org-design-system-demo-expected-behaviour>
+    </div>
+  `,
+})
+class DatePickerInputReactiveFormStory {
+  protected readonly now = DateTime.now().startOf('day');
+  protected readonly nowPlus7 = DateTime.now().plus({ days: 7 }).endOf('day');
+
+  protected readonly form = new FormGroup({
+    singleDate: new FormControl<{ startDate: DateTime | null; endDate: DateTime | null }>({
+      startDate: this.now,
+      endDate: null,
+    }),
+    range: new FormControl<{ startDate: DateTime | null; endDate: DateTime | null }>({
+      startDate: this.now,
+      endDate: this.nowPlus7,
+    }),
+    partialRange: new FormControl<{ startDate: DateTime | null; endDate: DateTime | null }>({
+      startDate: this.now,
+      endDate: null,
+    }),
+  });
+
+  protected readonly formValueDisplay = toSignal(
+    this.form.valueChanges.pipe(map((value) => JSON.stringify(value))),
+    { initialValue: JSON.stringify(this.form.value) }
+  );
+
+  protected setSingleToday(): void {
+    this.form.controls.singleDate.setValue({ startDate: this.now, endDate: null });
+  }
+
+  protected setRangeThisWeek(): void {
+    this.form.controls.range.setValue({ startDate: this.now, endDate: this.nowPlus7 });
+  }
+
+  protected setPartialAfter(): void {
+    this.form.controls.partialRange.setValue({ startDate: this.now, endDate: null });
+  }
+
+  protected clearAll(): void {
+    this.form.controls.singleDate.setValue({ startDate: null, endDate: null });
+    this.form.controls.range.setValue({ startDate: null, endDate: null });
+    this.form.controls.partialRange.setValue({ startDate: null, endDate: null });
+  }
+
+  protected disableAll(): void {
+    this.form.disable();
+  }
+
+  protected enableAll(): void {
+    this.form.enable();
+  }
+}
+
+@Component({
+  selector: 'story-date-picker-input-non-form',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    DatePickerInput,
+    Button,
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoCanvas,
+    DesignSystemDemoExpectedBehaviour,
+  ],
+  styles: [
+    `
+      :host {
+        display: block;
+      }
+      .picker-width {
+        width: 18rem; /* 288px */
+      }
+    `,
+  ],
+  template: `
+    <div class="flex flex-col gap-4">
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Non-Form Usage" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="picker-width">
+            <org-date-picker-input
+              name="non-form-single"
+              placeholder="Pick a date"
+              [selectedStartDate]="singleDate()"
+              (dateSelected)="onSingleSelected($event)"
+            />
+          </div>
+          <div class="picker-width">
+            <org-date-picker-input
+              name="non-form-range"
+              placeholder="Pick a range"
+              [allowRangeSelection]="true"
+              [selectedStartDate]="rangeStart()"
+              [selectedEndDate]="rangeEnd()"
+              (dateSelected)="onRangeSelected($event)"
+            />
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <org-button color="primary" size="sm" label="Set Single Today" (clicked)="setSingleToday()" />
+            <org-button color="primary" size="sm" label="Set Range This Week" (clicked)="setRangeThisWeek()" />
+            <org-button color="neutral" size="sm" label="Clear All" (clicked)="clearAll()" />
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="list-inside list-disc flex flex-col gap-1">
+          <li>Drives the picker without reactive forms via <code>[selectedStartDate]</code> + <code>(dateSelected)</code></li>
+          <li>The parent owns the signal that backs the picker's selected dates</li>
+          <li>The <code>dateSelected</code> output fires immediately when a selection commits</li>
+        </ul>
+      </org-design-system-demo-expected-behaviour>
+    </div>
+  `,
+})
+class DatePickerInputNonFormStory {
+  protected readonly singleDate = signal<DateTime | null>(null);
+  protected readonly rangeStart = signal<DateTime | null>(null);
+  protected readonly rangeEnd = signal<DateTime | null>(null);
+
+  protected onSingleSelected(dates: { startDate: DateTime | null; endDate: DateTime | null }): void {
+    this.singleDate.set(dates.startDate);
+  }
+
+  protected onRangeSelected(dates: { startDate: DateTime | null; endDate: DateTime | null }): void {
+    this.rangeStart.set(dates.startDate);
+    this.rangeEnd.set(dates.endDate);
+  }
+
+  protected setSingleToday(): void {
+    this.singleDate.set(DateTime.now().startOf('day'));
+  }
+
+  protected setRangeThisWeek(): void {
+    const now = DateTime.now();
+
+    this.rangeStart.set(now.startOf('week').startOf('day'));
+    this.rangeEnd.set(now.endOf('week').endOf('day'));
+  }
+
+  protected clearAll(): void {
+    this.singleDate.set(null);
+    this.rangeStart.set(null);
+    this.rangeEnd.set(null);
+  }
+}
+
+@Component({
+  selector: 'story-date-picker-input-focused-blurred',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [DatePickerInput, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
+  styles: [
+    `
+      :host {
+        display: block;
+      }
+      .picker-width {
+        width: 18rem; /* 288px */
+      }
+    `,
+  ],
+  template: `
+    <org-design-system-demo>
+      <org-design-system-demo-header slot="header" title="Focused / Blurred" />
+      <org-design-system-demo-canvas slot="canvas">
+        <div class="flex flex-col gap-2">
+          <div class="picker-width">
+            <org-date-picker-input
+              name="focused-blurred"
+              placeholder="Tab into me..."
+              (focused)="onFocused()"
+              (blurred)="onBlurred()"
+            />
+          </div>
+          <p>
+            isFocused: <strong>{{ isFocused() }}</strong>
+          </p>
+          <p>
+            Last event: <strong>{{ lastEvent() }}</strong>
+          </p>
+        </div>
+      </org-design-system-demo-canvas>
+    </org-design-system-demo>
+  `,
+})
+class DatePickerInputFocusedBlurredStory {
+  protected readonly isFocused = signal<boolean>(false);
+  protected readonly lastEvent = signal<string>('none');
+
+  protected onFocused(): void {
+    this.isFocused.set(true);
+    this.lastEvent.set('focused');
+  }
+
+  protected onBlurred(): void {
+    this.isFocused.set(false);
+    this.lastEvent.set('blurred');
+  }
+}
 
 const meta: Meta<DatePickerInput> = {
   title: 'Core/Components/Date Picker Input',
@@ -23,52 +913,17 @@ const meta: Meta<DatePickerInput> = {
 <div class="docs-top-level-overview">
   ## DatePickerInput Component
 
-  A comprehensive date picker component designed for date selection in forms with support for single date and date range selection.
+  A composed date input — a real \`org-input\` trigger anchored to an \`org-calendar\` popover. Supports single date, full range, and partial range (\`on or after\` / \`on or before\`) selections, opt-in trigger-edge clear, and an opt-in manual commit flow with Apply / Cancel.
 
   ### Features
-  - Single date selection mode
-  - Date range selection mode
-  - Partial range selection support (on or after/before)
-  - Customizable date and time formatting
-  - Reactive forms integration with ControlValueAccessor
-  - Simple forms integration with event handling
-  - Validation support
-  - Calendar keyboard navigation
-  - Date constraints (disable before/after, allowed range)
-  - Readonly input with calendar-only interaction
-
-  ### Usage Examples
-  \`\`\`html
-  <!-- Basic single date -->
-  <org-date-picker-input
-    placeholder="Select date..."
-    [selectedStartDate]="startDate"
-    (dateSelected)="onDateSelected($event)"
-  />
-
-  <!-- Date range -->
-  <org-date-picker-input
-    placeholder="Select date range..."
-    [allowRangeSelection]="true"
-    [selectedStartDate]="startDate"
-    [selectedEndDate]="endDate"
-    (dateSelected)="onDateSelected($event)"
-  />
-
-  <!-- With reactive forms -->
-  <org-date-picker-input
-    [formControl]="dateFormControl"
-    [allowRangeSelection]="true"
-    placeholder="Select date range..."
-  />
-
-  <!-- With validation -->
-  <org-date-picker-input
-    placeholder="Select date..."
-    (dateSelected)="onDateSelected($event)"
-  />
+  - Single date, full range, and partial range selection modes
+  - Auto-commit (default) or manual commit with Apply / Cancel in the calendar footer
+  - Optional in-popover Clear button and an opt-in trigger-edge Clear icon button
+  - Reactive forms integration via \`ControlValueAccessor\`
+  - Customisable date / time formats
+  - Validation surface via \`org-form-field\`
+  - Keyboard support — Enter / Space to open, Esc to cancel, Delete / Backspace to clear inside the calendar
 </div>
-\`\`\`
         `,
       },
     },
@@ -98,12 +953,12 @@ export const Default: Story = {
     allowedDateRange: 0,
     disabled: false,
     allowClear: true,
+    allowTriggerClear: false,
+    commitMode: 'auto',
+    resetOnModeChange: true,
   },
   argTypes: {
-    name: {
-      control: 'text',
-      description: 'The name attribute for the input element',
-    },
+    name: { control: 'text', description: 'The name attribute for the input element' },
     dateFormat: {
       control: 'select',
       options: Object.values(DateFormat),
@@ -114,34 +969,29 @@ export const Default: Story = {
       options: Object.values(TimeFormat),
       description: 'The time format for display',
     },
-    allowPartialRangeSelection: {
-      control: 'boolean',
-      description: 'Allow partial range selection (on or after/before)',
-    },
+    allowPartialRangeSelection: { control: 'boolean', description: 'Allow partial range selection (on or after/before)' },
     partialRangeSelectionType: {
       control: 'select',
       options: ['range', 'onOrBefore', 'onOrAfter'],
       description: 'The partial range selection type',
     },
-    placeholder: {
-      control: 'text',
-      description: 'Placeholder text for the input',
-    },
-    autoFocus: {
+    placeholder: { control: 'text', description: 'Placeholder text for the input' },
+    autoFocus: { control: 'boolean', description: 'Automatically focus the input on mount' },
+    allowRangeSelection: { control: 'boolean', description: 'Enable date range selection' },
+    disabled: { control: 'boolean', description: 'Disable the date picker' },
+    allowClear: { control: 'boolean', description: 'Show clear button in calendar footer' },
+    allowTriggerClear: {
       control: 'boolean',
-      description: 'Automatically focus the input on mount',
+      description: 'Render the inline clear button at the trigger trailing edge',
     },
-    allowRangeSelection: {
-      control: 'boolean',
-      description: 'Enable date range selection',
+    commitMode: {
+      control: 'select',
+      options: ['auto', 'manual'],
+      description: 'Auto commits on selection completion; manual waits for the Apply action',
     },
-    disabled: {
+    resetOnModeChange: {
       control: 'boolean',
-      description: 'Disable the date picker',
-    },
-    allowClear: {
-      control: 'boolean',
-      description: 'Show clear button in calendar footer',
+      description: 'When true, switching mode-related inputs clears the current selection',
     },
   },
   render: (args) => ({
@@ -167,1467 +1017,93 @@ export const Default: Story = {
           [allowedDateRange]="allowedDateRange"
           [disabled]="disabled"
           [allowClear]="allowClear"
+          [allowTriggerClear]="allowTriggerClear"
+          [commitMode]="commitMode"
+          [resetOnModeChange]="resetOnModeChange"
         />
       </div>
     `,
   }),
 };
 
-@Component({
-  selector: 'story-date-picker-input-single-select-demo',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [DatePickerInput, StorybookExampleContainer, StorybookExampleContainerSection, Button, JsonPipe],
-  template: `
-    <org-storybook-example-container
-      title="Single Date Selection"
-      [currentState]="'Selected: ' + (selectedDate() ? selectedDate()!.toISO() : 'None')"
-    >
-      <org-storybook-example-container-section label="Date Picker">
-        <div class="max-w-sm">
-          <org-date-picker-input
-            #datePicker
-            name="single-date"
-            placeholder="Select a date..."
-            [selectedStartDate]="selectedDate()"
-            (dateSelected)="onDateSelected($event)"
-          />
-        </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Controls">
-        <div class="flex flex-wrap gap-2">
-          <org-button color="primary" size="sm" label="Set Today" (clicked)="setToday()" />
-          <org-button color="secondary" size="sm" label="Set Yesterday" (clicked)="setYesterday()" />
-          <org-button color="secondary" size="sm" label="Clear" (clicked)="clearDate()" />
-        </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="State">
-        <div class="text-sm space-y-1">
-          <div>
-            <strong>Selected Date:</strong>
-            {{ selectedDate() ? selectedDate()!.toISO() : 'None' }}
-          </div>
-          <div>
-            <strong>Public API Result:</strong>
-            {{ datePicker.getSelectedDates() | json }}
-          </div>
-        </div>
-      </org-storybook-example-container-section>
-
-      <ul expected-behaviour class="mt-1 list-inside list-disc space-y-1">
-        <li>Input is readonly - dates can only be selected via calendar</li>
-        <li>Calendar opens when clicking input, calendar icon, or dropdown caret</li>
-        <li>Calendar closes automatically when a date is selected</li>
-        <li>Clicking the same date commits that date and closes calendar</li>
-        <li>Input value updates only when calendar closes with selection</li>
-        <li>Escape key or clicking outside cancels and reverts to previous value</li>
-        <li>Focus moves to calendar when opened for keyboard navigation</li>
-      </ul>
-    </org-storybook-example-container>
-  `,
-})
-class DatePickerInputSingleSelectDemo {
-  protected selectedDate = signal<DateTime | null>(null);
-
-  protected onDateSelected(dates: { startDate: DateTime | null; endDate: DateTime | null }): void {
-    console.log('Date selected:', dates);
-    this.selectedDate.set(dates.startDate);
-  }
-
-  protected setToday(): void {
-    this.selectedDate.set(DateTime.now().startOf('day'));
-  }
-
-  protected setYesterday(): void {
-    this.selectedDate.set(DateTime.now().minus({ days: 1 }).startOf('day'));
-  }
-
-  protected clearDate(): void {
-    this.selectedDate.set(null);
-  }
-}
-
-export const SingleSelect: Story = {
-  render: () => ({
-    template: '<story-date-picker-input-single-select-demo />',
-    moduleMetadata: {
-      imports: [DatePickerInputSingleSelectDemo],
-    },
-  }),
-};
-
-@Component({
-  selector: 'story-date-picker-input-range-select-demo',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [DatePickerInput, StorybookExampleContainer, StorybookExampleContainerSection, Button, JsonPipe],
-  template: `
-    <org-storybook-example-container
-      title="Date Range Selection"
-      [currentState]="
-        'Range: ' + (startDate() ? startDate()!.toISO() : 'None') + ' to ' + (endDate() ? endDate()!.toISO() : 'None')
-      "
-    >
-      <org-storybook-example-container-section label="Date Picker">
-        <div class="max-w-sm">
-          <org-date-picker-input
-            name="date-range"
-            placeholder="Select date range..."
-            [allowRangeSelection]="true"
-            [selectedStartDate]="startDate()"
-            [selectedEndDate]="endDate()"
-            (dateSelected)="onDateSelected($event)"
-          />
-        </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Controls">
-        <div class="flex flex-wrap gap-2">
-          <org-button color="primary" size="sm" label="This Week" (clicked)="setThisWeek()" />
-          <org-button color="secondary" size="sm" label="Last Week" (clicked)="setLastWeek()" />
-          <org-button color="secondary" size="sm" label="Clear" (clicked)="clearDates()" />
-        </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="State">
-        <div class="text-sm space-y-1">
-          <div>
-            <strong>Start Date:</strong>
-            {{ startDate() ? startDate()!.toISO() : 'None' }}
-          </div>
-          <div>
-            <strong>End Date:</strong>
-            {{ endDate() ? endDate()!.toISO() : 'None' }}
-          </div>
-        </div>
-      </org-storybook-example-container-section>
-
-      <ul expected-behaviour class="mt-1 list-inside list-disc space-y-1">
-        <li>Allows selection of start and end dates</li>
-        <li>Calendar shows existing range when reopening for visual reference</li>
-        <li>First click on any date starts a fresh range with that date as start</li>
-        <li>Second click sets end date and closes calendar automatically</li>
-        <li>Clicking same date twice creates a same-day range (00:00 - 23:59)</li>
-        <li>Input value updates only when calendar closes with complete range</li>
-        <li>Escape or clicking outside with incomplete range clears all dates</li>
-        <li>Calendar highlights dates in range during selection</li>
-      </ul>
-    </org-storybook-example-container>
-  `,
-})
-class DatePickerInputRangeSelectDemo {
-  protected startDate = signal<DateTime | null>(null);
-  protected endDate = signal<DateTime | null>(null);
-
-  protected onDateSelected(dates: { startDate: DateTime | null; endDate: DateTime | null }): void {
-    console.log('Dates selected:', dates);
-    this.startDate.set(dates.startDate);
-    this.endDate.set(dates.endDate);
-  }
-
-  protected setThisWeek(): void {
-    const now = DateTime.now();
-    this.startDate.set(now.startOf('week').startOf('day'));
-    this.endDate.set(now.endOf('week').endOf('day'));
-  }
-
-  protected setLastWeek(): void {
-    const lastWeek = DateTime.now().minus({ weeks: 1 });
-    this.startDate.set(lastWeek.startOf('week').startOf('day'));
-    this.endDate.set(lastWeek.endOf('week').endOf('day'));
-  }
-
-  protected clearDates(): void {
-    this.startDate.set(null);
-    this.endDate.set(null);
-  }
-}
-
-export const RangeSelect: Story = {
-  render: () => ({
-    template: '<story-date-picker-input-range-select-demo />',
-    moduleMetadata: {
-      imports: [DatePickerInputRangeSelectDemo],
-    },
-  }),
-};
-
-@Component({
-  selector: 'story-date-picker-input-partial-range-demo',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [DatePickerInput, StorybookExampleContainer, StorybookExampleContainerSection, Button, JsonPipe],
-  template: `
-    <org-storybook-example-container
-      title="Partial Range Selection"
-      [currentState]="
-        'Type: ' +
-        selectionType() +
-        ' | Range: ' +
-        (startDate() ? startDate()!.toISO() : 'None') +
-        ' to ' +
-        (endDate() ? endDate()!.toISO() : 'None')
-      "
-    >
-      <org-storybook-example-container-section label="Date Picker">
-        <div class="max-w-sm">
-          <org-date-picker-input
-            name="partial-range"
-            placeholder="Select date range..."
-            [allowRangeSelection]="true"
-            [allowPartialRangeSelection]="true"
-            [selectedStartDate]="startDate()"
-            [selectedEndDate]="endDate()"
-            [partialRangeSelectionType]="selectionType()"
-            (dateSelected)="onDateSelected($event)"
-            (partialRangeSelectionTypeChange)="onSelectionTypeChange($event)"
-          />
-        </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Controls">
-        <div class="flex flex-wrap gap-2">
-          <org-button color="primary" size="sm" label="Set Start Only" (clicked)="setStartOnly()" />
-          <org-button color="primary" size="sm" label="Set End Only" (clicked)="setEndOnly()" />
-          <org-button color="primary" size="sm" label="Set Range" (clicked)="setRange()" />
-          <org-button color="secondary" size="sm" label="Clear" (clicked)="clearDates()" />
-        </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="State">
-        <div class="text-sm space-y-1">
-          <div><strong>Selection Type:</strong> {{ selectionType() }}</div>
-          <div>
-            <strong>Start Date:</strong>
-            {{ startDate() ? startDate()!.toISO() : 'None' }}
-          </div>
-          <div>
-            <strong>End Date:</strong>
-            {{ endDate() ? endDate()!.toISO() : 'None' }}
-          </div>
-        </div>
-      </org-storybook-example-container-section>
-
-      <ul expected-behaviour class="mt-1 list-inside list-disc space-y-1">
-        <li>Radio group appears below month/year selection in calendar</li>
-        <li>Three modes: range, on or before, on or after</li>
-        <li>Range mode: standard range selection, closes after second date</li>
-        <li>On or after mode: selects start date only, closes immediately, displays "On or after [DATE]"</li>
-        <li>On or before mode: selects end date only, closes immediately, displays "On or before [DATE]"</li>
-        <li>Switching between ANY modes clears calendar selection</li>
-        <li>Input value remains unchanged while switching modes</li>
-        <li>Mode change only emits when new date is selected and committed</li>
-        <li>Overlay remains open when mode changes</li>
-      </ul>
-    </org-storybook-example-container>
-  `,
-})
-class DatePickerInputPartialRangeDemo {
-  protected startDate = signal<DateTime | null>(null);
-  protected endDate = signal<DateTime | null>(null);
-  protected selectionType = signal<'range' | 'onOrBefore' | 'onOrAfter'>('range');
-
-  protected onDateSelected(dates: { startDate: DateTime | null; endDate: DateTime | null }): void {
-    console.log('Dates selected:', dates);
-    this.startDate.set(dates.startDate);
-    this.endDate.set(dates.endDate);
-  }
-
-  protected onSelectionTypeChange(type: 'range' | 'onOrBefore' | 'onOrAfter'): void {
-    console.log('Selection type changed:', type);
-    this.selectionType.set(type);
-  }
-
-  protected setStartOnly(): void {
-    this.startDate.set(DateTime.now().startOf('day'));
-    this.endDate.set(null);
-    this.selectionType.set('onOrAfter');
-  }
-
-  protected setEndOnly(): void {
-    this.startDate.set(null);
-    this.endDate.set(DateTime.now().plus({ days: 7 }).endOf('day'));
-    this.selectionType.set('onOrBefore');
-  }
-
-  protected setRange(): void {
-    this.startDate.set(DateTime.now().startOf('day'));
-    this.endDate.set(DateTime.now().plus({ days: 7 }).endOf('day'));
-    this.selectionType.set('range');
-  }
-
-  protected clearDates(): void {
-    this.startDate.set(null);
-    this.endDate.set(null);
-  }
-}
-
-export const PartialRangeSelect: Story = {
-  render: () => ({
-    template: '<story-date-picker-input-partial-range-demo />',
-    moduleMetadata: {
-      imports: [DatePickerInputPartialRangeDemo],
-    },
-  }),
-};
-
-@Component({
-  selector: 'story-date-picker-input-reactive-forms-demo',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    DatePickerInput,
-    ReactiveFormsModule,
-    StorybookExampleContainer,
-    StorybookExampleContainerSection,
-    Button,
-    JsonPipe,
-  ],
-  template: `
-    <org-storybook-example-container
-      title="Reactive Forms Integration"
-      currentState="Multiple form controls with different configurations"
-    >
-      <org-storybook-example-container-section label="Single Date Selection">
-        <div class="max-w-sm">
-          <org-date-picker-input
-            name="reactive-form-single-date"
-            [formControl]="singleDateFormControl"
-            placeholder="Select a date..."
-          />
-        </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Range Selection (No Partial)">
-        <div class="max-w-sm">
-          <org-date-picker-input
-            name="reactive-form-date-range"
-            [formControl]="rangeFormControl"
-            [allowRangeSelection]="true"
-            placeholder="Select date range..."
-          />
-        </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Range Selection (With Partial)">
-        <div class="max-w-sm">
-          <org-date-picker-input
-            name="reactive-form-partial-range"
-            [formControl]="partialRangeFormControl"
-            [allowRangeSelection]="true"
-            [allowPartialRangeSelection]="true"
-            placeholder="Select date range..."
-          />
-        </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Controls">
-        <div class="flex flex-wrap gap-2">
-          <org-button color="primary" size="sm" label="Set Single to Today" (clicked)="setToday()" />
-          <org-button color="primary" size="sm" label="Set Range to This Week" (clicked)="setThisWeek()" />
-          <org-button color="primary" size="sm" label="Set Partial to On or After" (clicked)="setOnOrAfter()" />
-          <org-button color="secondary" size="sm" label="Clear All" (clicked)="clearAll()" />
-          <org-button color="secondary" size="sm" label="Disable All" (clicked)="disableAll()" />
-          <org-button color="secondary" size="sm" label="Enable All" (clicked)="enableAll()" />
-        </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Form Values">
-        <div class="text-sm space-y-3">
-          <div>
-            <strong>Single Date Value:</strong>
-            {{ singleDateFormControl.value | json }}
-          </div>
-          <div>
-            <strong>Range Value:</strong>
-            {{ rangeFormControl.value | json }}
-          </div>
-          <div>
-            <strong>Partial Range Value:</strong>
-            {{ partialRangeFormControl.value | json }}
-          </div>
-        </div>
-      </org-storybook-example-container-section>
-
-      <ul expected-behaviour class="mt-1 list-inside list-disc space-y-1">
-        <li>Implements ControlValueAccessor for reactive forms</li>
-        <li>Each form control value is an object with startDate and endDate</li>
-        <li>Single date mode only uses startDate property</li>
-        <li>Form value updates immediately when selection completes</li>
-        <li>Form marked as touched when calendar closes (any reason)</li>
-        <li>Supports setValue, disable, enable</li>
-        <li>Calendar closes automatically after complete selection</li>
-      </ul>
-    </org-storybook-example-container>
-  `,
-})
-class DatePickerInputReactiveFormsDemo {
-  protected singleDateFormControl = new FormControl<{ startDate: DateTime | null; endDate: DateTime | null }>({
-    startDate: null,
-    endDate: null,
-  });
-  protected rangeFormControl = new FormControl<{ startDate: DateTime | null; endDate: DateTime | null }>({
-    startDate: null,
-    endDate: null,
-  });
-  protected partialRangeFormControl = new FormControl<{ startDate: DateTime | null; endDate: DateTime | null }>({
-    startDate: null,
-    endDate: null,
-  });
-  protected now = DateTime.now().startOf('day');
-  protected nowPlus7 = DateTime.now().plus({ days: 7 }).endOf('day');
-
-  protected setToday(): void {
-    this.singleDateFormControl.setValue({ startDate: this.now, endDate: null });
-  }
-
-  protected setThisWeek(): void {
-    this.rangeFormControl.setValue({ startDate: this.now, endDate: this.nowPlus7 });
-  }
-
-  protected setOnOrAfter(): void {
-    this.partialRangeFormControl.setValue({ startDate: this.now, endDate: null });
-  }
-
-  protected clearAll(): void {
-    this.singleDateFormControl.setValue({ startDate: null, endDate: null });
-    this.rangeFormControl.setValue({ startDate: null, endDate: null });
-    this.partialRangeFormControl.setValue({ startDate: null, endDate: null });
-  }
-
-  protected disableAll(): void {
-    this.singleDateFormControl.disable();
-    this.rangeFormControl.disable();
-    this.partialRangeFormControl.disable();
-  }
-
-  protected enableAll(): void {
-    this.singleDateFormControl.enable();
-    this.rangeFormControl.enable();
-    this.partialRangeFormControl.enable();
-  }
-}
-
-export const ReactiveForms: Story = {
-  render: () => ({
-    template: '<story-date-picker-input-reactive-forms-demo />',
-    moduleMetadata: {
-      imports: [DatePickerInputReactiveFormsDemo],
-    },
-  }),
-};
-
-@Component({
-  selector: 'story-date-picker-input-simple-forms-demo',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [DatePickerInput, StorybookExampleContainer, StorybookExampleContainerSection, Button, JsonPipe],
-  template: `
-    <org-storybook-example-container
-      title="Simple Forms Integration"
-      currentState="Multiple date pickers with different configurations"
-    >
-      <org-storybook-example-container-section label="Single Date Selection">
-        <div class="max-w-sm">
-          <org-date-picker-input
-            name="simple-form-single-date"
-            placeholder="Select a date..."
-            [selectedStartDate]="singleDate()"
-            (dateSelected)="onSingleDateSelected($event)"
-          />
-        </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Range Selection (No Partial)">
-        <div class="max-w-sm">
-          <org-date-picker-input
-            name="simple-form-date-range"
-            placeholder="Select date range..."
-            [allowRangeSelection]="true"
-            [selectedStartDate]="rangeStartDate()"
-            [selectedEndDate]="rangeEndDate()"
-            (dateSelected)="onRangeDateSelected($event)"
-          />
-        </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Range Selection (With Partial)">
-        <div class="max-w-sm">
-          <org-date-picker-input
-            name="simple-form-partial-range"
-            placeholder="Select date range..."
-            [allowRangeSelection]="true"
-            [allowPartialRangeSelection]="true"
-            [selectedStartDate]="partialRangeStartDate()"
-            [selectedEndDate]="partialRangeEndDate()"
-            (dateSelected)="onPartialRangeDateSelected($event)"
-          />
-        </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Controls">
-        <div class="flex flex-wrap gap-2">
-          <org-button color="primary" size="sm" label="Set Single to Today" (clicked)="setToday()" />
-          <org-button color="primary" size="sm" label="Set Range to This Week" (clicked)="setThisWeek()" />
-          <org-button color="primary" size="sm" label="Set Partial to On or After" (clicked)="setOnOrAfter()" />
-          <org-button color="secondary" size="sm" label="Clear All" (clicked)="clearAll()" />
-        </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Current Values">
-        <div class="text-sm space-y-3">
-          <div>
-            <strong>Single Date:</strong>
-            {{ singleDate() ? singleDate()!.toISO() : 'None' }}
-          </div>
-          <div>
-            <strong>Range Start:</strong>
-            {{ rangeStartDate() ? rangeStartDate()!.toISO() : 'None' }}
-          </div>
-          <div>
-            <strong>Range End:</strong>
-            {{ rangeEndDate() ? rangeEndDate()!.toISO() : 'None' }}
-          </div>
-          <div>
-            <strong>Partial Range Start:</strong>
-            {{ partialRangeStartDate() ? partialRangeStartDate()!.toISO() : 'None' }}
-          </div>
-          <div>
-            <strong>Partial Range End:</strong>
-            {{ partialRangeEndDate() ? partialRangeEndDate()!.toISO() : 'None' }}
-          </div>
-        </div>
-      </org-storybook-example-container-section>
-
-      <ul expected-behaviour class="mt-1 list-inside list-disc space-y-1">
-        <li>Simple event-based integration without forms</li>
-        <li>dateSelected event emits immediately when selection completes</li>
-        <li>Pass selectedStartDate and selectedEndDate as inputs</li>
-        <li>Single date mode only uses startDate</li>
-        <li>Calendar closes automatically after complete selection</li>
-        <li>Parent component responsible for updating input values</li>
-      </ul>
-    </org-storybook-example-container>
-  `,
-})
-class DatePickerInputSimpleFormsDemo {
-  protected singleDate = signal<DateTime | null>(null);
-  protected rangeStartDate = signal<DateTime | null>(null);
-  protected rangeEndDate = signal<DateTime | null>(null);
-  protected partialRangeStartDate = signal<DateTime | null>(null);
-  protected partialRangeEndDate = signal<DateTime | null>(null);
-
-  protected onSingleDateSelected(dates: { startDate: DateTime | null; endDate: DateTime | null }): void {
-    console.log('Single date selected:', dates);
-    this.singleDate.set(dates.startDate);
-  }
-
-  protected onRangeDateSelected(dates: { startDate: DateTime | null; endDate: DateTime | null }): void {
-    console.log('Range dates selected:', dates);
-    this.rangeStartDate.set(dates.startDate);
-    this.rangeEndDate.set(dates.endDate);
-  }
-
-  protected onPartialRangeDateSelected(dates: { startDate: DateTime | null; endDate: DateTime | null }): void {
-    console.log('Partial range dates selected:', dates);
-    this.partialRangeStartDate.set(dates.startDate);
-    this.partialRangeEndDate.set(dates.endDate);
-  }
-
-  protected setToday(): void {
-    this.singleDate.set(DateTime.now().startOf('day'));
-  }
-
-  protected setThisWeek(): void {
-    const now = DateTime.now();
-    this.rangeStartDate.set(now.startOf('week').startOf('day'));
-    this.rangeEndDate.set(now.endOf('week').endOf('day'));
-  }
-
-  protected setOnOrAfter(): void {
-    this.partialRangeStartDate.set(DateTime.now().startOf('day'));
-    this.partialRangeEndDate.set(null);
-  }
-
-  protected clearAll(): void {
-    this.singleDate.set(null);
-    this.rangeStartDate.set(null);
-    this.rangeEndDate.set(null);
-    this.partialRangeStartDate.set(null);
-    this.partialRangeEndDate.set(null);
-  }
-}
-
-export const SimpleForms: Story = {
-  render: () => ({
-    template: '<story-date-picker-input-simple-forms-demo />',
-    moduleMetadata: {
-      imports: [DatePickerInputSimpleFormsDemo],
-    },
-  }),
-};
-
-@Component({
-  selector: 'story-date-picker-input-reactive-forms-prepopulated-demo',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    DatePickerInput,
-    ReactiveFormsModule,
-    StorybookExampleContainer,
-    StorybookExampleContainerSection,
-    Button,
-    JsonPipe,
-  ],
-  template: `
-    <org-storybook-example-container
-      title="Reactive Forms Integration (Prepopulated)"
-      currentState="Multiple form controls with different configurations and prepopulated values"
-    >
-      <org-storybook-example-container-section label="Single Date Selection">
-        <div class="max-w-sm">
-          <org-date-picker-input
-            name="reactive-form-prepopulated-single-date"
-            [formControl]="singleDateFormControl"
-            placeholder="Select a date..."
-          />
-        </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Range Selection (No Partial)">
-        <div class="max-w-sm">
-          <org-date-picker-input
-            name="reactive-form-prepopulated-date-range"
-            [formControl]="rangeFormControl"
-            [allowRangeSelection]="true"
-            placeholder="Select date range..."
-          />
-        </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Range Selection (With Partial)">
-        <div class="max-w-sm">
-          <org-date-picker-input
-            name="reactive-form-prepopulated-partial-range"
-            [formControl]="partialRangeFormControl"
-            [allowRangeSelection]="true"
-            [allowPartialRangeSelection]="true"
-            [partialRangeSelectionType]="partialRangeSelectionType()"
-            (partialRangeSelectionTypeChange)="onPartialRangeSelectionTypeChange($event)"
-            placeholder="Select date range..."
-          />
-        </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Controls">
-        <div class="flex flex-wrap gap-2">
-          <org-button color="primary" size="sm" label="Set Single to Today" (clicked)="setToday()" />
-          <org-button color="primary" size="sm" label="Set Range to This Week" (clicked)="setThisWeek()" />
-          <org-button color="primary" size="sm" label="Set Partial to On or After" (clicked)="setOnOrAfter()" />
-          <org-button color="secondary" size="sm" label="Clear All" (clicked)="clearAll()" />
-          <org-button color="secondary" size="sm" label="Disable All" (clicked)="disableAll()" />
-          <org-button color="secondary" size="sm" label="Enable All" (clicked)="enableAll()" />
-        </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Form Values">
-        <div class="text-sm space-y-3">
-          <div>
-            <strong>Single Date Value:</strong>
-            {{ singleDateFormControl.value | json }}
-          </div>
-          <div>
-            <strong>Range Value:</strong>
-            {{ rangeFormControl.value | json }}
-          </div>
-          <div>
-            <strong>Partial Range Value:</strong>
-            {{ partialRangeFormControl.value | json }}
-          </div>
-          <div>
-            <strong>Partial Range Selection Type:</strong>
-            {{ partialRangeSelectionType() }}
-          </div>
-        </div>
-      </org-storybook-example-container-section>
-
-      <ul expected-behaviour class="mt-1 list-inside list-disc space-y-1">
-        <li>Implements ControlValueAccessor for reactive forms</li>
-        <li>Each form control value is an object with startDate and endDate</li>
-        <li>Single date mode only uses startDate property</li>
-        <li>All date pickers are prepopulated with values on load</li>
-        <li>Form value updates immediately when selection completes</li>
-        <li>Form marked as touched when calendar closes (any reason)</li>
-        <li>Supports setValue, disable, enable</li>
-        <li>Calendar closes automatically after complete selection</li>
-      </ul>
-    </org-storybook-example-container>
-  `,
-})
-class DatePickerInputReactiveFormsPrepopulatedDemo {
-  protected partialRangeSelectionType = signal<CalendarPartialRangeSelectionType>('onOrAfter');
-
-  protected now = DateTime.now().startOf('day');
-  protected nowPlus7 = DateTime.now().plus({ days: 7 }).endOf('day');
-
-  protected singleDateFormControl = new FormControl<{ startDate: DateTime | null; endDate: DateTime | null }>({
-    startDate: this.now,
-    endDate: null,
-  });
-  protected rangeFormControl = new FormControl<{ startDate: DateTime | null; endDate: DateTime | null }>({
-    startDate: DateTime.now().startOf('week').startOf('day'),
-    endDate: DateTime.now().endOf('week').endOf('day'),
-  });
-  protected partialRangeFormControl = new FormControl<{ startDate: DateTime | null; endDate: DateTime | null }>({
-    startDate: this.now,
-    endDate: null,
-  });
-
-  protected setToday(): void {
-    this.singleDateFormControl.setValue({ startDate: this.now, endDate: null });
-  }
-
-  protected setThisWeek(): void {
-    this.rangeFormControl.setValue({ startDate: this.now, endDate: this.nowPlus7 });
-  }
-
-  protected setOnOrAfter(): void {
-    this.partialRangeFormControl.setValue({ startDate: this.now, endDate: null });
-  }
-
-  protected clearAll(): void {
-    this.singleDateFormControl.setValue({ startDate: null, endDate: null });
-    this.rangeFormControl.setValue({ startDate: null, endDate: null });
-    this.partialRangeFormControl.setValue({ startDate: null, endDate: null });
-  }
-
-  protected disableAll(): void {
-    this.singleDateFormControl.disable();
-    this.rangeFormControl.disable();
-    this.partialRangeFormControl.disable();
-  }
-
-  protected enableAll(): void {
-    this.singleDateFormControl.enable();
-    this.rangeFormControl.enable();
-    this.partialRangeFormControl.enable();
-  }
-
-  protected onPartialRangeSelectionTypeChange(type: CalendarPartialRangeSelectionType): void {
-    console.log('Partial range selection type changed:', type);
-    this.partialRangeSelectionType.set(type);
-  }
-}
-
-export const ReactiveFormsPrepopulated: Story = {
-  render: () => ({
-    template: '<story-date-picker-input-reactive-forms-prepopulated-demo />',
-    moduleMetadata: {
-      imports: [DatePickerInputReactiveFormsPrepopulatedDemo],
-    },
-  }),
-};
-
-@Component({
-  selector: 'story-date-picker-input-simple-forms-prepopulated-demo',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [DatePickerInput, StorybookExampleContainer, StorybookExampleContainerSection, Button, JsonPipe],
-  template: `
-    <org-storybook-example-container
-      title="Simple Forms Integration (Prepopulated)"
-      currentState="Multiple date pickers with different configurations and prepopulated values"
-    >
-      <org-storybook-example-container-section label="Single Date Selection">
-        <div class="max-w-sm">
-          <org-date-picker-input
-            name="simple-form-prepopulated-single-date"
-            placeholder="Select a date..."
-            [selectedStartDate]="singleDate()"
-            (dateSelected)="onSingleDateSelected($event)"
-          />
-        </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Range Selection (No Partial)">
-        <div class="max-w-sm">
-          <org-date-picker-input
-            name="simple-form-prepopulated-date-range"
-            placeholder="Select date range..."
-            [allowRangeSelection]="true"
-            [selectedStartDate]="rangeStartDate()"
-            [selectedEndDate]="rangeEndDate()"
-            (dateSelected)="onRangeDateSelected($event)"
-          />
-        </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Range Selection (With Partial)">
-        <div class="max-w-sm">
-          <org-date-picker-input
-            name="simple-form-prepopulated-partial-range"
-            placeholder="Select date range..."
-            [allowRangeSelection]="true"
-            [allowPartialRangeSelection]="true"
-            [partialRangeSelectionType]="partialRangeSelectionType()"
-            [selectedStartDate]="partialRangeStartDate()"
-            [selectedEndDate]="partialRangeEndDate()"
-            (dateSelected)="onPartialRangeDateSelected($event)"
-            (partialRangeSelectionTypeChange)="onPartialRangeSelectionTypeChange($event)"
-          />
-        </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Controls">
-        <div class="flex flex-wrap gap-2">
-          <org-button color="primary" size="sm" label="Set Single to Today" (clicked)="setToday()" />
-          <org-button color="primary" size="sm" label="Set Range to This Week" (clicked)="setThisWeek()" />
-          <org-button color="primary" size="sm" label="Set Partial to On or After" (clicked)="setOnOrAfter()" />
-          <org-button color="secondary" size="sm" label="Clear All" (clicked)="clearAll()" />
-        </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Current Values">
-        <div class="text-sm space-y-3">
-          <div>
-            <strong>Single Date:</strong>
-            {{ singleDate() ? singleDate()!.toISO() : 'None' }}
-          </div>
-          <div>
-            <strong>Range Start:</strong>
-            {{ rangeStartDate() ? rangeStartDate()!.toISO() : 'None' }}
-          </div>
-          <div>
-            <strong>Range End:</strong>
-            {{ rangeEndDate() ? rangeEndDate()!.toISO() : 'None' }}
-          </div>
-          <div>
-            <strong>Partial Range Start:</strong>
-            {{ partialRangeStartDate() ? partialRangeStartDate()!.toISO() : 'None' }}
-          </div>
-          <div>
-            <strong>Partial Range End:</strong>
-            {{ partialRangeEndDate() ? partialRangeEndDate()!.toISO() : 'None' }}
-          </div>
-          <div>
-            <strong>Partial Range Selection Type:</strong>
-            {{ partialRangeSelectionType() }}
-          </div>
-        </div>
-      </org-storybook-example-container-section>
-
-      <ul expected-behaviour class="mt-1 list-inside list-disc space-y-1">
-        <li>Simple event-based integration without forms</li>
-        <li>dateSelected event emits immediately when selection completes</li>
-        <li>Pass selectedStartDate and selectedEndDate as inputs</li>
-        <li>Single date mode only uses startDate</li>
-        <li>All date pickers are prepopulated with values on load</li>
-        <li>Calendar closes automatically after complete selection</li>
-        <li>Parent component responsible for updating input values</li>
-      </ul>
-    </org-storybook-example-container>
-  `,
-})
-class DatePickerInputSimpleFormsPrepopulatedDemo {
-  protected singleDate = signal<DateTime | null>(DateTime.now().startOf('day'));
-  protected rangeStartDate = signal<DateTime | null>(DateTime.now().startOf('week').startOf('day'));
-  protected rangeEndDate = signal<DateTime | null>(DateTime.now().endOf('week').endOf('day'));
-  protected partialRangeStartDate = signal<DateTime | null>(DateTime.now().startOf('day'));
-  protected partialRangeEndDate = signal<DateTime | null>(null);
-  protected partialRangeSelectionType = signal<CalendarPartialRangeSelectionType>('onOrAfter');
-
-  protected onSingleDateSelected(dates: { startDate: DateTime | null; endDate: DateTime | null }): void {
-    console.log('Single date selected:', dates);
-    this.singleDate.set(dates.startDate);
-  }
-
-  protected onRangeDateSelected(dates: { startDate: DateTime | null; endDate: DateTime | null }): void {
-    console.log('Range dates selected:', dates);
-    this.rangeStartDate.set(dates.startDate);
-    this.rangeEndDate.set(dates.endDate);
-  }
-
-  protected onPartialRangeDateSelected(dates: { startDate: DateTime | null; endDate: DateTime | null }): void {
-    console.log('Partial range dates selected:', dates);
-    this.partialRangeStartDate.set(dates.startDate);
-    this.partialRangeEndDate.set(dates.endDate);
-  }
-
-  protected setToday(): void {
-    this.singleDate.set(DateTime.now().startOf('day'));
-  }
-
-  protected setThisWeek(): void {
-    const now = DateTime.now();
-    this.rangeStartDate.set(now.startOf('week').startOf('day'));
-    this.rangeEndDate.set(now.endOf('week').endOf('day'));
-  }
-
-  protected setOnOrAfter(): void {
-    this.partialRangeStartDate.set(DateTime.now().startOf('day'));
-    this.partialRangeEndDate.set(null);
-  }
-
-  protected clearAll(): void {
-    this.singleDate.set(null);
-    this.rangeStartDate.set(null);
-    this.rangeEndDate.set(null);
-    this.partialRangeStartDate.set(null);
-    this.partialRangeEndDate.set(null);
-  }
-
-  protected onPartialRangeSelectionTypeChange(type: CalendarPartialRangeSelectionType): void {
-    console.log('Partial range selection type changed:', type);
-    this.partialRangeSelectionType.set(type);
-  }
-}
-
-export const SimpleFormsPrepopulated: Story = {
-  render: () => ({
-    template: '<story-date-picker-input-simple-forms-prepopulated-demo />',
-    moduleMetadata: {
-      imports: [DatePickerInputSimpleFormsPrepopulatedDemo],
-    },
-  }),
-};
-
-@Component({
-  selector: 'story-date-picker-input-validation-single-demo',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [DatePickerInput, StorybookExampleContainer, StorybookExampleContainerSection, Button, JsonPipe, FormField],
-  template: `
-    <org-storybook-example-container
-      title="Validation - Single Date Required"
-      [currentState]="'Has error: ' + hasError()"
-    >
-      <org-storybook-example-container-section label="Date Picker with Validation">
-        <div class="max-w-sm">
-          <org-form-field [validationMessage]="validationMessage()">
-            <org-date-picker-input
-              name="validation-single"
-              placeholder="Select a date..."
-              [selectedStartDate]="selectedDate()"
-              (dateSelected)="onDateSelected($event)"
-            />
-          </org-form-field>
-        </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Controls">
-        <div class="flex flex-wrap gap-2">
-          <org-button color="primary" size="sm" label="Trigger Validation" (clicked)="validateSelection()" />
-          <org-button color="secondary" size="sm" label="Clear Validation" (clicked)="clearValidation()" />
-          <org-button color="secondary" size="sm" label="Clear Date" (clicked)="clearDate()" />
-        </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="State">
-        <div class="text-sm space-y-1">
-          <div>
-            <strong>Selected Date:</strong>
-            {{ selectedDate() ? selectedDate()!.toISO() : 'None' }}
-          </div>
-          <div><strong>Validation Message:</strong> "{{ validationMessage() }}"</div>
-          <div><strong>Has Error:</strong> {{ hasError() }}</div>
-        </div>
-      </org-storybook-example-container-section>
-
-      <ul expected-behaviour class="mt-1 list-inside list-disc space-y-1">
-        <li>Validation message is displayed when provided</li>
-        <li>Date picker shows error state with red border</li>
-        <li>Validation message appears below the input</li>
-        <li>Validation can be triggered programmatically</li>
-      </ul>
-    </org-storybook-example-container>
-  `,
-})
-class DatePickerInputValidationSingleDemo {
-  protected selectedDate = signal<DateTime | null>(null);
-  protected validationMessage = signal<string | null>(null);
-  protected hasError = computed<boolean>(() => !!this.validationMessage()?.trim());
-
-  protected onDateSelected(dates: { startDate: DateTime | null; endDate: DateTime | null }): void {
-    console.log('Date selected:', dates);
-    this.selectedDate.set(dates.startDate);
-
-    if (dates.startDate && this.hasError()) {
-      this.clearValidation();
-    }
-  }
-
-  protected validateSelection(): void {
-    if (!this.selectedDate()) {
-      this.validationMessage.set('Date is required');
-    } else {
-      this.validationMessage.set('');
-    }
-  }
-
-  protected clearValidation(): void {
-    this.validationMessage.set('');
-  }
-
-  protected clearDate(): void {
-    this.selectedDate.set(null);
-  }
-}
-
-export const ValidationSingleRequired: Story = {
-  render: () => ({
-    template: '<story-date-picker-input-validation-single-demo />',
-    moduleMetadata: {
-      imports: [DatePickerInputValidationSingleDemo],
-    },
-  }),
-};
-
-@Component({
-  selector: 'story-date-picker-input-validation-range-either-demo',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [DatePickerInput, StorybookExampleContainer, StorybookExampleContainerSection, Button, JsonPipe, FormField],
-  template: `
-    <org-storybook-example-container
-      title="Validation - Either Date Required (Range)"
-      [currentState]="'Has error: ' + hasError()"
-    >
-      <org-storybook-example-container-section label="Date Picker with Validation">
-        <div class="max-w-sm">
-          <org-form-field [validationMessage]="validationMessage()">
-            <org-date-picker-input
-              name="validation-range-either"
-              placeholder="Select at least one date..."
-              [allowRangeSelection]="true"
-              [allowPartialRangeSelection]="true"
-              [selectedStartDate]="startDate()"
-              [selectedEndDate]="endDate()"
-              (dateSelected)="onDateSelected($event)"
-            />
-          </org-form-field>
-        </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Controls">
-        <div class="flex flex-wrap gap-2">
-          <org-button color="primary" size="sm" label="Trigger Validation" (clicked)="validateSelection()" />
-          <org-button color="secondary" size="sm" label="Clear Validation" (clicked)="clearValidation()" />
-          <org-button color="secondary" size="sm" label="Clear Dates" (clicked)="clearDates()" />
-        </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="State">
-        <div class="text-sm space-y-1">
-          <div>
-            <strong>Start Date:</strong>
-            {{ startDate() ? startDate()!.toISO() : 'None' }}
-          </div>
-          <div>
-            <strong>End Date:</strong>
-            {{ endDate() ? endDate()!.toISO() : 'None' }}
-          </div>
-          <div><strong>Validation Message:</strong> "{{ validationMessage() }}"</div>
-          <div><strong>Has Error:</strong> {{ hasError() }}</div>
-        </div>
-      </org-storybook-example-container-section>
-
-      <ul expected-behaviour class="mt-1 list-inside list-disc space-y-1">
-        <li>At least one date (start or end) must be selected</li>
-        <li>Validation message shows when no dates are selected</li>
-        <li>Useful for partial range selection validation</li>
-      </ul>
-    </org-storybook-example-container>
-  `,
-})
-class DatePickerInputValidationRangeEitherDemo {
-  protected startDate = signal<DateTime | null>(null);
-  protected endDate = signal<DateTime | null>(null);
-  protected validationMessage = signal<string | null>(null);
-  protected hasError = computed<boolean>(() => !!this.validationMessage()?.trim());
-
-  protected onDateSelected(dates: { startDate: DateTime | null; endDate: DateTime | null }): void {
-    console.log('Dates selected:', dates);
-    this.startDate.set(dates.startDate);
-    this.endDate.set(dates.endDate);
-
-    if ((dates.startDate || dates.endDate) && this.hasError()) {
-      this.clearValidation();
-    }
-  }
-
-  protected validateSelection(): void {
-    if (!this.startDate() && !this.endDate()) {
-      this.validationMessage.set('At least one date is required');
-    } else {
-      this.validationMessage.set('');
-    }
-  }
-
-  protected clearValidation(): void {
-    this.validationMessage.set('');
-  }
-
-  protected clearDates(): void {
-    this.startDate.set(null);
-    this.endDate.set(null);
-  }
-}
-
-export const ValidationRangeEitherRequired: Story = {
-  render: () => ({
-    template: '<story-date-picker-input-validation-range-either-demo />',
-    moduleMetadata: {
-      imports: [DatePickerInputValidationRangeEitherDemo],
-    },
-  }),
-};
-
-@Component({
-  selector: 'story-date-picker-input-validation-range-both-demo',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [DatePickerInput, StorybookExampleContainer, StorybookExampleContainerSection, Button, JsonPipe, FormField],
-  template: `
-    <org-storybook-example-container
-      title="Validation - Both Dates Required (Range)"
-      [currentState]="'Has error: ' + hasError()"
-    >
-      <org-storybook-example-container-section label="Date Picker with Validation">
-        <div class="max-w-sm">
-          <org-form-field [validationMessage]="validationMessage()">
-            <org-date-picker-input
-              name="validation-range-both"
-              placeholder="Select both dates..."
-              [allowRangeSelection]="true"
-              [selectedStartDate]="startDate()"
-              [selectedEndDate]="endDate()"
-              (dateSelected)="onDateSelected($event)"
-            />
-          </org-form-field>
-        </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Controls">
-        <div class="flex flex-wrap gap-2">
-          <org-button color="primary" size="sm" label="Trigger Validation" (clicked)="validateSelection()" />
-          <org-button color="secondary" size="sm" label="Clear Validation" (clicked)="clearValidation()" />
-          <org-button color="secondary" size="sm" label="Clear Dates" (clicked)="clearDates()" />
-        </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="State">
-        <div class="text-sm space-y-1">
-          <div>
-            <strong>Start Date:</strong>
-            {{ startDate() ? startDate()!.toISO() : 'None' }}
-          </div>
-          <div>
-            <strong>End Date:</strong>
-            {{ endDate() ? endDate()!.toISO() : 'None' }}
-          </div>
-          <div><strong>Validation Message:</strong> "{{ validationMessage() }}"</div>
-          <div><strong>Has Error:</strong> {{ hasError() }}</div>
-        </div>
-      </org-storybook-example-container-section>
-
-      <ul expected-behaviour class="mt-1 list-inside list-disc space-y-1">
-        <li>Both start and end dates must be selected</li>
-        <li>Validation message shows when either date is missing</li>
-        <li>Useful for complete date range validation</li>
-      </ul>
-    </org-storybook-example-container>
-  `,
-})
-class DatePickerInputValidationRangeBothDemo {
-  protected startDate = signal<DateTime | null>(null);
-  protected endDate = signal<DateTime | null>(null);
-  protected validationMessage = signal<string | null>(null);
-  protected hasError = computed<boolean>(() => !!this.validationMessage()?.trim());
-
-  protected onDateSelected(dates: { startDate: DateTime | null; endDate: DateTime | null }): void {
-    console.log('Dates selected:', dates);
-    this.startDate.set(dates.startDate);
-    this.endDate.set(dates.endDate);
-
-    if (dates.startDate && dates.endDate && this.hasError()) {
-      this.clearValidation();
-    }
-  }
-
-  protected validateSelection(): void {
-    if (!this.startDate() || !this.endDate()) {
-      this.validationMessage.set('Both start and end dates are required');
-    } else {
-      this.validationMessage.set('');
-    }
-  }
-
-  protected clearValidation(): void {
-    this.validationMessage.set('');
-  }
-
-  protected clearDates(): void {
-    this.startDate.set(null);
-    this.endDate.set(null);
-  }
-}
-
-export const ValidationRangeBothRequired: Story = {
-  render: () => ({
-    template: '<story-date-picker-input-validation-range-both-demo />',
-    moduleMetadata: {
-      imports: [DatePickerInputValidationRangeBothDemo],
-    },
-  }),
-};
-
-export const ValidationSpaceReservation: Story = {
+export const LiveDemo: Story = {
   parameters: {
     docs: {
       description: {
         story:
-          'Comparison of validation space reservation behavior. When reserveValidationSpace is true, space is always reserved for validation messages to maintain consistent layout. When false, space is only used when a validation message is present.',
+          'Interactive demo — drive every visual axis of the date picker (mode, commit mode, date / time format, allow-clear, allow-trigger-clear, disabled) and observe the live result in the canvas.',
       },
     },
   },
   render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Validation Space Reservation"
-        currentState="Comparing space reservation behaviors"
-      >
-        <org-storybook-example-container-section label="Reserve Space = true (default)">
-          <org-form-fields>
-            <org-form-field [reserveValidationSpace]="true">
-              <org-date-picker-input
-                name="reserve-true-date-picker-1"
-                placeholder="Date Picker 1 (no error)"
-              />
-            </org-form-field>
-            <org-form-field [reserveValidationSpace]="true" validationMessage="This field has an error">
-              <org-date-picker-input
-                name="reserve-true-date-picker-2"
-                placeholder="Date Picker 2 (with error)"
-              />
-            </org-form-field>
-            <org-form-field [reserveValidationSpace]="true">
-              <org-date-picker-input
-                name="reserve-true-date-picker-3"
-                placeholder="Date Picker 3 (no error)"
-              />
-            </org-form-field>
-          </org-form-fields>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Reserve Space = false">
-          <org-form-fields>
-            <org-form-field [reserveValidationSpace]="false">
-              <org-date-picker-input
-                name="reserve-false-date-picker-1"
-                placeholder="Date Picker 1 (no error)"
-              />
-            </org-form-field>
-            <org-form-field [reserveValidationSpace]="false" validationMessage="This field has an error">
-              <org-date-picker-input
-                name="reserve-false-date-picker-2"
-                placeholder="Date Picker 2 (with error)"
-              />
-            </org-form-field>
-            <org-form-field [reserveValidationSpace]="false">
-              <org-date-picker-input
-                name="reserve-false-date-picker-3"
-                placeholder="Date Picker 3 (no error)"
-              />
-            </org-form-field>
-          </org-form-fields>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc space-y-1">
-          <li><strong>reserveValidationSpace=true</strong>: Space is always reserved for validation messages (maintains consistent spacing between date pickers)</li>
-          <li><strong>reserveValidationSpace=false</strong>: Space is only allocated when a validation message is present (date pickers collapse together when no errors)</li>
-          <li>Notice how the left column maintains equal spacing between all date pickers</li>
-          <li>Notice how the right column's date pickers 1 and 3 are closer together since they have no error messages</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
+    template: '<story-date-picker-input-live-demo />',
     moduleMetadata: {
-      imports: [
-        DatePickerInput,
-        FormField,
-        FormFields,
-        StorybookExampleContainer,
-        StorybookExampleContainerSection,
-        FormFields,
-      ],
+      imports: [DatePickerInputLiveDemoStory],
     },
   }),
 };
 
-@Component({
-  selector: 'story-date-picker-input-clear-button-demo',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [DatePickerInput, StorybookExampleContainer, StorybookExampleContainerSection, Button, JsonPipe],
-  template: `
-    <org-storybook-example-container
-      title="Clear Button Feature"
-      description="The date picker can include a clear button in the calendar footer to clear selected dates."
-    >
-      <org-storybook-example-container-section label="With Clear Button (default)">
-        <org-date-picker-input
-          name="with-clear"
-          placeholder="Select date..."
-          [selectedStartDate]="singleDateWithClear()"
-          (dateSelected)="onSingleDateWithClearChange($event)"
-        />
-        <div class="mt-2 text-sm">Selected: {{ singleDateWithClear() ? singleDateWithClear()!.toISO() : 'None' }}</div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Without Clear Button">
-        <org-date-picker-input
-          name="without-clear"
-          placeholder="Select date..."
-          [allowClear]="false"
-          [selectedStartDate]="singleDateWithoutClear()"
-          (dateSelected)="onSingleDateWithoutClearChange($event)"
-        />
-        <div class="mt-2 text-sm">
-          Selected: {{ singleDateWithoutClear() ? singleDateWithoutClear()!.toISO() : 'None' }}
-        </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Range Selection With Clear">
-        <org-date-picker-input
-          name="range-with-clear"
-          placeholder="Select date range..."
-          [allowRangeSelection]="true"
-          [selectedStartDate]="rangeStartDate()"
-          [selectedEndDate]="rangeEndDate()"
-          (dateSelected)="onRangeDateChange($event)"
-        />
-        <div class="mt-2 text-sm">
-          Start: {{ rangeStartDate() ? rangeStartDate()!.toISO() : 'None' }}<br />
-          End: {{ rangeEndDate() ? rangeEndDate()!.toISO() : 'None' }}
-        </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Keyboard Support">
-        <div class="mb-2 text-sm">
-          Press <kbd class="px-1 py-0.5 bg-neutral rounded border border-neutral">Delete</kbd> or
-          <kbd class="px-1 py-0.5 bg-neutral rounded border border-neutral">Backspace</kbd>
-          while the calendar is focused to clear the selection.
-        </div>
-        <org-date-picker-input
-          name="keyboard-clear"
-          placeholder="Select date..."
-          [selectedStartDate]="keyboardClearDate()"
-          (dateSelected)="onKeyboardClearDateChange($event)"
-        />
-        <div class="mt-2 text-sm">Selected: {{ keyboardClearDate() ? keyboardClearDate()!.toISO() : 'None' }}</div>
-      </org-storybook-example-container-section>
-
-      <ul expected-behaviour class="mt-1 list-inside list-disc space-y-1">
-        <li><strong>Clear button</strong>: Appears in the calendar footer when allowClear is true (default)</li>
-        <li><strong>Disabled state</strong>: Clear button is disabled when no date is selected</li>
-        <li>
-          <strong>Keyboard shortcuts</strong>: Delete and Backspace keys clear the selection when calendar is focused
-        </li>
-        <li><strong>Close on clear</strong>: The calendar overlay closes automatically after clearing</li>
-        <li><strong>Form integration</strong>: Clearing marks the form as dirty and touched in reactive forms</li>
-        <li><strong>Works with ranges</strong>: Clear button works for both single date and range selection modes</li>
-      </ul>
-    </org-storybook-example-container>
-  `,
-})
-class DatePickerInputClearButtonDemo {
-  protected singleDateWithClear = signal<DateTime | null>(DateTime.now());
-  protected singleDateWithoutClear = signal<DateTime | null>(DateTime.now());
-  protected rangeStartDate = signal<DateTime | null>(DateTime.now().minus({ days: 3 }));
-  protected rangeEndDate = signal<DateTime | null>(DateTime.now().plus({ days: 3 }));
-  protected keyboardClearDate = signal<DateTime | null>(DateTime.now());
-
-  protected onSingleDateWithClearChange(dates: { startDate: DateTime | null; endDate: DateTime | null }): void {
-    this.singleDateWithClear.set(dates.startDate);
-  }
-
-  protected onSingleDateWithoutClearChange(dates: { startDate: DateTime | null; endDate: DateTime | null }): void {
-    this.singleDateWithoutClear.set(dates.startDate);
-  }
-
-  protected onRangeDateChange(dates: { startDate: DateTime | null; endDate: DateTime | null }): void {
-    this.rangeStartDate.set(dates.startDate);
-    this.rangeEndDate.set(dates.endDate);
-  }
-
-  protected onKeyboardClearDateChange(dates: { startDate: DateTime | null; endDate: DateTime | null }): void {
-    this.keyboardClearDate.set(dates.startDate);
-  }
-}
-
-export const ClearButton: Story = {
+export const Showcase: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Comprehensive showcase of every date-picker-input axis — single / range / partial-range modes, popover clear, trigger-edge clear, manual commit, prepopulated values, validation surface, and reservation behaviour — in a single scrollable view.',
+      },
+    },
+  },
   render: () => ({
+    template: '<story-date-picker-input-showcase />',
     moduleMetadata: {
-      imports: [DatePickerInputClearButtonDemo],
+      imports: [DatePickerInputShowcaseStory],
     },
-    template: '<story-date-picker-input-clear-button-demo />',
   }),
 };
 
-@Component({
-  selector: 'story-date-picker-input-focused-blurred-demo',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [DatePickerInput, StorybookExampleContainer, StorybookExampleContainerSection],
-  template: `
-    <org-storybook-example-container
-      title="Focused / Blurred Events"
-      [currentState]="'Focused: ' + isFocused() + ' | Event log: ' + lastEvent()"
-    >
-      <org-storybook-example-container-section label="Date Picker">
-        <div class="max-w-sm">
-          <org-date-picker-input
-            name="focused-blurred"
-            placeholder="Click to focus..."
-            (focused)="onFocused()"
-            (blurred)="onBlurred()"
-          />
-        </div>
-      </org-storybook-example-container-section>
+export const ReactiveFormIntegration: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story: 'Example of integrating the date picker with Angular reactive forms via ControlValueAccessor.',
+      },
+    },
+  },
+  render: () => ({
+    template: '<story-date-picker-input-reactive-form />',
+    moduleMetadata: {
+      imports: [DatePickerInputReactiveFormStory],
+    },
+  }),
+};
 
-      <org-storybook-example-container-section label="State">
-        <div class="text-sm space-y-1">
-          <div><strong>Currently Focused:</strong> {{ isFocused() }}</div>
-          <div><strong>Last Event:</strong> {{ lastEvent() }}</div>
-          <div><strong>Focus Count:</strong> {{ focusCount() }}</div>
-          <div><strong>Blur Count:</strong> {{ blurCount() }}</div>
-        </div>
-      </org-storybook-example-container-section>
-
-      <ul expected-behaviour class="mt-1 list-inside list-disc space-y-1">
-        <li>The focused event fires when the inner input receives focus</li>
-        <li>The blurred event fires when the inner input loses focus</li>
-        <li>Focus and blur counts increment with each corresponding event</li>
-        <li>Tab into the input to trigger focused, tab away to trigger blurred</li>
-      </ul>
-    </org-storybook-example-container>
-  `,
-})
-class DatePickerInputFocusedBlurredDemo {
-  protected isFocused = signal<boolean>(false);
-  protected lastEvent = signal<string>('none');
-  protected focusCount = signal<number>(0);
-  protected blurCount = signal<number>(0);
-
-  protected onFocused(): void {
-    console.log('focused');
-    this.isFocused.set(true);
-    this.lastEvent.set('focused');
-    this.focusCount.update((count) => count + 1);
-  }
-
-  protected onBlurred(): void {
-    console.log('blurred');
-    this.isFocused.set(false);
-    this.lastEvent.set('blurred');
-    this.blurCount.update((count) => count + 1);
-  }
-}
+export const NonFormUsage: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story: 'Driving the date picker outside of reactive forms using `[selectedStartDate]` + `(dateSelected)`.',
+      },
+    },
+  },
+  render: () => ({
+    template: '<story-date-picker-input-non-form />',
+    moduleMetadata: {
+      imports: [DatePickerInputNonFormStory],
+    },
+  }),
+};
 
 export const FocusedBlurred: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story: 'Demonstrates the `focused` / `blurred` outputs firing as the trigger gains and loses keyboard focus.',
+      },
+    },
+  },
   render: () => ({
-    template: '<story-date-picker-input-focused-blurred-demo />',
+    template: '<story-date-picker-input-focused-blurred />',
     moduleMetadata: {
-      imports: [DatePickerInputFocusedBlurredDemo],
+      imports: [DatePickerInputFocusedBlurredStory],
     },
   }),
 };

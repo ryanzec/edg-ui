@@ -1,0 +1,14 @@
+:root {
+  /* anchor gap between the trigger and the popover (matches combobox / overlay-menu rhythm) */
+  --spacing-date-picker-input-anchor-gap: var(--spacing-1);
+
+  /* popover surface geometry — matches the calendar radius so the wrapper clip mask aligns with calendar corners */
+  --radius-date-picker-input-popover: var(--radius-base);
+  --shadow-date-picker-input-popover: var(--shadow-base);
+
+  /* reveal motion */
+  --motion-date-picker-input-duration: var(--motion-duration-fast);
+
+  /* footer layout inside the popover when range mode renders Apply / Cancel + Clear */
+  --spacing-date-picker-input-footer-gap: var(--spacing-2);
+}

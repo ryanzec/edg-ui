@@ -11,6 +11,7 @@
 @import './tokens/checklist-tokens.css';
 @import './tokens/code-block-tokens.css';
 @import './tokens/combobox-tokens.css';
+@import './tokens/date-picker-input-tokens.css';
 @import './tokens/dialog-tokens.css';
 @import './tokens/chart-tokens.css';
 @import './tokens/scrollbar-tokens.css';

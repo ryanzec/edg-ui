@@ -714,6 +714,7 @@ const nonColorTokens: Record<string, string> = {
   'loading.blocker.text.line.height': '1.2',
   'loading.blocker.text.max.width': '28rem',
   'loading.blocker.z.index': '1200',
+  'motion.date.picker.input.duration': '100ms',
   'motion.duration.base': '150ms',
   'motion.duration.fast': '100ms',
   'motion.duration.slow': '250ms',
@@ -808,6 +809,7 @@ const nonColorTokens: Record<string, string> = {
   'radio.mark.size': '0.5rem',
   'radio.radius': '62.4375rem',
   'radius.base': '0.5rem',
+  'radius.date.picker.input.popover': '0.5rem',
   'radius.drop.down.selector.panel': '0.5rem',
   'radius.lg': '0.75rem',
   'radius.overlay.menu': '0.5rem',
@@ -822,6 +824,8 @@ const nonColorTokens: Record<string, string> = {
   'scrollbar.thumb.color': 'rgb(148 163 184 / 0.7)',
   'scrollbar.thumb.hover.color': 'rgb(100 116 139 / 0.9)',
   'shadow.base': '0 0.5rem 1.5rem -0.5rem rgba(0, 0, 0, 0.12), 0 0.125rem 0.25rem rgba(0, 0, 0, 0.04)',
+  'shadow.date.picker.input.popover':
+    '0 0.5rem 1.5rem -0.5rem rgba(0, 0, 0, 0.12), 0 0.125rem 0.25rem rgba(0, 0, 0, 0.04)',
   'shadow.drop.down.selector.panel':
     '0 0.5rem 1.5rem -0.5rem rgba(0, 0, 0, 0.12), 0 0.125rem 0.25rem rgba(0, 0, 0, 0.04)',
   'shadow.focus.ring': '0 0 0 0.1875rem oklch(0.56 0.13 240)',
@@ -901,6 +905,8 @@ const nonColorTokens: Record<string, string> = {
   'spacing.combobox.option.x': '0.625rem',
   'spacing.combobox.option.y': '0.375rem',
   'spacing.combobox.panel.pad': '0.25rem',
+  'spacing.date.picker.input.anchor.gap': '0.25rem',
+  'spacing.date.picker.input.footer.gap': '0.5rem',
   'spacing.drop.down.selector.gap': '0.375rem',
   'spacing.drop.down.selector.gap.lg': '0.5rem',
   'spacing.drop.down.selector.gap.sm': '0.25rem',
