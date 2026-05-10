@@ -1,118 +1,128 @@
 @layer components {
   :host {
-    position: relative;
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr auto;
     width: 100%;
-    padding: var(--spacing-2);
+    max-width: var(--textarea-max-width);
+    padding: 0;
+    border-radius: var(--textarea-radius);
+    border: var(--textarea-border-width) solid var(--textarea-border-color);
+    background-color: var(--textarea-bg);
+    color: var(--textarea-fg);
+    font-family: var(--font-sans);
+    font-size: var(--textarea-font-size);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--textarea-line-height);
+    letter-spacing: var(--textarea-letter-spacing);
+    cursor: text;
+    transition:
+      background-color var(--motion-duration-base) var(--motion-ease-standard),
+      border-color var(--motion-duration-base) var(--motion-ease-standard),
+      color var(--motion-duration-base) var(--motion-ease-standard);
   }
 
-  :host([data-focused]) {
-    box-shadow: 0 0 0 0.0625rem var(--color-focus-ring); /* 1px */
-  }
-
-  :host([data-variant='bordered']) {
-    border: var(--border-width) solid var(--color-border);
-    border-radius: var(--radius-base);
-    background-color: var(--color-bg-surface);
-  }
-
-  :host([data-variant='bordered'][data-focused]) {
-    border-color: var(--color-focus-ring);
-  }
-
-  :host([data-variant='bordered'][aria-disabled='true']) {
-    background-color: var(--color-bg-surface);
-    border-color: var(--color-border);
-    cursor: not-allowed;
-    opacity: 0.5;
-  }
-
-  :host([data-variant='borderless']) {
-    border: none;
-    background-color: var(--color-bg-surface);
-  }
-
-  :host([data-variant='borderless'][aria-disabled='true']) {
-    background-color: var(--color-bg-surface);
-    cursor: not-allowed;
-    opacity: 0.5;
-  }
-
-  .textarea-content {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-start;
+  /* native control — fills the content cell, padding lives here so click-anywhere-to-focus works */
+  .native {
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
     width: 100%;
-    gap: var(--spacing-1);
-    min-height: 4.375rem; /* 70px */
-  }
-
-  :host([data-auto-resize]) .textarea-content {
-    min-height: 0;
-  }
-
-  .native-textarea {
-    flex: 1;
-    background-color: transparent;
-    border: none;
+    margin: 0;
+    border: 0;
     outline: none;
-    font-size: var(--font-size-base);
-    line-height: var(--line-height-normal);
-    letter-spacing: var(--letter-spacing-normal);
-  }
-
-  :host textarea {
+    background-color: transparent;
+    color: inherit;
+    font: inherit;
+    letter-spacing: inherit;
+    cursor: inherit;
     resize: none;
+    overflow-y: auto;
+    padding: var(--textarea-pad-y) var(--textarea-pad-x);
+    field-sizing: content;
+    min-height: calc(var(--textarea-min-lines) * 1lh + var(--textarea-pad-y) * 2);
+    max-height: calc(var(--textarea-max-lines) * 1lh + var(--textarea-pad-y) * 2);
   }
 
-  :host textarea::placeholder {
-    color: var(--color-fg-muted);
+  .native::placeholder {
+    color: var(--textarea-fg-placeholder);
+    opacity: 1;
   }
 
-  :host textarea::selection {
+  .native::selection {
     background-color: var(--color-primary-soft);
   }
 
-  :host textarea:disabled {
+  .native:disabled,
+  .native[readonly] {
     cursor: not-allowed;
   }
 
-  :host textarea:read-only {
-    cursor: default;
+  /* neutralise webkit autofill so the yellow flash never appears and colors stay aligned */
+  .native:-webkit-autofill,
+  .native:-webkit-autofill:hover,
+  .native:-webkit-autofill:focus {
+    -webkit-text-fill-color: var(--textarea-fg);
+    caret-color: var(--textarea-fg);
+    transition: background-color 9999s ease-in-out 0s;
   }
 
-  .textarea-icon-btn {
-    display: inline-flex;
-    flex-shrink: 0;
-    color: var(--color-fg-muted);
+  /* drop the textarea's bottom padding when a toolbar is present so the seam reads as intentional whitespace */
+  :host([data-has-toolbar]) .native {
+    padding-bottom: var(--textarea-pad-bottom-with-toolbar);
   }
 
-  .textarea-icon-btn:focus-visible {
-    background-color: var(--color-primary-soft);
-    border-radius: var(--radius-sm);
+  /* === STATES === */
+
+  :host(:hover:not([data-state='error']):not([data-disabled])),
+  :host(.is-hover:not([data-state='error']):not([data-disabled])) {
+    background-color: var(--textarea-bg-hover);
+    border-color: var(--textarea-border-color-hover);
   }
 
-  .textarea-icon-btn:not(:disabled):hover {
-    color: var(--color-fg);
+  :host(:focus-within:not([data-state='error']):not([data-disabled])),
+  :host(.is-focus:not([data-state='error']):not([data-disabled])) {
+    background-color: var(--textarea-bg-focus);
+    border-color: var(--textarea-border-color-focus);
   }
 
-  :host([data-pre-icon-align='start']) .textarea-pre-icon-btn {
-    align-self: flex-start;
+  :host([data-state='error']) {
+    border-color: var(--textarea-border-color-error);
   }
-  :host([data-pre-icon-align='center']) .textarea-pre-icon-btn {
-    align-self: center;
+
+  :host([data-disabled]) {
+    opacity: var(--textarea-disabled-opacity);
+    cursor: not-allowed;
+    pointer-events: none;
   }
-  :host([data-pre-icon-align='end']) .textarea-pre-icon-btn {
-    align-self: flex-end;
+
+  :host([data-readonly]) {
+    --textarea-bg: var(--color-bg-surface-2);
+    --textarea-bg-hover: var(--color-bg-surface-2);
   }
-  :host([data-post-icon-align='start']) .textarea-post-icon-btn {
-    align-self: flex-start;
+
+  :host([data-loading]) org-loading-spinner {
+    color: var(--textarea-fg-muted);
   }
-  :host([data-post-icon-align='center']) .textarea-post-icon-btn {
-    align-self: center;
+
+  /* === VARIANTS === */
+
+  /* bordered (default) — uses base token values */
+  :host([data-variant='bordered']) {
+    --textarea-bg: var(--color-bg-surface);
+    --textarea-bg-hover: var(--color-bg-surface);
+    --textarea-bg-focus: var(--color-bg-surface);
+    --textarea-border-color: var(--color-border);
+    --textarea-border-color-hover: var(--color-info);
+    --textarea-border-color-focus: var(--color-info);
   }
-  :host([data-post-icon-align='end']) .textarea-post-icon-btn {
-    align-self: flex-end;
+
+  /* borderless: no chrome until interacted with — meant to live inside another bordered surface */
+  :host([data-variant='borderless']) {
+    --textarea-bg: transparent;
+    --textarea-bg-hover: var(--color-bg-surface-2);
+    --textarea-bg-focus: transparent;
+    --textarea-border-color: transparent;
+    --textarea-border-color-hover: transparent;
+    --textarea-border-color-focus: var(--color-info);
   }
 }

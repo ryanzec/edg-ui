@@ -1,7 +1,16 @@
 import { ChangeDetectionStrategy, Component, computed, input, model, output } from '@angular/core';
-import { Icon } from '../icon/icon';
+import { Button } from '../button/button';
 import { Tag } from '../tag/tag';
-import { Textarea, type TextareaInlineItem } from '../textarea/textarea';
+import { Textarea } from '../textarea/textarea';
+import { TextareaToolbar } from '../textarea/textarea-toolbar';
+import { TextareaToolbarItem } from '../textarea/textarea-toolbar-item';
+
+/** represents a queued attachment chip rendered above the chat composer textarea */
+export type ChatComposerAttachment = {
+  id: string;
+  label: string;
+  removable?: boolean;
+};
 
 /** default value for the placeholder input */
 export const CHAT_COMPOSER_PLACEHOLDER_DEFAULT = 'Ask anything...';
@@ -10,7 +19,7 @@ export const CHAT_COMPOSER_PLACEHOLDER_DEFAULT = 'Ask anything...';
 export const CHAT_COMPOSER_VALUE_DEFAULT = '';
 
 /** default value for the attachments input */
-export const CHAT_COMPOSER_ATTACHMENTS_DEFAULT: TextareaInlineItem[] = [];
+export const CHAT_COMPOSER_ATTACHMENTS_DEFAULT: ChatComposerAttachment[] = [];
 
 /** default value for the disabled input */
 export const CHAT_COMPOSER_DISABLED_DEFAULT = false;
@@ -28,7 +37,10 @@ export const CHAT_COMPOSER_SHOW_ATTACH_DEFAULT = true;
 export const CHAT_COMPOSER_SHOW_HINT_DEFAULT = true;
 
 /** default value for the hintLabel input */
-export const CHAT_COMPOSER_HINT_LABEL_DEFAULT = '↵ to send';
+export const CHAT_COMPOSER_HINT_LABEL_DEFAULT = 'to send';
+
+/** default value for the hintKey input */
+export const CHAT_COMPOSER_HINT_KEY_DEFAULT = '↵';
 
 /** default value for the sendAriaLabel input */
 export const CHAT_COMPOSER_SEND_ARIA_LABEL_DEFAULT = 'Send';
@@ -43,15 +55,15 @@ export const CHAT_COMPOSER_ATTACH_ARIA_LABEL_DEFAULT = 'Attach';
 export const CHAT_COMPOSER_STREAMING_LABEL_DEFAULT = 'Streaming...';
 
 /**
- * thin wrapper around `org-textarea` that owns the chat thread composer chrome: the optional attachments-chip row
- * above the textarea, the merged action bar with attach + send/stop affordances and the keyboard hint, plus the
- * streaming swap that flips the send button to a stop button while keeping the wrapper interactive. consumers
- * project additional toolbar buttons (e.g. "Tools") via the default `<ng-content />` slot.
+ * thin wrapper around `org-textarea` + `org-textarea-toolbar` that owns the chat thread composer chrome: the optional
+ * attachments-chip row above the textarea and the streaming swap that flips the toolbar's built-in send button to a
+ * red stop button while keeping the wrapper interactive. consumers project additional toolbar buttons (e.g. "Tools")
+ * via the default `<ng-content />` slot which lands on the toolbar's left edge alongside the attach button.
  */
 @Component({
   selector: 'org-chat-composer',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Icon, Tag, Textarea],
+  imports: [Button, Tag, Textarea, TextareaToolbar, TextareaToolbarItem],
   templateUrl: './chat-composer.html',
   styleUrl: './chat-composer.css',
   host: {
@@ -70,7 +82,7 @@ export class ChatComposer {
   public readonly value = model<string>(CHAT_COMPOSER_VALUE_DEFAULT);
 
   /** queued attachment chips rendered above the textarea (separate row, not inline) */
-  public readonly attachments = input<TextareaInlineItem[]>(CHAT_COMPOSER_ATTACHMENTS_DEFAULT);
+  public readonly attachments = input<ChatComposerAttachment[]>(CHAT_COMPOSER_ATTACHMENTS_DEFAULT);
 
   /** whether the composer is fully disabled (chips + textarea + buttons all dim, no interaction) */
   public readonly disabled = input<boolean>(CHAT_COMPOSER_DISABLED_DEFAULT);
@@ -81,14 +93,17 @@ export class ChatComposer {
   /** whether the textarea itself is readonly (still focusable, but value cannot change) */
   public readonly textareaReadonly = input<boolean>(CHAT_COMPOSER_READONLY_DEFAULT);
 
-  /** whether to render the attach (+) button in the action bar */
+  /** whether to render the attach (+) button in the toolbar */
   public readonly showAttach = input<boolean>(CHAT_COMPOSER_SHOW_ATTACH_DEFAULT);
 
-  /** whether to render the keyboard hint label in the action bar */
+  /** whether to render the keyboard hint label in the toolbar */
   public readonly showHint = input<boolean>(CHAT_COMPOSER_SHOW_HINT_DEFAULT);
 
-  /** the visible keyboard hint label (e.g. "↵ to send") */
+  /** descriptive text rendered after the kbd in the keyboard hint */
   public readonly hintLabel = input<string>(CHAT_COMPOSER_HINT_LABEL_DEFAULT);
+
+  /** keyboard glyph rendered inside the kbd in the keyboard hint */
+  public readonly hintKey = input<string>(CHAT_COMPOSER_HINT_KEY_DEFAULT);
 
   /** accessible label applied to the send icon button */
   public readonly sendAriaLabel = input<string>(CHAT_COMPOSER_SEND_ARIA_LABEL_DEFAULT);
@@ -112,7 +127,7 @@ export class ChatComposer {
   public readonly attached = output<void>();
 
   /** emitted when the viewer removes one of the queued attachment chips */
-  public readonly attachmentRemoved = output<TextareaInlineItem>();
+  public readonly attachmentRemoved = output<ChatComposerAttachment>();
 
   /** whether any attachments are currently queued */
   protected readonly hasAttachments = computed<boolean>(() => this.attachments().length > 0);
@@ -125,6 +140,12 @@ export class ChatComposer {
 
   /** whether the send button must be disabled (true while disabled or value is empty) */
   protected readonly isSendDisabled = computed<boolean>(() => this.disabled() || this.value().trim().length === 0);
+
+  /** whether the toolbar should render its built-in send button (hidden in streaming mode) */
+  protected readonly showSendButton = computed<boolean>(() => !this.streaming());
+
+  /** whether the toolbar should render its keyboard hint (hidden in streaming mode) */
+  protected readonly showToolbarHint = computed<boolean>(() => !this.streaming() && this.showHint());
 
   /** handles the send affordance — emits the current value */
   protected onSend(): void {
@@ -150,7 +171,7 @@ export class ChatComposer {
   }
 
   /** handles attachment chip removal — emits the removed item */
-  protected onAttachmentRemove(attachment: TextareaInlineItem): void {
+  protected onAttachmentRemove(attachment: ChatComposerAttachment): void {
     this.attachmentRemoved.emit(attachment);
   }
 

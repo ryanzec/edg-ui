@@ -105,7 +105,7 @@ const itemSchema = z.object({
                   formControlName="description"
                   name="nested-profile-description"
                   placeholder="Enter description"
-                  [rows]="3"
+                  [minLines]="3"
                 />
               </org-form-field>
 
@@ -360,7 +360,7 @@ class NestedObjectDemoComponent {
                   formControlName="description"
                   name="nested-defaults-profile-description"
                   placeholder="Enter description"
-                  [rows]="3"
+                  [minLines]="3"
                 />
               </org-form-field>
 
@@ -956,7 +956,7 @@ class ArrayOfTextWithDefaultsDemoComponent {
                       formControlName="description"
                       [name]="'item-' + $index + '-description'"
                       placeholder="Enter description"
-                      [rows]="2"
+                      [minLines]="2"
                     />
                   </org-form-field>
 
@@ -1247,7 +1247,7 @@ class ArrayOfObjectsDemoComponent {
                       formControlName="description"
                       [name]="'item-defaults-' + $index + '-description'"
                       placeholder="Enter description"
-                      [rows]="2"
+                      [minLines]="2"
                     />
                   </org-form-field>
 

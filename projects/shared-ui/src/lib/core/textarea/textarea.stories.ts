@@ -1,13 +1,43 @@
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import type { Meta, StoryObj } from '@storybook/angular';
-import { Textarea, allTextareaVariants, allTextareaIconAlignments } from './textarea';
+import { map } from 'rxjs';
+import { Button } from '../button/button';
+import { ButtonToggle, ButtonToggleItem } from '../button-toggle/button-toggle';
+import { CheckboxToggle } from '../checkbox-toggle/checkbox-toggle';
+import { FormField } from '../form-fields/form-field';
+import { FormFields } from '../form-fields/form-fields';
+import { Label } from '../label/label';
+import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
+import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
+import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
+import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
+import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
+import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
+import { Textarea, TextareaVariant, allTextareaVariants } from './textarea';
 import { TextareaToolbar } from './textarea-toolbar';
 import { TextareaToolbarItem } from './textarea-toolbar-item';
-import { allIconNames } from '../../brain/icon-brain/icon-brain';
-import { FormField } from '../form-fields/form-field';
-import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
-import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
-import { FormFields } from '../form-fields/form-fields';
-import { Button } from '../button/button';
+
+const liveDemoVariantItems: ButtonToggleItem[] = allTextareaVariants.map((variant) => ({
+  label: variant,
+  value: variant,
+  buttonColor: 'primary',
+}));
+
+const liveDemoStateItems: ButtonToggleItem[] = [
+  { label: 'rest', value: 'rest', buttonColor: 'primary' },
+  { label: 'error', value: 'error', buttonColor: 'primary' },
+  { label: 'disabled', value: 'disabled', buttonColor: 'primary' },
+  { label: 'readonly', value: 'readonly', buttonColor: 'primary' },
+];
+
+const liveDemoMinLinesItems: ButtonToggleItem[] = [
+  { label: '1', value: '1', buttonColor: 'primary' },
+  { label: '2', value: '2', buttonColor: 'primary' },
+  { label: '3', value: '3', buttonColor: 'primary' },
+  { label: '6', value: '6', buttonColor: 'primary' },
+];
 
 const meta: Meta<Textarea> = {
   title: 'Core/Components/Textarea',
@@ -20,70 +50,19 @@ const meta: Meta<Textarea> = {
 <div class="docs-top-level-overview">
   ## Textarea Component
 
-  A flexible textarea component with support for icons, validation, inline items (tags), icon alignment, and accessibility features.
+  A multi-line text-entry shell. Sibling of Input — same variant ramp (\`bordered\`, \`borderless\`), same focus / hover / error vocabulary. The native &lt;textarea&gt; lives inside a styled wrapper so the wrapper can host an optional bottom toolbar with a built-in send button + keyboard hint, and own the focus-within border color.
+
+  Auto-grow is the only height behaviour — there is no native resize handle. The shell sizes between \`minLines\` and \`maxLines\`, and content beyond \`maxLines\` scrolls inside.
 
   ### Features
-  - Two visual variants: bordered and borderless
-  - Optional pre and post icons with alignment control
-  - Inline items/tags support
-  - Validation message display
-  - Select all on focus behavior
-  - Auto-focus support
-  - Disabled and readonly states
-  - Configurable rows
-  - Inverse enter behavior (Shift+Enter vs Enter for submission)
-  - Full keyboard accessibility
-
-  ### Variants
-  - **bordered**: Standard textarea with visible border
-  - **borderless**: Minimal textarea without border
-
-  ### Icon Alignment
-  - **start**: Icon aligned to the top
-  - **center**: Icon aligned to the middle (default for postIcon)
-  - **end**: Icon aligned to the bottom (default for preIcon)
-
-  ### Usage Examples
-  \`\`\`html
-  <!-- Basic textarea -->
-  <org-textarea name="textarea" placeholder="Enter text..." />
-
-  <!-- Textarea with variant -->
-  <org-textarea name="textarea" variant="borderless" placeholder="Borderless textarea" />
-
-  <!-- Textarea with icons -->
-  <org-textarea name="textarea" preIcon="cog" placeholder="Settings" />
-  <org-textarea name="textarea" postIcon="arrow-right" placeholder="Submit" />
-
-  <!-- Textarea with icon alignment -->
-  <org-textarea
-    name="textarea"
-    postIcon="arrow-right"
-    postIconAlignment="end"
-    placeholder="Icon at bottom"
-  />
-
-  <!-- Textarea with inline items (tags) -->
-  <org-textarea
-    name="textarea"
-    placeholder="Add tags..."
-    [inlineItems]="[
-      { id: '1', label: 'React', removable: true },
-      { id: '2', label: 'Angular', removable: true }
-    ]"
-  />
-
-  <!-- Textarea with inverse enter behavior -->
-  <org-textarea
-    name="textarea"
-    [inverseEnter]="true"
-    placeholder="Press Enter to submit, Shift+Enter for new line"
-  />
-
-  <!-- Textarea with custom rows -->
-  <org-textarea name="textarea" [rows]="5" placeholder="Larger textarea" />
+  - Two variants: \`bordered\` (default), \`borderless\`
+  - Auto-grow between \`minLines\` and \`maxLines\` using CSS \`field-sizing: content\` + \`lh\` units
+  - Optional projected \`org-textarea-toolbar\` with built-in send button + keyboard hint
+  - Full state set: hover, focus, error, disabled, readonly, loading
+  - Form integration via \`ControlValueAccessor\` (works with reactive forms)
+  - Submit-key routing (\`enter\` / \`shift+enter\`, configurable via \`inverseEnter\`)
+  - Accessible: focus monitoring, aria-invalid driven by parent FormField validation message
 </div>
-\`\`\`
         `,
       },
     },
@@ -96,941 +75,633 @@ type Story = StoryObj<Textarea>;
 export const Default: Story = {
   args: {
     name: 'textarea',
-    placeholder: 'Enter text...',
-    preIcon: null,
-    postIcon: null,
+    variant: 'bordered',
+    placeholder: 'Tell us what you’re working on...',
+    value: '',
+    disabled: false,
+    readonly: false,
+    loading: false,
+    autoFocus: false,
+    selectAllOnFocus: false,
+    inverseEnter: false,
+    minLines: 3,
+    maxLines: 8,
   },
   argTypes: {
     name: {
       control: 'text',
-      description: 'the name attribute for the textarea element',
+      description: 'The name attribute (also used as the element id for label association)',
     },
     variant: {
       control: 'select',
       options: allTextareaVariants,
-      description: 'the visual variant of the textarea',
+      description: 'The visual variant of the textarea',
     },
     placeholder: {
       control: 'text',
-      description: 'placeholder text for the textarea',
+      description: 'Placeholder text for the textarea',
     },
     value: {
       control: 'text',
-      description: 'the current value of the textarea',
+      description: 'The current value of the textarea',
     },
     disabled: {
       control: 'boolean',
-      description: 'whether the textarea is disabled',
+      description: 'Whether the textarea is disabled',
     },
     readonly: {
       control: 'boolean',
-      description: 'whether the textarea is readonly',
+      description: 'Whether the textarea is readonly',
     },
-    preIcon: {
-      control: 'select',
-      options: [null, ...allIconNames],
-      description: 'icon to display before the textarea text',
-    },
-    preIconAriaLabel: {
-      control: 'text',
-      description: 'accessible label for the pre-icon button when it is interactive',
-    },
-    postIcon: {
-      control: 'select',
-      options: [null, ...allIconNames],
-      description: 'icon to display after the textarea text',
-    },
-    postIconAriaLabel: {
-      control: 'text',
-      description: 'accessible label for the post-icon button when it is interactive',
-    },
-    preIconAlignment: {
-      control: 'select',
-      options: allTextareaIconAlignments,
-      description: 'vertical alignment of the pre icon',
-    },
-    postIconAlignment: {
-      control: 'select',
-      options: allTextareaIconAlignments,
-      description: 'vertical alignment of the post icon',
-    },
-    selectAllOnFocus: {
+    loading: {
       control: 'boolean',
-      description: 'whether to select all text when the textarea receives focus',
+      description: 'Whether the textarea is in a loading state (tones any spinner inside the toolbar)',
     },
     autoFocus: {
       control: 'boolean',
-      description: 'whether the textarea should automatically receive focus',
+      description: 'Whether the textarea should auto-focus on mount',
     },
-    inlineItems: {
-      control: 'object',
-      description: 'array of inline items (tags) to display inside the textarea',
+    selectAllOnFocus: {
+      control: 'boolean',
+      description: 'Whether to select all text when the textarea receives focus',
     },
     inverseEnter: {
       control: 'boolean',
-      description: 'when true, enter submits and shift+enter adds new line (inverse of default)',
+      description: 'When true, Enter submits and Shift+Enter inserts newline (default is reversed)',
     },
-    rows: {
+    minLines: {
       control: 'number',
-      description: 'number of visible text rows',
+      description: 'Minimum visible lines — the textarea never collapses below this height',
+    },
+    maxLines: {
+      control: 'number',
+      description: 'Maximum visible lines — the textarea scrolls past this height instead of growing',
     },
   },
   parameters: {
     docs: {
       description: {
-        story: 'Default textarea with bordered variant. Use the controls below to interact with the component.',
+        story: 'Default textarea with full controls. Use the controls below to drive every visual input.',
       },
     },
   },
+  render: (args) => ({
+    props: args,
+    template: `
+      <org-textarea
+        [name]="name"
+        [variant]="variant"
+        [placeholder]="placeholder"
+        [value]="value"
+        [disabled]="disabled"
+        [readonly]="readonly"
+        [loading]="loading"
+        [autoFocus]="autoFocus"
+        [selectAllOnFocus]="selectAllOnFocus"
+        [inverseEnter]="inverseEnter"
+        [minLines]="minLines"
+        [maxLines]="maxLines"
+      />
+    `,
+    moduleMetadata: {
+      imports: [Textarea],
+    },
+  }),
 };
 
-export const Variants: Story = {
+@Component({
+  selector: 'story-textarea-live-demo',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    ReactiveFormsModule,
+    Textarea,
+    TextareaToolbar,
+    TextareaToolbarItem,
+    Button,
+    ButtonToggle,
+    CheckboxToggle,
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoControls,
+    DesignSystemDemoControlGroup,
+    DesignSystemDemoCanvas,
+    FormField,
+  ],
+  styles: [
+    `
+      :host {
+        display: block;
+      }
+      .canvas-stage {
+        display: flex;
+        align-items: stretch;
+        flex-direction: column;
+        gap: var(--spacing-2);
+        min-height: 10rem;
+      }
+      .meta {
+        font-size: var(--font-size-xs);
+        color: var(--color-fg-muted);
+      }
+    `,
+  ],
+  template: `
+    <form [formGroup]="liveDemoForm">
+      <org-design-system-demo>
+        <org-design-system-demo-header
+          slot="header"
+          title="Live demo"
+          description="Real, focusable textarea — type to see auto-grow up to maxLines, then scroll. Toggle the controls to walk every state."
+        />
+        <org-design-system-demo-controls slot="controls">
+          <org-design-system-demo-control-group label="Variant">
+            <org-button-toggle [items]="variantItems" formControlName="variant" buttonSize="sm" />
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="State">
+            <org-button-toggle [items]="stateItems" formControlName="state" buttonSize="sm" />
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Min lines">
+            <org-button-toggle [items]="minLinesItems" formControlName="minLines" buttonSize="sm" />
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Toolbar">
+            <org-checkbox-toggle name="live-demo-toolbar" value="toolbar" formControlName="toolbar">
+              {{ liveDemoForm.controls.toolbar.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
+        </org-design-system-demo-controls>
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="canvas-stage">
+            @if (liveDemoForm.controls.state.value === 'error') {
+              <org-form-field validationMessage="Description must be at least 20 characters.">
+                <org-textarea
+                  name="live-demo-textarea"
+                  placeholder="Tell us what you’re working on..."
+                  [variant]="liveDemoForm.controls.variant.value"
+                  [disabled]="false"
+                  [readonly]="false"
+                  [minLines]="parsedMinLines()"
+                  [maxLines]="8"
+                >
+                  @if (liveDemoForm.controls.toolbar.value) {
+                    <org-textarea-toolbar [showHint]="true">
+                      <org-textarea-toolbar-item>
+                        <org-button [iconOnly]="true" label="attach" ariaLabel="attach" variant="text" preIcon="plus" />
+                      </org-textarea-toolbar-item>
+                      <org-textarea-toolbar-item>
+                        <org-button [iconOnly]="true" label="mention" ariaLabel="mention" variant="text" preIcon="at-sign" />
+                      </org-textarea-toolbar-item>
+                    </org-textarea-toolbar>
+                  }
+                </org-textarea>
+              </org-form-field>
+            } @else {
+              <org-textarea
+                name="live-demo-textarea"
+                placeholder="Tell us what you’re working on..."
+                [variant]="liveDemoForm.controls.variant.value"
+                [disabled]="liveDemoForm.controls.state.value === 'disabled'"
+                [readonly]="liveDemoForm.controls.state.value === 'readonly'"
+                [minLines]="parsedMinLines()"
+                [maxLines]="8"
+              >
+                @if (liveDemoForm.controls.toolbar.value) {
+                  <org-textarea-toolbar [showHint]="true">
+                    <org-textarea-toolbar-item>
+                      <org-button [iconOnly]="true" label="attach" ariaLabel="attach" variant="text" preIcon="plus" />
+                    </org-textarea-toolbar-item>
+                    <org-textarea-toolbar-item>
+                      <org-button [iconOnly]="true" label="mention" ariaLabel="mention" variant="text" preIcon="at-sign" />
+                    </org-textarea-toolbar-item>
+                  </org-textarea-toolbar>
+                }
+              </org-textarea>
+            }
+            <p class="meta">
+              data-variant="{{ liveDemoForm.controls.variant.value }}", lines={{ liveDemoForm.controls.minLines.value }}–8
+            </p>
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+    </form>
+  `,
+})
+class TextareaLiveDemoStory {
+  protected readonly variantItems = liveDemoVariantItems;
+  protected readonly stateItems = liveDemoStateItems;
+  protected readonly minLinesItems = liveDemoMinLinesItems;
+
+  protected readonly liveDemoForm = new FormGroup({
+    variant: new FormControl<TextareaVariant>('bordered', { nonNullable: true }),
+    state: new FormControl<'rest' | 'error' | 'disabled' | 'readonly'>('rest', { nonNullable: true }),
+    minLines: new FormControl<string>('3', { nonNullable: true }),
+    toolbar: new FormControl<boolean>(true, { nonNullable: true }),
+  });
+
+  protected readonly parsedMinLines = toSignal(
+    this.liveDemoForm.controls.minLines.valueChanges.pipe(map((value) => parseInt(value, 10) || 3)),
+    { initialValue: 3 }
+  );
+}
+
+export const LiveDemo: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Comparison of bordered and borderless variants.',
+        story:
+          'Fully interactive demo. Use the controls to drive every visual input on the textarea (variant, state, min lines, toolbar) and observe the live result in the canvas.',
       },
     },
   },
   render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Variant Comparison"
-        currentState="Comparing bordered and borderless variants"
-      >
-        <org-storybook-example-container-section label="Bordered (default)">
-          <org-textarea name="textarea" variant="bordered" placeholder="Bordered textarea" />
-        </org-storybook-example-container-section>
+    template: `<story-textarea-live-demo />`,
+    moduleMetadata: {
+      imports: [TextareaLiveDemoStory],
+    },
+  }),
+};
 
-        <org-storybook-example-container-section label="Borderless">
-          <org-textarea name="textarea" variant="borderless" placeholder="Borderless textarea" />
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+@Component({
+  selector: 'story-textarea-showcase',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    Textarea,
+    TextareaToolbar,
+    TextareaToolbarItem,
+    Button,
+    Label,
+    FormField,
+    FormFields,
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoCanvas,
+    DesignSystemDemoExpectedBehaviour,
+  ],
+  template: `
+    <div class="flex flex-col gap-4">
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Variants" description="Two shell treatments, all sharing the Input ramp." />
+        <org-design-system-demo-canvas slot="canvas">
+          <org-textarea name="showcase-bordered" placeholder="Tell us what you’re working on..." />
+          <org-textarea name="showcase-borderless" variant="borderless" placeholder="Add a comment..." />
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="list-inside list-disc flex flex-col gap-1">
           <li><strong>bordered</strong>: Standard textarea with visible border (default)</li>
-          <li><strong>borderless</strong>: Minimal styling without border</li>
+          <li><strong>borderless</strong>: No chrome at rest — meant to live inside another bordered surface</li>
         </ul>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [Textarea, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
+      </org-design-system-demo-expected-behaviour>
 
-export const WithIcons: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Textareas with pre icons, post icons, or both.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Icon Variations"
-        currentState="Comparing textareas with different icon configurations"
-      >
-        <org-storybook-example-container-section label="No icons">
-          <org-textarea name="textarea" placeholder="No icons" />
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Pre icon only">
-          <org-textarea name="textarea" preIcon="cog" placeholder="Settings" />
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Post icon only">
-          <org-textarea name="textarea" postIcon="arrow-right" placeholder="Submit" />
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Both icons">
-          <org-textarea name="textarea" preIcon="cog" postIcon="arrow-right" placeholder="Both icons" />
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li><strong>preIcon</strong>: Icon displayed before the textarea text</li>
-          <li><strong>postIcon</strong>: Icon displayed after the textarea text</li>
-          <li>Both icons can be used simultaneously</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [Textarea, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const IconAlignment: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Icon alignment options (start, center, end) for vertical positioning.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Icon Alignment"
-        currentState="Comparing different icon alignment options"
-      >
-        <org-storybook-example-container-section label="Post icon - Start (top)">
-          <org-textarea
-            postIcon="arrow-right"
-            postIconAlignment="start"
-            placeholder="Icon at top"
-            [rows]="5"
-            name="textarea"
-          />
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Post icon - Center (middle)">
-          <org-textarea
-            postIcon="arrow-right"
-            postIconAlignment="center"
-            placeholder="Icon at center"
-            [rows]="5"
-            name="textarea"
-          />
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Post icon - End (bottom)">
-          <org-textarea
-            postIcon="arrow-right"
-            postIconAlignment="end"
-            placeholder="Icon at bottom"
-            [rows]="5"
-            name="textarea"
-          />
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Pre icon - Start (top)">
-          <org-textarea
-            preIcon="cog"
-            preIconAlignment="start"
-            placeholder="Icon at top"
-            [rows]="5"
-            name="textarea"
-          />
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li><strong>start</strong>: Icon aligned to the top (default for preIcon)</li>
-          <li><strong>center</strong>: Icon aligned to the middle</li>
-          <li><strong>end</strong>: Icon aligned to the bottom (default for postIcon)</li>
-          <li>Alignment is particularly useful for multi-row textareas</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [Textarea, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const EnterBehavior: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Normal vs. inverse enter key behavior for form submission.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Enter Key Behavior"
-        currentState="Comparing normal and inverse enter behavior"
-      >
-        <org-storybook-example-container-section label="Normal (default)">
-          <org-textarea
-            placeholder="Enter = new line, Shift+Enter = submit"
-            [rows]="3"
-            name="textarea"
-          />
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Inverse">
-          <org-textarea
-            [inverseEnter]="true"
-            placeholder="Enter = submit, Shift+Enter = new line"
-            [rows]="3"
-            name="textarea"
-          />
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li><strong>Normal</strong>: Enter adds new line, Shift+Enter emits submitKeyPressed event</li>
-          <li><strong>Inverse</strong>: Enter emits submitKeyPressed event, Shift+Enter adds new line</li>
-          <li>Useful for chat interfaces or quick-submit forms</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [Textarea, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const InlineItems: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Textarea with inline items (tags/chips) displayed inside the field.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Inline Items (Tags)"
-        currentState="Textarea with tags displayed inline"
-      >
-        <org-storybook-example-container-section label="Without inline items">
-          <org-textarea name="textarea" placeholder="Add tags..." />
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="With inline items (removable)">
-          <org-textarea
-            name="textarea"
-            placeholder="Add more tags..."
-            [inlineItems]="[
-      { id: '1', label: 'React', removable: true },
-      { id: '2', label: 'Angular', removable: true },
-              { id: '3', label: 'Vue', removable: true }
-            ]"
-          />
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="With non-removable items">
-          <org-textarea
-            name="textarea"
-            placeholder="Type here..."
-            [inlineItems]="[
-              { id: '1', label: 'TypeScript', removable: false },
-              { id: '2', label: 'JavaScript', removable: false }
-            ]"
-          />
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li>Inline items are displayed as tags inside the textarea</li>
-          <li>Items with <strong>removable: true</strong> show an X button</li>
-          <li>Clicking the X button emits <strong>inlineItemRemoved</strong> event</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [Textarea, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const States: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Comparison of disabled, readonly, and normal states.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Textarea States"
-        currentState="Comparing disabled, readonly, and normal states"
-      >
-        <org-storybook-example-container-section label="Normal (enabled)">
-          <org-textarea name="textarea" placeholder="Normal textarea" value="Editable text" />
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Disabled">
-          <org-textarea name="textarea" [disabled]="true" placeholder="Disabled textarea" value="Cannot edit" />
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Readonly">
-          <org-textarea
-            name="textarea"
-            [readonly]="true"
-            placeholder="Readonly textarea"
-            value="Cannot edit but can focus"
-          />
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li><strong>Normal</strong>: Fully interactive and editable</li>
-          <li><strong>Disabled</strong>: Cannot focus, edit, or interact</li>
-          <li><strong>Readonly</strong>: Can focus but cannot edit</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [Textarea, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const Validation: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Textarea with validation error messages.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Validation States"
-        currentState="Comparing valid and invalid textareas"
-      >
-        <org-storybook-example-container-section label="Valid (no error)">
-          <org-textarea name="textarea" placeholder="Valid textarea" value="This is valid content" />
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Invalid (with error message)">
-          <org-form-field validationMessage="Description must be at least 20 characters">
-            <org-textarea
-              name="textarea"
-              placeholder="Invalid textarea"
-              value="Too short"
-            />
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Visual States" description="Every state, shown for the bordered variant." />
+        <org-design-system-demo-canvas slot="canvas">
+          <org-textarea name="showcase-state-default" placeholder="Write a reply..." />
+          <org-form-field validationMessage="Description must be at least 20 characters.">
+            <org-textarea name="showcase-state-error" />
           </org-form-field>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Borderless with error">
-          <org-form-field validationMessage="This field is required">
-            <org-textarea
-              name="textarea"
-              variant="borderless"
-              placeholder="Required field"
-            />
-          </org-form-field>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="With icon and error">
-          <org-form-field validationMessage="Description is too short">
-            <org-textarea
-              name="textarea"
-              preIcon="cog"
-              placeholder="Description"
-              value="Invalid"
-            />
-          </org-form-field>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li>When <strong>validationMessage</strong> is provided, textarea shows error state</li>
-          <li>Error message is displayed below the textarea</li>
-          <li>Textarea border changes to error color (red)</li>
-          <li>Works with all variants and icon configurations</li>
+          <org-textarea name="showcase-state-disabled" [disabled]="true" placeholder="This payload is locked while the job runs." />
+          <org-textarea name="showcase-state-readonly" [readonly]="true" value="Auto-generated from the latest commit message." />
+          <org-textarea name="showcase-state-loading" [loading]="true" value="Streaming in progress..." />
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="list-inside list-disc flex flex-col gap-1">
+          <li><strong>Default</strong>: Hover and focus surface the info border color</li>
+          <li><strong>Error</strong>: Border switches to danger red and survives hover / focus</li>
+          <li><strong>Disabled</strong>: Reduced opacity, pointer events blocked</li>
+          <li><strong>Readonly</strong>: Slightly tinted background, value still selectable</li>
+          <li><strong>Loading</strong>: Forces native readonly; any toolbar spinner is toned to muted</li>
         </ul>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [Textarea, FormField, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
+      </org-design-system-demo-expected-behaviour>
 
-export const RowSizes: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Textareas with different row counts for varying heights.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Row Sizes"
-        currentState="Comparing different row counts"
-      >
-        <org-storybook-example-container-section label="Small (2 rows)">
-          <org-textarea name="textarea" [rows]="2" placeholder="Small textarea with 2 rows" />
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Default (3 rows)">
-          <org-textarea name="textarea" [rows]="3" placeholder="Default textarea with 3 rows" />
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Medium (5 rows)">
-          <org-textarea name="textarea" [rows]="5" placeholder="Medium textarea with 5 rows" />
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Large (8 rows)">
-          <org-textarea name="textarea" [rows]="8" placeholder="Large textarea with 8 rows" />
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li><strong>rows</strong>: Controls the visible height of the textarea</li>
-          <li>Default is 3 rows</li>
-          <li>Textarea is still resizable by the user (browser default)</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [Textarea, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const SpecialBehaviors: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Special textarea behaviors like select all on focus and auto-focus.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Special Behaviors"
-        currentState="Demonstrating select all on focus behavior"
-      >
-        <org-storybook-example-container-section label="Normal focus behavior">
-          <org-textarea name="textarea" placeholder="Click to focus" value="Normal focus behavior" />
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Select all on focus">
-            <org-textarea
-            name="textarea"
-            [selectAllOnFocus]="true"
-            placeholder="Click to focus"
-            value="Text will be selected on focus"
-          />
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li><strong>selectAllOnFocus</strong>: Automatically selects all text when textarea receives focus</li>
-          <li><strong>autoFocus</strong>: Automatically focuses the textarea when component mounts</li>
-          <li>Useful for forms where quick editing is needed</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [Textarea, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const ClickableIcons: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Textareas with pre and post icons that emit click events when outputs are observed.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Clickable Icons"
-        currentState="Demonstrating clickable pre and post icon events"
-      >
-        <org-storybook-example-container-section label="Clickable pre-icon">
-          <org-textarea
-            name="textarea-pre"
-            preIcon="cog"
-            preIconAriaLabel="open settings"
-            placeholder="click the cog icon"
-            (preIconClicked)="onPreIconClicked()"
-          />
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Clickable post-icon">
-          <org-textarea
-            name="textarea-post"
-            postIcon="arrow-right"
-            postIconAriaLabel="submit"
-            placeholder="click the arrow icon"
-            (postIconClicked)="onPostIconClicked()"
-          />
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Both icons clickable">
-          <org-textarea
-            name="textarea-both"
-            preIcon="cog"
-            preIconAriaLabel="open settings"
-            postIcon="arrow-right"
-            postIconAriaLabel="submit"
-            placeholder="both icons are clickable"
-            (preIconClicked)="onPreIconClicked()"
-            (postIconClicked)="onPostIconClicked()"
-          />
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li>icons with an observed output render as interactive buttons</li>
-          <li>clicking a pre or post icon emits the respective output event (check the browser console)</li>
-          <li>disabled and readonly states prevent icon click events from firing</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [Textarea, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-    props: {
-      onPreIconClicked: () => console.log('pre icon clicked'),
-      onPostIconClicked: () => console.log('post icon clicked'),
-    },
-  }),
-};
-
-export const ValidationSpaceReservation: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Comparison of validation space reservation behavior. When reserveValidationSpace is true, space is always reserved for validation messages to maintain consistent layout. When false, space is only used when a validation message is present.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Validation Space Reservation"
-        currentState="Comparing space reservation behaviors"
-      >
-        <org-storybook-example-container-section label="Reserve Space = true (default)">
-          <org-form-fields>
-            <org-form-field [reserveValidationSpace]="true">
-              <org-textarea
-                name="reserve-true-textarea-1"
-                placeholder="Textarea 1 (no error)"
-              />
-            </org-form-field>
-            <org-form-field [reserveValidationSpace]="true" validationMessage="This field has an error">
-              <org-textarea
-                name="reserve-true-textarea-2"
-                placeholder="Textarea 2 (with error)"
-              />
-            </org-form-field>
-            <org-form-field [reserveValidationSpace]="true">
-              <org-textarea
-                name="reserve-true-textarea-3"
-                placeholder="Textarea 3 (no error)"
-              />
-            </org-form-field>
-          </org-form-fields>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Reserve Space = false">
-          <org-form-fields>
-            <org-form-field [reserveValidationSpace]="false">
-              <org-textarea
-                name="reserve-false-textarea-1"
-                placeholder="Textarea 1 (no error)"
-              />
-            </org-form-field>
-            <org-form-field [reserveValidationSpace]="false" validationMessage="This field has an error">
-              <org-textarea
-                name="reserve-false-textarea-2"
-                placeholder="Textarea 2 (with error)"
-              />
-            </org-form-field>
-            <org-form-field [reserveValidationSpace]="false">
-              <org-textarea
-                name="reserve-false-textarea-3"
-                placeholder="Textarea 3 (no error)"
-              />
-            </org-form-field>
-          </org-form-fields>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li><strong>reserveValidationSpace=true</strong>: Space is always reserved for validation messages (maintains consistent spacing between textareas)</li>
-          <li><strong>reserveValidationSpace=false</strong>: Space is only allocated when a validation message is present (textareas collapse together when no errors)</li>
-          <li>Notice how the left column maintains equal spacing between all textareas</li>
-          <li>Notice how the right column's textareas 1 and 3 are closer together since they have no error messages</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [Textarea, FormField, FormFields, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const WithToolbar: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Textarea with an optional toolbar projected via content. The toolbar renders at the bottom of the textarea within the border and includes a send icon button aligned to the right, with projected toolbar items on the left.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Textarea with Toolbar"
-        currentState="Demonstrating the optional textarea toolbar"
-      >
-        <org-storybook-example-container-section label="Toolbar with items">
-          <org-textarea name="textarea-toolbar" placeholder="Type a message...">
-            <org-textarea-toolbar (sendClicked)="onSendClicked()">
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Toolbar" description="An optional bottom strip merged into the same shell — no internal divider. Holds tool buttons on the left and a built-in send button (with optional keyboard hint) on the right." />
+        <org-design-system-demo-canvas slot="canvas">
+          <org-textarea name="showcase-toolbar-followup" placeholder="Ask a follow-up...">
+            <org-textarea-toolbar [showHint]="true">
               <org-textarea-toolbar-item>
                 <org-button [iconOnly]="true" label="attach" ariaLabel="attach" variant="text" preIcon="plus" />
               </org-textarea-toolbar-item>
               <org-textarea-toolbar-item>
-                <org-button [iconOnly]="true" label="settings" ariaLabel="settings" variant="text" preIcon="cog" />
+                <org-button [iconOnly]="true" label="image" ariaLabel="image" variant="text" preIcon="image" />
+              </org-textarea-toolbar-item>
+              <org-textarea-toolbar-item>
+                <org-button [iconOnly]="true" label="mention" ariaLabel="mention" variant="text" preIcon="at-sign" />
               </org-textarea-toolbar-item>
             </org-textarea-toolbar>
           </org-textarea>
-        </org-storybook-example-container-section>
 
-        <org-storybook-example-container-section label="Toolbar with no items">
-          <org-textarea name="textarea-toolbar-empty" placeholder="Type a message...">
-            <org-textarea-toolbar (sendClicked)="onSendClicked()" />
+          <org-textarea name="showcase-toolbar-release" placeholder="Write a release note...">
+            <org-textarea-toolbar [showSendButton]="false">
+              <org-textarea-toolbar-item>
+                <org-button [iconOnly]="true" label="bold" ariaLabel="bold" variant="text" preIcon="bold" />
+              </org-textarea-toolbar-item>
+              <org-textarea-toolbar-item>
+                <org-button [iconOnly]="true" label="italic" ariaLabel="italic" variant="text" preIcon="italic" />
+              </org-textarea-toolbar-item>
+              <org-textarea-toolbar-item>
+                <org-button [iconOnly]="true" label="code" ariaLabel="code" variant="text" preIcon="code" />
+              </org-textarea-toolbar-item>
+              <org-textarea-toolbar-item>
+                <org-button [iconOnly]="true" label="link" ariaLabel="link" variant="text" preIcon="link" />
+              </org-textarea-toolbar-item>
+              <org-button toolbar-right label="Save draft" variant="soft" color="neutral" size="sm" />
+              <org-button toolbar-right label="Publish" variant="filled" color="primary" size="sm" />
+            </org-textarea-toolbar>
           </org-textarea>
-        </org-storybook-example-container-section>
 
-        <org-storybook-example-container-section label="Toolbar with inline items (tags)">
+          <org-textarea name="showcase-toolbar-reply" placeholder="Reply with one click...">
+            <org-textarea-toolbar [showHint]="true" hintLabel="to send · ⇧↵ for new line" />
+          </org-textarea>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="list-inside list-disc flex flex-col gap-1">
+          <li>Toolbar is part of the shell — no internal divider, no separate background</li>
+          <li><strong>Default slot</strong>: Project <code>org-textarea-toolbar-item</code> elements for the left edge</li>
+          <li><strong><code>[toolbar-right]</code> slot</strong>: Project custom buttons that sit before the built-in send button</li>
+          <li><strong><code>showSendButton</code></strong>: Drop the built-in send button entirely (e.g. drafts with Save / Publish)</li>
+          <li><strong><code>showHint</code> + <code>hintLabel</code></strong>: Show a small kbd-styled keyboard hint (e.g. "↵ to send")</li>
+        </ul>
+      </org-design-system-demo-expected-behaviour>
+
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Auto-grow" description="The shell sits between minLines and maxLines. Typing past maxLines scrolls inside the textarea — the field never grows past its ceiling." />
+        <org-design-system-demo-canvas slot="canvas">
           <org-textarea
-            name="textarea-toolbar-tags"
-            placeholder="Type a message..."
-            [inlineItems]="[
-              { id: '1', label: 'React', removable: true },
-              { id: '2', label: 'Angular', removable: true }
-            ]"
+            name="showcase-grow-single"
+            placeholder="Single-line, no auto-grow (1-line max)"
+            [minLines]="1"
+            [maxLines]="1"
+          />
+          <org-textarea
+            name="showcase-grow-compact"
+            placeholder="Compact: starts at 2 lines, caps at 4"
+            [minLines]="2"
+            [maxLines]="4"
+          />
+          <org-textarea
+            name="showcase-grow-long"
+            placeholder="Long-form: 6 starting lines, 12-line cap"
+            [minLines]="6"
+            [maxLines]="12"
+          />
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="list-inside list-disc flex flex-col gap-1">
+          <li><strong>minLines</strong> sets the floor — the textarea never collapses below this height</li>
+          <li><strong>maxLines</strong> sets the ceiling — content past this scrolls inside the textarea</li>
+          <li>Auto-grow is driven by CSS <code>field-sizing: content</code> + <code>1lh</code> bounds — no JavaScript runs</li>
+        </ul>
+      </org-design-system-demo-expected-behaviour>
+
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="In context — with Label" description="Stacked with a label and helper / error message via FormField." />
+        <org-design-system-demo-canvas slot="canvas">
+          <org-form-fields>
+            <org-form-field>
+              <org-label text="Description" htmlFor="showcase-context-description" [isRequired]="true" />
+              <org-textarea name="showcase-context-description" placeholder="What does this do?" />
+            </org-form-field>
+            <org-form-field validationMessage="Entry must be at least 20 characters.">
+              <org-label text="Changelog entry" htmlFor="showcase-context-changelog" [isRequired]="true" />
+              <org-textarea name="showcase-context-changelog" value="tweaks" />
+            </org-form-field>
+          </org-form-fields>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="list-inside list-disc flex flex-col gap-1">
+          <li><strong>FormField wrapping</strong>: Provides validation message + reserved space; the textarea's error state is driven directly by the FormField</li>
+          <li><strong>Label association</strong>: The label's <code>htmlFor</code> matches the textarea's <code>name</code> (which is also used as the element id)</li>
+        </ul>
+      </org-design-system-demo-expected-behaviour>
+    </div>
+  `,
+})
+class TextareaShowcaseStory {}
+
+export const Showcase: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Comprehensive showcase of every textarea axis — variants, visual states, toolbar configurations, auto-grow bounds, and in-context FormField composition — in a single scrollable view.',
+      },
+    },
+  },
+  render: () => ({
+    template: `<story-textarea-showcase />`,
+    moduleMetadata: {
+      imports: [TextareaShowcaseStory],
+    },
+  }),
+};
+
+@Component({
+  selector: 'story-textarea-non-form',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    Textarea,
+    TextareaToolbar,
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoCanvas,
+    DesignSystemDemoExpectedBehaviour,
+  ],
+  template: `
+    <div class="flex flex-col gap-4">
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Non-Form Usage" />
+        <org-design-system-demo-canvas slot="canvas">
+          <org-textarea
+            name="non-form-textarea"
+            placeholder="Type to update the value below"
+            [(value)]="value"
           >
-            <org-textarea-toolbar (sendClicked)="onSendClicked()">
-              <org-textarea-toolbar-item>
-                <org-button [iconOnly]="true" label="attach" ariaLabel="attach" variant="text" preIcon="plus" />
-              </org-textarea-toolbar-item>
-            </org-textarea-toolbar>
+            <org-textarea-toolbar
+              [showHint]="true"
+              [sendDisabled]="value().trim().length === 0"
+              (sendClicked)="onSend()"
+            />
           </org-textarea>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li>Toolbar renders at the bottom of the textarea within the border</li>
-          <li>Projected toolbar items align to the left</li>
-          <li>Send icon button always aligns to the right</li>
-          <li>Clicking the send button emits the <strong>sendClicked</strong> event (check the browser console)</li>
+          <p>
+            Value: <strong>{{ value() }}</strong>
+          </p>
+          <p>
+            Sent count: <strong>{{ sentCount() }}</strong>
+          </p>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="list-inside list-disc flex flex-col gap-1">
+          <li>Use <strong>[(value)]</strong> for two-way binding outside of a reactive form</li>
+          <li>The toolbar's <strong>sendClicked</strong> output emits whenever the built-in send button is clicked</li>
+          <li>The send button is gated locally via the <strong>sendDisabled</strong> input</li>
         </ul>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [
-        Textarea,
-        TextareaToolbar,
-        TextareaToolbarItem,
-        Button,
-        StorybookExampleContainer,
-        StorybookExampleContainerSection,
-      ],
-    },
-    props: {
-      onSendClicked: () => console.log('send clicked'),
-    },
-  }),
-};
+      </org-design-system-demo-expected-behaviour>
+    </div>
+  `,
+})
+class TextareaNonFormStory {
+  protected readonly value = signal<string>('');
+  protected readonly sentCount = signal<number>(0);
 
-export const Lines: Story = {
+  protected onSend(): void {
+    this.sentCount.update((count) => count + 1);
+    this.value.set('');
+  }
+}
+
+export const NonFormUsage: Story = {
   parameters: {
     docs: {
       description: {
-        story:
-          'Textarea with a properly configured `lines` input. The textarea starts at the minimum line count and auto-grows until it reaches the maximum, at which point it scrolls.',
+        story: 'Driving the textarea outside of a reactive form using `[(value)]` and listening to `(sendClicked)`.',
       },
     },
   },
   render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Auto-Resize by Lines"
-        currentState="Textarea starts at 2 lines, grows up to 6 lines, then scrolls"
-      >
-        <org-storybook-example-container-section label="lines = [2, 6]">
-          <org-textarea
-            name="textarea-lines-valid"
-            placeholder="type multiple lines to see the textarea grow..."
-            [lines]="[2, 6]"
-          />
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li>Textarea starts at <strong>2 lines</strong> tall (the minimum)</li>
-          <li>As content is added, the textarea grows until it reaches <strong>6 lines</strong> (the maximum)</li>
-          <li>Beyond the maximum, the textarea scrolls instead of growing further</li>
-          <li>Removing content shrinks the textarea back down to the minimum</li>
-          <li>When <strong>lines</strong> is valid, the <strong>rows</strong> input is ignored</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
+    template: `<story-textarea-non-form />`,
     moduleMetadata: {
-      imports: [Textarea, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [TextareaNonFormStory],
     },
   }),
 };
 
-export const LinesInvalidLength: Story = {
+@Component({
+  selector: 'story-textarea-reactive-form',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    ReactiveFormsModule,
+    Textarea,
+    Label,
+    FormField,
+    FormFields,
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoCanvas,
+    DesignSystemDemoExpectedBehaviour,
+  ],
+  template: `
+    <div class="flex flex-col gap-4">
+      <org-design-system-demo>
+        <org-design-system-demo-header
+          slot="header"
+          title="Reactive Form Integration"
+          [description]="'Form Valid: ' + descriptionForm.valid + ', Form Value: ' + formValueDisplay()"
+        />
+        <org-design-system-demo-canvas slot="canvas">
+          <form [formGroup]="descriptionForm" class="flex flex-col gap-2">
+            <org-form-fields>
+              <org-form-field [validationMessage]="descriptionError()">
+                <org-label text="Description" htmlFor="reactive-form-description" [isRequired]="true" />
+                <org-textarea
+                  name="reactive-form-description"
+                  placeholder="What does this do?"
+                  formControlName="description"
+                />
+              </org-form-field>
+              <org-form-field [validationMessage]="changelogError()">
+                <org-label text="Changelog entry" htmlFor="reactive-form-changelog" [isRequired]="true" />
+                <org-textarea
+                  name="reactive-form-changelog"
+                  placeholder="Markdown supported"
+                  formControlName="changelog"
+                  [minLines]="4"
+                />
+              </org-form-field>
+            </org-form-fields>
+          </form>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="list-inside list-disc flex flex-col gap-1">
+          <li>Uses <strong>formControlName</strong> for reactive forms via <code>ControlValueAccessor</code></li>
+          <li>The <code>org-form-field</code> wraps each textarea and drives <code>data-state="error"</code> via <code>validationMessage</code></li>
+          <li>Programmatic <strong>form.disable()</strong> / <strong>control.disable()</strong> reflects in the textarea</li>
+        </ul>
+      </org-design-system-demo-expected-behaviour>
+    </div>
+  `,
+})
+class TextareaReactiveFormStory {
+  protected readonly descriptionForm = new FormGroup({
+    description: new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.minLength(10)],
+    }),
+    changelog: new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.minLength(20)],
+    }),
+  });
+
+  protected readonly descriptionError = toSignal(
+    this.descriptionForm.controls.description.statusChanges.pipe(
+      map(() => {
+        const errors = this.descriptionForm.controls.description.errors;
+
+        if (!errors || !this.descriptionForm.controls.description.touched) {
+          return '';
+        }
+
+        if (errors['required']) {
+          return 'Description is required';
+        }
+
+        if (errors['minlength']) {
+          return 'Description must be at least 10 characters';
+        }
+
+        return '';
+      })
+    ),
+    { initialValue: '' }
+  );
+
+  protected readonly changelogError = toSignal(
+    this.descriptionForm.controls.changelog.statusChanges.pipe(
+      map(() => {
+        const errors = this.descriptionForm.controls.changelog.errors;
+
+        if (!errors || !this.descriptionForm.controls.changelog.touched) {
+          return '';
+        }
+
+        if (errors['required']) {
+          return 'Changelog entry is required';
+        }
+
+        if (errors['minlength']) {
+          return 'Entry must be at least 20 characters.';
+        }
+
+        return '';
+      })
+    ),
+    { initialValue: '' }
+  );
+
+  protected readonly formValueDisplay = toSignal(
+    this.descriptionForm.valueChanges.pipe(map((value) => JSON.stringify(value))),
+    { initialValue: JSON.stringify(this.descriptionForm.value) }
+  );
+}
+
+export const ReactiveFormIntegration: Story = {
   parameters: {
     docs: {
       description: {
-        story:
-          'Textarea with a `lines` input that does not have exactly 2 elements. Auto-resize is disabled and the `rows` input is used as a fallback. An error is logged to the console.',
+        story: 'Example of integrating the textarea with Angular reactive forms via `ControlValueAccessor`.',
       },
     },
   },
   render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Invalid Lines - Wrong Length"
-        currentState="lines has 1 element instead of 2"
-      >
-        <org-storybook-example-container-section label="lines = [3] (invalid, falls back to rows)">
-          <org-textarea
-            name="textarea-lines-invalid-length"
-            placeholder="auto-resize disabled, using rows=4"
-            [lines]="[3]"
-            [rows]="4"
-          />
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li>The <strong>lines</strong> input must contain exactly 2 elements</li>
-          <li>When invalid, the auto-resize feature is disabled</li>
-          <li>The <strong>rows</strong> input is used as a fallback for sizing</li>
-          <li>An error with type <strong>textarea-lines-invalid-length</strong> is logged to the browser console</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
+    template: `<story-textarea-reactive-form />`,
     moduleMetadata: {
-      imports: [Textarea, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const LinesInvalidValues: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Textarea with a `lines` input where one or both elements are 0 or negative. Auto-resize is disabled and the `rows` input is used as a fallback. An error is logged to the console.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Invalid Lines - Non-Positive Values"
-        currentState="lines has a value that is 0 or negative"
-      >
-        <org-storybook-example-container-section label="lines = [0, 5] (invalid, falls back to rows)">
-          <org-textarea
-            name="textarea-lines-invalid-values"
-            placeholder="auto-resize disabled, using rows=4"
-            [lines]="[0, 5]"
-            [rows]="4"
-          />
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li>Both elements of <strong>lines</strong> must be greater than 0</li>
-          <li>When invalid, the auto-resize feature is disabled</li>
-          <li>The <strong>rows</strong> input is used as a fallback for sizing</li>
-          <li>An error with type <strong>textarea-lines-invalid-values</strong> is logged to the browser console</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [Textarea, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const LinesInvalidOrder: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Textarea with a `lines` input where the second element is less than or equal to the first. Auto-resize is disabled and the `rows` input is used as a fallback. An error is logged to the console.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Invalid Lines - Wrong Order"
-        currentState="lines second element is not greater than the first"
-      >
-        <org-storybook-example-container-section label="lines = [5, 3] (invalid, falls back to rows)">
-          <org-textarea
-            name="textarea-lines-invalid-order"
-            placeholder="auto-resize disabled, using rows=4"
-            [lines]="[5, 3]"
-            [rows]="4"
-          />
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li>The second element of <strong>lines</strong> (max) must be greater than the first (min)</li>
-          <li>When invalid, the auto-resize feature is disabled</li>
-          <li>The <strong>rows</strong> input is used as a fallback for sizing</li>
-          <li>An error with type <strong>textarea-lines-invalid-order</strong> is logged to the browser console</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [Textarea, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const InverseEnter: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Demonstrates the `inverseEnter` input. When `inverseEnter` is false (default), Shift+Enter emits the `submitKeyPressed` output and Enter inserts a newline. When `inverseEnter` is true, Enter emits the `submitKeyPressed` output and Shift+Enter inserts a newline. Open the browser console to observe when the output fires.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Inverse Enter Behavior"
-        currentState="Comparing inverseEnter = false and inverseEnter = true with live output wiring"
-      >
-        <org-storybook-example-container-section label="inverseEnter = false (default)">
-          <org-textarea
-            name="textarea-inverse-enter-false"
-            placeholder="press Shift+Enter to submit, Enter for newline"
-            [rows]="3"
-            [inverseEnter]="false"
-            (submitKeyPressed)="onSubmitKeyPressed('inverseEnter=false')"
-          />
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="inverseEnter = true">
-          <org-textarea
-            name="textarea-inverse-enter-true"
-            placeholder="press Enter to submit, Shift+Enter for newline"
-            [rows]="3"
-            [inverseEnter]="true"
-            (submitKeyPressed)="onSubmitKeyPressed('inverseEnter=true')"
-          />
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li><strong>inverseEnter = false</strong>: Enter inserts a newline; Shift+Enter emits the <strong>submitKeyPressed</strong> output</li>
-          <li><strong>inverseEnter = true</strong>: Enter emits the <strong>submitKeyPressed</strong> output; Shift+Enter inserts a newline</li>
-          <li>Check the browser console to observe when the output fires and which configuration emitted it</li>
-          <li>Useful for chat-like interfaces where Enter should submit instead of adding a newline</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [Textarea, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-    props: {
-      onSubmitKeyPressed: (source: string) => console.log('submitKeyPressed fired from', source),
+      imports: [TextareaReactiveFormStory],
     },
   }),
 };

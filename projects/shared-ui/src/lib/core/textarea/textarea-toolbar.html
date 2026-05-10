@@ -1,13 +1,26 @@
-<div class="toolbar">
-  <div class="actions">
-    <ng-content />
-  </div>
-  <org-button
-    variant="text"
-    [iconOnly]="true"
-    [label]="sendAriaLabel()"
-    [ariaLabel]="sendAriaLabel()"
-    preIcon="send"
-    (clicked)="onSendClick()"
-  />
+<div class="left">
+  <ng-content />
+</div>
+<div class="spacer"></div>
+<div class="right">
+  <ng-content select="[toolbar-right]" />
+  @if (showHint()) {
+    <span class="hint">
+      <kbd>{{ hintKey() }}</kbd>
+      {{ hintLabel() }}
+    </span>
+  }
+  @if (showSendButton()) {
+    <org-button
+      variant="filled"
+      color="primary"
+      size="sm"
+      [iconOnly]="true"
+      preIcon="arrow-up"
+      [label]="sendAriaLabel()"
+      [ariaLabel]="sendAriaLabel()"
+      [disabled]="sendDisabled()"
+      (clicked)="onSendClick()"
+    />
+  }
 </div>

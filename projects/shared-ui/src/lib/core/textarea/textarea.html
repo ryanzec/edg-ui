@@ -1,67 +1,18 @@
-<div class="textarea-content">
-  @for (item of inlineItems(); track item.id) {
-    <org-tag
-      color="primary"
-      [removable]="item.removable && brainRef.canModifyContent()"
-      (removed)="onInlineItemRemove(item)"
-    >
-      {{ item.label }}
-    </org-tag>
-  }
-  @if (hasPreIcon()) {
-    @if (brainRef.isPreIconInteractive()) {
-      <button
-        type="button"
-        class="textarea-icon-btn textarea-pre-icon-btn"
-        (click)="brainRef.handlePreIconRequest()"
-        [disabled]="brainRef.isDisabled() || brainRef.readonly()"
-        [attr.aria-label]="preIconAriaLabel()"
-      >
-        <org-icon [name]="preIcon()!" />
-      </button>
-    } @else {
-      <span class="textarea-icon-btn textarea-pre-icon-btn" aria-hidden="true">
-        <org-icon [name]="preIcon()!" />
-      </span>
-    }
-  }
-  <textarea
-    orgTextareaBrain
-    #brainRef="orgTextareaBrain"
-    class="native-textarea"
-    [(value)]="value"
-    [name]="name()"
-    [disabled]="disabled()"
-    [readonly]="readonly()"
-    [autoFocus]="autoFocus()"
-    [selectAllOnFocus]="selectAllOnFocus()"
-    [inverseEnter]="inverseEnter()"
-    [preIconAriaLabel]="preIconAriaLabel()"
-    [postIconAriaLabel]="postIconAriaLabel()"
-    [placeholder]="placeholder()"
-    [rows]="effectiveRows()"
-    (focused)="onBrainFocused()"
-    (blurred)="onBrainBlurred()"
-    (submitKeyPressed)="onBrainSubmitKeyPressed()"
-    (preIconRequested)="onBrainPreIconRequested()"
-    (postIconRequested)="onBrainPostIconRequested()"
-  ></textarea>
-  @if (hasPostIcon()) {
-    @if (brainRef.isPostIconInteractive()) {
-      <button
-        type="button"
-        class="textarea-icon-btn textarea-post-icon-btn"
-        (click)="brainRef.handlePostIconRequest()"
-        [disabled]="brainRef.isDisabled() || brainRef.readonly()"
-        [attr.aria-label]="postIconAriaLabel()"
-      >
-        <org-icon [name]="postIcon()!" />
-      </button>
-    } @else {
-      <span class="textarea-icon-btn textarea-post-icon-btn" aria-hidden="true">
-        <org-icon [name]="postIcon()!" />
-      </span>
-    }
-  }
-</div>
+<textarea
+  orgTextareaBrain
+  #brainRef="orgTextareaBrain"
+  class="native"
+  [(value)]="value"
+  [name]="name()"
+  [disabled]="disabled()"
+  [readonly]="effectiveReadonly()"
+  [autoFocus]="autoFocus()"
+  [selectAllOnFocus]="selectAllOnFocus()"
+  [inverseEnter]="inverseEnter()"
+  [placeholder]="placeholder()"
+  (focused)="onBrainFocused()"
+  (blurred)="onBrainBlurred()"
+  (submitKeyPressed)="onBrainSubmitKeyPressed()"
+></textarea>
+
 <ng-content select="org-textarea-toolbar" />

@@ -55,6 +55,7 @@ const RADIO_GROUP_TOKENS_CSS = path.join(
 );
 const SKELETON_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/skeleton-tokens.css');
 const TABLE_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/table-tokens.css');
+const TEXTAREA_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/textarea-tokens.css');
 const EMPTY_INDICATOR_TOKENS_CSS = path.join(
   REPO_ROOT,
   'projects/shared-ui/src/lib/styles/tokens/empty-indicator-tokens.css',
@@ -270,6 +271,7 @@ async function main() {
   const radioGroupContent = cleanCss(fs.readFileSync(RADIO_GROUP_TOKENS_CSS, 'utf-8'));
   const skeletonContent = cleanCss(fs.readFileSync(SKELETON_TOKENS_CSS, 'utf-8'));
   const tableContent = cleanCss(fs.readFileSync(TABLE_TOKENS_CSS, 'utf-8'));
+  const textareaContent = cleanCss(fs.readFileSync(TEXTAREA_TOKENS_CSS, 'utf-8'));
 
   // Base tokens: all :root vars; color vars are used only for resolution, non-color vars are also output
   const baseVars = Object.assign({}, ...findBlocks(baseContent, ':root').map(extractVariables));
@@ -310,6 +312,7 @@ async function main() {
     ...findBlocks(radioGroupContent, ':root').map(extractVariables),
     ...findBlocks(skeletonContent, ':root').map(extractVariables),
     ...findBlocks(tableContent, ':root').map(extractVariables),
+    ...findBlocks(textareaContent, ':root').map(extractVariables),
   );
   const darkVars = Object.assign(
     {},
@@ -347,6 +350,7 @@ async function main() {
     ...findBlocks(radioGroupContent, '.dark').map(extractVariables),
     ...findBlocks(skeletonContent, '.dark').map(extractVariables),
     ...findBlocks(tableContent, '.dark').map(extractVariables),
+    ...findBlocks(textareaContent, '.dark').map(extractVariables),
   );
 
   // Resolution maps: base vars are always the foundation

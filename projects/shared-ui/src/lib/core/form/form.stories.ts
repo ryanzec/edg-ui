@@ -87,7 +87,7 @@ const skillOptions: ComboboxOptionInput[] = [
             <!-- textarea field -->
             <org-form-field [validationMessage]="getFieldError('bio')">
               <org-label text="Bio (max 200 chars)" htmlFor="bio" />
-              <org-textarea formControlName="bio" name="bio" placeholder="Tell us about yourself..." [rows]="4" />
+              <org-textarea formControlName="bio" name="bio" placeholder="Tell us about yourself..." [minLines]="4" />
             </org-form-field>
 
             <!-- checkbox field -->
@@ -345,7 +345,7 @@ class ReactiveFormDemoComponent {
             <!-- textarea field -->
             <org-form-field [validationMessage]="bioError()">
               <org-label text="Bio" htmlFor="bio" [isRequired]="true" />
-              <org-textarea [(value)]="bio" name="bio" placeholder="Tell us about yourself..." [rows]="4" />
+              <org-textarea [(value)]="bio" name="bio" placeholder="Tell us about yourself..." [minLines]="4" />
             </org-form-field>
 
             <!-- checkbox field -->
@@ -702,7 +702,7 @@ type PrePopulatedFormData = {
             <!-- textarea field -->
             <org-form-field [validationMessage]="getFieldError('bio')">
               <org-label text="Bio (max 200 chars)" htmlFor="bio" />
-              <org-textarea formControlName="bio" name="bio" placeholder="Tell us about yourself..." [rows]="4" />
+              <org-textarea formControlName="bio" name="bio" placeholder="Tell us about yourself..." [minLines]="4" />
             </org-form-field>
 
             <!-- checkbox field -->
@@ -982,7 +982,7 @@ class ReactiveFormPrePopulatedDemoComponent {
             <!-- textarea field -->
             <org-form-field [validationMessage]="bioError()">
               <org-label text="Bio" htmlFor="bio" [isRequired]="true" />
-              <org-textarea [(value)]="bio" name="bio" placeholder="Tell us about yourself..." [rows]="4" />
+              <org-textarea [(value)]="bio" name="bio" placeholder="Tell us about yourself..." [minLines]="4" />
             </org-form-field>
 
             <!-- checkbox field -->

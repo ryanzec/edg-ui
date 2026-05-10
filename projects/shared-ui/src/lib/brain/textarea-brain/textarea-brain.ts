@@ -15,7 +15,6 @@ import {
 import { outputFromObservable, takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FocusMonitor } from '@angular/cdk/a11y';
 import { Subject } from 'rxjs';
-import { angularUtils } from '@organization/shared-utils';
 import { FORM_FIELD_COMPONENT } from '../../core/form-fields/form-field';
 
 /** default initial value the brain assigns when no writes have happened */
@@ -36,12 +35,6 @@ export const TEXTAREA_AUTO_FOCUS_DEFAULT = false;
 /** default value for the inverseEnter input */
 export const TEXTAREA_INVERSE_ENTER_DEFAULT = false;
 
-/** default value for the preIconAriaLabel input */
-export const TEXTAREA_PRE_ICON_ARIA_LABEL_DEFAULT: string | undefined = undefined;
-
-/** default value for the postIconAriaLabel input */
-export const TEXTAREA_POST_ICON_ARIA_LABEL_DEFAULT: string | undefined = undefined;
-
 /** the internal state shape for the textarea brain directive */
 type TextareaState = {
   isFocused: boolean;
@@ -50,10 +43,9 @@ type TextareaState = {
 
 /**
  * headless brain directive for the textarea. owns interaction state (focused, form-disabled, value), focus monitoring
- * via the angular cdk, native value / blur / input event handling, accessible attribute exposure (including
- * pre/post-icon aria labels and form-field validation a11y wiring), submit-key (enter / shift+enter) routing, and
- * reactive forms callback plumbing. carries no styling — apply directly to a native textarea element inside a
- * presentation component.
+ * via the angular cdk, native value / blur / input event handling, accessible attribute exposure (form-field
+ * validation a11y wiring), submit-key (enter / shift+enter) routing, and reactive forms callback plumbing. carries
+ * no styling — apply directly to a native textarea element inside a presentation component.
  */
 @Directive({
   selector: 'textarea[orgTextareaBrain]',
@@ -86,8 +78,6 @@ export class TextareaBrainDirective implements OnInit, OnDestroy {
   });
 
   private readonly _submitKeyPressed$ = new Subject<void>();
-  private readonly _preIconRequested$ = new Subject<void>();
-  private readonly _postIconRequested$ = new Subject<void>();
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private _onChange: (value: string) => void = () => {};
@@ -117,18 +107,6 @@ export class TextareaBrainDirective implements OnInit, OnDestroy {
   /** when true, enter submits and shift+enter adds a new line; when false, the behavior is reversed */
   public readonly inverseEnter = input<boolean>(TEXTAREA_INVERSE_ENTER_DEFAULT);
 
-  /** accessible label for the pre-icon button when it is interactive */
-  public readonly preIconAriaLabel = input<string | undefined, string | null | undefined>(
-    TEXTAREA_PRE_ICON_ARIA_LABEL_DEFAULT,
-    { transform: angularUtils.transformNullToUndefined }
-  );
-
-  /** accessible label for the post-icon button when it is interactive */
-  public readonly postIconAriaLabel = input<string | undefined, string | null | undefined>(
-    TEXTAREA_POST_ICON_ARIA_LABEL_DEFAULT,
-    { transform: angularUtils.transformNullToUndefined }
-  );
-
   /** emitted when the textarea receives focus */
   public readonly focused = output<void>();
 
@@ -137,12 +115,6 @@ export class TextareaBrainDirective implements OnInit, OnDestroy {
 
   /** emitted when the configured submit key combination is pressed */
   public readonly submitKeyPressed = outputFromObservable(this._submitKeyPressed$);
-
-  /** emitted by the brain when a pre-icon click was requested and the textarea is interactive */
-  public readonly preIconRequested = outputFromObservable(this._preIconRequested$);
-
-  /** emitted by the brain when a post-icon click was requested and the textarea is interactive */
-  public readonly postIconRequested = outputFromObservable(this._postIconRequested$);
 
   /** whether the textarea currently has focus */
   public readonly isFocused = computed<boolean>(() => this._state().isFocused);
@@ -155,18 +127,6 @@ export class TextareaBrainDirective implements OnInit, OnDestroy {
 
   /** whether the user is allowed to modify content (combines disabled and readonly) */
   public readonly canModifyContent = computed<boolean>(() => !this.isDisabled() && !this.readonly());
-
-  /** whether the pre-icon click has any registered listener */
-  public readonly hasPreIconObserver = computed<boolean>(() => this._preIconRequested$.observed);
-
-  /** whether the post-icon click has any registered listener */
-  public readonly hasPostIconObserver = computed<boolean>(() => this._postIconRequested$.observed);
-
-  /** whether the pre-icon should be rendered as an interactive button (click observed) */
-  public readonly isPreIconInteractive = computed<boolean>(() => this.hasPreIconObserver());
-
-  /** whether the post-icon should be rendered as an interactive button (click observed) */
-  public readonly isPostIconInteractive = computed<boolean>(() => this.hasPostIconObserver());
 
   /** whether the associated form-field currently has a validation message */
   public readonly hasValidationMessage = computed<boolean>(() => {
@@ -257,24 +217,6 @@ export class TextareaBrainDirective implements OnInit, OnDestroy {
 
     event.preventDefault();
     this._submitKeyPressed$.next();
-  }
-
-  /** routes a pre-icon click request through the brain's interaction gating */
-  public handlePreIconRequest(): void {
-    if (!this.isInteractive()) {
-      return;
-    }
-
-    this._preIconRequested$.next();
-  }
-
-  /** routes a post-icon click request through the brain's interaction gating */
-  public handlePostIconRequest(): void {
-    if (!this.isInteractive()) {
-      return;
-    }
-
-    this._postIconRequested$.next();
   }
 
   /** programmatically focuses the native textarea element when interaction is allowed */

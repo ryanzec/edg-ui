@@ -1,0 +1,42 @@
+:root {
+  /* layout */
+  --textarea-radius: var(--radius-sm);
+  --textarea-border-width: var(--border-width);
+  --textarea-line-height: var(--line-height-normal);
+  --textarea-letter-spacing: var(--letter-spacing-normal);
+  --textarea-disabled-opacity: var(--opacity-disabled);
+  --textarea-max-width: var(--sizing-xl); /* 36rem */
+
+  /* size */
+  --textarea-pad-x: var(--spacing-2);
+  --textarea-pad-y: var(--spacing-2);
+  --textarea-pad-bottom-with-toolbar: var(--spacing-1);
+  --textarea-min-lines: 3;
+  --textarea-max-lines: 8;
+  --textarea-font-size: var(--font-size-base);
+
+  /* toolbar */
+  --textarea-toolbar-gap: var(--spacing-2);
+  --textarea-toolbar-pad-y: var(--spacing-1);
+  --textarea-toolbar-stack: var(--spacing-1);
+  --textarea-toolbar-min-h: var(--spacing-7); /* 28px */
+
+  /* keyboard hint + kbd */
+  --textarea-hint-font-size: var(--font-size-xs);
+  --textarea-hint-fg: var(--color-fg-muted);
+  --textarea-hint-kbd-border: var(--color-border);
+  --textarea-hint-kbd-bg: var(--color-bg-surface-2);
+  --textarea-hint-kbd-fg: var(--color-fg-muted);
+
+  /* color × variant slot tokens (defaults to bordered) */
+  --textarea-bg: var(--color-bg-surface);
+  --textarea-bg-hover: var(--color-bg-surface);
+  --textarea-bg-focus: var(--color-bg-surface);
+  --textarea-border-color: var(--color-border);
+  --textarea-border-color-hover: var(--color-info);
+  --textarea-border-color-focus: var(--color-info);
+  --textarea-border-color-error: var(--color-danger);
+  --textarea-fg: var(--color-fg);
+  --textarea-fg-placeholder: var(--color-fg-faint);
+  --textarea-fg-muted: var(--color-fg-muted);
+}

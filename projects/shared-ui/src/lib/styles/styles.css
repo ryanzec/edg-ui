@@ -36,6 +36,7 @@
 @import './tokens/radio-group-tokens.css';
 @import './tokens/skeleton-tokens.css';
 @import './tokens/table-tokens.css';
+@import './tokens/textarea-tokens.css';
 @import './animations.css';
 @import './background-utility.css';
 @import './border-utility.css';

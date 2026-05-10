@@ -1,18 +1,50 @@
 @layer components {
   :host {
-    display: block;
-    width: 100%;
-  }
-
-  .toolbar {
+    grid-column: 1 / -1;
+    grid-row: 2 / 3;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    width: 100%;
+    gap: var(--textarea-toolbar-gap);
+    min-height: var(--textarea-toolbar-min-h);
+    padding: var(--textarea-toolbar-pad-y) var(--textarea-pad-x) var(--textarea-pad-y);
+    margin-top: calc(var(--textarea-toolbar-stack) * -1);
   }
 
-  .actions {
-    display: flex;
-    gap: var(--spacing-2);
+  .left,
+  .right {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--textarea-toolbar-gap);
+    flex: 0 0 auto;
+  }
+
+  .spacer {
+    flex: 1 1 auto;
+  }
+
+  .hint {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-1);
+    color: var(--textarea-hint-fg);
+    font-size: var(--textarea-hint-font-size);
+    line-height: 1;
+    user-select: none;
+    pointer-events: none;
+  }
+
+  .hint kbd {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.125rem; /* 18px */
+    padding: 0 var(--spacing-1);
+    border: var(--border-width) solid var(--textarea-hint-kbd-border);
+    border-radius: var(--radius-xs);
+    background-color: var(--textarea-hint-kbd-bg);
+    color: var(--textarea-hint-kbd-fg);
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    line-height: 1.4;
   }
 }
