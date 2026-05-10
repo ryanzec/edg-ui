@@ -35,6 +35,7 @@ const DESIGN_SYSTEM_DEMO_TOKENS_CSS = path.join(
   'projects/shared-ui/src/lib/styles/tokens/design-system-demo-tokens.css',
 );
 const OVERLAY_MENU_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/overlay-menu-tokens.css');
+const SKELETON_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/skeleton-tokens.css');
 const EMPTY_INDICATOR_TOKENS_CSS = path.join(
   REPO_ROOT,
   'projects/shared-ui/src/lib/styles/tokens/empty-indicator-tokens.css',
@@ -237,6 +238,7 @@ async function main() {
   const designSystemDemoContent = cleanCss(fs.readFileSync(DESIGN_SYSTEM_DEMO_TOKENS_CSS, 'utf-8'));
   const emptyIndicatorContent = cleanCss(fs.readFileSync(EMPTY_INDICATOR_TOKENS_CSS, 'utf-8'));
   const overlayMenuContent = cleanCss(fs.readFileSync(OVERLAY_MENU_TOKENS_CSS, 'utf-8'));
+  const skeletonContent = cleanCss(fs.readFileSync(SKELETON_TOKENS_CSS, 'utf-8'));
 
   // Base tokens: all :root vars; color vars are used only for resolution, non-color vars are also output
   const baseVars = Object.assign({}, ...findBlocks(baseContent, ':root').map(extractVariables));
@@ -265,6 +267,7 @@ async function main() {
     ...findBlocks(designSystemDemoContent, ':root').map(extractVariables),
     ...findBlocks(emptyIndicatorContent, ':root').map(extractVariables),
     ...findBlocks(overlayMenuContent, ':root').map(extractVariables),
+    ...findBlocks(skeletonContent, ':root').map(extractVariables),
   );
   const darkVars = Object.assign(
     {},
@@ -290,6 +293,7 @@ async function main() {
     ...findBlocks(designSystemDemoContent, '.dark').map(extractVariables),
     ...findBlocks(emptyIndicatorContent, '.dark').map(extractVariables),
     ...findBlocks(overlayMenuContent, '.dark').map(extractVariables),
+    ...findBlocks(skeletonContent, '.dark').map(extractVariables),
   );
 
   // Resolution maps: base vars are always the foundation

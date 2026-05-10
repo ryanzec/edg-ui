@@ -37,7 +37,7 @@
 </div>
 
 @if (isInitialLoading()) {
-  <org-skeleton type="table" class="w-full" />
+  <org-skeleton variant="table" class="w-full" />
 } @else if (users().length === 0) {
   <div class="flex justify-center items-center p-4">
     @if (hasActiveFilters()) {

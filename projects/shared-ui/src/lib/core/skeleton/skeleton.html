@@ -1,11 +1,32 @@
-@if (isTable()) {
-  <div class="skeleton-table">
-    @for (bar of tableBars; track bar) {
-      <div class="skeleton-table-bar org-skeleton-gradient"></div>
-    }
-  </div>
-}
-
-@if (isCard()) {
-  <div class="skeleton-card org-skeleton-gradient"></div>
+@switch (variant()) {
+  @case ('card') {
+    <div class="block" data-aspect="media"></div>
+    <div class="stack">
+      <div class="bar" data-height="lg" data-width="2/3"></div>
+      <div class="bar" data-width="full"></div>
+      <div class="bar" data-width="3/4"></div>
+      <div class="bar" data-height="sm" data-width="1/2"></div>
+    </div>
+  }
+  @case ('card-headless') {
+    <div class="stack">
+      <div class="bar" data-height="lg" data-width="2/3"></div>
+      <div class="bar" data-width="full"></div>
+      <div class="bar" data-width="3/4"></div>
+    </div>
+  }
+  @case ('table') {
+    <div class="stack" data-gap="tight">
+      @for (bar of tableBars(); track bar.index) {
+        <div class="bar" [attr.data-width]="bar.width"></div>
+      }
+    </div>
+  }
+  @case ('table-varied') {
+    <div class="stack" data-gap="tight">
+      @for (bar of tableBars(); track bar.index) {
+        <div class="bar" [attr.data-width]="bar.width"></div>
+      }
+    </div>
+  }
 }

@@ -42,12 +42,13 @@
   }
 }
 
-@keyframes skeleton-shimmer {
-  0% {
-    background-position: 200% 0%;
-  }
+@keyframes skeleton-pulse {
+  0%,
   100% {
-    background-position: 0% 0%;
+    opacity: var(--opacity-skeleton-pulse-max);
+  }
+  50% {
+    opacity: var(--opacity-skeleton-pulse-min);
   }
 }
 

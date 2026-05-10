@@ -1,0 +1,29 @@
+:root {
+  /* color */
+  --color-skeleton-bar: var(--color-bg-surface-2);
+  --color-skeleton-bar-strong: var(--color-border);
+
+  /* sizing */
+  --sizing-skeleton-bar-sm: 0.5rem; /* 8px */
+  --sizing-skeleton-bar-base: 0.625rem; /* 10px */
+  --sizing-skeleton-bar-lg: 0.875rem; /* 14px */
+
+  /* spacing */
+  --spacing-skeleton-stack: var(--spacing-3);
+  --spacing-skeleton-stack-tight: var(--spacing-2);
+
+  /* motion */
+  --motion-skeleton-duration: 1.6s;
+
+  /* opacity */
+  --opacity-skeleton-pulse-max: 1;
+  --opacity-skeleton-pulse-min: 0.5;
+
+  /* aspect */
+  --aspect-skeleton-media: var(--aspect-video);
+}
+
+.dark {
+  --color-skeleton-bar: var(--color-bg-hover);
+  --color-skeleton-bar-strong: var(--color-bg-active);
+}

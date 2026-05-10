@@ -1,7 +1,27 @@
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import type { Meta, StoryObj } from '@storybook/angular';
-import { Skeleton } from './skeleton';
-import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
-import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
+import { ButtonToggle, ButtonToggleItem } from '../button-toggle/button-toggle';
+import { CheckboxToggle } from '../checkbox-toggle/checkbox-toggle';
+import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
+import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
+import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
+import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
+import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
+import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
+import { Skeleton, SkeletonVariant, allSkeletonVariants } from './skeleton';
+
+const liveDemoVariantItems: ButtonToggleItem[] = allSkeletonVariants.map((variant) => ({
+  label: variant,
+  value: variant,
+  buttonColor: 'primary',
+}));
+
+const liveDemoRowsItems: ButtonToggleItem[] = ['3', '7', '12'].map((rows) => ({
+  label: rows,
+  value: rows,
+  buttonColor: 'primary',
+}));
 
 const meta: Meta<Skeleton> = {
   title: 'Core/Components/Skeleton',
@@ -14,28 +34,34 @@ const meta: Meta<Skeleton> = {
 <div class="docs-top-level-overview">
   ## Skeleton Component
 
-  A loading placeholder component that displays animated gradient placeholders while content is loading in the background.
+  A loading placeholder that mimics the shape of the content being loaded. Four variant presets cover the most common layouts.
 
   ### Features
-  - 2 type variants (table, card)
-  - Animated left-to-right gradient shimmer effect
-  - Top-left to bottom-right light gray gradient
-  - Customizable container classes
+  - 4 variant presets (card, card-headless, table, table-varied)
+  - Bordered surface frame matching the Card component's surface tokens (toggleable)
+  - Configurable row count for table variants
+  - Calm pulse animation that respects \`prefers-reduced-motion\`
+  - \`role="status"\` + \`aria-busy="true"\` + configurable \`ariaLabel\` via the host brain directive
 
-  ### Type Options
-  - **table**: Renders 7 bars of varying widths with animated gradient
-  - **card**: Renders a rectangular card with animated gradient
+  ### Variant Options
+  - **card**: 16:9 media block on top, then a title bar, two body bars, and a footer/meta bar
+  - **card-headless**: Same as \`card\` but without the media block — for text-only stand-ins
+  - **table**: Equal-width horizontal bars stacked tightly to stand in for table rows
+  - **table-varied**: Same row layout as \`table\` but each bar takes a different width from a fixed cycle
 
   ### Usage Examples
   \`\`\`html
-  <!-- Table skeleton -->
-  <org-skeleton type="table" />
+  <!-- Card preset -->
+  <org-skeleton variant="card" />
 
-  <!-- Card skeleton -->
-  <org-skeleton type="card" />
+  <!-- Card without the media block -->
+  <org-skeleton variant="card-headless" />
 
-  <!-- With custom dimensions via class -->
-  <org-skeleton type="card" class="w-2xs h-sm" />
+  <!-- Table preset with 12 rows -->
+  <org-skeleton variant="table" [rows]="12" />
+
+  <!-- Drop the bordered frame when sitting inside a container that already provides it -->
+  <org-skeleton variant="table-varied" [bordered]="false" />
   \`\`\`
 </div>
         `,
@@ -49,19 +75,29 @@ type Story = StoryObj<Skeleton>;
 
 export const Default: Story = {
   args: {
-    type: 'table',
+    variant: 'card',
+    bordered: true,
+    rows: 7,
   },
   argTypes: {
-    type: {
+    variant: {
       control: 'select',
-      options: ['table', 'card'],
-      description: 'The type of skeleton to display',
+      options: ['card', 'card-headless', 'table', 'table-varied'],
+      description: 'The layout variant of the skeleton',
+    },
+    bordered: {
+      control: 'boolean',
+      description: 'Whether the skeleton renders its bordered surface frame',
+    },
+    rows: {
+      control: { type: 'number', min: 0, max: 24, step: 1 },
+      description: 'Number of rows rendered for the table and table-varied variants; ignored for card variants',
     },
   },
   parameters: {
     docs: {
       description: {
-        story: 'Default skeleton with table type. Use the controls below to interact with the component.',
+        story: 'Default skeleton with card variant. Use the controls below to interact with the component.',
       },
     },
   },
@@ -69,7 +105,9 @@ export const Default: Story = {
     props: args,
     template: `
       <org-skeleton
-        [type]="type"
+        [variant]="variant"
+        [bordered]="bordered"
+        [rows]="rows"
       />
     `,
     moduleMetadata: {
@@ -78,172 +116,234 @@ export const Default: Story = {
   }),
 };
 
-export const Types: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Comparison of table and card skeleton types.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Skeleton Types"
-        currentState="Comparing table and card skeleton types"
-      >
-        <org-storybook-example-container-section label="Table Type">
-          <org-skeleton type="table" />
-        </org-storybook-example-container-section>
+@Component({
+  selector: 'story-skeleton-live-demo',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    ReactiveFormsModule,
+    Skeleton,
+    ButtonToggle,
+    CheckboxToggle,
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoControls,
+    DesignSystemDemoControlGroup,
+    DesignSystemDemoCanvas,
+  ],
+  styles: [
+    `
+      :host {
+        display: block;
+      }
 
-        <org-storybook-example-container-section label="Card Type">
-          <org-skeleton type="card" />
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li><strong>Table</strong>: 7 bars of varying widths with animated gradient shimmer</li>
-          <li><strong>Card</strong>: Rectangular card with animated gradient shimmer</li>
-          <li><strong>Animation</strong>: Both types have a smooth left-to-right gradient animation</li>
-          <li><strong>Gradient</strong>: Top-left to bottom-right light gray gradient effect</li>
-        </ul>
-      </org-storybook-example-container>
+      .canvas-stage {
+        display: block;
+        width: 100%;
+      }
     `,
-    moduleMetadata: {
-      imports: [Skeleton, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const TableVariations: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Different table skeleton variations with different container classes.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Table Skeleton Variations"
-        currentState="Comparing different table skeleton configurations"
-      >
-        <org-storybook-example-container-section label="Default Width">
-          <org-skeleton type="table" />
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Custom Width">
-          <org-skeleton type="table" class="w-sm" />
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Full Width with More Gap">
-          <org-skeleton type="table" class="w-full gap-4" />
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li><strong>Default</strong>: Uses full width available with standard gap</li>
-          <li><strong>Custom Width</strong>: Fixed width can be set via the <code>class</code> attribute on the element</li>
-          <li><strong>Custom Gap</strong>: Spacing between bars can be customized</li>
-          <li><strong>Bar Widths</strong>: Each bar has a different width (90%, 75%, 95%, 60%, 85%, 70%, 80%)</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [Skeleton, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const CardVariations: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Different card skeleton variations with different dimensions.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Card Skeleton Variations"
-        currentState="Comparing different card skeleton dimensions"
-      >
-        <org-storybook-example-container-section label="Default Size">
-          <org-skeleton type="card" />
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Square Card">
-          <org-skeleton type="card" class="w-5xs h-5xs" />
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Wide Card">
-          <org-skeleton type="card" class="w-sm h-6xs" />
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Tall Card">
-          <org-skeleton type="card" class="w-5xs h-sm" />
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li><strong>Default</strong>: Full width with 200px height</li>
-          <li><strong>Square</strong>: Equal width and height for square cards</li>
-          <li><strong>Wide</strong>: Wider aspect ratio for horizontal layouts</li>
-          <li><strong>Tall</strong>: Taller aspect ratio for vertical layouts</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [Skeleton, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const UsageExamples: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Real-world usage examples showing skeletons in typical loading scenarios.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Usage Examples"
-        currentState="Real-world skeleton loading scenarios"
-      >
-        <org-storybook-example-container-section label="Loading User List">
-          <div class="flex flex-col gap-4">
-            <org-skeleton type="table" />
+  ],
+  template: `
+    <form [formGroup]="liveDemoForm">
+      <org-design-system-demo>
+        <org-design-system-demo-header
+          slot="header"
+          title="Live demo"
+          description="Toggle the variant, the bordered framing, and the table row count to see every preset."
+        />
+        <org-design-system-demo-controls slot="controls">
+          <org-design-system-demo-control-group label="Variant">
+            <org-button-toggle [items]="variantItems" formControlName="variant" buttonSize="sm" />
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Bordered">
+            <org-checkbox-toggle name="live-demo-bordered" value="bordered" formControlName="bordered">
+              {{ liveDemoForm.controls.bordered.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Rows">
+            <org-button-toggle [items]="rowsItems" formControlName="rows" buttonSize="sm" />
+          </org-design-system-demo-control-group>
+        </org-design-system-demo-controls>
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="canvas-stage">
+            <org-skeleton
+              [variant]="liveDemoForm.controls.variant.value"
+              [bordered]="liveDemoForm.controls.bordered.value"
+              [rows]="+liveDemoForm.controls.rows.value"
+            />
           </div>
-        </org-storybook-example-container-section>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+    </form>
+  `,
+})
+class SkeletonLiveDemoStory {
+  protected readonly variantItems = liveDemoVariantItems;
+  protected readonly rowsItems = liveDemoRowsItems;
 
-        <org-storybook-example-container-section label="Loading Product Cards">
-          <div class="flex gap-4">
-            <org-skeleton type="card" class="w-3xs h-2xs" />
-            <org-skeleton type="card" class="w-3xs h-2xs" />
-            <org-skeleton type="card" class="w-3xs h-2xs" />
-          </div>
-        </org-storybook-example-container-section>
+  protected readonly liveDemoForm = new FormGroup({
+    variant: new FormControl<SkeletonVariant>('card', { nonNullable: true }),
+    bordered: new FormControl<boolean>(true, { nonNullable: true }),
+    rows: new FormControl<string>('7', { nonNullable: true }),
+  });
+}
 
-        <org-storybook-example-container-section label="Loading Profile Section">
-          <div class="flex gap-4">
-            <org-skeleton type="card" class="w-6xs h-6xs" />
-            <div class="flex-1">
-              <org-skeleton type="table" class="gap-3" />
+export const LiveDemo: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Fully interactive demo. Use the controls to drive the variant, bordered framing, and row count and observe the live result in the canvas.',
+      },
+    },
+  },
+  render: () => ({
+    template: `<story-skeleton-live-demo />`,
+    moduleMetadata: {
+      imports: [SkeletonLiveDemoStory],
+    },
+  }),
+};
+
+export const Showcase: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Comprehensive showcase of every skeleton variant axis — card, card-headless, table, table-varied, bordered framing, and reduced motion.',
+      },
+    },
+  },
+  render: () => ({
+    template: `
+      <div class="flex flex-col gap-4">
+        <org-design-system-demo>
+          <org-design-system-demo-header
+            slot="header"
+            title="Variant · card"
+            description="A card-shaped placeholder: 16:9 media block on top, then a title bar, two body bars, and a footer/meta bar."
+          />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="w-2xs">
+              <org-skeleton variant="card" />
             </div>
-          </div>
-        </org-storybook-example-container-section>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>Block</strong>: 16:9 media silhouette sits flush against the host edges, using the stronger bar tint</li>
+            <li><strong>Stack</strong>: Title (lg height) + two body bars + footer (sm height) below the block</li>
+            <li><strong>Bordered by default</strong>: Renders the surrounding card-like surface frame</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
 
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li><strong>User List</strong>: Table skeleton for loading list data</li>
-          <li><strong>Product Cards</strong>: Multiple card skeletons for grid layouts</li>
-          <li><strong>Profile Section</strong>: Combined card and table skeletons for complex layouts</li>
-        </ul>
-      </org-storybook-example-container>
+        <org-design-system-demo>
+          <org-design-system-demo-header
+            slot="header"
+            title="Variant · card-headless"
+            description="Same as card but without the 16:9 media block on top. Use it when the placeholder stands in for text-only content."
+          />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="w-2xs">
+              <org-skeleton variant="card-headless" />
+            </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>No media block</strong>: A title bar plus two body bars only</li>
+            <li><strong>Same framing</strong>: Bordered surface matches the card variant</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header
+            slot="header"
+            title="Variant · table"
+            description="Horizontal bars stacked tightly to stand in for table rows. Configurable row count via the rows input."
+          />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="flex gap-4 items-start">
+              <org-skeleton variant="table" [rows]="3" />
+              <org-skeleton variant="table" [rows]="7" />
+              <org-skeleton variant="table" [rows]="12" />
+            </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>Equal widths</strong>: Every bar takes the full available width</li>
+            <li><strong>Tight rhythm</strong>: Rows stack with the tighter gap so the bars read as table rows, not body copy</li>
+            <li><strong>Default rows</strong>: 7 rows when the rows input is omitted</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header
+            slot="header"
+            title="Variant · table-varied"
+            description="Same row layout as table, but each bar takes a different width from a fixed cycle so the placeholder reads as data-shaped rows."
+          />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="flex gap-4 items-start">
+              <org-skeleton variant="table-varied" [rows]="3" />
+              <org-skeleton variant="table-varied" [rows]="7" />
+              <org-skeleton variant="table-varied" [rows]="12" />
+            </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>Width cycle</strong>: Cycles through full → 3/4 → 2/3 → 1/2 → full → 3/4 → 1/3 → 2/3 → 3/4 → 1/2 → full → 1/4</li>
+            <li><strong>Same gap rhythm</strong>: Inherits the tight stack gap from the table variant</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header
+            slot="header"
+            title="Bordered framing"
+            description="Variants render their own bordered surface frame by default. Set bordered to false when the skeleton sits inside a container that already provides the framing."
+          />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="flex gap-4 items-start">
+              <div class="w-2xs">
+                <org-skeleton variant="card" [bordered]="true" />
+              </div>
+              <div class="w-2xs">
+                <org-skeleton variant="card" [bordered]="false" />
+              </div>
+            </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>bordered=true (default)</strong>: Renders the surface background and border tokens that match the Card component</li>
+            <li><strong>bordered=false</strong>: Drops the frame; the media block picks up its own rounding so it does not float as a raw rectangle</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header
+            slot="header"
+            title="Reduced motion"
+            description="When the OS-level prefers-reduced-motion: reduce setting is active, the pulse stops and the bars hold at their resting (max-opacity) frame."
+          />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="w-2xs">
+              <org-skeleton variant="card" />
+            </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>OS-driven</strong>: The reduced-motion behaviour is driven by the user's system setting, not a component input</li>
+            <li><strong>Placeholder remains visible</strong>: Bars rest at the max-opacity frame so the loading silhouette stays readable</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+      </div>
     `,
     moduleMetadata: {
-      imports: [Skeleton, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [Skeleton, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas, DesignSystemDemoExpectedBehaviour],
     },
   }),
 };

@@ -34,6 +34,8 @@ const colorLight: Record<string, string> = {
   'loading.blocker.scrim': 'oklch(1 0 0)',
   'overlay.menu.border': 'oklch(0.9 0.005 95)',
   'overlay.menu.surface': 'oklch(0.93 0 95)',
+  'skeleton.bar': 'oklch(0.93 0 95)',
+  'skeleton.bar.strong': 'oklch(0.9 0.005 95)',
 };
 
 const colorDark: Record<string, string> = {
@@ -144,6 +146,8 @@ const colorDark: Record<string, string> = {
   'secondary.soft': 'oklch(0.3 0.012 260)',
   'secondary.soft.active': 'oklch(0.4 0.014 260)',
   'secondary.soft.hover': 'oklch(0.35 0.014 260)',
+  'skeleton.bar': 'oklch(0.275 0.007 260)',
+  'skeleton.bar.strong': 'oklch(0.305 0.008 260)',
   teal: 'oklch(0.72 0.13 195)',
   'teal.soft': 'oklch(0.28 0.05 195)',
   warning: 'oklch(0.76 0.16 55)',
@@ -161,6 +165,7 @@ const colorDark: Record<string, string> = {
 };
 
 const nonColorTokens: Record<string, string> = {
+  'aspect.skeleton.media': '16 / 9',
   'aspect.square': '1 / 1',
   'aspect.video': '16 / 9',
   'avatar.circle.size.base': '3rem',
@@ -572,11 +577,14 @@ const nonColorTokens: Record<string, string> = {
   'motion.ease.exit': 'cubic-bezier(0.55, 0, 1, 0.45)',
   'motion.ease.standard': 'cubic-bezier(0.3, 0.7, 0.4, 1)',
   'motion.overlay.menu.duration': '100ms',
+  'motion.skeleton.duration': '1.6s',
   'motion.spinner.duration': '0.9s',
   'opacity.disabled': '0.5',
   'opacity.loading.blocker.scrim.heavy': '0.92',
   'opacity.loading.blocker.scrim.light': '0.4',
   'opacity.loading.blocker.scrim.medium': '0.7',
+  'opacity.skeleton.pulse.max': '1',
+  'opacity.skeleton.pulse.min': '0.5',
   'radius.base': '0.5rem',
   'radius.lg': '0.75rem',
   'radius.overlay.menu': '0.5rem',
@@ -620,6 +628,9 @@ const nonColorTokens: Record<string, string> = {
   'sizing.lg': '32rem',
   'sizing.overlay.menu.max.width': '20rem',
   'sizing.overlay.menu.min.width': '11rem',
+  'sizing.skeleton.bar.base': '0.625rem',
+  'sizing.skeleton.bar.lg': '0.875rem',
+  'sizing.skeleton.bar.sm': '0.5rem',
   'sizing.sm': '24rem',
   'sizing.xl': '36rem',
   'sizing.xs': '20rem',
@@ -656,6 +667,8 @@ const nonColorTokens: Record<string, string> = {
   'spacing.empty.stack.lg': '0.75rem',
   'spacing.overlay.menu.anchor.gap': '0.25rem',
   'spacing.overlay.menu.pad': '0.25rem',
+  'spacing.skeleton.stack': '0.75rem',
+  'spacing.skeleton.stack.tight': '0.5rem',
   'tag.bg': 'oklch(0.95 0.004 260)',
   'tag.border': 'oklch(0.95 0.004 260)',
   'tag.border.width': '0.0625rem',
