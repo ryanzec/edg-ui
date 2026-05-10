@@ -16,12 +16,14 @@
 @import './tokens/icon-tokens.css';
 @import './tokens/indicator-tokens.css';
 @import './tokens/label-tokens.css';
+@import './tokens/last-updated-tokens.css';
 @import './tokens/link-tokens.css';
 @import './tokens/loading-blocker-tokens.css';
 @import './tokens/tag-tokens.css';
 @import './tokens/tooltip-tokens.css';
 @import './tokens/chat-tokens.css';
 @import './tokens/design-system-demo-tokens.css';
+@import './tokens/divider-tokens.css';
 @import './tokens/empty-indicator-tokens.css';
 @import './tokens/overlay-menu-tokens.css';
 @import './tokens/skeleton-tokens.css';

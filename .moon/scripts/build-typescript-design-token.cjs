@@ -12,6 +12,10 @@ const AVATAR_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/style
 const ICON_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/icon-tokens.css');
 const INDICATOR_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/indicator-tokens.css');
 const LABEL_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/label-tokens.css');
+const LAST_UPDATED_TOKENS_CSS = path.join(
+  REPO_ROOT,
+  'projects/shared-ui/src/lib/styles/tokens/last-updated-tokens.css',
+);
 const LINK_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/link-tokens.css');
 const LOADING_BLOCKER_TOKENS_CSS = path.join(
   REPO_ROOT,
@@ -34,6 +38,7 @@ const DESIGN_SYSTEM_DEMO_TOKENS_CSS = path.join(
   REPO_ROOT,
   'projects/shared-ui/src/lib/styles/tokens/design-system-demo-tokens.css',
 );
+const DIVIDER_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/divider-tokens.css');
 const OVERLAY_MENU_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/overlay-menu-tokens.css');
 const SKELETON_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/skeleton-tokens.css');
 const EMPTY_INDICATOR_TOKENS_CSS = path.join(
@@ -223,6 +228,7 @@ async function main() {
   const iconContent = cleanCss(fs.readFileSync(ICON_TOKENS_CSS, 'utf-8'));
   const indicatorContent = cleanCss(fs.readFileSync(INDICATOR_TOKENS_CSS, 'utf-8'));
   const labelContent = cleanCss(fs.readFileSync(LABEL_TOKENS_CSS, 'utf-8'));
+  const lastUpdatedContent = cleanCss(fs.readFileSync(LAST_UPDATED_TOKENS_CSS, 'utf-8'));
   const linkContent = cleanCss(fs.readFileSync(LINK_TOKENS_CSS, 'utf-8'));
   const loadingBlockerContent = cleanCss(fs.readFileSync(LOADING_BLOCKER_TOKENS_CSS, 'utf-8'));
   const tagContent = cleanCss(fs.readFileSync(TAG_TOKENS_CSS, 'utf-8'));
@@ -236,6 +242,7 @@ async function main() {
   const checklistContent = cleanCss(fs.readFileSync(CHECKLIST_TOKENS_CSS, 'utf-8'));
   const comboboxContent = cleanCss(fs.readFileSync(COMBOBOX_TOKENS_CSS, 'utf-8'));
   const designSystemDemoContent = cleanCss(fs.readFileSync(DESIGN_SYSTEM_DEMO_TOKENS_CSS, 'utf-8'));
+  const dividerContent = cleanCss(fs.readFileSync(DIVIDER_TOKENS_CSS, 'utf-8'));
   const emptyIndicatorContent = cleanCss(fs.readFileSync(EMPTY_INDICATOR_TOKENS_CSS, 'utf-8'));
   const overlayMenuContent = cleanCss(fs.readFileSync(OVERLAY_MENU_TOKENS_CSS, 'utf-8'));
   const skeletonContent = cleanCss(fs.readFileSync(SKELETON_TOKENS_CSS, 'utf-8'));
@@ -252,6 +259,7 @@ async function main() {
     ...findBlocks(iconContent, ':root').map(extractVariables),
     ...findBlocks(indicatorContent, ':root').map(extractVariables),
     ...findBlocks(labelContent, ':root').map(extractVariables),
+    ...findBlocks(lastUpdatedContent, ':root').map(extractVariables),
     ...findBlocks(linkContent, ':root').map(extractVariables),
     ...findBlocks(loadingBlockerContent, ':root').map(extractVariables),
     ...findBlocks(tagContent, ':root').map(extractVariables),
@@ -265,6 +273,7 @@ async function main() {
     ...findBlocks(checklistContent, ':root').map(extractVariables),
     ...findBlocks(comboboxContent, ':root').map(extractVariables),
     ...findBlocks(designSystemDemoContent, ':root').map(extractVariables),
+    ...findBlocks(dividerContent, ':root').map(extractVariables),
     ...findBlocks(emptyIndicatorContent, ':root').map(extractVariables),
     ...findBlocks(overlayMenuContent, ':root').map(extractVariables),
     ...findBlocks(skeletonContent, ':root').map(extractVariables),
@@ -278,6 +287,7 @@ async function main() {
     ...findBlocks(iconContent, '.dark').map(extractVariables),
     ...findBlocks(indicatorContent, '.dark').map(extractVariables),
     ...findBlocks(labelContent, '.dark').map(extractVariables),
+    ...findBlocks(lastUpdatedContent, '.dark').map(extractVariables),
     ...findBlocks(linkContent, '.dark').map(extractVariables),
     ...findBlocks(loadingBlockerContent, '.dark').map(extractVariables),
     ...findBlocks(tagContent, '.dark').map(extractVariables),
@@ -291,6 +301,7 @@ async function main() {
     ...findBlocks(checklistContent, '.dark').map(extractVariables),
     ...findBlocks(comboboxContent, '.dark').map(extractVariables),
     ...findBlocks(designSystemDemoContent, '.dark').map(extractVariables),
+    ...findBlocks(dividerContent, '.dark').map(extractVariables),
     ...findBlocks(emptyIndicatorContent, '.dark').map(extractVariables),
     ...findBlocks(overlayMenuContent, '.dark').map(extractVariables),
     ...findBlocks(skeletonContent, '.dark').map(extractVariables),

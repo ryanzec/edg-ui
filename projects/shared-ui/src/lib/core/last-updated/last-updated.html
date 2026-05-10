@@ -1,8 +1,38 @@
-@if (brain.isLoading()) {
-  <org-loading-spinner [iconColor]="indicatorColor()" />
+@if (brain.tooltipText(); as tooltipText) {
+  <org-tooltip placement="top">
+    <ng-container [ngTemplateOutlet]="content" />
+    <ng-template #tooltipContent>
+      <org-tooltip-content>{{ tooltipText }}</org-tooltip-content>
+    </ng-template>
+  </org-tooltip>
 } @else {
-  <org-indicator [color]="indicatorColor()" />
+  <ng-container [ngTemplateOutlet]="content" />
 }
-<span orgText textSize="sm" [textColor]="lastUpdatedAt().isValid ? null : 'neutral'" class="timestamp">
-  {{ lastUpdatedAt() | orgDate: { dateFormat: DateFormat.STANDARD, timeFormat: TimeFormat.STANDARD } }}
-</span>
+
+<ng-template #content>
+  @switch (brain.leadingSlot()) {
+    @case ('indicator') {
+      <org-indicator class="leading" size="sm" [color]="brain.indicatorColor()" />
+    }
+    @case ('refresh') {
+      <org-button
+        class="leading refresh"
+        variant="text"
+        color="neutral"
+        size="sm"
+        [iconOnly]="true"
+        preIcon="refresh-cw"
+        ariaLabel="Refresh"
+        label=""
+        (clicked)="brain.requestRefresh()"
+      />
+    }
+    @case ('spinner') {
+      <org-loading-spinner class="leading spinner" size="sm" iconColor="info" />
+    }
+  }
+  <span class="cluster">
+    <span class="label">{{ brain.label() }}</span>
+    <time class="time" [attr.datetime]="brain.dateTimeIso()">{{ brain.formattedTime() }}</time>
+  </span>
+</ng-template>

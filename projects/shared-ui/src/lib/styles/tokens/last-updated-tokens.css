@@ -1,0 +1,18 @@
+:root {
+  /* layout */
+  --last-updated-gap: var(--spacing-1_5);
+  --last-updated-label-gap: var(--spacing-1);
+  --last-updated-font-size: var(--font-size-sm);
+  --last-updated-font-weight: var(--font-weight-regular);
+  --last-updated-time-font-weight: var(--font-weight-medium);
+
+  /* default colors (fresh state) */
+  --last-updated-label-color: var(--color-fg-muted);
+  --last-updated-time-color: var(--color-fg);
+  --last-updated-loading-color: var(--color-info);
+
+  /* fine-grained sizing for inner elements */
+  --last-updated-refresh-size: var(--sizing-11xs);
+  --last-updated-refresh-icon-size: var(--font-size-sm);
+  --last-updated-spinner-size: var(--font-size-xs);
+}

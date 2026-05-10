@@ -2,13 +2,55 @@
   :host {
     display: inline-flex;
     align-items: center;
-    gap: var(--spacing-2);
+    gap: var(--last-updated-gap);
+    font-family: inherit;
+    font-size: var(--last-updated-font-size);
+    font-weight: var(--last-updated-font-weight);
+    line-height: var(--line-height-tight);
+    white-space: nowrap;
   }
 
-  .timestamp {
+  .cluster {
     display: inline-flex;
-    font-size: var(--font-size-xs);
-    line-height: var(--line-height-normal);
-    letter-spacing: var(--letter-spacing-normal);
+    align-items: baseline;
+    gap: var(--last-updated-label-gap);
+  }
+
+  .label {
+    color: var(--last-updated-label-color);
+  }
+
+  .time {
+    color: var(--last-updated-time-color);
+    font-weight: var(--last-updated-time-font-weight);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* size overrides for the inner refresh button so the row sits at the documented compact height */
+  .refresh {
+    --button-padding: 0;
+    --button-font-size: var(--last-updated-refresh-icon-size);
+    width: var(--last-updated-refresh-size);
+    height: var(--last-updated-refresh-size);
+  }
+
+  /* size override for the loading spinner so it visually matches the indicator dot it replaces */
+  .spinner {
+    font-size: var(--last-updated-spinner-size);
+  }
+
+  /* state overrides — re-bind only the design tokens; never override css properties directly */
+  :host([data-state='stale']) {
+    --last-updated-label-color: var(--color-caution);
+  }
+
+  :host([data-state='error']) {
+    --last-updated-label-color: var(--color-danger);
+    --last-updated-time-color: var(--color-danger);
+  }
+
+  /* loading: keep the label visible (consumer typically sets it to "Refreshing…") and hide the timestamp */
+  :host([data-state='loading']) .time {
+    display: none;
   }
 }

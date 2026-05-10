@@ -1,16 +1,96 @@
 @layer components {
   :host {
     display: block;
-    border-color: var(--color-border);
+    margin: 0;
+    align-self: stretch;
+    user-select: none;
+    border: 0 var(--divider-style) var(--divider-color);
   }
 
+  /* horizontal — line spans the full width via a top border */
   :host([data-direction='horizontal']) {
     width: 100%;
-    border-top: var(--border-width) solid var(--color-border);
+    height: 0;
+    border-top-width: var(--divider-weight);
+    margin-block: var(--divider-padding);
   }
 
+  /* vertical — line spans the full height via a left border (relies on a flex parent to stretch) */
   :host([data-direction='vertical']) {
-    height: 100%;
-    border-left: var(--border-width) solid var(--color-border);
+    width: 0;
+    border-left-width: var(--divider-weight);
+    margin-inline: var(--divider-padding);
+  }
+
+  /* style overrides — change the local design token, never the css property */
+  :host([data-style='solid']) {
+    --divider-style: solid;
+  }
+
+  :host([data-style='dashed']) {
+    --divider-style: dashed;
+  }
+
+  :host([data-style='dotted']) {
+    --divider-style: dotted;
+  }
+
+  /* weight overrides */
+  :host([data-weight='thin']) {
+    --divider-weight: var(--border-width);
+  }
+
+  :host([data-weight='thick']) {
+    --divider-weight: var(--border-width-thick);
+  }
+
+  /* padding overrides */
+  :host([data-padding='none']) {
+    --divider-padding: var(--spacing-0);
+  }
+
+  :host([data-padding='sm']) {
+    --divider-padding: var(--spacing-2);
+  }
+
+  :host([data-padding='base']) {
+    --divider-padding: var(--spacing-3);
+  }
+
+  :host([data-padding='lg']) {
+    --divider-padding: var(--spacing-4);
+  }
+
+  /* color overrides — only applied when an explicit data-color is set, otherwise the default --color-border is used */
+  :host([data-color='primary']) {
+    --divider-color: var(--color-primary);
+  }
+
+  :host([data-color='secondary']) {
+    --divider-color: var(--color-secondary);
+  }
+
+  :host([data-color='neutral']) {
+    --divider-color: var(--color-neutral);
+  }
+
+  :host([data-color='safe']) {
+    --divider-color: var(--color-safe);
+  }
+
+  :host([data-color='info']) {
+    --divider-color: var(--color-info);
+  }
+
+  :host([data-color='caution']) {
+    --divider-color: var(--color-caution);
+  }
+
+  :host([data-color='warning']) {
+    --divider-color: var(--color-warning);
+  }
+
+  :host([data-color='danger']) {
+    --divider-color: var(--color-danger);
   }
 }

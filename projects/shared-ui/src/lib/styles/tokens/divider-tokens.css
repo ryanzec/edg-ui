@@ -1,0 +1,13 @@
+:root {
+  /* line color (default = neutral border token) */
+  --divider-color: var(--color-border);
+
+  /* line style — solid | dashed | dotted */
+  --divider-style: solid;
+
+  /* line thickness — defaults to thin (1px) */
+  --divider-weight: var(--border-width);
+
+  /* cross-axis breathing room (vertical margin for horizontal direction; horizontal margin for vertical direction) */
+  --divider-padding: var(--spacing-2);
+}
