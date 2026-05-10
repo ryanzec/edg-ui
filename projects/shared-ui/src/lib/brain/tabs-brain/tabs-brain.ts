@@ -97,7 +97,13 @@ export class TabsBrainDirective {
     this.recalcScrollState(target);
   }
 
-  /** keyboard navigation handler for the tablist: arrow-left / arrow-right wrap focus, home / end jump to ends */
+  /**
+   * keyboard navigation handler for the tablist:
+   * - arrow-left / arrow-right wrap focus through all tabs (including disabled, so screen readers
+   *   can announce them); selection follows focus when the landed tab is not disabled.
+   * - home / end jump focus to the first / last tab using the same selection-follows-focus rule.
+   * - delete / backspace fire a close request when the focused tab is closable + not disabled.
+   */
   public handleKeyDown(event: KeyboardEvent): void {
     const tabs = this._getOrderedTabs();
 
@@ -111,26 +117,39 @@ export class TabsBrainDirective {
       case 'ArrowLeft': {
         event.preventDefault();
         const previousIndex = currentIndex > 0 ? currentIndex - 1 : tabs.length - 1;
-        tabs[previousIndex]?.focus();
+        this._focusAndMaybeActivate(tabs[previousIndex]);
         break;
       }
 
       case 'ArrowRight': {
         event.preventDefault();
         const nextIndex = currentIndex < tabs.length - 1 ? currentIndex + 1 : 0;
-        tabs[nextIndex]?.focus();
+        this._focusAndMaybeActivate(tabs[nextIndex]);
         break;
       }
 
       case 'Home': {
         event.preventDefault();
-        tabs[0]?.focus();
+        this._focusAndMaybeActivate(tabs[0]);
         break;
       }
 
       case 'End': {
         event.preventDefault();
-        tabs[tabs.length - 1]?.focus();
+        this._focusAndMaybeActivate(tabs[tabs.length - 1]);
+        break;
+      }
+
+      case 'Delete':
+      case 'Backspace': {
+        const focusedTab = tabs[currentIndex];
+
+        if (!focusedTab || !focusedTab.closable() || focusedTab.disabled()) {
+          return;
+        }
+
+        event.preventDefault();
+        focusedTab.requestClose();
         break;
       }
     }
@@ -150,6 +169,24 @@ export class TabsBrainDirective {
       block: 'nearest',
       inline: 'nearest',
     });
+  }
+
+  /**
+   * focuses the given tab and, if it is not disabled, also sets it as the active tab so selection
+   * follows focus per the wai-aria automatic-activation tabs pattern.
+   */
+  private _focusAndMaybeActivate(tab: TabBrainDirective | undefined): void {
+    if (!tab) {
+      return;
+    }
+
+    tab.focus();
+
+    if (tab.disabled()) {
+      return;
+    }
+
+    this.value.set(tab.value());
   }
 
   private _scrollByPercent(direction: -1 | 1): void {

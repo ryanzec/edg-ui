@@ -1,0 +1,54 @@
+:root {
+  /* row height per size */
+  --sizing-tabs-row-h-sm: var(--sizing-11xs);
+  --sizing-tabs-row-h-base: var(--sizing-10xs);
+  --sizing-tabs-row-h-lg: var(--sizing-10xs);
+
+  /* horizontal padding per size */
+  --spacing-tabs-tab-x-sm: var(--spacing-2);
+  --spacing-tabs-tab-x-base: var(--spacing-3);
+  --spacing-tabs-tab-x-lg: var(--spacing-4);
+
+  /* font size per size */
+  --font-size-tabs-sm: var(--font-size-xs);
+  --font-size-tabs-base: var(--font-size-sm);
+  --font-size-tabs-lg: var(--font-size-base);
+
+  /* gap between tabs per variant */
+  --spacing-tabs-gap-underline: var(--spacing-0);
+  --spacing-tabs-gap-pills: var(--spacing-1);
+  --spacing-tabs-gap-enclosed: var(--spacing-0);
+
+  /* gap between leading icon, label, and trailing tag inside a single tab */
+  --spacing-tabs-tab-gap: var(--spacing-2);
+
+  /* shared rail / fg / focus colors */
+  --color-tabs-rail: var(--color-border);
+  --color-tabs-active-rail: var(--color-fg);
+  --color-tabs-tab-fg: var(--color-fg-muted);
+  --color-tabs-tab-fg-hover: var(--color-fg);
+  --color-tabs-tab-fg-active: var(--color-fg);
+  --color-tabs-focus-ring: var(--color-focus-ring);
+
+  /* pills variant */
+  --color-tabs-pill-bg: transparent;
+  --color-tabs-pill-bg-hover: var(--color-bg-hover);
+  --color-tabs-pill-bg-active: var(--color-neutral-soft);
+
+  /* enclosed variant */
+  --color-tabs-enclosed-bg: var(--color-bg-surface);
+  --color-tabs-enclosed-bg-hover: var(--color-bg-hover);
+  --color-tabs-enclosed-border: var(--color-border-strong);
+
+  /* radii */
+  --radius-tabs-pill: var(--radius-sm);
+  --radius-tabs-enclosed-top: var(--radius-sm);
+
+  /* widths */
+  --border-width-tabs-rail: var(--border-width);
+  --border-width-tabs-active: var(--border-width-thick);
+
+  /* motion */
+  --motion-tabs-duration: var(--motion-duration-base);
+  --motion-tabs-easing: var(--motion-ease-standard);
+}

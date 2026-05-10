@@ -1,11 +1,38 @@
-<button
-  #buttonRef
-  type="button"
-  class="tab-btn"
-  [attr.role]="brain.tabRole"
-  [attr.aria-selected]="brain.isActive() ? 'true' : 'false'"
-  [attr.aria-disabled]="brain.disabled() ? 'true' : null"
-  (click)="brain.handleClick()"
->
-  <ng-content />
-</button>
+@if (brain.closable()) {
+  <div
+    #buttonRef
+    class="tab-btn"
+    [attr.role]="brain.tabRole"
+    [attr.aria-selected]="brain.isActive() ? 'true' : 'false'"
+    [attr.aria-disabled]="brain.disabled() ? 'true' : null"
+    [attr.tabindex]="brain.tabIndex()"
+    (click)="brain.handleClick()"
+  >
+    <ng-content />
+    <org-button
+      color="neutral"
+      variant="ghost"
+      size="sm"
+      [iconOnly]="true"
+      preIcon="x"
+      label="Close tab"
+      ariaLabel="Close tab"
+      buttonClass="tab-close"
+      (click)="$event.stopPropagation()"
+      (clicked)="brain.requestClose()"
+    />
+  </div>
+} @else {
+  <button
+    #buttonRef
+    type="button"
+    class="tab-btn"
+    [attr.role]="brain.tabRole"
+    [attr.aria-selected]="brain.isActive() ? 'true' : 'false'"
+    [attr.aria-disabled]="brain.disabled() ? 'true' : null"
+    [attr.tabindex]="brain.tabIndex()"
+    (click)="brain.handleClick()"
+  >
+    <ng-content />
+  </button>
+}

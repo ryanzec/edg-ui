@@ -1,13 +1,152 @@
 @layer components {
   :host {
+    /* size-driven locals (default base) */
+    --_tabs-row-h: var(--sizing-tabs-row-h-base);
+    --_tabs-tab-x: var(--spacing-tabs-tab-x-base);
+    --_tabs-font: var(--font-size-tabs-base);
+
+    /* variant-driven locals (default underline) */
+    --_tabs-gap: var(--spacing-tabs-gap-underline);
+    --_tabs-list-rail-color: var(--color-tabs-rail);
+    --_tabs-list-rail-width: var(--border-width-tabs-rail);
+
+    /* tab visual locals (default underline; consumed by tab.css) */
+    --_tab-bg: transparent;
+    --_tab-bg-hover: transparent;
+    --_tab-bg-active: transparent;
+    --_tab-border-top-width: 0;
+    --_tab-border-side-width: 0;
+    --_tab-border-top-color: transparent;
+    --_tab-border-side-color: transparent;
+    --_tab-border-side-color-active: transparent;
+    --_tab-border-bottom-width: var(--border-width-tabs-active);
+    --_tab-border-bottom-color: transparent;
+    --_tab-border-bottom-color-hover: var(--color-tabs-rail);
+    --_tab-border-bottom-color-active: var(--color-tabs-active-rail);
+    --_tab-radius-top: 0;
+    --_tab-radius-bottom: 0;
+    --_tab-margin-bottom: calc(-1 * var(--border-width-tabs-rail));
+
+    /* layout / stretch */
+    --_tab-flex: 0 0 auto;
+    --_tab-justify: flex-start;
+
     display: flex;
     gap: var(--spacing-1);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    min-width: 0;
+  }
+
+  /* size variants */
+  :host([data-size='sm']) {
+    --_tabs-row-h: var(--sizing-tabs-row-h-sm);
+    --_tabs-tab-x: var(--spacing-tabs-tab-x-sm);
+    --_tabs-font: var(--font-size-tabs-sm);
+  }
+
+  :host([data-size='base']) {
+    --_tabs-row-h: var(--sizing-tabs-row-h-base);
+    --_tabs-tab-x: var(--spacing-tabs-tab-x-base);
+    --_tabs-font: var(--font-size-tabs-base);
+  }
+
+  :host([data-size='lg']) {
+    --_tabs-row-h: var(--sizing-tabs-row-h-lg);
+    --_tabs-tab-x: var(--spacing-tabs-tab-x-lg);
+    --_tabs-font: var(--font-size-tabs-lg);
+  }
+
+  /* variant: underline (explicit so the spec rule holds even if defaults shift) */
+  :host([data-variant='underline']) {
+    --_tabs-gap: var(--spacing-tabs-gap-underline);
+    --_tabs-list-rail-color: var(--color-tabs-rail);
+    --_tabs-list-rail-width: var(--border-width-tabs-rail);
+
+    --_tab-bg: transparent;
+    --_tab-bg-hover: transparent;
+    --_tab-bg-active: transparent;
+    --_tab-border-top-width: 0;
+    --_tab-border-side-width: 0;
+    --_tab-border-top-color: transparent;
+    --_tab-border-side-color: transparent;
+    --_tab-border-side-color-active: transparent;
+    --_tab-border-bottom-width: var(--border-width-tabs-active);
+    --_tab-border-bottom-color: transparent;
+    --_tab-border-bottom-color-hover: var(--color-tabs-rail);
+    --_tab-border-bottom-color-active: var(--color-tabs-active-rail);
+    --_tab-radius-top: 0;
+    --_tab-radius-bottom: 0;
+    --_tab-margin-bottom: calc(-1 * var(--border-width-tabs-rail));
+  }
+
+  /* variant: pills */
+  :host([data-variant='pills']) {
+    --_tabs-gap: var(--spacing-tabs-gap-pills);
+    --_tabs-list-rail-color: transparent;
+    --_tabs-list-rail-width: 0;
+
+    --_tab-bg: var(--color-tabs-pill-bg);
+    --_tab-bg-hover: var(--color-tabs-pill-bg-hover);
+    --_tab-bg-active: var(--color-tabs-pill-bg-active);
+    --_tab-border-top-width: 0;
+    --_tab-border-side-width: 0;
+    --_tab-border-bottom-width: 0;
+    --_tab-border-top-color: transparent;
+    --_tab-border-side-color: transparent;
+    --_tab-border-side-color-active: transparent;
+    --_tab-border-bottom-color: transparent;
+    --_tab-border-bottom-color-hover: transparent;
+    --_tab-border-bottom-color-active: transparent;
+    --_tab-radius-top: var(--radius-tabs-pill);
+    --_tab-radius-bottom: var(--radius-tabs-pill);
+    --_tab-margin-bottom: 0;
+  }
+
+  /* variant: enclosed */
+  :host([data-variant='enclosed']) {
+    --_tabs-gap: var(--spacing-tabs-gap-enclosed);
+    --_tabs-list-rail-color: var(--color-tabs-rail);
+    --_tabs-list-rail-width: var(--border-width-tabs-rail);
+
+    --_tab-bg: transparent;
+    --_tab-bg-hover: var(--color-tabs-enclosed-bg-hover);
+    --_tab-bg-active: var(--color-tabs-enclosed-bg);
+    --_tab-border-top-width: var(--border-width);
+    --_tab-border-side-width: var(--border-width);
+    --_tab-border-bottom-width: var(--border-width);
+    --_tab-border-top-color: transparent;
+    --_tab-border-side-color: transparent;
+    --_tab-border-side-color-active: var(--color-tabs-enclosed-border);
+    --_tab-border-bottom-color: transparent;
+    --_tab-border-bottom-color-hover: transparent;
+    --_tab-border-bottom-color-active: var(--color-tabs-enclosed-bg);
+    --_tab-radius-top: var(--radius-tabs-enclosed-top);
+    --_tab-radius-bottom: 0;
+    --_tab-margin-bottom: calc(-1 * var(--border-width));
+  }
+
+  /* stretch fills the row equally — segmented-control style */
+  :host([data-stretch]) {
+    --_tab-flex: 1 1 0;
+    --_tab-justify: center;
+  }
+
+  :host([data-stretch]) .tablist {
+    flex: 1 1 0;
+    min-width: 0;
   }
 
   .tablist {
     display: flex;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    gap: var(--_tabs-gap);
+    min-width: 0;
+    border-bottom: var(--_tabs-list-rail-width) solid var(--_tabs-list-rail-color);
   }
 
+  /* scrollable mode keeps the existing chevron-driven horizontal scroll behavior */
   :host([data-scrollable]) .tablist {
     overflow-x: auto;
     scrollbar-width: none;
@@ -15,5 +154,12 @@
 
   :host([data-scrollable]) .tablist::-webkit-scrollbar {
     display: none;
+  }
+
+  /* respect the user's reduced-motion preference for any tab transitions defined in tab.css */
+  @media (prefers-reduced-motion: reduce) {
+    :host {
+      --motion-tabs-duration: 0ms;
+    }
   }
 }

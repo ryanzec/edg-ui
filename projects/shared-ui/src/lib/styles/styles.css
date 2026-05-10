@@ -21,6 +21,7 @@
 @import './tokens/last-updated-tokens.css';
 @import './tokens/link-tokens.css';
 @import './tokens/loading-blocker-tokens.css';
+@import './tokens/tabs-tokens.css';
 @import './tokens/tag-tokens.css';
 @import './tokens/tooltip-tokens.css';
 @import './tokens/chat-tokens.css';

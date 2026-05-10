@@ -1,40 +1,85 @@
 @layer components {
   :host {
     display: inline-flex;
+    flex: var(--_tab-flex, 0 0 auto);
+    min-width: 0;
   }
 
   .tab-btn {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    padding: var(--spacing-1) var(--spacing-2);
-    min-height: var(--sizing-10xs);
-    background-color: transparent;
-    color: var(--color-fg-muted);
+    justify-content: var(--_tab-justify, flex-start);
+    gap: var(--spacing-tabs-tab-gap);
+    flex: 1 1 auto;
+    min-width: 0;
+    height: var(--_tabs-row-h);
+    padding: 0 var(--_tabs-tab-x);
+    margin-bottom: var(--_tab-margin-bottom, 0);
+    background: var(--_tab-bg, transparent);
+    color: var(--color-tabs-tab-fg);
+    font: inherit;
+    font-size: var(--_tabs-font);
+    line-height: var(--line-height-normal);
     white-space: nowrap;
-    outline: none;
+    text-align: left;
     cursor: pointer;
-    border-bottom: var(--spacing-0_5) solid var(--color-border); /* 2px */
+    appearance: none;
+    border-top: var(--_tab-border-top-width, 0) solid var(--_tab-border-top-color, transparent);
+    border-right: var(--_tab-border-side-width, 0) solid var(--_tab-border-side-color, transparent);
+    border-bottom: var(--_tab-border-bottom-width, 0) solid var(--_tab-border-bottom-color, transparent);
+    border-left: var(--_tab-border-side-width, 0) solid var(--_tab-border-side-color, transparent);
+    border-top-left-radius: var(--_tab-radius-top, 0);
+    border-top-right-radius: var(--_tab-radius-top, 0);
+    border-bottom-right-radius: var(--_tab-radius-bottom, 0);
+    border-bottom-left-radius: var(--_tab-radius-bottom, 0);
     transition:
-      color 200ms,
-      background-color 200ms;
+      color var(--motion-tabs-duration) var(--motion-tabs-easing),
+      background-color var(--motion-tabs-duration) var(--motion-tabs-easing),
+      border-color var(--motion-tabs-duration) var(--motion-tabs-easing);
+  }
+
+  .tab-btn:hover {
+    color: var(--color-tabs-tab-fg-hover);
+    background: var(--_tab-bg-hover, transparent);
+    border-bottom-color: var(--_tab-border-bottom-color-hover, transparent);
   }
 
   .tab-btn:focus-visible {
-    background-color: var(--color-bg-surface);
+    outline: var(--border-width-thick) solid var(--color-tabs-focus-ring);
+    outline-offset: var(--spacing-0_5);
+    border-radius: var(--radius-sm);
   }
 
   .tab-btn[aria-selected='true'] {
-    border-bottom-color: var(--color-border-strong);
-    color: var(--color-fg);
-  }
-
-  .tab-btn:not([aria-selected='true']):not([aria-disabled='true']):hover {
-    background-color: var(--color-bg-surface);
+    color: var(--color-tabs-tab-fg-active);
+    background: var(--_tab-bg-active, transparent);
+    border-top-color: var(--_tab-border-side-color-active, transparent);
+    border-right-color: var(--_tab-border-side-color-active, transparent);
+    border-left-color: var(--_tab-border-side-color-active, transparent);
+    border-bottom-color: var(--_tab-border-bottom-color-active, transparent);
   }
 
   .tab-btn[aria-disabled='true'] {
     opacity: var(--opacity-disabled);
     cursor: not-allowed;
+  }
+
+  .tab-btn[aria-disabled='true']:hover {
+    background: var(--_tab-bg, transparent);
+    color: var(--color-tabs-tab-fg);
+    border-bottom-color: var(--_tab-border-bottom-color, transparent);
+  }
+
+  /* keep leading icon and trailing tag at their natural width inside the tab */
+  .tab-btn > org-icon,
+  .tab-btn > org-tag {
+    flex: 0 0 auto;
+  }
+
+  /* close affordance hugs the trailing edge so the × reads as quiet chrome */
+  .tab-btn > org-button {
+    flex: 0 0 auto;
+    margin-left: var(--spacing-0_5);
+    margin-right: calc(-1 * var(--spacing-1));
   }
 }

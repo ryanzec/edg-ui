@@ -8,11 +8,15 @@ type TabRole = 'tab';
 /** default value for the disabled input */
 export const TAB_DISABLED_DEFAULT = false;
 
+/** default value for the closable input */
+export const TAB_CLOSABLE_DEFAULT = false;
+
 /**
- * headless brain directive for the tab component. owns the per-tab value, disabled state, click event,
- * focus-management api consumed by the parent tabs brain, and the static / dynamic accessibility
- * attributes (role, aria-selected, aria-disabled). looks up the parent tabs brain via dependency
- * injection to derive its active state.
+ * headless brain directive for the tab component. owns the per-tab value, disabled state, closable
+ * state, click and close events, focus-management api consumed by the parent tabs brain, the
+ * computed tabindex used to enforce a single-tab-stop tablist, and the static / dynamic
+ * accessibility attributes (role, aria-selected, aria-disabled). looks up the parent tabs brain via
+ * dependency injection to derive its active state.
  */
 @Directive({
   selector: '[orgTabBrain]',
@@ -28,17 +32,29 @@ export class TabBrainDirective {
   /** clicked subject; emits the tab value when the host is activated while not disabled */
   private readonly _clicked$ = new Subject<string>();
 
+  /** closed subject; emits the tab value when the close affordance is activated while not disabled */
+  private readonly _closed$ = new Subject<string>();
+
   /** the value identifying this tab; compared against the parent value to derive the active state */
   public readonly value = input.required<string>();
 
   /** whether this tab is disabled; when true, click-driven activation is suppressed */
   public readonly disabled = input<boolean>(TAB_DISABLED_DEFAULT);
 
+  /** whether this tab is closable; when true, the presentation renders a trailing close affordance */
+  public readonly closable = input<boolean>(TAB_CLOSABLE_DEFAULT);
+
   /** emits the tab value when the host is activated by click and the tab is not disabled */
   public readonly clicked = outputFromObservable(this._clicked$);
 
+  /** emits the tab value when the close affordance is activated and the tab is not disabled */
+  public readonly closed = outputFromObservable(this._closed$);
+
   /** whether this tab is the currently active tab in its parent tabs brain */
   public readonly isActive = computed<boolean>(() => this._parentTabsBrain.value() === this.value());
+
+  /** the tabindex value applied by the presentation to enforce a single-tab-stop tablist */
+  public readonly tabIndex = computed<0 | -1>(() => (this.isActive() ? 0 : -1));
 
   /** static aria role applied by the presentation to the focusable element */
   public readonly tabRole: TabRole = 'tab';
@@ -71,5 +87,14 @@ export class TabBrainDirective {
 
     this._parentTabsBrain.value.set(this.value());
     this._clicked$.next(this.value());
+  }
+
+  /** requests close on this tab; suppressed when disabled or non-closable, otherwise emits the value */
+  public requestClose(): void {
+    if (this.disabled() || !this.closable()) {
+      return;
+    }
+
+    this._closed$.next(this.value());
   }
 }
