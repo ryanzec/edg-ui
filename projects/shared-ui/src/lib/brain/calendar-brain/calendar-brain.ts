@@ -24,6 +24,19 @@ export const allCalendarPartialRangeSelectionTypes = ['range', 'onOrBefore', 'on
 export type CalendarPartialRangeSelectionType = (typeof allCalendarPartialRangeSelectionTypes)[number];
 
 /**
+ * positional role of a date cell within a range (committed or preview); `null` when the cell is not part of any range
+ */
+export type CalendarRangePos =
+  | 'start'
+  | 'end'
+  | 'middle'
+  | 'single'
+  | 'preview-start'
+  | 'preview'
+  | 'preview-end'
+  | null;
+
+/**
  * data structure for a calendar date cell
  */
 export type CalendarDateData = {
@@ -34,6 +47,7 @@ export type CalendarDateData = {
   isInRange: boolean;
   isFocused: boolean;
   isToday: boolean;
+  rangePos: CalendarRangePos;
 };
 
 /**
@@ -57,6 +71,7 @@ type CalendarState = {
   displayYear: number;
   displayMonth: number;
   focusedDate: DateTime | null;
+  hoveredDate: DateTime | null;
 };
 
 // input defaults
@@ -72,6 +87,7 @@ export const CALENDAR_DISABLE_BEFORE_DEFAULT: DateTime | undefined = undefined;
 export const CALENDAR_DISABLE_AFTER_DEFAULT: DateTime | undefined = undefined;
 export const CALENDAR_ALLOWED_DATE_RANGE_DEFAULT = 0;
 export const CALENDAR_ENABLE_DESELECTION_DEFAULT = true;
+export const CALENDAR_DISABLED_DEFAULT = false;
 
 /**
  * headless brain directive for the calendar component. owns the displayed-month / focused-date state, the
@@ -95,6 +111,7 @@ export class CalendarBrainDirective {
     displayYear: DateTime.now().year,
     displayMonth: DateTime.now().month,
     focusedDate: null,
+    hoveredDate: null,
   });
 
   private readonly _liveAnnouncementSignal = signal<string>('');
@@ -148,6 +165,7 @@ export class CalendarBrainDirective {
   );
   public readonly allowedDateRange = input<number>(CALENDAR_ALLOWED_DATE_RANGE_DEFAULT);
   public readonly enableDeselection = input<boolean>(CALENDAR_ENABLE_DESELECTION_DEFAULT);
+  public readonly disabled = input<boolean>(CALENDAR_DISABLED_DEFAULT);
 
   // outputs
   public readonly dateSelected = output<{ startDate: DateTime | null; endDate: DateTime | null }>();
@@ -164,7 +182,21 @@ export class CalendarBrainDirective {
   public readonly displayYear = computed<number>(() => this._state().displayYear);
   public readonly displayMonth = computed<number>(() => this._state().displayMonth);
   public readonly focusedDate = computed<DateTime | null>(() => this._state().focusedDate);
+  public readonly hoveredDate = computed<DateTime | null>(() => this._state().hoveredDate);
   public readonly liveAnnouncement = computed<string>(() => this._liveAnnouncementSignal());
+
+  /** whether range hover preview should drive `preview-*` rangePos values on cells */
+  private readonly _isPreviewActive = computed<boolean>(() => {
+    if (!this.allowRangeSelection()) {
+      return false;
+    }
+
+    if (!this.allowPartialRangeSelection()) {
+      return true;
+    }
+
+    return this.partialRangeSelectionType() === 'range';
+  });
 
   private readonly _effectiveStartYear = computed<number>(() => Math.min(this.startYear(), this.endYear()));
 
@@ -205,6 +237,8 @@ export class CalendarBrainDirective {
     const startDate = this.selectedStartDate();
     const endDate = this.selectedEndDate();
     const focusedDate = this.focusedDate();
+    const hoveredDate = this.hoveredDate();
+    const isPreviewActive = this._isPreviewActive();
     const { before: disableBefore, after: disableAfter } = this._effectiveDisableRange();
     const allowedRange = this._effectiveAllowedDateRange();
     const today = DateTime.now();
@@ -232,6 +266,7 @@ export class CalendarBrainDirective {
         const isInRange = this._isDateInRange(currentDate, startDate, endDate);
         const isFocused = focusedDate ? currentDate.hasSame(focusedDate, 'day') : false;
         const isToday = currentDate.hasSame(today, 'day');
+        const rangePos = this._computeRangePos(currentDate, startDate, endDate, hoveredDate, isPreviewActive);
 
         weekDays.push({
           date: currentDate,
@@ -241,6 +276,7 @@ export class CalendarBrainDirective {
           isInRange,
           isFocused,
           isToday,
+          rangePos,
         });
 
         currentDate = currentDate.plus({ days: 1 });
@@ -338,6 +374,10 @@ export class CalendarBrainDirective {
 
   /** sets the current display date */
   public setDisplayDate(date: DateTime): void {
+    if (this.disabled()) {
+      return;
+    }
+
     const previousYear = this._state().displayYear;
     const previousMonth = this._state().displayMonth;
 
@@ -359,6 +399,10 @@ export class CalendarBrainDirective {
 
   /** handles year change from the year dropdown */
   public onYearChange(year: number): void {
+    if (this.disabled()) {
+      return;
+    }
+
     const previousYear = this._state().displayYear;
     const previousMonth = this._state().displayMonth;
 
@@ -381,6 +425,10 @@ export class CalendarBrainDirective {
 
   /** handles month change from the month dropdown */
   public onMonthChange(month: number): void {
+    if (this.disabled()) {
+      return;
+    }
+
     const previousYear = this._state().displayYear;
     const previousMonth = this._state().displayMonth;
 
@@ -403,6 +451,10 @@ export class CalendarBrainDirective {
 
   /** navigates to the previous month */
   public onPreviousMonth(): void {
+    if (this.disabled()) {
+      return;
+    }
+
     const currentYear = this._state().displayYear;
     const currentMonth = this._state().displayMonth;
 
@@ -426,6 +478,10 @@ export class CalendarBrainDirective {
 
   /** navigates to the next month */
   public onNextMonth(): void {
+    if (this.disabled()) {
+      return;
+    }
+
     const currentYear = this._state().displayYear;
     const currentMonth = this._state().displayMonth;
 
@@ -449,10 +505,20 @@ export class CalendarBrainDirective {
 
   /** handles date selection click */
   public onDateClick(dateData: CalendarDateData): void {
-    if (dateData.isDisabled) {
+    if (this.disabled() || dateData.isDisabled) {
       return;
     }
 
+    this._handleDateClickSelection(dateData);
+
+    // outside-month click nudges visible month to the clicked cell's month
+    if (!dateData.isCurrentMonth) {
+      this.setDisplayDate(dateData.date);
+    }
+  }
+
+  /** internal: emits the appropriate selection event for the clicked cell */
+  private _handleDateClickSelection(dateData: CalendarDateData): void {
     const clickedDate = dateData.date;
     const currentStart = this.selectedStartDate() ?? null;
     const currentEnd = this.selectedEndDate() ?? null;
@@ -542,6 +608,10 @@ export class CalendarBrainDirective {
 
   /** handles keyboard navigation */
   public onKeyDown(event: KeyboardEvent): void {
+    if (this.disabled()) {
+      return;
+    }
+
     const currentFocused = this.focusedDate();
 
     if (!currentFocused) {
@@ -637,16 +707,33 @@ export class CalendarBrainDirective {
     }
   }
 
-  /** updates focused date when a date is hovered */
+  /** updates focused date and hovered date when a date is hovered */
   public onDateHover(dateData: CalendarDateData): void {
+    if (this.disabled()) {
+      return;
+    }
+
     this._state.update((state) => ({
       ...state,
       focusedDate: dateData.date,
+      hoveredDate: dateData.date,
+    }));
+  }
+
+  /** clears the hovered date so the range preview disappears when the pointer leaves the grid */
+  public onMouseLeave(): void {
+    this._state.update((state) => ({
+      ...state,
+      hoveredDate: null,
     }));
   }
 
   /** handles partial range selection type change from the radio group */
   public onPartialRangeSelectionTypeChange(type: string): void {
+    if (this.disabled()) {
+      return;
+    }
+
     if (allCalendarPartialRangeSelectionTypes.includes(type as CalendarPartialRangeSelectionType)) {
       this.partialRangeSelectionTypeChanged.emit(type as CalendarPartialRangeSelectionType);
     }
@@ -724,6 +811,73 @@ export class CalendarBrainDirective {
     }
 
     return date > startDate && date < endDate;
+  }
+
+  /**
+   * computes the positional role of a cell within a committed or preview range. returns `null` when the cell
+   * is not part of any range (or when no range / preview applies). preview values only kick in when the brain
+   * deems preview active (range mode, no end date yet, hover present, partial type === range when partial enabled).
+   */
+  private _computeRangePos(
+    date: DateTime,
+    startDate: DateTime | undefined,
+    endDate: DateTime | undefined,
+    hoveredDate: DateTime | null,
+    isPreviewActive: boolean
+  ): CalendarRangePos {
+    if (startDate && endDate) {
+      if (startDate.hasSame(endDate, 'day')) {
+        return date.hasSame(startDate, 'day') ? 'single' : null;
+      }
+
+      if (date.hasSame(startDate, 'day')) {
+        return 'start';
+      }
+
+      if (date.hasSame(endDate, 'day')) {
+        return 'end';
+      }
+
+      if (date > startDate && date < endDate) {
+        return 'middle';
+      }
+
+      return null;
+    }
+
+    if (isPreviewActive && startDate && !endDate && hoveredDate && !hoveredDate.hasSame(startDate, 'day')) {
+      if (hoveredDate > startDate) {
+        if (date.hasSame(startDate, 'day')) {
+          return 'start';
+        }
+
+        if (date.hasSame(hoveredDate, 'day')) {
+          return 'preview-end';
+        }
+
+        if (date > startDate && date < hoveredDate) {
+          return 'preview';
+        }
+
+        return null;
+      }
+
+      if (date.hasSame(hoveredDate, 'day')) {
+        return 'preview-start';
+      }
+
+      if (date.hasSame(startDate, 'day')) {
+        return 'end';
+      }
+
+      if (date > hoveredDate && date < startDate) {
+        return 'preview';
+      }
+
+      return null;
+    }
+
+    return null;
   }
 
   /** finds date data for a given date in the current calendar grid */

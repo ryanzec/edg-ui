@@ -1,3 +1,39 @@
 <div [class]="'footer ' + containerClass()">
+  @if (hasBuiltInActions()) {
+    <div class="actions">
+      <div class="actions-left">
+        @if (showToday()) {
+          <org-button
+            variant="ghost"
+            color="neutral"
+            size="sm"
+            label="Today"
+            [disabled]="isDisabled()"
+            (clicked)="onTodayClicked()"
+          />
+        }
+      </div>
+      <div class="actions-right">
+        @if (showCancelApply()) {
+          <org-button
+            variant="ghost"
+            color="neutral"
+            size="sm"
+            label="Cancel"
+            [disabled]="isDisabled()"
+            (clicked)="onCancelClicked()"
+          />
+          <org-button
+            variant="filled"
+            color="primary"
+            size="sm"
+            label="Apply"
+            [disabled]="isDisabled()"
+            (clicked)="onApplyClicked()"
+          />
+        }
+      </div>
+    </div>
+  }
   <ng-content />
 </div>

@@ -1,0 +1,12 @@
+<button
+  orgChatReactionBrain
+  class="reaction-button"
+  [selected]="selected()"
+  [disabled]="disabled()"
+  (toggled)="onBrainToggled($event)"
+>
+  <span class="reaction-emoji">{{ emoji() }}</span>
+  @if (hasCount()) {
+    <span class="reaction-count">{{ count() }}</span>
+  }
+</button>

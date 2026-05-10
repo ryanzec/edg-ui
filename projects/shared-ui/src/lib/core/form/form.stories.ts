@@ -147,7 +147,7 @@ const skillOptions: ComboboxOptionInput[] = [
           </org-form-fields>
 
           <!-- submit button -->
-          <org-button type="submit" color="primary" buttonClass="w-full"> Submit Form </org-button>
+          <org-button type="submit" color="primary" buttonClass="w-full" label="Submit Form" />
         </form>
       </org-storybook-example-container-section>
 
@@ -407,7 +407,7 @@ class ReactiveFormDemoComponent {
           </org-form-fields>
 
           <!-- submit button -->
-          <org-button type="submit" color="primary" buttonClass="w-full"> Submit Form </org-button>
+          <org-button type="submit" color="primary" buttonClass="w-full" label="Submit Form" />
         </form>
       </org-storybook-example-container-section>
 
@@ -762,7 +762,7 @@ type PrePopulatedFormData = {
           </org-form-fields>
 
           <!-- submit button -->
-          <org-button type="submit" color="primary" buttonClass="w-full"> Submit Form </org-button>
+          <org-button type="submit" color="primary" buttonClass="w-full" label="Submit Form" />
         </form>
       </org-storybook-example-container-section>
 
@@ -1045,7 +1045,7 @@ class ReactiveFormPrePopulatedDemoComponent {
           </org-form-fields>
 
           <!-- submit button -->
-          <org-button type="submit" color="primary" buttonClass="w-full"> Submit Form </org-button>
+          <org-button type="submit" color="primary" buttonClass="w-full" label="Submit Form" />
         </form>
       </org-storybook-example-container-section>
 

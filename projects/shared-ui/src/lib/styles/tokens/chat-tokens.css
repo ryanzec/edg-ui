@@ -1,0 +1,62 @@
+:root {
+  /* thread layout */
+  --chat-thread-max-width: var(--sizing-3xl); /* 768px */
+  --chat-thread-padding: var(--spacing-4); /* 16px */
+  --chat-message-max-width: var(--sizing-2xl); /* 672px */
+
+  /* run rhythm */
+  --chat-run-gap-between: var(--spacing-5); /* 20px between different senders */
+  --chat-run-gap-within: var(--spacing-1); /* 4px within a run */
+
+  /* avatar gutter */
+  --chat-avatar-size: var(--spacing-8); /* 32px */
+  --chat-avatar-gap: var(--spacing-3); /* 12px gutter to body column */
+
+  /* author / meta */
+  --chat-author-min-height: var(--spacing-8); /* 32px — matches avatar so they centre line up */
+
+  /* body */
+  --chat-body-font-size: var(--font-size-base);
+  --chat-body-line-height: var(--line-height-normal);
+  --chat-body-child-gap: var(--spacing-2_5); /* 10px between body children */
+
+  /* surface mapping (resolved through base tokens — drop in component css via var()) */
+  --chat-system-bg: var(--color-bg-surface-2);
+  --chat-system-fg: var(--color-fg-muted);
+  --chat-system-border: var(--color-border-soft);
+
+  --chat-block-bg: var(--color-bg-surface-2);
+  --chat-block-border: var(--color-border);
+  --chat-block-fg: var(--color-fg);
+  --chat-block-meta-fg: var(--color-fg-muted);
+  --chat-block-tool-accent: var(--color-info);
+  --chat-block-thinking-accent: var(--color-fg-faint);
+  --chat-block-running-rail-width: var(--border-width-emphasize); /* 8px */
+  --chat-block-rail-width: var(--border-width); /* 1px */
+
+  --chat-suggestion-bg: var(--color-bg-surface);
+  --chat-suggestion-fg: var(--color-fg);
+  --chat-suggestion-border: var(--color-border);
+  --chat-suggestion-bg-hover: var(--color-bg-hover);
+
+  --chat-reaction-bg: var(--color-bg-surface-2);
+  --chat-reaction-fg: var(--color-fg-muted);
+  --chat-reaction-border: var(--color-border-soft);
+  --chat-reaction-bg-selected: var(--color-info-soft);
+  --chat-reaction-fg-selected: var(--color-info);
+  --chat-reaction-border-selected: var(--color-info);
+
+  --chat-quote-bg: var(--color-bg-surface-2);
+  --chat-quote-fg: var(--color-fg-muted);
+  --chat-quote-rail: var(--color-border-strong);
+  --chat-quote-rail-width: var(--border-width-emphasize);
+
+  --chat-streaming-bg: var(--color-info-soft);
+  --chat-streaming-fg: var(--color-info);
+  --chat-streaming-dot: var(--color-info);
+
+  --chat-typing-dot: var(--color-fg-muted);
+
+  --chat-day-rule: var(--color-border-soft);
+  --chat-day-fg: var(--color-fg-faint);
+}

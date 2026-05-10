@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { Box } from '../../../core/box/box';
 import { Button } from '../../../core/button/button';
-import { ButtonIcon } from '../../../core/button/button-icon';
 import { type IconName } from '../../../brain/icon-brain/icon-brain';
 import { Icon } from '../../../core/icon/icon';
 import { Tag, type TagColor } from '../../../core/tag/tag';
@@ -34,7 +33,7 @@ export type AvailableIntegration = {
 @Component({
   selector: 'org-integration-card-available',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Box, Button, ButtonIcon, Icon, Tag],
+  imports: [Box, Button, Icon, Tag],
   templateUrl: './integration-card-available.html',
   host: {
     class: 'block',

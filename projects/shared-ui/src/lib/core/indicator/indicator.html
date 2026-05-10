@@ -1,3 +1,5 @@
-@if (brain.hasNumber()) {
+@if (mode() === 'number') {
   <span>{{ brain.displayValue() }}</span>
+} @else {
+  <ng-content />
 }

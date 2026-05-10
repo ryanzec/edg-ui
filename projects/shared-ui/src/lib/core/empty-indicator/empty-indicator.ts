@@ -1,12 +1,17 @@
 import { Component, ChangeDetectionStrategy, computed, inject, input } from '@angular/core';
 import { angularUtils } from '@organization/shared-utils';
-import { EmptyIndicatorBrainDirective } from '../../brain/empty-indicator-brain/empty-indicator-brain';
+import {
+  EMPTY_INDICATOR_BRAIN_STATUS_ROLE_DEFAULT,
+  EmptyIndicatorBrainDirective,
+} from '../../brain/empty-indicator-brain/empty-indicator-brain';
 import { Button } from '../button/button';
 import {
   Box,
+  BOX_BACKGROUND_DEFAULT,
   BOX_BORDER_DEFAULT,
   BOX_COLOR_DEFAULT,
   BOX_PADDING_DEFAULT,
+  type BoxBackground,
   type BoxBorder,
   type BoxColor,
   type BoxPadding,
@@ -27,6 +32,12 @@ export const EMPTY_INDICATOR_BOX_BORDER_DEFAULT: BoxBorder = BOX_BORDER_DEFAULT;
 /** default value for the {@link EmptyIndicator.boxPadding} input */
 export const EMPTY_INDICATOR_BOX_PADDING_DEFAULT: BoxPadding = BOX_PADDING_DEFAULT;
 
+/** default value for the {@link EmptyIndicator.boxBackground} input */
+export const EMPTY_INDICATOR_BOX_BACKGROUND_DEFAULT: BoxBackground = BOX_BACKGROUND_DEFAULT;
+
+/** default value for the {@link EmptyIndicator.statusRole} input */
+export const EMPTY_INDICATOR_STATUS_ROLE_DEFAULT: boolean = EMPTY_INDICATOR_BRAIN_STATUS_ROLE_DEFAULT;
+
 @Component({
   selector: 'org-empty-indicator',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -36,6 +47,7 @@ export const EMPTY_INDICATOR_BOX_PADDING_DEFAULT: BoxPadding = BOX_PADDING_DEFAU
   hostDirectives: [
     {
       directive: EmptyIndicatorBrainDirective,
+      inputs: ['statusRole'],
       outputs: ['actionTriggered'],
     },
   ],
@@ -67,6 +79,9 @@ export class EmptyIndicator {
 
   /** the internal padding size applied to the inner Box component */
   public boxPadding = input<BoxPadding>(EMPTY_INDICATOR_BOX_PADDING_DEFAULT);
+
+  /** whether the inner Box component tints its background using the boxColor input */
+  public boxBackground = input<BoxBackground>(EMPTY_INDICATOR_BOX_BACKGROUND_DEFAULT);
 
   /** whether the action button should be rendered */
   protected readonly hasActionButton = computed<boolean>(() => {

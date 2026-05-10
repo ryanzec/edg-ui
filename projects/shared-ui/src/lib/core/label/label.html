@@ -1,24 +1,30 @@
-<ng-template #labelTemplate>
-  {{ labelBrainDirective.text() }}
-
-  @if (labelBrainDirective.isRequired()) {
-    <span class="required-marker" [attr.aria-hidden]="labelBrainDirective.requiredMarkerAriaHidden">*</span>
-    <span class="sr-only">{{ labelBrainDirective.requiredAccessibilityText }}</span>
-  }
+<ng-template #content>
+  <span class="org-label-text">{{ labelBrainDirective.text() }}</span>
 
   @if (labelBrainDirective.isLoading()) {
-    <org-loading-spinner />
+    <org-loading-spinner size="sm" />
   }
 
-  <ng-content />
+  <span class="org-label-trailing">
+    <ng-content select="[trailing]" />
+  </span>
 </ng-template>
 
 @if (labelBrainDirective.asLabel()) {
-  <label [for]="labelBrainDirective.htmlFor()">
-    <ng-container [ngTemplateOutlet]="labelTemplate" />
+  <label
+    class="org-label"
+    [for]="labelBrainDirective.htmlFor()"
+    [attr.data-required]="labelBrainDirective.isRequired() ? '1' : null"
+    [attr.data-loading]="labelBrainDirective.isLoading() ? '1' : null"
+  >
+    <ng-container [ngTemplateOutlet]="content" />
   </label>
 } @else {
-  <div>
-    <ng-container [ngTemplateOutlet]="labelTemplate" />
+  <div
+    class="org-label"
+    [attr.data-required]="labelBrainDirective.isRequired() ? '1' : null"
+    [attr.data-loading]="labelBrainDirective.isLoading() ? '1' : null"
+  >
+    <ng-container [ngTemplateOutlet]="content" />
   </div>
 }

@@ -20,6 +20,7 @@ export const COMBOBOX_OPTION_ROLE = 'option';
     '[attr.id]': 'optionId()',
     '[attr.aria-selected]': 'isSelected()',
     '[attr.aria-disabled]': 'isDisabled() ? "true" : null',
+    '[attr.data-active]': 'isFocused() ? "1" : null',
     '[attr.data-option-value]': 'option().value',
     '(mousedown)': 'handleMouseDown($event)',
     '(mouseenter)': 'handleMouseEnter($event)',

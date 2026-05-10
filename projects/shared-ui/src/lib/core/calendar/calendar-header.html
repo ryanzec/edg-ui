@@ -2,36 +2,44 @@
   <org-button
     [iconOnly]="true"
     variant="ghost"
+    size="sm"
     [excludeSpacing]="true"
+    [disabled]="calendarComponent.disabled()"
     (clicked)="onPreviousClick()"
+    label="Previous month"
     ariaLabel="Previous month"
-  >
-    <org-button-icon name="chevron-left" />
-  </org-button>
+    preIcon="chevron-left"
+  />
 
-  <div class="selectors">
-    <select class="selector" (change)="onMonthChange($event)" aria-label="Select month">
-      @for (month of calendarComponent.monthOptions; track month.value) {
-        <option [value]="month.value" [selected]="month.value === calendarComponent.displayMonth()">
-          {{ month.label }}
-        </option>
-      }
-    </select>
+  <div class="cluster">
+    <org-drop-down-selector
+      label="Month"
+      size="sm"
+      [items]="monthItems()"
+      [selectedItems]="selectedMonthItems()"
+      [disabled]="calendarComponent.disabled()"
+      (selectedItemsChange)="onMonthChanged($event)"
+    />
 
-    <select class="selector" (change)="onYearChange($event)" aria-label="Select year">
-      @for (year of calendarComponent.yearOptions(); track year) {
-        <option [value]="year" [selected]="year === calendarComponent.displayYear()">{{ year }}</option>
-      }
-    </select>
+    <org-drop-down-selector
+      label="Year"
+      size="sm"
+      [items]="yearItems()"
+      [selectedItems]="selectedYearItems()"
+      [disabled]="calendarComponent.disabled()"
+      (selectedItemsChange)="onYearChanged($event)"
+    />
   </div>
 
   <org-button
     [iconOnly]="true"
     variant="ghost"
+    size="sm"
     [excludeSpacing]="true"
+    [disabled]="calendarComponent.disabled()"
     (clicked)="onNextClick()"
+    label="Next month"
     ariaLabel="Next month"
-  >
-    <org-button-icon name="chevron-right" />
-  </org-button>
+    preIcon="chevron-right"
+  />
 </div>

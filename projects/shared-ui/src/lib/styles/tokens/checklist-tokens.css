@@ -1,0 +1,79 @@
+:root {
+  /* layout */
+  --checklist-row-padding-block: var(--spacing-1_5);
+  --checklist-row-padding-inline: var(--spacing-2);
+  --checklist-row-gap: var(--spacing-2_5);
+  --checklist-row-radius: var(--radius-base);
+  --checklist-item-spacing: var(--spacing-0_5);
+
+  /* row interaction backgrounds (parent rows only) */
+  --checklist-row-bg: transparent;
+  --checklist-row-bg-hover: var(--color-bg-hover);
+  --checklist-row-bg-active: var(--color-bg-active);
+  --checklist-row-focus-ring-width: var(--border-width-thick);
+  --checklist-row-focus-ring-color: var(--color-focus-ring);
+
+  /* row transition */
+  --checklist-row-transition-duration: var(--motion-duration-base);
+  --checklist-row-transition-easing: var(--motion-ease-standard);
+
+  /* label */
+  --checklist-label-color: var(--color-fg);
+  --checklist-label-font-size: var(--font-size-sm);
+  --checklist-label-font-weight: var(--font-weight-regular);
+  --checklist-label-line-height: var(--line-height-normal);
+  --checklist-label-color-emphasize-invalid: var(--color-danger);
+
+  /* status slot */
+  --checklist-status-size: var(--spacing-5);
+  --checklist-status-icon-size: var(--spacing-4);
+  --checklist-status-radius: var(--radius-pill);
+  --checklist-status-bg: transparent;
+
+  /* status colors per status */
+  --checklist-status-color-not-started: var(--color-neutral);
+  --checklist-status-color-in-progress: var(--color-info);
+  --checklist-status-color-valid: var(--color-safe);
+  --checklist-status-color-invalid: var(--color-danger);
+
+  /* status soft-tile backgrounds (consumer opt-in via showStatusBackground) */
+  --checklist-status-bg-not-started: var(--color-neutral-soft);
+  --checklist-status-bg-in-progress: var(--color-info-soft);
+  --checklist-status-bg-valid: var(--color-safe-soft);
+  --checklist-status-bg-invalid: var(--color-danger-soft);
+
+  /* count pill */
+  --checklist-count-color: var(--color-fg-muted);
+  --checklist-count-bg: var(--color-neutral-soft);
+  --checklist-count-radius: var(--radius-pill);
+  --checklist-count-font-size: var(--font-size-2xs);
+  --checklist-count-font-weight: var(--font-weight-medium);
+  --checklist-count-padding-block: 0;
+  --checklist-count-padding-inline: var(--spacing-1_5);
+  --checklist-count-min-width: var(--spacing-7);
+  --checklist-count-height: var(--spacing-4);
+  --checklist-count-gap: var(--spacing-2);
+
+  /* meta */
+  --checklist-meta-color: var(--color-fg-faint);
+  --checklist-meta-font-size: var(--font-size-xs);
+  --checklist-meta-line-height: 1;
+
+  /* chevron */
+  --checklist-chevron-size: var(--spacing-3_5);
+  --checklist-chevron-color: var(--color-fg-faint);
+  --checklist-chevron-color-active: var(--color-fg-muted);
+  --checklist-chevron-gap: var(--spacing-3);
+  --checklist-chevron-transition-duration: var(--motion-duration-base);
+  --checklist-chevron-transition-easing: var(--motion-ease-standard);
+
+  /* children block + indent rail */
+  --checklist-children-padding-block-start: var(--spacing-1);
+  --checklist-children-padding-block-end: var(--spacing-1_5);
+  --checklist-children-padding-inline-start: var(--spacing-7);
+  --checklist-rail-color: var(--color-border-soft);
+  --checklist-rail-width: var(--border-width);
+  --checklist-rail-inset-block-start: var(--spacing-1);
+  --checklist-rail-inset-block-end: var(--spacing-1_5);
+  --checklist-rail-inset-inline-start: var(--spacing-3);
+}

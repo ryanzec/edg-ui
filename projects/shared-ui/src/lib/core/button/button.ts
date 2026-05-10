@@ -1,6 +1,19 @@
-import { Component, ChangeDetectionStrategy, computed, contentChildren, input, output, viewChild } from '@angular/core';
-import { angularUtils } from '@organization/shared-utils';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  TemplateRef,
+  computed,
+  contentChild,
+  effect,
+  input,
+  output,
+  viewChild,
+} from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
+import { angularUtils, logManager } from '@organization/shared-utils';
 import { LoadingSpinner } from '../loading-spinner/loading-spinner';
+import { Icon, type IconSize } from '../icon/icon';
+import { type IconName } from '../../brain/icon-brain/icon-brain';
 import { ComponentColor, ComponentSize } from '../types/component-types';
 import {
   ButtonBrainDirective,
@@ -12,7 +25,6 @@ import {
   BUTTON_ICON_ONLY_DEFAULT,
   BUTTON_LOADING_DEFAULT,
 } from '../../brain/button-brain/button-brain';
-import { ButtonIcon } from './button-icon';
 
 /** the color variant of the button */
 export type ButtonColor = ComponentColor;
@@ -53,10 +65,16 @@ export const BUTTON_EXCLUDE_SPACING_DEFAULT = false;
 /** the default css class applied to the inner button element */
 export const BUTTON_BUTTON_CLASS_DEFAULT = '';
 
+/** the default pre-icon name */
+export const BUTTON_PRE_ICON_DEFAULT: IconName | undefined = undefined;
+
+/** the default post-icon name */
+export const BUTTON_POST_ICON_DEFAULT: IconName | undefined = undefined;
+
 @Component({
   selector: 'org-button',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [LoadingSpinner, ButtonBrainDirective],
+  imports: [LoadingSpinner, Icon, NgTemplateOutlet, ButtonBrainDirective],
   templateUrl: './button.html',
   styleUrl: './button.css',
   host: {
@@ -72,8 +90,11 @@ export const BUTTON_BUTTON_CLASS_DEFAULT = '';
 export class Button {
   private readonly _buttonBrainDirective = viewChild.required(ButtonBrainDirective);
 
-  /** @internal all slotted button icon instances; used by ButtonIcon to determine spinner placement during loading. */
-  private readonly _buttonIcons = contentChildren(ButtonIcon);
+  /** projected template for the pre slot — when provided, takes precedence over the preIcon input */
+  protected readonly preTemplate = contentChild<TemplateRef<unknown>>('pre');
+
+  /** projected template for the post slot — when provided, takes precedence over the postIcon input */
+  protected readonly postTemplate = contentChild<TemplateRef<unknown>>('post');
 
   /** the color variant applied to the button */
   public readonly color = input<ButtonColor>(BUTTON_COLOR_DEFAULT);
@@ -102,6 +123,19 @@ export class Button {
   /** additional css classes applied to the inner button element */
   public readonly buttonClass = input<string>(BUTTON_BUTTON_CLASS_DEFAULT);
 
+  /** the visible text label rendered inside the button */
+  public readonly label = input.required<string>();
+
+  /** optional icon rendered before the label; ignored when a projected #pre template is provided */
+  public readonly preIcon = input<IconName | undefined, IconName | null | undefined>(BUTTON_PRE_ICON_DEFAULT, {
+    transform: angularUtils.transformNullToUndefined,
+  });
+
+  /** optional icon rendered after the label; ignored when a projected #post template is provided */
+  public readonly postIcon = input<IconName | undefined, IconName | null | undefined>(BUTTON_POST_ICON_DEFAULT, {
+    transform: angularUtils.transformNullToUndefined,
+  });
+
   /** accessible label for icon-only buttons or when the visual label needs an override */
   public readonly ariaLabel = input<string | undefined, string | null | undefined>(BUTTON_ARIA_LABEL_DEFAULT, {
     transform: angularUtils.transformNullToUndefined,
@@ -129,14 +163,48 @@ export class Button {
   /** whether the button currently holds keyboard or pointer focus */
   public readonly isFocused = computed<boolean>(() => this._buttonBrainDirective().isFocused());
 
-  /** the first slotted ButtonIcon instance, used by ButtonIcon to detect which one renders the loading spinner. */
-  public readonly firstButtonIcon = computed<ButtonIcon | undefined>(() => this._buttonIcons()[0]);
+  /** the icon size that maps from the parent button size (sm -> xs, base -> base, lg -> 2xl) */
+  protected readonly iconSize = computed<IconSize>(() => {
+    const buttonSize = this.size();
 
-  /** whether any button icon is slotted under this button */
-  protected readonly hasButtonIcons = computed<boolean>(() => this._buttonIcons().length > 0);
+    if (buttonSize === 'sm') {
+      return 'xs';
+    }
 
-  /** whether the standalone loading spinner should render (no icons slotted and loading is true) */
-  protected readonly showStandaloneSpinner = computed<boolean>(() => this.loading() && !this.hasButtonIcons());
+    if (buttonSize === 'lg') {
+      return '2xl';
+    }
+
+    return 'base';
+  });
+
+  /** whether the pre-icon should render (no projected pre template present) */
+  protected readonly showPreIcon = computed<boolean>(() => this.preIcon() !== undefined && !this.preTemplate());
+
+  /** whether the post-icon should render (no projected post template present) */
+  protected readonly showPostIcon = computed<boolean>(() => this.postIcon() !== undefined && !this.postTemplate());
+
+  constructor() {
+    // warn when both preIcon input and projected #pre template are provided; the projected template wins
+    effect(() => {
+      if (this.preTemplate() && this.preIcon() !== undefined) {
+        logManager.warn({
+          type: 'button-conflicting-pre-slot',
+          message: 'both preIcon input and projected #pre template were provided; the projected template wins',
+        });
+      }
+    });
+
+    // warn when both postIcon input and projected #post template are provided; the projected template wins
+    effect(() => {
+      if (this.postTemplate() && this.postIcon() !== undefined) {
+        logManager.warn({
+          type: 'button-conflicting-post-slot',
+          message: 'both postIcon input and projected #post template were provided; the projected template wins',
+        });
+      }
+    });
+  }
 
   /** re-emits the brain's click as the component's public clicked output */
   protected onBrainClicked(): void {

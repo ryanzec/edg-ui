@@ -15,9 +15,9 @@ export const LABEL_HTML_FOR_DEFAULT: string | undefined = undefined;
 
 /**
  * headless brain directive for the label component. owns the rendered semantic-element choice
- * (native label vs div), the form-control association via htmlFor, the loading / required state, the
- * accessible text content, and the static accessibility values for the required-indicator markup. carries
- * no styling or template — apply it to a presentation component via hostDirectives.
+ * (native label vs div), the form-control association via htmlFor, the loading / required state, and
+ * the accessible text content. carries no styling or template — apply it to a presentation component
+ * via hostDirectives.
  */
 @Directive({
   selector: '[orgLabelBrain]',
@@ -40,12 +40,6 @@ export class LabelBrainDirective {
   public readonly htmlFor = input<string | undefined, string | null | undefined>(LABEL_HTML_FOR_DEFAULT, {
     transform: angularUtils.transformNullToUndefined,
   });
-
-  /** screen-reader announcement that accompanies the visual required-field indicator */
-  public readonly requiredAccessibilityText = 'required' as const;
-
-  /** static aria-hidden value applied to the visual-only required-field marker */
-  public readonly requiredMarkerAriaHidden = 'true' as const;
 
   constructor() {
     // warns when the directive is configured to render a native label without an htmlFor association

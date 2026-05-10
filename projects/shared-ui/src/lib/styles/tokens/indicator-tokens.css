@@ -1,0 +1,30 @@
+:root {
+  /* layout */
+  --indicator-radius: var(--radius-pill);
+  --indicator-line-height: 1;
+  --indicator-letter-spacing: -0.01em;
+  --indicator-font-weight: var(--font-weight-semibold);
+  --indicator-z-index: var(--z-index-raised);
+
+  /* size: base (default) */
+  --indicator-dot-size: var(--spacing-2); /* 8px */
+  --indicator-height: var(--spacing-4); /* 16px */
+  --indicator-pad-x: var(--spacing-1); /* 4px */
+  --indicator-icon-pad-x: 0.1875rem; /* 3px */
+  --indicator-font-size: var(--font-size-xs);
+
+  /* outline ring (default off) */
+  --indicator-ring-width: 0;
+  --indicator-ring-color: var(--color-bg-surface);
+
+  /* color: primary (default) */
+  --indicator-bg: var(--color-primary);
+  --indicator-fg: var(--color-primary-on);
+
+  /* corner pin translate */
+  --indicator-position-translate: 35%;
+
+  /* pulse animation */
+  --indicator-pulse-duration: 1.6s;
+  --indicator-pulse-easing: var(--motion-ease-exit);
+}

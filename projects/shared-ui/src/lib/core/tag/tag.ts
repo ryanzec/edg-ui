@@ -20,7 +20,7 @@ export const allTagVariants = ['strong', 'soft'] as const;
 export type TagVariant = (typeof allTagVariants)[number];
 
 /** the default size of the tag */
-export const TAG_SIZE_DEFAULT: TagSize = 'sm';
+export const TAG_SIZE_DEFAULT: TagSize = 'base';
 
 /** the default variant of the tag */
 export const TAG_VARIANT_DEFAULT: TagVariant = 'soft';

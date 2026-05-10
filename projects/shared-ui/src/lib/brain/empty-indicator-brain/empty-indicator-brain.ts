@@ -1,18 +1,21 @@
-import { Directive, computed, signal } from '@angular/core';
+import { Directive, computed, input, signal } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { outputFromObservable } from '@angular/core/rxjs-interop';
+
+/** default value for the statusRole input */
+export const EMPTY_INDICATOR_BRAIN_STATUS_ROLE_DEFAULT: boolean = true;
 
 /**
  * headless brain directive for the empty-indicator component. owns the action click event plumbing,
  * tracks subscriber count on the actionTriggered output to drive the action-button rendering decision,
- * and applies the static role="status" accessibility attribute. carries no styling or template — apply
- * it to the host of a presentation component via hostDirectives.
+ * and conditionally applies role="status" so consumers can opt out for steady-state placeholders.
+ * carries no styling or template — apply it to the host of a presentation component via hostDirectives.
  */
 @Directive({
   selector: '[orgEmptyIndicatorBrain]',
   exportAs: 'orgEmptyIndicatorBrain',
   host: {
-    role: 'status',
+    '[attr.role]': 'statusRole() ? "status" : null',
   },
 })
 export class EmptyIndicatorBrainDirective {
@@ -32,6 +35,9 @@ export class EmptyIndicatorBrainDirective {
       subscription.unsubscribe();
     };
   });
+
+  /** whether the host element should receive role="status"; consumers may opt out for steady-state placeholders */
+  public readonly statusRole = input<boolean>(EMPTY_INDICATOR_BRAIN_STATUS_ROLE_DEFAULT);
 
   /** emitted when the action button is triggered */
   public readonly actionTriggered = outputFromObservable(this._actionTriggeredObservable);

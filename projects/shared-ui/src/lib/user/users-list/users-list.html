@@ -6,10 +6,7 @@
       Manage who has access to this workspace, and what they can do.
     </span>
   </div>
-  <org-button color="primary" (clicked)="onInviteMemberClick()">
-    <org-button-icon name="plus" />
-    Invite member
-  </org-button>
+  <org-button color="primary" label="Invite member" preIcon="plus" (clicked)="onInviteMemberClick()" />
 </div>
 
 <div class="flex flex-row items-center justify-between gap-2">
@@ -66,9 +63,7 @@
     <ng-template [orgTypedContext]="users()" #body let-user>
       <org-table-td>
         <div class="flex flex-row items-center gap-1">
-          <org-avatar [label]="fullName(user)" size="base">
-            <org-avatar-circle />
-          </org-avatar>
+          <org-avatar [label]="fullName(user)" />
           <div class="flex flex-col">
             <span orgText textSize="sm">{{ fullName(user) }}</span>
             <span orgText textSize="2xs" textColor="neutral">{{ subId(user) }}</span>
@@ -102,10 +97,10 @@
             variant="ghost"
             [iconOnly]="true"
             size="sm"
-            aria-label="User actions"
-          >
-            <org-button-icon name="ellipsis" />
-          </org-button>
+            label="User actions"
+            ariaLabel="User actions"
+            preIcon="ellipsis"
+          />
           <ng-template #userActionsMenu>
             <org-overlay-menu [items]="rowActionsMenuItems" (itemClicked)="onRowActionMenuItemClick($event, user)" />
           </ng-template>
@@ -113,10 +108,7 @@
       </org-table-td>
     </ng-template>
     <ng-template #selectedActions>
-      <org-button color="danger" size="sm" (clicked)="onBulkDeleteClick()">
-        <org-button-icon name="trash" />
-        Delete
-      </org-button>
+      <org-button color="danger" size="sm" label="Delete" preIcon="trash" (clicked)="onBulkDeleteClick()" />
     </ng-template>
   </org-table>
 

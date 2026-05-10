@@ -17,11 +17,12 @@
     border-width: 0;
   }
 
+  /* base layout — properties applied once using slot tokens */
   :host .checkbox-label {
     display: inline-flex;
-    align-items: center;
-    gap: var(--spacing-1);
-    border-radius: var(--radius-sm);
+    align-items: flex-start;
+    gap: var(--checkbox-gap);
+    border-radius: var(--checkbox-radius);
     cursor: pointer;
   }
 
@@ -29,30 +30,150 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    color: var(--checkbox-indicator-color);
+    position: relative;
+    top: var(--checkbox-icon-top);
   }
 
-  :host([aria-disabled='true']) .checkbox-label {
-    opacity: var(--opacity-disabled);
-    cursor: not-allowed;
+  :host .checkbox-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--checkbox-body-gap);
+    min-width: 0;
   }
 
-  :host .checkbox-icon {
-    color: var(--color-neutral);
+  :host .checkbox-description {
+    font-size: var(--checkbox-description-font-size);
+    line-height: var(--line-height-normal);
+    color: var(--checkbox-description-color);
   }
 
+  /* checked / indeterminate fill */
+  :host([data-checked]) .checkbox-icon,
+  :host([data-indeterminate]) .checkbox-icon {
+    color: var(--checkbox-indicator-color-checked);
+  }
+
+  /* hover (not disabled) */
   :host:not([aria-disabled='true']) .checkbox-label:hover .checkbox-icon {
-    color: var(--color-primary);
+    color: var(--checkbox-indicator-color-hover);
   }
 
+  :host([data-checked]):not([aria-disabled='true']) .checkbox-label:hover .checkbox-icon,
+  :host([data-indeterminate]):not([aria-disabled='true']) .checkbox-label:hover .checkbox-icon {
+    color: var(--checkbox-indicator-color-checked-hover);
+  }
+
+  /* active (pressed, not disabled, checked) */
+  :host([data-checked]):not([aria-disabled='true']) .checkbox-label:active .checkbox-icon,
+  :host([data-indeterminate]):not([aria-disabled='true']) .checkbox-label:active .checkbox-icon {
+    color: var(--checkbox-indicator-color-checked-active);
+  }
+
+  /* focus-visible (a11y) */
   :host:not([aria-disabled='true']) .checkbox-label:focus-visible {
-    background-color: var(--color-primary-hover);
+    outline: none;
+    box-shadow: 0 0 0 var(--checkbox-focus-ring-width) var(--checkbox-focus-ring-color);
   }
 
   :host:not([aria-disabled='true']) .checkbox-label:focus-visible .checkbox-icon {
-    color: var(--color-fg-on-accent);
+    color: var(--checkbox-indicator-color-checked);
   }
 
-  :host([aria-disabled='true']) .checkbox-icon {
-    color: var(--color-fg-faint);
+  /* disabled */
+  :host([aria-disabled='true']) .checkbox-label {
+    opacity: var(--checkbox-disabled-opacity);
+    cursor: not-allowed;
+  }
+
+  /* ===== SIZE VARIANTS ===== */
+
+  :host([data-size='sm']) {
+    --checkbox-gap: var(--spacing-1_5);
+    --checkbox-body-gap: var(--spacing-0_5);
+    --checkbox-description-font-size: var(--font-size-xs);
+    --checkbox-icon-top: 0.0625rem; /* 1px */
+  }
+
+  :host([data-size='base']) {
+    --checkbox-gap: var(--spacing-2);
+    --checkbox-body-gap: var(--spacing-0_5);
+    --checkbox-description-font-size: var(--font-size-xs);
+    --checkbox-icon-top: 0.125rem; /* 2px */
+  }
+
+  :host([data-size='lg']) {
+    --checkbox-gap: var(--spacing-3);
+    --checkbox-body-gap: var(--spacing-0_5);
+    --checkbox-description-font-size: var(--font-size-sm);
+    --checkbox-icon-top: 0.1875rem; /* 3px */
+  }
+
+  /* ===== COLOR VARIANTS ===== */
+
+  :host([data-color='primary']) {
+    --checkbox-indicator-color: var(--color-neutral);
+    --checkbox-indicator-color-hover: var(--color-primary);
+    --checkbox-indicator-color-checked: var(--color-primary);
+    --checkbox-indicator-color-checked-hover: var(--color-primary-hover);
+    --checkbox-indicator-color-checked-active: var(--color-primary-active);
+    --checkbox-card-border-selected: var(--color-primary);
+  }
+
+  :host([data-color='danger']) {
+    --checkbox-indicator-color: var(--color-neutral);
+    --checkbox-indicator-color-hover: var(--color-danger);
+    --checkbox-indicator-color-checked: var(--color-danger);
+    --checkbox-indicator-color-checked-hover: var(--color-danger-hover);
+    --checkbox-indicator-color-checked-active: var(--color-danger-active);
+    --checkbox-card-border-selected: var(--color-danger);
+  }
+
+  /* ===== ERROR STATE ===== */
+  /* error overrides whatever color was selected to use danger tokens */
+  :host([data-state='error']) {
+    --checkbox-indicator-color: var(--color-danger);
+    --checkbox-indicator-color-hover: var(--color-danger);
+    --checkbox-indicator-color-checked: var(--color-danger);
+    --checkbox-indicator-color-checked-hover: var(--color-danger-hover);
+    --checkbox-indicator-color-checked-active: var(--color-danger-active);
+    --checkbox-card-border-selected: var(--color-danger);
+  }
+
+  /* ===== VARIANT: default ===== */
+  /* the default variant has no card chrome — base .checkbox-label rules apply directly. */
+
+  /* ===== VARIANT: card ===== */
+  :host([data-variant='card']) .checkbox-label {
+    align-items: flex-start;
+    width: 100%;
+    padding: var(--checkbox-card-padding);
+    background-color: var(--checkbox-card-bg);
+    border: var(--border-width) solid var(--checkbox-card-border);
+    border-radius: var(--checkbox-card-radius);
+  }
+
+  :host([data-variant='card']):not([aria-disabled='true']) .checkbox-label:hover {
+    background-color: var(--checkbox-card-bg-hover);
+    border-color: var(--checkbox-card-border-hover);
+  }
+
+  :host([data-variant='card'][data-checked]) .checkbox-label,
+  :host([data-variant='card'][data-indeterminate]) .checkbox-label,
+  :host([data-variant='card'][data-state='error']) .checkbox-label {
+    border-color: var(--checkbox-card-border-selected);
+  }
+
+  /* card variant size overrides — override the design token, not the property */
+  :host([data-variant='card'][data-size='sm']) {
+    --checkbox-card-padding: var(--spacing-2_5); /* 10px */
+  }
+
+  :host([data-variant='card'][data-size='base']) {
+    --checkbox-card-padding: var(--spacing-3); /* 12px */
+  }
+
+  :host([data-variant='card'][data-size='lg']) {
+    --checkbox-card-padding: var(--spacing-4); /* 16px */
   }
 }

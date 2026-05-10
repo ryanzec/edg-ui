@@ -33,6 +33,7 @@ export const CALENDAR_DISABLE_BEFORE_DEFAULT: DateTime | undefined = undefined;
 export const CALENDAR_DISABLE_AFTER_DEFAULT: DateTime | undefined = undefined;
 export const CALENDAR_ALLOWED_DATE_RANGE_DEFAULT = 0;
 export const CALENDAR_ENABLE_DESELECTION_DEFAULT = true;
+export const CALENDAR_DISABLED_DEFAULT = false;
 export const CALENDAR_CONTAINER_CLASS_DEFAULT = '';
 
 /**
@@ -59,6 +60,7 @@ export const CALENDAR_CONTAINER_CLASS_DEFAULT = '';
         'disableAfter',
         'allowedDateRange',
         'enableDeselection',
+        'disabled',
       ],
       outputs: [
         'dateSelected',
@@ -73,6 +75,8 @@ export const CALENDAR_CONTAINER_CLASS_DEFAULT = '';
     '[attr.data-allow-partial-range-selection]': 'allowPartialRangeSelection() ? "" : null',
     '[attr.data-partial-range-selection-type]': 'partialRangeSelectionType()',
     '[attr.data-enable-deselection]': 'enableDeselection() ? "" : null',
+    '[attr.data-disabled]': 'disabled() ? "" : null',
+    '[attr.aria-disabled]': 'disabled() ? "true" : null',
   },
 })
 export class Calendar {
@@ -109,6 +113,7 @@ export class Calendar {
   );
   public readonly allowedDateRange = input<number>(CALENDAR_ALLOWED_DATE_RANGE_DEFAULT);
   public readonly enableDeselection = input<boolean>(CALENDAR_ENABLE_DESELECTION_DEFAULT);
+  public readonly disabled = input<boolean>(CALENDAR_DISABLED_DEFAULT);
   public readonly containerClass = input<string>(CALENDAR_CONTAINER_CLASS_DEFAULT);
 
   // output events (mapped through to the brain via hostDirectives, but redeclared so consumers see them on Calendar)
@@ -184,6 +189,11 @@ export class Calendar {
   /** updates focused date when date is hovered */
   public onDateHover(dateData: CalendarDateData): void {
     this.brain.onDateHover(dateData);
+  }
+
+  /** clears the hovered date so the range preview disappears when the pointer leaves the grid */
+  public onMouseLeave(): void {
+    this.brain.onMouseLeave();
   }
 
   /** handles partial range selection type change from radio group */

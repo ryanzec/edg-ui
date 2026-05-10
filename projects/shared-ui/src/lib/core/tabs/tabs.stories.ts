@@ -499,15 +499,9 @@ export const ProgrammaticTabSelection: Story = {
           <org-storybook-example-container-section label="Scrollable with Jump to Last Button">
             <div class="flex flex-col gap-4">
               <div class="flex flex-row gap-1">
-                <org-button color="primary" (clicked)="jumpToFirstTab()">
-                  Jump to First Tab
-                </org-button>
-                <org-button color="primary" (clicked)="jumpToMiddleTab()">
-                  Jump to Middle Tab
-                </org-button>
-                <org-button color="primary" (clicked)="jumpToLastTab()">
-                  Jump to Last Tab
-                </org-button>
+                <org-button color="primary" label="Jump to First Tab" (clicked)="jumpToFirstTab()" />
+                <org-button color="primary" label="Jump to Middle Tab" (clicked)="jumpToMiddleTab()" />
+                <org-button color="primary" label="Jump to Last Tab" (clicked)="jumpToLastTab()" />
               </div>
 
               <div class="w-sm">

@@ -3,76 +3,156 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    border-radius: var(--radius-pill);
+    box-sizing: border-box;
+    flex-shrink: 0;
+    min-width: var(--indicator-height);
+    height: var(--indicator-height);
+    padding-inline: var(--indicator-pad-x);
+    border-radius: var(--indicator-radius);
+    background: var(--indicator-bg);
+    color: var(--indicator-fg);
+    font-family: inherit;
+    font-size: var(--indicator-font-size);
+    font-weight: var(--indicator-font-weight);
+    line-height: var(--indicator-line-height);
+    letter-spacing: var(--indicator-letter-spacing);
+    font-variant-numeric: tabular-nums;
+    box-shadow: 0 0 0 var(--indicator-ring-width) var(--indicator-ring-color);
   }
 
-  :host([data-size='sm']:not([data-has-number])) {
-    min-width: var(--spacing-2_5); /* 10px */
-    min-height: var(--spacing-2_5); /* 10px */
-  }
-  :host([data-size='base']:not([data-has-number])) {
-    min-width: var(--spacing-3_5); /* 14px */
-    min-height: var(--spacing-3_5); /* 14px */
-  }
-  :host([data-size='lg']:not([data-has-number])) {
-    min-width: 1.125rem; /* 18px */
-    min-height: 1.125rem; /* 18px */
-  }
-  :host([data-size='sm'][data-has-number]) {
-    min-width: var(--spacing-5); /* 20px */
-    min-height: var(--spacing-5); /* 20px */
-    padding: var(--spacing-1);
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-medium);
-    line-height: 1;
-  }
-  :host([data-size='base'][data-has-number]) {
-    min-width: var(--spacing-6); /* 24px */
-    min-height: var(--spacing-6); /* 24px */
-    padding: var(--spacing-1) var(--spacing-1_5);
-    font-size: var(--font-size-base);
-    font-weight: var(--font-weight-medium);
-    line-height: 1;
-  }
-  :host([data-size='lg'][data-has-number]) {
-    min-width: var(--spacing-7); /* 28px */
-    min-height: var(--spacing-7); /* 28px */
-    padding: var(--spacing-1_5) var(--spacing-2);
-    font-size: var(--font-size-lg);
-    font-weight: var(--font-weight-medium);
-    line-height: 1;
+  /* dot mode: circular with no padding */
+  :host([data-mode='dot']) {
+    width: var(--indicator-dot-size);
+    height: var(--indicator-dot-size);
+    min-width: 0;
+    padding: 0;
   }
 
+  /* icon mode: snug-fit glyph pill — consumer sets [size] on the projected org-icon to match */
+  :host([data-mode='icon']) {
+    padding-inline: var(--indicator-icon-pad-x);
+  }
+
+  /* sizes */
+  :host([data-size='sm']) {
+    --indicator-dot-size: 0.375rem; /* 6px */
+    --indicator-height: 0.875rem; /* 14px */
+    --indicator-pad-x: var(--spacing-1); /* 4px */
+    --indicator-font-size: var(--font-size-2xs);
+  }
+
+  :host([data-size='base']) {
+    --indicator-dot-size: var(--spacing-2); /* 8px */
+    --indicator-height: var(--spacing-4); /* 16px */
+    --indicator-pad-x: var(--spacing-1); /* 4px */
+    --indicator-font-size: var(--font-size-xs);
+  }
+
+  :host([data-size='lg']) {
+    --indicator-dot-size: var(--spacing-2_5); /* 10px */
+    --indicator-height: var(--spacing-5); /* 20px */
+    --indicator-pad-x: var(--spacing-1_5); /* 6px */
+    --indicator-font-size: var(--font-size-sm);
+  }
+
+  /* colors: bg + on-color foreground */
   :host([data-color='primary']) {
-    background-color: var(--color-primary);
-    color: var(--color-fg);
+    --indicator-bg: var(--color-primary);
+    --indicator-fg: var(--color-primary-on);
   }
+
   :host([data-color='secondary']) {
-    background-color: var(--color-secondary);
-    color: var(--color-fg);
+    --indicator-bg: var(--color-secondary);
+    --indicator-fg: var(--color-secondary-on);
   }
+
   :host([data-color='neutral']) {
-    background-color: var(--color-neutral);
-    color: var(--color-fg);
+    --indicator-bg: var(--color-neutral);
+    --indicator-fg: var(--color-neutral-on);
   }
+
   :host([data-color='safe']) {
-    background-color: var(--color-safe);
-    color: var(--color-fg);
+    --indicator-bg: var(--color-safe);
+    --indicator-fg: var(--color-safe-on);
   }
+
   :host([data-color='info']) {
-    background-color: var(--color-info);
-    color: var(--color-fg);
+    --indicator-bg: var(--color-info);
+    --indicator-fg: var(--color-info-on);
   }
+
   :host([data-color='caution']) {
-    background-color: var(--color-caution);
-    color: var(--color-fg);
+    --indicator-bg: var(--color-caution);
+    --indicator-fg: var(--color-caution-on);
   }
+
   :host([data-color='warning']) {
-    background-color: var(--color-warning);
-    color: var(--color-fg);
+    --indicator-bg: var(--color-warning);
+    --indicator-fg: var(--color-warning-on);
   }
+
   :host([data-color='danger']) {
-    background-color: var(--color-danger);
-    color: var(--color-fg);
+    --indicator-bg: var(--color-danger);
+    --indicator-fg: var(--color-danger-on);
+  }
+
+  /* outline ring: visible when sitting over imagery */
+  :host([data-ring]) {
+    --indicator-ring-width: var(--border-width-thick);
+  }
+
+  /* corner pinning to the nearest positioned ancestor (typically org-indicator-anchor) */
+  :host([data-position]) {
+    position: absolute;
+    z-index: var(--indicator-z-index);
+  }
+
+  :host([data-position='top-right']) {
+    top: 0;
+    right: 0;
+    transform: translate(var(--indicator-position-translate), calc(var(--indicator-position-translate) * -1));
+  }
+
+  :host([data-position='top-left']) {
+    top: 0;
+    left: 0;
+    transform: translate(
+      calc(var(--indicator-position-translate) * -1),
+      calc(var(--indicator-position-translate) * -1)
+    );
+  }
+
+  :host([data-position='bottom-right']) {
+    bottom: 0;
+    right: 0;
+    transform: translate(var(--indicator-position-translate), var(--indicator-position-translate));
+  }
+
+  :host([data-position='bottom-left']) {
+    bottom: 0;
+    left: 0;
+    transform: translate(calc(var(--indicator-position-translate) * -1), var(--indicator-position-translate));
+  }
+
+  /* pulse: a softly fading and scaling shadow behind the indicator */
+  :host([data-pulse])::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: var(--indicator-bg);
+    z-index: -1;
+    animation: var(--animate-org-indicator-pulse);
+  }
+
+  /* the pulse needs the host to act as a positioning context for ::before when the indicator is not pinned */
+  :host([data-pulse]:not([data-position])) {
+    position: relative;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :host([data-pulse])::before {
+      animation: none;
+    }
   }
 }

@@ -1,462 +1,59 @@
-import type { Meta, StoryObj } from '@storybook/angular';
-import { Checkbox } from './checkbox';
-import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
-import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
-import { Component, computed, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { map } from 'rxjs';
+import type { Meta, StoryObj } from '@storybook/angular';
+import { ButtonToggle, ButtonToggleItem } from '../button-toggle/button-toggle';
+import { CheckboxToggle } from '../checkbox-toggle/checkbox-toggle';
+import { Input } from '../input/input';
 import { FormFields } from '../form-fields/form-fields';
 import { FormField } from '../form-fields/form-field';
+import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
+import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
+import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
+import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
+import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
+import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
+import {
+  Checkbox,
+  CheckboxColor,
+  CheckboxSize,
+  CheckboxVariant,
+  allCheckboxColors,
+  allCheckboxSizes,
+  allCheckboxVariants,
+} from './checkbox';
 
-const meta: Meta<Checkbox> = {
-  title: 'Core/Components/Checkbox',
-  component: Checkbox,
-  tags: ['autodocs'],
-  parameters: {
-    docs: {
-      description: {
-        component: `
-<div class="docs-top-level-overview">
-  ## Checkbox Component
+const liveDemoSizeItems: ButtonToggleItem[] = allCheckboxSizes.map((size) => ({
+  label: size,
+  value: size,
+  buttonColor: 'primary',
+}));
 
-  A checkbox component designed for use in and out of forms with custom icon-based styling.
+const liveDemoColorItems: ButtonToggleItem[] = allCheckboxColors.map((color) => ({
+  label: color,
+  value: color,
+  buttonColor: 'primary',
+}));
 
-  ### Features
-  - Custom icon-based visual representation (no default checkbox)
-  - Three states: unchecked, checked, and indeterminate
-  - Three size options: small, base, and large
-  - Form integration support with reactive forms
-  - Disabled state
-  - Accessible with proper ARIA attributes
-  - Keyboard navigation support (Space and Enter keys)
-
-  ### States
-  - **Unchecked**: Shows square icon
-  - **Checked**: Shows check-square icon
-  - **Indeterminate**: Shows minus-square icon (useful for "select all" scenarios)
-
-  ### Sizes
-  - **Small**: Default size (default)
-  - **Base**: Larger checkbox size
-  - **Large**: Prominent checkbox for emphasis
-
-  ### Usage Examples
-  \`\`\`html
-  <!-- Basic checkbox -->
-  <org-checkbox name="agree" value="yes">
-    I agree to the terms
-  </org-checkbox>
-
-  <!-- Checkbox with checked state -->
-  <org-checkbox name="newsletter" value="subscribe" [checked]="true">
-    Subscribe to newsletter
-  </org-checkbox>
-
-  <!-- Checkbox with indeterminate state -->
-  <org-checkbox name="selectAll" value="all" [indeterminate]="true">
-    Select All
-  </org-checkbox>
-
-  <!-- Disabled checkbox -->
-  <org-checkbox name="disabled" value="value" [disabled]="true">
-    Disabled option
-  </org-checkbox>
-
-  <!-- Different sizes -->
-  <org-checkbox name="small" value="small" size="sm">
-    Small checkbox
-  </org-checkbox>
-  <org-checkbox name="large" value="large" size="lg">
-    Large checkbox
-  </org-checkbox>
-
-  <!-- With reactive forms -->
-  <form [formGroup]="myForm">
-    <org-form-fields>
-      <org-form-field>
-        <org-checkbox
-          name="option1"
-          value="option1"
-          [checked]="myForm.value.option1 ?? false"
-          (checkedChange)="myForm.patchValue({ option1: $event })"
-        >
-          Option 1
-        </org-checkbox>
-      </org-form-field>
-    </org-form-fields>
-  </form>
-  \`\`\`
-</div>
-        `,
-      },
-    },
-  },
-};
-
-export default meta;
-
-// the checked / indeterminate / disabled inputs come from the host-directive forwarding on `Checkbox`, which
-// storybook's signal-input type extraction does not see, so they are augmented onto the args type here.
-type Story = StoryObj<Checkbox & { checked: boolean; indeterminate: boolean; disabled: boolean }>;
-
-export const Default: Story = {
-  args: {
-    name: 'checkbox',
-    value: 'value',
-    checked: false,
-    indeterminate: false,
-    disabled: false,
-    size: 'base',
-  },
-  argTypes: {
-    name: {
-      control: 'text',
-      description: 'Name attribute for the checkbox input (required)',
-    },
-    value: {
-      control: 'text',
-      description: 'Value attribute for the checkbox input (required)',
-    },
-    checked: {
-      control: 'boolean',
-      description: 'Checked state',
-    },
-    indeterminate: {
-      control: 'boolean',
-      description: 'Indeterminate state',
-    },
-    disabled: {
-      control: 'boolean',
-      description: 'Whether the checkbox is disabled',
-    },
-    size: {
-      control: 'select',
-      options: ['sm', 'base', 'lg'],
-      description: 'Size of the checkbox icon',
-    },
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: 'Default checkbox with all controls. Use the controls below to interact with the component.',
-      },
-    },
-  },
-  render: (args) => ({
-    props: args,
-    template: `
-      <org-checkbox
-        [name]="name"
-        [value]="value"
-        [checked]="checked"
-        [indeterminate]="indeterminate"
-        [disabled]="disabled"
-        [size]="size"
-      >
-        Checkbox Label
-      </org-checkbox>
-    `,
-    moduleMetadata: {
-      imports: [Checkbox],
-    },
-  }),
-};
-
-export const Sizes: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Comparison of all three size variants: small, base, and large.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Checkbox Sizes"
-        currentState="Comparing small, base, and large sizes"
-      >
-        <org-storybook-example-container-section label="Small">
-          <org-checkbox name="small" value="small" size="sm" [checked]="true">
-            Small checkbox
-          </org-checkbox>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Base (Default)">
-          <org-checkbox name="base" value="base" size="base" [checked]="true">
-            Base checkbox
-          </org-checkbox>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Large">
-          <org-checkbox name="large" value="large" size="lg" [checked]="true">
-            Large checkbox
-          </org-checkbox>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li><strong>Small</strong>: Compact checkbox for tight spaces (default)</li>
-          <li><strong>Base</strong>: Standard checkbox size</li>
-          <li><strong>Large</strong>: Prominent checkbox for emphasis</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [Checkbox, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const States: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Comparison of all three checkbox states: unchecked, checked, and indeterminate.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Checkbox States"
-        currentState="Comparing unchecked, checked, and indeterminate states"
-      >
-        <org-storybook-example-container-section label="Unchecked">
-          <org-checkbox name="unchecked" value="unchecked">
-            Unchecked checkbox
-          </org-checkbox>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Checked">
-          <org-checkbox name="checked" value="checked" [checked]="true">
-            Checked checkbox
-          </org-checkbox>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Indeterminate">
-          <org-checkbox name="indeterminate" value="indeterminate" [indeterminate]="true">
-            Indeterminate checkbox
-          </org-checkbox>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li><strong>Unchecked</strong>: Shows square icon, clicking will check it</li>
-          <li><strong>Checked</strong>: Shows check-square icon, clicking will uncheck it</li>
-          <li><strong>Indeterminate</strong>: Shows minus-square icon, clicking will check it</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [Checkbox, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const DisabledStates: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Comparison of disabled checkboxes in different states.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Disabled States"
-        currentState="Comparing disabled checkboxes in different states"
-      >
-        <org-storybook-example-container-section label="Disabled Unchecked">
-          <org-checkbox name="disabled-unchecked" value="disabled-unchecked" [disabled]="true">
-            Disabled unchecked
-          </org-checkbox>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Disabled Checked">
-          <org-checkbox name="disabled-checked" value="disabled-checked" [disabled]="true" [checked]="true">
-            Disabled checked
-          </org-checkbox>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Disabled Indeterminate">
-          <org-checkbox name="disabled-indeterminate" value="disabled-indeterminate" [disabled]="true" [indeterminate]="true">
-            Disabled indeterminate
-          </org-checkbox>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li>Disabled checkboxes have reduced opacity</li>
-          <li>Disabled checkboxes cannot be clicked or interacted with</li>
-          <li>Cursor changes to not-allowed when hovering over disabled checkboxes</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [Checkbox, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const GroupedCheckboxes: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Checkboxes grouped flex for consistent spacing.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Grouped Checkboxes"
-        currentState="Using flexbox for consistent spacing"
-      >
-        <org-storybook-example-container-section label="Vertical Group (Column)">
-          <div class="flex flex-col gap-1">
-            <org-checkbox name="option1" value="option1">
-              Option 1
-            </org-checkbox>
-            <org-checkbox name="option2" value="option2" [checked]="true">
-              Option 2 (checked)
-            </org-checkbox>
-            <org-checkbox name="option3" value="option3">
-              Option 3
-            </org-checkbox>
-            <org-checkbox name="option4" value="option4" [disabled]="true">
-              Option 4 (disabled)
-            </org-checkbox>
-          </div>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Horizontal Group (Row)">
-          <div class="flex flex-row gap-1">
-            <org-checkbox name="h-option1" value="h-option1">
-              Option 1
-            </org-checkbox>
-            <org-checkbox name="h-option2" value="h-option2" [checked]="true">
-              Option 2
-            </org-checkbox>
-            <org-checkbox name="h-option3" value="h-option3">
-              Option 3
-            </org-checkbox>
-          </div>
-        </org-storybook-example-container-section>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [Checkbox, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
+const liveDemoVariantItems: ButtonToggleItem[] = allCheckboxVariants.map((variant) => ({
+  label: variant,
+  value: variant,
+  buttonColor: 'primary',
+}));
 
 @Component({
-  selector: 'story-checkbox-reactive-form-story',
+  selector: 'story-checkbox-select-all-section',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [Checkbox, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
   template: `
-    <org-storybook-example-container
-      title="Reactive Form Integration"
-      [currentState]="'Form Valid: ' + checkboxForm.valid + ', Form Value: ' + formValueDisplay()"
-    >
-      <org-storybook-example-container-section label="Checkbox Group in Form">
-        <form [formGroup]="checkboxForm" class="flex flex-col gap-1">
-          <org-form-fields>
-            <org-form-field>
-              <org-checkbox
-                name="terms"
-                value="terms"
-                [checked]="checkboxForm.value.terms ?? false"
-                (checkedChange)="onTermsChange($event)"
-              >
-                I agree to the terms and conditions
-              </org-checkbox>
-            </org-form-field>
-            <org-form-field>
-              <org-checkbox
-                name="newsletter"
-                value="newsletter"
-                [checked]="checkboxForm.value.newsletter ?? false"
-                (checkedChange)="onNewsletterChange($event)"
-              >
-                Subscribe to newsletter
-              </org-checkbox>
-            </org-form-field>
-            <org-form-field>
-              <org-checkbox
-                name="marketing"
-                value="marketing"
-                [checked]="checkboxForm.value.marketing ?? false"
-                (checkedChange)="onMarketingChange($event)"
-              >
-                Receive marketing emails
-              </org-checkbox>
-            </org-form-field>
-          </org-form-fields>
-        </form>
-      </org-storybook-example-container-section>
-
-      <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-        <li>Checkboxes emit <strong>checkedChange</strong> events when toggled</li>
-        <li>Can be integrated with reactive forms by handling change events</li>
-        <li>Form state updates in real-time as checkboxes are toggled</li>
-      </ul>
-    </org-storybook-example-container>
-  `,
-  imports: [
-    Checkbox,
-    FormFields,
-    FormField,
-    StorybookExampleContainer,
-    StorybookExampleContainerSection,
-    ReactiveFormsModule,
-  ],
-})
-class CheckboxReactiveFormStory {
-  public checkboxForm = new FormGroup({
-    terms: new FormControl(false, { nonNullable: true }),
-    newsletter: new FormControl(false, { nonNullable: true }),
-    marketing: new FormControl(false, { nonNullable: true }),
-  });
-
-  public formValueDisplay = signal<string>(JSON.stringify(this.checkboxForm.value));
-
-  public onTermsChange(checked: boolean): void {
-    this.checkboxForm.patchValue({ terms: checked });
-    this.formValueDisplay.set(JSON.stringify(this.checkboxForm.value));
-  }
-
-  public onNewsletterChange(checked: boolean): void {
-    this.checkboxForm.patchValue({ newsletter: checked });
-    this.formValueDisplay.set(JSON.stringify(this.checkboxForm.value));
-  }
-
-  public onMarketingChange(checked: boolean): void {
-    this.checkboxForm.patchValue({ marketing: checked });
-    this.formValueDisplay.set(JSON.stringify(this.checkboxForm.value));
-  }
-}
-
-export const ReactiveFormIntegration: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Example of integrating checkboxes with Angular reactive forms.',
-      },
-    },
-  },
-  render: () => ({
-    template: `<story-checkbox-reactive-form-story />`,
-    moduleMetadata: {
-      imports: [CheckboxReactiveFormStory],
-    },
-  }),
-};
-
-@Component({
-  selector: 'story-checkbox-select-all-story',
-  template: `
-    <org-storybook-example-container
-      title="Select All Pattern"
-      [currentState]="'Selected: ' + selectedCount() + ' of ' + totalCount"
-    >
-      <org-storybook-example-container-section label="Select All with Indeterminate State">
+    <org-design-system-demo>
+      <org-design-system-demo-header
+        slot="header"
+        title="Select All Pattern"
+        [description]="'Selected: ' + selectedCount() + ' of ' + totalCount"
+      />
+      <org-design-system-demo-canvas slot="canvas">
         <div class="flex flex-col gap-1">
           <org-checkbox
             name="selectAll"
@@ -502,212 +99,831 @@ export const ReactiveFormIntegration: Story = {
             </org-checkbox>
           </div>
         </div>
-      </org-storybook-example-container-section>
-
-      <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-        <li><strong>Select All</strong> is checked when all items are selected</li>
-        <li><strong>Select All</strong> is indeterminate when some (but not all) items are selected</li>
-        <li><strong>Select All</strong> is unchecked when no items are selected</li>
-        <li>Clicking <strong>Select All</strong> toggles all items</li>
-      </ul>
-    </org-storybook-example-container>
+      </org-design-system-demo-canvas>
+    </org-design-system-demo>
   `,
-  imports: [Checkbox, StorybookExampleContainer, StorybookExampleContainerSection],
 })
-class CheckboxSelectAllStory {
+class CheckboxSelectAllSection {
   private readonly _totalCount = 4;
 
-  public items = signal<{ selected: boolean }[]>([
+  protected readonly items = signal<{ selected: boolean }[]>([
     { selected: false },
     { selected: false },
     { selected: false },
     { selected: false },
   ]);
 
-  public readonly totalCount = this._totalCount;
+  protected readonly totalCount = this._totalCount;
 
-  public readonly selectedCount = computed<number>(() => this.items().filter((item) => item.selected).length);
+  protected readonly selectedCount = computed<number>(() => this.items().filter((item) => item.selected).length);
 
-  public readonly allSelected = computed<boolean>(() => this.selectedCount() === this._totalCount);
+  protected readonly allSelected = computed<boolean>(() => this.selectedCount() === this._totalCount);
 
-  public readonly someSelected = computed<boolean>(
+  protected readonly someSelected = computed<boolean>(
     () => this.selectedCount() > 0 && this.selectedCount() < this._totalCount
   );
 
-  public onItemChange(index: number, checked: boolean): void {
+  protected onItemChange(index: number, checked: boolean): void {
     const newItems = [...this.items()];
     newItems[index].selected = checked;
     this.items.set(newItems);
   }
 
-  public onSelectAllChange(checked: boolean): void {
+  protected onSelectAllChange(checked: boolean): void {
     this.items.set(this.items().map(() => ({ selected: checked })));
   }
 }
 
-export const SelectAllPattern: Story = {
+@Component({
+  selector: 'story-checkbox-validation-section',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    ReactiveFormsModule,
+    Checkbox,
+    FormFields,
+    FormField,
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoCanvas,
+  ],
+  template: `
+    <org-design-system-demo>
+      <org-design-system-demo-header
+        slot="header"
+        title="Validation"
+        [description]="'Form Valid: ' + validationForm.valid + ', Accepted: ' + (validationForm.value.terms || false)"
+      />
+      <org-design-system-demo-canvas slot="canvas">
+        <form [formGroup]="validationForm">
+          <org-form-fields>
+            <org-form-field validationMessage="You must accept the terms and conditions to continue">
+              <org-checkbox formControlName="terms" name="terms" value="accepted">
+                I accept the terms and conditions
+              </org-checkbox>
+            </org-form-field>
+            <org-form-field>
+              <org-checkbox formControlName="newsletter" name="newsletter" value="subscribed">
+                Subscribe to newsletter
+              </org-checkbox>
+            </org-form-field>
+          </org-form-fields>
+        </form>
+      </org-design-system-demo-canvas>
+    </org-design-system-demo>
+  `,
+})
+class CheckboxValidationSection {
+  protected readonly validationForm = new FormGroup({
+    terms: new FormControl<boolean>(false, { nonNullable: true }),
+    newsletter: new FormControl<boolean>(true, { nonNullable: true }),
+  });
+}
+
+const meta: Meta<Checkbox> = {
+  title: 'Core/Components/Checkbox',
+  component: Checkbox,
+  tags: ['autodocs'],
   parameters: {
     docs: {
       description: {
-        story: 'Common "Select All" pattern using the indeterminate state.',
+        component: `
+<div class="docs-top-level-overview">
+  ## Checkbox Component
+
+  A boolean opt-in — a styled square indicator (with a tick or a horizontal dash) paired with a label and an optional sub-line description. Native &lt;input type="checkbox"&gt; drives state; the visible square is a styled sibling. Three sizes &times; two colors &times; default and card variants &times; indeterminate / disabled / error states.
+
+  ### Features
+  - Three sizes: \`sm\`, \`base\` (default), \`lg\`
+  - Two colors: \`primary\` (default), \`danger\`
+  - Two variants: \`default\` (row), \`card\` (bordered tile)
+  - Three checked states: unchecked, checked, indeterminate
+  - Optional description sub-line beneath the label
+  - Disabled state
+  - Error state (driven by parent \`org-form-field\` validation message)
+  - Form integration via \`ControlValueAccessor\` (works with reactive forms)
+  - Accessible: ARIA attributes, keyboard navigation (Space / Enter)
+
+  ### Usage Examples
+  \`\`\`html
+  <!-- Basic checkbox -->
+  <org-checkbox name="agree" value="yes">I agree to the terms</org-checkbox>
+
+  <!-- Checked, with description -->
+  <org-checkbox name="features" value="features" [checked]="true" description="Up to once a week.">
+    Email me about new features
+  </org-checkbox>
+
+  <!-- Danger color (destructive opt-in) -->
+  <org-checkbox name="delete" value="delete" color="danger">
+    Permanently delete this account
+  </org-checkbox>
+
+  <!-- Card variant (permission picker) -->
+  <org-checkbox name="read" value="read" variant="card" description="View projects, files, and comments.">
+    Read
+  </org-checkbox>
+
+  <!-- Different sizes -->
+  <org-checkbox name="small" value="small" size="sm">Small</org-checkbox>
+  <org-checkbox name="large" value="large" size="lg">Large</org-checkbox>
+
+  <!-- Reactive forms -->
+  <form [formGroup]="myForm">
+    <org-form-fields>
+      <org-form-field validationMessage="You must accept the terms">
+        <org-checkbox formControlName="terms" name="terms" value="accepted">
+          I accept the terms
+        </org-checkbox>
+      </org-form-field>
+    </org-form-fields>
+  </form>
+  \`\`\`
+</div>
+        `,
       },
     },
   },
-  render: () => ({
-    template: `<story-checkbox-select-all-story />`,
+};
+
+export default meta;
+
+// the checked / indeterminate / disabled inputs come from the host-directive forwarding on `Checkbox`, which
+// storybook's signal-input type extraction does not see, so they are augmented onto the args type here.
+type Story = StoryObj<Checkbox & { checked: boolean; indeterminate: boolean; disabled: boolean }>;
+
+export const Default: Story = {
+  args: {
+    name: 'checkbox',
+    value: 'value',
+    checked: false,
+    indeterminate: false,
+    disabled: false,
+    size: 'base',
+    color: 'primary',
+    variant: 'default',
+    description: '',
+  },
+  argTypes: {
+    name: {
+      control: 'text',
+      description: 'Name attribute for the checkbox input (required)',
+    },
+    value: {
+      control: 'text',
+      description: 'Value attribute for the checkbox input (required)',
+    },
+    checked: {
+      control: 'boolean',
+      description: 'Checked state',
+    },
+    indeterminate: {
+      control: 'boolean',
+      description: 'Indeterminate state',
+    },
+    disabled: {
+      control: 'boolean',
+      description: 'Whether the checkbox is disabled',
+    },
+    size: {
+      control: 'select',
+      options: allCheckboxSizes,
+      description: 'Size of the checkbox',
+    },
+    color: {
+      control: 'select',
+      options: allCheckboxColors,
+      description: 'Color variant of the checkbox',
+    },
+    variant: {
+      control: 'select',
+      options: allCheckboxVariants,
+      description: 'Visual variant: default (row) or card (bordered tile)',
+    },
+    description: {
+      control: 'text',
+      description: 'Optional description sub-line beneath the label',
+    },
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Default checkbox with all controls. Use the controls below to interact with the component.',
+      },
+    },
+  },
+  render: (args) => ({
+    props: args,
+    template: `
+      <org-checkbox
+        [name]="name"
+        [value]="value"
+        [checked]="checked"
+        [indeterminate]="indeterminate"
+        [disabled]="disabled"
+        [size]="size"
+        [color]="color"
+        [variant]="variant"
+        [description]="description"
+      >
+        Checkbox Label
+      </org-checkbox>
+    `,
     moduleMetadata: {
-      imports: [CheckboxSelectAllStory],
+      imports: [Checkbox],
     },
   }),
 };
 
 @Component({
-  selector: 'story-checkbox-validation-story',
-  template: `
-    <org-storybook-example-container
-      title="Checkbox Validation"
-      [currentState]="'Form Valid: ' + validationForm.valid + ', Accepted: ' + (validationForm.value.terms || false)"
-    >
-      <form [formGroup]="validationForm">
-        <org-form-fields>
-          <org-form-field validationMessage="You must accept the terms and conditions to continue">
-            <org-checkbox formControlName="terms" name="terms" value="accepted">
-              I accept the terms and conditions
-            </org-checkbox>
-          </org-form-field>
-          <org-form-field>
-            <org-checkbox formControlName="newsletter" name="newsletter" value="subscribed">
-              Subscribe to newsletter
-            </org-checkbox>
-          </org-form-field>
-        </org-form-fields>
-      </form>
-
-      <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-        <li>Validation message appears below the checkbox when provided</li>
-        <li>Message uses <strong>text-danger</strong> color (danger/red)</li>
-        <li>Message is visible only when validationMessage input is provided</li>
-        <li>Proper ARIA attributes for accessibility (aria-invalid, aria-describedby)</li>
-        <li>Message uses role="alert" and aria-live="polite" for screen readers</li>
-      </ul>
-    </org-storybook-example-container>
-  `,
+  selector: 'story-checkbox-live-demo',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    Checkbox,
-    FormFields,
-    FormField,
-    StorybookExampleContainer,
-    StorybookExampleContainerSection,
     ReactiveFormsModule,
+    Checkbox,
+    ButtonToggle,
+    CheckboxToggle,
+    Input,
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoControls,
+    DesignSystemDemoControlGroup,
+    DesignSystemDemoCanvas,
   ],
+  styles: [
+    `
+      :host {
+        display: block;
+      }
+      .canvas-stage {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 6rem; /* 96px */
+      }
+    `,
+  ],
+  template: `
+    <form [formGroup]="liveDemoForm">
+      <org-design-system-demo>
+        <org-design-system-demo-header
+          slot="header"
+          title="Live demo"
+          description="Toggle the inputs to walk every documented combination — label, description, size, color, variant, checked, indeterminate, disabled."
+        />
+        <org-design-system-demo-controls slot="controls">
+          <org-design-system-demo-control-group label="Label">
+            <org-input name="live-demo-label" formControlName="label" ariaLabel="Checkbox label" />
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Description">
+            <org-input name="live-demo-description" formControlName="description" ariaLabel="Checkbox description" />
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Size">
+            <org-button-toggle [items]="sizeItems" formControlName="size" buttonSize="sm" />
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Color">
+            <org-button-toggle [items]="colorItems" formControlName="color" buttonSize="sm" />
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Variant">
+            <org-button-toggle [items]="variantItems" formControlName="variant" buttonSize="sm" />
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Checked">
+            <org-checkbox-toggle name="live-demo-checked" value="checked" formControlName="checked">
+              {{ liveDemoForm.controls.checked.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Indeterminate">
+            <org-checkbox-toggle
+              name="live-demo-indeterminate"
+              value="indeterminate"
+              formControlName="indeterminate"
+            >
+              {{ liveDemoForm.controls.indeterminate.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Disabled">
+            <org-checkbox-toggle name="live-demo-disabled" value="disabled" formControlName="disabled">
+              {{ liveDemoForm.controls.disabled.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
+        </org-design-system-demo-controls>
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="canvas-stage">
+            <org-checkbox
+              name="live-demo"
+              value="live-demo"
+              [size]="liveDemoForm.controls.size.value"
+              [color]="liveDemoForm.controls.color.value"
+              [variant]="liveDemoForm.controls.variant.value"
+              [checked]="liveDemoForm.controls.checked.value"
+              [indeterminate]="liveDemoForm.controls.indeterminate.value"
+              [disabled]="liveDemoForm.controls.disabled.value"
+              [description]="liveDemoForm.controls.description.value"
+            >
+              {{ liveDemoForm.controls.label.value }}
+            </org-checkbox>
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+    </form>
+  `,
 })
-class CheckboxValidationStory {
-  public validationForm = new FormGroup({
-    terms: new FormControl(false, { nonNullable: true }),
-    newsletter: new FormControl(true, { nonNullable: true }),
+class CheckboxLiveDemoStory {
+  protected readonly sizeItems = liveDemoSizeItems;
+  protected readonly colorItems = liveDemoColorItems;
+  protected readonly variantItems = liveDemoVariantItems;
+
+  protected readonly liveDemoForm = new FormGroup({
+    label: new FormControl<string>('Email me about new features', { nonNullable: true }),
+    description: new FormControl<string>('Up to once a week.', { nonNullable: true }),
+    size: new FormControl<CheckboxSize>('base', { nonNullable: true }),
+    color: new FormControl<CheckboxColor>('primary', { nonNullable: true }),
+    variant: new FormControl<CheckboxVariant>('default', { nonNullable: true }),
+    checked: new FormControl<boolean>(true, { nonNullable: true }),
+    indeterminate: new FormControl<boolean>(false, { nonNullable: true }),
+    disabled: new FormControl<boolean>(false, { nonNullable: true }),
   });
 }
 
-export const Validation: Story = {
+export const LiveDemo: Story = {
   parameters: {
     docs: {
       description: {
         story:
-          'Example showing checkboxes with validation messages. The validation message is displayed below the checkbox when provided.',
+          'Fully interactive demo. Walk every combination — size, color, variant, checked, indeterminate, disabled — and edit the label / description text.',
       },
     },
   },
   render: () => ({
-    template: `<story-checkbox-validation-story />`,
+    template: `<story-checkbox-live-demo />`,
     moduleMetadata: {
-      imports: [CheckboxValidationStory],
+      imports: [CheckboxLiveDemoStory],
     },
   }),
 };
 
-export const ValidationSpaceReservation: Story = {
+export const Showcase: Story = {
   parameters: {
     docs: {
       description: {
         story:
-          'Comparison of validation space reservation behavior. When reserveValidationSpace is true, space is always reserved for validation messages to maintain consistent layout. When false, space is only used when a validation message is present.',
+          'Comprehensive showcase of every checkbox variant axis — sizes, colors, states, description sub-line, card variant, grouping, select-all pattern, validation, and validation space reservation — in a single scrollable view.',
       },
     },
   },
   render: () => ({
     template: `
-      <org-storybook-example-container
-        title="Validation Space Reservation"
-        currentState="Comparing space reservation behaviors"
-      >
-        <org-storybook-example-container-section label="Reserve Space = true (default)">
-          <org-form-fields>
-            <org-form-field [reserveValidationSpace]="true">
-              <org-checkbox
-                name="reserve-true-checkbox-1"
-                value="1"
-              >
-                Checkbox 1 (no error)
-              </org-checkbox>
-            </org-form-field>
-            <org-form-field [reserveValidationSpace]="true" validationMessage="This field has an error">
-              <org-checkbox
-                name="reserve-true-checkbox-2"
-                value="2"
-              >
-                Checkbox 2 (with error)
-              </org-checkbox>
-            </org-form-field>
-            <org-form-field [reserveValidationSpace]="true">
-              <org-checkbox
-                name="reserve-true-checkbox-3"
-                value="3"
-              >
-                Checkbox 3 (no error)
-              </org-checkbox>
-            </org-form-field>
-          </org-form-fields>
-        </org-storybook-example-container-section>
+      <div class="flex flex-col gap-4">
+        <org-design-system-demo>
+          <org-design-system-demo-header
+            slot="header"
+            title="Sizes"
+            description="Three sizes — sm, base, lg. The indicator, label type, tick stroke weight, and full row hit-target all scale together."
+          />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="flex flex-col gap-3">
+              <div class="flex items-center gap-6">
+                <org-checkbox name="sizes-sm-unchecked" value="sm" size="sm">Small</org-checkbox>
+                <org-checkbox name="sizes-sm-checked" value="sm" size="sm" [checked]="true">Small</org-checkbox>
+                <org-checkbox name="sizes-sm-ind" value="sm" size="sm" [indeterminate]="true">Small</org-checkbox>
+              </div>
+              <div class="flex items-center gap-6">
+                <org-checkbox name="sizes-base-unchecked" value="base">Base</org-checkbox>
+                <org-checkbox name="sizes-base-checked" value="base" [checked]="true">Base</org-checkbox>
+                <org-checkbox name="sizes-base-ind" value="base" [indeterminate]="true">Base</org-checkbox>
+              </div>
+              <div class="flex items-center gap-6">
+                <org-checkbox name="sizes-lg-unchecked" value="lg" size="lg">Large</org-checkbox>
+                <org-checkbox name="sizes-lg-checked" value="lg" size="lg" [checked]="true">Large</org-checkbox>
+                <org-checkbox name="sizes-lg-ind" value="lg" size="lg" [indeterminate]="true">Large</org-checkbox>
+              </div>
+            </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>sm</strong>: compact for tight spaces</li>
+            <li><strong>base</strong>: standard default</li>
+            <li><strong>lg</strong>: prominent — emphasis or large-touch surfaces</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
 
-        <org-storybook-example-container-section label="Reserve Space = false">
-          <org-form-fields>
-            <org-form-field [reserveValidationSpace]="false">
-              <org-checkbox
-                name="reserve-false-checkbox-1"
-                value="1"
-              >
-                Checkbox 1 (no error)
-              </org-checkbox>
-            </org-form-field>
-            <org-form-field [reserveValidationSpace]="false" validationMessage="This field has an error">
-              <org-checkbox
-                name="reserve-false-checkbox-2"
-                value="2"
-              >
-                Checkbox 2 (with error)
-              </org-checkbox>
-            </org-form-field>
-            <org-form-field [reserveValidationSpace]="false">
-              <org-checkbox
-                name="reserve-false-checkbox-3"
-                value="3"
-              >
-                Checkbox 3 (no error)
-              </org-checkbox>
-            </org-form-field>
-          </org-form-fields>
-        </org-storybook-example-container-section>
+        <org-design-system-demo>
+          <org-design-system-demo-header
+            slot="header"
+            title="Colors"
+            description="Two semantic colors only — primary (ink) and danger. Use danger sparingly, for destructive opt-ins like &quot;Permanently delete this account&quot;."
+          />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="flex flex-col gap-3">
+              <div class="flex items-center gap-6">
+                <org-checkbox name="colors-primary-unchecked" value="primary">Send me product updates</org-checkbox>
+                <org-checkbox name="colors-primary-checked" value="primary" [checked]="true">
+                  Send me product updates
+                </org-checkbox>
+              </div>
+              <div class="flex items-center gap-6">
+                <org-checkbox name="colors-danger-unchecked" value="danger" color="danger">
+                  Permanently delete this account
+                </org-checkbox>
+                <org-checkbox name="colors-danger-checked" value="danger" color="danger" [checked]="true">
+                  Permanently delete this account
+                </org-checkbox>
+              </div>
+            </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>primary</strong>: default ink color for routine opt-ins</li>
+            <li><strong>danger</strong>: reserve for destructive opt-ins (delete account, irreversible actions)</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
 
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li><strong>reserveValidationSpace=true</strong>: Space is always reserved for validation messages (maintains consistent spacing between checkboxes)</li>
-          <li><strong>reserveValidationSpace=false</strong>: Space is only allocated when a validation message is present (checkboxes collapse together when no errors)</li>
-          <li>Notice how the left column maintains equal spacing between all checkboxes</li>
-          <li>Notice how the right column's checkboxes 1 and 3 are closer together since they have no error messages</li>
-        </ul>
-      </org-storybook-example-container>
+        <org-design-system-demo>
+          <org-design-system-demo-header
+            slot="header"
+            title="States"
+            description="Default / hover / focus / disabled / error across unchecked, checked, and indeterminate. Hover and focus are real — interact with the controls below to see them."
+          />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="flex flex-col gap-3">
+              <div class="flex items-center gap-6">
+                <org-checkbox name="states-default-unchecked" value="default">Option</org-checkbox>
+                <org-checkbox name="states-default-checked" value="default" [checked]="true">Option</org-checkbox>
+                <org-checkbox name="states-default-ind" value="default" [indeterminate]="true">Option</org-checkbox>
+              </div>
+              <div class="flex items-center gap-6">
+                <org-checkbox name="states-disabled-unchecked" value="disabled" [disabled]="true">Option</org-checkbox>
+                <org-checkbox
+                  name="states-disabled-checked"
+                  value="disabled"
+                  [disabled]="true"
+                  [checked]="true"
+                >
+                  Option
+                </org-checkbox>
+                <org-checkbox
+                  name="states-disabled-ind"
+                  value="disabled"
+                  [disabled]="true"
+                  [indeterminate]="true"
+                >
+                  Option
+                </org-checkbox>
+              </div>
+              <org-form-fields>
+                <org-form-field validationMessage="This field is required">
+                  <org-checkbox name="states-error-unchecked" value="error">Option (error)</org-checkbox>
+                </org-form-field>
+                <org-form-field validationMessage="This field is required">
+                  <org-checkbox name="states-error-checked" value="error" [checked]="true">
+                    Option (error)
+                  </org-checkbox>
+                </org-form-field>
+                <org-form-field validationMessage="This field is required">
+                  <org-checkbox name="states-error-ind" value="error" [indeterminate]="true">
+                    Option (error)
+                  </org-checkbox>
+                </org-form-field>
+              </org-form-fields>
+            </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>Default</strong>: neutral indicator border, fills with the color when checked / indeterminate</li>
+            <li><strong>Hover</strong>: indicator color shifts toward the active color on the row</li>
+            <li><strong>Focus</strong>: visible focus ring around the row (a11y)</li>
+            <li><strong>Disabled</strong>: row reads at reduced opacity, pointer becomes not-allowed</li>
+            <li><strong>Error</strong>: indicator color uses danger across all checked states; driven by a parent <code>org-form-field</code> validation message</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header
+            slot="header"
+            title="Description sub-line"
+            description="An optional muted line beneath the label, for secondary clarifying copy. The indicator stays optically aligned with the first line of the label."
+          />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="flex flex-col gap-3">
+              <org-checkbox
+                name="desc-features"
+                value="features"
+                [checked]="true"
+                description="Up to once a week. You can unsubscribe at any time from your settings."
+              >
+                Email me about new features
+              </org-checkbox>
+              <org-checkbox
+                name="desc-usage"
+                value="usage"
+                description="Helps us understand how the product is used and prioritise improvements."
+              >
+                Share anonymized usage data
+              </org-checkbox>
+              <org-checkbox
+                name="desc-delete"
+                value="delete"
+                color="danger"
+                description="All projects, files, and integrations will be removed. This cannot be undone."
+              >
+                I understand this will permanently delete my account
+              </org-checkbox>
+            </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li>The description renders below the label in a muted color</li>
+            <li>Pair with <strong>color="danger"</strong> when the description warns of irreversible consequences</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header
+            slot="header"
+            title="Card variant"
+            description="Wraps the indicator + body in a bordered tile. Useful for permission pickers, feature opt-ins, and any list where each option needs to read as its own surface."
+          />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="flex flex-col gap-2 w-full">
+              <org-checkbox
+                name="card-read"
+                value="read"
+                variant="card"
+                [checked]="true"
+                description="View projects, files, and comments. No write access."
+              >
+                Read
+              </org-checkbox>
+              <org-checkbox
+                name="card-write"
+                value="write"
+                variant="card"
+                [checked]="true"
+                description="Create, edit, and delete projects and files."
+              >
+                Write
+              </org-checkbox>
+              <org-checkbox
+                name="card-admin"
+                value="admin"
+                variant="card"
+                description="Manage members, billing, and workspace settings."
+              >
+                Admin
+              </org-checkbox>
+            </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li>Each card is its own surface — border + background change on hover</li>
+            <li>Selected (checked / indeterminate) cards highlight their border with the chosen color</li>
+            <li>Combine with <strong>description</strong> to clarify what each option grants</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header
+            slot="header"
+            title="Grouped Checkboxes"
+            description="Multiple checkboxes laid out vertically or horizontally with consistent spacing."
+          />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="flex flex-col gap-1">
+              <org-checkbox name="vert-option1" value="option1">Option 1</org-checkbox>
+              <org-checkbox name="vert-option2" value="option2" [checked]="true">Option 2 (checked)</org-checkbox>
+              <org-checkbox name="vert-option3" value="option3">Option 3</org-checkbox>
+              <org-checkbox name="vert-option4" value="option4" [disabled]="true">Option 4 (disabled)</org-checkbox>
+            </div>
+            <div class="flex flex-row gap-3">
+              <org-checkbox name="horz-option1" value="option1">Option 1</org-checkbox>
+              <org-checkbox name="horz-option2" value="option2" [checked]="true">Option 2</org-checkbox>
+              <org-checkbox name="horz-option3" value="option3">Option 3</org-checkbox>
+            </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li>Use a column layout for related opt-ins so each has its own row hit target</li>
+            <li>Row layouts work for short, parallel choices that fit on one line</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <story-checkbox-select-all-section />
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>Select All</strong> is checked when all items are selected</li>
+            <li><strong>Select All</strong> is indeterminate when some (but not all) items are selected</li>
+            <li><strong>Select All</strong> is unchecked when no items are selected</li>
+            <li>Clicking <strong>Select All</strong> toggles all items</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <story-checkbox-validation-section />
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li>Validation message appears below the checkbox when provided</li>
+            <li>Message uses <strong>text-danger</strong> color (danger / red)</li>
+            <li>Proper ARIA attributes for accessibility (aria-invalid, aria-describedby)</li>
+            <li>Message uses role="alert" and aria-live="polite" for screen readers</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header
+            slot="header"
+            title="Validation Space Reservation"
+            description="When reserveValidationSpace is true, space is always reserved for validation messages so rows do not jump as errors appear and disappear."
+          />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="flex gap-6 w-full">
+              <org-form-fields>
+                <org-form-field [reserveValidationSpace]="true">
+                  <org-checkbox name="reserve-true-1" value="1">Checkbox 1 (no error)</org-checkbox>
+                </org-form-field>
+                <org-form-field [reserveValidationSpace]="true" validationMessage="This field has an error">
+                  <org-checkbox name="reserve-true-2" value="2">Checkbox 2 (with error)</org-checkbox>
+                </org-form-field>
+                <org-form-field [reserveValidationSpace]="true">
+                  <org-checkbox name="reserve-true-3" value="3">Checkbox 3 (no error)</org-checkbox>
+                </org-form-field>
+              </org-form-fields>
+              <org-form-fields>
+                <org-form-field [reserveValidationSpace]="false">
+                  <org-checkbox name="reserve-false-1" value="1">Checkbox 1 (no error)</org-checkbox>
+                </org-form-field>
+                <org-form-field [reserveValidationSpace]="false" validationMessage="This field has an error">
+                  <org-checkbox name="reserve-false-2" value="2">Checkbox 2 (with error)</org-checkbox>
+                </org-form-field>
+                <org-form-field [reserveValidationSpace]="false">
+                  <org-checkbox name="reserve-false-3" value="3">Checkbox 3 (no error)</org-checkbox>
+                </org-form-field>
+              </org-form-fields>
+            </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>reserveValidationSpace=true</strong>: space is always reserved (left column) — rows stay aligned</li>
+            <li><strong>reserveValidationSpace=false</strong>: space is allocated only when a message is present (right column) — rows collapse together</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+      </div>
     `,
     moduleMetadata: {
-      imports: [Checkbox, FormField, FormFields, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [
+        Checkbox,
+        FormFields,
+        FormField,
+        CheckboxSelectAllSection,
+        CheckboxValidationSection,
+        DesignSystemDemo,
+        DesignSystemDemoHeader,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
+      ],
+    },
+  }),
+};
+
+@Component({
+  selector: 'story-checkbox-non-form',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    Checkbox,
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoCanvas,
+    DesignSystemDemoExpectedBehaviour,
+  ],
+  template: `
+    <div class="flex flex-col gap-4">
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Non-Form Usage" />
+        <org-design-system-demo-canvas slot="canvas">
+          <org-checkbox
+            name="non-form"
+            value="non-form"
+            [checked]="checked()"
+            (checkedChange)="checked.set($event)"
+            description="Driven without a reactive form, using [checked] + (checkedChange)."
+          >
+            Subscribe to product updates
+          </org-checkbox>
+          <p>
+            Checked: <strong>{{ checked() }}</strong>
+          </p>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="list-inside list-disc flex flex-col gap-1">
+          <li>Bind <strong>[checked]</strong> to a signal (or any value) and listen to <strong>(checkedChange)</strong> to update it</li>
+          <li>No reactive form required — the host owns the state</li>
+        </ul>
+      </org-design-system-demo-expected-behaviour>
+    </div>
+  `,
+})
+class CheckboxNonFormStory {
+  protected readonly checked = signal<boolean>(false);
+}
+
+export const NonFormUsage: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story: 'Driving the checkbox outside of a reactive form using `[checked]` + `(checkedChange)`.',
+      },
+    },
+  },
+  render: () => ({
+    template: `<story-checkbox-non-form />`,
+    moduleMetadata: {
+      imports: [CheckboxNonFormStory],
+    },
+  }),
+};
+
+@Component({
+  selector: 'story-checkbox-reactive-form',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    ReactiveFormsModule,
+    Checkbox,
+    FormFields,
+    FormField,
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoCanvas,
+    DesignSystemDemoExpectedBehaviour,
+  ],
+  template: `
+    <div class="flex flex-col gap-4">
+      <org-design-system-demo>
+        <org-design-system-demo-header
+          slot="header"
+          title="Reactive Form Integration"
+          [description]="'Form Valid: ' + checkboxForm.valid + ', Form Value: ' + formValueDisplay()"
+        />
+        <org-design-system-demo-canvas slot="canvas">
+          <form [formGroup]="checkboxForm" class="flex flex-col gap-2">
+            <org-form-fields>
+              <org-form-field>
+                <org-checkbox formControlName="terms" name="terms" value="terms">
+                  I agree to the terms and conditions
+                </org-checkbox>
+              </org-form-field>
+              <org-form-field>
+                <org-checkbox formControlName="newsletter" name="newsletter" value="newsletter">
+                  Subscribe to newsletter
+                </org-checkbox>
+              </org-form-field>
+              <org-form-field>
+                <org-checkbox formControlName="marketing" name="marketing" value="marketing">
+                  Receive marketing emails
+                </org-checkbox>
+              </org-form-field>
+            </org-form-fields>
+          </form>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="list-inside list-disc flex flex-col gap-1">
+          <li>Uses <strong>formControlName</strong> for reactive forms integration via ControlValueAccessor</li>
+          <li>Form state updates automatically as checkboxes are toggled — no manual change handlers needed</li>
+        </ul>
+      </org-design-system-demo-expected-behaviour>
+    </div>
+  `,
+})
+class CheckboxReactiveFormStory {
+  protected readonly checkboxForm = new FormGroup({
+    terms: new FormControl<boolean>(false, { nonNullable: true }),
+    newsletter: new FormControl<boolean>(false, { nonNullable: true }),
+    marketing: new FormControl<boolean>(false, { nonNullable: true }),
+  });
+
+  protected readonly formValueDisplay = toSignal(
+    this.checkboxForm.valueChanges.pipe(map((value) => JSON.stringify(value))),
+    { initialValue: JSON.stringify(this.checkboxForm.value) }
+  );
+}
+
+export const ReactiveFormIntegration: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story: 'Example of integrating checkboxes with Angular reactive forms via ControlValueAccessor.',
+      },
+    },
+  },
+  render: () => ({
+    template: `<story-checkbox-reactive-form />`,
+    moduleMetadata: {
+      imports: [CheckboxReactiveFormStory],
     },
   }),
 };

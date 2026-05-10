@@ -11,9 +11,23 @@
   [ariaPressed]="ariaPressed()"
   (clicked)="onBrainClicked()"
 >
-  @if (showStandaloneSpinner()) {
+  @if (loading()) {
     <org-loading-spinner [size]="size()" />
+  } @else {
+    @if (preTemplate()) {
+      <ng-container [ngTemplateOutlet]="preTemplate()!" />
+    } @else if (showPreIcon()) {
+      <org-icon class="pre-icon" [name]="preIcon()!" [size]="iconSize()" />
+    }
   }
-
-  <ng-content />
+  @if (iconOnly() === false) {
+    <span>{{ label() }}</span>
+  }
+  @if (!loading()) {
+    @if (postTemplate()) {
+      <ng-container [ngTemplateOutlet]="postTemplate()!" />
+    } @else if (showPostIcon()) {
+      <org-icon class="post-icon" [name]="postIcon()!" [size]="iconSize()" />
+    }
+  }
 </button>

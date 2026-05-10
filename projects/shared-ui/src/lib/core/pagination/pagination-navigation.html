@@ -2,22 +2,22 @@
   size="sm"
   color="neutral"
   [iconOnly]="true"
+  [label]="brain.firstPageAriaLabel()"
   [ariaLabel]="brain.firstPageAriaLabel()"
+  preIcon="chevron-first"
   [disabled]="brain.firstPageDisabled()"
   (clicked)="brain.goToFirstPage()"
->
-  <org-button-icon name="chevron-first" />
-</org-button>
+/>
 <org-button
   size="sm"
   color="neutral"
   [iconOnly]="true"
+  [label]="brain.previousPageAriaLabel()"
   [ariaLabel]="brain.previousPageAriaLabel()"
+  preIcon="chevron-left"
   [disabled]="brain.previousPageDisabled()"
   (clicked)="brain.goToPreviousPage()"
->
-  <org-button-icon name="chevron-left" />
-</org-button>
+/>
 @for (page of brain.visiblePageItems(); track page.value || 'ellipsis-' + $index) {
   @if (page.type === 'ellipsis') {
     <span class="ellipsis" [attr.aria-hidden]="brain.ellipsisAriaHidden">...</span>
@@ -27,31 +27,30 @@
       [color]="page.isActive ? 'primary' : 'neutral'"
       [disabled]="brain.disabled()"
       [attr.aria-current]="page.isActive ? 'page' : null"
+      [label]="page.value!.toString()"
       [ariaLabel]="brain.pageButtonAriaLabel(page.value!)"
       (clicked)="brain.goToPage(page.value!)"
       class="page-button"
-    >
-      {{ page.value }}
-    </org-button>
+    />
   }
 }
 <org-button
   size="sm"
   color="neutral"
   [iconOnly]="true"
+  [label]="brain.nextPageAriaLabel()"
   [ariaLabel]="brain.nextPageAriaLabel()"
+  preIcon="chevron-right"
   [disabled]="brain.nextPageDisabled()"
   (clicked)="brain.goToNextPage()"
->
-  <org-button-icon name="chevron-right" />
-</org-button>
+/>
 <org-button
   size="sm"
   color="neutral"
   [iconOnly]="true"
+  [label]="brain.lastPageAriaLabel()"
   [ariaLabel]="brain.lastPageAriaLabel()"
+  preIcon="chevron-last"
   [disabled]="brain.lastPageDisabled()"
   (clicked)="brain.goToLastPage()"
->
-  <org-button-icon name="chevron-last" />
-</org-button>
+/>

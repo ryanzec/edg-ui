@@ -1,12 +1,11 @@
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { Button } from '../button/button';
-import { ButtonIcon } from '../button/button-icon';
 import { DialogCloseButtonBrainDirective } from '../../brain/dialog-close-button-brain/dialog-close-button-brain';
 
 @Component({
   selector: 'org-dialog-close-button',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Button, ButtonIcon],
+  imports: [Button],
   templateUrl: './dialog-close-button.html',
   styleUrl: './dialog-close-button.css',
   hostDirectives: [DialogCloseButtonBrainDirective],

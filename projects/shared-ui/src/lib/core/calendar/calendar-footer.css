@@ -5,6 +5,20 @@
 
   .footer {
     padding: var(--spacing-2);
-    border-top: var(--border-width) solid var(--color-border-soft);
+    border-top: var(--border-width) solid var(--calendar-footer-border);
+  }
+
+  .actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--calendar-footer-gap);
+  }
+
+  .actions-left,
+  .actions-right {
+    display: flex;
+    align-items: center;
+    gap: var(--calendar-footer-gap);
   }
 }

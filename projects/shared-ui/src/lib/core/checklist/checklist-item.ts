@@ -18,6 +18,7 @@ import { ChecklistStatusIcon } from './checklist-status-icon';
   ],
   host: {
     role: 'listitem',
+    '[attr.data-status]': 'item().status',
     '[attr.data-expanded]': 'brain.isExpanded() ? "" : null',
   },
 })
@@ -36,7 +37,4 @@ export class ChecklistItem {
 
     return !!items && items.length > 0;
   });
-
-  /** number of nested sub-items for this item. */
-  protected readonly nestedItemCount = computed<number>(() => this.item().items?.length ?? 0);
 }

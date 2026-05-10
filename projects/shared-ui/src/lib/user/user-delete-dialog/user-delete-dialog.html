@@ -5,8 +5,8 @@
       <p>Are you sure you want to delete {{ usersName() }}?</p>
     </org-dialog-content>
     <org-dialog-footer>
-      <org-button color="neutral" [disabled]="isProcessing()" (clicked)="onCancelClick()"> Cancel </org-button>
-      <org-button color="danger" [loading]="isProcessing()" (clicked)="onDeleteClick()"> Delete </org-button>
+      <org-button color="neutral" label="Cancel" [disabled]="isProcessing()" (clicked)="onCancelClick()" />
+      <org-button color="danger" label="Delete" [loading]="isProcessing()" (clicked)="onDeleteClick()" />
     </org-dialog-footer>
   </org-dialog>
 }

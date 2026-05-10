@@ -7,7 +7,7 @@ export const allCardAlignments = ['start', 'center', 'end'] as const;
 export type CardAlignment = (typeof allCardAlignments)[number];
 
 /** default value for the card footer alignment input */
-export const CARD_FOOTER_ALIGNMENT_DEFAULT: CardAlignment = 'start';
+export const CARD_FOOTER_ALIGNMENT_DEFAULT: CardAlignment = 'end';
 
 /** container for card footer actions with configurable horizontal alignment */
 @Component({

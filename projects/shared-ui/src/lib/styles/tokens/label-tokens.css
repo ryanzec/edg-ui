@@ -1,0 +1,25 @@
+:root {
+  /* root layout & typography */
+  --label-gap: var(--spacing-1_5);
+  --label-color: var(--color-fg);
+  --label-font-size: var(--font-size-sm);
+  --label-font-weight: var(--font-weight-medium);
+  --label-line-height: var(--line-height-tight);
+  --label-letter-spacing: var(--letter-spacing-normal);
+
+  /* text wrapper */
+  --label-text-gap: 0.125rem; /* 2px */
+
+  /* required marker */
+  --label-marker-color: var(--color-danger);
+  --label-marker-font-weight: var(--font-weight-semibold);
+  --label-marker-margin-inline-start: 0.125rem; /* 2px */
+
+  /* loading spinner */
+  --label-spinner-color: var(--color-fg-muted);
+  --label-spinner-margin-inline-start: var(--spacing-0_5);
+
+  /* trailing slot */
+  --label-trailing-color: var(--color-fg-muted);
+  --label-trailing-gap: var(--spacing-1);
+}

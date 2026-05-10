@@ -17,8 +17,8 @@ import { Button } from '../button/button';
         You have unsaved changes on this page. Leaving will discard them. Do you want to continue?
       </org-dialog-content>
       <org-dialog-footer>
-        <org-button color="neutral" (clicked)="cancel()">Stay</org-button>
-        <org-button color="danger" (clicked)="confirm()">Discard Changes</org-button>
+        <org-button color="neutral" label="Stay" (clicked)="cancel()" />
+        <org-button color="danger" label="Discard Changes" (clicked)="confirm()" />
       </org-dialog-footer>
     </org-dialog>
   `,

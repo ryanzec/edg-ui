@@ -1,15 +1,47 @@
-<a
-  orgLinkBrain
-  class="link"
-  [href]="href()"
-  [target]="target()"
-  [rel]="rel()"
-  [download]="download()"
-  [hreflang]="hreflang()"
-  [referrerPolicy]="referrerPolicy()"
-  [ariaLabel]="ariaLabel()"
-  [disabled]="disabled()"
-  (clicked)="onBrainClicked($event)"
->
+@if (disabled()) {
+  <span
+    orgLinkBrain
+    class="link"
+    [href]="href()"
+    [target]="target()"
+    [rel]="rel()"
+    [download]="download()"
+    [hreflang]="hreflang()"
+    [referrerPolicy]="referrerPolicy()"
+    [ariaLabel]="ariaLabel()"
+    [disabled]="disabled()"
+    [affordance]="affordance()"
+  >
+    <ng-container [ngTemplateOutlet]="content" />
+  </span>
+} @else {
+  <a
+    orgLinkBrain
+    class="link"
+    [href]="href()"
+    [target]="target()"
+    [rel]="rel()"
+    [download]="download()"
+    [hreflang]="hreflang()"
+    [referrerPolicy]="referrerPolicy()"
+    [ariaLabel]="ariaLabel()"
+    [disabled]="disabled()"
+    [affordance]="affordance()"
+    (clicked)="onBrainClicked($event)"
+  >
+    <ng-container [ngTemplateOutlet]="content" />
+  </a>
+}
+
+<ng-template #content>
+  @if (preTemplate(); as preTemplate) {
+    <ng-container [ngTemplateOutlet]="preTemplate" />
+  }
   <ng-content />
-</a>
+  @if (postTemplate(); as postTemplate) {
+    <ng-container [ngTemplateOutlet]="postTemplate" />
+  }
+  @if (showAffordanceIcon()) {
+    <org-icon class="link-icon" [name]="affordanceIcon()!" data-pos="trailing" />
+  }
+</ng-template>

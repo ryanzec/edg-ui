@@ -1,4 +1,4 @@
-<org-list listRole="none" borderVariant="outer">
+<org-list listRole="none" [size]="listSize()">
   @for (item of brain.items(); track item.id) {
     @if (item.type === 'divider') {
       <org-overlay-menu-divider />
@@ -7,12 +7,26 @@
         type="button"
         orgOverlayMenuItemBrain
         [item]="item"
+        [disabled]="item.disabled ?? false"
         (triggered)="onItemTriggered($event)"
         class="menu-item-button"
       >
-        <org-list-item [forceClickable]="true" [label]="item.label">
+        <org-list-item [forceClickable]="true" [disabled]="item.disabled ?? false" [label]="item.label">
           @if (item.icon; as iconName) {
             <org-list-item-icon pre [name]="iconName" />
+          }
+          @if (item.tag || item.shortcut || item.trailingIcon) {
+            <org-overlay-menu-item-meta post>
+              @if (item.tag; as itemTag) {
+                <org-tag [color]="toTagColor(itemTag.color)" size="xs">{{ itemTag.label }}</org-tag>
+              }
+              @if (item.shortcut; as shortcut) {
+                <span>{{ shortcut }}</span>
+              }
+              @if (item.trailingIcon; as trailingIcon) {
+                <org-list-item-icon [name]="trailingIcon" />
+              }
+            </org-overlay-menu-item-meta>
           }
         </org-list-item>
       </button>

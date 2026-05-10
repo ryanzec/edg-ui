@@ -1,8 +1,8 @@
 <div
   #calendarContainerRef
-  [class]="'calendar-container ' + containerClass()"
+  [class]="'container ' + containerClass()"
   (keydown)="onKeyDown($event)"
-  tabindex="0"
+  [attr.tabindex]="disabled() ? -1 : 0"
   aria-label="Calendar"
 >
   <span class="sr-only" aria-live="polite" aria-atomic="true">{{ _liveAnnouncement() }}</span>

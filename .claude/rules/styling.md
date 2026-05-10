@@ -21,6 +21,10 @@ Utility css classes **MUST** be used for all other styles:
 - z-index
 - etc.
 
+# Design Token / CSS Variables Patterns:
+- any component that can have variants that effect css property must **ALWAYS** use design tokens (css variables) for that as a placeholder value in a component design token file in `projects/shared-ui/src/lib/styles/animations.css`.
+- the css code **MUST** implement all variants (even whatever the default values are) as the default css variables are more placeholders than values to be used.
+
 # Styling Patterns
 - **NEVER** add styling to components in `projects/shared-ui/src/lib/brain`.
 - **NEVER** add explicitly height / widths to component is `projects/shared-ui/src/lib/core`, they should **ALWAYS** grow based on the content inside them.
@@ -44,7 +48,7 @@ Utility css classes **MUST** be used for all other styles:
 - **ALWAYS** use flexbox for aligning and spacing a group of elements.
 - **ALWAYS** omit passing values to component inputs that has a default value other than `null` / `undefined`.
 - **ALWAYS** use `var()` when defining custom css variables
-- ONLY use system level design tokens in css utility classes
+- **ONLY** use system level design tokens in css utility classes
 - **ALWAYS** use `aria-*` when available and then fallback to `data-*` attributes for component styling that is based on an input having the input value be the `data-*` attribute value, see `projects/shared-ui/src/lib/core/box` as a reference.
 - **ALWAYS** use the `.dark` for defining dark mode colors.
 - **ALWAYS** use `/* ... */` to comment is CSS.
@@ -53,7 +57,7 @@ Utility css classes **MUST** be used for all other styles:
 - **ALWAYS** use thing like background color change when styling `focus` elements for accessability.
 - **ALWAYS** prevent states based styles from being applied to components when it is disabled.
 - **ALWAYS** use `rem` over `px` for css values.
-- **ALWAYS** add a comment at the end of the line when using `rem` values that just has the `px` value assuming a `1rem` = `16px`.
+- **ONLY** add a comment at the end of the line when using **RAW** `rem` values that just has the `px` value assuming a `1rem` = `16px`, **DONT** do this when using a variable that is a `REM` value.
 - **ALWAYS** place ALL @keyframes definations in `projects/shared-ui/src/lib/animations.css`.
 - **NEVER** use the style tag unless the value NEEDS to be dynamic based on typescript code.=
 - **NEVER** add animations or transitions unless **EXPLICITLY** asked for.

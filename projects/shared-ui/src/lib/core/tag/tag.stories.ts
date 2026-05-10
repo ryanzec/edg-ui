@@ -1,79 +1,46 @@
 import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import type { Meta, StoryObj } from '@storybook/angular';
-import { Tag, allTagSizes, allTagVariants } from './tag';
-import { TagIcon } from './tag-icon';
+import { ButtonToggle, ButtonToggleItem } from '../button-toggle/button-toggle';
+import { CheckboxToggle } from '../checkbox-toggle/checkbox-toggle';
+import { Input } from '../input/input';
 import { allComponentColors } from '../types/component-types';
-import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
-import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
+import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
+import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
+import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
+import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
+import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
+import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
+import { Tag, TagColor, TagSize, TagVariant, allTagSizes, allTagVariants } from './tag';
+import { TagIcon } from './tag-icon';
+
+const liveDemoColorItems: ButtonToggleItem[] = allComponentColors.map((color) => ({
+  label: color,
+  value: color,
+  buttonColor: 'primary',
+}));
+
+const liveDemoVariantItems: ButtonToggleItem[] = allTagVariants.map((variant) => ({
+  label: variant,
+  value: variant,
+  buttonColor: 'primary',
+}));
+
+const liveDemoSizeItems: ButtonToggleItem[] = allTagSizes.map((size) => ({
+  label: size,
+  value: size,
+  buttonColor: 'primary',
+}));
 
 @Component({
-  selector: 'story-tag-clickable-icons',
+  selector: 'story-tag-removable-section',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Tag, TagIcon, StorybookExampleContainer, StorybookExampleContainerSection],
+  imports: [Tag, TagIcon, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
   template: `
-    <org-storybook-example-container
-      title="Clickable Icons"
-      currentState="Icons become interactive when their clicked output is observed"
-    >
-      <org-storybook-example-container-section label="Clickable pre icon">
-        <div class="flex flex-col gap-2">
-          <org-tag color="primary">
-            <org-tag-icon name="cog" (clicked)="preClickCount.set(preClickCount() + 1)" />
-            Settings
-          </org-tag>
-          <p>
-            Clicks: <strong>{{ preClickCount() }}</strong>
-          </p>
-        </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Clickable post icon">
-        <div class="flex flex-col gap-2">
-          <org-tag color="info">
-            Action
-            <org-tag-icon name="arrow-right" (clicked)="postClickCount.set(postClickCount() + 1)" />
-          </org-tag>
-          <p>
-            Clicks: <strong>{{ postClickCount() }}</strong>
-          </p>
-        </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Non-clickable icons (no listener attached)">
-        <org-tag color="neutral">
-          <org-tag-icon name="cog" />
-          Static icons
-          <org-tag-icon name="check" />
-        </org-tag>
-      </org-storybook-example-container-section>
-
-      <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-        <li>Icons are only interactive when their <strong>clicked</strong> output is observed</li>
-        <li>Non-clickable icons show no hover effect and are not keyboard-focusable</li>
-        <li>Use <strong>ariaLabel</strong> on <strong>org-tag-icon</strong> to provide meaningful accessible labels</li>
-      </ul>
-    </org-storybook-example-container>
-  `,
-})
-class TagClickableIconsStory {
-  protected readonly preClickCount = signal(0);
-  protected readonly postClickCount = signal(0);
-}
-
-@Component({
-  selector: 'story-tag-removable',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Tag, TagIcon, StorybookExampleContainer, StorybookExampleContainerSection],
-  template: `
-    <org-storybook-example-container
-      title="Removable Tags"
-      currentState="The tag-level removable input renders a built-in X affordance and overrides any trailing tag-icon"
-    >
-      <org-storybook-example-container-section label="Not removable">
+    <org-design-system-demo>
+      <org-design-system-demo-header slot="header" title="Removable" />
+      <org-design-system-demo-canvas slot="canvas">
         <org-tag color="primary">Fixed Tag</org-tag>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Removable (soft variant)">
         <div class="flex flex-col gap-2">
           <org-tag color="primary" [removable]="true" (removed)="removedCount.set(removedCount() + 1)">
             Removable Tag
@@ -82,60 +49,68 @@ class TagClickableIconsStory {
             Removed events: <strong>{{ removedCount() }}</strong>
           </p>
         </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Removable (strong variant)">
         <org-tag color="safe" variant="strong" [removable]="true">Removable Strong</org-tag>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Removable + leading icon">
         <org-tag color="info" [removable]="true">
           <org-tag-icon name="cog" />
           Settings Tag
         </org-tag>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section
-        label="Removable overrides a trailing tag-icon (the trailing arrow-right is suppressed)"
-      >
         <org-tag color="caution" [removable]="true">
           Action Tag
           <org-tag-icon name="arrow-right" />
         </org-tag>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Custom removeAriaLabel">
         <org-tag color="neutral" [removable]="true" removeAriaLabel="Remove the priority filter">priority:high</org-tag>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Multiple removable tags">
         <div class="flex flex-wrap gap-2">
           <org-tag color="primary" [removable]="true">React</org-tag>
           <org-tag color="info" [removable]="true">Angular</org-tag>
           <org-tag color="safe" [removable]="true">Vue</org-tag>
           <org-tag color="caution" [removable]="true">Svelte</org-tag>
         </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label='Legacy: removable via &lt;org-tag-icon [removable]="true" /&gt;'>
-        <org-tag color="primary">
-          Legacy Removable
-          <org-tag-icon [removable]="true" />
-        </org-tag>
-      </org-storybook-example-container-section>
-
-      <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-        <li>Setting <strong>removable</strong> on <strong>org-tag</strong> renders a built-in X affordance</li>
-        <li>The X click emits the <strong>removed</strong> output on <strong>org-tag</strong></li>
-        <li>If a trailing <strong>org-tag-icon</strong> is also slotted, it is suppressed (overridden)</li>
-        <li>Leading <strong>org-tag-icon</strong>s are still rendered alongside the built-in X</li>
-        <li>Use <strong>removeAriaLabel</strong> to give the X a meaningful accessible label</li>
-      </ul>
-    </org-storybook-example-container>
+      </org-design-system-demo-canvas>
+    </org-design-system-demo>
   `,
 })
-class TagRemovableStory {
+class TagRemovableSection {
   protected readonly removedCount = signal(0);
+}
+
+@Component({
+  selector: 'story-tag-clickable-icons-section',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [Tag, TagIcon, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
+  template: `
+    <org-design-system-demo>
+      <org-design-system-demo-header slot="header" title="Clickable Icons" />
+      <org-design-system-demo-canvas slot="canvas">
+        <div class="flex flex-col gap-2">
+          <org-tag color="primary">
+            <org-tag-icon name="cog" (clicked)="preClickCount.set(preClickCount() + 1)" />
+            Settings
+          </org-tag>
+          <p>
+            Pre-icon clicks: <strong>{{ preClickCount() }}</strong>
+          </p>
+        </div>
+        <div class="flex flex-col gap-2">
+          <org-tag color="info">
+            Action
+            <org-tag-icon name="arrow-right" (clicked)="postClickCount.set(postClickCount() + 1)" />
+          </org-tag>
+          <p>
+            Post-icon clicks: <strong>{{ postClickCount() }}</strong>
+          </p>
+        </div>
+        <org-tag color="neutral">
+          <org-tag-icon name="cog" />
+          Static icons
+          <org-tag-icon name="check" />
+        </org-tag>
+      </org-design-system-demo-canvas>
+    </org-design-system-demo>
+  `,
+})
+class TagClickableIconsSection {
+  protected readonly preClickCount = signal(0);
+  protected readonly postClickCount = signal(0);
 }
 
 const meta: Meta<Tag> = {
@@ -153,10 +128,10 @@ const meta: Meta<Tag> = {
 
   ### Composition Parts
   - **org-tag** — the pill container. Drives color, size, variant, and the built-in removable affordance.
-  - **org-tag-icon** — slotted icon; the icon inherits the tag's color and per-size dimension. Becomes interactive when its \`clicked\` output is observed or when its own \`removable\` input is set.
+  - **org-tag-icon** — slotted icon; the icon inherits the tag's color and per-size dimension. Becomes interactive when its \`clicked\` output is observed.
 
   ### Features
-  - Three sizes: xs, sm (default), base
+  - Three sizes: xs, sm, base (default)
   - Two visual variants: soft (default) and strong
   - Eight color options: primary, secondary, neutral, safe, info, caution, warning, danger
   - Composable pre / post icons via &lt;org-tag-icon /&gt;
@@ -222,7 +197,7 @@ type Story = StoryObj<Tag & { removable: boolean; removeAriaLabel: string | null
 export const Default: Story = {
   args: {
     color: 'primary',
-    size: 'sm',
+    size: 'base',
     variant: 'soft',
     removable: false,
     removeAriaLabel: null,
@@ -279,355 +254,410 @@ export const Default: Story = {
   }),
 };
 
-export const Sizes: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Comparison of all three size options: xs, sm (default), and base.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Size Variants"
-        currentState="Comparing all three size options"
-      >
-        <org-storybook-example-container-section label="Extra Small (xs)">
-          <org-tag color="primary" size="xs">Extra Small</org-tag>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Small (sm) - Default">
-          <org-tag color="primary">Small</org-tag>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Base">
-          <org-tag color="primary" size="base">Base</org-tag>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="With Icons - xs">
-          <org-tag color="info" size="xs">
-            <org-tag-icon name="cog" />
-            Extra Small
-            <org-tag-icon name="arrow-right" />
-          </org-tag>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="With Icons - sm">
-          <org-tag color="info">
-            <org-tag-icon name="cog" />
-            Small
-            <org-tag-icon name="arrow-right" />
-          </org-tag>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="With Icons - base">
-          <org-tag color="info" size="base">
-            <org-tag-icon name="cog" />
-            Base
-            <org-tag-icon name="arrow-right" />
-          </org-tag>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Removable - all sizes">
-          <div class="flex flex-wrap items-center gap-2">
-            <org-tag color="safe" size="xs" [removable]="true">xs</org-tag>
-            <org-tag color="safe" [removable]="true">sm</org-tag>
-            <org-tag color="safe" size="base" [removable]="true">base</org-tag>
-          </div>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li><strong>xs</strong>: 18px tall, dense for status columns</li>
-          <li><strong>sm</strong>: 20px tall (default)</li>
-          <li><strong>base</strong>: 24px tall, larger padding and text</li>
-          <li>Icon and X dimensions scale proportionally with tag size</li>
-        </ul>
-      </org-storybook-example-container>
+@Component({
+  selector: 'story-tag-live-demo',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    ReactiveFormsModule,
+    Tag,
+    TagIcon,
+    ButtonToggle,
+    CheckboxToggle,
+    Input,
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoControls,
+    DesignSystemDemoControlGroup,
+    DesignSystemDemoCanvas,
+  ],
+  styles: [
+    `
+      :host {
+        display: block;
+      }
+      .canvas-stage {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 6rem; /* 96px */
+      }
     `,
-    moduleMetadata: {
-      imports: [Tag, TagIcon, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const Variants: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Comparison of soft and strong variants across the same set of colors.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Variant Comparison"
-        currentState="Strong (saturated fill) vs soft (tinted, same-color text)"
-      >
-        <org-storybook-example-container-section label="Soft (default)">
-          <div class="flex flex-wrap gap-2">
-            <org-tag color="neutral">Design</org-tag>
-            <org-tag color="safe">Active</org-tag>
-            <org-tag color="info">Beta</org-tag>
-            <org-tag color="caution">Review</org-tag>
-            <org-tag color="danger">Blocked</org-tag>
-            <org-tag color="primary">Draft</org-tag>
+  ],
+  template: `
+    <form [formGroup]="liveDemoForm">
+      <org-design-system-demo>
+        <org-design-system-demo-header
+          slot="header"
+          title="Live demo"
+          description="Walk every combination — color, variant, size, and the optional icon and removable flags. The label text is editable so you can sanity-check truncation and icon spacing on real copy."
+        />
+        <org-design-system-demo-controls slot="controls">
+          <org-design-system-demo-control-group label="Color">
+            <org-button-toggle [items]="colorItems" formControlName="color" buttonSize="sm" />
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Variant">
+            <org-button-toggle [items]="variantItems" formControlName="variant" buttonSize="sm" />
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Size">
+            <org-button-toggle [items]="sizeItems" formControlName="size" buttonSize="sm" />
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Label">
+            <org-input name="live-demo-label" formControlName="label" ariaLabel="Tag label" />
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Leading icon">
+            <org-checkbox-toggle name="live-demo-leading-icon" value="leadingIcon" formControlName="leadingIcon">
+              {{ liveDemoForm.controls.leadingIcon.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Trailing icon">
+            <org-checkbox-toggle name="live-demo-trailing-icon" value="trailingIcon" formControlName="trailingIcon">
+              {{ liveDemoForm.controls.trailingIcon.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Removable">
+            <org-checkbox-toggle name="live-demo-removable" value="removable" formControlName="removable">
+              {{ liveDemoForm.controls.removable.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
+        </org-design-system-demo-controls>
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="canvas-stage">
+            <org-tag
+              [color]="liveDemoForm.controls.color.value"
+              [variant]="liveDemoForm.controls.variant.value"
+              [size]="liveDemoForm.controls.size.value"
+              [removable]="liveDemoForm.controls.removable.value"
+            >
+              @if (liveDemoForm.controls.leadingIcon.value) {
+                <org-tag-icon name="cog" />
+              }
+              {{ liveDemoForm.controls.label.value }}
+              @if (liveDemoForm.controls.trailingIcon.value) {
+                <org-tag-icon name="arrow-right" />
+              }
+            </org-tag>
           </div>
-        </org-storybook-example-container-section>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+    </form>
+  `,
+})
+class TagLiveDemoStory {
+  protected readonly colorItems = liveDemoColorItems;
+  protected readonly variantItems = liveDemoVariantItems;
+  protected readonly sizeItems = liveDemoSizeItems;
 
-        <org-storybook-example-container-section label="Strong">
-          <div class="flex flex-wrap gap-2">
-            <org-tag color="neutral" variant="strong">Design</org-tag>
-            <org-tag color="safe" variant="strong">Active</org-tag>
-            <org-tag color="info" variant="strong">Beta</org-tag>
-            <org-tag color="caution" variant="strong">Review</org-tag>
-            <org-tag color="danger" variant="strong">Blocked</org-tag>
-            <org-tag color="primary" variant="strong">Draft</org-tag>
-          </div>
-        </org-storybook-example-container-section>
+  protected readonly liveDemoForm = new FormGroup({
+    color: new FormControl<TagColor>('primary', { nonNullable: true }),
+    variant: new FormControl<TagVariant>('strong', { nonNullable: true }),
+    size: new FormControl<TagSize>('base', { nonNullable: true }),
+    label: new FormControl<string>('Design', { nonNullable: true }),
+    leadingIcon: new FormControl<boolean>(false, { nonNullable: true }),
+    trailingIcon: new FormControl<boolean>(false, { nonNullable: true }),
+    removable: new FormControl<boolean>(false, { nonNullable: true }),
+  });
+}
 
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li><strong>soft</strong>: Tinted background, same-color text — quieter; designed to pack densely</li>
-          <li><strong>strong</strong>: Saturated fill, contrasting text — reads at a glance, suitable for status</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [Tag, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const Colors: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'All eight color variants in both soft and strong variants.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Color Variants"
-        currentState="All 8 colors in soft (default) and strong"
-      >
-        <org-storybook-example-container-section label="Soft - Primary"><org-tag color="primary">Primary</org-tag></org-storybook-example-container-section>
-        <org-storybook-example-container-section label="Soft - Secondary"><org-tag color="secondary">Secondary</org-tag></org-storybook-example-container-section>
-        <org-storybook-example-container-section label="Soft - Neutral"><org-tag color="neutral">Neutral</org-tag></org-storybook-example-container-section>
-        <org-storybook-example-container-section label="Soft - Safe"><org-tag color="safe">Safe</org-tag></org-storybook-example-container-section>
-        <org-storybook-example-container-section label="Soft - Info"><org-tag color="info">Info</org-tag></org-storybook-example-container-section>
-        <org-storybook-example-container-section label="Soft - Caution"><org-tag color="caution">Caution</org-tag></org-storybook-example-container-section>
-        <org-storybook-example-container-section label="Soft - Warning"><org-tag color="warning">Warning</org-tag></org-storybook-example-container-section>
-        <org-storybook-example-container-section label="Soft - Danger"><org-tag color="danger">Danger</org-tag></org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Strong - Primary"><org-tag color="primary" variant="strong">Primary</org-tag></org-storybook-example-container-section>
-        <org-storybook-example-container-section label="Strong - Secondary"><org-tag color="secondary" variant="strong">Secondary</org-tag></org-storybook-example-container-section>
-        <org-storybook-example-container-section label="Strong - Neutral"><org-tag color="neutral" variant="strong">Neutral</org-tag></org-storybook-example-container-section>
-        <org-storybook-example-container-section label="Strong - Safe"><org-tag color="safe" variant="strong">Safe</org-tag></org-storybook-example-container-section>
-        <org-storybook-example-container-section label="Strong - Info"><org-tag color="info" variant="strong">Info</org-tag></org-storybook-example-container-section>
-        <org-storybook-example-container-section label="Strong - Caution"><org-tag color="caution" variant="strong">Caution</org-tag></org-storybook-example-container-section>
-        <org-storybook-example-container-section label="Strong - Warning"><org-tag color="warning" variant="strong">Warning</org-tag></org-storybook-example-container-section>
-        <org-storybook-example-container-section label="Strong - Danger"><org-tag color="danger" variant="strong">Danger</org-tag></org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li><strong>primary</strong>: Primary brand color</li>
-          <li><strong>secondary</strong>: Secondary accent color</li>
-          <li><strong>neutral</strong>: Neutral/gray color</li>
-          <li><strong>safe</strong>: Success/positive state (green)</li>
-          <li><strong>info</strong>: Informational state (blue)</li>
-          <li><strong>caution</strong>: Caution state (yellow)</li>
-          <li><strong>warning</strong>: Warning state (orange)</li>
-          <li><strong>danger</strong>: Error/danger state (red)</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [Tag, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const ColorBySize: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Color × size matrix in the strong variant. Mirrors the design-system reference figure.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Color × Size · Strong"
-        currentState="Eight semantic colors at three sizes (strong variant)"
-      >
-        <org-storybook-example-container-section label="Primary">
-          <div class="flex flex-wrap items-center gap-2">
-            <org-tag color="primary" variant="strong" size="xs">Label</org-tag>
-            <org-tag color="primary" variant="strong" size="sm">Label</org-tag>
-            <org-tag color="primary" variant="strong" size="base">Label</org-tag>
-          </div>
-        </org-storybook-example-container-section>
-        <org-storybook-example-container-section label="Secondary">
-          <div class="flex flex-wrap items-center gap-2">
-            <org-tag color="secondary" variant="strong" size="xs">Label</org-tag>
-            <org-tag color="secondary" variant="strong" size="sm">Label</org-tag>
-            <org-tag color="secondary" variant="strong" size="base">Label</org-tag>
-          </div>
-        </org-storybook-example-container-section>
-        <org-storybook-example-container-section label="Neutral">
-          <div class="flex flex-wrap items-center gap-2">
-            <org-tag color="neutral" variant="strong" size="xs">Label</org-tag>
-            <org-tag color="neutral" variant="strong" size="sm">Label</org-tag>
-            <org-tag color="neutral" variant="strong" size="base">Label</org-tag>
-          </div>
-        </org-storybook-example-container-section>
-        <org-storybook-example-container-section label="Safe">
-          <div class="flex flex-wrap items-center gap-2">
-            <org-tag color="safe" variant="strong" size="xs">Label</org-tag>
-            <org-tag color="safe" variant="strong" size="sm">Label</org-tag>
-            <org-tag color="safe" variant="strong" size="base">Label</org-tag>
-          </div>
-        </org-storybook-example-container-section>
-        <org-storybook-example-container-section label="Info">
-          <div class="flex flex-wrap items-center gap-2">
-            <org-tag color="info" variant="strong" size="xs">Label</org-tag>
-            <org-tag color="info" variant="strong" size="sm">Label</org-tag>
-            <org-tag color="info" variant="strong" size="base">Label</org-tag>
-          </div>
-        </org-storybook-example-container-section>
-        <org-storybook-example-container-section label="Caution">
-          <div class="flex flex-wrap items-center gap-2">
-            <org-tag color="caution" variant="strong" size="xs">Label</org-tag>
-            <org-tag color="caution" variant="strong" size="sm">Label</org-tag>
-            <org-tag color="caution" variant="strong" size="base">Label</org-tag>
-          </div>
-        </org-storybook-example-container-section>
-        <org-storybook-example-container-section label="Warning">
-          <div class="flex flex-wrap items-center gap-2">
-            <org-tag color="warning" variant="strong" size="xs">Label</org-tag>
-            <org-tag color="warning" variant="strong" size="sm">Label</org-tag>
-            <org-tag color="warning" variant="strong" size="base">Label</org-tag>
-          </div>
-        </org-storybook-example-container-section>
-        <org-storybook-example-container-section label="Danger">
-          <div class="flex flex-wrap items-center gap-2">
-            <org-tag color="danger" variant="strong" size="xs">Label</org-tag>
-            <org-tag color="danger" variant="strong" size="sm">Label</org-tag>
-            <org-tag color="danger" variant="strong" size="base">Label</org-tag>
-          </div>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li>Reach for <strong>safe</strong> for "active / approved"</li>
-          <li>Reach for <strong>caution</strong> and <strong>warning</strong> for "needs attention"</li>
-          <li>Reach for <strong>danger</strong> for "blocked / failing"</li>
-          <li>Reach for <strong>neutral</strong> for de-emphasized status</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [Tag, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const WithIcons: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Tags composed with leading, trailing, or both org-tag-icon children.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Icon Composition"
-        currentState="Comparing tags with different org-tag-icon configurations"
-      >
-        <org-storybook-example-container-section label="No icons">
-          <org-tag color="primary">No Icons</org-tag>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Leading icon only">
-          <div class="flex flex-wrap gap-2">
-            <org-tag color="info"><org-tag-icon name="bookmark" />Saved</org-tag>
-            <org-tag color="safe"><org-tag-icon name="check" />Approved</org-tag>
-            <org-tag color="caution"><org-tag-icon name="circle" />Pending</org-tag>
-            <org-tag color="danger"><org-tag-icon name="circle-x" />Blocked</org-tag>
-          </div>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Trailing icon only">
-          <div class="flex flex-wrap gap-2">
-            <org-tag color="neutral">Linear<org-tag-icon name="arrow-up-right" /></org-tag>
-            <org-tag color="neutral">3 issues<org-tag-icon name="chevron-right" /></org-tag>
-            <org-tag color="info">Docs<org-tag-icon name="arrow-up-right" /></org-tag>
-          </div>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Both icons">
-          <org-tag color="primary">
-            <org-tag-icon name="cog" />
-            Action
-            <org-tag-icon name="arrow-right" />
-          </org-tag>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Strong variant with icons">
-          <org-tag color="danger" variant="strong">
-            <org-tag-icon name="trash" />
-            Delete
-          </org-tag>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li>Place an <strong>org-tag-icon</strong> before the text for a leading icon</li>
-          <li>Place an <strong>org-tag-icon</strong> after the text for a trailing icon</li>
-          <li>The icon inherits the tag's color and per-size dimension automatically</li>
-          <li>Setting <strong>removable</strong> on the parent tag suppresses the trailing icon</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [Tag, TagIcon, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const Removable: Story = {
+export const LiveDemo: Story = {
   parameters: {
     docs: {
       description: {
         story:
-          'The tag-level removable input renders a built-in X affordance and overrides any trailing org-tag-icon. The X is keyboard-focusable and emits the removed output.',
+          'Fully interactive demo. Walk every combination — color, variant, size, and the optional icon and removable flags — and edit the label text to sanity-check truncation and icon spacing on real copy.',
       },
     },
   },
   render: () => ({
-    template: '<story-tag-removable />',
+    template: `<story-tag-live-demo />`,
     moduleMetadata: {
-      imports: [TagRemovableStory],
+      imports: [TagLiveDemoStory],
     },
   }),
 };
 
-export const ClickableIcons: Story = {
+export const Showcase: Story = {
   parameters: {
     docs: {
       description: {
         story:
-          'Slot icons become interactive when their clicked output is observed. Non-observed icons are disabled and non-focusable.',
+          'Comprehensive showcase of every tag variant axis — variant style, color × size matrix, color, size, icon composition, removable affordance, clickable icons, and realistic in-context placements — in a single scrollable view.',
       },
     },
   },
   render: () => ({
-    template: '<story-tag-clickable-icons />',
+    template: `
+      <div class="flex flex-col gap-4">
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Variant Comparison" />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="flex flex-wrap gap-2">
+              <org-tag color="neutral" variant="strong">Design</org-tag>
+              <org-tag color="safe" variant="strong">Active</org-tag>
+              <org-tag color="info" variant="strong">Beta</org-tag>
+              <org-tag color="caution" variant="strong">Review</org-tag>
+              <org-tag color="danger" variant="strong">Blocked</org-tag>
+              <org-tag color="primary" variant="strong">Draft</org-tag>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <org-tag color="neutral">Design</org-tag>
+              <org-tag color="safe">Active</org-tag>
+              <org-tag color="info">Beta</org-tag>
+              <org-tag color="caution">Review</org-tag>
+              <org-tag color="danger">Blocked</org-tag>
+              <org-tag color="primary">Draft</org-tag>
+            </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>strong</strong> (top): Saturated fill, contrasting text — reads at a glance, suitable for status</li>
+            <li><strong>soft</strong> (bottom, default): Tinted background, same-color text — quieter; designed to pack densely</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Color × Size · Strong" />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="flex flex-wrap items-center gap-2">
+              <org-tag color="primary" variant="strong" size="xs">Label</org-tag>
+              <org-tag color="primary" variant="strong" size="sm">Label</org-tag>
+              <org-tag color="primary" variant="strong" size="base">Label</org-tag>
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+              <org-tag color="secondary" variant="strong" size="xs">Label</org-tag>
+              <org-tag color="secondary" variant="strong" size="sm">Label</org-tag>
+              <org-tag color="secondary" variant="strong" size="base">Label</org-tag>
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+              <org-tag color="neutral" variant="strong" size="xs">Label</org-tag>
+              <org-tag color="neutral" variant="strong" size="sm">Label</org-tag>
+              <org-tag color="neutral" variant="strong" size="base">Label</org-tag>
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+              <org-tag color="safe" variant="strong" size="xs">Label</org-tag>
+              <org-tag color="safe" variant="strong" size="sm">Label</org-tag>
+              <org-tag color="safe" variant="strong" size="base">Label</org-tag>
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+              <org-tag color="info" variant="strong" size="xs">Label</org-tag>
+              <org-tag color="info" variant="strong" size="sm">Label</org-tag>
+              <org-tag color="info" variant="strong" size="base">Label</org-tag>
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+              <org-tag color="caution" variant="strong" size="xs">Label</org-tag>
+              <org-tag color="caution" variant="strong" size="sm">Label</org-tag>
+              <org-tag color="caution" variant="strong" size="base">Label</org-tag>
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+              <org-tag color="warning" variant="strong" size="xs">Label</org-tag>
+              <org-tag color="warning" variant="strong" size="sm">Label</org-tag>
+              <org-tag color="warning" variant="strong" size="base">Label</org-tag>
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+              <org-tag color="danger" variant="strong" size="xs">Label</org-tag>
+              <org-tag color="danger" variant="strong" size="sm">Label</org-tag>
+              <org-tag color="danger" variant="strong" size="base">Label</org-tag>
+            </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li>Reach for <strong>safe</strong> for "active / approved"</li>
+            <li>Reach for <strong>caution</strong> and <strong>warning</strong> for "needs attention"</li>
+            <li>Reach for <strong>danger</strong> for "blocked / failing"</li>
+            <li>Reach for <strong>neutral</strong> for de-emphasized status</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Color Variants" />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="flex flex-wrap gap-2">
+              <org-tag color="primary">Primary</org-tag>
+              <org-tag color="secondary">Secondary</org-tag>
+              <org-tag color="neutral">Neutral</org-tag>
+              <org-tag color="safe">Safe</org-tag>
+              <org-tag color="info">Info</org-tag>
+              <org-tag color="caution">Caution</org-tag>
+              <org-tag color="warning">Warning</org-tag>
+              <org-tag color="danger">Danger</org-tag>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <org-tag color="primary" variant="strong">Primary</org-tag>
+              <org-tag color="secondary" variant="strong">Secondary</org-tag>
+              <org-tag color="neutral" variant="strong">Neutral</org-tag>
+              <org-tag color="safe" variant="strong">Safe</org-tag>
+              <org-tag color="info" variant="strong">Info</org-tag>
+              <org-tag color="caution" variant="strong">Caution</org-tag>
+              <org-tag color="warning" variant="strong">Warning</org-tag>
+              <org-tag color="danger" variant="strong">Danger</org-tag>
+            </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>primary</strong>: Primary brand color</li>
+            <li><strong>secondary</strong>: Secondary accent color</li>
+            <li><strong>neutral</strong>: Neutral/gray color</li>
+            <li><strong>safe</strong>: Success/positive state (green)</li>
+            <li><strong>info</strong>: Informational state (blue)</li>
+            <li><strong>caution</strong>: Caution state (yellow)</li>
+            <li><strong>warning</strong>: Warning state (orange)</li>
+            <li><strong>danger</strong>: Error/danger state (red)</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Size Variants" />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="flex flex-wrap items-center gap-2">
+              <org-tag color="primary" size="xs">Extra Small</org-tag>
+              <org-tag color="primary" size="sm">Small</org-tag>
+              <org-tag color="primary">Base</org-tag>
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+              <org-tag color="info" size="xs">
+                <org-tag-icon name="cog" />
+                Extra Small
+                <org-tag-icon name="arrow-right" />
+              </org-tag>
+              <org-tag color="info" size="sm">
+                <org-tag-icon name="cog" />
+                Small
+                <org-tag-icon name="arrow-right" />
+              </org-tag>
+              <org-tag color="info">
+                <org-tag-icon name="cog" />
+                Base
+                <org-tag-icon name="arrow-right" />
+              </org-tag>
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+              <org-tag color="safe" size="xs" [removable]="true">xs</org-tag>
+              <org-tag color="safe" size="sm" [removable]="true">sm</org-tag>
+              <org-tag color="safe" [removable]="true">base</org-tag>
+            </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>xs</strong>: 18px tall, dense for status columns</li>
+            <li><strong>sm</strong>: 20px tall</li>
+            <li><strong>base</strong>: 24px tall, larger padding and text (default)</li>
+            <li>Icon and X dimensions scale proportionally with tag size</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Icon Composition" />
+          <org-design-system-demo-canvas slot="canvas">
+            <org-tag color="primary">No Icons</org-tag>
+            <div class="flex flex-wrap gap-2">
+              <org-tag color="info"><org-tag-icon name="file-text" />Saved</org-tag>
+              <org-tag color="safe"><org-tag-icon name="check" />Approved</org-tag>
+              <org-tag color="caution"><org-tag-icon name="circle" />Pending</org-tag>
+              <org-tag color="danger"><org-tag-icon name="circle-x" />Blocked</org-tag>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <org-tag color="neutral">Linear<org-tag-icon name="arrow-up-right" /></org-tag>
+              <org-tag color="neutral">3 issues<org-tag-icon name="chevron-right" /></org-tag>
+              <org-tag color="info">Docs<org-tag-icon name="arrow-up-right" /></org-tag>
+            </div>
+            <org-tag color="primary">
+              <org-tag-icon name="cog" />
+              Action
+              <org-tag-icon name="arrow-right" />
+            </org-tag>
+            <org-tag color="danger" variant="strong">
+              <org-tag-icon name="trash" />
+              Delete
+            </org-tag>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li>Place an <strong>org-tag-icon</strong> before the text for a leading icon</li>
+            <li>Place an <strong>org-tag-icon</strong> after the text for a trailing icon</li>
+            <li>The icon inherits the tag's color and per-size dimension automatically</li>
+            <li>Setting <strong>removable</strong> on the parent tag suppresses the trailing icon</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <story-tag-removable-section />
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li>Setting <strong>removable</strong> on <strong>org-tag</strong> renders a built-in X affordance</li>
+            <li>The X click emits the <strong>removed</strong> output on <strong>org-tag</strong></li>
+            <li>If a trailing <strong>org-tag-icon</strong> is also slotted, it is suppressed (overridden)</li>
+            <li>Leading <strong>org-tag-icon</strong>s are still rendered alongside the built-in X</li>
+            <li>Use <strong>removeAriaLabel</strong> to give the X a meaningful accessible label</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <story-tag-clickable-icons-section />
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li>Icons are only interactive when their <strong>clicked</strong> output is observed</li>
+            <li>Non-clickable icons show no hover effect and are not keyboard-focusable</li>
+            <li>Use <strong>ariaLabel</strong> on <strong>org-tag-icon</strong> to provide meaningful accessible labels</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="In Context" />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="flex flex-col gap-2">
+              <div class="flex items-center gap-2">
+                <org-tag color="safe" variant="strong" size="sm">Active</org-tag>
+                <strong>Tokens — light + dark parity audit</strong>
+                <span class="ml-auto">due Fri</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <org-tag color="caution" variant="strong" size="sm">Review</org-tag>
+                <strong>Input · password show/hide affordance</strong>
+                <span class="ml-auto">opened 2d</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <org-tag color="danger" variant="strong" size="sm">Blocked</org-tag>
+                <strong>List item · long-press disclosure on touch</strong>
+                <span class="ml-auto">waiting on a11y</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <org-tag color="neutral" variant="strong" size="sm">Draft</org-tag>
+                <strong>Modal · scrim opacity in dark mode</strong>
+                <span class="ml-auto">no owner</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span>Categories</span>
+                <org-tag color="neutral" size="sm">design-system</org-tag>
+                <org-tag color="info" size="sm">tokens</org-tag>
+                <org-tag color="info" size="sm">light-mode</org-tag>
+                <org-tag color="info" size="sm">a11y</org-tag>
+                <org-tag color="neutral" size="sm">+3</org-tag>
+              </div>
+            </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li>Tags read as "what this thing is", not "what to do with it" — pair with adjacent labels for context</li>
+            <li>Use <strong>strong</strong> for status indicators (Active, Review, Blocked) and <strong>soft</strong> for category tags that should not compete with surrounding content</li>
+            <li>Pick semantic colors that match the meaning: safe for active, caution for review, danger for blocked, neutral for de-emphasized</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+      </div>
+    `,
     moduleMetadata: {
-      imports: [TagClickableIconsStory],
+      imports: [
+        Tag,
+        TagIcon,
+        TagRemovableSection,
+        TagClickableIconsSection,
+        DesignSystemDemo,
+        DesignSystemDemoHeader,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
+      ],
     },
   }),
 };

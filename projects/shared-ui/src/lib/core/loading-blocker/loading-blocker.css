@@ -1,23 +1,130 @@
 @layer components {
   :host {
-    display: none;
     position: absolute;
     inset: 0;
+    display: flex;
     align-items: center;
     justify-content: center;
-    background-color: var(--color-bg-surface-2);
-    z-index: var(--z-index-overlay);
+    border-radius: inherit;
+    background-color: color-mix(
+      in oklch,
+      var(--loading-blocker-scrim-bg) calc(var(--loading-blocker-scrim-opacity) * 100%),
+      transparent
+    );
+    backdrop-filter: blur(var(--loading-blocker-blur));
+    -webkit-backdrop-filter: blur(var(--loading-blocker-blur));
+    color: var(--loading-blocker-fg);
+    z-index: var(--loading-blocker-z-index);
     pointer-events: auto;
+    cursor: progress;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity var(--loading-blocker-motion-duration) var(--motion-ease-standard),
+      visibility 0s linear var(--loading-blocker-motion-duration);
   }
 
-  :host([aria-busy='true']) {
-    display: flex;
+  :host([data-visible='1']) {
+    opacity: 1;
+    visibility: visible;
+    transition:
+      opacity var(--loading-blocker-motion-duration) var(--motion-ease-standard),
+      visibility 0s linear 0s;
   }
 
-  .content {
-    display: flex;
+  /* intensity drives scrim opacity and backdrop blur */
+  :host([data-intensity='light']) {
+    --loading-blocker-scrim-opacity: var(--opacity-loading-blocker-scrim-light);
+    --loading-blocker-blur: 0;
+  }
+
+  :host([data-intensity='medium']) {
+    --loading-blocker-scrim-opacity: var(--opacity-loading-blocker-scrim-medium);
+    --loading-blocker-blur: var(--blur-loading-blocker-medium);
+  }
+
+  :host([data-intensity='heavy']) {
+    --loading-blocker-scrim-opacity: var(--opacity-loading-blocker-scrim-heavy);
+    --loading-blocker-blur: var(--blur-loading-blocker-heavy);
+  }
+
+  /* viewport scope covers the full window and uses the app background as the scrim */
+  :host([data-scope='viewport']) {
+    position: fixed;
+    inset: 0;
+    border-radius: 0;
+    z-index: var(--z-index-modal);
+    --loading-blocker-scrim-bg: var(--color-bg-app);
+  }
+
+  /* color tints — applied to the panel via --loading-blocker-fg, picked up by spinner via currentColor */
+  :host([data-color='primary']) {
+    --loading-blocker-fg: var(--color-primary);
+  }
+
+  :host([data-color='secondary']) {
+    --loading-blocker-fg: var(--color-secondary);
+  }
+
+  :host([data-color='neutral']) {
+    --loading-blocker-fg: var(--color-fg-muted);
+  }
+
+  :host([data-color='safe']) {
+    --loading-blocker-fg: var(--color-safe);
+  }
+
+  :host([data-color='info']) {
+    --loading-blocker-fg: var(--color-info);
+  }
+
+  :host([data-color='caution']) {
+    --loading-blocker-fg: var(--color-caution);
+  }
+
+  :host([data-color='warning']) {
+    --loading-blocker-fg: var(--color-warning);
+  }
+
+  :host([data-color='danger']) {
+    --loading-blocker-fg: var(--color-danger);
+  }
+
+  /* backdrop-filter fallback — bump the scrim opacity so the scrim still reads as separation */
+  @supports not ((backdrop-filter: blur(0.0625rem)) or (-webkit-backdrop-filter: blur(0.0625rem))) {
+    :host([data-intensity='medium']) {
+      --loading-blocker-scrim-opacity: 0.88;
+    }
+
+    :host([data-intensity='light']) {
+      --loading-blocker-scrim-opacity: 0.72;
+    }
+  }
+
+  .panel {
+    display: inline-flex;
+    flex-direction: column;
     align-items: center;
-    gap: var(--spacing-2);
-    margin: var(--spacing-4);
+    justify-content: center;
+    gap: var(--loading-blocker-stack-gap);
+    color: var(--loading-blocker-fg);
+  }
+
+  .text {
+    max-width: var(--loading-blocker-text-max-width);
+    color: var(--loading-blocker-fg);
+    font-size: var(--loading-blocker-text-font-size);
+    font-weight: var(--loading-blocker-text-font-weight);
+    line-height: var(--loading-blocker-text-line-height);
+    letter-spacing: var(--loading-blocker-text-letter-spacing);
+    text-align: center;
+    text-wrap: pretty;
+  }
+
+  /* reduced motion removes the fade only — the spinner keeps spinning as the loading affordance */
+  @media (prefers-reduced-motion: reduce) {
+    :host {
+      transition: none;
+    }
   }
 }

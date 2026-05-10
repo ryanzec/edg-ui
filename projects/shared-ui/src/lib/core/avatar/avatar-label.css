@@ -1,33 +1,50 @@
 @layer components {
   :host {
-    display: flex;
+    display: inline-flex;
     flex-direction: column;
+    min-width: 0;
+    gap: var(--avatar-label-gap);
+  }
+
+  .label,
+  .sub-label {
+    line-height: var(--line-height-tight);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .label {
     font-weight: var(--font-weight-medium);
     color: var(--color-fg);
-    font-size: var(--font-size-base);
-    line-height: var(--line-height-normal);
-    letter-spacing: var(--letter-spacing-normal);
-  }
-
-  :host([data-size='sm']) .label {
-    font-size: var(--font-size-xs);
-    line-height: var(--line-height-normal);
-    letter-spacing: var(--letter-spacing-normal);
   }
 
   .sub-label {
+    font-weight: var(--font-weight-regular);
     color: var(--color-fg-muted);
-    font-size: var(--font-size-xs);
-    line-height: var(--line-height-normal);
-    letter-spacing: var(--letter-spacing-normal);
+  }
+
+  :host([data-size='sm']) .label {
+    font-size: var(--avatar-label-name-font-size-sm);
+  }
+
+  :host([data-size='base']) .label {
+    font-size: var(--avatar-label-name-font-size-base);
+  }
+
+  :host([data-size='lg']) .label {
+    font-size: var(--avatar-label-name-font-size-lg);
   }
 
   :host([data-size='sm']) .sub-label {
-    font-size: var(--font-size-2xs);
-    line-height: var(--line-height-normal);
-    letter-spacing: var(--letter-spacing-normal);
+    font-size: var(--avatar-label-sub-font-size-sm);
+  }
+
+  :host([data-size='base']) .sub-label {
+    font-size: var(--avatar-label-sub-font-size-base);
+  }
+
+  :host([data-size='lg']) .sub-label {
+    font-size: var(--avatar-label-sub-font-size-lg);
   }
 }

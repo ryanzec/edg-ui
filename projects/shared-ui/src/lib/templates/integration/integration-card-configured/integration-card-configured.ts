@@ -3,7 +3,6 @@ import { CdkMenuTrigger } from '@angular/cdk/menu';
 import { type DateTime } from 'luxon';
 import { Box } from '../../../core/box/box';
 import { Button } from '../../../core/button/button';
-import { ButtonIcon } from '../../../core/button/button-icon';
 import { DatePipe } from '../../../core/date-pipe/date-pipe';
 import { Divider } from '../../../core/divider/divider';
 import { type IconName } from '../../../brain/icon-brain/icon-brain';
@@ -86,7 +85,7 @@ const statusLabelMap: Record<IntegrationStatus, string> = {
 @Component({
   selector: 'org-integration-card-configured',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Box, Button, ButtonIcon, CdkMenuTrigger, DatePipe, Divider, Icon, OverlayMenu, Tag],
+  imports: [Box, Button, CdkMenuTrigger, DatePipe, Divider, Icon, OverlayMenu, Tag],
   templateUrl: './integration-card-configured.html',
   host: {
     class: 'block',

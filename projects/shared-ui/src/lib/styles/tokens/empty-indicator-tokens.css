@@ -1,0 +1,18 @@
+:root {
+  /* spacing: default (none / sm / base padding) */
+  --spacing-empty-stack: var(--spacing-2);
+  --spacing-empty-icon-gap: var(--spacing-4);
+  --spacing-empty-action-gap: var(--spacing-3);
+
+  /* spacing: lg padding-aware overrides */
+  --spacing-empty-stack-lg: var(--spacing-3);
+  --spacing-empty-icon-gap-lg: var(--spacing-5);
+  --spacing-empty-action-gap-lg: var(--spacing-4);
+
+  /* sizing */
+  --sizing-empty-desc-max-width: 44ch;
+
+  /* typography */
+  --font-size-empty-header: var(--font-size-xl);
+  --font-size-empty-description: var(--font-size-base);
+}

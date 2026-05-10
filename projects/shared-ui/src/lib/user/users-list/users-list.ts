@@ -25,7 +25,6 @@ import {
   assignableUserPermissions,
 } from '@organization/shared-types';
 import { Button } from '../../core/button/button';
-import { ButtonIcon } from '../../core/button/button-icon';
 import { Table } from '../../core/table/table';
 import { TableHeader } from '../../core/table/table-header';
 import { TableCell } from '../../core/table/table-cell';
@@ -34,7 +33,6 @@ import { OverlayMenu, type OverlayMenuItem } from '../../core/overlay-menu/overl
 import { Skeleton } from '../../core/skeleton/skeleton';
 import { Input } from '../../core/input/input';
 import { Avatar } from '../../core/avatar/avatar';
-import { AvatarCircle } from '../../core/avatar/avatar-circle';
 import { DropDownSelector } from '../../core/drop-down-selector/drop-down-selector';
 import { type SelectionValue } from '../../brain/drop-down-selector-brain/drop-down-selector-brain';
 import { SortingStore } from '../../core/sorting-store/sorting-store';
@@ -99,7 +97,6 @@ const ROW_ACTIONS_MENU_POSITION = [
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     Button,
-    ButtonIcon,
     CdkMenuTrigger,
     OverlayMenu,
     Table,
@@ -109,7 +106,6 @@ const ROW_ACTIONS_MENU_POSITION = [
     Skeleton,
     Input,
     Avatar,
-    AvatarCircle,
     DropDownSelector,
     ReactiveFormsModule,
     SortableDirective,

@@ -7,10 +7,7 @@
           <h3 class="m-0">{{ integration().name }}</h3>
         </div>
       </div>
-      <org-button color="safe" (clicked)="onAdd()">
-        <org-button-icon name="plus" />
-        Add
-      </org-button>
+      <org-button color="safe" label="Add" preIcon="plus" (clicked)="onAdd()" />
     </div>
     <p class="m-0">{{ integration().description }}</p>
     @if (integration().tags.length > 0) {

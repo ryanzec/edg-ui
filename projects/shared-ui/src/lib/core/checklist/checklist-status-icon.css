@@ -1,28 +1,46 @@
 @layer components {
   :host {
-    display: flex;
+    flex: 0 0 auto;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    flex-shrink: 0;
-  }
-
-  .spinner {
-    animation: var(--animate-spin);
+    width: var(--checklist-status-size);
+    height: var(--checklist-status-size);
+    border-radius: var(--checklist-status-radius);
+    background: var(--checklist-status-bg);
+    line-height: 1;
   }
 
   :host([data-status='not-started']) {
-    color: var(--color-neutral);
+    color: var(--checklist-status-color-not-started);
   }
 
   :host([data-status='in-progress']) {
-    color: var(--color-info);
+    color: var(--checklist-status-color-in-progress);
   }
 
   :host([data-status='valid']) {
-    color: var(--color-safe);
+    color: var(--checklist-status-color-valid);
   }
 
   :host([data-status='invalid']) {
-    color: var(--color-danger);
+    color: var(--checklist-status-color-invalid);
+  }
+
+  /* parent checklist consumer-opt-in: paint a soft tile background matching the status hue */
+  :host-context([data-status-background]):host([data-status='not-started']) {
+    background: var(--checklist-status-bg-not-started);
+  }
+
+  :host-context([data-status-background]):host([data-status='in-progress']) {
+    background: var(--checklist-status-bg-in-progress);
+  }
+
+  :host-context([data-status-background]):host([data-status='valid']) {
+    background: var(--checklist-status-bg-valid);
+  }
+
+  :host-context([data-status-background]):host([data-status='invalid']) {
+    background: var(--checklist-status-bg-invalid);
   }
 }

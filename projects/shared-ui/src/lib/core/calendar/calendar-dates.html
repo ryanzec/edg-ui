@@ -1,34 +1,38 @@
-<div role="grid" class="grid">
-  <!-- day of week labels row -->
-  <div role="row" class="grid grid-cols-7 gap-1">
+<div class="weekdays" aria-hidden="true">
+  @for (label of calendarComponent.dayLabels; track $index) {
+    <span class="weekday">{{ label.short }}</span>
+  }
+</div>
+
+<div role="grid" class="grid" (mouseleave)="calendarComponent.onMouseLeave()">
+  <div role="row" class="visually-hidden-row">
     @for (label of calendarComponent.dayLabels; track $index) {
-      <div role="columnheader" class="day-label" [attr.aria-label]="label.label">
-        {{ label.short }}
-      </div>
+      <div role="columnheader">{{ label.label }}</div>
     }
   </div>
 
-  <!-- calendar date rows -->
   @for (week of calendarComponent.calendarDates(); track $index) {
     <div role="row" class="week-row">
       @for (dateData of week; track dateData.date.toISO()) {
-        <div role="gridcell" class="date-cell">
-          <button
-            type="button"
-            class="date-button"
-            (click)="calendarComponent.onDateClick(dateData)"
-            (mouseenter)="calendarComponent.onDateHover(dateData)"
-            [disabled]="dateData.isDisabled"
-            [attr.aria-label]="dateData.date.toFormat('MMMM d, yyyy')"
-            [attr.aria-selected]="dateData.isSelected"
-            [attr.aria-disabled]="dateData.isDisabled"
-            [attr.data-current-month]="dateData.isCurrentMonth ? '' : null"
-            [attr.data-in-range]="dateData.isInRange ? '' : null"
-            [attr.data-focused]="dateData.isFocused ? '' : null"
-            [attr.aria-current]="dateData.isToday ? 'date' : null"
-          >
-            {{ getDay(dateData) }}
-          </button>
+        <div
+          role="gridcell"
+          class="day"
+          tabindex="-1"
+          (click)="calendarComponent.onDateClick(dateData)"
+          (mouseenter)="calendarComponent.onDateHover(dateData)"
+          [attr.aria-label]="dateData.date.toFormat('MMMM d, yyyy')"
+          [attr.aria-selected]="dateData.isSelected"
+          [attr.aria-disabled]="dateData.isDisabled ? 'true' : null"
+          [attr.aria-current]="dateData.isToday ? 'date' : null"
+          [attr.data-today]="dateData.isToday ? '' : null"
+          [attr.data-selected]="dateData.isSelected ? '' : null"
+          [attr.data-outside-month]="!dateData.isCurrentMonth ? '' : null"
+          [attr.data-focused]="dateData.isFocused ? '' : null"
+          [attr.data-range-pos]="dateData.rangePos"
+        >
+          <span class="day-band"></span>
+          <span class="day-chip"></span>
+          <span class="day-num">{{ getDay(dateData) }}</span>
         </div>
       }
     </div>

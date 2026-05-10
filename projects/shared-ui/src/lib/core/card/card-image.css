@@ -1,15 +1,32 @@
 @layer components {
   :host {
-    position: relative;
     display: block;
-    overflow: hidden;
+    width: 100%;
   }
 
   :host img {
+    display: block;
+    width: 100%;
+    height: auto;
     object-fit: cover;
   }
 
-  :host([data-full-width]) img {
+  /* constrained: inset by the shared card gutter, inner img gets its own rounding */
+  :host([data-full-width='0']) {
+    padding: 0 var(--card-padding-x);
+  }
+
+  :host([data-full-width='0']) img {
+    border-radius: var(--card-image-inset-radius);
+  }
+
+  /* fill mode: forced aspect ratio; ngOptimizedImage's [fill] places the img absolute inside us */
+  :host([data-mode='fill']) {
+    position: relative;
+    aspect-ratio: var(--card-image-fill-aspect-ratio);
+  }
+
+  :host([data-mode='fill']) img {
     width: 100%;
     height: 100%;
   }

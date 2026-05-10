@@ -1,14 +1,16 @@
-@let heightValue = height();
-@let widthValue = width();
-
-@if (heightValue && widthValue) {
+@if (mode() === 'fill') {
   <img
     [ngSrc]="cardImageBrainDirective.src()"
     [alt]="cardImageBrainDirective.alt()"
-    [width]="widthValue"
-    [height]="heightValue"
+    fill
     [priority]="priority()"
   />
 } @else {
-  <img [ngSrc]="cardImageBrainDirective.src()" [alt]="cardImageBrainDirective.alt()" fill [priority]="priority()" />
+  <img
+    [ngSrc]="cardImageBrainDirective.src()"
+    [alt]="cardImageBrainDirective.alt()"
+    [width]="width()!"
+    [height]="height()!"
+    [priority]="priority()"
+  />
 }

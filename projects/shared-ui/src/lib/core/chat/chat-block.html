@@ -1,0 +1,25 @@
+<button
+  orgChatBlockBrain
+  class="block-header"
+  [(expanded)]="expanded"
+>
+  <span class="block-kind">
+    <org-icon [name]="kindIcon()" size="xs" />
+  </span>
+  <span class="block-title">
+    @if (hasTitleEmphasis()) {
+      <span class="block-title-emphasis">{{ titleEmphasis() }}</span>
+    } @else {
+      {{ title() }}
+    }
+  </span>
+  @if (hasMeta()) {
+    <span class="block-meta">{{ meta() }}</span>
+  }
+  <span class="block-chevron">
+    <org-icon name="chevron-down" size="xs" />
+  </span>
+</button>
+<div class="block-body">
+  <ng-content />
+</div>

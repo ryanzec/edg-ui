@@ -2,7 +2,12 @@
   <div class="actions">
     <ng-content />
   </div>
-  <org-button variant="text" [iconOnly]="true" [ariaLabel]="sendAriaLabel()" (clicked)="onSendClick()">
-    <org-button-icon name="send" />
-  </org-button>
+  <org-button
+    variant="text"
+    [iconOnly]="true"
+    [label]="sendAriaLabel()"
+    [ariaLabel]="sendAriaLabel()"
+    preIcon="send"
+    (clicked)="onSendClick()"
+  />
 </div>

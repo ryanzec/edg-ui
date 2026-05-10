@@ -6,10 +6,10 @@
     [disabled]="!brain.canScrollLeft()"
     (clicked)="brain.scrollLeft()"
     buttonClass="shrink-0 self-center"
+    label="Scroll tabs left"
     ariaLabel="Scroll tabs left"
-  >
-    <org-button-icon name="chevron-left" />
-  </org-button>
+    preIcon="chevron-left"
+  />
 }
 
 <!--
@@ -36,8 +36,8 @@
     [disabled]="!brain.canScrollRight()"
     (clicked)="brain.scrollRight()"
     buttonClass="shrink-0 self-center"
+    label="Scroll tabs right"
     ariaLabel="Scroll tabs right"
-  >
-    <org-button-icon name="chevron-right" />
-  </org-button>
+    preIcon="chevron-right"
+  />
 }

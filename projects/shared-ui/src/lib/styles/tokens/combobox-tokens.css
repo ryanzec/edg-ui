@@ -1,0 +1,23 @@
+:root {
+  /* spacing */
+  --spacing-combobox-panel-pad: var(--spacing-1);
+  --spacing-combobox-anchor-gap: var(--spacing-1);
+  --spacing-combobox-option-x: var(--spacing-2_5);
+  --spacing-combobox-option-y: var(--spacing-1_5);
+  --spacing-combobox-option-gap: var(--spacing-2);
+  --spacing-combobox-group-y: var(--spacing-1);
+  --spacing-combobox-empty-y: var(--spacing-3);
+
+  /* sizing */
+  --sizing-combobox-option-min-height: var(--sizing-10xs);
+  --sizing-combobox-check-gutter: var(--sizing-12xs);
+  --sizing-combobox-panel-max-height: var(--sizing-xs);
+
+  /* typography */
+  --font-size-combobox-option: var(--font-size-base);
+  --font-size-combobox-group-label: var(--font-size-2xs);
+  --font-size-combobox-empty: var(--font-size-sm);
+
+  /* color */
+  --color-combobox-option-check: var(--color-fg);
+}

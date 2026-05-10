@@ -8,8 +8,8 @@
           value is effectively the same (like setting an array to a new array with the same values).
         </div>
         <div class="flex gap-2">
-          <org-button color="primary" (click)="updateSignalWithValue1()">Update Signal Value 1</org-button>
-          <org-button color="primary" (click)="updateSignalWithValue2()">Update Signal Value 2</org-button>
+          <org-button color="primary" label="Update Signal Value 1" (click)="updateSignalWithValue1()" />
+          <org-button color="primary" label="Update Signal Value 2" (click)="updateSignalWithValue2()" />
         </div>
         <div class="rounded border border-default-color bg-app p-3">
           <div class="text-sm font-medium text-fg">Effect triggered count:</div>
@@ -28,12 +28,8 @@
         </div>
         <div class="mt-auto flex flex-col gap-3">
           <div class="flex gap-2">
-            <org-button color="primary" (click)="updateSignalWithValue1CustomEquality()">
-              Update Signal Value 1
-            </org-button>
-            <org-button color="primary" (click)="updateSignalWithValue2CustomEquality()">
-              Update Signal Value 2
-            </org-button>
+            <org-button color="primary" label="Update Signal Value 1" (click)="updateSignalWithValue1CustomEquality()" />
+            <org-button color="primary" label="Update Signal Value 2" (click)="updateSignalWithValue2CustomEquality()" />
           </div>
           <div class="rounded border border-default-color bg-app p-3">
             <div class="text-sm font-medium text-fg">Effect triggered count:</div>

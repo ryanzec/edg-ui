@@ -30,9 +30,9 @@ import { Label } from '../../core/label/label';
     >
       <org-storybook-example-container-section label="Virtual Scroll Viewport">
         <div class="flex gap-2 mb-2">
-          <org-button color="primary" size="sm" (clicked)="scrollToFirst()">Scroll to First</org-button>
-          <org-button color="primary" size="sm" (clicked)="scrollToMiddle()">Scroll to Middle</org-button>
-          <org-button color="primary" size="sm" (clicked)="scrollToLast()">Scroll to Last</org-button>
+          <org-button color="primary" size="sm" label="Scroll to First" (clicked)="scrollToFirst()" />
+          <org-button color="primary" size="sm" label="Scroll to Middle" (clicked)="scrollToMiddle()" />
+          <org-button color="primary" size="sm" label="Scroll to Last" (clicked)="scrollToLast()" />
         </div>
         <cdk-virtual-scroll-viewport
           #viewport
@@ -137,9 +137,9 @@ class FixedSizeVirtualScrollDemoComponent {
     >
       <org-storybook-example-container-section label="Virtual Scroll Viewport">
         <div class="flex gap-2 mb-2">
-          <org-button color="primary" size="sm" (clicked)="scrollToFirst()">Scroll to First</org-button>
-          <org-button color="primary" size="sm" (clicked)="scrollToMiddle()">Scroll to Middle</org-button>
-          <org-button color="primary" size="sm" (clicked)="scrollToLast()">Scroll to Last</org-button>
+          <org-button color="primary" size="sm" label="Scroll to First" (clicked)="scrollToFirst()" />
+          <org-button color="primary" size="sm" label="Scroll to Middle" (clicked)="scrollToMiddle()" />
+          <org-button color="primary" size="sm" label="Scroll to Last" (clicked)="scrollToLast()" />
         </div>
         <cdk-virtual-scroll-viewport
           #viewport
@@ -310,9 +310,9 @@ class DynamicSizeVirtualScrollDemoComponent {
         </div>
 
         <div class="flex gap-2 mb-2">
-          <org-button color="primary" size="sm" (clicked)="scrollToFirst()">Scroll to First</org-button>
-          <org-button color="primary" size="sm" (clicked)="scrollToMiddle()">Scroll to Middle</org-button>
-          <org-button color="primary" size="sm" (clicked)="scrollToLast()">Scroll to Last</org-button>
+          <org-button color="primary" size="sm" label="Scroll to First" (clicked)="scrollToFirst()" />
+          <org-button color="primary" size="sm" label="Scroll to Middle" (clicked)="scrollToMiddle()" />
+          <org-button color="primary" size="sm" label="Scroll to Last" (clicked)="scrollToLast()" />
         </div>
 
         <cdk-virtual-scroll-viewport

@@ -1,8 +1,9 @@
 @layer components {
   :host {
     display: flex;
-    gap: var(--spacing-1);
-    padding: 0 var(--spacing-3) var(--spacing-3);
+    align-items: center;
+    gap: var(--card-footer-gap);
+    padding: var(--card-padding-y) var(--card-padding-x);
   }
 
   :host([data-alignment='start']) {

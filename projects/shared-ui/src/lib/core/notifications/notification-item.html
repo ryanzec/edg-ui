@@ -12,12 +12,13 @@
         <org-button
           variant="text"
           color="neutral"
+          [iconOnly]="true"
           [excludeSpacing]="true"
-          [attr.aria-label]="brain.closeButtonAriaLabel()"
+          [label]="brain.closeButtonAriaLabel()"
+          [ariaLabel]="brain.closeButtonAriaLabel()"
+          preIcon="x"
           (click)="startClose()"
-        >
-          <org-button-icon name="x" />
-        </org-button>
+        />
       }
     </div>
   </org-card-content>

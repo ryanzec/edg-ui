@@ -22,27 +22,17 @@ import { StorybookExampleContainerSection } from '../../private/storybook-exampl
 
       <org-storybook-example-container-section label="Toggle Sort">
         <div class="flex flex-wrap gap-2">
-          <org-button color="primary" size="sm" (click)="sortingStore.toggleSort('name')">
-            Toggle Sort: Name
-          </org-button>
-          <org-button color="primary" size="sm" (click)="sortingStore.toggleSort('date')">
-            Toggle Sort: Date
-          </org-button>
-          <org-button color="primary" size="sm" (click)="sortingStore.toggleSort('status')">
-            Toggle Sort: Status
-          </org-button>
+          <org-button color="primary" size="sm" label="Toggle Sort: Name" (click)="sortingStore.toggleSort('name')" />
+          <org-button color="primary" size="sm" label="Toggle Sort: Date" (click)="sortingStore.toggleSort('date')" />
+          <org-button color="primary" size="sm" label="Toggle Sort: Status" (click)="sortingStore.toggleSort('status')" />
         </div>
       </org-storybook-example-container-section>
 
       <org-storybook-example-container-section label="Set Sort">
         <div class="flex flex-wrap gap-2">
-          <org-button color="secondary" size="sm" (click)="sortingStore.setSort('name', 'asc')">
-            Set: Name ASC
-          </org-button>
-          <org-button color="secondary" size="sm" (click)="sortingStore.setSort('date', 'desc')">
-            Set: Date DESC
-          </org-button>
-          <org-button color="neutral" size="sm" (click)="sortingStore.clearSort()"> Clear Sort </org-button>
+          <org-button color="secondary" size="sm" label="Set: Name ASC" (click)="sortingStore.setSort('name', 'asc')" />
+          <org-button color="secondary" size="sm" label="Set: Date DESC" (click)="sortingStore.setSort('date', 'desc')" />
+          <org-button color="neutral" size="sm" label="Clear Sort" (click)="sortingStore.clearSort()" />
         </div>
       </org-storybook-example-container-section>
     </org-storybook-example-container>

@@ -3,97 +3,95 @@
     display: inline-flex;
   }
 
-  :host([data-size='2xs']) svg {
-    width: var(--icon-size-2xs);
-    height: var(--icon-size-2xs);
+  :host svg {
+    width: var(--icon-size);
+    height: var(--icon-size);
+    color: var(--icon-color);
   }
 
-  :host([data-size='xs']) svg {
-    width: var(--icon-size-xs);
-    height: var(--icon-size-xs);
+  /*
+   * sizes
+   * because there is internal spacing in the icon itself we add a little to the size to help is better match
+   * when it is next to text
+   */
+  :host([data-size='2xs']) {
+    --icon-size: calc(var(--font-size-2xs) + 0.0625rem); /* 1px */
   }
 
-  :host([data-size='sm']) svg {
-    width: var(--icon-size-sm);
-    height: var(--icon-size-sm);
+  :host([data-size='xs']) {
+    --icon-size: calc(var(--font-size-xs) + 0.0625rem); /* 1px */
   }
 
-  :host([data-size='base']) svg {
-    width: var(--icon-size-base);
-    height: var(--icon-size-base);
+  :host([data-size='sm']) {
+    --icon-size: calc(var(--font-size-sm) + 0.125rem); /* 2px */
   }
 
-  :host([data-size='5xl']) svg {
-    width: var(--icon-size-5xl);
-    height: var(--icon-size-5xl);
+  :host([data-size='base']) {
+    --icon-size: calc(var(--font-size-base) + 0.1875rem); /* 3px */
   }
 
-  :host([data-size='lg']) svg {
-    width: var(--icon-size-lg);
-    height: var(--icon-size-lg);
+  :host([data-size='lg']) {
+    --icon-size: calc(var(--font-size-lg) + 0.1875rem); /* 3px */
   }
 
-  :host([data-size='xl']) svg {
-    width: var(--icon-size-xl);
-    height: var(--icon-size-xl);
+  :host([data-size='xl']) {
+    --icon-size: calc(var(--font-size-xl) + 0.1875rem); /* 3px */
   }
 
-  :host([data-size='2xl']) svg {
-    width: var(--icon-size-2xl);
-    height: var(--icon-size-2xl);
+  :host([data-size='2xl']) {
+    --icon-size: calc(var(--font-size-2xl) + 0.1875rem); /* 3px */
   }
 
-  :host([data-size='3xl']) svg {
-    width: var(--icon-size-3xl);
-    height: var(--icon-size-3xl);
+  :host([data-size='3xl']) {
+    --icon-size: calc(var(--font-size-3xl) + 0.1875rem); /* 3px */
   }
 
-  :host([data-size='4xl']) svg {
-    width: var(--icon-size-4xl);
-    height: var(--icon-size-4xl);
+  :host([data-size='4xl']) {
+    --icon-size: calc(var(--font-size-4xl) + 0.25rem); /* 4px */
   }
 
-  :host([data-color='inherit']) svg {
-    color: var(--icon-color-inherit);
+  :host([data-size='5xl']) {
+    --icon-size: calc(var(--font-size-5xl) + 0.25rem); /* 4px */
   }
 
-  :host([data-color='muted']) svg {
-    color: var(--icon-color-muted);
+  /* colors */
+  :host([data-color='muted']) {
+    --icon-color: var(--color-fg-muted);
   }
 
-  :host([data-color='faint']) svg {
-    color: var(--icon-color-faint);
+  :host([data-color='faint']) {
+    --icon-color: var(--color-fg-faint);
   }
 
-  :host([data-color='primary']) svg {
-    color: var(--icon-color-primary);
+  :host([data-color='primary']) {
+    --icon-color: var(--color-primary);
   }
 
-  :host([data-color='secondary']) svg {
-    color: var(--icon-color-secondary);
+  :host([data-color='secondary']) {
+    --icon-color: var(--color-secondary);
   }
 
-  :host([data-color='neutral']) svg {
-    color: var(--icon-color-neutral);
+  :host([data-color='neutral']) {
+    --icon-color: var(--color-neutral);
   }
 
-  :host([data-color='safe']) svg {
-    color: var(--icon-color-safe);
+  :host([data-color='safe']) {
+    --icon-color: var(--color-safe);
   }
 
-  :host([data-color='info']) svg {
-    color: var(--icon-color-info);
+  :host([data-color='info']) {
+    --icon-color: var(--color-info);
   }
 
-  :host([data-color='caution']) svg {
-    color: var(--icon-color-caution);
+  :host([data-color='caution']) {
+    --icon-color: var(--color-caution);
   }
 
-  :host([data-color='warning']) svg {
-    color: var(--icon-color-warning);
+  :host([data-color='warning']) {
+    --icon-color: var(--color-warning);
   }
 
-  :host([data-color='danger']) svg {
-    color: var(--icon-color-danger);
+  :host([data-color='danger']) {
+    --icon-color: var(--color-danger);
   }
 }

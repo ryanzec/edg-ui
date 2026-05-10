@@ -441,7 +441,7 @@ export const VerticalBarChart: Story = {
         <org-storybook-example-container title="Vertical Bar Chart">
           <org-storybook-example-container-section label="Example">
             <div>
-              <org-button (clicked)="onRefresh()">Refresh Data</org-button>
+              <org-button label="Refresh Data" (clicked)="onRefresh()" />
             </div>
             <org-chart containerClass="self-stretch w-full" [config]="chartConfig()" />
           </org-storybook-example-container-section>
@@ -468,7 +468,7 @@ export const HorizontalBarChart: Story = {
         <org-storybook-example-container title="Horizontal Bar Chart">
           <org-storybook-example-container-section label="Example">
             <div>
-              <org-button (clicked)="onRefresh()">Refresh Data</org-button>
+              <org-button label="Refresh Data" (clicked)="onRefresh()" />
             </div>
             <org-chart [config]="chartConfig()" class="w-full" />
           </org-storybook-example-container-section>
@@ -495,7 +495,7 @@ export const StackedBarChart: Story = {
         <org-storybook-example-container title="Stacked Bar Chart">
           <org-storybook-example-container-section label="Example">
             <div>
-              <org-button (clicked)="onRefresh()">Refresh Data</org-button>
+              <org-button label="Refresh Data" (clicked)="onRefresh()" />
             </div>
             <org-chart [config]="chartConfig()" class="w-full" />
           </org-storybook-example-container-section>
@@ -522,7 +522,7 @@ export const LineChart: Story = {
         <org-storybook-example-container title="Line Chart with Fill">
           <org-storybook-example-container-section label="Example">
             <div>
-              <org-button (clicked)="onRefresh()">Refresh Data</org-button>
+              <org-button label="Refresh Data" (clicked)="onRefresh()" />
             </div>
             <org-chart [config]="chartConfig()" class="w-full" />
           </org-storybook-example-container-section>
@@ -549,7 +549,7 @@ export const BubbleChart: Story = {
         <org-storybook-example-container title="Bubble Chart">
           <org-storybook-example-container-section label="Example">
             <div>
-              <org-button (clicked)="onRefresh()">Refresh Data</org-button>
+              <org-button label="Refresh Data" (clicked)="onRefresh()" />
             </div>
             <org-chart [config]="chartConfig()" class="w-full" />
           </org-storybook-example-container-section>
@@ -576,7 +576,7 @@ export const PieChart: Story = {
         <org-storybook-example-container title="Pie Chart">
           <org-storybook-example-container-section label="Example">
             <div>
-              <org-button (clicked)="onRefresh()">Refresh Data</org-button>
+              <org-button label="Refresh Data" (clicked)="onRefresh()" />
             </div>
             <org-chart [config]="chartConfig()" class="w-full" />
           </org-storybook-example-container-section>
@@ -603,7 +603,7 @@ export const PolarChart: Story = {
         <org-storybook-example-container title="Polar Area Chart">
           <org-storybook-example-container-section label="Example">
             <div>
-              <org-button (clicked)="onRefresh()">Refresh Data</org-button>
+              <org-button label="Refresh Data" (clicked)="onRefresh()" />
             </div>
             <org-chart [config]="chartConfig()" class="w-full" />
           </org-storybook-example-container-section>
@@ -630,7 +630,7 @@ export const RadarChart: Story = {
         <org-storybook-example-container title="Radar Chart">
           <org-storybook-example-container-section label="Example">
             <div>
-              <org-button (clicked)="onRefresh()">Refresh Data</org-button>
+              <org-button label="Refresh Data" (clicked)="onRefresh()" />
             </div>
             <org-chart [config]="chartConfig()" class="w-full" />
           </org-storybook-example-container-section>
@@ -665,9 +665,9 @@ export const ChartTypeSwitch: Story = {
         <org-storybook-example-container title="Chart Type Switch" currentState="Switching between chart types destroys and recreates the chart instance">
           <org-storybook-example-container-section label="Example">
             <div class="flex gap-2">
-              <org-button (clicked)="switchToBar()">Bar</org-button>
-              <org-button (clicked)="switchToLine()">Line</org-button>
-              <org-button (clicked)="switchToRadar()">Radar</org-button>
+              <org-button label="Bar" (clicked)="switchToBar()" />
+              <org-button label="Line" (clicked)="switchToLine()" />
+              <org-button label="Radar" (clicked)="switchToRadar()" />
             </div>
             <org-chart [config]="chartConfig()" class="w-full" />
           </org-storybook-example-container-section>

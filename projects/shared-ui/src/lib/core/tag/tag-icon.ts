@@ -12,12 +12,11 @@ import { Tag } from './tag';
   hostDirectives: [
     {
       directive: TagIconBrainDirective,
-      inputs: ['name', 'removable', 'ariaLabel'],
-      outputs: ['clicked', 'removed'],
+      inputs: ['name', 'ariaLabel'],
+      outputs: ['clicked'],
     },
   ],
   host: {
-    '[attr.data-removable]': 'brain.removable() ? "" : null',
     '[attr.data-suppressed]': 'isSuppressedByParent() ? "" : null',
   },
 })

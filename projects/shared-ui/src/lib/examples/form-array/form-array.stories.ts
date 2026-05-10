@@ -15,7 +15,6 @@ import { Combobox } from '../../core/combobox/combobox';
 import { type ComboboxOptionInput } from '../../core/combobox-store/combobox-store';
 import { DatePickerInput } from '../../core/date-picker-input/date-picker-input';
 import { Button } from '../../core/button/button';
-import { ButtonIcon } from '../../core/button/button-icon';
 import { Label } from '../../core/label/label';
 import { FormField } from '../../core/form-fields/form-field';
 import { FormFields } from '../../core/form-fields/form-fields';
@@ -176,7 +175,7 @@ const itemSchema = z.object({
             </org-form-fields>
           </div>
 
-          <org-button type="submit" color="primary" buttonClass="w-full mt-1">Submit Form</org-button>
+          <org-button type="submit" color="primary" buttonClass="w-full mt-1" label="Submit Form" />
         </form>
       </org-storybook-example-container-section>
 
@@ -430,7 +429,7 @@ class NestedObjectDemoComponent {
             </org-form-fields>
           </div>
 
-          <org-button type="submit" color="primary" buttonClass="w-full mt-1">Submit Form</org-button>
+          <org-button type="submit" color="primary" buttonClass="w-full mt-1" label="Submit Form" />
         </form>
       </org-storybook-example-container-section>
 
@@ -588,7 +587,6 @@ class NestedObjectWithDefaultsDemoComponent {
     StorybookExampleContainerSection,
     Input,
     Button,
-    ButtonIcon,
     Label,
     FormField,
     FormFields,
@@ -602,7 +600,7 @@ class NestedObjectWithDefaultsDemoComponent {
         <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-1 max-w-lg">
           <div class="flex items-center justify-between mb-1">
             <div class="text-sm font-semibold">Tags</div>
-            <org-button type="button" color="primary" size="sm" (clicked)="addTag()">Add Tag</org-button>
+            <org-button type="button" color="primary" size="sm" label="Add Tag" (clicked)="addTag()" />
           </div>
 
           <div formArrayName="tags" class="flex flex-col gap-2">
@@ -621,11 +619,11 @@ class NestedObjectWithDefaultsDemoComponent {
                   variant="ghost"
                   size="sm"
                   [iconOnly]="true"
+                  label="Remove tag"
                   ariaLabel="Remove tag"
+                  preIcon="trash"
                   (clicked)="removeTag($index)"
-                >
-                  <org-button-icon name="trash" />
-                </org-button>
+                />
               </div>
             }
 
@@ -634,7 +632,7 @@ class NestedObjectWithDefaultsDemoComponent {
             }
           </div>
 
-          <org-button type="submit" color="primary" buttonClass="w-full mt-1">Submit Form</org-button>
+          <org-button type="submit" color="primary" buttonClass="w-full mt-1" label="Submit Form" />
         </form>
       </org-storybook-example-container-section>
 
@@ -734,7 +732,6 @@ class ArrayOfTextDemoComponent {
     StorybookExampleContainerSection,
     Input,
     Button,
-    ButtonIcon,
     Label,
     FormField,
     FormFields,
@@ -748,7 +745,7 @@ class ArrayOfTextDemoComponent {
         <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-1 max-w-lg">
           <div class="flex items-center justify-between mb-1">
             <div class="text-sm font-semibold">Tags</div>
-            <org-button type="button" color="primary" size="sm" (clicked)="addTag()">Add Tag</org-button>
+            <org-button type="button" color="primary" size="sm" label="Add Tag" (clicked)="addTag()" />
           </div>
 
           <div formArrayName="tags" class="flex flex-col gap-2">
@@ -767,16 +764,16 @@ class ArrayOfTextDemoComponent {
                   variant="ghost"
                   size="sm"
                   [iconOnly]="true"
+                  label="Remove tag"
                   ariaLabel="Remove tag"
+                  preIcon="trash"
                   (clicked)="removeTag($index)"
-                >
-                  <org-button-icon name="trash" />
-                </org-button>
+                />
               </div>
             }
           </div>
 
-          <org-button type="submit" color="primary" buttonClass="w-full mt-1">Submit Form</org-button>
+          <org-button type="submit" color="primary" buttonClass="w-full mt-1" label="Submit Form" />
         </form>
       </org-storybook-example-container-section>
 
@@ -903,7 +900,6 @@ class ArrayOfTextWithDefaultsDemoComponent {
     Combobox,
     DatePickerInput,
     Button,
-    ButtonIcon,
     Label,
     FormField,
     FormFields,
@@ -917,7 +913,7 @@ class ArrayOfTextWithDefaultsDemoComponent {
         <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-1 max-w-lg">
           <div class="flex items-center justify-between mb-1">
             <div class="text-sm font-semibold">Items</div>
-            <org-button type="button" color="primary" size="sm" (clicked)="addItem()">Add Item</org-button>
+            <org-button type="button" color="primary" size="sm" label="Add Item" (clicked)="addItem()" />
           </div>
 
           <div formArrayName="items" class="flex flex-col gap-3">
@@ -931,11 +927,11 @@ class ArrayOfTextWithDefaultsDemoComponent {
                     variant="ghost"
                     size="sm"
                     [iconOnly]="true"
+                    label="Remove item"
                     ariaLabel="Remove item"
+                    preIcon="trash"
                     (clicked)="removeItem($index)"
-                  >
-                    <org-button-icon name="trash" />
-                  </org-button>
+                  />
                 </div>
 
                 <org-form-fields>
@@ -1034,7 +1030,7 @@ class ArrayOfTextWithDefaultsDemoComponent {
             }
           </div>
 
-          <org-button type="submit" color="primary" buttonClass="w-full mt-1">Submit Form</org-button>
+          <org-button type="submit" color="primary" buttonClass="w-full mt-1" label="Submit Form" />
         </form>
       </org-storybook-example-container-section>
 
@@ -1191,7 +1187,6 @@ class ArrayOfObjectsDemoComponent {
     Combobox,
     DatePickerInput,
     Button,
-    ButtonIcon,
     Label,
     FormField,
     FormFields,
@@ -1205,7 +1200,7 @@ class ArrayOfObjectsDemoComponent {
         <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-1 max-w-lg">
           <div class="flex items-center justify-between mb-1">
             <div class="text-sm font-semibold">Items</div>
-            <org-button type="button" color="primary" size="sm" (clicked)="addItem()">Add Item</org-button>
+            <org-button type="button" color="primary" size="sm" label="Add Item" (clicked)="addItem()" />
           </div>
 
           <div formArrayName="items" class="flex flex-col gap-3">
@@ -1219,11 +1214,11 @@ class ArrayOfObjectsDemoComponent {
                     variant="ghost"
                     size="sm"
                     [iconOnly]="true"
+                    label="Remove item"
                     ariaLabel="Remove item"
+                    preIcon="trash"
                     (clicked)="removeItem($index)"
-                  >
-                    <org-button-icon name="trash" />
-                  </org-button>
+                  />
                 </div>
 
                 <org-form-fields>
@@ -1327,7 +1322,7 @@ class ArrayOfObjectsDemoComponent {
             }
           </div>
 
-          <org-button type="submit" color="primary" buttonClass="w-full mt-1">Submit Form</org-button>
+          <org-button type="submit" color="primary" buttonClass="w-full mt-1" label="Submit Form" />
         </form>
       </org-storybook-example-container-section>
 

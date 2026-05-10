@@ -1,4 +1,4 @@
-<div class="options-panel">
+<div class="combobox-panel">
   <org-scroll-area
     #optionsScrollAreaComponent
     [enabled]="brain.isScrollNeeded()"
@@ -8,35 +8,27 @@
     <div [attr.id]="brain.listboxId()" [attr.role]="brain.listboxRole" [attr.aria-label]="brain.listboxAriaLabel">
       @if (hasFilteredOptions()) {
         @if (!isGroupingEnabled()) {
-          <org-list>
-            @for (option of filteredOptions(); track option.value) {
-              <org-combobox-option [option]="option" />
-            }
-          </org-list>
+          @for (option of filteredOptions(); track option.value) {
+            <org-combobox-option [option]="option" />
+          }
         } @else {
           @for (group of filteredGroupedOptions(); track group.groupLabel) {
-            <div class="group" [attr.role]="brain.groupRole" [attr.aria-label]="group.groupLabel">
-              <div class="group-label">{{ group.groupLabel }}</div>
-              <org-list>
-                @for (option of group.options; track option.value) {
-                  <org-combobox-option [option]="option" />
-                }
-              </org-list>
+            <div class="combobox-group" [attr.role]="brain.groupRole" [attr.aria-label]="group.groupLabel">
+              <div class="combobox-group-label">{{ group.groupLabel }}</div>
+              @for (option of group.options; track option.value) {
+                <org-combobox-option [option]="option" />
+              }
             </div>
           }
         }
       }
 
       @if (newOptionSuggestion(); as suggestion) {
-        <org-list>
-          <org-combobox-option [option]="suggestion" displayLabelPrefix="Add" />
-        </org-list>
+        <org-combobox-option [option]="suggestion" displayLabelPrefix="Add" />
       }
 
       @if (!hasFilteredOptions() && !newOptionSuggestion()) {
-        <org-list>
-          <org-list-item label="No options available" />
-        </org-list>
+        <div class="combobox-empty">No options available</div>
       }
     </div>
   </org-scroll-area>

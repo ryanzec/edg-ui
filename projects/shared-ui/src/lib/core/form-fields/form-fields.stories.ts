@@ -1,12 +1,102 @@
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import type { Meta, StoryObj } from '@storybook/angular';
-import { FormFields } from './form-fields';
-import { FormField } from './form-field';
-import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
-import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
+import { CheckboxToggle } from '../checkbox-toggle/checkbox-toggle';
+import { Checkbox } from '../checkbox/checkbox';
 import { Input } from '../input/input';
 import { Label } from '../label/label';
 import { Textarea } from '../textarea/textarea';
-import { Checkbox } from '../checkbox/checkbox';
+import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
+import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
+import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
+import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
+import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
+import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
+import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
+import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
+import { FormField } from './form-field';
+import { FormFields } from './form-fields';
+
+@Component({
+  selector: 'story-form-field-live-demo',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    ReactiveFormsModule,
+    FormField,
+    Input,
+    Label,
+    CheckboxToggle,
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoControls,
+    DesignSystemDemoControlGroup,
+    DesignSystemDemoCanvas,
+  ],
+  styles: [
+    `
+      :host {
+        display: block;
+      }
+      .canvas-stage {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 6rem; /* 96px */
+      }
+      .canvas-stage > org-form-field {
+        width: 100%;
+        max-width: 24rem; /* 384px */
+      }
+    `,
+  ],
+  template: `
+    <form [formGroup]="liveDemoForm">
+      <org-design-system-demo>
+        <org-design-system-demo-header
+          slot="header"
+          title="Live demo"
+          description="All form fields below are real and interactive — hover, focus, press, or tab through them to see every state."
+        />
+        <org-design-system-demo-controls slot="controls">
+          <org-design-system-demo-control-group label="Validation message">
+            <org-input
+              name="live-demo-validation-message"
+              formControlName="validationMessage"
+              placeholder="Type a message to flip into the error state"
+              ariaLabel="Validation message"
+            />
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Reserve validation space">
+            <org-checkbox-toggle
+              name="live-demo-reserve-validation-space"
+              value="reserveValidationSpace"
+              formControlName="reserveValidationSpace"
+            >
+              {{ liveDemoForm.controls.reserveValidationSpace.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
+        </org-design-system-demo-controls>
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="canvas-stage">
+            <org-form-field
+              [validationMessage]="liveDemoForm.controls.validationMessage.value"
+              [reserveValidationSpace]="liveDemoForm.controls.reserveValidationSpace.value"
+            >
+              <org-label text="Email" htmlFor="live-demo-form-field-email" />
+              <org-input name="live-demo-form-field-email" type="email" placeholder="you@example.com" />
+            </org-form-field>
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+    </form>
+  `,
+})
+class StoryFormFieldLiveDemo {
+  protected readonly liveDemoForm = new FormGroup({
+    validationMessage: new FormControl<string>('', { nonNullable: true }),
+    reserveValidationSpace: new FormControl<boolean>(false, { nonNullable: true }),
+  });
+}
 
 const meta: Meta<FormFields> = {
   title: 'Core/Components/Form Fields',
@@ -88,9 +178,6 @@ const meta: Meta<FormFields> = {
 
 export default meta;
 type Story = StoryObj<FormFields>;
-// the validationMessage input comes from the host-directive forwarding on `FormField`, which storybook's
-// signal-input type extraction does not see, so it is augmented onto the args type here.
-type FormFieldStory = StoryObj<FormField & { validationMessage: string | null }>;
 
 export const Default: Story = {
   args: {
@@ -136,49 +223,269 @@ export const Default: Story = {
   }),
 };
 
-export const WithMixedFormElements: Story = {
+export const LiveDemo: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Form fields container with different types of form elements (inputs, textareas, checkboxes).',
+        story:
+          'Fully interactive demo of org-form-field. Type into the validation-message control to flip the field into its error state, and toggle reserve-validation-space to see how the layout reserves vertical room when no message is present.',
+      },
+    },
+  },
+  render: () => ({
+    template: `<story-form-field-live-demo />`,
+    moduleMetadata: {
+      imports: [StoryFormFieldLiveDemo],
+    },
+  }),
+};
+
+export const Showcase: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Comprehensive showcase of every form-fields / form-field axis — mixed form-element types, validation messaging across both wrapper and standalone usage, multi-group composition, reserved validation space (container default and per-field override), and inputs with leading/trailing icons — in a single scrollable view.',
       },
     },
   },
   render: () => ({
     template: `
-      <org-storybook-example-container
-        title="Mixed Form Elements"
-        currentState="Showing various form element types with consistent spacing"
-      >
-        <org-storybook-example-container-section label="Text Input + Textarea + Checkbox">
-          <org-form-fields>
-            <org-form-field>
-              <org-label text="Name" htmlFor="name-input-mixed" />
-              <org-input name="name-input-mixed" placeholder="Enter your name" />
-            </org-form-field>
+      <div class="flex flex-col gap-4">
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Mixed Form Elements" />
+          <org-design-system-demo-canvas slot="canvas">
+            <org-form-fields>
+              <org-form-field>
+                <org-label text="Name" htmlFor="showcase-mixed-name" />
+                <org-input name="showcase-mixed-name" placeholder="Enter your name" />
+              </org-form-field>
 
-            <org-form-field>
-              <org-label text="Email" htmlFor="email-input-mixed" />
-              <org-input name="email-input-mixed" type="email" placeholder="Enter your email" />
-            </org-form-field>
+              <org-form-field>
+                <org-label text="Email" htmlFor="showcase-mixed-email" />
+                <org-input name="showcase-mixed-email" type="email" placeholder="Enter your email" />
+              </org-form-field>
 
-            <org-form-field>
-              <org-label text="Message" htmlFor="message-textarea-mixed" />
-              <org-textarea name="message-textarea-mixed" placeholder="Enter your message..." />
-            </org-form-field>
+              <org-form-field>
+                <org-label text="Message" htmlFor="showcase-mixed-message" />
+                <org-textarea name="showcase-mixed-message" placeholder="Enter your message..." />
+              </org-form-field>
 
-            <org-form-field>
-              <org-checkbox name="subscribe-checkbox-mixed" value="subscribe">Subscribe to newsletter</org-checkbox>
-            </org-form-field>
-          </org-form-fields>
-        </org-storybook-example-container-section>
+              <org-form-field>
+                <org-checkbox name="showcase-mixed-subscribe" value="subscribe">Subscribe to newsletter</org-checkbox>
+              </org-form-field>
+            </org-form-fields>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li>All form elements maintain consistent vertical spacing (gap-1)</li>
+            <li>Works seamlessly with inputs, textareas, checkboxes, and labels</li>
+            <li>Labels and their corresponding inputs are grouped naturally</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
 
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li>All form elements maintain consistent vertical spacing (gap-1)</li>
-          <li>Works seamlessly with inputs, textareas, checkboxes, and labels</li>
-          <li>Labels and their corresponding inputs are grouped naturally</li>
-        </ul>
-      </org-storybook-example-container>
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="With Validation Messages" />
+          <org-design-system-demo-canvas slot="canvas">
+            <org-form-fields>
+              <org-form-field>
+                <org-label text="Email (Valid)" htmlFor="showcase-validation-email-valid" />
+                <org-input
+                  name="showcase-validation-email-valid"
+                  type="email"
+                  placeholder="Enter email"
+                  value="user@example.com"
+                />
+              </org-form-field>
+
+              <org-form-field validationMessage="Please enter a valid email address">
+                <org-label text="Email (Invalid)" htmlFor="showcase-validation-email-invalid" />
+                <org-input
+                  name="showcase-validation-email-invalid"
+                  type="email"
+                  placeholder="Enter email"
+                  value="invalid@"
+                />
+              </org-form-field>
+
+              <org-form-field validationMessage="Password must be at least 8 characters">
+                <org-label text="Password (Invalid)" htmlFor="showcase-validation-password-invalid" />
+                <org-input
+                  name="showcase-validation-password-invalid"
+                  type="password"
+                  placeholder="Enter password"
+                  value="123"
+                />
+              </org-form-field>
+            </org-form-fields>
+
+            <org-form-fields>
+              <org-form-field>
+                <org-label text="Valid Field" htmlFor="showcase-validation-standalone-valid" />
+                <org-input name="showcase-validation-standalone-valid" placeholder="No validation error" />
+              </org-form-field>
+
+              <org-form-field validationMessage="This field is required">
+                <org-label text="Invalid Field" htmlFor="showcase-validation-standalone-invalid" />
+                <org-input name="showcase-validation-standalone-invalid" placeholder="Has a validation error" />
+              </org-form-field>
+            </org-form-fields>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li>Validation messages appear below their respective inputs</li>
+            <li>Spacing remains consistent even with validation messages</li>
+            <li>Works for both grouped fields inside org-form-fields and standalone org-form-field usage</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Multiple Form Field Groups" />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="flex flex-col gap-6">
+              <div>
+                <h3 class="mb-2 font-semibold">Personal Information</h3>
+                <org-form-fields>
+                  <org-form-field>
+                    <org-label text="First Name" htmlFor="showcase-multi-first-name" />
+                    <org-input name="showcase-multi-first-name" placeholder="Enter first name" />
+                  </org-form-field>
+
+                  <org-form-field>
+                    <org-label text="Last Name" htmlFor="showcase-multi-last-name" />
+                    <org-input name="showcase-multi-last-name" placeholder="Enter last name" />
+                  </org-form-field>
+                </org-form-fields>
+              </div>
+
+              <div>
+                <h3 class="mb-2 font-semibold">Account Details</h3>
+                <org-form-fields>
+                  <org-form-field>
+                    <org-label text="Username" htmlFor="showcase-multi-username" />
+                    <org-input name="showcase-multi-username" placeholder="Enter username" />
+                  </org-form-field>
+
+                  <org-form-field>
+                    <org-label text="Password" htmlFor="showcase-multi-password" />
+                    <org-input name="showcase-multi-password" type="password" placeholder="Enter password" />
+                  </org-form-field>
+                </org-form-fields>
+              </div>
+            </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li>Multiple form-fields containers can be used to organize form sections</li>
+            <li>Each container maintains its own internal spacing</li>
+            <li>Additional spacing between containers should be handled externally</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Reserve Validation Space" />
+          <org-design-system-demo-canvas slot="canvas">
+            <org-form-fields [reserveValidationSpace]="true">
+              <org-form-field>
+                <org-label text="First Name" htmlFor="showcase-rvs-true-first-name" />
+                <org-input name="showcase-rvs-true-first-name" placeholder="Enter first name" />
+              </org-form-field>
+
+              <org-form-field validationMessage="Last name is required">
+                <org-label text="Last Name" htmlFor="showcase-rvs-true-last-name" />
+                <org-input name="showcase-rvs-true-last-name" placeholder="Enter last name" />
+              </org-form-field>
+
+              <org-form-field>
+                <org-label text="Email" htmlFor="showcase-rvs-true-email" />
+                <org-input name="showcase-rvs-true-email" type="email" placeholder="Enter email" />
+              </org-form-field>
+            </org-form-fields>
+
+            <org-form-fields [reserveValidationSpace]="false">
+              <org-form-field>
+                <org-label text="First Name" htmlFor="showcase-rvs-false-first-name" />
+                <org-input name="showcase-rvs-false-first-name" placeholder="Enter first name" />
+              </org-form-field>
+
+              <org-form-field validationMessage="Last name is required">
+                <org-label text="Last Name" htmlFor="showcase-rvs-false-last-name" />
+                <org-input name="showcase-rvs-false-last-name" placeholder="Enter last name" />
+              </org-form-field>
+
+              <org-form-field>
+                <org-label text="Email" htmlFor="showcase-rvs-false-email" />
+                <org-input name="showcase-rvs-false-email" type="email" placeholder="Enter email" />
+              </org-form-field>
+            </org-form-fields>
+
+            <org-form-fields>
+              <org-form-field [reserveValidationSpace]="false">
+                <org-label text="First Name" htmlFor="showcase-rvs-override-first-name" />
+                <org-input name="showcase-rvs-override-first-name" placeholder="No space reserved below" />
+              </org-form-field>
+
+              <org-form-field [reserveValidationSpace]="false">
+                <org-label text="Last Name" htmlFor="showcase-rvs-override-last-name" />
+                <org-input name="showcase-rvs-override-last-name" placeholder="No space reserved below" />
+              </org-form-field>
+            </org-form-fields>
+
+            <org-form-field [reserveValidationSpace]="true">
+              <org-label text="First Name" htmlFor="showcase-rvs-standalone-first-name" />
+              <org-input
+                name="showcase-rvs-standalone-first-name"
+                placeholder="Explicit reserveValidationSpace=true, no parent org-form-fields"
+              />
+            </org-form-field>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li>With reserveValidationSpace=true on org-form-fields, all child fields keep the same height regardless of validation state</li>
+            <li>With reserveValidationSpace=false on org-form-fields, fields without a validation message collapse the validation area, causing layout shift</li>
+            <li>Per-field [reserveValidationSpace]="false" overrides the parent org-form-fields setting</li>
+            <li>Standalone org-form-field with explicit [reserveValidationSpace]="true" reserves space without a parent org-form-fields</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="With Input Icons" />
+          <org-design-system-demo-canvas slot="canvas">
+            <org-form-fields>
+              <org-form-field>
+                <org-label text="Search" htmlFor="showcase-icons-search" />
+                <org-input name="showcase-icons-search" preIcon="search" placeholder="Search..." />
+              </org-form-field>
+
+              <org-form-field>
+                <org-label text="Email" htmlFor="showcase-icons-email" />
+                <org-input name="showcase-icons-email" preIcon="mail" type="email" placeholder="Enter email" />
+              </org-form-field>
+
+              <org-form-field>
+                <org-label text="Password" htmlFor="showcase-icons-password" />
+                <org-input
+                  name="showcase-icons-password"
+                  type="password"
+                  [showPasswordToggle]="true"
+                  placeholder="Enter password"
+                />
+              </org-form-field>
+            </org-form-fields>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li>Icons in inputs don't affect the consistent spacing</li>
+            <li>Works with pre-icons, post-icons, and password toggles</li>
+            <li>Labels align properly regardless of input icon configuration</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+      </div>
     `,
     moduleMetadata: {
       imports: [
@@ -188,391 +495,11 @@ export const WithMixedFormElements: Story = {
         Input,
         Textarea,
         Checkbox,
-        StorybookExampleContainer,
-        StorybookExampleContainerSection,
+        DesignSystemDemo,
+        DesignSystemDemoHeader,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
       ],
-    },
-  }),
-};
-
-export const WithValidation: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Form fields container with validation messages displayed under inputs.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="With Validation Messages"
-        currentState="Showing form fields with validation errors"
-      >
-        <org-storybook-example-container-section label="Valid and Invalid Inputs">
-          <org-form-fields>
-            <org-form-field>
-              <org-label text="Email (Valid)" htmlFor="email-valid-input" />
-              <org-input name="email-valid-input" type="email" placeholder="Enter email" value="user@example.com" />
-            </org-form-field>
-
-            <org-form-field validationMessage="Please enter a valid email address">
-              <org-label text="Email (Invalid)" htmlFor="email-invalid-input" />
-              <org-input
-                name="email-invalid-input"
-                type="email"
-                placeholder="Enter email"
-                value="invalid@"
-              />
-            </org-form-field>
-
-            <org-form-field validationMessage="Password must be at least 8 characters">
-              <org-label text="Password (Invalid)" htmlFor="password-invalid-input" />
-              <org-input
-                name="password-invalid-input"
-                type="password"
-                placeholder="Enter password"
-                value="123"
-              />
-            </org-form-field>
-          </org-form-fields>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li>Validation messages appear below their respective inputs</li>
-          <li>Spacing remains consistent even with validation messages</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [FormFields, FormField, Label, Input, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const MultipleGroups: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Multiple form fields groups can be used to organize related fields into sections.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Multiple Form Field Groups"
-        currentState="Showing multiple form field containers for organizing sections"
-      >
-        <org-storybook-example-container-section label="Personal Information + Account Details">
-          <div class="flex flex-col gap-6">
-            <div>
-              <h3 class="mb-2 font-semibold">Personal Information</h3>
-              <org-form-fields>
-                <org-form-field>
-                  <org-label text="First Name" htmlFor="first-name-multi" />
-                  <org-input name="first-name-multi" placeholder="Enter first name" />
-                </org-form-field>
-
-                <org-form-field>
-                  <org-label text="Last Name" htmlFor="last-name-multi" />
-                  <org-input name="last-name-multi" placeholder="Enter last name" />
-                </org-form-field>
-              </org-form-fields>
-            </div>
-
-            <div>
-              <h3 class="mb-2 font-semibold">Account Details</h3>
-              <org-form-fields>
-                <org-form-field>
-                  <org-label text="Username" htmlFor="username-multi" />
-                  <org-input name="username-multi" placeholder="Enter username" />
-                </org-form-field>
-
-                <org-form-field>
-                  <org-label text="Password" htmlFor="password-multi" />
-                  <org-input name="password-multi" type="password" placeholder="Enter password" />
-                </org-form-field>
-              </org-form-fields>
-            </div>
-          </div>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li>Multiple form-fields containers can be used to organize form sections</li>
-          <li>Each container maintains its own internal spacing</li>
-          <li>Additional spacing between containers should be handled externally</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [FormFields, FormField, Label, Input, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const ReserveValidationSpace: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Demonstrates how reserveValidationSpace controls whether child form-fields reserve space for validation messages by default. When true (default), all fields maintain consistent height regardless of validation state. When false, fields collapse the validation area when no message is present.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Reserve Validation Space"
-        currentState="Comparing reserveValidationSpace true vs false"
-      >
-        <org-storybook-example-container-section label="reserveValidationSpace=true (default) — space always reserved">
-          <org-form-fields [reserveValidationSpace]="true">
-            <org-form-field>
-              <org-label text="First Name" htmlFor="rvs-true-first-name" />
-              <org-input name="rvs-true-first-name" placeholder="Enter first name" />
-            </org-form-field>
-
-            <org-form-field validationMessage="Last name is required">
-              <org-label text="Last Name" htmlFor="rvs-true-last-name" />
-              <org-input name="rvs-true-last-name" placeholder="Enter last name" />
-            </org-form-field>
-
-            <org-form-field>
-              <org-label text="Email" htmlFor="rvs-true-email" />
-              <org-input name="rvs-true-email" type="email" placeholder="Enter email" />
-            </org-form-field>
-          </org-form-fields>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="reserveValidationSpace=false — space only used when message is present">
-          <org-form-fields [reserveValidationSpace]="false">
-            <org-form-field>
-              <org-label text="First Name" htmlFor="rvs-false-first-name" />
-              <org-input name="rvs-false-first-name" placeholder="Enter first name" />
-            </org-form-field>
-
-            <org-form-field validationMessage="Last name is required">
-              <org-label text="Last Name" htmlFor="rvs-false-last-name" />
-              <org-input name="rvs-false-last-name" placeholder="Enter last name" />
-            </org-form-field>
-
-            <org-form-field>
-              <org-label text="Email" htmlFor="rvs-false-email" />
-              <org-input name="rvs-false-email" type="email" placeholder="Enter email" />
-            </org-form-field>
-          </org-form-fields>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li>With reserveValidationSpace=true, all fields have the same height regardless of whether a validation message is shown</li>
-          <li>With reserveValidationSpace=false, fields without a validation message collapse the validation area, reducing vertical height</li>
-          <li>Individual form-field reserveValidationSpace inputs override the parent form-fields setting</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [FormFields, FormField, Label, Input, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const WithInputIcons: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Form fields container works seamlessly with inputs that have pre and post icons.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="With Input Icons"
-        currentState="Form fields with icon-enhanced inputs"
-      >
-        <org-storybook-example-container-section label="Inputs With Icons">
-          <org-form-fields>
-            <org-form-field>
-              <org-label text="Search" htmlFor="search-icon-input" />
-              <org-input name="search-icon-input" preIcon="search" placeholder="Search..." />
-            </org-form-field>
-
-            <org-form-field>
-              <org-label text="Email" htmlFor="email-icon-input" />
-              <org-input name="email-icon-input" preIcon="mail" type="email" placeholder="Enter email" />
-            </org-form-field>
-
-            <org-form-field>
-              <org-label text="Password" htmlFor="password-icon-input" />
-              <org-input
-                name="password-icon-input"
-                type="password"
-                [showPasswordToggle]="true"
-                placeholder="Enter password"
-              />
-            </org-form-field>
-          </org-form-fields>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li>Icons in inputs don't affect the consistent spacing</li>
-          <li>Works with pre-icons, post-icons, and password toggles</li>
-          <li>Labels align properly regardless of input icon configuration</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [FormFields, FormField, Label, Input, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const FormFieldDefault: FormFieldStory = {
-  args: {
-    validationMessage: null,
-    reserveValidationSpace: null,
-  },
-  argTypes: {
-    validationMessage: {
-      control: 'text',
-      description: 'The validation message to display below the field',
-    },
-    reserveValidationSpace: {
-      control: 'select',
-      options: [null, true, false],
-      description:
-        'Whether to reserve space for the validation message area. When null, inherits from a parent org-form-fields or defaults to false.',
-    },
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: 'Default form field with a label and input. Use the controls below to interact with the component.',
-      },
-    },
-  },
-  render: (args) => ({
-    props: args,
-    template: `
-      <org-storybook-example-container
-        title="Form Field"
-        currentState="Default"
-      >
-        <org-storybook-example-container-section label="Basic Usage">
-          <org-form-field [validationMessage]="validationMessage" [reserveValidationSpace]="reserveValidationSpace">
-            <org-label text="Email" htmlFor="default-email-input" />
-            <org-input name="default-email-input" type="email" placeholder="Enter your email" />
-          </org-form-field>
-        </org-storybook-example-container-section>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [FormField, FormFields, Label, Input, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const FormFieldValidationMessage: FormFieldStory = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Demonstrates the validationMessage input. When provided, the message is displayed below the input.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Validation Message"
-        currentState="Showing with and without validation messages"
-      >
-        <org-storybook-example-container-section label="No Message vs With Message">
-          <org-form-fields>
-            <org-form-field>
-              <org-label text="Valid Field" htmlFor="valid-field-input" />
-              <org-input name="valid-field-input" placeholder="No validation error" />
-            </org-form-field>
-
-            <org-form-field validationMessage="This field is required">
-              <org-label text="Invalid Field" htmlFor="invalid-field-input" />
-              <org-input name="invalid-field-input" placeholder="Has a validation error" />
-            </org-form-field>
-          </org-form-fields>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li>Validation message appears below the input when the validationMessage input is set</li>
-          <li>No layout shift occurs because space is reserved by default via the parent org-form-fields</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [FormField, FormFields, Label, Input, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const FormFieldReserveValidationSpace: FormFieldStory = {
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Demonstrates the reserveValidationSpace input. When true, vertical space is always reserved below the input to prevent layout shift when a validation message appears. Overrides the parent org-form-fields setting when explicitly set.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Reserve Validation Space"
-        currentState="Comparing reserved vs non-reserved validation space"
-      >
-        <org-storybook-example-container-section label="Reserved Space (Default via org-form-fields)">
-          <org-form-fields>
-            <org-form-field>
-              <org-label text="First Name" htmlFor="reserve-first-name-input" />
-              <org-input name="reserve-first-name-input" placeholder="Space reserved below" />
-            </org-form-field>
-
-            <org-form-field>
-              <org-label text="Last Name" htmlFor="reserve-last-name-input" />
-              <org-input name="reserve-last-name-input" placeholder="Space reserved below" />
-            </org-form-field>
-          </org-form-fields>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="No Reserved Space (Explicit Override)">
-          <org-form-fields>
-            <org-form-field [reserveValidationSpace]="false">
-              <org-label text="First Name" htmlFor="no-reserve-first-name-input" />
-              <org-input name="no-reserve-first-name-input" placeholder="No space reserved below" />
-            </org-form-field>
-
-            <org-form-field [reserveValidationSpace]="false">
-              <org-label text="Last Name" htmlFor="no-reserve-last-name-input" />
-              <org-input name="no-reserve-last-name-input" placeholder="No space reserved below" />
-            </org-form-field>
-          </org-form-fields>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Reserved Space (Explicit True on Standalone)">
-          <org-form-field [reserveValidationSpace]="true">
-            <org-label text="First Name" htmlFor="standalone-reserve-first-name-input" />
-            <org-input name="standalone-reserve-first-name-input" placeholder="Explicit reserveValidationSpace true, no parent org-form-fields" />
-          </org-form-field>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li>Reserved space (default): validation area is always rendered, keeping layout stable</li>
-          <li>No reserved space: validation area only renders when a message is present, causing layout shift</li>
-          <li>The reserveValidationSpace input on org-form-field overrides the parent org-form-fields setting</li>
-          <li>Explicit true on standalone: reserveValidationSpace can be set directly without a parent org-form-fields</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [FormField, FormFields, Label, Input, StorybookExampleContainer, StorybookExampleContainerSection],
     },
   }),
 };

@@ -30,8 +30,8 @@ type EXAMPLEDialogData = {
         <org-dialog-header [title]="data.title" />
         <org-dialog-content>{{ data.message }}</org-dialog-content>
         <org-dialog-footer>
-          <org-button color="neutral" (clicked)="onCancel()">Cancel</org-button>
-          <org-button color="primary" (clicked)="onConfirm()">Confirm</org-button>
+          <org-button color="neutral" label="Cancel" (clicked)="onCancel()" />
+          <org-button color="primary" label="Confirm" (clicked)="onConfirm()" />
         </org-dialog-footer>
       </org-dialog>
     }
@@ -101,7 +101,7 @@ class EXAMPLEDialog {
       [showCloseIcon]="showCloseIcon()"
       [enableEscapeKey]="enableEscapeKey()"
     />
-    <org-button (click)="openDialog()">Open Dialog</org-button>
+    <org-button label="Open Dialog" (click)="openDialog()" />
   `,
   host: {},
 })
@@ -147,7 +147,7 @@ const meta: Meta<EXAMPLEStoryDialog> = {
   ### Usage Example
   \`\`\`html
   <app-confirm-dialog #dlg position="center" (closed)="onClosed()" />
-  <org-button (clicked)="dlg.openDialog({ title, message })">Open</org-button>
+  <org-button label="Open" (clicked)="dlg.openDialog({ title, message })" />
   \`\`\`
 
   ### CDK Dialog Concepts
@@ -379,7 +379,7 @@ export const EnableEscapeKey: Story = {
   template: `
     <div class="flex flex-col gap-4">
       <story-example-dialog #dialogComponent position="center" (closed)="onDialogClosed()" />
-      <org-button (click)="openDialog()">Open Dialog</org-button>
+      <org-button label="Open Dialog" (click)="openDialog()" />
 
       @if (closeCount() > 0) {
         <div class="p-4 bg-secondary-soft rounded-lg">
@@ -466,7 +466,7 @@ export const ClosedEvent: Story = {
         [position]="hasBackdrop() ? 'center' : 'right'"
         [hasBackdrop]="hasBackdrop()"
       />
-      <org-button (click)="openDialog()">Open Dialog</org-button>
+      <org-button label="Open Dialog" (click)="openDialog()" />
     </div>
   `,
   host: {},
@@ -553,8 +553,8 @@ export const Backdrop: Story = {
           </div>
         </org-dialog-content>
         <org-dialog-footer>
-          <org-button color="neutral" (clicked)="onCancel()">Cancel</org-button>
-          <org-button color="primary" (clicked)="onConfirm()">Confirm</org-button>
+          <org-button color="neutral" label="Cancel" (clicked)="onCancel()" />
+          <org-button color="primary" label="Confirm" (clicked)="onConfirm()" />
         </org-dialog-footer>
       </org-dialog>
     }
@@ -621,7 +621,7 @@ class EXAMPLEDialogWithCloseIconToggle {
   template: `
     <div class="flex flex-col gap-4">
       <story-example-dialog-with-close-icon-toggle #dialogComponent position="center" />
-      <org-button (click)="openDialog()">Open Dialog</org-button>
+      <org-button label="Open Dialog" (click)="openDialog()" />
     </div>
   `,
   host: {},
@@ -705,8 +705,8 @@ export const CloseIcon: Story = {
           </div>
         </org-dialog-content>
         <org-dialog-footer>
-          <org-button color="neutral" (clicked)="onCancel()">Cancel</org-button>
-          <org-button color="primary" (clicked)="onConfirm()">Confirm</org-button>
+          <org-button color="neutral" label="Cancel" (clicked)="onCancel()" />
+          <org-button color="primary" label="Confirm" (clicked)="onConfirm()" />
         </org-dialog-footer>
       </org-dialog>
     }
@@ -773,7 +773,7 @@ class EXAMPLEDialogWithEscapeToggle {
   template: `
     <div class="flex flex-col gap-4">
       <story-example-dialog-with-escape-toggle #dialogComponent position="center" />
-      <org-button (click)="openDialog()">Open Dialog</org-button>
+      <org-button label="Open Dialog" (click)="openDialog()" />
     </div>
   `,
   host: {},
@@ -835,7 +835,7 @@ export const DynamicCloseControl: Story = {
   imports: [Button, Dialog, DialogHeader, DialogContent, DialogFooter, TypedContextDirective],
   template: `
     <div class="flex flex-col gap-4">
-      <org-button (click)="openDialog()">Open Dialog</org-button>
+      <org-button label="Open Dialog" (click)="openDialog()" />
 
       <ng-template [orgTypedContext]="dialogContextType" #dialogTemplateRef let-context>
         <org-dialog [position]="position()">
@@ -845,8 +845,8 @@ export const DynamicCloseControl: Story = {
             <p class="mt-2 text-sm text-muted">{{ context.message }}</p>
           </org-dialog-content>
           <org-dialog-footer>
-            <org-button color="neutral" (clicked)="onCancel()">Cancel</org-button>
-            <org-button color="primary" (clicked)="onConfirm()">Confirm</org-button>
+            <org-button color="neutral" label="Cancel" (clicked)="onCancel()" />
+            <org-button color="primary" label="Confirm" (clicked)="onConfirm()" />
           </org-dialog-footer>
         </org-dialog>
       </ng-template>

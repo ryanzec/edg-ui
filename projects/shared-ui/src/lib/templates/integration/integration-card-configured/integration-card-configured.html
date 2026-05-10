@@ -13,10 +13,10 @@
         variant="text"
         color="neutral"
         [iconOnly]="true"
+        label="Open integration actions menu"
         ariaLabel="Open integration actions menu"
-      >
-        <org-button-icon name="ellipsis" />
-      </org-button>
+        preIcon="ellipsis"
+      />
       <ng-template #menu>
         <org-overlay-menu [label]="menuLabel" [items]="menuItems()" (itemClicked)="onMenuItemClicked($event)" />
       </ng-template>

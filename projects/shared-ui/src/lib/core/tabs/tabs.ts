@@ -9,14 +9,13 @@ import {
   viewChild,
 } from '@angular/core';
 import { Button } from '../button/button';
-import { ButtonIcon } from '../button/button-icon';
 import { TabsBrainDirective } from '../../brain/tabs-brain/tabs-brain';
 import { TabBrainDirective } from '../../brain/tab-brain/tab-brain';
 
 @Component({
   selector: 'org-tabs',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Button, ButtonIcon],
+  imports: [Button],
   templateUrl: './tabs.html',
   styleUrl: './tabs.css',
   hostDirectives: [

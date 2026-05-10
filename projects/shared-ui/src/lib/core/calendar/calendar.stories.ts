@@ -1,11 +1,524 @@
+import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import type { Meta, StoryObj } from '@storybook/angular';
+import { DateTime } from 'luxon';
+import { map } from 'rxjs';
+import { Button } from '../button/button';
+import { ButtonToggle, type ButtonToggleItem } from '../button-toggle/button-toggle';
+import { CheckboxToggle } from '../checkbox-toggle/checkbox-toggle';
+import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
+import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
+import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
+import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
+import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
+import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
+import { type CalendarPartialRangeSelectionType } from '../../brain/calendar-brain/calendar-brain';
 import { Calendar } from './calendar';
 import { CalendarFooter } from './calendar-footer';
-import { Button } from '../button/button';
-import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
-import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
-import { DateTime } from 'luxon';
-import { signal, Component, ChangeDetectionStrategy } from '@angular/core';
+
+const partialRangeTypeItems: ButtonToggleItem[] = [
+  { value: 'range', label: 'Range', buttonColor: 'primary' },
+  { value: 'onOrBefore', label: 'On or Before', buttonColor: 'primary' },
+  { value: 'onOrAfter', label: 'On or After', buttonColor: 'primary' },
+];
+
+const allowedRangeItems: ButtonToggleItem[] = [
+  { value: '0', label: '0 (off)', buttonColor: 'primary' },
+  { value: '7', label: '7', buttonColor: 'primary' },
+  { value: '14', label: '14', buttonColor: 'primary' },
+  { value: '30', label: '30', buttonColor: 'primary' },
+];
+
+@Component({
+  selector: 'story-calendar-live-demo',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    ReactiveFormsModule,
+    Calendar,
+    CalendarFooter,
+    ButtonToggle,
+    CheckboxToggle,
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoControls,
+    DesignSystemDemoControlGroup,
+    DesignSystemDemoCanvas,
+  ],
+  styles: [
+    `
+      :host {
+        display: block;
+      }
+      .canvas-stage {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 6rem; /* 96px */
+      }
+    `,
+  ],
+  template: `
+    <form [formGroup]="liveDemoForm">
+      <org-design-system-demo>
+        <org-design-system-demo-header
+          slot="header"
+          title="Live demo"
+          description="A working calendar — click cells to pick, switch modes to see how range build vs. partial mode behave. In range mode, a hovered cell after the start previews the range with an animated soft fill."
+        />
+        <org-design-system-demo-controls slot="controls">
+          <org-design-system-demo-control-group label="Allow range selection">
+            <org-checkbox-toggle
+              name="live-demo-allow-range"
+              value="allowRangeSelection"
+              formControlName="allowRangeSelection"
+            >
+              {{ liveDemoForm.controls.allowRangeSelection.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Allow partial range">
+            <org-checkbox-toggle
+              name="live-demo-allow-partial"
+              value="allowPartialRangeSelection"
+              formControlName="allowPartialRangeSelection"
+            >
+              {{ liveDemoForm.controls.allowPartialRangeSelection.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Partial range type">
+            <org-button-toggle
+              [items]="partialRangeTypeItems"
+              formControlName="partialRangeSelectionType"
+              buttonSize="sm"
+            />
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Allowed range (days)">
+            <org-button-toggle [items]="allowedRangeItems" formControlName="allowedDateRange" buttonSize="sm" />
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Enable deselection">
+            <org-checkbox-toggle
+              name="live-demo-deselect"
+              value="enableDeselection"
+              formControlName="enableDeselection"
+            >
+              {{ liveDemoForm.controls.enableDeselection.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Show footer">
+            <org-checkbox-toggle name="live-demo-show-footer" value="showFooter" formControlName="showFooter">
+              {{ liveDemoForm.controls.showFooter.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Disabled">
+            <org-checkbox-toggle name="live-demo-disabled" value="disabled" formControlName="disabled">
+              {{ liveDemoForm.controls.disabled.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
+        </org-design-system-demo-controls>
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="canvas-stage">
+            <org-calendar
+              #liveDemoCalendar
+              [allowRangeSelection]="liveDemoForm.controls.allowRangeSelection.value"
+              [allowPartialRangeSelection]="liveDemoForm.controls.allowPartialRangeSelection.value"
+              [partialRangeSelectionType]="liveDemoForm.controls.partialRangeSelectionType.value"
+              [allowedDateRange]="parseAllowedRange(liveDemoForm.controls.allowedDateRange.value)"
+              [enableDeselection]="liveDemoForm.controls.enableDeselection.value"
+              [disabled]="liveDemoForm.controls.disabled.value"
+              [selectedStartDate]="selectedStart()"
+              [selectedEndDate]="selectedEnd()"
+              (dateSelected)="onDateSelected($event)"
+              (partialRangeSelectionTypeChange)="onPartialTypeChange($event)"
+            >
+              @if (liveDemoForm.controls.showFooter.value) {
+                <org-calendar-footer
+                  [showToday]="true"
+                  [showCancelApply]="true"
+                  (today)="onTodayClicked(liveDemoCalendar)"
+                  (cancel)="onCancelClicked()"
+                  (apply)="onApplyClicked()"
+                />
+              }
+            </org-calendar>
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+    </form>
+  `,
+})
+class CalendarLiveDemoStory {
+  protected readonly partialRangeTypeItems = partialRangeTypeItems;
+  protected readonly allowedRangeItems = allowedRangeItems;
+
+  protected readonly selectedStart = signal<DateTime | null>(null);
+  protected readonly selectedEnd = signal<DateTime | null>(null);
+
+  protected readonly liveDemoForm = new FormGroup({
+    allowRangeSelection: new FormControl<boolean>(true, { nonNullable: true }),
+    allowPartialRangeSelection: new FormControl<boolean>(false, { nonNullable: true }),
+    partialRangeSelectionType: new FormControl<CalendarPartialRangeSelectionType>('range', { nonNullable: true }),
+    allowedDateRange: new FormControl<string>('0', { nonNullable: true }),
+    enableDeselection: new FormControl<boolean>(true, { nonNullable: true }),
+    showFooter: new FormControl<boolean>(false, { nonNullable: true }),
+    disabled: new FormControl<boolean>(false, { nonNullable: true }),
+  });
+
+  protected parseAllowedRange(raw: string): number {
+    const parsed = parseInt(raw, 10);
+
+    return Number.isNaN(parsed) ? 0 : parsed;
+  }
+
+  protected onDateSelected(event: { startDate: DateTime | null; endDate: DateTime | null }): void {
+    this.selectedStart.set(event.startDate);
+    this.selectedEnd.set(event.endDate);
+  }
+
+  protected onPartialTypeChange(type: CalendarPartialRangeSelectionType): void {
+    this.liveDemoForm.controls.partialRangeSelectionType.setValue(type);
+  }
+
+  protected onTodayClicked(calendar: Calendar): void {
+    const today = DateTime.now();
+    calendar.setDisplayDate(today);
+    this.selectedStart.set(today.startOf('day'));
+    this.selectedEnd.set(null);
+  }
+
+  protected onCancelClicked(): void {
+    this.selectedStart.set(null);
+    this.selectedEnd.set(null);
+  }
+
+  protected onApplyClicked(): void {
+    console.log('Apply clicked', { start: this.selectedStart(), end: this.selectedEnd() });
+  }
+}
+
+@Component({
+  selector: 'story-calendar-showcase',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    Calendar,
+    CalendarFooter,
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoCanvas,
+    DesignSystemDemoExpectedBehaviour,
+  ],
+  template: `
+    <div class="flex flex-col gap-4">
+      <!-- Single Date Selection -->
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Single date selection" />
+        <org-design-system-demo-canvas slot="canvas">
+          <org-calendar [selectedStartDate]="singleSelectedStart()" (dateSelected)="onSingleDateSelected($event)" />
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="list-inside list-disc flex flex-col gap-1">
+          <li>Click any date to select it (stored as 00:00:00)</li>
+          <li>Click the same date again to deselect it</li>
+          <li>Use arrow keys for keyboard navigation</li>
+        </ul>
+      </org-design-system-demo-expected-behaviour>
+
+      <!-- Range Selection -->
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Range selection" />
+        <org-design-system-demo-canvas slot="canvas">
+          <org-calendar
+            [allowRangeSelection]="true"
+            [selectedStartDate]="rangeSelectedStart()"
+            [selectedEndDate]="rangeSelectedEnd()"
+            (dateSelected)="onRangeSelected($event)"
+          />
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="list-inside list-disc flex flex-col gap-1">
+          <li>First click selects start date (00:00:00)</li>
+          <li>Second click selects end date (23:59:59)</li>
+          <li>Hovering after the start previews the range with an animated soft fill</li>
+          <li>Clicking a date before start swaps them</li>
+          <li>Dates between start and end are highlighted with a continuous band</li>
+        </ul>
+      </org-design-system-demo-expected-behaviour>
+
+      <!-- Partial Range Selection -->
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Partial range selection" />
+        <org-design-system-demo-canvas slot="canvas">
+          <org-calendar
+            [allowRangeSelection]="true"
+            [allowPartialRangeSelection]="true"
+            [partialRangeSelectionType]="partialType()"
+            [selectedStartDate]="partialSelectedStart()"
+            [selectedEndDate]="partialSelectedEnd()"
+            (dateSelected)="onPartialSelected($event)"
+            (partialRangeSelectionTypeChange)="onPartialTypeChange($event)"
+          />
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="list-inside list-disc flex flex-col gap-1">
+          <li>Toggle between Range, On or Before, and On or After modes</li>
+          <li>Range mode behaves like the standard range selection</li>
+          <li>On or Before sets only an end date</li>
+          <li>On or After sets only a start date</li>
+          <li>The mode is rendered as a segmented button-toggle below the header</li>
+        </ul>
+      </org-design-system-demo-expected-behaviour>
+
+      <!-- Disabled Dates -->
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Disabled dates" />
+        <org-design-system-demo-canvas slot="canvas">
+          <org-calendar
+            [disableBefore]="disabledMinDate"
+            [disableAfter]="disabledMaxDate"
+            [selectedStartDate]="disabledSelectedStart()"
+            (dateSelected)="onDisabledSelected($event)"
+          />
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="list-inside list-disc flex flex-col gap-1">
+          <li>Dates before the minimum or after the maximum are disabled</li>
+          <li>Disabled dates have a not-allowed cursor and faint colour</li>
+          <li>Disabled dates cannot be clicked or selected</li>
+        </ul>
+      </org-design-system-demo-expected-behaviour>
+
+      <!-- Allowed Date Range -->
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Allowed date range" />
+        <org-design-system-demo-canvas slot="canvas">
+          <org-calendar
+            [allowRangeSelection]="true"
+            [allowedDateRange]="14"
+            [selectedStartDate]="allowedRangeSelectedStart()"
+            [selectedEndDate]="allowedRangeSelectedEnd()"
+            (dateSelected)="onAllowedRangeSelected($event)"
+          />
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="list-inside list-disc flex flex-col gap-1">
+          <li>After selecting a start date, dates more than 14 days away are disabled</li>
+          <li>The cap applies in both directions</li>
+          <li>Once the range is fully set, the cap is no longer enforced</li>
+        </ul>
+      </org-design-system-demo-expected-behaviour>
+
+      <!-- With Footer -->
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="With footer" />
+        <org-design-system-demo-canvas slot="canvas">
+          <org-calendar
+            #footerCalendar
+            [allowRangeSelection]="true"
+            [selectedStartDate]="footerSelectedStart()"
+            [selectedEndDate]="footerSelectedEnd()"
+            (dateSelected)="onFooterSelected($event)"
+          >
+            <org-calendar-footer
+              [showToday]="true"
+              [showCancelApply]="true"
+              (today)="onFooterToday(footerCalendar)"
+              (cancel)="onFooterCancel()"
+              (apply)="onFooterApply()"
+            />
+          </org-calendar>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="list-inside list-disc flex flex-col gap-1">
+          <li>Footer renders the built-in Today, Cancel, and Apply actions</li>
+          <li>Today jumps to today's month and selects today</li>
+          <li>Cancel clears the current selection</li>
+          <li>Apply emits the apply event for the consumer to handle</li>
+        </ul>
+      </org-design-system-demo-expected-behaviour>
+
+      <!-- Without Deselection -->
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Without deselection" />
+        <org-design-system-demo-canvas slot="canvas">
+          <org-calendar
+            [enableDeselection]="false"
+            [selectedStartDate]="noDeselectSelectedStart()"
+            (dateSelected)="onNoDeselectSelected($event)"
+          />
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="list-inside list-disc flex flex-col gap-1">
+          <li>Clicking the currently selected date does not clear the selection</li>
+          <li>Useful when consumers auto-close the calendar on selection (e.g. date picker inputs)</li>
+        </ul>
+      </org-design-system-demo-expected-behaviour>
+
+      <!-- Display Month Control -->
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Display month control" />
+        <org-design-system-demo-canvas slot="canvas">
+          <org-calendar #displayCalendar />
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="list-inside list-disc flex flex-col gap-1">
+          <li>The header has previous / next nav buttons + month and year drop-downs for direct selection</li>
+          <li>Clicking a day in the previous or next month nudges the calendar to that month</li>
+          <li>Use the public <code>setDisplayDate()</code> method to change the displayed month programmatically</li>
+        </ul>
+      </org-design-system-demo-expected-behaviour>
+
+      <!-- Keyboard Navigation -->
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Keyboard navigation" />
+        <org-design-system-demo-canvas slot="canvas">
+          <org-calendar />
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="list-inside list-disc flex flex-col gap-1">
+          <li><strong>Arrow keys</strong>: navigate between dates</li>
+          <li><strong>Page Up / Down</strong>: previous / next month</li>
+          <li><strong>Home / End</strong>: first / last day of the month</li>
+          <li><strong>Enter / Space</strong>: select the focused date</li>
+          <li>Crossing month boundaries auto-updates the display</li>
+        </ul>
+      </org-design-system-demo-expected-behaviour>
+
+      <!-- States -->
+      <org-design-system-demo>
+        <org-design-system-demo-header
+          slot="header"
+          title="States"
+          description="Every documented day-cell state, side by side. Cells carry data attributes for each — data-today, data-selected, data-range-pos, data-outside-month — plus the standard hover / disabled / focus-visible interactions."
+        />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="flex flex-row gap-4 flex-wrap">
+            <div class="flex flex-col gap-2">
+              <span class="text-xs">Single · today selected</span>
+              <org-calendar [selectedStartDate]="todayDate" [defaultDisplayDate]="todayDate" />
+            </div>
+            <div class="flex flex-col gap-2">
+              <span class="text-xs">Single · today not selected</span>
+              <org-calendar [selectedStartDate]="todayDate.plus({ days: 4 })" [defaultDisplayDate]="todayDate" />
+            </div>
+            <div class="flex flex-col gap-2">
+              <span class="text-xs">Range · built</span>
+              <org-calendar
+                [allowRangeSelection]="true"
+                [selectedStartDate]="todayDate.minus({ days: 6 })"
+                [selectedEndDate]="todayDate.plus({ days: 1 })"
+                [defaultDisplayDate]="todayDate"
+              />
+            </div>
+            <div class="flex flex-col gap-2">
+              <span class="text-xs">Disabled · before today</span>
+              <org-calendar [disableBefore]="todayDate" [defaultDisplayDate]="todayDate" />
+            </div>
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="list-inside list-disc flex flex-col gap-1">
+          <li>The today cell is shown with an inset ring on the chip</li>
+          <li>The selected cell paints the chip with the primary fill</li>
+          <li>A built range paints the band continuously across the middle cells with mid-cell insets at endpoints</li>
+          <li>Outside-month cells use a faded foreground colour</li>
+          <li>Disabled cells use the not-allowed cursor and faded colour and cannot be hovered</li>
+        </ul>
+      </org-design-system-demo-expected-behaviour>
+    </div>
+  `,
+})
+class CalendarShowcaseStory {
+  protected readonly todayDate = DateTime.now();
+
+  // single
+  protected readonly singleSelectedStart = signal<DateTime | null>(null);
+
+  protected onSingleDateSelected(event: { startDate: DateTime | null; endDate: DateTime | null }): void {
+    this.singleSelectedStart.set(event.startDate);
+  }
+
+  // range
+  protected readonly rangeSelectedStart = signal<DateTime | null>(null);
+  protected readonly rangeSelectedEnd = signal<DateTime | null>(null);
+
+  protected onRangeSelected(event: { startDate: DateTime | null; endDate: DateTime | null }): void {
+    this.rangeSelectedStart.set(event.startDate);
+    this.rangeSelectedEnd.set(event.endDate);
+  }
+
+  // partial
+  protected readonly partialSelectedStart = signal<DateTime | null>(null);
+  protected readonly partialSelectedEnd = signal<DateTime | null>(null);
+  protected readonly partialType = signal<CalendarPartialRangeSelectionType>('range');
+
+  protected onPartialSelected(event: { startDate: DateTime | null; endDate: DateTime | null }): void {
+    this.partialSelectedStart.set(event.startDate);
+    this.partialSelectedEnd.set(event.endDate);
+  }
+
+  protected onPartialTypeChange(type: CalendarPartialRangeSelectionType): void {
+    this.partialType.set(type);
+  }
+
+  // disabled dates
+  protected readonly disabledMinDate = DateTime.now().minus({ days: 7 });
+  protected readonly disabledMaxDate = DateTime.now().plus({ days: 14 });
+  protected readonly disabledSelectedStart = signal<DateTime | null>(null);
+
+  protected onDisabledSelected(event: { startDate: DateTime | null; endDate: DateTime | null }): void {
+    this.disabledSelectedStart.set(event.startDate);
+  }
+
+  // allowed range
+  protected readonly allowedRangeSelectedStart = signal<DateTime | null>(null);
+  protected readonly allowedRangeSelectedEnd = signal<DateTime | null>(null);
+
+  protected onAllowedRangeSelected(event: { startDate: DateTime | null; endDate: DateTime | null }): void {
+    this.allowedRangeSelectedStart.set(event.startDate);
+    this.allowedRangeSelectedEnd.set(event.endDate);
+  }
+
+  // footer
+  protected readonly footerSelectedStart = signal<DateTime | null>(null);
+  protected readonly footerSelectedEnd = signal<DateTime | null>(null);
+
+  protected onFooterSelected(event: { startDate: DateTime | null; endDate: DateTime | null }): void {
+    this.footerSelectedStart.set(event.startDate);
+    this.footerSelectedEnd.set(event.endDate);
+  }
+
+  protected onFooterToday(calendar: Calendar): void {
+    const today = DateTime.now();
+    calendar.setDisplayDate(today);
+    this.footerSelectedStart.set(today.startOf('day'));
+    this.footerSelectedEnd.set(null);
+  }
+
+  protected onFooterCancel(): void {
+    this.footerSelectedStart.set(null);
+    this.footerSelectedEnd.set(null);
+  }
+
+  protected onFooterApply(): void {
+    console.log('Apply', { start: this.footerSelectedStart(), end: this.footerSelectedEnd() });
+  }
+
+  // no deselection
+  protected readonly noDeselectSelectedStart = signal<DateTime | null>(null);
+
+  protected onNoDeselectSelected(event: { startDate: DateTime | null; endDate: DateTime | null }): void {
+    this.noDeselectSelectedStart.set(event.startDate);
+  }
+}
 
 const meta: Meta<Calendar> = {
   title: 'Core/Components/Calendar',
@@ -18,67 +531,27 @@ const meta: Meta<Calendar> = {
 <div class="docs-top-level-overview">
   ## Calendar Component
 
-  A comprehensive calendar component for date selection with support for single dates, date ranges, and various constraints.
+  A bordered date-grid surface for date selection with single, range, and partial-range modes. Composes the
+  Button (header nav), DropDownSelector (month / year picker), and ButtonToggle (partial-range switcher) core
+  components, and uses a three-layer cell structure — band / chip / num — so range bands paint continuously
+  while keeping endpoint chips visible.
 
   ### Features
   - Single date or date range selection
-  - Partial range selection modes (on or before, on or after)
-  - Year and month dropdowns for quick navigation
-  - Previous/next month navigation arrows
-  - Keyboard navigation support (arrow keys, Page Up/Down, Home/End, Enter)
-  - Date constraints (disable before/after specific dates)
-  - Allowed date range limits for range selection
-  - Display dates from previous/next months
-  - Accessible with full ARIA support
-  - Customizable footer for additional content
+  - Partial range modes — range, on or before, on or after — with a segmented switcher
+  - Optional drop-down month and year navigation
+  - Optional footer with built-in Today, Cancel, and Apply actions
+  - Keyboard navigation (arrow keys, Page Up / Down, Home / End, Enter / Space)
+  - Date constraints — disable before / after, allowed range cap
+  - Outside-month cells nudge the visible month on click
+  - Range hover preview with an animated soft fill
+  - Accessible via grid roles, aria attributes, and a live announcement region
 
-  ### Sub-Components
-  - **Calendar Header**: Contains year/month dropdowns and navigation arrows
-  - **Calendar Dates**: Grid of dates with selection logic
-  - **Calendar Footer**: Optional footer for custom content (e.g., action buttons)
-
-  ### Usage Examples
-  \`\`\`html
-  <!-- Basic single date selection -->
-  <org-calendar
-    [defaultDisplayDate]="currentDate"
-    (dateSelected)="onDateSelected($event)"
-  />
-
-  <!-- Date range selection -->
-  <org-calendar
-    [allowRangeSelection]="true"
-    [selectedStartDate]="startDate"
-    [selectedEndDate]="endDate"
-    (dateSelected)="onDateSelected($event)"
-  />
-
-  <!-- Partial range selection -->
-  <org-calendar
-    [allowRangeSelection]="true"
-    [allowPartialRangeSelection]="true"
-    [partialRangeSelectionType]="rangeType"
-    [selectedStartDate]="startDate"
-    [selectedEndDate]="endDate"
-    (dateSelected)="onDateSelected($event)"
-    (partialRangeSelectionTypeChange)="onRangeTypeChange($event)"
-  />
-
-  <!-- With date constraints -->
-  <org-calendar
-    [disableBefore]="minDate"
-    [disableAfter]="maxDate"
-    [allowedDateRange]="14"
-    (dateSelected)="onDateSelected($event)"
-  />
-
-  <!-- With custom footer -->
-  <org-calendar (dateSelected)="onDateSelected($event)">
-    <org-calendar-footer>
-      <org-button color="primary">Apply</org-button>
-    </org-calendar-footer>
-  </org-calendar>
-  \`\`\`
+  ### Sub-components
+  - **CalendarHeader** — month / year drop-down selectors and previous / next navigation
+  - **CalendarPartialRangeSelector** — segmented Range / On or Before / On or After button-toggle
+  - **CalendarDates** — weekday strip and day cells
+  - **CalendarFooter** — built-in actions and / or projected content
 </div>
         `,
       },
@@ -97,10 +570,13 @@ export const Default: Story = {
     selectedStartDate: null,
     selectedEndDate: null,
     allowRangeSelection: false,
+    allowPartialRangeSelection: false,
+    partialRangeSelectionType: 'range',
     disableBefore: null,
     disableAfter: null,
     allowedDateRange: 0,
     enableDeselection: true,
+    disabled: false,
     containerClass: '',
   },
   argTypes: {
@@ -110,11 +586,11 @@ export const Default: Story = {
     },
     startYear: {
       control: 'number',
-      description: 'Earliest selectable year in dropdown',
+      description: 'Earliest selectable year in the year drop-down',
     },
     endYear: {
       control: 'number',
-      description: 'Latest selectable year in dropdown',
+      description: 'Latest selectable year in the year drop-down',
     },
     selectedStartDate: {
       control: false,
@@ -127,6 +603,15 @@ export const Default: Story = {
     allowRangeSelection: {
       control: 'boolean',
       description: 'Enable date range selection mode',
+    },
+    allowPartialRangeSelection: {
+      control: 'boolean',
+      description: 'Enable the partial-range-selection-type segmented switcher',
+    },
+    partialRangeSelectionType: {
+      control: 'select',
+      options: ['range', 'onOrBefore', 'onOrAfter'],
+      description: 'Active partial-range-selection type',
     },
     disableBefore: {
       control: false,
@@ -144,6 +629,10 @@ export const Default: Story = {
       control: 'boolean',
       description: 'Allow clicking selected dates to deselect them',
     },
+    disabled: {
+      control: 'boolean',
+      description: 'Whether the entire calendar is disabled and non-interactive',
+    },
     containerClass: {
       control: 'text',
       description: 'Additional CSS classes for the container',
@@ -157,11 +646,7 @@ export const Default: Story = {
     },
   },
   render: (args) => ({
-    props: {
-      ...args,
-      onDateSelected: (event: unknown) => console.log('Date selected:', event),
-      onDisplayMonthChanged: (event: unknown) => console.log('Display month changed:', event),
-    },
+    props: args,
     template: `
       <org-calendar
         [defaultDisplayDate]="defaultDisplayDate"
@@ -170,13 +655,14 @@ export const Default: Story = {
         [selectedStartDate]="selectedStartDate"
         [selectedEndDate]="selectedEndDate"
         [allowRangeSelection]="allowRangeSelection"
+        [allowPartialRangeSelection]="allowPartialRangeSelection"
+        [partialRangeSelectionType]="partialRangeSelectionType"
         [disableBefore]="disableBefore"
         [disableAfter]="disableAfter"
         [allowedDateRange]="allowedDateRange"
         [enableDeselection]="enableDeselection"
+        [disabled]="disabled"
         [containerClass]="containerClass"
-        (dateSelected)="onDateSelected($event)"
-        (displayMonthChanged)="onDisplayMonthChanged($event)"
       />
     `,
     moduleMetadata: {
@@ -185,831 +671,325 @@ export const Default: Story = {
   }),
 };
 
-export const SingleDateSelection: Story = {
+export const LiveDemo: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Calendar with single date selection. Click a date to select it, click again to deselect.',
-      },
-    },
-  },
-  render: () => {
-    const selectedStart = signal<DateTime | null>(null);
-
-    return {
-      props: {
-        selectedStart,
-        onDateSelected: (event: { startDate: DateTime | null; endDate: DateTime | null }) => {
-          selectedStart.set(event.startDate);
-          console.log('Date selected:', event);
-        },
-      },
-      template: `
-        <org-storybook-example-container
-          title="Single Date Selection"
-          currentState="Click a date to select, click again to deselect"
-        >
-          <org-storybook-example-container-section label="Calendar">
-            <org-calendar
-              [selectedStartDate]="selectedStart()"
-              (dateSelected)="onDateSelected($event)"
-            />
-          </org-storybook-example-container-section>
-
-          <org-storybook-example-container-section label="Selected Date">
-            @if (selectedStart()) {
-              <div>{{ selectedStart()!.toISO() }}</div>
-            } @else {
-              <div class="opacity-subtle">No date selected</div>
-            }
-          </org-storybook-example-container-section>
-
-          <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-            <li>Click any date to select it (stored as 00:00:00)</li>
-            <li>Click the same date again to deselect it</li>
-            <li>Click another date to change the selection</li>
-            <li>Use arrow keys for keyboard navigation</li>
-          </ul>
-        </org-storybook-example-container>
-      `,
-      moduleMetadata: {
-        imports: [Calendar, StorybookExampleContainer, StorybookExampleContainerSection],
-      },
-    };
-  },
-};
-
-export const RangeSelection: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Calendar with date range selection enabled. Select start and end dates to define a range.',
-      },
-    },
-  },
-  render: () => {
-    const selectedStart = signal<DateTime | null>(null);
-    const selectedEnd = signal<DateTime | null>(null);
-
-    return {
-      props: {
-        selectedStart,
-        selectedEnd,
-        onDateSelected: (event: { startDate: DateTime | null; endDate: DateTime | null }) => {
-          selectedStart.set(event.startDate);
-          selectedEnd.set(event.endDate);
-          console.log('Date selected:', event);
-        },
-      },
-      template: `
-        <org-storybook-example-container
-          title="Range Selection"
-          currentState="Select start and end dates for a range"
-        >
-          <org-storybook-example-container-section label="Calendar">
-            <org-calendar
-              [allowRangeSelection]="true"
-              [selectedStartDate]="selectedStart()"
-              [selectedEndDate]="selectedEnd()"
-              (dateSelected)="onDateSelected($event)"
-            />
-          </org-storybook-example-container-section>
-
-          <org-storybook-example-container-section label="Selected Range">
-            @if (selectedStart() && selectedEnd()) {
-              <div>Start: {{ selectedStart()!.toISO() }}</div>
-              <div>End: {{ selectedEnd()!.toISO() }}</div>
-            } @else if (selectedStart()) {
-              <div>Start: {{ selectedStart()!.toISO() }}</div>
-              <div class="opacity-subtle">End: Not selected</div>
-            } @else {
-              <div class="opacity-subtle">No range selected</div>
-            }
-          </org-storybook-example-container-section>
-
-          <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-            <li>First click selects start date (00:00:00)</li>
-            <li>Second click selects end date (23:59:59)</li>
-            <li>Clicking a date before start swaps them</li>
-            <li>Clicking a date between range updates end date</li>
-            <li>Clicking start or end date deselects only that date</li>
-            <li>Dates in between are highlighted</li>
-          </ul>
-        </org-storybook-example-container>
-      `,
-      moduleMetadata: {
-        imports: [Calendar, StorybookExampleContainer, StorybookExampleContainerSection],
-      },
-    };
-  },
-};
-
-export const DisabledDates: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Calendar with date constraints using disableBefore and disableAfter.',
-      },
-    },
-  },
-  render: () => {
-    const today = DateTime.now();
-    const minDate = today.minus({ days: 7 });
-    const maxDate = today.plus({ days: 14 });
-    const selectedStart = signal<DateTime | null>(null);
-
-    return {
-      props: {
-        minDate,
-        maxDate,
-        selectedStart,
-        onDateSelected: (event: { startDate: DateTime | null; endDate: DateTime | null }) => {
-          selectedStart.set(event.startDate);
-          console.log('Date selected:', event);
-        },
-      },
-      template: `
-        <org-storybook-example-container
-          title="Disabled Dates"
-          currentState="Dates outside the allowed range are disabled"
-        >
-          <org-storybook-example-container-section label="Calendar">
-            <org-calendar
-              [disableBefore]="minDate"
-              [disableAfter]="maxDate"
-              [selectedStartDate]="selectedStart()"
-              (dateSelected)="onDateSelected($event)"
-            />
-          </org-storybook-example-container-section>
-
-          <org-storybook-example-container-section label="Constraints">
-            <div>Disable Before: {{ minDate.toISO() }}</div>
-            <div>Disable After: {{ maxDate.toISO() }}</div>
-          </org-storybook-example-container-section>
-
-          <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-            <li>Dates before {{ minDate.toISO() }} are disabled</li>
-            <li>Dates after {{ maxDate.toISO() }} are disabled</li>
-            <li>Disabled dates have reduced opacity</li>
-            <li>Disabled dates cannot be clicked</li>
-            <li>Outside-month dates that are disabled show only disabled opacity</li>
-          </ul>
-        </org-storybook-example-container>
-      `,
-      moduleMetadata: {
-        imports: [Calendar, StorybookExampleContainer, StorybookExampleContainerSection],
-      },
-    };
-  },
-};
-
-export const AllowedDateRange: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Calendar with range selection limited to a maximum number of days.',
-      },
-    },
-  },
-  render: () => {
-    const selectedStart = signal<DateTime | null>(null);
-    const selectedEnd = signal<DateTime | null>(null);
-    const allowedRange = 14;
-
-    return {
-      props: {
-        selectedStart,
-        selectedEnd,
-        allowedRange,
-        onDateSelected: (event: { startDate: DateTime | null; endDate: DateTime | null }) => {
-          selectedStart.set(event.startDate);
-          selectedEnd.set(event.endDate);
-          console.log('Date selected:', event);
-        },
-      },
-      template: `
-        <org-storybook-example-container
-          title="Allowed Date Range"
-          [currentState]="'Maximum range of ' + allowedRange + ' days'"
-        >
-          <org-storybook-example-container-section label="Calendar">
-            <org-calendar
-              [allowRangeSelection]="true"
-              [allowedDateRange]="allowedRange"
-              [selectedStartDate]="selectedStart()"
-              [selectedEndDate]="selectedEnd()"
-              (dateSelected)="onDateSelected($event)"
-            />
-          </org-storybook-example-container-section>
-
-          <org-storybook-example-container-section label="Selected Range">
-            @if (selectedStart() && selectedEnd()) {
-              <div>Start: {{ selectedStart()!.toISO() }}</div>
-              <div>End: {{ selectedEnd()!.toISO() }}</div>
-              <div>Days: {{ selectedEnd()!.diff(selectedStart()!, 'days').days + 1 | number:'1.0-0' }}</div>
-            } @else if (selectedStart()) {
-              <div>Start: {{ selectedStart()!.toISO() }}</div>
-              <div class="opacity-subtle">Select an end date within {{ allowedRange }} days</div>
-            } @else {
-              <div class="opacity-subtle">No range selected</div>
-            }
-          </org-storybook-example-container-section>
-
-          <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-            <li>Select a start date first</li>
-            <li>Dates beyond {{ allowedRange }} days from start are disabled</li>
-            <li>Dates more than {{ allowedRange }} days before start are also disabled</li>
-            <li>Once end date is selected, all dates become available again</li>
-            <li>Range includes start date, so {{ allowedRange }} days total</li>
-          </ul>
-        </org-storybook-example-container>
-      `,
-      moduleMetadata: {
-        imports: [Calendar, StorybookExampleContainer, StorybookExampleContainerSection],
-      },
-    };
-  },
-};
-
-export const WithFooter: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Calendar with custom footer content for action buttons or additional information.',
-      },
-    },
-  },
-  render: () => {
-    const selectedStart = signal<DateTime | null>(null);
-    const selectedEnd = signal<DateTime | null>(null);
-
-    return {
-      props: {
-        selectedStart,
-        selectedEnd,
-        onDateSelected: (event: { startDate: DateTime | null; endDate: DateTime | null }) => {
-          selectedStart.set(event.startDate);
-          selectedEnd.set(event.endDate);
-          console.log('Date selected:', event);
-        },
-        onClear: () => {
-          selectedStart.set(null);
-          selectedEnd.set(null);
-          console.log('Cleared selection');
-        },
-        onToday: () => {
-          selectedStart.set(DateTime.now());
-          selectedEnd.set(null);
-          console.log('Selected today');
-        },
-        onApply: () => {
-          console.log('Apply clicked');
-        },
-      },
-      template: `
-        <org-storybook-example-container
-          title="With Footer"
-          currentState="Calendar with custom footer buttons"
-        >
-          <org-storybook-example-container-section label="Calendar">
-            <org-calendar
-              [allowRangeSelection]="true"
-              [selectedStartDate]="selectedStart()"
-              [selectedEndDate]="selectedEnd()"
-              (dateSelected)="onDateSelected($event)"
-            >
-              <org-calendar-footer>
-                <div class="flex items-center justify-between gap-2">
-                  <org-button
-                    variant="ghost"
-                    (clicked)="onToday()"
-                  >
-                    Today
-                  </org-button>
-                  <div class="flex items-center gap-2">
-                    <org-button
-                      variant="ghost"
-                      (clicked)="onClear()"
-                    >
-                      Clear
-                    </org-button>
-                    <org-button
-                      color="primary"
-                      (clicked)="onApply()"
-                    >
-                      Apply
-                    </org-button>
-                  </div>
-                </div>
-              </org-calendar-footer>
-            </org-calendar>
-          </org-storybook-example-container-section>
-
-          <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-            <li>Footer contains action buttons</li>
-            <li>"Today" button sets selection to current date</li>
-            <li>"Clear" button removes selection</li>
-            <li>"Apply" button would typically close calendar and apply selection</li>
-            <li>Footer content is completely customizable</li>
-          </ul>
-        </org-storybook-example-container>
-      `,
-      moduleMetadata: {
-        imports: [Calendar, CalendarFooter, Button, StorybookExampleContainer, StorybookExampleContainerSection],
-      },
-    };
-  },
-};
-
-export const KeyboardNavigation: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Calendar with full keyboard navigation support.',
-      },
-    },
-  },
-  render: () => {
-    const selectedStart = signal<DateTime | null>(null);
-
-    return {
-      props: {
-        selectedStart,
-        onDateSelected: (event: { startDate: DateTime | null; endDate: DateTime | null }) => {
-          selectedStart.set(event.startDate);
-          console.log('Date selected:', event);
-        },
-      },
-      template: `
-        <org-storybook-example-container
-          title="Keyboard Navigation"
-          currentState="Click on the calendar to focus, then use keyboard to navigate"
-        >
-          <org-storybook-example-container-section label="Calendar">
-            <org-calendar
-              [selectedStartDate]="selectedStart()"
-              (dateSelected)="onDateSelected($event)"
-            />
-          </org-storybook-example-container-section>
-
-          <org-storybook-example-container-section label="Keyboard Shortcuts">
-            <div class="flex flex-col gap-1 text-sm">
-              <div><strong>Arrow Keys:</strong> Navigate between dates</div>
-              <div><strong>Page Up/Down:</strong> Navigate between months</div>
-              <div><strong>Home:</strong> Jump to first day of month</div>
-              <div><strong>End:</strong> Jump to last day of month</div>
-              <div><strong>Enter/Space:</strong> Select focused date</div>
-            </div>
-          </org-storybook-example-container-section>
-
-          <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-            <li>Click calendar to focus, then use keyboard</li>
-            <li>Arrow keys move focus between dates</li>
-            <li>Crossing month boundaries auto-updates display</li>
-            <li>Page Up/Down moves one month at a time</li>
-            <li>Home/End jumps to month boundaries</li>
-            <li>Enter or Space selects the focused date</li>
-            <li>Focused date has a ring indicator</li>
-          </ul>
-        </org-storybook-example-container>
-      `,
-      moduleMetadata: {
-        imports: [Calendar, StorybookExampleContainer, StorybookExampleContainerSection],
-      },
-    };
-  },
-};
-
-export const DisplayMonthControl: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Demonstrates programmatic control of the displayed month using the public API.',
-      },
-    },
-  },
-  render: () => {
-    return {
-      props: {
-        getOffsetDate: (monthsOffset: number) => DateTime.now().plus({ months: monthsOffset }),
-        onMonthChanged: (event: unknown) => console.log('Month changed:', event),
-      },
-      template: `
-        <org-storybook-example-container
-          title="Display Month Control"
-          currentState="Use buttons to programmatically change the displayed month"
-        >
-          <org-storybook-example-container-section label="Controls">
-            <div class="flex items-center gap-2">
-              <org-button
-                variant="ghost"
-                (clicked)="calendar.setDisplayDate(getOffsetDate(-3))"
-              >
-                -3 Months
-              </org-button>
-              <org-button
-                variant="ghost"
-                (clicked)="calendar.setDisplayDate(getOffsetDate(-1))"
-              >
-                -1 Month
-              </org-button>
-              <org-button
-                color="primary"
-                (clicked)="calendar.setDisplayDate(getOffsetDate(0))"
-              >
-                Today
-              </org-button>
-              <org-button
-                variant="ghost"
-                (clicked)="calendar.setDisplayDate(getOffsetDate(1))"
-              >
-                +1 Month
-              </org-button>
-              <org-button
-                variant="ghost"
-                (clicked)="calendar.setDisplayDate(getOffsetDate(3))"
-              >
-                +3 Months
-              </org-button>
-            </div>
-          </org-storybook-example-container-section>
-
-          <org-storybook-example-container-section label="Calendar">
-            <org-calendar
-              #calendar
-              (displayMonthChanged)="onMonthChanged($event)"
-            />
-          </org-storybook-example-container-section>
-
-          <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-            <li>Use public API <code>setDisplayDate()</code> to change display</li>
-            <li>Month change triggers <code>displayMonthChanged</code> event</li>
-            <li>Buttons demonstrate programmatic navigation</li>
-            <li>Event includes current and previous month/year</li>
-          </ul>
-        </org-storybook-example-container>
-      `,
-      moduleMetadata: {
-        imports: [Calendar, Button, StorybookExampleContainer, StorybookExampleContainerSection],
-      },
-    };
-  },
-};
-
-export const PartialRangeSelection: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Calendar with partial range selection modes - allows selecting "on or before" or "on or after" a date.',
-      },
-    },
-  },
-  render: () => {
-    const selectedStart = signal<DateTime | null>(null);
-    const selectedEnd = signal<DateTime | null>(null);
-    const partialRangeType = signal<'range' | 'onOrBefore' | 'onOrAfter'>('range');
-
-    return {
-      props: {
-        selectedStart,
-        selectedEnd,
-        partialRangeType,
-        onDateSelected: (event: { startDate: DateTime | null; endDate: DateTime | null }) => {
-          selectedStart.set(event.startDate);
-          selectedEnd.set(event.endDate);
-          console.log('Date selected:', event);
-        },
-        onPartialRangeTypeChange: (type: 'range' | 'onOrBefore' | 'onOrAfter') => {
-          partialRangeType.set(type);
-          console.log('Partial range type changed:', type);
-        },
-      },
-      template: `
-        <org-storybook-example-container
-          title="Partial Range Selection"
-          currentState="Switch between range modes to change selection behavior"
-        >
-          <org-storybook-example-container-section label="Calendar">
-            <org-calendar
-              [allowRangeSelection]="true"
-              [allowPartialRangeSelection]="true"
-              [partialRangeSelectionType]="partialRangeType()"
-              [selectedStartDate]="selectedStart()"
-              [selectedEndDate]="selectedEnd()"
-              (dateSelected)="onDateSelected($event)"
-              (partialRangeSelectionTypeChange)="onPartialRangeTypeChange($event)"
-            />
-          </org-storybook-example-container-section>
-
-          <org-storybook-example-container-section label="Current Mode">
-            <div class="flex flex-col gap-1">
-              <div><strong>Mode:</strong> {{ partialRangeType() }}</div>
-              @if (partialRangeType() === 'range') {
-                <div class="text-sm opacity-subtle">
-                  Standard range selection with start and end dates
-                </div>
-              }
-              @if (partialRangeType() === 'onOrBefore') {
-                <div class="text-sm opacity-subtle">
-                  Selects all dates on or before the selected date (only end date)
-                </div>
-              }
-              @if (partialRangeType() === 'onOrAfter') {
-                <div class="text-sm opacity-subtle">
-                  Selects all dates on or after the selected date (only start date)
-                </div>
-              }
-            </div>
-          </org-storybook-example-container-section>
-
-          <org-storybook-example-container-section label="Selected Dates">
-            @if (selectedStart() && selectedEnd()) {
-              <div>Start: {{ selectedStart()!.toISO() }}</div>
-              <div>End: {{ selectedEnd()!.toISO() }}</div>
-            } @else if (selectedStart()) {
-              <div>Start: {{ selectedStart()!.toISO() }}</div>
-              <div class="opacity-subtle">End: Not selected</div>
-            } @else if (selectedEnd()) {
-              <div class="opacity-subtle">Start: Not selected</div>
-              <div>End: {{ selectedEnd()!.toISO() }}</div>
-            } @else {
-              <div class="opacity-subtle">No dates selected</div>
-            }
-          </org-storybook-example-container-section>
-
-          <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-            <li><strong>Range Mode:</strong> Standard selection with both start (00:00:00) and end dates (23:59:59)</li>
-            <li><strong>On or Before Mode:</strong> Clicking a date sets only the end date (23:59:59), no start date</li>
-            <li><strong>On or After Mode:</strong> Clicking a date sets only the start date (00:00:00), no end date</li>
-            <li>Radio buttons allow switching between modes</li>
-            <li>Selection is cleared when switching between any modes</li>
-            <li>Each mode represents a different type of date filter</li>
-          </ul>
-        </org-storybook-example-container>
-      `,
-      moduleMetadata: {
-        imports: [Calendar, StorybookExampleContainer, StorybookExampleContainerSection],
-      },
-    };
-  },
-};
-
-@Component({
-  selector: 'story-calendar-with-deselection-demo',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Calendar, StorybookExampleContainer, StorybookExampleContainerSection],
-  template: `
-    <org-storybook-example-container
-      title="With Deselection (enableDeselection=true)"
-      currentState="Click selected dates to deselect them"
-    >
-      <org-storybook-example-container-section label="Single Select Mode">
-        <div class="flex flex-col gap-2">
-          <org-calendar
-            [selectedStartDate]="singleDate()"
-            [enableDeselection]="true"
-            (dateSelected)="onSingleDateSelected($event)"
-          />
-          <div class="text-sm">
-            <strong>Selected:</strong>
-            {{ singleDate() ? singleDate()!.toISO() : 'None' }}
-          </div>
-        </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Range Mode">
-        <div class="flex flex-col gap-2">
-          <org-calendar
-            [selectedStartDate]="rangeStart()"
-            [selectedEndDate]="rangeEnd()"
-            [allowRangeSelection]="true"
-            [enableDeselection]="true"
-            (dateSelected)="onRangeSelected($event)"
-          />
-          <div class="text-sm flex flex-col gap-1">
-            <div>
-              <strong>Start:</strong>
-              {{ rangeStart() ? rangeStart()!.toISO() : 'None' }}
-            </div>
-            <div>
-              <strong>End:</strong>
-              {{ rangeEnd() ? rangeEnd()!.toISO() : 'None' }}
-            </div>
-          </div>
-        </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Range Mode + Partial Allowed">
-        <div class="flex flex-col gap-2">
-          <org-calendar
-            [selectedStartDate]="partialStart()"
-            [selectedEndDate]="partialEnd()"
-            [allowRangeSelection]="true"
-            [allowPartialRangeSelection]="true"
-            [partialRangeSelectionType]="partialType()"
-            [enableDeselection]="true"
-            (dateSelected)="onPartialSelected($event)"
-            (partialRangeSelectionTypeChange)="onPartialTypeChange($event)"
-          />
-          <div class="text-sm flex flex-col gap-1">
-            <div><strong>Mode:</strong> {{ partialType() }}</div>
-            <div>
-              <strong>Start:</strong>
-              {{ partialStart() ? partialStart()!.toISO() : 'None' }}
-            </div>
-            <div>
-              <strong>End:</strong>
-              {{ partialEnd() ? partialEnd()!.toISO() : 'None' }}
-            </div>
-          </div>
-        </div>
-      </org-storybook-example-container-section>
-
-      <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-        <li>Clicking a selected date deselects it</li>
-        <li>In single select mode, click selected date to clear selection</li>
-        <li>In range mode, click start date to clear start, click end date to clear end</li>
-        <li>Can selectively clear individual dates in a range</li>
-        <li>All selection modes support deselection when enabled</li>
-      </ul>
-    </org-storybook-example-container>
-  `,
-})
-class CalendarWithDeselectionDemo {
-  // single select
-  protected singleDate = signal<DateTime | null>(null);
-
-  protected onSingleDateSelected(dates: { startDate: DateTime | null; endDate: DateTime | null }): void {
-    this.singleDate.set(dates.startDate);
-  }
-
-  // range mode
-  protected rangeStart = signal<DateTime | null>(null);
-  protected rangeEnd = signal<DateTime | null>(null);
-
-  protected onRangeSelected(dates: { startDate: DateTime | null; endDate: DateTime | null }): void {
-    this.rangeStart.set(dates.startDate);
-    this.rangeEnd.set(dates.endDate);
-  }
-
-  // partial range mode
-  protected partialStart = signal<DateTime | null>(null);
-  protected partialEnd = signal<DateTime | null>(null);
-  protected partialType = signal<'range' | 'onOrBefore' | 'onOrAfter'>('range');
-
-  protected onPartialSelected(dates: { startDate: DateTime | null; endDate: DateTime | null }): void {
-    this.partialStart.set(dates.startDate);
-    this.partialEnd.set(dates.endDate);
-  }
-
-  protected onPartialTypeChange(type: 'range' | 'onOrBefore' | 'onOrAfter'): void {
-    this.partialType.set(type);
-  }
-}
-
-export const WithDeselection: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Demonstrates deselection behavior (enableDeselection=true, default). Clicking already selected dates will deselect them, allowing users to easily clear their selections.',
+        story: 'Interactive live demo with controls for every visual / behavioural input.',
       },
     },
   },
   render: () => ({
-    template: '<story-calendar-with-deselection-demo />',
+    template: '<story-calendar-live-demo />',
     moduleMetadata: {
-      imports: [CalendarWithDeselectionDemo],
+      imports: [CalendarLiveDemoStory],
+    },
+  }),
+};
+
+export const Showcase: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Comprehensive showcase of every Calendar variant axis — single / range / partial-range modes, disabled dates, allowed-range cap, deselection, footer actions, keyboard navigation, display-month control, and the full set of cell states.',
+      },
+    },
+  },
+  render: () => ({
+    template: '<story-calendar-showcase />',
+    moduleMetadata: {
+      imports: [CalendarShowcaseStory],
     },
   }),
 };
 
 @Component({
-  selector: 'story-calendar-without-deselection-demo',
+  selector: 'story-calendar-non-form',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Calendar, StorybookExampleContainer, StorybookExampleContainerSection],
+  imports: [
+    Calendar,
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoCanvas,
+    DesignSystemDemoExpectedBehaviour,
+  ],
   template: `
-    <org-storybook-example-container
-      title="Without Deselection (enableDeselection=false)"
-      currentState="Clicking selected dates has no effect or selects new range"
-    >
-      <org-storybook-example-container-section label="Single Select Mode">
-        <div class="flex flex-col gap-2">
-          <org-calendar
-            [selectedStartDate]="singleDate()"
-            [enableDeselection]="false"
-            (dateSelected)="onSingleDateSelected($event)"
-          />
-          <div class="text-sm">
-            <strong>Selected:</strong>
-            {{ singleDate() ? singleDate()!.toISO() : 'None' }}
-          </div>
-        </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Range Mode">
-        <div class="flex flex-col gap-2">
-          <org-calendar
-            [selectedStartDate]="rangeStart()"
-            [selectedEndDate]="rangeEnd()"
-            [allowRangeSelection]="true"
-            [enableDeselection]="false"
-            (dateSelected)="onRangeSelected($event)"
-          />
-          <div class="text-sm flex flex-col gap-1">
-            <div>
-              <strong>Start:</strong>
-              {{ rangeStart() ? rangeStart()!.toISO() : 'None' }}
+    <div class="flex flex-col gap-4">
+      <org-design-system-demo>
+        <org-design-system-demo-header
+          slot="header"
+          title="Non-Form Usage"
+          description="Drive the calendar with parent-owned signals using [selectedStartDate] / [selectedEndDate] inputs and the (dateSelected) output."
+        />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="flex flex-row gap-4 flex-wrap">
+            <div class="flex flex-col gap-2">
+              <span class="text-sm font-bold">Single mode</span>
+              <org-calendar [selectedStartDate]="singleSelected()" (dateSelected)="onSingleSelected($event)" />
+              <p class="text-sm">
+                Selected:
+                <strong>{{ singleSelected() ? singleSelected()!.toISO() : 'None' }}</strong>
+              </p>
             </div>
-            <div>
-              <strong>End:</strong>
-              {{ rangeEnd() ? rangeEnd()!.toISO() : 'None' }}
+            <div class="flex flex-col gap-2">
+              <span class="text-sm font-bold">Range mode</span>
+              <org-calendar
+                [allowRangeSelection]="true"
+                [selectedStartDate]="rangeStart()"
+                [selectedEndDate]="rangeEnd()"
+                (dateSelected)="onRangeSelected($event)"
+              />
+              <div class="text-sm flex flex-col gap-1">
+                <div>
+                  Start: <strong>{{ rangeStart() ? rangeStart()!.toISO() : 'None' }}</strong>
+                </div>
+                <div>
+                  End: <strong>{{ rangeEnd() ? rangeEnd()!.toISO() : 'None' }}</strong>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Range Mode + Partial Allowed">
-        <div class="flex flex-col gap-2">
-          <org-calendar
-            [selectedStartDate]="partialStart()"
-            [selectedEndDate]="partialEnd()"
-            [allowRangeSelection]="true"
-            [allowPartialRangeSelection]="true"
-            [partialRangeSelectionType]="partialType()"
-            [enableDeselection]="false"
-            (dateSelected)="onPartialSelected($event)"
-            (partialRangeSelectionTypeChange)="onPartialTypeChange($event)"
-          />
-          <div class="text-sm flex flex-col gap-1">
-            <div><strong>Mode:</strong> {{ partialType() }}</div>
-            <div>
-              <strong>Start:</strong>
-              {{ partialStart() ? partialStart()!.toISO() : 'None' }}
-            </div>
-            <div>
-              <strong>End:</strong>
-              {{ partialEnd() ? partialEnd()!.toISO() : 'None' }}
-            </div>
-          </div>
-        </div>
-      </org-storybook-example-container-section>
-
-      <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-        <li>Clicking a selected date does NOT deselect it</li>
-        <li>In single select mode, clicking same date again keeps it selected</li>
-        <li>In range mode, clicking same date as start creates same-day range</li>
-        <li>Cannot clear selections by clicking, must use external controls</li>
-        <li>Useful when auto-closing on selection (like in date picker input)</li>
-      </ul>
-    </org-storybook-example-container>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="list-inside list-disc flex flex-col gap-1">
+          <li>Parent owns the selected start / end signals</li>
+          <li>
+            The <code>(dateSelected)</code> output emits an object with both <code>startDate</code> and
+            <code>endDate</code>
+          </li>
+          <li>The host writes the emitted values back to its signals to keep state in sync</li>
+          <li>This pattern works for any selection mode — single, range, or partial range</li>
+        </ul>
+      </org-design-system-demo-expected-behaviour>
+    </div>
   `,
 })
-class CalendarWithoutDeselectionDemo {
-  // single select
-  protected singleDate = signal<DateTime | null>(null);
+class CalendarNonFormStory {
+  // single
+  protected readonly singleSelected = signal<DateTime | null>(null);
 
-  protected onSingleDateSelected(dates: { startDate: DateTime | null; endDate: DateTime | null }): void {
-    this.singleDate.set(dates.startDate);
+  protected onSingleSelected(event: { startDate: DateTime | null; endDate: DateTime | null }): void {
+    this.singleSelected.set(event.startDate);
   }
 
-  // range mode
-  protected rangeStart = signal<DateTime | null>(null);
-  protected rangeEnd = signal<DateTime | null>(null);
+  // range
+  protected readonly rangeStart = signal<DateTime | null>(null);
+  protected readonly rangeEnd = signal<DateTime | null>(null);
 
-  protected onRangeSelected(dates: { startDate: DateTime | null; endDate: DateTime | null }): void {
-    this.rangeStart.set(dates.startDate);
-    this.rangeEnd.set(dates.endDate);
-  }
-
-  // partial range mode
-  protected partialStart = signal<DateTime | null>(null);
-  protected partialEnd = signal<DateTime | null>(null);
-  protected partialType = signal<'range' | 'onOrBefore' | 'onOrAfter'>('range');
-
-  protected onPartialSelected(dates: { startDate: DateTime | null; endDate: DateTime | null }): void {
-    this.partialStart.set(dates.startDate);
-    this.partialEnd.set(dates.endDate);
-  }
-
-  protected onPartialTypeChange(type: 'range' | 'onOrBefore' | 'onOrAfter'): void {
-    this.partialType.set(type);
+  protected onRangeSelected(event: { startDate: DateTime | null; endDate: DateTime | null }): void {
+    this.rangeStart.set(event.startDate);
+    this.rangeEnd.set(event.endDate);
   }
 }
 
-export const WithoutDeselection: Story = {
+export const NonFormUsage: Story = {
   parameters: {
     docs: {
       description: {
         story:
-          'Demonstrates behavior with deselection disabled (enableDeselection=false). Clicking already selected dates will not deselect them. Useful for scenarios like date picker inputs where auto-close on selection is enabled.',
+          'Driving the calendar outside of a reactive form using [selectedStartDate] / [selectedEndDate] inputs and the (dateSelected) output. Shown for both single and range selection modes.',
       },
     },
   },
   render: () => ({
-    template: '<story-calendar-without-deselection-demo />',
+    template: '<story-calendar-non-form />',
     moduleMetadata: {
-      imports: [CalendarWithoutDeselectionDemo],
+      imports: [CalendarNonFormStory],
+    },
+  }),
+};
+
+@Component({
+  selector: 'story-calendar-reactive-form',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    Calendar,
+    Button,
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoCanvas,
+    DesignSystemDemoExpectedBehaviour,
+    ReactiveFormsModule,
+  ],
+  template: `
+    <div class="flex flex-col gap-4">
+      <org-design-system-demo>
+        <org-design-system-demo-header
+          slot="header"
+          title="Reactive Form Integration"
+          [description]="
+            'Single form valid: ' +
+            singleForm.valid +
+            ', value: ' +
+            singleFormValueDisplay() +
+            ' · Range form valid: ' +
+            rangeForm.valid +
+            ', value: ' +
+            rangeFormValueDisplay()
+          "
+        />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="flex flex-row gap-4 flex-wrap">
+            <div class="flex flex-col gap-2">
+              <span class="text-sm font-bold">Single mode</span>
+              <org-calendar
+                [selectedStartDate]="singleStartDate()"
+                [disabled]="singleForm.disabled"
+                (dateSelected)="onSingleFormDateSelected($event)"
+              />
+              <div class="flex flex-row gap-2">
+                <org-button
+                  variant="ghost"
+                  color="neutral"
+                  size="sm"
+                  label="Disable"
+                  (clicked)="singleForm.disable()"
+                />
+                <org-button variant="ghost" color="neutral" size="sm" label="Enable" (clicked)="singleForm.enable()" />
+                <org-button variant="ghost" color="neutral" size="sm" label="Reset" (clicked)="singleForm.reset()" />
+              </div>
+            </div>
+            <div class="flex flex-col gap-2">
+              <span class="text-sm font-bold">Range mode (with partial)</span>
+              <org-calendar
+                [allowRangeSelection]="true"
+                [allowPartialRangeSelection]="true"
+                [partialRangeSelectionType]="rangePartialType()"
+                [selectedStartDate]="rangeStartDate()"
+                [selectedEndDate]="rangeEndDate()"
+                [disabled]="rangeForm.disabled"
+                (dateSelected)="onRangeFormDateSelected($event)"
+                (partialRangeSelectionTypeChange)="onRangePartialTypeChanged($event)"
+              />
+              <div class="flex flex-row gap-2">
+                <org-button variant="ghost" color="neutral" size="sm" label="Disable" (clicked)="rangeForm.disable()" />
+                <org-button variant="ghost" color="neutral" size="sm" label="Enable" (clicked)="rangeForm.enable()" />
+                <org-button variant="ghost" color="neutral" size="sm" label="Reset" (clicked)="rangeForm.reset()" />
+              </div>
+            </div>
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="list-inside list-disc flex flex-col gap-1">
+          <li>
+            The calendar is not a <code>ControlValueAccessor</code>; the host bridges its inputs and outputs to a
+            <code>FormGroup</code>
+          </li>
+          <li>
+            Form value drives the calendar via <code>[selectedStartDate]</code> / <code>[selectedEndDate]</code> /
+            <code>[partialRangeSelectionType]</code>
+          </li>
+          <li>
+            Calendar's <code>(dateSelected)</code> and <code>(partialRangeSelectionTypeChange)</code> patch the form via
+            signals derived from <code>valueChanges</code>
+          </li>
+          <li>
+            Programmatic <code>form.disable()</code> reflects in the calendar via the <code>[disabled]</code> input —
+            interaction is suppressed and the surface is dimmed
+          </li>
+          <li>Form values are stored as ISO strings so the form serialises cleanly for transport</li>
+        </ul>
+      </org-design-system-demo-expected-behaviour>
+    </div>
+  `,
+})
+class CalendarReactiveFormStory {
+  // single mode form
+  protected readonly singleForm = new FormGroup({
+    start: new FormControl<string | null>(null),
+    end: new FormControl<string | null>(null),
+    partialRangeSelectionType: new FormControl<CalendarPartialRangeSelectionType>('range', { nonNullable: true }),
+  });
+
+  /** signal driven by valueChanges; subscribed to so the UI reacts to form mutations */
+  private readonly _singleFormChange = toSignal(this.singleForm.valueChanges, { initialValue: null });
+
+  protected readonly singleFormValueDisplay = toSignal(
+    this.singleForm.valueChanges.pipe(map((value) => JSON.stringify(value))),
+    { initialValue: JSON.stringify(this.singleForm.getRawValue()) }
+  );
+
+  protected readonly singleStartDate = computed<DateTime | null>(() => {
+    // re-read when the form changes
+    this._singleFormChange();
+
+    const raw = this.singleForm.controls.start.value;
+
+    return raw ? DateTime.fromISO(raw) : null;
+  });
+
+  // range mode form
+  protected readonly rangeForm = new FormGroup({
+    start: new FormControl<string | null>(null),
+    end: new FormControl<string | null>(null),
+    partialRangeSelectionType: new FormControl<CalendarPartialRangeSelectionType>('range', { nonNullable: true }),
+  });
+
+  /** signal driven by valueChanges; subscribed to so the UI reacts to form mutations */
+  private readonly _rangeFormChange = toSignal(this.rangeForm.valueChanges, { initialValue: null });
+
+  protected readonly rangeFormValueDisplay = toSignal(
+    this.rangeForm.valueChanges.pipe(map((value) => JSON.stringify(value))),
+    { initialValue: JSON.stringify(this.rangeForm.getRawValue()) }
+  );
+
+  protected readonly rangeStartDate = computed<DateTime | null>(() => {
+    this._rangeFormChange();
+
+    const raw = this.rangeForm.controls.start.value;
+
+    return raw ? DateTime.fromISO(raw) : null;
+  });
+
+  protected readonly rangeEndDate = computed<DateTime | null>(() => {
+    this._rangeFormChange();
+
+    const raw = this.rangeForm.controls.end.value;
+
+    return raw ? DateTime.fromISO(raw) : null;
+  });
+
+  protected readonly rangePartialType = computed<CalendarPartialRangeSelectionType>(() => {
+    this._rangeFormChange();
+
+    return this.rangeForm.controls.partialRangeSelectionType.value;
+  });
+
+  protected onSingleFormDateSelected(event: { startDate: DateTime | null; endDate: DateTime | null }): void {
+    this.singleForm.patchValue({
+      start: event.startDate?.toISO() ?? null,
+      end: event.endDate?.toISO() ?? null,
+    });
+  }
+
+  protected onRangeFormDateSelected(event: { startDate: DateTime | null; endDate: DateTime | null }): void {
+    this.rangeForm.patchValue({
+      start: event.startDate?.toISO() ?? null,
+      end: event.endDate?.toISO() ?? null,
+    });
+  }
+
+  protected onRangePartialTypeChanged(type: CalendarPartialRangeSelectionType): void {
+    this.rangeForm.patchValue({ partialRangeSelectionType: type });
+  }
+}
+
+export const ReactiveFormIntegration: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Bridging the calendar to Angular reactive forms. The calendar is not itself a ControlValueAccessor (it has multiple value axes — start, end, partial-range type), so the host pattern is: form value drives the calendar inputs, the calendar outputs patch the form. The example also demonstrates that programmatic form.disable() reflects in the calendar via the [disabled] input.',
+      },
+    },
+  },
+  render: () => ({
+    template: '<story-calendar-reactive-form />',
+    moduleMetadata: {
+      imports: [CalendarReactiveFormStory],
     },
   }),
 };

@@ -3,11 +3,29 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import type { Meta, StoryObj } from '@storybook/angular';
 import { map } from 'rxjs';
+import { CheckboxToggle } from '../checkbox-toggle/checkbox-toggle';
 import { FormField } from '../form-fields/form-field';
 import { FormFields } from '../form-fields/form-fields';
-import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
-import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
+import { allComponentColors } from '../types/component-types';
+import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
+import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
+import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
+import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
+import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
+import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
 import { ButtonToggle, ButtonToggleItem } from './button-toggle';
+
+const liveDemoSizeItems: ButtonToggleItem[] = [
+  { label: 'sm', value: 'sm', buttonColor: 'primary' },
+  { label: 'base', value: 'base', buttonColor: 'primary' },
+  { label: 'lg', value: 'lg', buttonColor: 'primary' },
+];
+
+const liveDemoToggleItems: ButtonToggleItem[] = [
+  { label: 'Left', value: 'left', buttonColor: 'primary' },
+  { label: 'Center', value: 'center', buttonColor: 'primary' },
+  { label: 'Right', value: 'right', buttonColor: 'primary' },
+];
 
 const meta: Meta<ButtonToggle> = {
   title: 'Core/Components/Button Toggle',
@@ -124,86 +142,174 @@ export const Default: Story = {
   }),
 };
 
-export const Sizes: Story = {
+@Component({
+  selector: 'story-button-toggle-live-demo',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    ReactiveFormsModule,
+    ButtonToggle,
+    CheckboxToggle,
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoControls,
+    DesignSystemDemoControlGroup,
+    DesignSystemDemoCanvas,
+  ],
+  styles: [
+    `
+      :host {
+        display: block;
+      }
+      .canvas-stage {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 6rem; /* 96px */
+      }
+    `,
+  ],
+  template: `
+    <form [formGroup]="liveDemoForm">
+      <org-design-system-demo>
+        <org-design-system-demo-header
+          slot="header"
+          title="Live demo"
+          description="The button toggle below is real and interactive — click any button to update the selected value, and use the controls to drive the visual state."
+        />
+        <org-design-system-demo-controls slot="controls">
+          <org-design-system-demo-control-group label="Button Size">
+            <org-button-toggle [items]="sizeItems" formControlName="buttonSize" buttonSize="sm" />
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Disabled">
+            <org-checkbox-toggle name="live-demo-disabled" value="disabled" formControlName="disabled">
+              {{ liveDemoForm.controls.disabled.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
+        </org-design-system-demo-controls>
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="canvas-stage">
+            <org-button-toggle
+              [items]="toggleItems"
+              formControlName="value"
+              [buttonSize]="liveDemoForm.controls.buttonSize.value"
+              [disabled]="liveDemoForm.controls.disabled.value"
+            />
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+    </form>
+  `,
+})
+class ButtonToggleLiveDemoStory {
+  protected readonly sizeItems = liveDemoSizeItems;
+  protected readonly toggleItems = liveDemoToggleItems;
+
+  protected readonly liveDemoForm = new FormGroup({
+    value: new FormControl<string>('center', { nonNullable: true }),
+    buttonSize: new FormControl<'sm' | 'base' | 'lg'>('base', { nonNullable: true }),
+    disabled: new FormControl<boolean>(false, { nonNullable: true }),
+  });
+}
+
+export const LiveDemo: Story = {
   parameters: {
     docs: {
       description: {
         story:
-          'Comparison of all 3 size variants (sm, base, lg). The size is applied uniformly to every button in the toggle.',
+          'Fully interactive demo. Click the toggle to change the selected value, and use the controls to drive the button size and disabled state.',
       },
     },
   },
   render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Button Sizes"
-        currentState="Comparing sm, base, and lg sizes for the toggle's buttons"
-      >
-        <org-storybook-example-container-section label="Small">
-          <org-button-toggle [items]="items" value="center" buttonSize="sm" />
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Base (Default)">
-          <org-button-toggle [items]="items" value="center" buttonSize="base" />
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Large">
-          <org-button-toggle [items]="items" value="center" buttonSize="lg" />
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li><strong>Small</strong>: Compact toggle for dense layouts</li>
-          <li><strong>Base</strong>: Standard toggle size for most use cases (default)</li>
-          <li><strong>Large</strong>: Prominent toggle for primary/important segmented controls</li>
-          <li>The size is applied uniformly to every button in the toggle</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    props: {
-      items: defaultItems,
-    },
+    template: `<story-button-toggle-live-demo />`,
     moduleMetadata: {
-      imports: [ButtonToggle, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [ButtonToggleLiveDemoStory],
     },
   }),
 };
 
-export const PerItemColors: Story = {
+export const Showcase: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Each item can specify its own button color, allowing semantic differentiation per option.',
+        story:
+          'Comprehensive showcase of every button-toggle variant axis — button size, per-item colors, and disabled states — in a single scrollable view.',
       },
     },
   },
   render: () => ({
     template: `
-      <org-storybook-example-container
-        title="Per-Item Colors"
-        currentState="Each item drives its own button color via the buttonColor field"
-      >
-        <org-storybook-example-container-section label="Semantic Severity">
-          <org-button-toggle
-            [items]="severityItems"
-            value="info"
-          />
-        </org-storybook-example-container-section>
+      <div class="flex flex-col gap-4">
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Button Sizes" />
+          <org-design-system-demo-canvas slot="canvas">
+            <org-button-toggle [items]="items" value="center" buttonSize="sm" />
+            <org-button-toggle [items]="items" value="center" buttonSize="base" />
+            <org-button-toggle [items]="items" value="center" buttonSize="lg" />
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>Small</strong>: Compact toggle for dense layouts</li>
+            <li><strong>Base</strong>: Standard toggle size for most use cases (default)</li>
+            <li><strong>Large</strong>: Prominent toggle for primary/important segmented controls</li>
+            <li>The size is applied uniformly to every button in the toggle</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
 
-        <org-storybook-example-container-section label="Mixed Brand Colors">
-          <org-button-toggle
-            [items]="brandItems"
-            value="secondary"
-          />
-        </org-storybook-example-container-section>
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="All Button Colors in One Toggle" />
+          <org-design-system-demo-canvas slot="canvas">
+            <org-button-toggle [items]="allColorsItems" value="primary" />
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li>Every available <code>ButtonColor</code> is rendered as an item within a single toggle</li>
+            <li>Items appear in the canonical <code>allComponentColors</code> order: primary, secondary, neutral, safe, info, caution, warning, danger</li>
+            <li>The selected item (<strong>primary</strong>) shows its color's pressed/active state; click any other item to see its color in the active state</li>
+            <li>Inactive items remain in their default (neutral) state regardless of their per-item <code>buttonColor</code></li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
 
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li>The active button renders in its variant's pressed (active) state colors</li>
-          <li>Hover and active pseudo-states are neutralized on the active button</li>
-          <li>Focus-visible remains on the active button so keyboard focus is still indicated</li>
-        </ul>
-      </org-storybook-example-container>
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Per-Item Colors" />
+          <org-design-system-demo-canvas slot="canvas">
+            <org-button-toggle [items]="severityItems" value="info" />
+            <org-button-toggle [items]="brandItems" value="secondary" />
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li>The active button renders in its variant's pressed (active) state colors</li>
+            <li>Hover and active pseudo-states are neutralized on the active button</li>
+            <li>Focus-visible remains on the active button so keyboard focus is still indicated</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Disabled States" />
+          <org-design-system-demo-canvas slot="canvas">
+            <org-button-toggle [items]="items" value="center" [disabled]="true" />
+            <org-button-toggle [items]="perItemDisabledItems" value="left" />
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>Wrapper disabled</strong>: every item is non-interactive and the whole toggle is dimmed</li>
+            <li><strong>Per-item disabled</strong>: only the items with <code>buttonDisabled: true</code> are non-interactive</li>
+            <li>An item is disabled when either the wrapper is disabled OR its own <code>buttonDisabled</code> is true</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+      </div>
     `,
     props: {
+      items: defaultItems,
+      allColorsItems: allComponentColors.map((color) => ({
+        label: color,
+        value: color,
+        buttonColor: color,
+      })) as ButtonToggleItem[],
       severityItems: [
         { label: 'Safe', value: 'safe', buttonColor: 'safe' },
         { label: 'Info', value: 'info', buttonColor: 'info' },
@@ -216,52 +322,6 @@ export const PerItemColors: Story = {
         { label: 'Secondary', value: 'secondary', buttonColor: 'secondary' },
         { label: 'Neutral', value: 'neutral', buttonColor: 'neutral' },
       ] as ButtonToggleItem[],
-    },
-    moduleMetadata: {
-      imports: [ButtonToggle, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const Disabled: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Disabling can target the whole toggle (wrapper-level `disabled`) or individual items (`buttonDisabled` per item).',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Disabled States"
-        currentState="Comparing wrapper-level and per-item disabled behaviors"
-      >
-        <org-storybook-example-container-section label="Wrapper Disabled">
-          <org-button-toggle
-            [items]="items"
-            value="center"
-            [disabled]="true"
-          />
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Per-Item Disabled">
-          <org-button-toggle
-            [items]="perItemDisabledItems"
-            value="left"
-          />
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li><strong>Wrapper disabled</strong>: every item is non-interactive and the whole toggle is dimmed</li>
-          <li><strong>Per-item disabled</strong>: only the items with <code>buttonDisabled: true</code> are non-interactive</li>
-          <li>An item is disabled when either the wrapper is disabled OR its own <code>buttonDisabled</code> is true</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    props: {
-      items: defaultItems,
       perItemDisabledItems: [
         { label: 'Left', value: 'left', buttonColor: 'primary' },
         { label: 'Center', value: 'center', buttonColor: 'primary', buttonDisabled: true },
@@ -269,7 +329,7 @@ export const Disabled: Story = {
       ] as ButtonToggleItem[],
     },
     moduleMetadata: {
-      imports: [ButtonToggle, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [ButtonToggle, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas, DesignSystemDemoExpectedBehaviour],
     },
   }),
 };
@@ -278,19 +338,32 @@ export const Disabled: Story = {
   selector: 'story-button-toggle-non-form',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <org-storybook-example-container title="Non-Form Usage" [currentState]="'Selected: ' + selected()">
-      <org-storybook-example-container-section label="Two-Way Style Binding via [value] + (changed)">
-        <org-button-toggle [items]="items" [value]="selected()" (changed)="selected.set($event)" />
-      </org-storybook-example-container-section>
-
-      <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-        <li>Click any button to update the selected value</li>
-        <li>Clicking the active button is a no-op (no deselect)</li>
-        <li>The host listens to the <code>changed</code> output to update its own state</li>
-      </ul>
-    </org-storybook-example-container>
+    <div class="flex flex-col gap-4">
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Non-Form Usage" />
+        <org-design-system-demo-canvas slot="canvas">
+          <org-button-toggle [items]="items" [value]="selected()" (changed)="selected.set($event)" />
+          <p>
+            Selected: <strong>{{ selected() }}</strong>
+          </p>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="list-inside list-disc flex flex-col gap-1">
+          <li>Click any button to update the selected value</li>
+          <li>Clicking the active button is a no-op (no deselect)</li>
+          <li>The host listens to the <code>changed</code> output to update its own state</li>
+        </ul>
+      </org-design-system-demo-expected-behaviour>
+    </div>
   `,
-  imports: [ButtonToggle, StorybookExampleContainer, StorybookExampleContainerSection],
+  imports: [
+    ButtonToggle,
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoCanvas,
+    DesignSystemDemoExpectedBehaviour,
+  ],
 })
 class ButtonToggleNonFormStory {
   protected readonly items: ButtonToggleItem[] = [
@@ -323,38 +396,45 @@ export const NonFormUsage: Story = {
   selector: 'story-button-toggle-reactive-form',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <org-storybook-example-container
-      title="Reactive Form Integration"
-      [currentState]="'Form Valid: ' + toggleForm.valid + ', Form Value: ' + formValueDisplay()"
-    >
-      <org-storybook-example-container-section label="Toggle in a Form">
-        <form [formGroup]="toggleForm" class="flex flex-col gap-2">
-          <org-form-fields>
-            <org-form-field>
-              <org-button-toggle [items]="alignmentItems" formControlName="alignment" />
-            </org-form-field>
-            <org-form-field>
-              <org-button-toggle [items]="severityItems" formControlName="severity" />
-            </org-form-field>
-          </org-form-fields>
-        </form>
-      </org-storybook-example-container-section>
-
-      <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-        <li>Uses <strong>formControlName</strong> for reactive forms integration via ControlValueAccessor</li>
-        <li>Form state updates automatically as buttons are clicked — no manual change handlers needed</li>
-        <li>
-          Programmatic <strong>form.disable()</strong> and <strong>control.disable()</strong> reflect in the toggle
-        </li>
-      </ul>
-    </org-storybook-example-container>
+    <div class="flex flex-col gap-4">
+      <org-design-system-demo>
+        <org-design-system-demo-header
+          slot="header"
+          title="Reactive Form Integration"
+          [description]="'Form Valid: ' + toggleForm.valid + ', Form Value: ' + formValueDisplay()"
+        />
+        <org-design-system-demo-canvas slot="canvas">
+          <form [formGroup]="toggleForm" class="flex flex-col gap-2">
+            <org-form-fields>
+              <org-form-field>
+                <org-button-toggle [items]="alignmentItems" formControlName="alignment" />
+              </org-form-field>
+              <org-form-field>
+                <org-button-toggle [items]="severityItems" formControlName="severity" />
+              </org-form-field>
+            </org-form-fields>
+          </form>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="list-inside list-disc flex flex-col gap-1">
+          <li>Uses <strong>formControlName</strong> for reactive forms integration via ControlValueAccessor</li>
+          <li>Form state updates automatically as buttons are clicked — no manual change handlers needed</li>
+          <li>
+            Programmatic <strong>form.disable()</strong> and <strong>control.disable()</strong> reflect in the toggle
+          </li>
+        </ul>
+      </org-design-system-demo-expected-behaviour>
+    </div>
   `,
   imports: [
     ButtonToggle,
     FormFields,
     FormField,
-    StorybookExampleContainer,
-    StorybookExampleContainerSection,
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoCanvas,
+    DesignSystemDemoExpectedBehaviour,
     ReactiveFormsModule,
   ],
 })

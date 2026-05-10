@@ -2,6 +2,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const prettier = require('prettier');
 
 const REPO_ROOT = path.resolve(__dirname, '..', '..');
 const BASE_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/base-tokens.css');
@@ -9,11 +10,33 @@ const CHART_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles
 const SCROLLBAR_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/scrollbar-tokens.css');
 const AVATAR_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/avatar-tokens.css');
 const ICON_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/icon-tokens.css');
+const INDICATOR_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/indicator-tokens.css');
+const LABEL_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/label-tokens.css');
+const LINK_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/link-tokens.css');
+const LOADING_BLOCKER_TOKENS_CSS = path.join(
+  REPO_ROOT,
+  'projects/shared-ui/src/lib/styles/tokens/loading-blocker-tokens.css',
+);
 const TAG_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/tag-tokens.css');
 const BUTTON_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/button-tokens.css');
+const CALENDAR_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/calendar-tokens.css');
+const CARD_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/card-tokens.css');
+const CHAT_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/chat-tokens.css');
+const CHECKBOX_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/checkbox-tokens.css');
+const CHECKBOX_TOGGLE_TOKENS_CSS = path.join(
+  REPO_ROOT,
+  'projects/shared-ui/src/lib/styles/tokens/checkbox-toggle-tokens.css',
+);
+const CHECKLIST_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/checklist-tokens.css');
+const COMBOBOX_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/combobox-tokens.css');
 const DESIGN_SYSTEM_DEMO_TOKENS_CSS = path.join(
   REPO_ROOT,
   'projects/shared-ui/src/lib/styles/tokens/design-system-demo-tokens.css',
+);
+const OVERLAY_MENU_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/overlay-menu-tokens.css');
+const EMPTY_INDICATOR_TOKENS_CSS = path.join(
+  REPO_ROOT,
+  'projects/shared-ui/src/lib/styles/tokens/empty-indicator-tokens.css',
 );
 const OUTPUT_TS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/design-tokens.ts');
 
@@ -187,7 +210,7 @@ export const designTokenUtils = {
 `;
 }
 
-function main() {
+async function main() {
   const cleanCss = (content) =>
     content.replace(/@import[^;]+;/g, '').replace(/\/\*[\s\S]*?\*\//g, '');
 
@@ -196,9 +219,22 @@ function main() {
   const scrollbarContent = cleanCss(fs.readFileSync(SCROLLBAR_TOKENS_CSS, 'utf-8'));
   const avatarContent = cleanCss(fs.readFileSync(AVATAR_TOKENS_CSS, 'utf-8'));
   const iconContent = cleanCss(fs.readFileSync(ICON_TOKENS_CSS, 'utf-8'));
+  const indicatorContent = cleanCss(fs.readFileSync(INDICATOR_TOKENS_CSS, 'utf-8'));
+  const labelContent = cleanCss(fs.readFileSync(LABEL_TOKENS_CSS, 'utf-8'));
+  const linkContent = cleanCss(fs.readFileSync(LINK_TOKENS_CSS, 'utf-8'));
+  const loadingBlockerContent = cleanCss(fs.readFileSync(LOADING_BLOCKER_TOKENS_CSS, 'utf-8'));
   const tagContent = cleanCss(fs.readFileSync(TAG_TOKENS_CSS, 'utf-8'));
   const buttonContent = cleanCss(fs.readFileSync(BUTTON_TOKENS_CSS, 'utf-8'));
+  const calendarContent = cleanCss(fs.readFileSync(CALENDAR_TOKENS_CSS, 'utf-8'));
+  const cardContent = cleanCss(fs.readFileSync(CARD_TOKENS_CSS, 'utf-8'));
+  const chatContent = cleanCss(fs.readFileSync(CHAT_TOKENS_CSS, 'utf-8'));
+  const checkboxContent = cleanCss(fs.readFileSync(CHECKBOX_TOKENS_CSS, 'utf-8'));
+  const checkboxToggleContent = cleanCss(fs.readFileSync(CHECKBOX_TOGGLE_TOKENS_CSS, 'utf-8'));
+  const checklistContent = cleanCss(fs.readFileSync(CHECKLIST_TOKENS_CSS, 'utf-8'));
+  const comboboxContent = cleanCss(fs.readFileSync(COMBOBOX_TOKENS_CSS, 'utf-8'));
   const designSystemDemoContent = cleanCss(fs.readFileSync(DESIGN_SYSTEM_DEMO_TOKENS_CSS, 'utf-8'));
+  const emptyIndicatorContent = cleanCss(fs.readFileSync(EMPTY_INDICATOR_TOKENS_CSS, 'utf-8'));
+  const overlayMenuContent = cleanCss(fs.readFileSync(OVERLAY_MENU_TOKENS_CSS, 'utf-8'));
 
   // Base tokens: all :root vars; color vars are used only for resolution, non-color vars are also output
   const baseVars = Object.assign({}, ...findBlocks(baseContent, ':root').map(extractVariables));
@@ -210,9 +246,22 @@ function main() {
     ...findBlocks(scrollbarContent, ':root').map(extractVariables),
     ...findBlocks(avatarContent, ':root').map(extractVariables),
     ...findBlocks(iconContent, ':root').map(extractVariables),
+    ...findBlocks(indicatorContent, ':root').map(extractVariables),
+    ...findBlocks(labelContent, ':root').map(extractVariables),
+    ...findBlocks(linkContent, ':root').map(extractVariables),
+    ...findBlocks(loadingBlockerContent, ':root').map(extractVariables),
     ...findBlocks(tagContent, ':root').map(extractVariables),
     ...findBlocks(buttonContent, ':root').map(extractVariables),
+    ...findBlocks(calendarContent, ':root').map(extractVariables),
+    ...findBlocks(cardContent, ':root').map(extractVariables),
+    ...findBlocks(chatContent, ':root').map(extractVariables),
+    ...findBlocks(checkboxContent, ':root').map(extractVariables),
+    ...findBlocks(checkboxToggleContent, ':root').map(extractVariables),
+    ...findBlocks(checklistContent, ':root').map(extractVariables),
+    ...findBlocks(comboboxContent, ':root').map(extractVariables),
     ...findBlocks(designSystemDemoContent, ':root').map(extractVariables),
+    ...findBlocks(emptyIndicatorContent, ':root').map(extractVariables),
+    ...findBlocks(overlayMenuContent, ':root').map(extractVariables),
   );
   const darkVars = Object.assign(
     {},
@@ -221,9 +270,22 @@ function main() {
     ...findBlocks(scrollbarContent, '.dark').map(extractVariables),
     ...findBlocks(avatarContent, '.dark').map(extractVariables),
     ...findBlocks(iconContent, '.dark').map(extractVariables),
+    ...findBlocks(indicatorContent, '.dark').map(extractVariables),
+    ...findBlocks(labelContent, '.dark').map(extractVariables),
+    ...findBlocks(linkContent, '.dark').map(extractVariables),
+    ...findBlocks(loadingBlockerContent, '.dark').map(extractVariables),
     ...findBlocks(tagContent, '.dark').map(extractVariables),
     ...findBlocks(buttonContent, '.dark').map(extractVariables),
+    ...findBlocks(calendarContent, '.dark').map(extractVariables),
+    ...findBlocks(cardContent, '.dark').map(extractVariables),
+    ...findBlocks(chatContent, '.dark').map(extractVariables),
+    ...findBlocks(checkboxContent, '.dark').map(extractVariables),
+    ...findBlocks(checkboxToggleContent, '.dark').map(extractVariables),
+    ...findBlocks(checklistContent, '.dark').map(extractVariables),
+    ...findBlocks(comboboxContent, '.dark').map(extractVariables),
     ...findBlocks(designSystemDemoContent, '.dark').map(extractVariables),
+    ...findBlocks(emptyIndicatorContent, '.dark').map(extractVariables),
+    ...findBlocks(overlayMenuContent, '.dark').map(extractVariables),
   );
 
   // Resolution maps: base vars are always the foundation
@@ -268,7 +330,13 @@ function main() {
 
   const tsContent = generateTypeScript(colorLightMap, colorDarkMap, nonColorMap);
 
-  fs.writeFileSync(OUTPUT_TS, tsContent, 'utf-8');
+  const prettierConfig = await prettier.resolveConfig(OUTPUT_TS);
+  const formatted = await prettier.format(tsContent, {
+    ...prettierConfig,
+    filepath: OUTPUT_TS,
+  });
+
+  fs.writeFileSync(OUTPUT_TS, formatted, 'utf-8');
 
   console.log(`Generated ${Object.keys(colorLightMap).length} light color tokens`);
   console.log(`Generated ${Object.keys(colorDarkMap).length} dark color tokens`);
@@ -276,4 +344,7 @@ function main() {
   console.log(`Output: ${OUTPUT_TS}`);
 }
 
-main();
+main().catch((error) => {
+  console.error(error);
+  process.exit(1);
+});

@@ -1,130 +1,167 @@
-import { Component, ChangeDetectionStrategy, input, computed } from '@angular/core';
-import { DateTime } from 'luxon';
-import { Indicator } from '../indicator/indicator';
-import { ChatMessageSteps } from './chat-message-steps';
-import type { ChecklistItemData } from '../checklist/checklist';
+import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
+import { angularUtils } from '@organization/shared-utils';
+import { Avatar, AVATAR_SHAPE_VARIANT_DEFAULT, type AvatarShapeVariant } from '../avatar/avatar';
+import { Box, type BoxBorder, type BoxColor } from '../box/box';
+import { Icon } from '../icon/icon';
+import { type IconName } from '../../brain/icon-brain/icon-brain';
+import {
+  ChatMessageBrainDirective,
+  CHAT_MESSAGE_ROLE_DEFAULT,
+  CHAT_MESSAGE_STATE_DEFAULT,
+  type ChatMessageRole,
+  type ChatMessageState,
+} from '../../brain/chat-message-brain/chat-message-brain';
 
-/** all available chat message status values */
-export const allChatMessageStatuses = ['in-progress', 'completed', 'failed'] as const;
+/** all available chat message run-position values */
+export const allChatMessageRunPositions = ['only', 'first', 'middle', 'last'] as const;
 
-/** the status of an ai-driven chat message */
-export type ChatMessageStatus = (typeof allChatMessageStatuses)[number];
+/**
+ * the position of the message inside a sender run. consumers set this to drive vertical rhythm and to hide the
+ * avatar / author label on continuation messages.
+ */
+export type ChatMessageRunPosition = (typeof allChatMessageRunPositions)[number];
 
-/** all available chat message source values */
-export const allChatMessageSources = ['user', 'ai', 'system'] as const;
+/** default value for the runPosition input */
+export const CHAT_MESSAGE_RUN_POSITION_DEFAULT: ChatMessageRunPosition = 'only';
 
-/** the originator of a chat message */
-export type ChatMessageSource = (typeof allChatMessageSources)[number];
+/** default value for the authorName input */
+export const CHAT_MESSAGE_AUTHOR_NAME_DEFAULT = '';
 
-/** the data shape for a single chat message */
-export type ChatMessageData = {
-  /** unique id for the message */
-  id: string;
-  /** the text content of the message */
-  message: string;
-  /** optional processing status for ai messages */
-  status?: ChatMessageStatus;
-  /** optional ordered list of steps taken to produce the message */
-  steps?: ChecklistItemData[];
-  /** iso formatted date string for when processing started */
-  startedAt?: string;
-  /** iso formatted date string for when processing completed */
-  completedAt?: string;
-  /** the originator of the message */
-  source: ChatMessageSource;
-};
+/** default value for the time input */
+export const CHAT_MESSAGE_TIME_DEFAULT: string | undefined = undefined;
 
+/** default value for the meta input (overrides time when present, e.g. "Sending...") */
+export const CHAT_MESSAGE_META_DEFAULT: string | undefined = undefined;
+
+/** default value for the edited input */
+export const CHAT_MESSAGE_EDITED_DEFAULT = false;
+
+/** default value for the avatarImgSrc input */
+export const CHAT_MESSAGE_AVATAR_IMG_SRC_DEFAULT: string | undefined = undefined;
+
+/** default value for the avatarImgEmail input */
+export const CHAT_MESSAGE_AVATAR_IMG_EMAIL_DEFAULT: string | undefined = undefined;
+
+/** default value for the avatarShape input */
+export const CHAT_MESSAGE_AVATAR_SHAPE_DEFAULT: AvatarShapeVariant = AVATAR_SHAPE_VARIANT_DEFAULT;
+
+/** default value for the systemIcon input */
+export const CHAT_MESSAGE_SYSTEM_ICON_DEFAULT: IconName | undefined = undefined;
+
+// re-export role/state defaults so consumers can keep importing them from the core barrel
+export { CHAT_MESSAGE_ROLE_DEFAULT, CHAT_MESSAGE_STATE_DEFAULT };
+
+/**
+ * single chat message rendered as a two-column grid (avatar gutter + body column). composes
+ * `ChatMessageBrainDirective` for the role-driven aria semantics (system → status, others → article) and the
+ * pending / failed aria states. user and error roles wrap the body slot in an `org-box` for the bubble surface;
+ * assistant renders the body bare; system collapses the grid to a centred chrome pill with an optional leading
+ * `systemIcon`. the gutter avatar is rendered internally as an `org-avatar` driven by the `authorName`,
+ * `avatarImgSrc`, `avatarImgEmail`, and `avatarShape` inputs — there is no avatar projection slot. consumers
+ * project content via three named slots: `[quote]` for an optional quoted-reply preview above the body, `[body]`
+ * for the body content (auto-wrapped for user / error), and the default slot for trailing column items
+ * (suggestions, reactions). hover-actions sit on a separate row via `[hoverActions]`.
+ */
 @Component({
   selector: 'org-chat-message',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Indicator, ChatMessageSteps],
+  imports: [Avatar, Box, Icon, NgTemplateOutlet],
   templateUrl: './chat-message.html',
   styleUrl: './chat-message.css',
+  hostDirectives: [
+    {
+      directive: ChatMessageBrainDirective,
+      inputs: ['role', 'state'],
+    },
+  ],
   host: {
-    '[attr.data-source]': 'messageSource()',
-    '[attr.data-status]': 'chatMessage().status ?? null',
+    '[attr.data-role]': 'brain.role()',
+    '[attr.data-state]': 'brain.state()',
+    '[attr.data-run-position]': 'runPosition()',
   },
 })
 export class ChatMessage {
-  /** the message data to render */
-  public chatMessage = input.required<ChatMessageData>();
+  /** reference to the host chat-message brain directive owning role / state aria semantics */
+  protected readonly brain = inject(ChatMessageBrainDirective);
 
-  /** the source of the message, reflected as a host attribute for styling */
-  protected readonly messageSource = computed<ChatMessageSource>(() => this.chatMessage().source);
+  /** the position of the message inside a sender run; drives top margin + author / avatar visibility */
+  public readonly runPosition = input<ChatMessageRunPosition>(CHAT_MESSAGE_RUN_POSITION_DEFAULT);
 
-  /** whether the message has a status value */
-  protected hasStatus = computed<boolean>(() => {
-    return !!this.chatMessage().status;
+  /** the rendered author display name; also the source of the avatar's initials and color */
+  public readonly authorName = input<string>(CHAT_MESSAGE_AUTHOR_NAME_DEFAULT);
+
+  /** the rendered timestamp (e.g. "2:14 PM"); omitted when meta is present */
+  public readonly time = input<string | undefined, string | null | undefined>(CHAT_MESSAGE_TIME_DEFAULT, {
+    transform: angularUtils.transformNullToUndefined,
   });
 
-  /** whether the message has both a start and end time for duration display */
-  protected hasDuration = computed<boolean>(() => {
-    const message = this.chatMessage();
-
-    return !!message.startedAt && !!message.completedAt;
+  /** override label for the time slot (e.g. "Sending...", "Failed — retry"); takes precedence over time */
+  public readonly meta = input<string | undefined, string | null | undefined>(CHAT_MESSAGE_META_DEFAULT, {
+    transform: angularUtils.transformNullToUndefined,
   });
 
-  /** the human-readable label for the current status */
-  protected statusDisplay = computed<string>(() => {
-    const status = this.chatMessage().status;
+  /** whether to render the "(edited)" marker in the author / meta row */
+  public readonly edited = input<boolean>(CHAT_MESSAGE_EDITED_DEFAULT);
 
-    if (!status) {
-      return '';
-    }
+  /** explicit image url forwarded to the avatar; takes priority over avatarImgEmail */
+  public readonly avatarImgSrc = input<string | undefined, string | null | undefined>(
+    CHAT_MESSAGE_AVATAR_IMG_SRC_DEFAULT,
+    { transform: angularUtils.transformNullToUndefined },
+  );
 
-    if (status === 'in-progress') {
-      return 'In Progress';
-    }
+  /** email forwarded to the avatar to fetch a gravatar image when avatarImgSrc is absent */
+  public readonly avatarImgEmail = input<string | undefined, string | null | undefined>(
+    CHAT_MESSAGE_AVATAR_IMG_EMAIL_DEFAULT,
+    { transform: angularUtils.transformNullToUndefined },
+  );
 
-    if (status === 'completed') {
-      return 'Completed';
-    }
+  /** shape variant forwarded to the avatar; circle for people, square for organisations / teams / projects */
+  public readonly avatarShape = input<AvatarShapeVariant>(CHAT_MESSAGE_AVATAR_SHAPE_DEFAULT);
 
-    if (status === 'failed') {
-      return 'Failed';
-    }
+  /** optional leading icon for the system pill; ignored for non-system roles */
+  public readonly systemIcon = input<IconName | undefined, IconName | null | undefined>(
+    CHAT_MESSAGE_SYSTEM_ICON_DEFAULT,
+    { transform: angularUtils.transformNullToUndefined },
+  );
 
-    return '';
+  /** convenience: true when the message role renders as a centered system pill */
+  protected readonly isSystem = computed<boolean>(() => this.brain.role() === 'system');
+
+  /** convenience: true when the run-position is the start of a run (or its only message) */
+  protected readonly isLeadOfRun = computed<boolean>(() => {
+    const position = this.runPosition();
+
+    return position === 'first' || position === 'only';
   });
 
-  /** the indicator color mapped from the current status */
-  protected statusIndicatorColor = computed<'info' | 'safe' | 'danger'>(() => {
-    const status = this.chatMessage().status;
+  /** whether the body should be wrapped in an `org-box` (user / error roles) */
+  protected readonly useSurface = computed<boolean>(() => {
+    const role = this.brain.role();
 
-    if (status === 'in-progress') {
-      return 'info';
-    }
-
-    if (status === 'completed') {
-      return 'safe';
-    }
-
-    return 'danger';
+    return role === 'user' || role === 'error';
   });
 
-  /** the formatted elapsed time between startedAt and completedAt */
-  protected durationDisplay = computed<string>(() => {
-    const message = this.chatMessage();
+  /** the box color mapped from the role; only consulted when useSurface() is true */
+  protected readonly boxColor = computed<BoxColor>(() => (this.brain.role() === 'error' ? 'danger' : 'neutral'));
 
-    if (!message.startedAt || !message.completedAt) {
-      return '';
-    }
+  /** the box border style mapped from the role; only consulted when useSurface() is true */
+  protected readonly boxBorder = computed<BoxBorder>(() =>
+    this.brain.role() === 'error' ? 'bordered' : 'borderless',
+  );
 
-    const start = DateTime.fromISO(message.startedAt);
-    const end = DateTime.fromISO(message.completedAt);
-    const diff = end.diff(start, ['minutes', 'seconds']);
+  /** the trailing meta label rendered after the author name; meta() takes precedence over time() */
+  protected readonly trailingMeta = computed<string | undefined>(() => this.meta() ?? this.time());
 
-    const minutes = Math.floor(diff.minutes);
-    const seconds = Math.floor(diff.seconds);
+  /** whether the trailing meta label should render */
+  protected readonly hasTrailingMeta = computed<boolean>(() => !!this.trailingMeta());
 
-    if (minutes === 0) {
-      return `${seconds}s`;
-    }
+  /** whether the meta input is the source of the trailing label (drives the muted styling vs. faint time) */
+  protected readonly trailingIsMeta = computed<boolean>(() => !!this.meta());
 
-    if (seconds === 0) {
-      return `${minutes}m`;
-    }
+  /** whether to render the "(edited)" marker */
+  protected readonly hasEdited = computed<boolean>(() => this.edited());
 
-    return `${minutes}m ${seconds}s`;
-  });
+  /** whether the system pill should render its leading icon */
+  protected readonly hasSystemIcon = computed<boolean>(() => !!this.systemIcon());
 }

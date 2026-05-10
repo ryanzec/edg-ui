@@ -5,7 +5,7 @@ Inputs:
 -->
 You are tasked to create a new component in the referenced directory using the referenced image as a guide.
 
-If this component is in `projects/shared-ui/src/lib/core` then you must **ALWAYS** include the context from `.claude/commands/create-core-component.md` but if it is **NOT** in that directory, **NEVER** use the context from `claude/commands/create-core-component.md`.
+If this component is in `projects/shared-ui/src/lib/core` then you must **ALWAYS** include the context from `.claude/commands/create-core-component.md` but if it is **NOT** in that directory, **NEVER** use the context from `.claude/commands/create-core-component.md`.
 
 # Design Tokens
 

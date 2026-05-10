@@ -1,29 +1,45 @@
 <label
-  orgCheckboxToggleBrain
-  orgText
-  [textSize]="textSize()"
-  [checked]="checked()"
-  [disabled]="isDisabled()"
-  (changed)="onBrainChanged($event)"
-  (touched)="onBrainTouched()"
-  class="checkbox-toggle-container"
+  class="checkbox-toggle-label"
+  (click)="onClick($event)"
+  (keydown)="onKeyDown($event)"
+  [attr.tabindex]="brain.tabIndex()"
+  [attr.role]="brain.role"
+  [attr.aria-checked]="brain.ariaChecked()"
+  [attr.aria-disabled]="brain.ariaDisabled()"
+  [attr.aria-describedby]="brain.ariaDescribedBy()"
+  [attr.aria-invalid]="brain.ariaInvalid()"
 >
   <input
+    #inputRef
     type="checkbox"
     [name]="name()"
     [value]="value()"
-    [checked]="checked()"
-    [disabled]="isDisabled()"
+    [checked]="brain.checked()"
+    [disabled]="brain.isDisabled()"
     [attr.aria-hidden]="true"
     tabindex="-1"
     class="native-input"
   />
-  <div class="checkbox-toggle-track">
-    <div class="checkbox-toggle-thumb">
-      @if (displayIcon()) {
-        <org-icon [name]="displayIcon()!" [size]="iconSize()" class="checkbox-toggle-icon" />
+  <span class="track">
+    <span class="knob">
+      @if (iconOff()) {
+        <span class="icon-off">
+          <org-icon [name]="iconOff()!" [size]="iconSize()" />
+        </span>
       }
-    </div>
-  </div>
-  <ng-content />
+      @if (iconOn()) {
+        <span class="icon-on">
+          <org-icon [name]="iconOn()!" [size]="iconSize()" />
+        </span>
+      }
+    </span>
+  </span>
+  <span class="body">
+    <span class="label" orgText [textSize]="textSize()">
+      <ng-content />
+    </span>
+    @if (description()) {
+      <span class="description">{{ description() }}</span>
+    }
+  </span>
 </label>

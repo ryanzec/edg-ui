@@ -322,7 +322,7 @@ class SplitterCollapsedSideStory {
       </org-storybook-example-container-section>
 
       <div class="flex gap-2 items-center mt-2">
-        <org-button (clicked)="flip()">Flip Sizes</org-button>
+        <org-button label="Flip Sizes" (clicked)="flip()" />
         <span>Current sizes: [{{ size()[0] }}, {{ size()[1] }}]</span>
       </div>
 

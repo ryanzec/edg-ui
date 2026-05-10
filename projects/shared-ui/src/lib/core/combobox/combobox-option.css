@@ -1,0 +1,50 @@
+@layer components {
+  :host {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-combobox-option-gap);
+    min-height: var(--sizing-combobox-option-min-height);
+    padding: var(--spacing-combobox-option-y) var(--spacing-combobox-option-x);
+    font-size: var(--font-size-combobox-option);
+    cursor: pointer;
+    user-select: none;
+  }
+
+  :host:hover,
+  :host([data-active='1']) {
+    background-color: var(--color-bg-hover);
+  }
+
+  :host([aria-disabled='true']) {
+    opacity: var(--opacity-disabled);
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  .check {
+    flex: 0 0 var(--sizing-combobox-check-gutter);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-combobox-option-check);
+    opacity: 0;
+    transition: opacity var(--motion-duration-fast);
+  }
+
+  :host([aria-selected='true']) .check {
+    opacity: 1;
+  }
+
+  :host([aria-disabled='true']) .check,
+  :host([aria-disabled='true']):hover {
+    background-color: transparent;
+  }
+
+  .label {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}

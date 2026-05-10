@@ -1,0 +1,59 @@
+:root {
+  /* container */
+  --calendar-padding: var(--spacing-3); /* 12px */
+  --calendar-stack-gap: var(--spacing-2); /* 8px */
+  --calendar-radius: var(--radius-base); /* 8px */
+  --calendar-bg: var(--color-bg-surface);
+  --calendar-border: var(--color-border);
+  --calendar-fg: var(--color-fg);
+
+  /* day cell */
+  --calendar-cell-size: 2.25rem; /* 36px */
+  --calendar-cell-font-size: var(--font-size-sm); /* 13px */
+  --calendar-cell-font-weight: var(--font-weight-medium);
+
+  /* chip layer (hover / today / selected paint) */
+  --calendar-chip-inset: var(--spacing-0_5); /* 2px */
+  --calendar-chip-radius: var(--radius-sm); /* 6px */
+  --calendar-chip-hover-bg: var(--color-bg-hover);
+  --calendar-chip-selected-bg: var(--color-primary);
+  --calendar-chip-selected-fg: var(--color-primary-on);
+  --calendar-chip-selected-hover-bg: var(--color-primary-hover);
+  --calendar-chip-selected-font-weight: var(--font-weight-semibold);
+
+  /* today ring (rendered as inset box-shadow on the chip) */
+  --calendar-today-ring-color: var(--color-primary);
+  --calendar-today-ring-width: 0.09375rem; /* 1.5px */
+
+  /* range band layer (drawn under the chip; insets at endpoints) */
+  --calendar-band-bg: var(--color-primary-soft);
+  --calendar-band-inset-y: var(--spacing-0_5); /* 2px */
+
+  /* outside month */
+  --calendar-outside-month-fg: var(--color-fg-faint);
+
+  /* disabled */
+  --calendar-disabled-fg: var(--color-fg-faint);
+
+  /* weekday strip */
+  --calendar-weekday-strip-height: 1.5rem; /* 24px */
+  --calendar-weekday-font-size: var(--font-size-2xs); /* 10px */
+  --calendar-weekday-font-weight: var(--font-weight-semibold);
+  --calendar-weekday-letter-spacing: var(--letter-spacing-wide);
+  --calendar-weekday-fg: var(--color-fg-faint);
+
+  /* header cluster */
+  --calendar-header-gap: var(--spacing-2); /* 8px */
+  --calendar-header-cluster-gap: var(--spacing-1_5); /* 6px */
+
+  /* footer */
+  --calendar-footer-padding-top: var(--spacing-2); /* 8px */
+  --calendar-footer-gap: var(--spacing-2); /* 8px */
+  --calendar-footer-border: var(--color-border-soft);
+
+  /* motion */
+  --calendar-band-transition-duration: var(--motion-duration-base);
+  --calendar-band-transition-ease: var(--motion-ease-standard);
+  --calendar-chip-transition-duration: var(--motion-duration-fast);
+  --calendar-chip-transition-ease: var(--motion-ease-standard);
+}

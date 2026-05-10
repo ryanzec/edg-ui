@@ -1,7 +1,5 @@
 <label
   class="checkbox-label"
-  orgText
-  [textSize]="textSize()"
   (click)="onClick($event)"
   (keydown)="onKeyDown($event)"
   [attr.tabindex]="brain.tabIndex()"
@@ -26,5 +24,12 @@
   <div class="checkbox-icon">
     <org-icon [name]="currentIcon()" [size]="size()" />
   </div>
-  <ng-content />
+  <div class="checkbox-body">
+    <span class="checkbox-label-text" orgText [textSize]="textSize()">
+      <ng-content />
+    </span>
+    @if (description()) {
+      <span class="checkbox-description">{{ description() }}</span>
+    }
+  </div>
 </label>

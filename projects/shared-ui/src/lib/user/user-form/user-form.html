@@ -66,7 +66,11 @@
     </org-form-field>
   </org-form-fields>
 
-  <org-button color="primary" type="submit" buttonClass="w-full" [loading]="isProcessing()">
-    {{ submitButtonText() }}
-  </org-button>
+  <org-button
+    color="primary"
+    type="submit"
+    buttonClass="w-full"
+    [label]="submitButtonText()"
+    [loading]="isProcessing()"
+  />
 </form>

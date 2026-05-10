@@ -3,6 +3,12 @@ import { outputFromObservable } from '@angular/core/rxjs-interop';
 import { Subject } from 'rxjs';
 import { angularUtils } from '@organization/shared-utils';
 
+/** semantic identifiers for the trailing affordance icon auto-injected for external / download links */
+export const allLinkAffordanceIcons = ['external-link', 'download'] as const;
+
+/** the affordance icon name auto-injected for external / download links */
+export type LinkAffordanceIcon = (typeof allLinkAffordanceIcons)[number];
+
 /** all available link target values matching the standard html anchor target attribute */
 export const allLinkTargets = ['_self', '_blank', '_parent', '_top'] as const;
 
@@ -48,24 +54,28 @@ export const LINK_ARIA_LABEL_DEFAULT: string | undefined = undefined;
 /** default value for the disabled input */
 export const LINK_DISABLED_DEFAULT = false;
 
+/** default value for the affordance input — when true, an external-link / download icon is auto-injected when applicable */
+export const LINK_AFFORDANCE_DEFAULT = true;
+
 /**
  * headless brain directive for the link. owns href / target / rel / download / hreflang / referrerpolicy
- * navigation behavior, action-link mode (no href emits clicked), keyboard activation via enter / space, and
- * the full accessibility surface (role, tabindex, aria-disabled, aria-label). carries no styling — apply it
- * to a native anchor element inside a presentation component.
+ * navigation behavior, action-link mode (no href emits clicked), keyboard activation via enter / space, the
+ * full accessibility surface (role, tabindex, data-disabled, aria-label), and the auto-injected trailing
+ * affordance icon decision for external / download links. carries no styling — apply it to a native anchor
+ * (or span when disabled) inside a presentation component.
  */
 @Directive({
-  selector: 'a[orgLinkBrain]',
+  selector: 'a[orgLinkBrain], span[orgLinkBrain]',
   exportAs: 'orgLinkBrain',
   host: {
     '[attr.href]': 'effectiveHref()',
-    '[attr.target]': 'target() ?? null',
-    '[attr.rel]': 'effectiveRel() ?? null',
-    '[attr.download]': 'download() ?? null',
-    '[attr.hreflang]': 'hreflang() ?? null',
-    '[attr.referrerpolicy]': 'referrerPolicy() ?? null',
+    '[attr.target]': 'effectiveTarget()',
+    '[attr.rel]': 'effectiveRel()',
+    '[attr.download]': 'effectiveDownload()',
+    '[attr.hreflang]': 'effectiveHreflang()',
+    '[attr.referrerpolicy]': 'effectiveReferrerPolicy()',
     '[attr.aria-label]': 'ariaLabel() ?? null',
-    '[attr.aria-disabled]': 'disabled() ? "true" : null',
+    '[attr.data-disabled]': 'disabled() ? "1" : null',
     '[attr.role]': 'effectiveRole()',
     '[attr.tabindex]': 'effectiveTabindex()',
     '(click)': 'click($event)',
@@ -113,8 +123,11 @@ export class LinkBrainDirective {
     transform: angularUtils.transformNullToUndefined,
   });
 
-  /** whether the link is disabled and non-interactive; sets aria-disabled, removes href, and gates click / keydown */
+  /** whether the link is disabled and non-interactive; sets data-disabled, removes href, and gates click / keydown */
   public readonly disabled = input<boolean>(LINK_DISABLED_DEFAULT);
+
+  /** when true, a trailing affordance icon (external-link or download) is auto-rendered when applicable */
+  public readonly affordance = input<boolean>(LINK_AFFORDANCE_DEFAULT);
 
   /** emitted when an action-link is activated by mouse or keyboard, only when href is not provided */
   public readonly clicked = outputFromObservable(this._clicked$);
@@ -123,14 +136,18 @@ export class LinkBrainDirective {
   public readonly isActionLink = computed<boolean>(() => this.href() === undefined);
 
   /** the rel attribute applied to the anchor; defaults to "noopener noreferrer" when target is "_blank" and consumer did not provide one */
-  public readonly effectiveRel = computed<string | undefined>(() => {
+  public readonly effectiveRel = computed<string | null>(() => {
+    if (this.disabled()) {
+      return null;
+    }
+
     const consumerRel = this.rel();
 
     if (consumerRel !== undefined) {
       return consumerRel;
     }
 
-    return this.target() === '_blank' ? 'noopener noreferrer' : undefined;
+    return this.target() === '_blank' ? 'noopener noreferrer' : null;
   });
 
   /** the href attribute applied to the anchor; cleared when disabled so the link is non-navigable */
@@ -140,6 +157,42 @@ export class LinkBrainDirective {
     }
 
     return this.href() ?? null;
+  });
+
+  /** the target attribute applied to the anchor; cleared when disabled */
+  public readonly effectiveTarget = computed<LinkTarget | null>(() => {
+    if (this.disabled()) {
+      return null;
+    }
+
+    return this.target() ?? null;
+  });
+
+  /** the download attribute applied to the anchor; cleared when disabled */
+  public readonly effectiveDownload = computed<string | null>(() => {
+    if (this.disabled()) {
+      return null;
+    }
+
+    return this.download() ?? null;
+  });
+
+  /** the hreflang attribute applied to the anchor; cleared when disabled */
+  public readonly effectiveHreflang = computed<string | null>(() => {
+    if (this.disabled()) {
+      return null;
+    }
+
+    return this.hreflang() ?? null;
+  });
+
+  /** the referrerpolicy attribute applied to the anchor; cleared when disabled */
+  public readonly effectiveReferrerPolicy = computed<LinkReferrerPolicy | null>(() => {
+    if (this.disabled()) {
+      return null;
+    }
+
+    return this.referrerPolicy() ?? null;
   });
 
   /** the role attribute applied to the anchor; "button" in action-link mode so screen readers announce it correctly */
@@ -160,10 +213,34 @@ export class LinkBrainDirective {
     return null;
   });
 
+  /**
+   * the auto-injected trailing affordance icon for external / download links.
+   * returns undefined when affordance is disabled, when the link is disabled, when the link is in
+   * action-link mode, or when neither target="_blank" nor download is set. download wins over external-link
+   * when both are present since downloading is the more specific action.
+   */
+  public readonly affordanceIcon = computed<LinkAffordanceIcon | undefined>(() => {
+    if (!this.affordance() || this.disabled() || this.isActionLink()) {
+      return undefined;
+    }
+
+    if (this.download() !== undefined) {
+      return 'download';
+    }
+
+    if (this.target() === '_blank') {
+      return 'external-link';
+    }
+
+    return undefined;
+  });
+
   /** handles anchor click; emits clicked when the host is acting as an action link and not disabled */
-  protected click(event: MouseEvent): void {
+  protected click(event: Event): void {
+    const mouseEvent = event as MouseEvent;
+
     if (this.disabled()) {
-      event.preventDefault();
+      mouseEvent.preventDefault();
 
       return;
     }
@@ -172,11 +249,13 @@ export class LinkBrainDirective {
       return;
     }
 
-    this._clicked$.next(event);
+    this._clicked$.next(mouseEvent);
   }
 
   /** handles keyboard activation of the action link via enter or space */
-  protected keydown(event: KeyboardEvent): void {
+  protected keydown(event: Event): void {
+    const keyboardEvent = event as KeyboardEvent;
+
     if (this.disabled()) {
       return;
     }
@@ -185,11 +264,11 @@ export class LinkBrainDirective {
       return;
     }
 
-    if (event.key !== 'Enter' && event.key !== ' ') {
+    if (keyboardEvent.key !== 'Enter' && keyboardEvent.key !== ' ') {
       return;
     }
 
-    event.preventDefault();
-    this._clicked$.next(event);
+    keyboardEvent.preventDefault();
+    this._clicked$.next(keyboardEvent);
   }
 }

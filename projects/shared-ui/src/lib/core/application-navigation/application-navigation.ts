@@ -7,8 +7,6 @@ import { List } from '../list/list';
 import { ListItem } from '../list/list-item';
 import { ListItemIcon } from '../list/list-item-icon';
 import { Avatar } from '../avatar/avatar';
-import { AvatarCircle } from '../avatar/avatar-circle';
-import { AvatarLabel } from '../avatar/avatar-label';
 import { OverlayMenu, type OverlayMenuItem } from '../overlay-menu/overlay-menu';
 import { Tooltip } from '../tooltip/tooltip';
 import { RouterLink } from '@angular/router';
@@ -46,8 +44,6 @@ export const APPLICATION_NAVIGATION_COLLAPSED_DEFAULT = false;
     ListItemIcon,
     CdkMenuTrigger,
     Avatar,
-    AvatarCircle,
-    AvatarLabel,
     OverlayMenu,
     RouterLink,
     Icon,

@@ -7,6 +7,7 @@ import { List } from '../list/list';
 import { ListItem } from '../list/list-item';
 import { ListItemIcon } from '../list/list-item-icon';
 import { OverlayMenuDivider } from '../overlay-menu/overlay-menu-divider';
+import { ScrollArea } from '../scroll-area/scroll-area';
 import { ComponentSize } from '../types/component-types';
 import {
   DROP_DOWN_SELECTOR_DISABLED_DEFAULT as BRAIN_DROP_DOWN_SELECTOR_DISABLED_DEFAULT,
@@ -68,7 +69,16 @@ const POSITION_CONFIGURATIONS: Record<DropDownSelectorPosition, ConnectedPositio
 @Component({
   selector: 'org-drop-down-selector',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CdkOverlayOrigin, CdkConnectedOverlay, Icon, List, ListItem, ListItemIcon, OverlayMenuDivider],
+  imports: [
+    CdkOverlayOrigin,
+    CdkConnectedOverlay,
+    Icon,
+    List,
+    ListItem,
+    ListItemIcon,
+    OverlayMenuDivider,
+    ScrollArea,
+  ],
   templateUrl: './drop-down-selector.html',
   styleUrl: './drop-down-selector.css',
   hostDirectives: [

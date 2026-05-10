@@ -99,14 +99,12 @@ type Story = StoryObj<AutoScroll>;
     <org-storybook-example-container title="Interactive Auto Scroll Test" [currentState]="currentState()">
       <org-storybook-example-container-section label="Interactive Demo">
         <div class="mb-4 flex flex-wrap gap-2">
-          <org-button (click)="toggleInterval()">
-            {{ intervalActive() ? 'Stop Adding Items' : 'Start Adding Items' }}
-          </org-button>
-          <org-button (click)="clearItems()"> Clear Items </org-button>
+          <org-button [label]="intervalActive() ? 'Stop Adding Items' : 'Start Adding Items'" (click)="toggleInterval()" />
+          <org-button label="Clear Items" (click)="clearItems()" />
           <div class="w-full"></div>
-          <org-button (click)="setState('enabled')"> Set State: Enabled </org-button>
-          <org-button (click)="setState('disabled')"> Set State: Disabled </org-button>
-          <org-button (click)="setState('forced-disabled')"> Set State: Forced-Disabled </org-button>
+          <org-button label="Set State: Enabled" (click)="setState('enabled')" />
+          <org-button label="Set State: Disabled" (click)="setState('disabled')" />
+          <org-button label="Set State: Forced-Disabled" (click)="setState('forced-disabled')" />
         </div>
 
         <div class="mb-4 rounded border border-default-color bg-muted/30 p-3 text-sm">
@@ -218,9 +216,9 @@ class AutoScrollInteractiveTestComponent {
     <org-storybook-example-container title="Programmatic Scroll Control" [currentState]="currentState()">
       <org-storybook-example-container-section label="Interactive Demo">
         <div class="mb-4 flex gap-2">
-          <org-button buttonStyle="primary" (click)="scrollToBottom()"> Scroll to Bottom </org-button>
-          <org-button buttonStyle="secondary" (click)="scrollToTop()"> Scroll to Top </org-button>
-          <org-button buttonStyle="secondary" (click)="scrollToMiddle()"> Scroll to Middle </org-button>
+          <org-button buttonStyle="primary" label="Scroll to Bottom" (click)="scrollToBottom()" />
+          <org-button buttonStyle="secondary" label="Scroll to Top" (click)="scrollToTop()" />
+          <org-button buttonStyle="secondary" label="Scroll to Middle" (click)="scrollToMiddle()" />
         </div>
 
         <div class="mb-4 rounded border border-default-color bg-muted/30 p-3 text-sm">
@@ -505,10 +503,8 @@ export const ProgrammaticDemo: Story = {
     <org-storybook-example-container title="Dynamic Scrollable Parent Detection" [currentState]="currentState()">
       <org-storybook-example-container-section label="Interactive Demo">
         <div class="mb-4 flex gap-2">
-          <org-button buttonStyle="primary" (click)="toggleContainer()">
-            {{ showLargeContainer() ? 'Switch to Small Container' : 'Switch to Large Container' }}
-          </org-button>
-          <org-button buttonStyle="secondary" (click)="addItem()"> Add Item </org-button>
+          <org-button buttonStyle="primary" [label]="showLargeContainer() ? 'Switch to Small Container' : 'Switch to Large Container'" (click)="toggleContainer()" />
+          <org-button buttonStyle="secondary" label="Add Item" (click)="addItem()" />
         </div>
 
         <div class="mb-4 rounded border border-default-color bg-muted/30 p-3 text-sm">

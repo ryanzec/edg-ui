@@ -1,12 +1,61 @@
 @layer components {
   :host {
+    /* internal locals — read once from the overlay-menu design tokens, then used throughout */
+    --_surface: var(--color-overlay-menu-surface);
+    --_border: var(--color-overlay-menu-border);
+    --_radius: var(--radius-overlay-menu);
+    --_shadow: var(--shadow-overlay-menu);
+    --_pad: var(--spacing-overlay-menu-pad);
+    --_min-w: var(--sizing-overlay-menu-min-width);
+    --_max-w: var(--sizing-overlay-menu-max-width);
+    --_motion-dur: var(--motion-overlay-menu-duration);
+
     display: block;
-    width: var(--sizing-5xs);
+    width: max-content;
+    min-width: var(--_min-w);
+    max-width: var(--_max-w);
+    padding: var(--_pad);
+    background-color: var(--_surface);
+    border: var(--border-width) solid var(--_border);
+    border-radius: var(--_radius);
+    box-shadow: var(--_shadow);
+    color: var(--color-fg);
+    z-index: var(--z-index-popover);
     overflow: hidden;
-    background-color: var(--color-bg-surface-2);
+    transition: opacity var(--_motion-dur) var(--motion-ease-standard),
+      transform var(--_motion-dur) var(--motion-ease-standard);
+  }
+
+  :host([data-state='closed']) {
+    opacity: 0;
+    transform: translateY(-0.125rem); /* 2px */
+    pointer-events: none;
+  }
+
+  :host([data-state='open']) {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* respect the user's reduced-motion preference — drop both the slide and the fade */
+  @media (prefers-reduced-motion: reduce) {
+    :host {
+      transition-duration: 0ms;
+    }
+
+    :host([data-state='closed']),
+    :host([data-state='open']) {
+      transform: none;
+    }
   }
 
   .menu-item-button {
     width: 100%;
+    background: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+    color: inherit;
+    font: inherit;
   }
 }

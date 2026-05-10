@@ -1,15 +1,27 @@
 @layer components {
   :host {
-    display: block;
+    display: inline-block;
   }
 
-  .calendar-container {
-    width: var(--sizing-xs);
-    border: var(--border-width) solid var(--color-border);
-    border-radius: var(--radius-base);
-    background-color: var(--color-bg-app);
+  :host([data-disabled]) {
+    opacity: var(--opacity-disabled);
+  }
+
+  .container {
+    display: inline-flex;
+    flex-direction: column;
+    width: max-content;
+    border: var(--border-width) solid var(--calendar-border);
+    border-radius: var(--calendar-radius);
+    background-color: var(--calendar-bg);
+    color: var(--calendar-fg);
     overflow: hidden;
     outline: none;
+  }
+
+  /* suppress all interactive cell styling when the whole calendar is disabled */
+  :host([data-disabled]) .container {
+    cursor: not-allowed;
   }
 
   .sr-only {

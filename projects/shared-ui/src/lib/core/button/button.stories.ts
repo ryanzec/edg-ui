@@ -2,7 +2,9 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import type { Meta, StoryObj } from '@storybook/angular';
 import { ButtonToggle, ButtonToggleItem } from '../button-toggle/button-toggle';
+import { Checkbox } from '../checkbox/checkbox';
 import { CheckboxToggle } from '../checkbox-toggle/checkbox-toggle';
+import { Icon } from '../icon/icon';
 import { allComponentColors } from '../types/component-types';
 import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
 import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
@@ -11,7 +13,6 @@ import { DesignSystemDemoControls } from '../../example/design-system-demo/desig
 import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
 import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
 import { Button, allButtonSizes, allButtonVariants, ButtonColor, ButtonSize, ButtonVariant } from './button';
-import { ButtonIcon } from './button-icon';
 import { ButtonGroup } from './button-group';
 
 const liveDemoColorItems: ButtonToggleItem[] = allComponentColors.map((color) => ({
@@ -51,7 +52,7 @@ const liveDemoIconItems: ButtonToggleItem[] = allLiveDemoIconChoices.map((choice
       <org-design-system-demo-header slot="header" title="Pressed State" />
       <org-design-system-demo-canvas slot="canvas">
         <div class="flex flex-col gap-2">
-          <org-button #buttonRef>Hold to Press</org-button>
+          <org-button #buttonRef label="Hold to Press" />
           <p>
             isPressed: <strong>{{ buttonRef.isPressed() }}</strong>
           </p>
@@ -71,7 +72,7 @@ class ButtonPressedStateStory {}
       <org-design-system-demo-header slot="header" title="Focused State" />
       <org-design-system-demo-canvas slot="canvas">
         <div class="flex flex-col gap-2">
-          <org-button #buttonRef>Click or Tab to Focus</org-button>
+          <org-button #buttonRef label="Click or Tab to Focus" />
           <p>
             isFocused: <strong>{{ buttonRef.isFocused() }}</strong>
           </p>
@@ -93,14 +94,15 @@ const meta: Meta<Button> = {
 <div class="docs-top-level-overview">
   ## Button Component
 
-  A versatile button component with multiple color variants, sizes, composable icon support, and interactive states.
+  A versatile button component with multiple color variants, sizes, icon support, and interactive states.
 
   ### Features
   - 8 color variants for different semantic meanings
   - 4 style variants (filled, ghost, text, soft)
   - 3 size options (small, base, large)
-  - Composable icon support via &lt;org-button-icon /&gt; slotted before/after content
-  - Loading state with spinner (replaces the first slotted icon or prepends a spinner when none are slotted)
+  - Built-in icon support via the preIcon and postIcon inputs
+  - Custom pre/post content via projected #pre / #post templates (ngTemplateOutlet)
+  - Loading state with spinner (replaces the pre slot during loading)
   - Disabled state
   - Accessible with focus management
   - Smooth hover and pressed states
@@ -124,36 +126,30 @@ const meta: Meta<Button> = {
   ### Usage Examples
   \`\`\`html
   <!-- Basic button -->
-  <org-button color="primary">Click Me</org-button>
+  <org-button color="primary" label="Click Me" />
 
   <!-- Button with pre-icon -->
-  <org-button color="primary">
-    <org-button-icon name="plus" />
-    Add Item
-  </org-button>
+  <org-button color="primary" label="Add Item" preIcon="plus" />
 
   <!-- Button with post-icon -->
-  <org-button color="primary">
-    Continue
-    <org-button-icon name="arrow-right" />
-  </org-button>
+  <org-button color="primary" label="Continue" postIcon="arrow-right" />
+
+  <!-- Button with both icons -->
+  <org-button color="primary" label="Download" preIcon="download" postIcon="arrow-right" />
 
   <!-- Loading button -->
-  <org-button color="primary" [loading]="true">Saving...</org-button>
+  <org-button color="primary" label="Saving..." [loading]="true" />
 
   <!-- Disabled button -->
-  <org-button color="primary" [disabled]="true">Disabled</org-button>
+  <org-button color="primary" label="Disabled" [disabled]="true" />
 
   <!-- Icon-only button with accessible label -->
-  <org-button color="primary" [iconOnly]="true" ariaLabel="Settings">
-    <org-button-icon name="cog" />
-  </org-button>
+  <org-button color="primary" label="Settings" preIcon="cog" [iconOnly]="true" ariaLabel="Settings" />
 
-  <!-- Large button with pre and post icons -->
-  <org-button color="primary" size="lg">
-    <org-button-icon name="download" />
-    Download
-    <org-button-icon name="arrow-right" />
+  <!-- Custom pre/post content via projected templates -->
+  <org-button color="primary" label="With Custom Content">
+    <ng-template #pre><org-icon name="sparkles" /></ng-template>
+    <ng-template #post><org-icon name="arrow-right" /></ng-template>
   </org-button>
 </div>
 \`\`\`
@@ -178,6 +174,9 @@ export const Default: Story = {
     excludeSpacing: false,
     buttonClass: '',
     ariaLabel: null,
+    label: 'Click Me',
+    preIcon: null,
+    postIcon: null,
   },
   argTypes: {
     color: {
@@ -224,6 +223,20 @@ export const Default: Story = {
       control: 'text',
       description: 'Accessible label for icon-only buttons or visual label override',
     },
+    label: {
+      control: 'text',
+      description: 'The visible text label rendered inside the button',
+    },
+    preIcon: {
+      control: 'select',
+      options: [null, 'plus', 'sparkles', 'download', 'cog', 'arrow-right', 'check'],
+      description: 'Optional icon rendered before the label',
+    },
+    postIcon: {
+      control: 'select',
+      options: [null, 'arrow-right', 'sparkles', 'download', 'check', 'plus'],
+      description: 'Optional icon rendered after the label',
+    },
   },
   parameters: {
     docs: {
@@ -246,12 +259,13 @@ export const Default: Story = {
         [excludeSpacing]="excludeSpacing"
         [buttonClass]="buttonClass"
         [ariaLabel]="ariaLabel"
-      >
-        Click Me
-      </org-button>
+        [label]="label"
+        [preIcon]="preIcon"
+        [postIcon]="postIcon"
+      />
     `,
     moduleMetadata: {
-      imports: [Button, ButtonIcon],
+      imports: [Button],
     },
   }),
 };
@@ -262,8 +276,8 @@ export const Default: Story = {
   imports: [
     ReactiveFormsModule,
     Button,
-    ButtonIcon,
     ButtonToggle,
+    Checkbox,
     CheckboxToggle,
     DesignSystemDemo,
     DesignSystemDemoHeader,
@@ -315,6 +329,16 @@ export const Default: Story = {
               {{ liveDemoForm.controls.loading.value ? 'on' : 'off' }}
             </org-checkbox-toggle>
           </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Custom pre">
+            <org-checkbox-toggle name="live-demo-custom-pre" value="custom-pre" formControlName="customPre">
+              {{ liveDemoForm.controls.customPre.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Custom post">
+            <org-checkbox-toggle name="live-demo-custom-post" value="custom-post" formControlName="customPost">
+              {{ liveDemoForm.controls.customPost.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
         </org-design-system-demo-controls>
         <org-design-system-demo-canvas slot="canvas">
           <div class="canvas-stage">
@@ -326,8 +350,18 @@ export const Default: Story = {
                   [size]="liveDemoForm.controls.size.value"
                   [disabled]="liveDemoForm.controls.disabled.value"
                   [loading]="liveDemoForm.controls.loading.value"
+                  label="Save changes"
                 >
-                  Save changes
+                  @if (liveDemoForm.controls.customPre.value) {
+                    <ng-template #pre>
+                      <org-checkbox name="live-demo-projected-pre" value="live-demo-projected-pre" />
+                    </ng-template>
+                  }
+                  @if (liveDemoForm.controls.customPost.value) {
+                    <ng-template #post>
+                      <org-checkbox name="live-demo-projected-post" value="live-demo-projected-post" />
+                    </ng-template>
+                  }
                 </org-button>
               }
               @case ('leading') {
@@ -337,9 +371,19 @@ export const Default: Story = {
                   [size]="liveDemoForm.controls.size.value"
                   [disabled]="liveDemoForm.controls.disabled.value"
                   [loading]="liveDemoForm.controls.loading.value"
+                  label="Save changes"
+                  preIcon="sparkles"
                 >
-                  <org-button-icon name="sparkles" />
-                  Save changes
+                  @if (liveDemoForm.controls.customPre.value) {
+                    <ng-template #pre>
+                      <org-checkbox name="live-demo-projected-pre" value="live-demo-projected-pre" />
+                    </ng-template>
+                  }
+                  @if (liveDemoForm.controls.customPost.value) {
+                    <ng-template #post>
+                      <org-checkbox name="live-demo-projected-post" value="live-demo-projected-post" />
+                    </ng-template>
+                  }
                 </org-button>
               }
               @case ('trailing') {
@@ -349,9 +393,19 @@ export const Default: Story = {
                   [size]="liveDemoForm.controls.size.value"
                   [disabled]="liveDemoForm.controls.disabled.value"
                   [loading]="liveDemoForm.controls.loading.value"
+                  label="Save changes"
+                  postIcon="sparkles"
                 >
-                  Save changes
-                  <org-button-icon name="sparkles" />
+                  @if (liveDemoForm.controls.customPre.value) {
+                    <ng-template #pre>
+                      <org-checkbox name="live-demo-projected-pre" value="live-demo-projected-pre" />
+                    </ng-template>
+                  }
+                  @if (liveDemoForm.controls.customPost.value) {
+                    <ng-template #post>
+                      <org-checkbox name="live-demo-projected-post" value="live-demo-projected-post" />
+                    </ng-template>
+                  }
                 </org-button>
               }
               @case ('both') {
@@ -361,10 +415,20 @@ export const Default: Story = {
                   [size]="liveDemoForm.controls.size.value"
                   [disabled]="liveDemoForm.controls.disabled.value"
                   [loading]="liveDemoForm.controls.loading.value"
+                  label="Save changes"
+                  preIcon="sparkles"
+                  postIcon="sparkles"
                 >
-                  <org-button-icon name="sparkles" />
-                  Save changes
-                  <org-button-icon name="sparkles" />
+                  @if (liveDemoForm.controls.customPre.value) {
+                    <ng-template #pre>
+                      <org-checkbox name="live-demo-projected-pre" value="live-demo-projected-pre" />
+                    </ng-template>
+                  }
+                  @if (liveDemoForm.controls.customPost.value) {
+                    <ng-template #post>
+                      <org-checkbox name="live-demo-projected-post" value="live-demo-projected-post" />
+                    </ng-template>
+                  }
                 </org-button>
               }
               @case ('only') {
@@ -375,9 +439,20 @@ export const Default: Story = {
                   [disabled]="liveDemoForm.controls.disabled.value"
                   [loading]="liveDemoForm.controls.loading.value"
                   [iconOnly]="true"
+                  label="Save changes"
+                  preIcon="sparkles"
                   ariaLabel="Save changes"
                 >
-                  <org-button-icon name="sparkles" />
+                  @if (liveDemoForm.controls.customPre.value) {
+                    <ng-template #pre>
+                      <org-checkbox name="live-demo-projected-pre" value="live-demo-projected-pre" />
+                    </ng-template>
+                  }
+                  @if (liveDemoForm.controls.customPost.value) {
+                    <ng-template #post>
+                      <org-checkbox name="live-demo-projected-post" value="live-demo-projected-post" />
+                    </ng-template>
+                  }
                 </org-button>
               }
             }
@@ -400,6 +475,8 @@ class ButtonLiveDemoStory {
     icon: new FormControl<LiveDemoIconChoice>('none', { nonNullable: true }),
     disabled: new FormControl<boolean>(false, { nonNullable: true }),
     loading: new FormControl<boolean>(false, { nonNullable: true }),
+    customPre: new FormControl<boolean>(false, { nonNullable: true }),
+    customPost: new FormControl<boolean>(false, { nonNullable: true }),
   });
 }
 
@@ -425,7 +502,7 @@ export const Showcase: Story = {
     docs: {
       description: {
         story:
-          'Comprehensive showcase of every button variant axis — color, size, icon composition, state, variant style, spacing, and group orientation — in a single scrollable view.',
+          'Comprehensive showcase of every button variant axis — color, size, icon composition, state, variant style, spacing, group orientation, and custom pre/post projection — in a single scrollable view.',
       },
     },
   },
@@ -435,14 +512,14 @@ export const Showcase: Story = {
         <org-design-system-demo>
           <org-design-system-demo-header slot="header" title="Color Variants" />
           <org-design-system-demo-canvas slot="canvas">
-            <org-button color="primary">Primary Button</org-button>
-            <org-button color="secondary">Secondary Button</org-button>
-            <org-button color="neutral">Neutral Button</org-button>
-            <org-button color="safe">Safe Button</org-button>
-            <org-button color="info">Info Button</org-button>
-            <org-button color="caution">Caution Button</org-button>
-            <org-button color="warning">Warning Button</org-button>
-            <org-button color="danger">Danger Button</org-button>
+            <org-button color="primary" label="Primary Button" />
+            <org-button color="secondary" label="Secondary Button" />
+            <org-button color="neutral" label="Neutral Button" />
+            <org-button color="safe" label="Safe Button" />
+            <org-button color="info" label="Info Button" />
+            <org-button color="caution" label="Caution Button" />
+            <org-button color="warning" label="Warning Button" />
+            <org-button color="danger" label="Danger Button" />
           </org-design-system-demo-canvas>
         </org-design-system-demo>
         <org-design-system-demo-expected-behaviour>
@@ -461,9 +538,9 @@ export const Showcase: Story = {
         <org-design-system-demo>
           <org-design-system-demo-header slot="header" title="Size Variants" />
           <org-design-system-demo-canvas slot="canvas">
-            <org-button color="primary" size="sm">Small Button</org-button>
-            <org-button color="primary" size="base">Base Button</org-button>
-            <org-button color="primary" size="lg">Large Button</org-button>
+            <org-button color="primary" size="sm" label="Small Button" />
+            <org-button color="primary" size="base" label="Base Button" />
+            <org-button color="primary" size="lg" label="Large Button" />
           </org-design-system-demo-canvas>
         </org-design-system-demo>
         <org-design-system-demo-expected-behaviour>
@@ -478,67 +555,68 @@ export const Showcase: Story = {
           <org-design-system-demo-header slot="header" title="Icon Variations" />
           <org-design-system-demo-canvas slot="canvas">
             <div class="flex gap-2 items-baseline">
-              <org-button color="primary" size="sm">
-                <org-button-icon name="plus" />
-                Add Item
-              </org-button>
-              <org-button color="primary" size="base">
-                <org-button-icon name="plus" />
-                Add Item
-              </org-button>
-              <org-button color="primary" size="lg">
-                <org-button-icon name="plus" />
-                Add Item
-              </org-button>
+              <org-button color="primary" size="sm" label="Add Item" preIcon="plus" />
+              <org-button color="primary" size="base" label="Add Item" preIcon="plus" />
+              <org-button color="primary" size="lg" label="Add Item" preIcon="plus" />
             </div>
-            <org-button color="primary">
-              <org-button-icon name="plus" />
-              Add Item
+            <org-button color="primary" label="Add Item" preIcon="plus" />
+            <org-button color="primary" label="Continue" postIcon="arrow-right" />
+            <org-button color="primary" label="Download" preIcon="download" postIcon="arrow-right" />
+            <org-button color="primary" label="Settings" preIcon="cog" [iconOnly]="true" ariaLabel="Settings" />
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>Pre-Icon</strong>: Pass a preIcon name to render an icon before the label</li>
+            <li><strong>Post-Icon</strong>: Pass a postIcon name to render an icon after the label</li>
+            <li><strong>Both Icons</strong>: Pass both preIcon and postIcon for emphasis</li>
+            <li><strong>Icon-Only</strong>: Set [iconOnly]="true" for icon-only padding and always provide an ariaLabel for accessibility</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Custom Pre/Post Content" />
+          <org-design-system-demo-canvas slot="canvas">
+            <org-button color="primary" label="Custom Pre">
+              <ng-template #pre><org-icon name="sparkles" /></ng-template>
             </org-button>
-            <org-button color="primary">
-              Continue
-              <org-button-icon name="arrow-right" />
+            <org-button color="primary" label="Custom Post">
+              <ng-template #post><org-icon name="arrow-right" /></ng-template>
             </org-button>
-            <org-button color="primary">
-              <org-button-icon name="download" />
-              Download
-              <org-button-icon name="arrow-right" />
+            <org-button color="primary" label="Custom Both">
+              <ng-template #pre><org-icon name="sparkles" /></ng-template>
+              <ng-template #post><org-icon name="arrow-right" /></ng-template>
             </org-button>
-            <org-button color="primary" [iconOnly]="true" ariaLabel="Settings">
-              <org-button-icon name="cog" />
+            <org-button color="primary" label="With Badge">
+              <ng-template #pre>
+                <span class="rounded-base bg-danger px-1 text-xs text-on-danger">3</span>
+              </ng-template>
             </org-button>
           </org-design-system-demo-canvas>
         </org-design-system-demo>
         <org-design-system-demo-expected-behaviour>
           <ul class="list-inside list-disc flex flex-col gap-1">
-            <li><strong>Pre-Icon</strong>: Slot an org-button-icon before the text</li>
-            <li><strong>Post-Icon</strong>: Slot an org-button-icon after the text</li>
-            <li><strong>Both Icons</strong>: Slot icons on both sides for emphasis</li>
-            <li><strong>Icon-Only</strong>: Set [iconOnly]="true" for icon-only padding and always provide an ariaLabel for accessibility</li>
+            <li><strong>#pre template</strong>: Project an <code>&lt;ng-template #pre&gt;</code> to render before the label</li>
+            <li><strong>#post template</strong>: Project an <code>&lt;ng-template #post&gt;</code> to render after the label</li>
+            <li><strong>Template wins</strong>: When both a projected template and the corresponding icon input are provided, the projected template wins and a warning is logged</li>
           </ul>
         </org-design-system-demo-expected-behaviour>
 
         <org-design-system-demo>
           <org-design-system-demo-header slot="header" title="Button States" />
           <org-design-system-demo-canvas slot="canvas">
-            <org-button color="primary">Normal Button</org-button>
-            <org-button color="primary" [disabled]="true">Disabled Button</org-button>
-            <org-button color="primary" [loading]="true">Loading Button</org-button>
-            <org-button color="primary" [loading]="true">
-              <org-button-icon name="upload" />
-              Uploading...
-            </org-button>
-            <org-button color="primary" [loading]="true" [iconOnly]="true" ariaLabel="Settings">
-              <org-button-icon name="cog" />
-            </org-button>
+            <org-button color="primary" label="Normal Button" />
+            <org-button color="primary" label="Disabled Button" [disabled]="true" />
+            <org-button color="primary" label="Loading Button" [loading]="true" />
+            <org-button color="primary" label="Uploading..." preIcon="upload" [loading]="true" />
+            <org-button color="primary" label="Settings" preIcon="cog" [loading]="true" [iconOnly]="true" ariaLabel="Settings" />
           </org-design-system-demo-canvas>
         </org-design-system-demo>
         <org-design-system-demo-expected-behaviour>
           <ul class="list-inside list-disc flex flex-col gap-1">
             <li><strong>Normal</strong>: Interactive with hover and focus states</li>
             <li><strong>Disabled</strong>: Non-interactive, reduced opacity, no hover effects</li>
-            <li><strong>Loading</strong>: Shows spinner, non-interactive during operation</li>
-            <li><strong>Loading with Icon</strong>: The first slotted org-button-icon renders as the spinner</li>
+            <li><strong>Loading</strong>: Shows spinner in the pre slot, non-interactive during operation</li>
             <li><strong>Loading Icon-Only</strong>: The icon is replaced by the spinner during loading</li>
           </ul>
         </org-design-system-demo-expected-behaviour>
@@ -547,52 +625,52 @@ export const Showcase: Story = {
           <org-design-system-demo-header slot="header" title="Button Variants" />
           <org-design-system-demo-canvas slot="canvas">
             <div class="flex gap-2">
-              <org-button color="primary" variant="filled">Filled</org-button>
-              <org-button color="primary" variant="ghost">Ghost</org-button>
-              <org-button color="primary" variant="text">Text</org-button>
-              <org-button color="primary" variant="soft">Soft</org-button>
+              <org-button color="primary" variant="filled" label="Filled" />
+              <org-button color="primary" variant="ghost" label="Ghost" />
+              <org-button color="primary" variant="text" label="Text" />
+              <org-button color="primary" variant="soft" label="Soft" />
             </div>
             <div class="flex gap-2">
-              <org-button color="secondary" variant="filled">Filled</org-button>
-              <org-button color="secondary" variant="ghost">Ghost</org-button>
-              <org-button color="secondary" variant="text">Text</org-button>
-              <org-button color="secondary" variant="soft">Soft</org-button>
+              <org-button color="secondary" variant="filled" label="Filled" />
+              <org-button color="secondary" variant="ghost" label="Ghost" />
+              <org-button color="secondary" variant="text" label="Text" />
+              <org-button color="secondary" variant="soft" label="Soft" />
             </div>
             <div class="flex gap-2">
-              <org-button color="neutral" variant="filled">Filled</org-button>
-              <org-button color="neutral" variant="ghost">Ghost</org-button>
-              <org-button color="neutral" variant="text">Text</org-button>
-              <org-button color="neutral" variant="soft">Soft</org-button>
+              <org-button color="neutral" variant="filled" label="Filled" />
+              <org-button color="neutral" variant="ghost" label="Ghost" />
+              <org-button color="neutral" variant="text" label="Text" />
+              <org-button color="neutral" variant="soft" label="Soft" />
             </div>
             <div class="flex gap-2">
-              <org-button color="safe" variant="filled">Filled</org-button>
-              <org-button color="safe" variant="ghost">Ghost</org-button>
-              <org-button color="safe" variant="text">Text</org-button>
-              <org-button color="safe" variant="soft">Soft</org-button>
+              <org-button color="safe" variant="filled" label="Filled" />
+              <org-button color="safe" variant="ghost" label="Ghost" />
+              <org-button color="safe" variant="text" label="Text" />
+              <org-button color="safe" variant="soft" label="Soft" />
             </div>
             <div class="flex gap-2">
-              <org-button color="info" variant="filled">Filled</org-button>
-              <org-button color="info" variant="ghost">Ghost</org-button>
-              <org-button color="info" variant="text">Text</org-button>
-              <org-button color="info" variant="soft">Soft</org-button>
+              <org-button color="info" variant="filled" label="Filled" />
+              <org-button color="info" variant="ghost" label="Ghost" />
+              <org-button color="info" variant="text" label="Text" />
+              <org-button color="info" variant="soft" label="Soft" />
             </div>
             <div class="flex gap-2">
-              <org-button color="caution" variant="filled">Filled</org-button>
-              <org-button color="caution" variant="ghost">Ghost</org-button>
-              <org-button color="caution" variant="text">Text</org-button>
-              <org-button color="caution" variant="soft">Soft</org-button>
+              <org-button color="caution" variant="filled" label="Filled" />
+              <org-button color="caution" variant="ghost" label="Ghost" />
+              <org-button color="caution" variant="text" label="Text" />
+              <org-button color="caution" variant="soft" label="Soft" />
             </div>
             <div class="flex gap-2">
-              <org-button color="warning" variant="filled">Filled</org-button>
-              <org-button color="warning" variant="ghost">Ghost</org-button>
-              <org-button color="warning" variant="text">Text</org-button>
-              <org-button color="warning" variant="soft">Soft</org-button>
+              <org-button color="warning" variant="filled" label="Filled" />
+              <org-button color="warning" variant="ghost" label="Ghost" />
+              <org-button color="warning" variant="text" label="Text" />
+              <org-button color="warning" variant="soft" label="Soft" />
             </div>
             <div class="flex gap-2">
-              <org-button color="danger" variant="filled">Filled</org-button>
-              <org-button color="danger" variant="ghost">Ghost</org-button>
-              <org-button color="danger" variant="text">Text</org-button>
-              <org-button color="danger" variant="soft">Soft</org-button>
+              <org-button color="danger" variant="filled" label="Filled" />
+              <org-button color="danger" variant="ghost" label="Ghost" />
+              <org-button color="danger" variant="text" label="Text" />
+              <org-button color="danger" variant="soft" label="Soft" />
             </div>
           </org-design-system-demo-canvas>
         </org-design-system-demo>
@@ -610,36 +688,24 @@ export const Showcase: Story = {
           <org-design-system-demo-header slot="header" title="Exclude Spacing" />
           <org-design-system-demo-canvas slot="canvas">
             <div class="flex gap-2 items-baseline">
-              <org-button color="primary" size="sm">Small</org-button>
-              <org-button color="primary" size="base">Base</org-button>
-              <org-button color="primary" size="lg">Large</org-button>
+              <org-button color="primary" size="sm" label="Small" />
+              <org-button color="primary" size="base" label="Base" />
+              <org-button color="primary" size="lg" label="Large" />
             </div>
             <div class="flex gap-2 items-baseline">
-              <org-button color="primary" size="sm" [excludeSpacing]="true">Small</org-button>
-              <org-button color="primary" size="base" [excludeSpacing]="true">Base</org-button>
-              <org-button color="primary" size="lg" [excludeSpacing]="true">Large</org-button>
+              <org-button color="primary" size="sm" label="Small" [excludeSpacing]="true" />
+              <org-button color="primary" size="base" label="Base" [excludeSpacing]="true" />
+              <org-button color="primary" size="lg" label="Large" [excludeSpacing]="true" />
             </div>
             <div class="flex gap-2 items-baseline">
-              <org-button color="primary" size="sm" [iconOnly]="true" ariaLabel="Settings">
-                <org-button-icon name="cog" />
-              </org-button>
-              <org-button color="primary" size="base" [iconOnly]="true" ariaLabel="Settings">
-                <org-button-icon name="cog" />
-              </org-button>
-              <org-button color="primary" size="lg" [iconOnly]="true" ariaLabel="Settings">
-                <org-button-icon name="cog" />
-              </org-button>
+              <org-button color="primary" size="sm" label="Settings" preIcon="cog" [iconOnly]="true" ariaLabel="Settings" />
+              <org-button color="primary" size="base" label="Settings" preIcon="cog" [iconOnly]="true" ariaLabel="Settings" />
+              <org-button color="primary" size="lg" label="Settings" preIcon="cog" [iconOnly]="true" ariaLabel="Settings" />
             </div>
             <div class="flex gap-2 items-baseline">
-              <org-button color="primary" size="sm" [iconOnly]="true" ariaLabel="Settings" [excludeSpacing]="true">
-                <org-button-icon name="cog" />
-              </org-button>
-              <org-button color="primary" size="base" [iconOnly]="true" ariaLabel="Settings" [excludeSpacing]="true">
-                <org-button-icon name="cog" />
-              </org-button>
-              <org-button color="primary" size="lg" [iconOnly]="true" ariaLabel="Settings" [excludeSpacing]="true">
-                <org-button-icon name="cog" />
-              </org-button>
+              <org-button color="primary" size="sm" label="Settings" preIcon="cog" [iconOnly]="true" ariaLabel="Settings" [excludeSpacing]="true" />
+              <org-button color="primary" size="base" label="Settings" preIcon="cog" [iconOnly]="true" ariaLabel="Settings" [excludeSpacing]="true" />
+              <org-button color="primary" size="lg" label="Settings" preIcon="cog" [iconOnly]="true" ariaLabel="Settings" [excludeSpacing]="true" />
             </div>
           </org-design-system-demo-canvas>
         </org-design-system-demo>
@@ -656,18 +722,18 @@ export const Showcase: Story = {
           <org-design-system-demo-header slot="header" title="Button Group Orientations" />
           <org-design-system-demo-canvas slot="canvas">
             <org-button-group>
-              <org-button color="primary">First</org-button>
-              <org-button color="primary" variant="ghost">Second</org-button>
-              <org-button color="primary" variant="ghost">Third</org-button>
+              <org-button color="primary" label="First" />
+              <org-button color="primary" variant="ghost" label="Second" />
+              <org-button color="primary" variant="ghost" label="Third" />
             </org-button-group>
             <org-button-group orientation="vertical">
-              <org-button color="primary">First</org-button>
-              <org-button color="primary" variant="ghost">Second</org-button>
-              <org-button color="primary" variant="ghost">Third</org-button>
+              <org-button color="primary" label="First" />
+              <org-button color="primary" variant="ghost" label="Second" />
+              <org-button color="primary" variant="ghost" label="Third" />
             </org-button-group>
             <org-button-group class="border border-default-color rounded-base p-1">
-              <org-button color="neutral" variant="ghost">Cancel</org-button>
-              <org-button color="primary">Save</org-button>
+              <org-button color="neutral" variant="ghost" label="Cancel" />
+              <org-button color="primary" label="Save" />
             </org-button-group>
           </org-design-system-demo-canvas>
         </org-design-system-demo>
@@ -683,8 +749,8 @@ export const Showcase: Story = {
     moduleMetadata: {
       imports: [
         Button,
-        ButtonIcon,
         ButtonGroup,
+        Icon,
         DesignSystemDemo,
         DesignSystemDemoHeader,
         DesignSystemDemoCanvas,

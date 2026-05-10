@@ -1,86 +1,181 @@
 @layer components {
   :host {
-    display: block;
+    display: grid;
+    grid-template-columns: var(--chat-avatar-size) minmax(0, 1fr);
+    column-gap: var(--chat-avatar-gap);
+    width: 100%;
   }
 
-  .message-text-row {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-2);
+  /* run rhythm — different senders get a wider gap; continuation messages within a run snap close */
+  :host([data-run-position='first']),
+  :host([data-run-position='only']) {
+    margin-top: var(--chat-run-gap-between);
   }
 
-  .message-text {
-    flex: 1;
+  :host([data-run-position='middle']),
+  :host([data-run-position='last']) {
+    margin-top: var(--chat-run-gap-within);
   }
 
-  .chat-message-container {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-2);
-    align-items: flex-start;
+  /* the very first message in a thread sits flush */
+  :host:first-child {
+    margin-top: 0;
   }
 
-  :host([data-source='user']) .chat-message-container {
-    align-items: flex-end;
+  /* the gutter glyph is a real org-avatar rendered directly in the template; it lives in column 1 */
+  :host > org-avatar {
+    grid-column: 1;
+    align-self: start;
   }
 
-  :host([data-source='system']) .chat-message-container {
-    align-items: center;
+  /* continuation messages keep the gutter (so labels line up across a run) but hide the avatar itself */
+  :host > org-avatar[data-hidden='1'] {
+    visibility: hidden;
   }
 
-  .chat-message-content {
-    display: flex;
-    flex-direction: column;
-    font-size: var(--font-size-base);
-    max-width: 80%;
-  }
-
-  :host([data-source='system']) .chat-message-content {
-    max-width: 90%;
-  }
-
-  .chat-message-bubble {
+  .message-column {
+    grid-column: 2;
     display: flex;
     flex-direction: column;
     gap: var(--spacing-1);
-    padding-inline: var(--spacing-3);
-    padding-block: var(--spacing-2);
+    min-width: 0;
   }
 
-  :host([data-source='user']) .chat-message-bubble,
-  :host([data-source='ai']) .chat-message-bubble {
-    border-radius: 1rem; /* 16px */
-    background-color: var(--color-bg-surface-2);
-    color: var(--color-fg);
-  }
-
-  :host([data-source='system']) .chat-message-bubble {
-    text-align: center;
-    font-weight: bold;
-    color: var(--color-fg);
-  }
-
-  .chat-message-metadata {
+  .message-author {
     display: flex;
     align-items: center;
-    line-height: 1rem; /* 16px */
-    gap: var(--spacing-1);
+    gap: var(--spacing-2);
+    min-height: var(--chat-author-min-height);
+    color: var(--color-fg);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-tight);
+  }
+
+  .author-name {
+    color: var(--color-fg);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .author-trailing-time {
+    color: var(--color-fg-faint);
     font-size: var(--font-size-xs);
-    color: var(--color-fg-muted);
+    font-weight: var(--font-weight-regular);
   }
 
-  /* hide the metadata row when it has no visible content */
-  .chat-message-metadata:not(:has(*)) {
+  .author-trailing-meta {
+    color: var(--color-fg-muted);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-regular);
+  }
+
+  .author-edited {
+    color: var(--color-fg-faint);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-regular);
+    font-style: italic;
+  }
+
+  /* user / error wrap the body in an org-box; clamp width so a long pasted prompt doesn't span the thread */
+  .message-body-wrap {
+    max-width: var(--chat-message-max-width);
+  }
+
+  .message-body {
+    font-size: var(--chat-body-font-size);
+    line-height: var(--chat-body-line-height);
+    color: inherit;
+    text-wrap: pretty;
+  }
+
+  .message-body > * + * {
+    margin-top: var(--chat-body-child-gap);
+  }
+
+  .message-body p {
+    margin: 0;
+  }
+
+  .message-body ul,
+  .message-body ol {
+    margin: 0;
+    padding-inline-start: var(--spacing-5);
+  }
+
+  .message-body li + li {
+    margin-top: var(--spacing-1);
+  }
+
+  .message-body strong {
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .message-body em {
+    font-style: italic;
+  }
+
+  /* failed state: pull the inner box to the danger-soft surface */
+  :host([data-state='failed']) .message-body-wrap {
+    --box-border-color: var(--color-danger-border-strong);
+    --box-bg: var(--color-danger-soft);
+  }
+
+  /* pending state: dim the inner surface to flag in-flight */
+  :host([data-state='pending']) .message-body-wrap {
+    opacity: var(--opacity-disabled);
+  }
+
+  /* system role — collapse to a centred chrome pill */
+  :host([data-role='system']) {
+    grid-template-columns: minmax(0, 1fr);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-2);
+    width: fit-content;
+    max-width: 100%;
+    margin-block: var(--spacing-2);
+    margin-inline: auto;
+    padding-block: var(--spacing-2);
+    padding-inline: var(--spacing-3);
+    background: var(--chat-system-bg);
+    color: var(--chat-system-fg);
+    border: 0.0625rem solid var(--chat-system-border); /* 1px */
+    border-radius: var(--radius-pill);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-tight);
+    text-align: center;
+  }
+
+  /* hover actions wrapper — child projected with [hoverActions] reveals on hover / focus-within or when pinned */
+  .message-hover-actions {
+    grid-column: 2;
+    margin-top: var(--spacing-1_5);
+    opacity: 0;
+    transform: translateY(-0.125rem); /* -2px */
+    pointer-events: none;
+    transition:
+      opacity var(--motion-duration-base) var(--motion-ease-standard),
+      transform var(--motion-duration-base) var(--motion-ease-standard);
+  }
+
+  /* keep the slot out of the layout when nothing is projected */
+  .message-hover-actions:empty {
     display: none;
   }
 
-  .chat-message-status {
-    display: flex;
-    align-items: center;
-    gap: 0.375rem; /* 6px */
+  :host(:hover) .message-hover-actions,
+  :host(:focus-within) .message-hover-actions,
+  .message-hover-actions:has([data-pinned='1']) {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
   }
 
-  :host([data-status='in-progress']) .chat-message-status org-indicator {
-    animation: var(--animate-pulse);
+  @media (prefers-reduced-motion: reduce) {
+    .message-hover-actions {
+      transition: none;
+      transform: none;
+    }
   }
 }

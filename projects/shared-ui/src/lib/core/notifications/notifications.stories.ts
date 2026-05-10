@@ -13,7 +13,7 @@ import { TypedContextDirective } from '../typed-context-directive/typed-context-
   imports: [Notifications, Button, StorybookExampleContainer],
   template: `
     <org-storybook-example-container title="Default" currentState="Default notification usage">
-      <org-button color="primary" (click)="addNotification()"> Add Notification </org-button>
+      <org-button color="primary" label="Add Notification" (click)="addNotification()" />
       <org-notifications [xPosition]="xPosition" [yPosition]="yPosition" />
     </org-storybook-example-container>
   `,
@@ -43,27 +43,27 @@ class NotificationsDefaultStory {
       currentState="Demonstrating different position configurations"
     >
       <org-storybook-example-container-section label="Top-Left">
-        <org-button color="info" (click)="showTopLeft()"> Show Top-Left Notification </org-button>
+        <org-button color="info" label="Show Top-Left Notification" (click)="showTopLeft()" />
       </org-storybook-example-container-section>
 
       <org-storybook-example-container-section label="Top-Center (Default)">
-        <org-button color="safe" (click)="showTopCenter()"> Show Top-Center Notification </org-button>
+        <org-button color="safe" label="Show Top-Center Notification" (click)="showTopCenter()" />
       </org-storybook-example-container-section>
 
       <org-storybook-example-container-section label="Top-Right">
-        <org-button color="warning" (click)="showTopRight()"> Show Top-Right Notification </org-button>
+        <org-button color="warning" label="Show Top-Right Notification" (click)="showTopRight()" />
       </org-storybook-example-container-section>
 
       <org-storybook-example-container-section label="Bottom-Left">
-        <org-button color="danger" (click)="showBottomLeft()"> Show Bottom-Left Notification </org-button>
+        <org-button color="danger" label="Show Bottom-Left Notification" (click)="showBottomLeft()" />
       </org-storybook-example-container-section>
 
       <org-storybook-example-container-section label="Bottom-Center">
-        <org-button color="neutral" (click)="showBottomCenter()"> Show Bottom-Center Notification </org-button>
+        <org-button color="neutral" label="Show Bottom-Center Notification" (click)="showBottomCenter()" />
       </org-storybook-example-container-section>
 
       <org-storybook-example-container-section label="Bottom-Right">
-        <org-button color="primary" (click)="showBottomRight()"> Show Bottom-Right Notification </org-button>
+        <org-button color="primary" label="Show Bottom-Right Notification" (click)="showBottomRight()" />
       </org-storybook-example-container-section>
 
       <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
@@ -163,35 +163,35 @@ class NotificationsPositionsStory {
   template: `
     <org-storybook-example-container title="Color Variants" currentState="Comparing all color options">
       <org-storybook-example-container-section label="Primary">
-        <org-button color="primary" (click)="addPrimary()"> Show Primary Notification </org-button>
+        <org-button color="primary" label="Show Primary Notification" (click)="addPrimary()" />
       </org-storybook-example-container-section>
 
       <org-storybook-example-container-section label="Secondary">
-        <org-button color="secondary" (click)="addSecondary()"> Show Secondary Notification </org-button>
+        <org-button color="secondary" label="Show Secondary Notification" (click)="addSecondary()" />
       </org-storybook-example-container-section>
 
       <org-storybook-example-container-section label="Neutral">
-        <org-button color="neutral" (click)="addNeutral()"> Show Neutral Notification </org-button>
+        <org-button color="neutral" label="Show Neutral Notification" (click)="addNeutral()" />
       </org-storybook-example-container-section>
 
       <org-storybook-example-container-section label="Safe (Success)">
-        <org-button color="safe" (click)="addSafe()"> Show Safe Notification </org-button>
+        <org-button color="safe" label="Show Safe Notification" (click)="addSafe()" />
       </org-storybook-example-container-section>
 
       <org-storybook-example-container-section label="Info">
-        <org-button color="info" (click)="addInfo()"> Show Info Notification </org-button>
+        <org-button color="info" label="Show Info Notification" (click)="addInfo()" />
       </org-storybook-example-container-section>
 
       <org-storybook-example-container-section label="Caution">
-        <org-button color="caution" (click)="addCaution()"> Show Caution Notification </org-button>
+        <org-button color="caution" label="Show Caution Notification" (click)="addCaution()" />
       </org-storybook-example-container-section>
 
       <org-storybook-example-container-section label="Warning">
-        <org-button color="warning" (click)="addWarning()"> Show Warning Notification </org-button>
+        <org-button color="warning" label="Show Warning Notification" (click)="addWarning()" />
       </org-storybook-example-container-section>
 
       <org-storybook-example-container-section label="Danger">
-        <org-button color="danger" (click)="addDanger()"> Show Danger Notification </org-button>
+        <org-button color="danger" label="Show Danger Notification" (click)="addDanger()" />
       </org-storybook-example-container-section>
 
       <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
@@ -289,23 +289,23 @@ class NotificationsColorsStory {
       currentState="Demonstrating different auto-close and manual close options"
     >
       <org-storybook-example-container-section label="Auto-close 2 seconds">
-        <org-button color="info" (click)="addAutoClose2s()"> Show 2s Auto-close </org-button>
+        <org-button color="info" label="Show 2s Auto-close" (click)="addAutoClose2s()" />
       </org-storybook-example-container-section>
 
       <org-storybook-example-container-section label="Auto-close 5 seconds">
-        <org-button color="safe" (click)="addAutoClose5s()"> Show 5s Auto-close </org-button>
+        <org-button color="safe" label="Show 5s Auto-close" (click)="addAutoClose5s()" />
       </org-storybook-example-container-section>
 
       <org-storybook-example-container-section label="Auto-close 10 seconds">
-        <org-button color="warning" (click)="addAutoClose10s()"> Show 10s Auto-close </org-button>
+        <org-button color="warning" label="Show 10s Auto-close" (click)="addAutoClose10s()" />
       </org-storybook-example-container-section>
 
       <org-storybook-example-container-section label="Manual Close Only">
-        <org-button color="danger" (click)="addManualClose()"> Show Manual Close Only </org-button>
+        <org-button color="danger" label="Show Manual Close Only" (click)="addManualClose()" />
       </org-storybook-example-container-section>
 
       <org-storybook-example-container-section label="No Close Button">
-        <org-button color="neutral" (click)="addNoClose()"> Show No Close Button </org-button>
+        <org-button color="neutral" label="Show No Close Button" (click)="addNoClose()" />
       </org-storybook-example-container-section>
 
       <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
@@ -376,12 +376,8 @@ class NotificationsAutoCloseStory {
       currentState="Adding a persistent notification then updating it to a closeable success notification"
     >
       <org-storybook-example-container-section label="Add then update">
-        <org-button color="info" [disabled]="!!notificationId()" (click)="addPersistentNotification()">
-          Add Persistent Notification
-        </org-button>
-        <org-button color="safe" [disabled]="!notificationId()" (click)="updateToCloseableSuccess()">
-          Update To Closeable Success
-        </org-button>
+        <org-button color="info" [disabled]="!!notificationId()" label="Add Persistent Notification" (click)="addPersistentNotification()" />
+        <org-button color="safe" [disabled]="!notificationId()" label="Update To Closeable Success" (click)="updateToCloseableSuccess()" />
       </org-storybook-example-container-section>
 
       <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
@@ -446,7 +442,7 @@ class NotificationsUpdateDynamicallyStory {
       currentState="Validating aria-live region and close button accessible name"
     >
       <org-storybook-example-container-section label="Closeable Notification">
-        <org-button color="info" (click)="addCloseableNotification()"> Show Closeable Notification </org-button>
+        <org-button color="info" label="Show Closeable Notification" (click)="addCloseableNotification()" />
       </org-storybook-example-container-section>
 
       <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
@@ -493,7 +489,7 @@ class NotificationsAccessibilityStory {
       </ng-template>
 
       <org-storybook-example-container-section label="Add notification with link">
-        <org-button color="info" (click)="addNotificationWithLink()"> Add Notification With Link </org-button>
+        <org-button color="info" label="Add Notification With Link" (click)="addNotificationWithLink()" />
       </org-storybook-example-container-section>
 
       <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">

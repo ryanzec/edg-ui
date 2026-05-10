@@ -1,7 +1,133 @@
+import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import type { Meta, StoryObj } from '@storybook/angular';
-import { Box, allBoxBackgrounds, allBoxBorders, allBoxColors, allBoxPaddings } from './box';
-import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
-import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
+import { ButtonToggle, ButtonToggleItem } from '../button-toggle/button-toggle';
+import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
+import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
+import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
+import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
+import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
+import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
+import {
+  Box,
+  BoxBackground,
+  BoxBorder,
+  BoxColor,
+  BoxPadding,
+  allBoxBackgrounds,
+  allBoxBorders,
+  allBoxColors,
+  allBoxPaddings,
+} from './box';
+
+type LiveDemoColorChoice = 'none' | BoxColor;
+
+const allLiveDemoColorChoices = ['none', ...allBoxColors] as const;
+
+const liveDemoColorItems: ButtonToggleItem[] = allLiveDemoColorChoices.map((color) => ({
+  label: color,
+  value: color,
+  buttonColor: 'primary',
+}));
+
+const liveDemoBorderItems: ButtonToggleItem[] = allBoxBorders.map((border) => ({
+  label: border,
+  value: border,
+  buttonColor: 'primary',
+}));
+
+const liveDemoPaddingItems: ButtonToggleItem[] = allBoxPaddings.map((padding) => ({
+  label: padding,
+  value: padding,
+  buttonColor: 'primary',
+}));
+
+const liveDemoBackgroundItems: ButtonToggleItem[] = allBoxBackgrounds.map((background) => ({
+  label: background,
+  value: background,
+  buttonColor: 'primary',
+}));
+
+@Component({
+  selector: 'story-box-live-demo',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    ReactiveFormsModule,
+    Box,
+    ButtonToggle,
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoControls,
+    DesignSystemDemoControlGroup,
+    DesignSystemDemoCanvas,
+  ],
+  styles: [
+    `
+      :host {
+        display: block;
+      }
+      .canvas-stage {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 6rem; /* 96px */
+      }
+    `,
+  ],
+  template: `
+    <form [formGroup]="liveDemoForm">
+      <org-design-system-demo>
+        <org-design-system-demo-header
+          slot="header"
+          title="Live demo"
+          description="Box is purely presentational — no hover, focus, or pressed states. Toggle the inputs to see every visual combination."
+        />
+        <org-design-system-demo-controls slot="controls">
+          <org-design-system-demo-control-group label="Color">
+            <org-button-toggle [items]="colorItems" formControlName="color" buttonSize="sm" />
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Border">
+            <org-button-toggle [items]="borderItems" formControlName="border" buttonSize="sm" />
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Padding">
+            <org-button-toggle [items]="paddingItems" formControlName="padding" buttonSize="sm" />
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Background">
+            <org-button-toggle [items]="backgroundItems" formControlName="background" buttonSize="sm" />
+          </org-design-system-demo-control-group>
+        </org-design-system-demo-controls>
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="canvas-stage">
+            <org-box
+              [color]="liveDemoForm.controls.color.value === 'none' ? null : liveDemoForm.controls.color.value"
+              [border]="liveDemoForm.controls.border.value"
+              [padding]="liveDemoForm.controls.padding.value"
+              [background]="liveDemoForm.controls.background.value"
+            >
+              <div class="flex flex-col gap-1">
+                <strong>Box content</strong>
+                <span>This is a foundational container. Drop any composition inside — text, controls, key/value rows, or another component.</span>
+              </div>
+            </org-box>
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+    </form>
+  `,
+})
+class BoxLiveDemoStory {
+  protected readonly colorItems = liveDemoColorItems;
+  protected readonly borderItems = liveDemoBorderItems;
+  protected readonly paddingItems = liveDemoPaddingItems;
+  protected readonly backgroundItems = liveDemoBackgroundItems;
+
+  protected readonly liveDemoForm = new FormGroup({
+    color: new FormControl<LiveDemoColorChoice>('info', { nonNullable: true }),
+    border: new FormControl<BoxBorder>('bordered', { nonNullable: true }),
+    padding: new FormControl<BoxPadding>('base', { nonNullable: true }),
+    background: new FormControl<BoxBackground>('colored', { nonNullable: true }),
+  });
+}
 
 const meta: Meta<Box> = {
   title: 'Core/Components/Box',
@@ -135,270 +261,284 @@ export const Default: Story = {
   }),
 };
 
-export const Colors: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Comparison of all color variants for both bordered and borderless borders.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Color Variants"
-        currentState="Comparing default and all 8 color options (bordered)"
-      >
-        <org-storybook-example-container-section label="Default (No Color)">
-          <div>
-            <org-box>Default box.</org-box>
-          </div>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Primary">
-          <div>
-            <org-box color="primary">Primary box.</org-box>
-          </div>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Secondary">
-          <div>
-            <org-box color="secondary">Secondary box.</org-box>
-          </div>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Neutral">
-          <div>
-            <org-box color="neutral">Neutral box.</org-box>
-          </div>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Safe">
-          <div>
-            <org-box color="safe">Safe box.</org-box>
-          </div>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Info">
-          <div>
-            <org-box color="info">Info box.</org-box>
-          </div>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Caution">
-          <div>
-            <org-box color="caution">Caution box.</org-box>
-          </div>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Warning">
-          <div>
-            <org-box color="warning">Warning box.</org-box>
-          </div>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Danger">
-          <div>
-            <org-box color="danger">Danger box.</org-box>
-          </div>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li><strong>Default</strong>: Standard border and background</li>
-          <li><strong>Primary</strong>: Primary color for main content</li>
-          <li><strong>Secondary</strong>: Secondary accent for supporting content</li>
-          <li><strong>Neutral</strong>: Neutral gray for low-emphasis containers</li>
-          <li><strong>Safe</strong>: Green for success/positive status</li>
-          <li><strong>Info</strong>: Blue for informational content</li>
-          <li><strong>Caution</strong>: Yellow for caution states</li>
-          <li><strong>Warning</strong>: Orange for important warnings</li>
-          <li><strong>Danger</strong>: Red for error/critical status</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [Box, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const Borders: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Comparison of bordered, borderless, border-thick, and border-emphasize borders across color options.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Borders"
-        currentState="Comparing bordered, borderless, border-thick, and border-emphasize borders"
-      >
-        <org-storybook-example-container-section label="Bordered (Default)">
-          <div class="flex flex-col gap-2 max-w-sm">
-            <org-box>Default bordered.</org-box>
-            <org-box color="primary">Primary bordered.</org-box>
-            <org-box color="safe">Safe bordered.</org-box>
-            <org-box color="danger">Danger bordered.</org-box>
-          </div>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Borderless">
-          <div class="flex flex-col gap-2 max-w-sm">
-            <org-box border="borderless">Default borderless.</org-box>
-            <org-box color="primary" border="borderless">Primary borderless.</org-box>
-            <org-box color="safe" border="borderless">Safe borderless.</org-box>
-            <org-box color="danger" border="borderless">Danger borderless.</org-box>
-          </div>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Border Thick">
-          <div class="flex flex-col gap-2 max-w-sm">
-            <org-box border="border-thick">Default border-thick.</org-box>
-            <org-box color="primary" border="border-thick">Primary border-thick.</org-box>
-            <org-box color="safe" border="border-thick">Safe border-thick.</org-box>
-            <org-box color="danger" border="border-thick">Danger border-thick.</org-box>
-          </div>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Border Emphasize">
-          <div class="flex flex-col gap-2 max-w-sm">
-            <org-box border="border-emphasize">Default border-emphasize.</org-box>
-            <org-box color="primary" border="border-emphasize">Primary border-emphasize.</org-box>
-            <org-box color="safe" border="border-emphasize">Safe border-emphasize.</org-box>
-            <org-box color="danger" border="border-emphasize">Danger border-emphasize.</org-box>
-          </div>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li><strong>Bordered</strong>: Visible colored border with matching subtle background</li>
-          <li><strong>Borderless</strong>: Transparent border — only the background color is applied</li>
-          <li><strong>Border Thick</strong>: Thicker (2px) visible border with matching subtle background</li>
-          <li><strong>Border Emphasize</strong>: Top/right/bottom borders use the default border color; the left border is 7px and matches the color input</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [Box, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const Background: Story = {
+export const LiveDemo: Story = {
   parameters: {
     docs: {
       description: {
         story:
-          'Comparison of colored vs colorless backgrounds. When colorless, the color input only tints the border and the background stays at the default.',
+          'Fully interactive demo. Use the controls to drive every visual input on the box (color, border, padding, background) and observe the live result in the canvas.',
       },
     },
   },
   render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Background"
-        currentState="Comparing colored and colorless backgrounds with bordered and border-emphasize borders"
-      >
-        <org-storybook-example-container-section label="Bordered - Colored (Default)">
-          <div class="flex flex-col gap-2 max-w-sm">
-            <org-box color="primary" border="bordered">Primary bordered colored.</org-box>
-            <org-box color="safe" border="bordered">Safe bordered colored.</org-box>
-            <org-box color="warning" border="bordered">Warning bordered colored.</org-box>
-            <org-box color="danger" border="bordered">Danger bordered colored.</org-box>
-          </div>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Bordered - Colorless">
-          <div class="flex flex-col gap-2 max-w-sm">
-            <org-box color="primary" border="bordered" background="colorless">Primary bordered colorless.</org-box>
-            <org-box color="safe" border="bordered" background="colorless">Safe bordered colorless.</org-box>
-            <org-box color="warning" border="bordered" background="colorless">Warning bordered colorless.</org-box>
-            <org-box color="danger" border="bordered" background="colorless">Danger bordered colorless.</org-box>
-          </div>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Border Emphasize - Colored (Default)">
-          <div class="flex flex-col gap-2 max-w-sm">
-            <org-box color="primary" border="border-emphasize">Primary border-emphasize colored.</org-box>
-            <org-box color="safe" border="border-emphasize">Safe border-emphasize colored.</org-box>
-            <org-box color="warning" border="border-emphasize">Warning border-emphasize colored.</org-box>
-            <org-box color="danger" border="border-emphasize">Danger border-emphasize colored.</org-box>
-          </div>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Border Emphasize - Colorless">
-          <div class="flex flex-col gap-2 max-w-sm">
-            <org-box color="primary" border="border-emphasize" background="colorless">
-              Primary border-emphasize colorless.
-            </org-box>
-            <org-box color="safe" border="border-emphasize" background="colorless">
-              Safe border-emphasize colorless.
-            </org-box>
-            <org-box color="warning" border="border-emphasize" background="colorless">
-              Warning border-emphasize colorless.
-            </org-box>
-            <org-box color="danger" border="border-emphasize" background="colorless">
-              Danger border-emphasize colorless.
-            </org-box>
-          </div>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li><strong>Colored</strong>: The color input tints both the border and the background (default)</li>
-          <li><strong>Colorless</strong>: The color input only affects the border; the background stays at the default</li>
-          <li><strong>Bordered + Colorless</strong>: Useful when you want a subtle neutral container with a semantic border accent</li>
-          <li><strong>Border Emphasize + Colorless</strong>: Useful for call-out style containers where only the left accent bar is colored</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
+    template: `<story-box-live-demo />`,
     moduleMetadata: {
-      imports: [Box, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [BoxLiveDemoStory],
     },
   }),
 };
 
-export const Padding: Story = {
+export const Showcase: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Comparison of all padding options: none, sm, md (default), and lg.',
+        story:
+          'Comprehensive showcase of every box variant axis — color, border, background, padding — plus a color × border matrix and realistic content fillings to show how the primitive carries different compositions.',
       },
     },
   },
   render: () => ({
     template: `
-      <org-storybook-example-container
-        title="Padding"
-        currentState="Comparing none, sm, md, and lg padding options"
-      >
-        <org-storybook-example-container-section label="None">
-          <org-box padding="none">Box with no padding.</org-box>
-        </org-storybook-example-container-section>
+      <div class="flex flex-col gap-4">
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Color Variants" />
+          <org-design-system-demo-canvas slot="canvas">
+            <org-box>Default box.</org-box>
+            <org-box color="primary">Primary box.</org-box>
+            <org-box color="secondary">Secondary box.</org-box>
+            <org-box color="neutral">Neutral box.</org-box>
+            <org-box color="safe">Safe box.</org-box>
+            <org-box color="info">Info box.</org-box>
+            <org-box color="caution">Caution box.</org-box>
+            <org-box color="warning">Warning box.</org-box>
+            <org-box color="danger">Danger box.</org-box>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>Default</strong>: Standard border and background</li>
+            <li><strong>Primary</strong>: Primary color for main content</li>
+            <li><strong>Secondary</strong>: Secondary accent for supporting content</li>
+            <li><strong>Neutral</strong>: Neutral gray for low-emphasis containers</li>
+            <li><strong>Safe</strong>: Green for success/positive status</li>
+            <li><strong>Info</strong>: Blue for informational content</li>
+            <li><strong>Caution</strong>: Yellow for caution states</li>
+            <li><strong>Warning</strong>: Orange for important warnings</li>
+            <li><strong>Danger</strong>: Red for error/critical status</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
 
-        <org-storybook-example-container-section label="Small">
-          <org-box padding="sm">Box with small padding.</org-box>
-        </org-storybook-example-container-section>
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Borders" />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="flex flex-col gap-2 max-w-sm">
+              <org-box>Default bordered.</org-box>
+              <org-box color="primary">Primary bordered.</org-box>
+              <org-box color="safe">Safe bordered.</org-box>
+              <org-box color="danger">Danger bordered.</org-box>
+            </div>
+            <div class="flex flex-col gap-2 max-w-sm">
+              <org-box border="borderless">Default borderless.</org-box>
+              <org-box color="primary" border="borderless">Primary borderless.</org-box>
+              <org-box color="safe" border="borderless">Safe borderless.</org-box>
+              <org-box color="danger" border="borderless">Danger borderless.</org-box>
+            </div>
+            <div class="flex flex-col gap-2 max-w-sm">
+              <org-box border="border-thick">Default border-thick.</org-box>
+              <org-box color="primary" border="border-thick">Primary border-thick.</org-box>
+              <org-box color="safe" border="border-thick">Safe border-thick.</org-box>
+              <org-box color="danger" border="border-thick">Danger border-thick.</org-box>
+            </div>
+            <div class="flex flex-col gap-2 max-w-sm">
+              <org-box border="border-emphasize">Default border-emphasize.</org-box>
+              <org-box color="primary" border="border-emphasize">Primary border-emphasize.</org-box>
+              <org-box color="safe" border="border-emphasize">Safe border-emphasize.</org-box>
+              <org-box color="danger" border="border-emphasize">Danger border-emphasize.</org-box>
+            </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>Bordered</strong>: Visible colored border with matching subtle background</li>
+            <li><strong>Borderless</strong>: Transparent border — only the background color is applied</li>
+            <li><strong>Border Thick</strong>: Thicker (2px) visible border with matching subtle background</li>
+            <li><strong>Border Emphasize</strong>: Top/right/bottom borders use the default border color; the left border is 7px and matches the color input</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
 
-        <org-storybook-example-container-section label="Base (Default)">
-          <org-box padding="base">Box with base padding.</org-box>
-        </org-storybook-example-container-section>
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Background" />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="flex flex-col gap-2 max-w-sm">
+              <org-box color="primary" border="bordered">Primary bordered colored.</org-box>
+              <org-box color="safe" border="bordered">Safe bordered colored.</org-box>
+              <org-box color="warning" border="bordered">Warning bordered colored.</org-box>
+              <org-box color="danger" border="bordered">Danger bordered colored.</org-box>
+            </div>
+            <div class="flex flex-col gap-2 max-w-sm">
+              <org-box color="primary" border="bordered" background="colorless">Primary bordered colorless.</org-box>
+              <org-box color="safe" border="bordered" background="colorless">Safe bordered colorless.</org-box>
+              <org-box color="warning" border="bordered" background="colorless">Warning bordered colorless.</org-box>
+              <org-box color="danger" border="bordered" background="colorless">Danger bordered colorless.</org-box>
+            </div>
+            <div class="flex flex-col gap-2 max-w-sm">
+              <org-box color="primary" border="border-emphasize">Primary border-emphasize colored.</org-box>
+              <org-box color="safe" border="border-emphasize">Safe border-emphasize colored.</org-box>
+              <org-box color="warning" border="border-emphasize">Warning border-emphasize colored.</org-box>
+              <org-box color="danger" border="border-emphasize">Danger border-emphasize colored.</org-box>
+            </div>
+            <div class="flex flex-col gap-2 max-w-sm">
+              <org-box color="primary" border="border-emphasize" background="colorless">
+                Primary border-emphasize colorless.
+              </org-box>
+              <org-box color="safe" border="border-emphasize" background="colorless">
+                Safe border-emphasize colorless.
+              </org-box>
+              <org-box color="warning" border="border-emphasize" background="colorless">
+                Warning border-emphasize colorless.
+              </org-box>
+              <org-box color="danger" border="border-emphasize" background="colorless">
+                Danger border-emphasize colorless.
+              </org-box>
+            </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>Colored</strong>: The color input tints both the border and the background (default)</li>
+            <li><strong>Colorless</strong>: The color input only affects the border; the background stays at the default</li>
+            <li><strong>Bordered + Colorless</strong>: Useful when you want a subtle neutral container with a semantic border accent</li>
+            <li><strong>Border Emphasize + Colorless</strong>: Useful for call-out style containers where only the left accent bar is colored</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
 
-        <org-storybook-example-container-section label="Large">
-          <org-box padding="lg">Box with large padding.</org-box>
-        </org-storybook-example-container-section>
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Padding" />
+          <org-design-system-demo-canvas slot="canvas">
+            <org-box padding="none">Box with no padding.</org-box>
+            <org-box padding="sm">Box with small padding.</org-box>
+            <org-box padding="base">Box with base padding.</org-box>
+            <org-box padding="lg">Box with large padding.</org-box>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>None</strong>: No internal padding applied</li>
+            <li><strong>Small</strong>: Small padding</li>
+            <li><strong>Base</strong>: Base padding — the default value</li>
+            <li><strong>Large</strong>: Large padding for spacious content areas</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
 
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li><strong>None</strong>: No internal padding applied</li>
-          <li><strong>Small</strong>: Small padding</li>
-          <li><strong>Base</strong>: Base padding — the default value</li>
-          <li><strong>Large</strong>: Large padding for spacious content areas</li>
-        </ul>
-      </org-storybook-example-container>
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Color × border matrix" />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="flex flex-col gap-2">
+              <div class="flex gap-2">
+                <org-box color="primary" border="bordered">Bordered</org-box>
+                <org-box color="primary" border="border-thick">Thick</org-box>
+                <org-box color="primary" border="border-emphasize">Emphasize</org-box>
+                <org-box color="primary" border="borderless">Borderless</org-box>
+              </div>
+              <div class="flex gap-2">
+                <org-box color="secondary" border="bordered">Bordered</org-box>
+                <org-box color="secondary" border="border-thick">Thick</org-box>
+                <org-box color="secondary" border="border-emphasize">Emphasize</org-box>
+                <org-box color="secondary" border="borderless">Borderless</org-box>
+              </div>
+              <div class="flex gap-2">
+                <org-box color="neutral" border="bordered">Bordered</org-box>
+                <org-box color="neutral" border="border-thick">Thick</org-box>
+                <org-box color="neutral" border="border-emphasize">Emphasize</org-box>
+                <org-box color="neutral" border="borderless">Borderless</org-box>
+              </div>
+              <div class="flex gap-2">
+                <org-box color="safe" border="bordered">Bordered</org-box>
+                <org-box color="safe" border="border-thick">Thick</org-box>
+                <org-box color="safe" border="border-emphasize">Emphasize</org-box>
+                <org-box color="safe" border="borderless">Borderless</org-box>
+              </div>
+              <div class="flex gap-2">
+                <org-box color="info" border="bordered">Bordered</org-box>
+                <org-box color="info" border="border-thick">Thick</org-box>
+                <org-box color="info" border="border-emphasize">Emphasize</org-box>
+                <org-box color="info" border="borderless">Borderless</org-box>
+              </div>
+              <div class="flex gap-2">
+                <org-box color="caution" border="bordered">Bordered</org-box>
+                <org-box color="caution" border="border-thick">Thick</org-box>
+                <org-box color="caution" border="border-emphasize">Emphasize</org-box>
+                <org-box color="caution" border="borderless">Borderless</org-box>
+              </div>
+              <div class="flex gap-2">
+                <org-box color="warning" border="bordered">Bordered</org-box>
+                <org-box color="warning" border="border-thick">Thick</org-box>
+                <org-box color="warning" border="border-emphasize">Emphasize</org-box>
+                <org-box color="warning" border="borderless">Borderless</org-box>
+              </div>
+              <div class="flex gap-2">
+                <org-box color="danger" border="bordered">Bordered</org-box>
+                <org-box color="danger" border="border-thick">Thick</org-box>
+                <org-box color="danger" border="border-emphasize">Emphasize</org-box>
+                <org-box color="danger" border="borderless">Borderless</org-box>
+              </div>
+            </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>Eight semantic colors × four border treatments</strong>: every combination is valid</li>
+            <li><strong>Bordered / Thick</strong>: hairline and 2px frames carry the color on all four sides</li>
+            <li><strong>Emphasize</strong>: the left edge widens to a 7px accent rail in the semantic color</li>
+            <li><strong>Borderless</strong>: only the soft tinted background carries the color signal</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Realistic fillings" />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="flex gap-2">
+              <org-box color="caution" border="border-emphasize">
+                <div class="flex flex-col gap-1">
+                  <strong>Heads up</strong>
+                  <span>Your trial expires in 4 days. Add a payment method to keep your project running.</span>
+                </div>
+              </org-box>
+              <org-box>
+                <div class="flex flex-col gap-1">
+                  <div class="flex justify-between gap-4">
+                    <span>Plan</span>
+                    <span>Team · Annual</span>
+                  </div>
+                  <div class="flex justify-between gap-4">
+                    <span>Seats</span>
+                    <span>12 / 15</span>
+                  </div>
+                  <div class="flex justify-between gap-4">
+                    <span>Renews</span>
+                    <span>Mar 4, 2026</span>
+                  </div>
+                </div>
+              </org-box>
+            </div>
+            <div class="flex gap-2">
+              <org-box color="safe" border="border-emphasize">
+                <div class="flex flex-col gap-1">
+                  <strong>Deploy succeeded</strong>
+                  <span>web · main · 2.4 MB · 1m 12s</span>
+                  <span>commit 9f3a01c · by ada</span>
+                </div>
+              </org-box>
+              <org-box color="danger" border="border-emphasize" background="colorless">
+                <div class="flex flex-col gap-1">
+                  <strong>Build failed</strong>
+                  <span>3 type errors in src/checkout/payment.ts. The previous successful build was 14 minutes ago.</span>
+                </div>
+              </org-box>
+            </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>Box accepts any content</strong>: short prose, key/value rows, stacked metadata, or multi-element blocks</li>
+            <li><strong>Semantic color carries meaning</strong>: pair caution / safe / danger with text content, never color alone</li>
+            <li><strong>Composition is the consumer's job</strong>: Box only frames the content; inner layout is up to you</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+      </div>
     `,
     moduleMetadata: {
-      imports: [Box, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [Box, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas, DesignSystemDemoExpectedBehaviour],
     },
   }),
 };

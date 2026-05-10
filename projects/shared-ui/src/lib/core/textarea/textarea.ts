@@ -16,7 +16,6 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { type IconName } from '../../brain/icon-brain/icon-brain';
 import { Icon } from '../icon/icon';
 import { Tag } from '../tag/tag';
-import { TagIcon } from '../tag/tag-icon';
 import { Subject } from 'rxjs';
 import { outputFromObservable } from '@angular/core/rxjs-interop';
 import { angularUtils, logManager } from '@organization/shared-utils';
@@ -95,7 +94,7 @@ export type TextareaInlineItem = {
 @Component({
   selector: 'org-textarea',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Icon, Tag, TagIcon, TextareaBrainDirective],
+  imports: [Icon, Tag, TextareaBrainDirective],
   templateUrl: './textarea.html',
   styleUrl: './textarea.css',
   host: {

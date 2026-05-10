@@ -1,7 +1,8 @@
-@if (avatarImageBrainDirective.shouldShowImage()) {
+@if (avatarImageBrainDirective.shouldRender()) {
   <img
     [src]="avatarImageBrainDirective.imageSrc()"
     [alt]="effectiveAlt()"
+    [hidden]="avatarImageBrainDirective.isHidden()"
     (error)="avatarImageBrainDirective.error()"
   />
 }

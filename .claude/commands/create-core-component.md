@@ -10,7 +10,7 @@ You are tasked to create a new component in the specified directory.
 Architecture Rules
 
 1. The Brain Directive / Component
-- Location: Must be generated in the /projects/shared-ui/brain directory.
+- Location: Must be generated in the `projects/shared-ui/src/lib/brain` directory.
 - Styles: Must contain absolutely zero styling. Do not link a CSS/SCSS file and keep the styles array empty.
 - Responsibilities: Must handle all state management (using Angular Signals), event handling, and complex logic.
 - Accessibility: Must manage all ARIA attributes and keyboard navigation using host bindings or strictly controlled template logic.

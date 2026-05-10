@@ -9,8 +9,6 @@ import {
   inject,
   untracked,
 } from '@angular/core';
-import { List } from '../list/list';
-import { ListItem } from '../list/list-item';
 import { ScrollArea } from '../scroll-area/scroll-area';
 import { Combobox } from './combobox';
 import { ComboboxOption } from './combobox-option';
@@ -25,7 +23,7 @@ import type { ComboboxGroupedOptions, ComboboxOption as ComboboxOptionData } fro
 @Component({
   selector: 'org-combobox-options',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ScrollArea, List, ListItem, ComboboxOption],
+  imports: [ScrollArea, ComboboxOption],
   templateUrl: './combobox-options.html',
   styleUrl: './combobox-options.css',
   hostDirectives: [ComboboxOptionsBrainDirective],

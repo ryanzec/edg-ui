@@ -11,7 +11,7 @@ import { ChangeDetectionStrategy, Component, signal, ViewChild } from '@angular/
   imports: [UserDeleteDialog, Button],
   template: `
     <div class="flex flex-col gap-4">
-      <org-button (click)="openDialog()">Open Delete Dialog</org-button>
+      <org-button label="Open Delete Dialog" (click)="openDialog()" />
 
       @if (lastAction()) {
         <div class="p-4 bg-secondary-soft rounded-lg">
@@ -65,7 +65,7 @@ export class UserDeleteDialogStory {
   imports: [UserDeleteDialog, Button],
   template: `
     <div class="flex flex-col gap-4">
-      <org-button (click)="openDialog()">Open Delete Dialog (Processing State)</org-button>
+      <org-button label="Open Delete Dialog (Processing State)" (click)="openDialog()" />
 
       @if (lastAction()) {
         <div class="p-4 bg-secondary-soft rounded-lg">

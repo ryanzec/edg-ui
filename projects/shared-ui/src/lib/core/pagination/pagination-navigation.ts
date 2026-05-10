@@ -1,12 +1,11 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { PaginationBrainDirective } from '../../brain/pagination-brain/pagination-brain';
 import { Button } from '../button/button';
-import { ButtonIcon } from '../button/button-icon';
 
 @Component({
   selector: 'org-pagination-navigation',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Button, ButtonIcon],
+  imports: [Button],
   templateUrl: './pagination-navigation.html',
   styleUrl: './pagination-navigation.css',
   host: {

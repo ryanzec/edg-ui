@@ -1,0 +1,40 @@
+@layer components {
+  :host {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-0_5);
+    padding-block: var(--spacing-1_5);
+    padding-inline: var(--spacing-2_5);
+    margin-bottom: var(--spacing-1_5);
+    background: var(--chat-quote-bg);
+    color: var(--chat-quote-fg);
+    border-left: var(--chat-quote-rail-width) solid var(--chat-quote-rail);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-xs);
+    line-height: var(--line-height-normal);
+    cursor: pointer;
+    transition: background var(--motion-duration-fast) var(--motion-ease-standard);
+  }
+
+  :host:hover {
+    background: var(--color-bg-hover);
+  }
+
+  :host:focus-visible {
+    outline: 0.125rem solid var(--color-focus-ring); /* 2px */
+    outline-offset: 0.0625rem; /* 1px */
+  }
+
+  .quote-author {
+    color: var(--color-fg);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .quote-body {
+    color: var(--chat-quote-fg);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}

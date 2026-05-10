@@ -42,6 +42,7 @@ Inspect every existing exported story and categorize each as exactly one of:
 - The Showcase render's `moduleMetadata.imports` array must include **every** internal `org-*` component referenced in the merged templates.
 - **DELETE** the old category-3 story exports after merging into Showcase.
 - The Showcase story description should summarize all merged axes (e.g., "Comprehensive showcase of every X variant axis — color, size, state, …").
+- If referenced images are attached and the examples in them are not accounted for in the existing stories, add a new section to the showcase stories for each missing piece.
 
 # Live Demo rules
 - Create a `LiveDemo` story **ONLY** if the component has more than one visual or functional input.

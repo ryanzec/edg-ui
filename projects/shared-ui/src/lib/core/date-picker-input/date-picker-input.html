@@ -50,7 +50,7 @@
       @if (allowClear()) {
         <org-calendar-footer>
           <div class="footer-actions">
-            <org-button color="neutral" [disabled]="isClearDisabled()" (clicked)="onClearClick()">Clear</org-button>
+            <org-button color="neutral" label="Clear" [disabled]="isClearDisabled()" (clicked)="onClearClick()" />
           </div>
         </org-calendar-footer>
       }

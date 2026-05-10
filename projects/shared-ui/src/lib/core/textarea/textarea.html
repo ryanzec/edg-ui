@@ -1,10 +1,11 @@
 <div class="textarea-content">
   @for (item of inlineItems(); track item.id) {
-    <org-tag color="primary">
+    <org-tag
+      color="primary"
+      [removable]="item.removable && brainRef.canModifyContent()"
+      (removed)="onInlineItemRemove(item)"
+    >
       {{ item.label }}
-      @if (item.removable && brainRef.canModifyContent()) {
-        <org-tag-icon [removable]="true" (removed)="onInlineItemRemove(item)" />
-      }
     </org-tag>
   }
   @if (hasPreIcon()) {

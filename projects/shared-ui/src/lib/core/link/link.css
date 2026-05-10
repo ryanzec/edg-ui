@@ -1,36 +1,68 @@
 @layer components {
   :host {
-    display: inline;
+    display: inline-flex;
   }
 
   .link {
-    color: var(--color-link);
-    text-decoration: underline;
+    font: inherit;
+    color: var(--link-color);
+    text-decoration-line: underline;
+    text-decoration-color: transparent;
+    text-decoration-thickness: var(--link-text-decoration-thickness);
+    text-underline-offset: var(--link-text-underline-offset);
     cursor: pointer;
-    border-radius: var(--radius-xs);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--link-icon-gap);
+    transition:
+      color var(--link-transition-duration),
+      text-decoration-color var(--link-transition-duration);
   }
 
-  .link:visited {
-    color: var(--color-link);
+  /* underline only appears on hover or keyboard focus */
+  .link:not([data-disabled='1']):hover {
+    color: var(--link-color-hover);
+    text-decoration-color: currentColor;
   }
 
-  .link:not([aria-disabled='true']):hover {
-    color: var(--color-link-hover);
-  }
-
-  .link:not([aria-disabled='true']):active {
-    color: var(--color-link-active);
-  }
-
-  .link:not([aria-disabled='true']):focus-visible {
-    color: var(--color-link-hover);
-    background-color: var(--color-info-soft);
+  .link:not([data-disabled='1']):focus-visible {
+    text-decoration-color: currentColor;
     outline: none;
   }
 
-  .link[aria-disabled='true'] {
-    color: var(--color-fg-faint);
-    text-decoration: none;
+  .link:not([data-disabled='1']):active {
+    color: var(--link-color-active);
+  }
+
+  /* silence the visited state — product UI shouldn't carry a stale-purple link */
+  .link:visited {
+    color: var(--link-color);
+  }
+
+  .link:visited:hover {
+    color: var(--link-color-hover);
+  }
+
+  .link:visited:active {
+    color: var(--link-color-active);
+  }
+
+  .link[data-disabled='1'] {
+    color: var(--link-color-disabled);
     cursor: not-allowed;
+    text-decoration-color: transparent;
+    pointer-events: none;
+  }
+
+  /* inline icons inherit the surrounding text size via 1em sizing.
+     specificity raised with [data-size] / [data-color] to override the org-icon defaults set by data-size attribute */
+  .link .link-icon[data-size] {
+    --icon-size: var(--link-icon-size);
+    font-size: var(--link-icon-font-size);
+    vertical-align: var(--link-icon-vertical-align);
+  }
+
+  .link .link-icon[data-color] {
+    --icon-color: currentColor;
   }
 }

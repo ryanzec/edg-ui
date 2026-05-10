@@ -112,15 +112,10 @@
         </div>
       </ng-template>
       <org-tooltip [templateRef]="userTooltip" xPosition="right" yPosition="center">
-        <org-avatar [label]="userName()">
-          <org-avatar-circle />
-        </org-avatar>
+        <org-avatar [label]="userName()" />
       </org-tooltip>
     } @else {
-      <org-avatar [label]="userName()">
-        <org-avatar-circle />
-        <org-avatar-label />
-      </org-avatar>
+      <org-avatar [label]="userName()" [showLabel]="true" />
     }
   </div>
 }

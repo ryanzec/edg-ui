@@ -49,7 +49,10 @@
 
   .menu-panel {
     min-width: var(--sizing-5xs);
+    max-height: var(--sizing-lg);
     background-color: var(--color-bg-app);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-base);
     overflow: hidden;
   }
 

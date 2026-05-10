@@ -1,0 +1,26 @@
+@layer components {
+  :host {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+    margin-block: var(--spacing-4);
+    color: var(--chat-day-fg);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: var(--letter-spacing-wide);
+    text-transform: uppercase;
+    user-select: none;
+  }
+
+  :host::before,
+  :host::after {
+    content: '';
+    flex: 1 1 0;
+    height: 0.0625rem; /* 1px */
+    background: var(--chat-day-rule);
+  }
+
+  .day-label {
+    flex: 0 0 auto;
+  }
+}

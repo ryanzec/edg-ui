@@ -1,0 +1,130 @@
+@layer components {
+  :host {
+    display: block;
+    border: 0.0625rem solid var(--chat-block-border); /* 1px */
+    background: var(--chat-block-bg);
+    border-radius: var(--radius-base);
+    font-size: var(--chat-body-font-size);
+    color: var(--chat-block-fg);
+  }
+
+  /* stack adjacent blocks (and a block following body content) with a small gap */
+  :host + :host,
+  :host:not(:first-child) {
+    margin-top: var(--spacing-2);
+  }
+
+  .block-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    width: 100%;
+    padding: var(--spacing-3);
+    background: transparent;
+    border: 0;
+    border-radius: var(--radius-base);
+    color: inherit;
+    font: inherit;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    text-align: start;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .block-header:hover {
+    background: var(--color-bg-hover);
+  }
+
+  .block-header:focus-visible {
+    outline: 0.125rem solid var(--color-focus-ring); /* 2px */
+    outline-offset: -0.125rem; /* -2px (inset) */
+  }
+
+  .block-kind {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.125rem; /* 18px */
+    height: 1.125rem; /* 18px */
+    flex: 0 0 auto;
+  }
+
+  :host([data-kind='tool']) .block-kind {
+    color: var(--chat-block-tool-accent);
+  }
+
+  :host([data-kind='thinking']) .block-kind {
+    color: var(--chat-block-thinking-accent);
+  }
+
+  .block-title {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .block-title-emphasis {
+    font-size: 0.95em;
+  }
+
+  :host([data-kind='tool']) .block-title-emphasis {
+    font-family: var(--font-mono);
+    color: var(--chat-block-tool-accent);
+  }
+
+  :host([data-kind='thinking']) .block-title-emphasis {
+    font-family: var(--font-sans);
+    font-style: italic;
+    color: var(--chat-block-thinking-accent);
+  }
+
+  .block-meta {
+    color: var(--chat-block-meta-fg);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-regular);
+    flex: 0 0 auto;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .block-chevron {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--chat-block-meta-fg);
+    transition: transform var(--motion-duration-base) var(--motion-ease-standard);
+  }
+
+  :host([data-expanded='1']) .block-chevron {
+    transform: rotate(180deg);
+  }
+
+  .block-body {
+    padding-block-end: var(--spacing-3);
+    padding-inline: var(--spacing-3);
+    color: var(--chat-block-meta-fg);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-normal);
+  }
+
+  .block-body > * + * {
+    margin-top: var(--spacing-2);
+  }
+
+  :host([data-expanded='0']) .block-body {
+    display: none;
+  }
+
+  /* running rail thickens the leading edge to the info accent */
+  :host([data-state='running']) {
+    border-left-color: var(--chat-block-tool-accent);
+    border-left-width: var(--chat-block-running-rail-width);
+  }
+
+  /* re-balance the header inset so the icon doesn't shift when the rail thickens */
+  :host([data-state='running']) .block-header {
+    padding-left: 0.3125rem; /* 5px = 12px - 8px + 1px */
+  }
+}

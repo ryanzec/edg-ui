@@ -10,7 +10,6 @@ import { SortingStore } from '../sorting-store/sorting-store';
 import { Pagination } from '../pagination/pagination';
 import { DataSelectionStore } from '../data-selection-store/data-selection-store';
 import { Button } from '../button/button';
-import { ButtonIcon } from '../button/button-icon';
 import { TypedContextDirective } from '../typed-context-directive/typed-context-directive';
 
 type User = {
@@ -210,21 +209,15 @@ class PaginatedTableDemo {
 @Component({
   selector: 'story-selection-table-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Table, TableHeader, TableCell, Pagination, Button, ButtonIcon, TypedContextDirective],
+  imports: [Table, TableHeader, TableCell, Pagination, Button, TypedContextDirective],
   template: `
     <div class="flex flex-col gap-4">
       <div class="text-sm"><strong>Selected:</strong> {{ selectionStore.selectedCount() }} user(s)</div>
       <org-table [data]="paginatedUsers()" [selectionData]="selectionStore" [style.maxHeight]="'400px'">
         <ng-template #selectedActions>
-          <org-button (clicked)="onResendInvite()">
-            <org-button-icon name="mail" />
-            Resend invite
-          </org-button>
-          <org-button (clicked)="onRestore()">Restore</org-button>
-          <org-button color="danger" (clicked)="onDelete()">
-            <org-button-icon name="trash" />
-            Delete
-          </org-button>
+          <org-button label="Resend invite" preIcon="mail" (clicked)="onResendInvite()" />
+          <org-button label="Restore" (clicked)="onRestore()" />
+          <org-button color="danger" label="Delete" preIcon="trash" (clicked)="onDelete()" />
         </ng-template>
         <ng-template #header>
           <org-table-th>Name</org-table-th>
@@ -278,7 +271,7 @@ class SelectionTableDemo {
 @Component({
   selector: 'story-full-featured-table-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Table, TableHeader, TableCell, SortableDirective, Pagination, Button, ButtonIcon, TypedContextDirective],
+  imports: [Table, TableHeader, TableCell, SortableDirective, Pagination, Button, TypedContextDirective],
   providers: [SortingStore],
   template: `
     <div class="flex flex-col gap-4">
@@ -293,15 +286,9 @@ class SelectionTableDemo {
       </div>
       <org-table [data]="displayUsers()" [selectionData]="selectionStore" [style.maxHeight]="'400px'">
         <ng-template #selectedActions>
-          <org-button (clicked)="onResendInvite()">
-            <org-button-icon name="mail" />
-            Resend invite
-          </org-button>
-          <org-button (clicked)="onRestore()">Restore</org-button>
-          <org-button color="danger" (clicked)="onDelete()">
-            <org-button-icon name="trash" />
-            Delete
-          </org-button>
+          <org-button label="Resend invite" preIcon="mail" (clicked)="onResendInvite()" />
+          <org-button label="Restore" (clicked)="onRestore()" />
+          <org-button color="danger" label="Delete" preIcon="trash" (clicked)="onDelete()" />
         </ng-template>
         <ng-template #header>
           <org-table-th>
@@ -499,9 +486,7 @@ class ScrollingTableDemo {
   template: `
     <div class="flex flex-col gap-4">
       <div class="flex items-center gap-4">
-        <org-button (clicked)="toggleLoading()">
-          {{ isLoading() ? 'Stop Loading' : 'Start Loading' }}
-        </org-button>
+        <org-button [label]="isLoading() ? 'Stop Loading' : 'Start Loading'" (clicked)="toggleLoading()" />
         <div class="text-sm"><strong>Status:</strong> {{ isLoading() ? 'Loading...' : 'Ready' }}</div>
       </div>
       <org-table [data]="users" [isLoading]="isLoading()" [style.maxHeight]="'400px'">
@@ -537,9 +522,10 @@ class LoadingTableDemo {
   template: `
     <div class="flex flex-col gap-4">
       <div class="flex items-center gap-4">
-        <org-button (clicked)="toggleBackgroundLoading()">
-          {{ isBackgroundLoading() ? 'Stop Background Loading' : 'Start Background Loading' }}
-        </org-button>
+        <org-button
+          [label]="isBackgroundLoading() ? 'Stop Background Loading' : 'Start Background Loading'"
+          (clicked)="toggleBackgroundLoading()"
+        />
         <div class="text-sm">
           <strong>Status:</strong> {{ isBackgroundLoading() ? 'Refreshing data in background...' : 'Ready' }}
         </div>
@@ -577,8 +563,8 @@ class BackgroundLoadingTableDemo {
   template: `
     <div class="flex flex-col gap-4">
       <div class="flex items-center gap-4">
-        <org-button (clicked)="simulateInitialLoad()">Simulate Initial Load</org-button>
-        <org-button (clicked)="simulateRefresh()">Simulate Refresh</org-button>
+        <org-button label="Simulate Initial Load" (clicked)="simulateInitialLoad()" />
+        <org-button label="Simulate Refresh" (clicked)="simulateRefresh()" />
         <div class="text-sm">
           <strong>Status:</strong>
           @if (isLoading()) {

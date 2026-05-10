@@ -59,10 +59,11 @@ export class AvatarImageBrainDirective {
     return undefined;
   });
 
-  /** true when an image source is available and has not errored */
-  public readonly shouldShowImage = computed<boolean>(() => {
-    return !!this.imageSrc() && this._state().loadError === false;
-  });
+  /** true when an image source is available and the host should render the underlying <img> element */
+  public readonly shouldRender = computed<boolean>(() => !!this.imageSrc());
+
+  /** true when the image has failed to load and the host should mark the rendered <img> as hidden */
+  public readonly isHidden = computed<boolean>(() => this._state().loadError);
 
   constructor() {
     // reset the load error flag whenever the source inputs change so a newly provided src or email gets a fresh load attempt

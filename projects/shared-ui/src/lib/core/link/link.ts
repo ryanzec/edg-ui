@@ -1,9 +1,22 @@
-import { ChangeDetectionStrategy, Component, computed, input, output, viewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  TemplateRef,
+  computed,
+  contentChild,
+  input,
+  output,
+  viewChild,
+} from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
 import { angularUtils } from '@organization/shared-utils';
+import { Icon } from '../icon/icon';
+import { type IconName } from '../../brain/icon-brain/icon-brain';
 import {
   LinkBrainDirective,
   LinkReferrerPolicy,
   LinkTarget,
+  LINK_AFFORDANCE_DEFAULT,
   LINK_ARIA_LABEL_DEFAULT,
   LINK_DISABLED_DEFAULT,
   LINK_DOWNLOAD_DEFAULT,
@@ -17,12 +30,18 @@ import {
 @Component({
   selector: 'org-link',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [LinkBrainDirective],
+  imports: [LinkBrainDirective, NgTemplateOutlet, Icon],
   templateUrl: './link.html',
   styleUrl: './link.css',
 })
 export class Link {
   private readonly _linkBrainDirective = viewChild.required(LinkBrainDirective);
+
+  /** projected template for the pre slot — content rendered before the default content */
+  protected readonly preTemplate = contentChild<TemplateRef<unknown>>('pre');
+
+  /** projected template for the post slot — content rendered after the default content; suppresses the auto-injected affordance icon */
+  protected readonly postTemplate = contentChild<TemplateRef<unknown>>('post');
 
   /** the url the link navigates to; when omitted the link acts as a clickable action and emits the clicked output */
   public readonly href = input<string | undefined, string | null | undefined>(LINK_HREF_DEFAULT, {
@@ -65,11 +84,26 @@ export class Link {
   /** when true the link renders styled as disabled with cursor not-allowed and is non-interactive */
   public readonly disabled = input<boolean>(LINK_DISABLED_DEFAULT);
 
+  /** when true, an external-link or download icon is auto-injected as a trailing affordance when applicable */
+  public readonly affordance = input<boolean>(LINK_AFFORDANCE_DEFAULT);
+
   /** emitted when the link is activated by mouse or keyboard, only when href is not provided so consumers can handle action-style clicks */
   public readonly clicked = output<MouseEvent | KeyboardEvent>();
 
   /** whether the link is rendering as an action-link (no href provided) */
   public readonly isActionLink = computed<boolean>(() => this._linkBrainDirective().isActionLink());
+
+  /** the icon name for the auto-injected trailing affordance icon, or undefined when none should render */
+  protected readonly affordanceIcon = computed<IconName | undefined>(() => {
+    const icon = this._linkBrainDirective().affordanceIcon();
+
+    return icon;
+  });
+
+  /** whether the auto-injected affordance icon should render — suppressed when a manual #post template wins */
+  protected readonly showAffordanceIcon = computed<boolean>(() => {
+    return this.affordanceIcon() !== undefined && !this.postTemplate();
+  });
 
   /** re-emits the brain's clicked event as the component's public clicked output */
   protected onBrainClicked(event: MouseEvent | KeyboardEvent): void {

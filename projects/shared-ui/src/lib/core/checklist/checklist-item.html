@@ -1,39 +1,47 @@
 @if (hasNestedItems()) {
-  <button
-    type="button"
-    class="checklist-item-button"
-    (click)="brain.toggle()"
-    [attr.aria-expanded]="brain.isExpanded()"
-  >
-    <org-checklist-status-icon [status]="item().status" />
-
-    <span class="label">
-      {{ item().label }}
-      @if (nestedItemCount() > 0) {
-        <span>({{ nestedItemCount() }})</span>
-      }
-    </span>
-
-    <org-icon [name]="brain.isExpanded() ? 'chevron-down' : 'chevron-right'" size="sm" class="chevron" />
-  </button>
-} @else {
-  <div class="checklist-item-row">
+  <button type="button" class="row" data-clickable="1" (click)="brain.toggle()" [attr.aria-expanded]="brain.isExpanded()">
     <org-checklist-status-icon [status]="item().status" />
 
     <span class="label">{{ item().label }}</span>
+
+    @if (item().count) {
+      <span class="count">{{ item().count }}</span>
+    }
+
+    @if (item().meta) {
+      <span class="meta">{{ item().meta }}</span>
+    }
+
+    <span class="chevron">
+      <org-icon name="chevron-right" size="sm" />
+    </span>
+  </button>
+} @else {
+  <div class="row">
+    <org-checklist-status-icon [status]="item().status" />
+
+    <span class="label">{{ item().label }}</span>
+
+    @if (item().meta) {
+      <span class="meta">{{ item().meta }}</span>
+    }
   </div>
 }
 
-@if (hasNestedItems() && brain.isExpanded()) {
-  <div class="nested-items" role="list">
+@if (hasNestedItems()) {
+  <ul class="children" role="list">
     @for (nestedItem of item().items; track nestedItem.id) {
-      <div class="nested-item" role="listitem">
-        <div class="nested-item-row">
+      <li class="nested-item" [attr.data-status]="nestedItem.status" role="listitem">
+        <div class="row">
           <org-checklist-status-icon [status]="nestedItem.status" />
 
           <span class="label">{{ nestedItem.label }}</span>
+
+          @if (nestedItem.meta) {
+            <span class="meta">{{ nestedItem.meta }}</span>
+          }
         </div>
-      </div>
+      </li>
     }
-  </div>
+  </ul>
 }

@@ -1,0 +1,13 @@
+:root {
+  /* layout */
+  --card-padding-x: var(--spacing-3); /* 12px */
+  --card-padding-y: var(--spacing-3); /* 12px */
+  --card-header-grid-gap: var(--spacing-3); /* 12px */
+  --card-header-titles-gap: var(--spacing-0_5); /* 2px */
+  --card-header-actions-gap: var(--spacing-1_5); /* 6px */
+  --card-footer-gap: var(--spacing-1_5); /* 6px */
+
+  /* image */
+  --card-image-inset-radius: var(--radius-sm); /* 6px */
+  --card-image-fill-aspect-ratio: 16 / 9;
+}

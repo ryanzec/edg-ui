@@ -1,1 +1,4 @@
-<org-list-item [isSelected]="brain.isFocused()" [disabled]="option().disabled" [label]="displayLabel()" />
+<span class="check" aria-hidden="true">
+  <org-icon name="check" size="xs" />
+</span>
+<span class="label">{{ displayLabel() }}</span>

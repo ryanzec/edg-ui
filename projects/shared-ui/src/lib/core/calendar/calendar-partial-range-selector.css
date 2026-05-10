@@ -3,17 +3,11 @@
     display: block;
   }
 
-  .selector-container {
+  .container {
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    justify-content: center;
     padding: var(--spacing-2);
     border-bottom: var(--border-width) solid var(--color-border-soft);
-  }
-
-  .radio-options {
-    display: flex;
-    flex-direction: row;
-    gap: var(--spacing-3);
   }
 }

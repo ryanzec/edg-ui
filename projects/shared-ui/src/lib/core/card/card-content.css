@@ -1,18 +1,14 @@
 @layer components {
   :host {
     display: block;
-    padding-left: var(--spacing-3);
-    padding-right: var(--spacing-3);
-    line-height: 1.625;
+    padding: var(--card-padding-y) var(--card-padding-x);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-normal);
+    color: var(--color-fg);
+  }
 
-    /* top padding when card-content is the first child (no header or image preceding it) */
-    &:first-child {
-      padding-top: var(--spacing-3);
-    }
-
-    /* bottom padding when card-content has no following card-footer sibling */
-    &:not(:has(~ org-card-footer)) {
-      padding-bottom: var(--spacing-3);
-    }
+  /* adjacent-region padding collapse: drop bottom padding when followed by footer */
+  :host(:has(+ org-card-footer)) {
+    padding-bottom: 0;
   }
 }

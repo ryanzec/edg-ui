@@ -4,26 +4,53 @@
     width: 100%;
   }
 
-  .container {
+  .org-empty-indicator {
+    --_empty-stack-gap: var(--spacing-empty-stack);
+    --_empty-icon-gap: var(--spacing-empty-icon-gap);
+    --_empty-action-gap: var(--spacing-empty-action-gap);
+    --_empty-desc-max-width: var(--sizing-empty-desc-max-width);
+
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 100%;
-    min-height: var(--sizing-4xs);
-    gap: var(--spacing-1);
+    text-align: center;
+    gap: var(--_empty-stack-gap);
+  }
+
+  .org-empty-indicator[data-padding='lg'] {
+    --_empty-stack-gap: var(--spacing-empty-stack-lg);
+    --_empty-icon-gap: var(--spacing-empty-icon-gap-lg);
+    --_empty-action-gap: var(--spacing-empty-action-gap-lg);
   }
 
   .header {
-    font-size: var(--font-size-xl);
-    line-height: var(--line-height-normal);
-    letter-spacing: var(--letter-spacing-normal);
+    margin: 0;
+    color: var(--color-fg);
+    font-family: inherit;
+    font-size: var(--font-size-empty-header);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-tight);
+    letter-spacing: var(--letter-spacing-tight);
   }
 
   .description {
-    font-size: var(--font-size-base);
-    line-height: var(--line-height-normal);
-    letter-spacing: var(--letter-spacing-normal);
+    margin: 0;
+    max-width: var(--_empty-desc-max-width);
     color: var(--color-fg-muted);
+    font-family: inherit;
+    font-size: var(--font-size-empty-description);
+    line-height: var(--line-height-normal);
+    text-wrap: pretty;
+  }
+
+  /* extra breathing room above the action so it reads as a separate decision, not a paragraph follow-up */
+  .org-empty-indicator > org-button {
+    margin-top: calc(var(--_empty-action-gap) - var(--_empty-stack-gap));
+  }
+
+  /* extra gap below the icon so it reads as a visual lead-in rather than a peer of the header */
+  .org-empty-indicator > org-empty-indicator-icon {
+    margin-bottom: calc(var(--_empty-icon-gap) - var(--_empty-stack-gap));
   }
 }

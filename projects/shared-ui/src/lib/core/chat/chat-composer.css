@@ -1,0 +1,121 @@
+@layer components {
+  :host {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2);
+    width: 100%;
+    max-width: var(--chat-thread-max-width);
+    margin-inline: auto;
+  }
+
+  :host([data-disabled='1']) {
+    opacity: var(--opacity-disabled);
+    pointer-events: none;
+  }
+
+  /* keep the wrapper interactive while streaming so the stop button stays clickable */
+  :host([data-streaming='1']) {
+    pointer-events: auto;
+  }
+
+  .composer-attachments {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-2);
+  }
+
+  .composer-attachments:empty {
+    display: none;
+  }
+
+  .composer-pill {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2);
+    padding: var(--spacing-2_5);
+    background: var(--color-bg-surface);
+    border: 0.0625rem solid var(--color-border); /* 1px */
+    border-radius: var(--radius-lg);
+  }
+
+  .composer-pill:focus-within {
+    border-color: var(--color-focus-ring);
+  }
+
+  .composer-textarea {
+    width: 100%;
+  }
+
+  .composer-action-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-2);
+  }
+
+  .composer-actions-start,
+  .composer-actions-end {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+  }
+
+  .composer-icon-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem; /* 28px */
+    height: 1.75rem; /* 28px */
+    padding: 0;
+    background: var(--color-bg-surface-2);
+    color: var(--color-fg);
+    border: 0;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: background var(--motion-duration-fast) var(--motion-ease-standard);
+  }
+
+  .composer-icon-button:not(:disabled):hover {
+    background: var(--color-bg-hover);
+  }
+
+  .composer-icon-button:focus-visible {
+    outline: 0.125rem solid var(--color-focus-ring); /* 2px */
+    outline-offset: 0.0625rem; /* 1px */
+  }
+
+  .composer-icon-button:disabled {
+    cursor: not-allowed;
+    opacity: var(--opacity-disabled);
+  }
+
+  .composer-stop-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem; /* 28px */
+    height: 1.75rem; /* 28px */
+    padding: 0;
+    background: var(--color-danger);
+    color: var(--color-danger-on);
+    border: 0;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: background var(--motion-duration-fast) var(--motion-ease-standard);
+  }
+
+  .composer-stop-button:hover {
+    background: var(--color-danger-hover);
+  }
+
+  .composer-stop-button:focus-visible {
+    outline: 0.125rem solid var(--color-focus-ring); /* 2px */
+    outline-offset: 0.0625rem; /* 1px */
+  }
+
+  .composer-hint,
+  .composer-streaming-label {
+    color: var(--color-fg-muted);
+    font-size: var(--font-size-xs);
+  }
+}

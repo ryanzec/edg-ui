@@ -2,9 +2,7 @@
   :host {
     display: flex;
     flex-direction: column;
-    gap: 0.125rem; /* 2px */
-    font-size: var(--font-size-base);
-    line-height: var(--line-height-normal);
-    letter-spacing: var(--letter-spacing-normal);
+    gap: var(--checklist-item-spacing);
+    color: var(--color-fg);
   }
 }

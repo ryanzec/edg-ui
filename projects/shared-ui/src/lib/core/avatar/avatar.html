@@ -1,13 +1,37 @@
 <ng-template #avatarContent>
-  <ng-content />
+  <org-indicator-anchor>
+    <org-avatar-shape>
+      @if (imgSrc() || imgEmail()) {
+        <org-avatar-image [src]="imgSrc()" [email]="imgEmail()" [alt]="imgAlt()" />
+      }
+    </org-avatar-shape>
+    @if (hasIndicator()) {
+      <org-indicator
+        [color]="indicatorColor()"
+        [number]="indicatorNumber()"
+        [position]="indicatorPosition()"
+        [ring]="true"
+        size="base"
+      />
+    }
+  </org-indicator-anchor>
+  @if (showLabel()) {
+    <org-avatar-label [subLabel]="subLabel()" />
+  }
 </ng-template>
 
 @if (avatarBrainDirective.isClickable()) {
-  <button orgButtonBrain type="button" [ariaLabel]="label()" (clicked)="avatarBrainDirective.click()">
+  <button
+    orgButtonBrain
+    type="button"
+    [ariaLabel]="avatarBrainDirective.label()"
+    [disabled]="avatarBrainDirective.isDisabled()"
+    (clicked)="avatarBrainDirective.click()"
+  >
     <ng-container [ngTemplateOutlet]="avatarContent" />
   </button>
 } @else {
-  <div>
+  <span>
     <ng-container [ngTemplateOutlet]="avatarContent" />
-  </div>
+  </span>
 }

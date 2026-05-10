@@ -1,6 +1,6 @@
-<div class="content">
-  <org-loading-spinner />
+<div class="panel">
+  <org-loading-spinner [size]="spinnerSize()" />
   @if (brain.label()) {
-    <span>{{ brain.label() }}</span>
+    <span class="text">{{ brain.label() }}</span>
   }
 </div>

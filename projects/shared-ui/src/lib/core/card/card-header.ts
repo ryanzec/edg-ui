@@ -19,6 +19,9 @@ export const CARD_HEADER_SUBTITLE_DEFAULT: string | undefined = undefined;
       inputs: ['headingLevel'],
     },
   ],
+  host: {
+    '[attr.data-actions-only]': 'actionsOnly() ? "" : null',
+  },
 })
 export class CardHeader {
   /** reference to the host card header brain directive owning the headingLevel input */
@@ -39,4 +42,7 @@ export class CardHeader {
 
   /** whether the subtitle has a non-empty value */
   protected readonly hasSubtitle = computed<boolean>(() => !!this.subtitle());
+
+  /** whether the header is in actions-only mode (no title and no subtitle) — drives the right-aligned single-column grid */
+  protected readonly actionsOnly = computed<boolean>(() => !this.hasTitle() && !this.hasSubtitle());
 }

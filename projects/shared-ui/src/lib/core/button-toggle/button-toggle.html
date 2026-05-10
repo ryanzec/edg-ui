@@ -7,9 +7,8 @@
       [isActive]="item.value === currentValue()"
       [ariaPressed]="item.value === currentValue()"
       [disabled]="isDisabled() || !!item.buttonDisabled"
+      [label]="item.label"
       (clicked)="onItemClicked(item.value)"
-    >
-      {{ item.label }}
-    </org-button>
+    />
   }
 </org-button-group>

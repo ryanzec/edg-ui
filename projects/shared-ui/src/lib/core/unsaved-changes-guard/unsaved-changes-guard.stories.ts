@@ -30,8 +30,8 @@ import { StorybookExampleContainerSection } from '../../private/storybook-exampl
         Hold up — your edits on this page haven't been saved. Want to keep editing or leave anyway?
       </org-dialog-content>
       <org-dialog-footer>
-        <org-button color="neutral" (clicked)="cancel()">Keep Editing</org-button>
-        <org-button color="warning" (clicked)="confirm()">Discard &amp; Leave</org-button>
+        <org-button color="neutral" label="Keep Editing" (clicked)="cancel()" />
+        <org-button color="warning" label="Discard &amp; Leave" (clicked)="confirm()" />
       </org-dialog-footer>
     </org-dialog>
   `,
@@ -67,7 +67,7 @@ class StoryCustomUnsavedChangesDialog {
         <div><strong>Has Unsaved Changes:</strong> {{ isDirty() }}</div>
       </div>
       <div class="flex gap-2">
-        <org-button (clicked)="save()" data-testid="standard-form-save">Save</org-button>
+        <org-button label="Save" (clicked)="save()" data-testid="standard-form-save" />
       </div>
       <p class="text-sm">
         Type into the input to mark the form dirty, then click "Custom Dialog" to see the standard guard prompt.
@@ -110,7 +110,7 @@ class StoryUnsavedChangesStandardDialogView implements UnsavedChangesAware {
         <div><strong>Has Unsaved Changes:</strong> {{ isDirty() }}</div>
       </div>
       <div class="flex gap-2">
-        <org-button (clicked)="save()" data-testid="custom-form-save">Save</org-button>
+        <org-button label="Save" (clicked)="save()" data-testid="custom-form-save" />
       </div>
       <p class="text-sm">
         Same form contract as the standard view, but this one supplies a custom dialog component via
@@ -149,12 +149,8 @@ class StoryUnsavedChangesCustomDialogView implements UnsavedChangesAware {
     >
       <org-storybook-example-container-section label="Navigation">
         <div class="flex gap-2">
-          <org-button color="primary" (clicked)="navigateTo('/standard')" data-testid="nav-standard-dialog">
-            Standard Dialog
-          </org-button>
-          <org-button color="neutral" (clicked)="navigateTo('/custom')" data-testid="nav-custom-dialog">
-            Custom Dialog
-          </org-button>
+          <org-button color="primary" label="Standard Dialog" (clicked)="navigateTo('/standard')" data-testid="nav-standard-dialog" />
+          <org-button color="neutral" label="Custom Dialog" (clicked)="navigateTo('/custom')" data-testid="nav-custom-dialog" />
         </div>
       </org-storybook-example-container-section>
 

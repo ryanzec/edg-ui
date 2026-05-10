@@ -5,7 +5,7 @@
       <div class="actions">
         <ng-container *ngTemplateOutlet="selectedActionsTemplate()!" />
       </div>
-      <org-button variant="text" (clicked)="brain.clearSelection()">Clear</org-button>
+      <org-button variant="text" label="Clear" (clicked)="brain.clearSelection()" />
     </div>
   }
   <org-scroll-area

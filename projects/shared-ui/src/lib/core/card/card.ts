@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { angularUtils } from '@organization/shared-utils';
-import { Box, BOX_BACKGROUND_DEFAULT } from '../box/box';
-import type { BoxBackground, BoxBorder } from '../box/box';
+import { Box, BOX_BACKGROUND_DEFAULT, BOX_PADDING_DEFAULT } from '../box/box';
+import type { BoxBackground, BoxBorder, BoxPadding } from '../box/box';
 import { ComponentColor, allComponentColors } from '../types/component-types';
 
 /** the color variant type for the card component */
@@ -21,6 +21,9 @@ export const CARD_BOX_BORDER_DEFAULT: BoxBorder = 'bordered';
 
 /** default value for the card box background input */
 export const CARD_BOX_BACKGROUND_DEFAULT = BOX_BACKGROUND_DEFAULT;
+
+/** default value for the card box padding input */
+export const CARD_BOX_PADDING_DEFAULT = BOX_PADDING_DEFAULT;
 
 @Component({
   selector: 'org-card',
@@ -48,4 +51,7 @@ export class Card {
 
   /** the background style variant of the card container */
   public boxBackground = input<BoxBackground>(CARD_BOX_BACKGROUND_DEFAULT);
+
+  /** the padding style variant of the card container */
+  public boxPadding = input<BoxPadding>(CARD_BOX_PADDING_DEFAULT);
 }

@@ -1,0 +1,49 @@
+@layer components {
+  :host {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-fg);
+  }
+
+  /* color tints — the slot owns `color`, the inner icon locked to "inherit" picks it up via currentColor */
+  :host([data-color='muted']) {
+    color: var(--color-fg-muted);
+  }
+
+  :host([data-color='faint']) {
+    color: var(--color-fg-faint);
+  }
+
+  :host([data-color='primary']) {
+    color: var(--color-primary);
+  }
+
+  :host([data-color='secondary']) {
+    color: var(--color-secondary);
+  }
+
+  :host([data-color='neutral']) {
+    color: var(--color-neutral);
+  }
+
+  :host([data-color='safe']) {
+    color: var(--color-safe);
+  }
+
+  :host([data-color='info']) {
+    color: var(--color-info);
+  }
+
+  :host([data-color='caution']) {
+    color: var(--color-caution);
+  }
+
+  :host([data-color='warning']) {
+    color: var(--color-warning);
+  }
+
+  :host([data-color='danger']) {
+    color: var(--color-danger);
+  }
+}

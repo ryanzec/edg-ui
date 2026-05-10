@@ -32,6 +32,11 @@ const ROLE_ITEMS: SelectionValue<string>[] = [
   { value: 'viewer', display: 'Viewer' },
 ];
 
+const MANY_ITEMS: SelectionValue<string>[] = Array.from({ length: 40 }, (_, index) => ({
+  value: `item-${index + 1}`,
+  display: `Item ${index + 1}`,
+}));
+
 @Component({
   selector: 'story-drop-down-selector-host',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -385,6 +390,43 @@ export const WithIcon: Story = {
             iconName="eye"
           />
         </org-storybook-example-container-section>
+      </org-storybook-example-container>
+    `,
+    moduleMetadata: {
+      imports: [DropDownSelectorHost, StorybookExampleContainer, StorybookExampleContainerSection],
+    },
+  }),
+};
+
+export const WithManyItems: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'When the menu content exceeds the panel max height (`--sizing-lg`, 32rem / 512px), the overlay scrolls vertically via `org-scroll-area`. The compact overlay scrollbar only appears when content overflows.',
+      },
+    },
+  },
+  render: () => ({
+    props: { manyItems: MANY_ITEMS },
+    template: `
+      <org-storybook-example-container
+        title="Overflow Scrolling"
+        currentState="Open the trigger to see the overlay menu scroll when items exceed the max height"
+      >
+        <org-storybook-example-container-section label="Single Selection (40 items)">
+          <story-drop-down-selector-host [items]="manyItems" label="Item" selectionMode="single" />
+        </org-storybook-example-container-section>
+
+        <org-storybook-example-container-section label="Multiple Selection (40 items)">
+          <story-drop-down-selector-host [items]="manyItems" label="Item" selectionMode="multiple" />
+        </org-storybook-example-container-section>
+
+        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+          <li>The overlay menu caps at 512px tall and scrolls when content exceeds that height</li>
+          <li>The compact overlay scrollbar only renders when overflow is present</li>
+          <li>In <strong>multiple</strong> mode, the <strong>Clear</strong> action sits at the end of the scroll list</li>
+        </ul>
       </org-storybook-example-container>
     `,
     moduleMetadata: {

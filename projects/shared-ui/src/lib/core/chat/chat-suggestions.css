@@ -1,0 +1,8 @@
+@layer components {
+  :host {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-2);
+    margin-top: var(--spacing-2_5);
+  }
+}

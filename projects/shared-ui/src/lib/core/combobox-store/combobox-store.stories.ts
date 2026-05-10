@@ -74,12 +74,12 @@ const fruitOptions: ComboboxOptionInput[] = [
 
       <org-storybook-example-container-section label="Controls">
         <div class="flex flex-wrap gap-2">
-          <org-button color="primary" size="sm" (click)="store.focusNext()">Focus Next</org-button>
-          <org-button color="primary" size="sm" (click)="store.focusPrevious()">Focus Previous</org-button>
-          <org-button color="primary" size="sm" (click)="store.focusFirst()">Focus First</org-button>
-          <org-button color="primary" size="sm" (click)="store.focusLast()">Focus Last</org-button>
-          <org-button color="secondary" size="sm" (click)="store.setSelectedValues([])">Clear Selection</org-button>
-          <org-button color="secondary" size="sm" (click)="store.clearInputValue()">Clear Input</org-button>
+          <org-button color="primary" size="sm" label="Focus Next" (click)="store.focusNext()" />
+          <org-button color="primary" size="sm" label="Focus Previous" (click)="store.focusPrevious()" />
+          <org-button color="primary" size="sm" label="Focus First" (click)="store.focusFirst()" />
+          <org-button color="primary" size="sm" label="Focus Last" (click)="store.focusLast()" />
+          <org-button color="secondary" size="sm" label="Clear Selection" (click)="store.setSelectedValues([])" />
+          <org-button color="secondary" size="sm" label="Clear Input" (click)="store.clearInputValue()" />
         </div>
       </org-storybook-example-container-section>
 
@@ -214,18 +214,17 @@ class ComboboxStoreSingleSelectDemo {
 
       <org-storybook-example-container-section label="Controls">
         <div class="flex flex-wrap gap-2">
-          <org-button color="primary" size="sm" (click)="store.groupFocusNext()">Group Focus Next</org-button>
-          <org-button color="primary" size="sm" (click)="store.groupFocusPrevious()"> Group Focus Previous </org-button>
-          <org-button color="primary" size="sm" (click)="store.groupFocusFirst()">Group Focus First</org-button>
-          <org-button color="primary" size="sm" (click)="store.groupFocusLast()">Group Focus Last</org-button>
-          <org-button color="secondary" size="sm" (click)="store.setSelectedValues([])">Clear All</org-button>
+          <org-button color="primary" size="sm" label="Group Focus Next" (click)="store.groupFocusNext()" />
+          <org-button color="primary" size="sm" label="Group Focus Previous" (click)="store.groupFocusPrevious()" />
+          <org-button color="primary" size="sm" label="Group Focus First" (click)="store.groupFocusFirst()" />
+          <org-button color="primary" size="sm" label="Group Focus Last" (click)="store.groupFocusLast()" />
+          <org-button color="secondary" size="sm" label="Clear All" (click)="store.setSelectedValues([])" />
           <org-button
             color="secondary"
             size="sm"
+            [label]="(store.config().filterSelectedOptions ? 'Show' : 'Hide') + ' Selected'"
             (click)="store.setFilterSelectedOptions(!store.config().filterSelectedOptions)"
-          >
-            {{ store.config().filterSelectedOptions ? 'Show' : 'Hide' }} Selected
-          </org-button>
+          />
         </div>
       </org-storybook-example-container-section>
 
@@ -365,10 +364,10 @@ class ComboboxStoreMultiSelectDemo {
 
       <org-storybook-example-container-section label="Focus Navigation">
         <div class="flex flex-wrap gap-2">
-          <org-button color="primary" size="sm" (click)="store.groupFocusNext()">Next in Group</org-button>
-          <org-button color="primary" size="sm" (click)="store.groupFocusPrevious()">Previous in Group</org-button>
-          <org-button color="primary" size="sm" (click)="store.groupFocusFirst()">First Option</org-button>
-          <org-button color="primary" size="sm" (click)="store.groupFocusLast()">Last Option</org-button>
+          <org-button color="primary" size="sm" label="Next in Group" (click)="store.groupFocusNext()" />
+          <org-button color="primary" size="sm" label="Previous in Group" (click)="store.groupFocusPrevious()" />
+          <org-button color="primary" size="sm" label="First Option" (click)="store.groupFocusFirst()" />
+          <org-button color="primary" size="sm" label="Last Option" (click)="store.groupFocusLast()" />
         </div>
       </org-storybook-example-container-section>
 
@@ -475,10 +474,10 @@ class ComboboxStoreGroupedDemo {
 
       <org-storybook-example-container-section label="Dynamic Updates">
         <div class="flex flex-wrap gap-2">
-          <org-button color="primary" size="sm" (click)="loadFruitsOnly()">Load Fruits Only</org-button>
-          <org-button color="primary" size="sm" (click)="loadVegetablesOnly()">Load Vegetables Only</org-button>
-          <org-button color="primary" size="sm" (click)="loadAllOptions()">Load All Options</org-button>
-          <org-button color="secondary" size="sm" (click)="addRandomOption()">Add Random Option</org-button>
+          <org-button color="primary" size="sm" label="Load Fruits Only" (click)="loadFruitsOnly()" />
+          <org-button color="primary" size="sm" label="Load Vegetables Only" (click)="loadVegetablesOnly()" />
+          <org-button color="primary" size="sm" label="Load All Options" (click)="loadAllOptions()" />
+          <org-button color="secondary" size="sm" label="Add Random Option" (click)="addRandomOption()" />
         </div>
       </org-storybook-example-container-section>
 
@@ -615,11 +614,11 @@ class ComboboxStoreDynamicOptionsDemo {
 
       <org-storybook-example-container-section label="Controls">
         <div class="flex flex-wrap gap-2">
-          <org-button color="primary" size="sm" (click)="store.open()">Open</org-button>
-          <org-button color="primary" size="sm" (click)="store.close()">Close</org-button>
-          <org-button color="primary" size="sm" (click)="store.toggle()">Toggle</org-button>
-          <org-button color="secondary" size="sm" (click)="store.setIsOpened(true)">Set Opened (true)</org-button>
-          <org-button color="secondary" size="sm" (click)="store.setIsOpened(false)">Set Opened (false)</org-button>
+          <org-button color="primary" size="sm" label="Open" (click)="store.open()" />
+          <org-button color="primary" size="sm" label="Close" (click)="store.close()" />
+          <org-button color="primary" size="sm" label="Toggle" (click)="store.toggle()" />
+          <org-button color="secondary" size="sm" label="Set Opened (true)" (click)="store.setIsOpened(true)" />
+          <org-button color="secondary" size="sm" label="Set Opened (false)" (click)="store.setIsOpened(false)" />
         </div>
       </org-storybook-example-container-section>
 
@@ -698,9 +697,9 @@ class ComboboxStoreOpenedStateDemo {
 
       <org-storybook-example-container-section label="Controls">
         <div class="flex flex-wrap gap-2">
-          <org-button color="primary" size="sm" (clicked)="store.open()">Open</org-button>
-          <org-button color="primary" size="sm" (clicked)="store.close()">Close</org-button>
-          <org-button color="secondary" size="sm" (clicked)="store.setSelectedValues([])">Clear</org-button>
+          <org-button color="primary" size="sm" label="Open" (clicked)="store.open()" />
+          <org-button color="primary" size="sm" label="Close" (clicked)="store.close()" />
+          <org-button color="secondary" size="sm" label="Clear" (clicked)="store.setSelectedValues([])" />
         </div>
       </org-storybook-example-container-section>
 

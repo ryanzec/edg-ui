@@ -1,33 +1,51 @@
 @layer components {
   :host {
+    display: contents;
+  }
+
+  .org-label {
     display: inline-flex;
     align-items: center;
-    gap: var(--spacing-1);
-    font-size: var(--font-size-base);
-    line-height: var(--line-height-normal);
-    letter-spacing: var(--letter-spacing-normal);
+    gap: var(--label-gap);
+    font-family: inherit;
+    font-size: var(--label-font-size);
+    font-weight: var(--label-font-weight);
+    line-height: var(--label-line-height);
+    letter-spacing: var(--label-letter-spacing);
+    color: var(--label-color);
+    cursor: default;
   }
 
-  label,
-  div {
+  .org-label-text {
     display: inline-flex;
     align-items: center;
-    gap: var(--spacing-1);
+    gap: var(--label-text-gap);
   }
 
-  .required-marker {
-    color: var(--color-danger);
+  /* required marker — generated, decorative-only via empty alt text so screen readers ignore it; */
+  /* the form control linked through htmlFor carries the required semantic */
+  .org-label[data-required='1'] .org-label-text::after {
+    content: '*' / '';
+    margin-inline-start: var(--label-marker-margin-inline-start);
+    color: var(--label-marker-color);
+    font-weight: var(--label-marker-font-weight);
+    line-height: 1;
   }
 
-  .sr-only {
-    position: absolute;
-    width: 0.0625rem; /* 1px */
-    height: 0.0625rem; /* 1px */
-    padding: 0;
-    margin: -0.0625rem; /* 1px */
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border-width: 0;
+  .org-label .org-loading-spinner {
+    color: var(--label-spinner-color);
+    margin-inline-start: var(--label-spinner-margin-inline-start);
+  }
+
+  .org-label-trailing {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--label-trailing-gap);
+    color: var(--label-trailing-color);
+  }
+
+  /* hide the trailing wrapper entirely when no content was projected so the root gap does not add stray spacing */
+  .org-label-trailing:empty {
+    display: none;
   }
 }

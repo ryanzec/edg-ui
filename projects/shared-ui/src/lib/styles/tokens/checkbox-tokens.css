@@ -1,0 +1,34 @@
+:root {
+  /* layout */
+  --checkbox-radius: var(--radius-sm);
+  --checkbox-disabled-opacity: var(--opacity-disabled);
+  --checkbox-icon-top: 0.125rem; /* 2px */
+
+  /* size: base (placeholder — actual values set by [data-size='base']) */
+  --checkbox-gap: var(--spacing-2);
+  --checkbox-body-gap: var(--spacing-0_5);
+  --checkbox-description-font-size: var(--font-size-xs);
+
+  /* color: primary (placeholder — actual values set by [data-color='primary']) */
+  --checkbox-indicator-color: var(--color-neutral);
+  --checkbox-indicator-color-hover: var(--color-primary);
+  --checkbox-indicator-color-checked: var(--color-primary);
+  --checkbox-indicator-color-checked-hover: var(--color-primary-hover);
+  --checkbox-indicator-color-checked-active: var(--color-primary-active);
+
+  /* description copy */
+  --checkbox-description-color: var(--color-fg-muted);
+
+  /* focus ring (a11y) */
+  --checkbox-focus-ring-color: var(--color-focus-ring);
+  --checkbox-focus-ring-width: 0.1875rem; /* 3px */
+
+  /* card variant (placeholder — actual values set by [data-variant='card']) */
+  --checkbox-card-padding: var(--spacing-3);
+  --checkbox-card-radius: var(--radius-base);
+  --checkbox-card-bg: var(--color-bg-surface);
+  --checkbox-card-border: var(--color-border);
+  --checkbox-card-border-hover: var(--color-border-strong);
+  --checkbox-card-border-selected: var(--color-primary);
+  --checkbox-card-bg-hover: var(--color-bg-hover);
+}

@@ -1,17 +1,22 @@
 @layer components {
   org-avatar-stack {
-    display: flex;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  org-avatar-stack > * {
+    position: relative;
   }
 
   org-avatar-stack[data-size='sm'] > * ~ * {
-    margin-inline-start: calc(-1 * var(--spacing-3));
+    margin-inline-start: var(--avatar-stack-overlap-sm);
   }
 
   org-avatar-stack[data-size='base'] > * ~ * {
-    margin-inline-start: calc(-1 * var(--spacing-4));
+    margin-inline-start: var(--avatar-stack-overlap-base);
   }
 
   org-avatar-stack[data-size='lg'] > * ~ * {
-    margin-inline-start: calc(-1 * var(--spacing-6));
+    margin-inline-start: var(--avatar-stack-overlap-lg);
   }
 }

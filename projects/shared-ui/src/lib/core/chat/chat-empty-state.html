@@ -1,0 +1,10 @@
+@if (icon()) {
+  <span class="empty-state-icon">
+    <org-icon [name]="icon()!" size="lg" />
+  </span>
+}
+<h2 class="empty-state-heading">{{ heading() }}</h2>
+@if (supportingCopy()) {
+  <p class="empty-state-copy">{{ supportingCopy() }}</p>
+}
+<ng-content />

@@ -17,11 +17,11 @@ import { StorybookExampleContainerSection } from '../../private/storybook-exampl
     <org-storybook-example-container title="Notification Manager" currentState="Interactive service API demo">
       <org-storybook-example-container-section label="Add Notifications">
         <div class="flex flex-wrap gap-2">
-          <org-button color="info" size="sm" (click)="addInfo()">Add Info</org-button>
-          <org-button color="safe" size="sm" (click)="addSuccess()">Add Success</org-button>
-          <org-button color="warning" size="sm" (click)="addWarning()">Add Warning</org-button>
-          <org-button color="danger" size="sm" (click)="addPermanent()">Add Permanent (no auto-close)</org-button>
-          <org-button color="neutral" size="sm" (click)="manager.clear()">Clear All</org-button>
+          <org-button color="info" size="sm" label="Add Info" (click)="addInfo()" />
+          <org-button color="safe" size="sm" label="Add Success" (click)="addSuccess()" />
+          <org-button color="warning" size="sm" label="Add Warning" (click)="addWarning()" />
+          <org-button color="danger" size="sm" label="Add Permanent (no auto-close)" (click)="addPermanent()" />
+          <org-button color="neutral" size="sm" label="Clear All" (click)="manager.clear()" />
         </div>
       </org-storybook-example-container-section>
 
@@ -35,7 +35,7 @@ import { StorybookExampleContainerSection } from '../../private/storybook-exampl
               >
               <span>{{ notification.message }}</span>
               <span>(color: {{ notification.color ?? 'none' }}, canClose: {{ notification.canClose }})</span>
-              <org-button color="danger" size="sm" (click)="manager.remove(notification.id)">Remove</org-button>
+              <org-button color="danger" size="sm" label="Remove" (click)="manager.remove(notification.id)" />
             </div>
           }
         </div>

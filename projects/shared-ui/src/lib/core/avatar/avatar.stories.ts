@@ -1,11 +1,195 @@
+import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import type { Meta, StoryObj } from '@storybook/angular';
-import { Avatar } from './avatar';
-import { AvatarCircle } from './avatar-circle';
-import { AvatarImage } from './avatar-image';
-import { AvatarLabel } from './avatar-label';
+import { ButtonToggle, ButtonToggleItem } from '../button-toggle/button-toggle';
+import { CheckboxToggle } from '../checkbox-toggle/checkbox-toggle';
+import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
+import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
+import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
+import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
+import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
+import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
+import { Avatar, allAvatarShapeVariants, allAvatarSizes, AvatarShapeVariant, AvatarSize } from './avatar';
 import { AvatarStack } from './avatar-stack';
-import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
-import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
+import { AvatarStackOverflow } from './avatar-stack-overflow';
+
+type LiveDemoImageMode = 'none' | 'gravatar' | 'custom';
+
+const liveDemoSizeItems: ButtonToggleItem[] = allAvatarSizes.map((size) => ({
+  label: size,
+  value: size,
+  buttonColor: 'primary',
+}));
+
+const liveDemoShapeItems: ButtonToggleItem[] = allAvatarShapeVariants.map((shape) => ({
+  label: shape,
+  value: shape,
+  buttonColor: 'primary',
+}));
+
+const liveDemoImageItems: ButtonToggleItem[] = (['none', 'gravatar', 'custom'] as const).map((value) => ({
+  label: value,
+  value,
+  buttonColor: 'primary',
+}));
+
+@Component({
+  selector: 'story-avatar-live-demo',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    ReactiveFormsModule,
+    Avatar,
+    ButtonToggle,
+    CheckboxToggle,
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoControls,
+    DesignSystemDemoControlGroup,
+    DesignSystemDemoCanvas,
+  ],
+  styles: [
+    `
+      :host {
+        display: block;
+      }
+      .canvas-stage {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 6rem; /* 96px */
+      }
+      .text-input {
+        padding: 0.25rem 0.5rem;
+        border: 1px solid var(--color-border-default);
+        border-radius: 0.25rem;
+        font: inherit;
+      }
+    `,
+  ],
+  template: `
+    <form [formGroup]="liveDemoForm">
+      <org-design-system-demo>
+        <org-design-system-demo-header
+          slot="header"
+          title="Live demo"
+          description="Edit the label, toggle the image, sub-label, shape, clickable, and status pip — every visual axis updates against a single live avatar."
+        />
+        <org-design-system-demo-controls slot="controls">
+          <org-design-system-demo-control-group label="Label">
+            <input class="text-input" type="text" formControlName="label" />
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Sub-label">
+            <input class="text-input" type="text" formControlName="subLabel" />
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Size">
+            <org-button-toggle [items]="sizeItems" formControlName="size" buttonSize="sm" />
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Shape">
+            <org-button-toggle [items]="shapeItems" formControlName="shape" buttonSize="sm" />
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Image">
+            <org-button-toggle [items]="imageItems" formControlName="image" buttonSize="sm" />
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Show label">
+            <org-checkbox-toggle name="live-demo-show-label" value="show-label" formControlName="showLabel">
+              {{ liveDemoForm.controls.showLabel.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Show sub-label">
+            <org-checkbox-toggle name="live-demo-show-sub" value="show-sub" formControlName="showSubLabel">
+              {{ liveDemoForm.controls.showSubLabel.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Clickable">
+            <org-checkbox-toggle name="live-demo-clickable" value="clickable" formControlName="clickable">
+              {{ liveDemoForm.controls.clickable.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Disabled">
+            <org-checkbox-toggle name="live-demo-disabled" value="disabled" formControlName="disabled">
+              {{ liveDemoForm.controls.disabled.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Status pip">
+            <org-checkbox-toggle name="live-demo-status" value="status" formControlName="statusPip">
+              {{ liveDemoForm.controls.statusPip.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
+        </org-design-system-demo-controls>
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="canvas-stage">
+            @if (liveDemoForm.controls.clickable.value) {
+              <org-avatar
+                [label]="liveDemoForm.controls.label.value"
+                [size]="liveDemoForm.controls.size.value"
+                [shape]="liveDemoForm.controls.shape.value"
+                [disabled]="liveDemoForm.controls.disabled.value"
+                [hasIndicator]="liveDemoForm.controls.statusPip.value"
+                indicatorColor="safe"
+                [showLabel]="liveDemoForm.controls.showLabel.value"
+                [subLabel]="resolvedSubLabel()"
+                [imgSrc]="resolvedImgSrc()"
+                [imgEmail]="resolvedImgEmail()"
+                (clicked)="onClicked()"
+              />
+            } @else {
+              <org-avatar
+                [label]="liveDemoForm.controls.label.value"
+                [size]="liveDemoForm.controls.size.value"
+                [shape]="liveDemoForm.controls.shape.value"
+                [disabled]="liveDemoForm.controls.disabled.value"
+                [hasIndicator]="liveDemoForm.controls.statusPip.value"
+                indicatorColor="safe"
+                [showLabel]="liveDemoForm.controls.showLabel.value"
+                [subLabel]="resolvedSubLabel()"
+                [imgSrc]="resolvedImgSrc()"
+                [imgEmail]="resolvedImgEmail()"
+              />
+            }
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+    </form>
+  `,
+})
+class AvatarLiveDemoStory {
+  protected readonly sizeItems = liveDemoSizeItems;
+  protected readonly shapeItems = liveDemoShapeItems;
+  protected readonly imageItems = liveDemoImageItems;
+
+  protected readonly liveDemoForm = new FormGroup({
+    label: new FormControl<string>('Sarah Chen', { nonNullable: true }),
+    subLabel: new FormControl<string>('sarah@org.dev', { nonNullable: true }),
+    size: new FormControl<AvatarSize>('base', { nonNullable: true }),
+    shape: new FormControl<AvatarShapeVariant>('circle', { nonNullable: true }),
+    image: new FormControl<LiveDemoImageMode>('none', { nonNullable: true }),
+    showLabel: new FormControl<boolean>(true, { nonNullable: true }),
+    showSubLabel: new FormControl<boolean>(false, { nonNullable: true }),
+    clickable: new FormControl<boolean>(false, { nonNullable: true }),
+    disabled: new FormControl<boolean>(false, { nonNullable: true }),
+    statusPip: new FormControl<boolean>(false, { nonNullable: true }),
+  });
+
+  protected resolvedSubLabel(): string | null {
+    return this.liveDemoForm.controls.showSubLabel.value ? this.liveDemoForm.controls.subLabel.value : null;
+  }
+
+  protected resolvedImgSrc(): string | null {
+    if (this.liveDemoForm.controls.image.value !== 'custom') {
+      return null;
+    }
+
+    return `https://api.dicebear.com/7.x/avataaars/svg?seed=${this.liveDemoForm.controls.label.value}`;
+  }
+
+  protected resolvedImgEmail(): string | null {
+    return this.liveDemoForm.controls.image.value === 'gravatar' ? 'test1@example.com' : null;
+  }
+
+  protected onClicked(): void {
+    console.log('avatar clicked');
+  }
+}
 
 const meta: Meta<Avatar> = {
   title: 'Core/Components/Avatar',
@@ -18,105 +202,41 @@ const meta: Meta<Avatar> = {
 <div class="docs-top-level-overview">
   ## Avatar Component
 
-  A composable avatar that coordinates a circle (with image / initials / gravatar) and optional labels.
+  A self-contained representation of a user or entity. The root sets size, shape, label, optional adjacent label, and optional image overlay — no projected sub-components.
 
-  ### Composition Parts
-  - **org-avatar** — parent wrapper providing shared \`label\` and \`size\` context to children, plus clickable behavior
-  - **org-avatar-circle** — the circular visual; always renders initials from the parent label; accepts an \`org-avatar-image\` child
-  - **org-avatar-image** — image layer positioned over the circle's initials; supports \`src\`, \`email\` (gravatar), and \`alt\` override; hides on load error to reveal initials
-  - **org-avatar-label** — renders the parent label text plus an optional sub-label
+  ### Inputs
+  - **label** — display name; drives initials, image alt fallback, and the clickable button aria-label
+  - **size** — sm / base / lg
+  - **shape** — circle (people) / square (organisations / teams / projects)
+  - **showLabel** — when true, renders the adjacent name (and optional sub-label) block
+  - **subLabel** — secondary text rendered below the main label (only when showLabel is true)
+  - **imgSrc** — explicit image url overlaying the colored shape; takes priority over imgEmail
+  - **imgEmail** — email used to fetch a gravatar image when no imgSrc is provided
+  - **imgAlt** — overrides the image alt text; falls back to the label when omitted
+  - **hasIndicator** + **indicatorColor** / **indicatorNumber** / **indicatorPosition** — optional status indicator pinned to the corner
 
   ### Size Options
-  - **sm**: Small avatar (20px)
-  - **base**: Standard avatar size (28px) - default
-  - **lg**: Large avatar (40px)
+  - **sm**: 32px circle
+  - **base**: 48px circle (default)
+  - **lg**: 64px circle
 
-  ### Image Priority (inside org-avatar-image)
-  1. Explicit \`src\` URL
-  2. Gravatar (via \`email\`)
+  ### Shape Options
+  - **circle**: default — represents a person
+  - **square**: softly rounded — represents an organisation, team, or project
+
+  ### Image Priority
+  1. Explicit imgSrc URL
+  2. Gravatar (via imgEmail)
   3. None — initials remain visible
 
   ### Initials Generation
   - Single word: First 2 letters (e.g., "John" → "JO")
-  - Multiple words: First letter of first word + first letter of last word (e.g., "John Doe" → "JD")
+  - Multiple words: First letter of first + last word (e.g., "John Doe" → "JD")
 
-  ### Usage Examples
-  \`\`\`html
-  <!-- Initials only -->
-  <org-avatar label="John Doe">
-    <org-avatar-circle />
-  </org-avatar>
-
-  <!-- With custom image -->
-  <org-avatar label="John Doe">
-    <org-avatar-circle>
-      <org-avatar-image src="path/to/image.jpg" />
-    </org-avatar-circle>
-  </org-avatar>
-
-  <!-- With Gravatar -->
-  <org-avatar label="John Doe">
-    <org-avatar-circle>
-      <org-avatar-image email="test1@example.com" />
-    </org-avatar-circle>
-  </org-avatar>
-
-  <!-- With labels -->
-  <org-avatar label="John Doe">
-    <org-avatar-circle />
-    <org-avatar-label subLabel="Software Engineer" />
-  </org-avatar>
-
-  <!-- With explicit alt override -->
-  <org-avatar label="John Doe">
-    <org-avatar-circle>
-      <org-avatar-image src="path/to/image.jpg" alt="Custom alt text" />
-    </org-avatar-circle>
-  </org-avatar>
-
-  <!-- Large avatar, circle only (no label text) -->
-  <org-avatar label="John Doe" size="lg">
-    <org-avatar-circle />
-  </org-avatar>
+  ### Companion Components
+  - **org-avatar-stack** — overlapping row layout container
+  - **org-avatar-stack-overflow** — trailing "+N" pill for collapsed stacks
 </div>
-
----
-
-  ## Avatar Stack Component
-
-  A component that displays multiple avatars in a horizontal stack with overlapping effect.
-
-  ### Features
-  - Stacks child elements (typically avatars) horizontally with overlapping
-  - Supports three size variants: sm, base, lg
-  - Can be disabled by setting size to \`null\`
-  - Defaults to "base" size when no value is provided
-  - Uses flexbox with negative spacing for overlap effect
-  - Avatars in a stack should set \`[stacked]="true"\` on the \`org-avatar-circle\` for a background-colored ring between circles
-
-  ### Size Variants
-  - **sm**: Small overlap
-  - **base**: Base overlap (default)
-  - **lg**: Large overlap
-  - **null**: Disabled - no overlap styling applied
-
-  Set each \`org-avatar\` \`size\` to match the stack so circle dimensions align with the overlap spacing.
-
-  ### Usage Examples
-  \`\`\`html
-  <!-- Default (base size) -->
-  <org-avatar-stack>
-    <org-avatar label="User 1" size="base">
-      <org-avatar-circle [stacked]="true" />
-    </org-avatar>
-    <org-avatar label="User 2" size="base">
-      <org-avatar-circle [stacked]="true" />
-    </org-avatar>
-    <org-avatar label="User 3" size="base">
-      <org-avatar-circle [stacked]="true" />
-    </org-avatar>
-  </org-avatar-stack>
-\`\`\`
         `,
       },
     },
@@ -124,439 +244,353 @@ const meta: Meta<Avatar> = {
 };
 
 export default meta;
-type Story = StoryObj<Avatar>;
+type Story = StoryObj<Avatar & { label: string; disabled: boolean }>;
 
 export const Default: Story = {
   args: {
-    label: 'John Doe',
+    label: 'Sarah Chen',
     size: 'base',
+    shape: 'circle',
+    showLabel: true,
+    disabled: false,
   },
   argTypes: {
     label: {
       control: 'text',
-      description: 'The name/label for the avatar; shared with child sub-components',
+      description: 'The display name; drives initials, image alt fallback, and the clickable button aria-label',
     },
     size: {
       control: 'select',
       options: ['sm', 'base', 'lg'],
-      description: 'The size of the avatar; shared with child sub-components',
+      description: 'The size of the avatar; shared with internal sub-components',
+    },
+    shape: {
+      control: 'select',
+      options: ['circle', 'square'],
+      description: 'The shape of the avatar; circle for people, square for organisations / teams / projects',
+    },
+    showLabel: {
+      control: 'boolean',
+      description: 'When true, renders the adjacent name / sub-label block to the side of the avatar shape',
+    },
+    disabled: {
+      control: 'boolean',
+      description: 'When clickable, disables interaction and applies the disabled visual treatment',
     },
   },
   parameters: {
     docs: {
       description: {
         story:
-          'Default avatar configuration with label and initials. Use the controls below to interact with the component.',
+          'Default avatar configuration with label, size, shape, and showLabel controls. Use the controls below to interact with the component.',
       },
     },
   },
   render: (args) => ({
     props: args,
     template: `
-      <org-avatar [label]="label" [size]="size">
-        <org-avatar-circle />
-        <org-avatar-label />
-      </org-avatar>
+      <org-avatar [label]="label" [size]="size" [shape]="shape" [showLabel]="showLabel" [disabled]="disabled" />
     `,
     moduleMetadata: {
-      imports: [Avatar, AvatarCircle, AvatarLabel],
+      imports: [Avatar],
     },
   }),
 };
 
-export const Sizes: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Comparison of all available size variants (sm, base, lg).',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Size Variants"
-        currentState="Comparing sm, base, and lg sizes"
-      >
-        <org-storybook-example-container-section label="Small (sm)">
-          <org-avatar label="John Doe" size="sm">
-            <org-avatar-circle />
-          </org-avatar>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Base (default)">
-          <org-avatar label="John Doe">
-            <org-avatar-circle />
-          </org-avatar>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Large (lg)">
-          <org-avatar label="John Doe" size="lg">
-            <org-avatar-circle />
-          </org-avatar>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li><strong>sm</strong>: Small avatar (20px)</li>
-          <li><strong>base</strong>: Standard avatar size (28px) - default</li>
-          <li><strong>lg</strong>: Large avatar (40px)</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [Avatar, AvatarCircle, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const ImageTypes: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Comparison of different image types: initials, Gravatar, and custom images.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Image Types"
-        currentState="Comparing initials, Gravatar, and custom images"
-      >
-        <org-storybook-example-container-section label="With Initials">
-          <org-avatar label="John Doe">
-            <org-avatar-circle />
-          </org-avatar>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="With Gravatar">
-          <org-avatar label="John Doe">
-            <org-avatar-circle>
-              <org-avatar-image email="test1@example.com" />
-            </org-avatar-circle>
-          </org-avatar>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="With Custom Image">
-          <org-avatar label="John Doe">
-            <org-avatar-circle>
-              <org-avatar-image src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" />
-            </org-avatar-circle>
-          </org-avatar>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li><strong>Initials</strong>: Automatically generated from label (first and last name)</li>
-          <li><strong>Gravatar</strong>: Fetched from Gravatar service using email</li>
-          <li><strong>Custom Image</strong>: Uses provided image URL (takes priority)</li>
-          <li>Falls back to initials if image fails to load</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [Avatar, AvatarCircle, AvatarImage, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const LabelVariations: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Comparison of different label configurations: with labels, with sub-labels, and without labels.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Label Variations"
-        currentState="Comparing different label configurations"
-      >
-        <org-storybook-example-container-section label="With Label Only">
-          <org-avatar label="John Doe">
-            <org-avatar-circle />
-            <org-avatar-label />
-          </org-avatar>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="With Label and Sub-label">
-          <org-avatar label="John Doe">
-            <org-avatar-circle />
-            <org-avatar-label subLabel="Software Engineer" />
-          </org-avatar>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Without Labels (Avatar Only)">
-          <org-avatar label="John Doe">
-            <org-avatar-circle />
-          </org-avatar>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li><strong>Label Only</strong>: Displays name next to avatar</li>
-          <li><strong>Label and Sub-label</strong>: Displays name and additional info (e.g., title, email)</li>
-          <li><strong>Avatar Only</strong>: Shows only the avatar circle without text</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [Avatar, AvatarCircle, AvatarLabel, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const InitialsGeneration: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Comparison of how initials are generated from different name formats.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Initials Generation"
-        currentState="Comparing single name, two names, and multiple names"
-      >
-        <org-storybook-example-container-section label="Single Name">
-          <org-avatar label="John">
-            <org-avatar-circle />
-          </org-avatar>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Two Names">
-          <org-avatar label="John Doe">
-            <org-avatar-circle />
-          </org-avatar>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Multiple Names">
-          <org-avatar label="John Michael Doe">
-            <org-avatar-circle />
-          </org-avatar>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li><strong>Single Name</strong>: Shows first 2 letters (e.g., "John" → "JO")</li>
-          <li><strong>Two Names</strong>: Shows first letter of each word (e.g., "John Doe" → "JD")</li>
-          <li><strong>Multiple Names</strong>: Shows first letter of first and last word (e.g., "John Michael Doe" → "JD")</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [Avatar, AvatarCircle, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const LabelColors: Story = {
+export const LiveDemo: Story = {
   parameters: {
     docs: {
       description: {
         story:
-          'The avatar circle background cycles through 12 distinct colors based on the lowercased character code of the first label character (modulo 12). The same first character always produces the same color.',
+          'Fully interactive demo. Edit the label to see deterministic color hashing and initials update; toggle every visual axis on a single live avatar.',
       },
     },
   },
   render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Label Color Cycling"
-        currentState="Comparing background colors derived from the first character of each label"
-      >
-        <org-storybook-example-container-section label="Letters A-L (one per color)">
-          <div class="flex gap-2 items-center">
-            <org-avatar label="Alice"><org-avatar-circle /></org-avatar>
-            <org-avatar label="Bob"><org-avatar-circle /></org-avatar>
-            <org-avatar label="Carol"><org-avatar-circle /></org-avatar>
-            <org-avatar label="Dave"><org-avatar-circle /></org-avatar>
-            <org-avatar label="Eve"><org-avatar-circle /></org-avatar>
-            <org-avatar label="Frank"><org-avatar-circle /></org-avatar>
-            <org-avatar label="Grace"><org-avatar-circle /></org-avatar>
-            <org-avatar label="Heidi"><org-avatar-circle /></org-avatar>
-            <org-avatar label="Ivan"><org-avatar-circle /></org-avatar>
-            <org-avatar label="Judy"><org-avatar-circle /></org-avatar>
-            <org-avatar label="Karl"><org-avatar-circle /></org-avatar>
-            <org-avatar label="Liam"><org-avatar-circle /></org-avatar>
-          </div>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Letters M-X (cycle wraps)">
-          <div class="flex gap-2 items-center">
-            <org-avatar label="Mallory"><org-avatar-circle /></org-avatar>
-            <org-avatar label="Niaj"><org-avatar-circle /></org-avatar>
-            <org-avatar label="Olivia"><org-avatar-circle /></org-avatar>
-            <org-avatar label="Peggy"><org-avatar-circle /></org-avatar>
-            <org-avatar label="Quentin"><org-avatar-circle /></org-avatar>
-            <org-avatar label="Rupert"><org-avatar-circle /></org-avatar>
-            <org-avatar label="Sybil"><org-avatar-circle /></org-avatar>
-            <org-avatar label="Trent"><org-avatar-circle /></org-avatar>
-            <org-avatar label="Uma"><org-avatar-circle /></org-avatar>
-            <org-avatar label="Victor"><org-avatar-circle /></org-avatar>
-            <org-avatar label="Walter"><org-avatar-circle /></org-avatar>
-            <org-avatar label="Xavier"><org-avatar-circle /></org-avatar>
-          </div>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Case insensitivity">
-          <div class="flex gap-2 items-center">
-            <org-avatar label="alice"><org-avatar-circle /></org-avatar>
-            <org-avatar label="Alice"><org-avatar-circle /></org-avatar>
-            <org-avatar label="ALICE"><org-avatar-circle /></org-avatar>
-          </div>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li>Color is computed as <code>lowercased first char's char code % 12</code></li>
-          <li>Same first character always produces the same color regardless of casing</li>
-          <li>Empty labels fall back to color index 0</li>
-          <li>Image overlays sit on top, so the colored background is visible only when no image is loaded (or when one fails)</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
+    template: `<story-avatar-live-demo />`,
     moduleMetadata: {
-      imports: [Avatar, AvatarCircle, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [AvatarLiveDemoStory],
     },
   }),
 };
 
-export const Clickable: Story = {
+export const Showcase: Story = {
   parameters: {
     docs: {
       description: {
         story:
-          'When a (clicked) event listener is bound, the avatar renders as a <button> with cursor: pointer and data-clickable="true" on the host. Without a listener, it renders as a non-interactive <div>. The clicked output is now void (no MouseEvent payload).',
+          'Comprehensive showcase of every avatar variant axis — size, shape, image / fallback behaviour, color hashing, label composition, clickable behaviour, status indicator anchoring, and realistic in-context placements.',
       },
     },
   },
   render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Clickable Behavior"
-        currentState="Comparing clickable and non-clickable avatars"
-      >
-        <org-storybook-example-container-section label="With Click Handler (button)">
-          <org-avatar label="John Doe" (clicked)="onClicked()">
-            <org-avatar-circle />
-            <org-avatar-label />
-          </org-avatar>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Without Click Handler (div)">
-          <org-avatar label="John Doe">
-            <org-avatar-circle />
-            <org-avatar-label />
-          </org-avatar>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li><strong>With handler</strong>: Renders a &lt;button&gt;, adds data-clickable="true" to host, shows pointer cursor</li>
-          <li><strong>Without handler</strong>: Renders a &lt;div&gt;, no data-clickable attribute, default cursor</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
     props: {
-      onClicked: () => console.log('avatar clicked'),
+      onAvatarClicked: () => console.log('avatar clicked'),
     },
-    moduleMetadata: {
-      imports: [Avatar, AvatarCircle, AvatarLabel, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const ErrorHandling: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Demonstration of fallback behavior when images fail to load.',
-      },
-    },
-  },
-  render: () => ({
     template: `
-      <org-storybook-example-container
-        title="Error Handling & Fallbacks"
-        currentState="Testing image load failures"
-      >
-        <org-storybook-example-container-section label="Invalid Image URL">
-          <org-avatar label="John Doe">
-            <org-avatar-circle>
-              <org-avatar-image src="https://invalid-url.com/image.jpg" />
-            </org-avatar-circle>
-          </org-avatar>
-        </org-storybook-example-container-section>
+      <div class="flex flex-col gap-4">
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Sizes" />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="flex gap-4 items-center">
+              <org-avatar label="Sarah Chen" size="sm" />
+              <org-avatar label="Sarah Chen" />
+              <org-avatar label="Sarah Chen" size="lg" />
+            </div>
+            <div class="flex gap-4 items-center">
+              <org-avatar label="Sarah Chen" size="sm" [showLabel]="true" />
+              <org-avatar label="Sarah Chen" [showLabel]="true" />
+              <org-avatar label="Sarah Chen" size="lg" [showLabel]="true" />
+            </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>sm</strong>: 32px circle, 12px initials, 13px label</li>
+            <li><strong>base</strong>: 48px circle, 16px initials, 14px label (default)</li>
+            <li><strong>lg</strong>: 64px circle, 20px initials, 16px label</li>
+            <li>Circle, initials, ring thickness, and adjacent label rhythm scale together by size</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
 
-        <org-storybook-example-container-section label="Invalid Gravatar Email">
-          <org-avatar label="John Doe">
-            <org-avatar-circle>
-              <org-avatar-image email="nonexistent@example.com" />
-            </org-avatar-circle>
-          </org-avatar>
-        </org-storybook-example-container-section>
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Shape" />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="flex gap-4 items-end">
+              <div class="flex flex-col items-center gap-1">
+                <org-avatar label="Sarah Chen" />
+                <span class="text-xs text-muted">Circle &middot; person</span>
+              </div>
+              <div class="flex flex-col items-center gap-1">
+                <org-avatar label="Acme Corp" shape="square" />
+                <span class="text-xs text-muted">Square &middot; org "Acme"</span>
+              </div>
+              <div class="flex flex-col items-center gap-1">
+                <org-avatar label="Design Systems" shape="square" />
+                <span class="text-xs text-muted">Square &middot; team "Design Systems"</span>
+              </div>
+            </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>Circle</strong>: default shape — represents a person</li>
+            <li><strong>Square</strong>: softly rounded — represents an organisation, team, or project</li>
+            <li>The square shape reads as "not a person" while still feeling like an avatar</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
 
-        <org-storybook-example-container-section label="Successful Image">
-          <org-avatar label="John Doe">
-            <org-avatar-circle>
-              <org-avatar-image src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" />
-            </org-avatar-circle>
-          </org-avatar>
-        </org-storybook-example-container-section>
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Image &amp; Fallback" />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="flex gap-4 items-end">
+              <div class="flex flex-col items-center gap-1">
+                <org-avatar label="Sarah Chen" size="lg" imgSrc="https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah" />
+                <span class="text-xs text-muted">Image loaded</span>
+              </div>
+              <div class="flex flex-col items-center gap-1">
+                <org-avatar label="Noah Park" size="lg" imgSrc="https://api.dicebear.com/7.x/avataaars/svg?seed=Noah" />
+                <span class="text-xs text-muted">Image loaded</span>
+              </div>
+              <div class="flex flex-col items-center gap-1">
+                <org-avatar label="Renée Marin" size="lg" imgSrc="https://invalid-url.com/missing.jpg" />
+                <span class="text-xs text-muted">Image error → initials</span>
+              </div>
+              <div class="flex flex-col items-center gap-1">
+                <org-avatar label="Avery Tan" size="lg" />
+                <span class="text-xs text-muted">No image — initials</span>
+              </div>
+            </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li>The image overlays the colored circle; when missing or failing to load, the underlying initials read through</li>
+            <li>Failed images set the <code>hidden</code> attribute on the underlying &lt;img&gt; — the colored initials stay in identity</li>
+            <li>Don't replace failed images with a generic person glyph; the colored initials carry identity</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
 
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li><strong>Invalid Image URL</strong>: Falls back to initials when image fails to load</li>
-          <li><strong>Invalid Gravatar</strong>: Falls back to initials when Gravatar not found</li>
-          <li><strong>Successful Image</strong>: Displays image when successfully loaded</li>
-          <li>Fallback is seamless and automatic</li>
-        </ul>
-      </org-storybook-example-container>
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Color hashing" />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="flex gap-2 items-center">
+              <org-avatar label="Alex" />
+              <org-avatar label="Bo" />
+              <org-avatar label="Cal" />
+              <org-avatar label="Drew" />
+              <org-avatar label="Eli" />
+              <org-avatar label="Fin" />
+              <org-avatar label="Gio" />
+              <org-avatar label="Hal" />
+            </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li>Background is one of 8 categorical hues, picked deterministically from the lowercased first character of the label</li>
+            <li>Same label always produces the same color, every render</li>
+            <li>Color is identity, not status — status lives in a pinned indicator</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Initials generation" />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="flex gap-4 items-center">
+              <org-avatar label="John" />
+              <org-avatar label="John Doe" />
+              <org-avatar label="John Michael Doe" />
+            </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>Single name</strong>: first 2 letters (e.g., "John" → "JO")</li>
+            <li><strong>Two names</strong>: first letter of each (e.g., "John Doe" → "JD")</li>
+            <li><strong>Three+ names</strong>: first letter of first + last word (e.g., "John Michael Doe" → "JD")</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Adjacent label" />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="flex flex-col gap-3">
+              <org-avatar label="Sarah Chen" [showLabel]="true" />
+              <org-avatar label="Noah Park" [showLabel]="true" subLabel="noah@org.dev" />
+              <org-avatar label="Renée Marin" [showLabel]="true" subLabel="Engineering &middot; Lead" />
+            </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li>The label block sits next to the circle</li>
+            <li>The primary line uses medium weight; the optional sub-label is faint, for emails, roles, or status text</li>
+            <li>Long names ellipsis-truncate within their min-width container</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Clickable" />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="flex gap-4 items-center">
+              <org-avatar label="Sarah Chen" [showLabel]="true" subLabel="View profile" (clicked)="onAvatarClicked()" />
+              <org-avatar label="Noah Park" (clicked)="onAvatarClicked()" />
+              <org-avatar
+                label="Renée Marin"
+                [disabled]="true"
+                [showLabel]="true"
+                subLabel="Disabled"
+                (clicked)="onAvatarClicked()"
+              />
+            </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li>Binding <code>(clicked)</code> renders the avatar as a real &lt;button&gt; — focus ring, keyboard activation, all native</li>
+            <li>Hover dims slightly, focus shows the system focus ring, active dims further</li>
+            <li><code>[disabled]="true"</code> on a clickable avatar applies cursor: not-allowed and 50% opacity, and suppresses click emission</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="With status indicator" />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="flex gap-6 items-end">
+              <div class="flex flex-col items-center gap-1">
+                <org-avatar label="Sarah Chen" size="lg" [hasIndicator]="true" indicatorColor="safe" />
+                <span class="text-xs text-muted">Online</span>
+              </div>
+              <div class="flex flex-col items-center gap-1">
+                <org-avatar label="James K" size="lg" [hasIndicator]="true" indicatorColor="caution" />
+                <span class="text-xs text-muted">Away</span>
+              </div>
+              <div class="flex flex-col items-center gap-1">
+                <org-avatar label="Renée Marin" size="lg" [hasIndicator]="true" indicatorColor="neutral" />
+                <span class="text-xs text-muted">Offline</span>
+              </div>
+              <div class="flex flex-col items-center gap-1">
+                <org-avatar
+                  label="Avery Tan"
+                  size="lg"
+                  [hasIndicator]="true"
+                  indicatorColor="danger"
+                  indicatorPosition="top-right"
+                  [indicatorNumber]="3"
+                />
+                <span class="text-xs text-muted">Unread count</span>
+              </div>
+            </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li>Set <code>[hasIndicator]="true"</code> on the avatar; the dot is automatically anchored to the corner of the circle (not the avatar's full bounding box)</li>
+            <li>Customize via <code>indicatorColor</code>, <code>indicatorNumber</code>, and <code>indicatorPosition</code> (top-right, top-left, bottom-right, bottom-left) inputs</li>
+            <li>The indicator renders inside the avatar regardless of whether the adjacent label is visible</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="In context" />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="flex flex-col gap-3 w-full">
+              <div class="flex items-center justify-between p-3 border border-default-color rounded-base">
+                <org-avatar label="Sarah Chen" [showLabel]="true" subLabel="commented 2h ago" />
+                <span class="text-xs text-muted">#1284</span>
+              </div>
+              <div class="flex items-center justify-between p-3 border border-default-color rounded-base">
+                <org-avatar label="Noah Park" [showLabel]="true" subLabel="opened this issue" />
+                <span class="text-xs text-muted">#1283</span>
+              </div>
+              <div class="flex items-center justify-between p-3 border border-default-color rounded-base">
+                <org-avatar label="Renée Marin" [showLabel]="true" subLabel="requested review" />
+                <span class="text-xs text-muted">#1282</span>
+              </div>
+              <div class="flex items-center justify-between p-3 border border-default-color rounded-base">
+                <div class="flex items-center gap-3">
+                  <span class="text-sm">Shared with</span>
+                  <org-avatar-stack size="sm">
+                    <org-avatar label="Sarah Chen" size="sm" />
+                    <org-avatar label="Noah Park" size="sm" />
+                    <org-avatar label="Renée Marin" size="sm" />
+                    <org-avatar-stack-overflow [count]="7" size="sm" />
+                  </org-avatar-stack>
+                </div>
+                <span class="text-xs text-muted">11 members</span>
+              </div>
+              <div class="flex items-center justify-between p-3 border border-default-color rounded-base">
+                <org-avatar
+                  label="Acme Corp"
+                  shape="square"
+                  [showLabel]="true"
+                  subLabel="3 projects &middot; 24 members"
+                />
+                <span class="text-xs text-muted">Switch workspace ›</span>
+              </div>
+            </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li>Realistic placements — comments list, "shared with" row, and a workspace switcher with a square org avatar</li>
+            <li>The compositions read as identity-first — name + sub-line, plus optional metadata to the right</li>
+            <li>Square shape on the workspace avatar signals "not a person" alongside the people-shaped circles</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+      </div>
     `,
     moduleMetadata: {
-      imports: [Avatar, AvatarCircle, AvatarImage, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const AltOverride: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'The org-avatar-image alt input defaults to the parent avatar label for accessibility; an explicit alt overrides this default.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Alt Text Behavior"
-        currentState="Comparing default alt fallback vs explicit alt override"
-      >
-        <org-storybook-example-container-section label="Default (uses avatar label)">
-          <org-avatar label="John Doe">
-            <org-avatar-circle>
-              <org-avatar-image src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" />
-            </org-avatar-circle>
-          </org-avatar>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Explicit Alt Override">
-          <org-avatar label="John Doe">
-            <org-avatar-circle>
-              <org-avatar-image src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" alt="Profile picture of the current user" />
-            </org-avatar-circle>
-          </org-avatar>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li><strong>Default</strong>: Image alt attribute reads "John Doe" (inherited from the avatar label)</li>
-          <li><strong>Override</strong>: Image alt attribute reads the explicitly provided value</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [Avatar, AvatarCircle, AvatarImage, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [
+        Avatar,
+        AvatarStack,
+        AvatarStackOverflow,
+        DesignSystemDemo,
+        DesignSystemDemoHeader,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
+      ],
     },
   }),
 };
@@ -578,7 +612,7 @@ export const StackDefault: StackStory = {
     docs: {
       description: {
         story:
-          'Default avatar stack with base size. Use the controls below to interact with the component. Note: This story uses projected content (avatars), so only the stack size control is interactive.',
+          'Default avatar stack with base size. Use the controls below to interact with the component. Note: the stack child avatars match the stack size automatically and the stacked ring auto-applies inside a stack.',
       },
     },
   },
@@ -586,214 +620,138 @@ export const StackDefault: StackStory = {
     props: args,
     template: `
       <org-avatar-stack [size]="size">
-        <org-avatar label="John Doe" [size]="size">
-          <org-avatar-circle [stacked]="true" />
-        </org-avatar>
-        <org-avatar label="Jane Smith" [size]="size">
-          <org-avatar-circle [stacked]="true" />
-        </org-avatar>
-        <org-avatar label="Bob Johnson" [size]="size">
-          <org-avatar-circle [stacked]="true" />
-        </org-avatar>
-        <org-avatar label="Alice Williams" [size]="size">
-          <org-avatar-circle [stacked]="true" />
-        </org-avatar>
+        <org-avatar label="Sarah Chen" [size]="size" />
+        <org-avatar label="Noah Park" [size]="size" />
+        <org-avatar label="Renée Marin" [size]="size" />
+        <org-avatar label="Avery Tan" [size]="size" />
       </org-avatar-stack>
     `,
     moduleMetadata: {
-      imports: [AvatarStack, Avatar, AvatarCircle],
+      imports: [AvatarStack, Avatar],
     },
   }),
 };
 
-export const StackSizes: StackStory = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Comparison of all available size variants (sm, base, lg) side by side.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Size Variants"
-        currentState="Comparing sm, base, and lg sizes"
-      >
-        <org-storybook-example-container-section label="Small (sm)">
-          <org-avatar-stack size="sm">
-            <org-avatar label="User 1" size="sm"><org-avatar-circle [stacked]="true" /></org-avatar>
-            <org-avatar label="User 2" size="sm"><org-avatar-circle [stacked]="true" /></org-avatar>
-            <org-avatar label="User 3" size="sm"><org-avatar-circle [stacked]="true" /></org-avatar>
-            <org-avatar label="User 4" size="sm"><org-avatar-circle [stacked]="true" /></org-avatar>
-          </org-avatar-stack>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Base (default)">
-          <org-avatar-stack size="base">
-            <org-avatar label="User 1"><org-avatar-circle [stacked]="true" /></org-avatar>
-            <org-avatar label="User 2"><org-avatar-circle [stacked]="true" /></org-avatar>
-            <org-avatar label="User 3"><org-avatar-circle [stacked]="true" /></org-avatar>
-            <org-avatar label="User 4"><org-avatar-circle [stacked]="true" /></org-avatar>
-          </org-avatar-stack>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Large (lg)">
-          <org-avatar-stack size="lg">
-            <org-avatar label="User 1" size="lg"><org-avatar-circle [stacked]="true" /></org-avatar>
-            <org-avatar label="User 2" size="lg"><org-avatar-circle [stacked]="true" /></org-avatar>
-            <org-avatar label="User 3" size="lg"><org-avatar-circle [stacked]="true" /></org-avatar>
-            <org-avatar label="User 4" size="lg"><org-avatar-circle [stacked]="true" /></org-avatar>
-          </org-avatar-stack>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li><strong>sm</strong>: Minimal overlap for compact display</li>
-          <li><strong>base</strong>: Standard overlap for balanced appearance (default)</li>
-          <li><strong>lg</strong>: Maximum overlap for space-efficient display</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [AvatarStack, Avatar, AvatarCircle, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const StackAvatarTypes: StackStory = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Comparison of avatar stacks with different avatar types: initials, Gravatar, and custom images.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Avatar Types"
-        currentState="Comparing initials, Gravatar, and custom images"
-      >
-        <org-storybook-example-container-section label="With Initials">
-          <org-avatar-stack>
-            <org-avatar label="John Doe"><org-avatar-circle [stacked]="true" /></org-avatar>
-            <org-avatar label="Jane Smith"><org-avatar-circle [stacked]="true" /></org-avatar>
-            <org-avatar label="Bob Johnson"><org-avatar-circle [stacked]="true" /></org-avatar>
-            <org-avatar label="Alice Williams"><org-avatar-circle [stacked]="true" /></org-avatar>
-          </org-avatar-stack>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="With Gravatar">
-          <org-avatar-stack>
-            <org-avatar label="User 1"><org-avatar-circle [stacked]="true"><org-avatar-image email="test1@example.com" /></org-avatar-circle></org-avatar>
-            <org-avatar label="User 2"><org-avatar-circle [stacked]="true"><org-avatar-image email="test2@example.com" /></org-avatar-circle></org-avatar>
-            <org-avatar label="User 3"><org-avatar-circle [stacked]="true"><org-avatar-image email="user3@example.com" /></org-avatar-circle></org-avatar>
-            <org-avatar label="User 4"><org-avatar-circle [stacked]="true"><org-avatar-image email="test3@example.com" /></org-avatar-circle></org-avatar>
-          </org-avatar-stack>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="With Custom Images">
-          <org-avatar-stack>
-            <org-avatar label="John Doe">
-              <org-avatar-circle [stacked]="true">
-                <org-avatar-image src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" />
-              </org-avatar-circle>
-            </org-avatar>
-            <org-avatar label="Jane Smith">
-              <org-avatar-circle [stacked]="true">
-                <org-avatar-image src="https://api.dicebear.com/7.x/avataaars/svg?seed=Jane" />
-              </org-avatar-circle>
-            </org-avatar>
-            <org-avatar label="Bob Johnson">
-              <org-avatar-circle [stacked]="true">
-                <org-avatar-image src="https://api.dicebear.com/7.x/avataaars/svg?seed=Bob" />
-              </org-avatar-circle>
-            </org-avatar>
-            <org-avatar label="Alice Williams">
-              <org-avatar-circle [stacked]="true">
-                <org-avatar-image src="https://api.dicebear.com/7.x/avataaars/svg?seed=Alice" />
-              </org-avatar-circle>
-            </org-avatar>
-          </org-avatar-stack>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li><strong>Initials</strong>: Avatars display with generated initials from labels</li>
-          <li><strong>Gravatar</strong>: Avatars display with Gravatar images based on email</li>
-          <li><strong>Custom Images</strong>: Avatars display with provided custom image sources</li>
-          <li>Border styling provides visual separation between overlapping avatars</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [
-        AvatarStack,
-        Avatar,
-        AvatarCircle,
-        AvatarImage,
-        StorybookExampleContainer,
-        StorybookExampleContainerSection,
-      ],
-    },
-  }),
-};
-
-export const StackLabelVariations: StackStory = {
+export const StackShowcase: StackStory = {
   parameters: {
     docs: {
       description: {
         story:
-          'Comparison of avatar stacks with different label variations: single name, interactive, and multiple word names.',
+          'Comprehensive showcase of every avatar-stack variant axis — size variants, image / initials / gravatar children, multi-word labels, and the trailing overflow pill that collapses long tails.',
       },
     },
   },
   render: () => ({
     template: `
-      <org-storybook-example-container
-        title="Label Variations"
-        currentState="Comparing single name, interactive, and multiple word names"
-      >
-        <org-storybook-example-container-section label="Single Name">
-          <org-avatar-stack>
-            <org-avatar label="John"><org-avatar-circle [stacked]="true" /></org-avatar>
-            <org-avatar label="Jane"><org-avatar-circle [stacked]="true" /></org-avatar>
-            <org-avatar label="Bob"><org-avatar-circle [stacked]="true" /></org-avatar>
-            <org-avatar label="Alice"><org-avatar-circle [stacked]="true" /></org-avatar>
-          </org-avatar-stack>
-        </org-storybook-example-container-section>
+      <div class="flex flex-col gap-4">
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Stack sizes" />
+          <org-design-system-demo-canvas slot="canvas">
+            <org-avatar-stack size="sm">
+              <org-avatar label="Sarah Chen" size="sm" />
+              <org-avatar label="Noah Park" size="sm" />
+              <org-avatar label="Renée Marin" size="sm" />
+              <org-avatar-stack-overflow [count]="3" />
+            </org-avatar-stack>
+            <org-avatar-stack>
+              <org-avatar label="Sarah Chen" />
+              <org-avatar label="Noah Park" />
+              <org-avatar label="Renée Marin" />
+              <org-avatar-stack-overflow [count]="4" />
+            </org-avatar-stack>
+            <org-avatar-stack size="lg">
+              <org-avatar label="Sarah Chen" size="lg" />
+              <org-avatar label="Noah Park" size="lg" />
+              <org-avatar label="Renée Marin" size="lg" />
+              <org-avatar-stack-overflow [count]="12" />
+            </org-avatar-stack>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>sm</strong> / <strong>base</strong> / <strong>lg</strong>: stack overlap scales with circle diameter (60% of the circle)</li>
+            <li>Each stacked circle gets a surface-colored ring so adjacent siblings stay visually separated</li>
+            <li>The trailing <code>org-avatar-stack-overflow</code> reads as a count, not a person</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
 
-        <org-storybook-example-container-section label="Interactive (many avatars)">
-          <org-avatar-stack>
-            <org-avatar label="User 1"><org-avatar-circle [stacked]="true" /></org-avatar>
-            <org-avatar label="User 2"><org-avatar-circle [stacked]="true" /></org-avatar>
-            <org-avatar label="User 3"><org-avatar-circle [stacked]="true" /></org-avatar>
-            <org-avatar label="User 4"><org-avatar-circle [stacked]="true" /></org-avatar>
-            <org-avatar label="User 5"><org-avatar-circle [stacked]="true" /></org-avatar>
-            <org-avatar label="User 6"><org-avatar-circle [stacked]="true" /></org-avatar>
-            <org-avatar label="User 7"><org-avatar-circle [stacked]="true" /></org-avatar>
-            <org-avatar label="User 8"><org-avatar-circle [stacked]="true" /></org-avatar>
-          </org-avatar-stack>
-        </org-storybook-example-container-section>
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Stack avatar types" />
+          <org-design-system-demo-canvas slot="canvas">
+            <org-avatar-stack>
+              <org-avatar label="Sarah Chen" />
+              <org-avatar label="Noah Park" />
+              <org-avatar label="Renée Marin" />
+              <org-avatar label="Avery Tan" />
+            </org-avatar-stack>
+            <org-avatar-stack>
+              <org-avatar label="User 1" imgEmail="test1@example.com" />
+              <org-avatar label="User 2" imgEmail="test2@example.com" />
+              <org-avatar label="User 3" imgEmail="user3@example.com" />
+              <org-avatar label="User 4" imgEmail="test3@example.com" />
+            </org-avatar-stack>
+            <org-avatar-stack>
+              <org-avatar label="Sarah Chen" imgSrc="https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah" />
+              <org-avatar label="Noah Park" imgSrc="https://api.dicebear.com/7.x/avataaars/svg?seed=Noah" />
+              <org-avatar label="Renée Marin" imgSrc="https://api.dicebear.com/7.x/avataaars/svg?seed=Renee" />
+              <org-avatar label="Avery Tan" imgSrc="https://api.dicebear.com/7.x/avataaars/svg?seed=Avery" />
+            </org-avatar-stack>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>Initials</strong>: deterministic per-user color makes individuals readable at a glance</li>
+            <li><strong>Gravatar</strong>: image overlays the initials, preserving the same overall shape</li>
+            <li><strong>Custom images</strong>: stack sizing stays consistent regardless of source</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
 
-        <org-storybook-example-container-section label="Multiple Word Names">
-          <org-avatar-stack>
-            <org-avatar label="John Doe"><org-avatar-circle [stacked]="true" /></org-avatar>
-            <org-avatar label="Jane Smith"><org-avatar-circle [stacked]="true" /></org-avatar>
-            <org-avatar label="Bob Johnson"><org-avatar-circle [stacked]="true" /></org-avatar>
-            <org-avatar label="Alice Williams"><org-avatar-circle [stacked]="true" /></org-avatar>
-          </org-avatar-stack>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li><strong>Single Name</strong>: Avatars display with single initial from one-word labels</li>
-          <li><strong>Interactive</strong>: Component scales well with many avatars maintaining consistent spacing</li>
-          <li><strong>Multiple Word Names</strong>: Avatars display with initials from multi-word labels</li>
-          <li>Overlap effect maintains visual hierarchy regardless of label complexity</li>
-        </ul>
-      </org-storybook-example-container>
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Stack label variations" />
+          <org-design-system-demo-canvas slot="canvas">
+            <org-avatar-stack>
+              <org-avatar label="John" />
+              <org-avatar label="Jane" />
+              <org-avatar label="Bob" />
+              <org-avatar label="Alice" />
+            </org-avatar-stack>
+            <org-avatar-stack>
+              <org-avatar label="User 1" />
+              <org-avatar label="User 2" />
+              <org-avatar label="User 3" />
+              <org-avatar label="User 4" />
+              <org-avatar label="User 5" />
+              <org-avatar label="User 6" />
+              <org-avatar label="User 7" />
+              <org-avatar label="User 8" />
+            </org-avatar-stack>
+            <org-avatar-stack>
+              <org-avatar label="John Doe" />
+              <org-avatar label="Jane Smith" />
+              <org-avatar label="Bob Johnson" />
+              <org-avatar label="Alice Williams" />
+            </org-avatar-stack>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>Single names</strong>: deterministic per-letter color keeps the row readable</li>
+            <li><strong>Many avatars</strong>: spacing stays consistent — pair with an overflow pill once the row gets long</li>
+            <li><strong>Multi-word names</strong>: two-letter initials maintain hierarchy in the stack</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+      </div>
     `,
     moduleMetadata: {
-      imports: [AvatarStack, Avatar, AvatarCircle, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [
+        AvatarStack,
+        AvatarStackOverflow,
+        Avatar,
+        DesignSystemDemo,
+        DesignSystemDemoHeader,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
+      ],
     },
   }),
 };

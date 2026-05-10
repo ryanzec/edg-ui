@@ -10,6 +10,7 @@ alwaysApply: true
 - **ALWAYS** split out general stories from stories specifically for using Storybook testing functionality into seperate files.
 - Storybook files specific for using storybook testing feature must end with `.tests.stories.ts` and its title must end with `/Tests`.
 - **ALWAYS** create a storybook file (`*.stories.ts`) in the same folder as the component with stories for all the unique state, DO NOT create any play / test related stories in this file.
+- **ALWAYS** use the `projects/shared-ui/src/lib/example/design-system-demo` components for storybook examples.
 - If a storkbook test need to select a dom element, use the `data-testid`
 - Tests must **ALWAYS** simulate the the interaction the user would take, **NEVER** call component apis directly.
 - **ALWAYS** use custom components from `projects/shared-ui/src/lib/core` or native html elements instead of creating inline components.
@@ -32,10 +33,4 @@ alwaysApply: true
 
 # References for **PATTERNS** to follow in structuring storybook file for components:
 - `projects/shared-ui/src/lib/core/button/button.stories.ts`
-- `projects/shared-ui/src/lib/core/card/card.stories.ts`
-- 
-# References for **PATTERNS** to follow in structuring storybook file for directives:
-- `projects/shared-ui/src/lib/core/sortable-directive/sortable-directive.stories.ts`
-
-# References for **PATTERNS** to follow in structuring storybook file for servives:
-- `projects/shared-ui/src/lib/core/sorting-store/sorting-store.stories.ts`
+- `projects/shared-ui/src/lib/core/tag/tag.stories.ts`

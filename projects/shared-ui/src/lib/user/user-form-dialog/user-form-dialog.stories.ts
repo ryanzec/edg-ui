@@ -39,7 +39,7 @@ const meta: Meta<UserFormDialog> = {
 
   @Component({
     template: \`
-      <org-button (click)="openUserDialog()">Create User</org-button>
+      <org-button label="Create User" (click)="openUserDialog()" />
       <org-user-form-dialog #userFormDialog />
     \`,
     imports: [Button, UserFormDialog]
@@ -181,7 +181,7 @@ export const ProcessingStateManagement: Story = {
 @Component({
   selector: 'story-user-form-dialog-default-story',
   template: `
-    <org-button (click)="openDialog()">Open Create User Dialog</org-button>
+    <org-button label="Open Create User Dialog" (click)="openDialog()" />
     <org-user-form-dialog #userFormDialog />
   `,
   imports: [Button, UserFormDialog],
@@ -201,7 +201,7 @@ class UserFormDialogDefaultStory {
 @Component({
   selector: 'story-user-form-dialog-create-story',
   template: `
-    <org-button (click)="openDialog()">Open Create User Dialog</org-button>
+    <org-button label="Open Create User Dialog" (click)="openDialog()" />
     <org-user-form-dialog #userFormDialog />
   `,
   imports: [Button, UserFormDialog],
@@ -221,7 +221,7 @@ class UserFormDialogCreateStory {
 @Component({
   selector: 'story-user-form-dialog-edit-story',
   template: `
-    <org-button (click)="openDialog()">Open Edit User Dialog</org-button>
+    <org-button label="Open Edit User Dialog" (click)="openDialog()" />
     <org-user-form-dialog #userFormDialog />
   `,
   imports: [Button, UserFormDialog],
@@ -262,8 +262,8 @@ class UserFormDialogEditStory {
         </div>
       </div>
 
-      <org-button (click)="openCreateDialog()">Open Create User Dialog</org-button>
-      <org-button (click)="openEditDialog()">Open Edit User Dialog</org-button>
+      <org-button label="Open Create User Dialog" (click)="openCreateDialog()" />
+      <org-button label="Open Edit User Dialog" (click)="openEditDialog()" />
 
       <div class="flex flex-col gap-0.5 p-0.75 bg-info-soft rounded text-sm">
         <div class="font-medium">Note:</div>
@@ -323,7 +323,7 @@ class UserFormDialogInteractiveStory {
         </div>
       </div>
 
-      <org-button (click)="openDialog()">Open Create User Dialog</org-button>
+      <org-button label="Open Create User Dialog" (click)="openDialog()" />
 
       <div class="flex flex-col gap-0.5">
         <h4 class="font-medium">

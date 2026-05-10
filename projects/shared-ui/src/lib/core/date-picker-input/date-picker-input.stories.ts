@@ -196,9 +196,9 @@ export const Default: Story = {
 
       <org-storybook-example-container-section label="Controls">
         <div class="flex flex-wrap gap-2">
-          <org-button color="primary" size="sm" (clicked)="setToday()"> Set Today </org-button>
-          <org-button color="secondary" size="sm" (clicked)="setYesterday()"> Set Yesterday </org-button>
-          <org-button color="secondary" size="sm" (clicked)="clearDate()"> Clear </org-button>
+          <org-button color="primary" size="sm" label="Set Today" (clicked)="setToday()" />
+          <org-button color="secondary" size="sm" label="Set Yesterday" (clicked)="setYesterday()" />
+          <org-button color="secondary" size="sm" label="Clear" (clicked)="clearDate()" />
         </div>
       </org-storybook-example-container-section>
 
@@ -283,9 +283,9 @@ export const SingleSelect: Story = {
 
       <org-storybook-example-container-section label="Controls">
         <div class="flex flex-wrap gap-2">
-          <org-button color="primary" size="sm" (clicked)="setThisWeek()"> This Week </org-button>
-          <org-button color="secondary" size="sm" (clicked)="setLastWeek()"> Last Week </org-button>
-          <org-button color="secondary" size="sm" (clicked)="clearDates()"> Clear </org-button>
+          <org-button color="primary" size="sm" label="This Week" (clicked)="setThisWeek()" />
+          <org-button color="secondary" size="sm" label="Last Week" (clicked)="setLastWeek()" />
+          <org-button color="secondary" size="sm" label="Clear" (clicked)="clearDates()" />
         </div>
       </org-storybook-example-container-section>
 
@@ -386,10 +386,10 @@ export const RangeSelect: Story = {
 
       <org-storybook-example-container-section label="Controls">
         <div class="flex flex-wrap gap-2">
-          <org-button color="primary" size="sm" (clicked)="setStartOnly()"> Set Start Only </org-button>
-          <org-button color="primary" size="sm" (clicked)="setEndOnly()"> Set End Only </org-button>
-          <org-button color="primary" size="sm" (clicked)="setRange()"> Set Range </org-button>
-          <org-button color="secondary" size="sm" (clicked)="clearDates()"> Clear </org-button>
+          <org-button color="primary" size="sm" label="Set Start Only" (clicked)="setStartOnly()" />
+          <org-button color="primary" size="sm" label="Set End Only" (clicked)="setEndOnly()" />
+          <org-button color="primary" size="sm" label="Set Range" (clicked)="setRange()" />
+          <org-button color="secondary" size="sm" label="Clear" (clicked)="clearDates()" />
         </div>
       </org-storybook-example-container-section>
 
@@ -521,12 +521,12 @@ export const PartialRangeSelect: Story = {
 
       <org-storybook-example-container-section label="Controls">
         <div class="flex flex-wrap gap-2">
-          <org-button color="primary" size="sm" (clicked)="setToday()"> Set Single to Today </org-button>
-          <org-button color="primary" size="sm" (clicked)="setThisWeek()"> Set Range to This Week </org-button>
-          <org-button color="primary" size="sm" (clicked)="setOnOrAfter()"> Set Partial to On or After </org-button>
-          <org-button color="secondary" size="sm" (clicked)="clearAll()"> Clear All </org-button>
-          <org-button color="secondary" size="sm" (clicked)="disableAll()"> Disable All </org-button>
-          <org-button color="secondary" size="sm" (clicked)="enableAll()"> Enable All </org-button>
+          <org-button color="primary" size="sm" label="Set Single to Today" (clicked)="setToday()" />
+          <org-button color="primary" size="sm" label="Set Range to This Week" (clicked)="setThisWeek()" />
+          <org-button color="primary" size="sm" label="Set Partial to On or After" (clicked)="setOnOrAfter()" />
+          <org-button color="secondary" size="sm" label="Clear All" (clicked)="clearAll()" />
+          <org-button color="secondary" size="sm" label="Disable All" (clicked)="disableAll()" />
+          <org-button color="secondary" size="sm" label="Enable All" (clicked)="enableAll()" />
         </div>
       </org-storybook-example-container-section>
 
@@ -664,10 +664,10 @@ export const ReactiveForms: Story = {
 
       <org-storybook-example-container-section label="Controls">
         <div class="flex flex-wrap gap-2">
-          <org-button color="primary" size="sm" (clicked)="setToday()"> Set Single to Today </org-button>
-          <org-button color="primary" size="sm" (clicked)="setThisWeek()"> Set Range to This Week </org-button>
-          <org-button color="primary" size="sm" (clicked)="setOnOrAfter()"> Set Partial to On or After </org-button>
-          <org-button color="secondary" size="sm" (clicked)="clearAll()"> Clear All </org-button>
+          <org-button color="primary" size="sm" label="Set Single to Today" (clicked)="setToday()" />
+          <org-button color="primary" size="sm" label="Set Range to This Week" (clicked)="setThisWeek()" />
+          <org-button color="primary" size="sm" label="Set Partial to On or After" (clicked)="setOnOrAfter()" />
+          <org-button color="secondary" size="sm" label="Clear All" (clicked)="clearAll()" />
         </div>
       </org-storybook-example-container-section>
 
@@ -817,12 +817,12 @@ export const SimpleForms: Story = {
 
       <org-storybook-example-container-section label="Controls">
         <div class="flex flex-wrap gap-2">
-          <org-button color="primary" size="sm" (clicked)="setToday()"> Set Single to Today </org-button>
-          <org-button color="primary" size="sm" (clicked)="setThisWeek()"> Set Range to This Week </org-button>
-          <org-button color="primary" size="sm" (clicked)="setOnOrAfter()"> Set Partial to On or After </org-button>
-          <org-button color="secondary" size="sm" (clicked)="clearAll()"> Clear All </org-button>
-          <org-button color="secondary" size="sm" (clicked)="disableAll()"> Disable All </org-button>
-          <org-button color="secondary" size="sm" (clicked)="enableAll()"> Enable All </org-button>
+          <org-button color="primary" size="sm" label="Set Single to Today" (clicked)="setToday()" />
+          <org-button color="primary" size="sm" label="Set Range to This Week" (clicked)="setThisWeek()" />
+          <org-button color="primary" size="sm" label="Set Partial to On or After" (clicked)="setOnOrAfter()" />
+          <org-button color="secondary" size="sm" label="Clear All" (clicked)="clearAll()" />
+          <org-button color="secondary" size="sm" label="Disable All" (clicked)="disableAll()" />
+          <org-button color="secondary" size="sm" label="Enable All" (clicked)="enableAll()" />
         </div>
       </org-storybook-example-container-section>
 
@@ -975,10 +975,10 @@ export const ReactiveFormsPrepopulated: Story = {
 
       <org-storybook-example-container-section label="Controls">
         <div class="flex flex-wrap gap-2">
-          <org-button color="primary" size="sm" (clicked)="setToday()"> Set Single to Today </org-button>
-          <org-button color="primary" size="sm" (clicked)="setThisWeek()"> Set Range to This Week </org-button>
-          <org-button color="primary" size="sm" (clicked)="setOnOrAfter()"> Set Partial to On or After </org-button>
-          <org-button color="secondary" size="sm" (clicked)="clearAll()"> Clear All </org-button>
+          <org-button color="primary" size="sm" label="Set Single to Today" (clicked)="setToday()" />
+          <org-button color="primary" size="sm" label="Set Range to This Week" (clicked)="setThisWeek()" />
+          <org-button color="primary" size="sm" label="Set Partial to On or After" (clicked)="setOnOrAfter()" />
+          <org-button color="secondary" size="sm" label="Clear All" (clicked)="clearAll()" />
         </div>
       </org-storybook-example-container-section>
 
@@ -1110,9 +1110,9 @@ export const SimpleFormsPrepopulated: Story = {
 
       <org-storybook-example-container-section label="Controls">
         <div class="flex flex-wrap gap-2">
-          <org-button color="primary" size="sm" (clicked)="validateSelection()"> Trigger Validation </org-button>
-          <org-button color="secondary" size="sm" (clicked)="clearValidation()"> Clear Validation </org-button>
-          <org-button color="secondary" size="sm" (clicked)="clearDate()"> Clear Date </org-button>
+          <org-button color="primary" size="sm" label="Trigger Validation" (clicked)="validateSelection()" />
+          <org-button color="secondary" size="sm" label="Clear Validation" (clicked)="clearValidation()" />
+          <org-button color="secondary" size="sm" label="Clear Date" (clicked)="clearDate()" />
         </div>
       </org-storybook-example-container-section>
 
@@ -1203,9 +1203,9 @@ export const ValidationSingleRequired: Story = {
 
       <org-storybook-example-container-section label="Controls">
         <div class="flex flex-wrap gap-2">
-          <org-button color="primary" size="sm" (clicked)="validateSelection()"> Trigger Validation </org-button>
-          <org-button color="secondary" size="sm" (clicked)="clearValidation()"> Clear Validation </org-button>
-          <org-button color="secondary" size="sm" (clicked)="clearDates()"> Clear Dates </org-button>
+          <org-button color="primary" size="sm" label="Trigger Validation" (clicked)="validateSelection()" />
+          <org-button color="secondary" size="sm" label="Clear Validation" (clicked)="clearValidation()" />
+          <org-button color="secondary" size="sm" label="Clear Dates" (clicked)="clearDates()" />
         </div>
       </org-storybook-example-container-section>
 
@@ -1301,9 +1301,9 @@ export const ValidationRangeEitherRequired: Story = {
 
       <org-storybook-example-container-section label="Controls">
         <div class="flex flex-wrap gap-2">
-          <org-button color="primary" size="sm" (clicked)="validateSelection()"> Trigger Validation </org-button>
-          <org-button color="secondary" size="sm" (clicked)="clearValidation()"> Clear Validation </org-button>
-          <org-button color="secondary" size="sm" (clicked)="clearDates()"> Clear Dates </org-button>
+          <org-button color="primary" size="sm" label="Trigger Validation" (clicked)="validateSelection()" />
+          <org-button color="secondary" size="sm" label="Clear Validation" (clicked)="clearValidation()" />
+          <org-button color="secondary" size="sm" label="Clear Dates" (clicked)="clearDates()" />
         </div>
       </org-storybook-example-container-section>
 

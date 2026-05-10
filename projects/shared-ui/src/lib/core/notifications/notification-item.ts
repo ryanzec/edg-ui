@@ -5,7 +5,6 @@ import { Card } from '../card/card';
 import type { CardColor } from '../card/card';
 import { CardContent } from '../card/card-content';
 import { Button } from '../button/button';
-import { ButtonIcon } from '../button/button-icon';
 import { NotificationBrainDirective } from '../../brain/notification-brain/notification-brain';
 
 /** default value for the message input */
@@ -26,7 +25,7 @@ export const NOTIFICATION_ITEM_ANIMATION_DURATION_DEFAULT = 0.3;
 @Component({
   selector: 'org-notification-item',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Card, CardContent, Button, ButtonIcon, NgTemplateOutlet],
+  imports: [Card, CardContent, Button, NgTemplateOutlet],
   templateUrl: './notification-item.html',
   styleUrl: './notification-item.css',
   hostDirectives: [

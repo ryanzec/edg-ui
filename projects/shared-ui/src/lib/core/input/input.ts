@@ -14,7 +14,6 @@ import { angularUtils } from '@organization/shared-utils';
 import { type IconName } from '../../brain/icon-brain/icon-brain';
 import { Icon } from '../icon/icon';
 import { Tag } from '../tag/tag';
-import { TagIcon } from '../tag/tag-icon';
 import { Subject } from 'rxjs';
 import { outputFromObservable } from '@angular/core/rxjs-interop';
 import {
@@ -82,7 +81,7 @@ export type InputInlineItem = {
 @Component({
   selector: 'org-input',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Icon, Tag, TagIcon, InputBrainDirective],
+  imports: [Icon, Tag, InputBrainDirective],
   templateUrl: './input.html',
   styleUrl: './input.css',
   host: {

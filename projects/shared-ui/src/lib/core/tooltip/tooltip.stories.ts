@@ -143,7 +143,7 @@ export const Default: Story = {
           [xPosition]="xPosition"
           [yPosition]="yPosition"
         >
-          <org-button color="primary">Hover or click me</org-button>
+          <org-button color="primary" label="Hover or click me" />
         </org-tooltip>
       </div>
     `,
@@ -176,7 +176,7 @@ export const TriggerTypes: Story = {
             triggerType="hover"
             [templateRef]="hoverTooltip"
           >
-            <org-button color="primary">Hover me</org-button>
+            <org-button color="primary" label="Hover me" />
           </org-tooltip>
         </org-storybook-example-container-section>
 
@@ -189,7 +189,7 @@ export const TriggerTypes: Story = {
             triggerType="click"
             [templateRef]="clickTooltip"
           >
-            <org-button color="secondary">Click me</org-button>
+            <org-button color="secondary" label="Click me" />
           </org-tooltip>
         </org-storybook-example-container-section>
 
@@ -229,7 +229,7 @@ export const Delays: Story = {
             [openDelay]="200"
             [closeDelay]="200"
           >
-            <org-button color="primary">Hover me</org-button>
+            <org-button color="primary" label="Hover me" />
           </org-tooltip>
         </org-storybook-example-container-section>
 
@@ -243,7 +243,7 @@ export const Delays: Story = {
             [openDelay]="0"
             [closeDelay]="0"
           >
-            <org-button color="primary">Hover me</org-button>
+            <org-button color="primary" label="Hover me" />
           </org-tooltip>
         </org-storybook-example-container-section>
 
@@ -257,7 +257,7 @@ export const Delays: Story = {
             [openDelay]="500"
             [closeDelay]="200"
           >
-            <org-button color="primary">Hover me</org-button>
+            <org-button color="primary" label="Hover me" />
           </org-tooltip>
         </org-storybook-example-container-section>
 
@@ -271,7 +271,7 @@ export const Delays: Story = {
             [openDelay]="200"
             [closeDelay]="50"
           >
-            <org-button color="primary">Hover me</org-button>
+            <org-button color="primary" label="Hover me" />
           </org-tooltip>
         </org-storybook-example-container-section>
 
@@ -312,7 +312,7 @@ export const KeepOpenOnHover: Story = {
             [templateRef]="normalTooltip"
             [keepOpenOnHover]="false"
           >
-            <org-button color="primary">Hover me</org-button>
+            <org-button color="primary" label="Hover me" />
           </org-tooltip>
         </org-storybook-example-container-section>
 
@@ -325,7 +325,7 @@ export const KeepOpenOnHover: Story = {
             [templateRef]="keepOpenTooltip"
             [keepOpenOnHover]="true"
           >
-            <org-button color="secondary">Hover me</org-button>
+            <org-button color="secondary" label="Hover me" />
           </org-tooltip>
         </org-storybook-example-container-section>
 
@@ -363,7 +363,7 @@ export const RichContent: Story = {
           </ng-template>
 
           <org-tooltip [templateRef]="simpleTooltip">
-            <org-button color="primary">Simple</org-button>
+            <org-button color="primary" label="Simple" />
           </org-tooltip>
         </org-storybook-example-container-section>
 
@@ -378,7 +378,7 @@ export const RichContent: Story = {
           </ng-template>
 
           <org-tooltip [templateRef]="multilineTooltip">
-            <org-button color="primary">Multi-line</org-button>
+            <org-button color="primary" label="Multi-line" />
           </org-tooltip>
         </org-storybook-example-container-section>
 
@@ -395,7 +395,7 @@ export const RichContent: Story = {
           </ng-template>
 
           <org-tooltip [templateRef]="formattedTooltip">
-            <org-button color="primary">Formatted</org-button>
+            <org-button color="primary" label="Formatted" />
           </org-tooltip>
         </org-storybook-example-container-section>
 
@@ -406,9 +406,8 @@ export const RichContent: Story = {
               <org-button
                 color="primary"
                 size="sm"
-              >
-                Click me
-              </org-button>
+                label="Click me"
+              />
             </org-tooltip-content>
           </ng-template>
 
@@ -416,7 +415,7 @@ export const RichContent: Story = {
             [templateRef]="interactiveTooltip"
             [keepOpenOnHover]="true"
           >
-            <org-button color="secondary">Interactive</org-button>
+            <org-button color="secondary" label="Interactive" />
           </org-tooltip>
         </org-storybook-example-container-section>
 
@@ -458,11 +457,11 @@ export const Positioning: Story = {
 
           <div class="flex gap-4">
             <org-tooltip [templateRef]="topTooltip" xPosition="center" yPosition="top">
-              <org-button color="primary">Top</org-button>
+              <org-button color="primary" label="Top" />
             </org-tooltip>
 
             <org-tooltip [templateRef]="bottomTooltip" xPosition="center" yPosition="bottom">
-              <org-button color="primary">Bottom</org-button>
+              <org-button color="primary" label="Bottom" />
             </org-tooltip>
           </div>
         </org-storybook-example-container-section>
@@ -480,12 +479,12 @@ export const Positioning: Story = {
             <div>
               This text provides padding above the trigger so the left-positioned tooltip has room to render.
               <org-tooltip [templateRef]="leftTooltip" xPosition="left" yPosition="center">
-                <org-button color="primary">Left</org-button>
+                <org-button color="primary" label="Left" />
               </org-tooltip>
             </div>
 
             <org-tooltip [templateRef]="rightTooltip" xPosition="right" yPosition="center">
-              <org-button color="primary">Right</org-button>
+              <org-button color="primary" label="Right" />
             </org-tooltip>
           </div>
         </org-storybook-example-container-section>
@@ -509,19 +508,19 @@ export const Positioning: Story = {
 
           <div class="flex gap-4">
             <org-tooltip [templateRef]="topRightTooltip" xPosition="right" yPosition="top">
-              <org-button color="primary">Top Right</org-button>
+              <org-button color="primary" label="Top Right" />
             </org-tooltip>
 
             <org-tooltip [templateRef]="bottomLeftTooltip" xPosition="left" yPosition="bottom">
-              <org-button color="primary">Bottom Left</org-button>
+              <org-button color="primary" label="Bottom Left" />
             </org-tooltip>
 
             <org-tooltip [templateRef]="bottomRightTooltip" xPosition="right" yPosition="bottom">
-              <org-button color="primary">Bottom Right</org-button>
+              <org-button color="primary" label="Bottom Right" />
             </org-tooltip>
 
             <org-tooltip [templateRef]="topLeftTooltip" xPosition="left" yPosition="top">
-              <org-button color="primary">Top Left</org-button>
+              <org-button color="primary" label="Top Left" />
             </org-tooltip>
           </div>
         </org-storybook-example-container-section>
@@ -569,7 +568,7 @@ export const Events: StoryObj<Tooltip> = {
             (opened)="handleOpened()"
             (closed)="handleClosed()"
           >
-            <org-button color="primary">Hover me</org-button>
+            <org-button color="primary" label="Hover me" />
           </org-tooltip>
         </org-storybook-example-container-section>
 
@@ -584,7 +583,7 @@ export const Events: StoryObj<Tooltip> = {
             (opened)="handleOpened()"
             (closed)="handleClosed()"
           >
-            <org-button color="secondary">Click me</org-button>
+            <org-button color="secondary" label="Click me" />
           </org-tooltip>
         </org-storybook-example-container-section>
 
@@ -622,7 +621,7 @@ export const CustomChrome: Story = {
           </ng-template>
 
           <org-tooltip [templateRef]="defaultChromeTooltip">
-            <org-button color="primary">Default</org-button>
+            <org-button color="primary" label="Default" />
           </org-tooltip>
         </org-storybook-example-container-section>
 
@@ -634,7 +633,7 @@ export const CustomChrome: Story = {
           </ng-template>
 
           <org-tooltip [templateRef]="customChromeTooltip">
-            <org-button color="secondary">Custom</org-button>
+            <org-button color="secondary" label="Custom" />
           </org-tooltip>
         </org-storybook-example-container-section>
 

@@ -1,0 +1,18 @@
+:root {
+  /* surface paint */
+  --color-overlay-menu-surface: var(--color-bg-surface-2);
+  --color-overlay-menu-border: var(--color-border);
+
+  /* geometry */
+  --radius-overlay-menu: var(--radius-base);
+  --shadow-overlay-menu: var(--shadow-base);
+  --spacing-overlay-menu-pad: var(--spacing-1);
+  --sizing-overlay-menu-min-width: 11rem; /* 176px */
+  --sizing-overlay-menu-max-width: 20rem; /* 320px */
+
+  /* docs-only anchor — gap between trigger and panel when stories use the static anchor wrapper */
+  --spacing-overlay-menu-anchor-gap: var(--spacing-1);
+
+  /* reveal motion */
+  --motion-overlay-menu-duration: var(--motion-duration-fast);
+}

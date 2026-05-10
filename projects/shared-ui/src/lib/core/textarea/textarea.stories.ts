@@ -8,7 +8,6 @@ import { StorybookExampleContainer } from '../../private/storybook-example-conta
 import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
 import { FormFields } from '../form-fields/form-fields';
 import { Button } from '../button/button';
-import { ButtonIcon } from '../button/button-icon';
 
 const meta: Meta<Textarea> = {
   title: 'Core/Components/Textarea',
@@ -776,14 +775,10 @@ export const WithToolbar: Story = {
           <org-textarea name="textarea-toolbar" placeholder="Type a message...">
             <org-textarea-toolbar (sendClicked)="onSendClicked()">
               <org-textarea-toolbar-item>
-                <org-button [iconOnly]="true" ariaLabel="attach" variant="text">
-                  <org-button-icon name="plus" />
-                </org-button>
+                <org-button [iconOnly]="true" label="attach" ariaLabel="attach" variant="text" preIcon="plus" />
               </org-textarea-toolbar-item>
               <org-textarea-toolbar-item>
-                <org-button [iconOnly]="true" ariaLabel="settings" variant="text">
-                  <org-button-icon name="cog" />
-                </org-button>
+                <org-button [iconOnly]="true" label="settings" ariaLabel="settings" variant="text" preIcon="cog" />
               </org-textarea-toolbar-item>
             </org-textarea-toolbar>
           </org-textarea>
@@ -806,9 +801,7 @@ export const WithToolbar: Story = {
           >
             <org-textarea-toolbar (sendClicked)="onSendClicked()">
               <org-textarea-toolbar-item>
-                <org-button [iconOnly]="true" ariaLabel="attach" variant="text">
-                  <org-button-icon name="plus" />
-                </org-button>
+                <org-button [iconOnly]="true" label="attach" ariaLabel="attach" variant="text" preIcon="plus" />
               </org-textarea-toolbar-item>
             </org-textarea-toolbar>
           </org-textarea>
@@ -828,7 +821,6 @@ export const WithToolbar: Story = {
         TextareaToolbar,
         TextareaToolbarItem,
         Button,
-        ButtonIcon,
         StorybookExampleContainer,
         StorybookExampleContainerSection,
       ],

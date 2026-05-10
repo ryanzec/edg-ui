@@ -61,17 +61,11 @@ const DEMO_USERS: User[] = [
 
       <org-storybook-example-container-section label="Actions">
         <div class="flex flex-wrap gap-2">
-          <org-button color="primary" size="sm" (click)="selectionStore.selectAll(users)"> Select All </org-button>
-          <org-button color="primary" size="sm" (click)="selectionStore.toggleSelectAll(users)">
-            Toggle Select All
-          </org-button>
-          <org-button color="secondary" size="sm" (click)="selectionStore.select(users[0])">
-            Select First User
-          </org-button>
-          <org-button color="secondary" size="sm" (click)="selectionStore.selectMultiple([users[1], users[2]])">
-            Select Users 2 &amp; 3
-          </org-button>
-          <org-button color="neutral" size="sm" (click)="selectionStore.clear()"> Clear Selection </org-button>
+          <org-button color="primary" size="sm" label="Select All" (click)="selectionStore.selectAll(users)" />
+          <org-button color="primary" size="sm" label="Toggle Select All" (click)="selectionStore.toggleSelectAll(users)" />
+          <org-button color="secondary" size="sm" label="Select First User" (click)="selectionStore.select(users[0])" />
+          <org-button color="secondary" size="sm" label="Select Users 2 &amp; 3" (click)="selectionStore.selectMultiple([users[1], users[2]])" />
+          <org-button color="neutral" size="sm" label="Clear Selection" (click)="selectionStore.clear()" />
         </div>
       </org-storybook-example-container-section>
     </org-storybook-example-container>
@@ -112,7 +106,7 @@ class DataSelectionDemo {
 
       <org-storybook-example-container-section label="Actions">
         <div class="flex flex-wrap gap-2">
-          <org-button color="neutral" size="sm" (click)="selectionStore.clear()"> Clear </org-button>
+          <org-button color="neutral" size="sm" label="Clear" (click)="selectionStore.clear()" />
         </div>
       </org-storybook-example-container-section>
     </org-storybook-example-container>
@@ -157,10 +151,8 @@ class DataSelectionWithSelectionDemo {
 
       <org-storybook-example-container-section label="Actions">
         <div class="flex flex-wrap gap-2">
-          <org-button color="primary" size="sm" (click)="selectionStore.toggleSelectAll(users)">
-            Toggle Select All
-          </org-button>
-          <org-button color="neutral" size="sm" (click)="selectionStore.clear()"> Clear </org-button>
+          <org-button color="primary" size="sm" label="Toggle Select All" (click)="selectionStore.toggleSelectAll(users)" />
+          <org-button color="neutral" size="sm" label="Clear" (click)="selectionStore.clear()" />
         </div>
       </org-storybook-example-container-section>
     </org-storybook-example-container>
@@ -195,9 +187,9 @@ class DataSelectionAllSelectedDemo {
         }
       </div>
       <div class="flex flex-wrap gap-2">
-        <org-button color="primary" size="sm" (click)="selectionStore.selectAll(users)"> Select All </org-button>
-        <org-button color="neutral" size="sm" (click)="selectionStore.clear()"> Clear </org-button>
-        <org-button color="secondary" size="sm" (click)="setFromOutside()"> Set From Outside </org-button>
+        <org-button color="primary" size="sm" label="Select All" (click)="selectionStore.selectAll(users)" />
+        <org-button color="neutral" size="sm" label="Clear" (click)="selectionStore.clear()" />
+        <org-button color="secondary" size="sm" label="Set From Outside" (click)="setFromOutside()" />
       </div>
     </div>
   `,

@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { angularUtils } from '@organization/shared-utils';
-import { List } from '../list/list';
-import { ListItem } from '../list/list-item';
+import { Icon } from '../icon/icon';
 import { ComboboxOptionBrainDirective } from '../../brain/combobox-option-brain/combobox-option-brain';
 import type { ComboboxOption as ComboboxOptionData } from '../combobox-store/combobox-store';
 
@@ -11,25 +10,19 @@ export const COMBOBOX_OPTION_DISPLAY_LABEL_PREFIX_DEFAULT: string | undefined = 
 /**
  * renders a single option inside the combobox dropdown. all interaction state, a11y attributes, and
  * mouse routing live on the brain (applied as host bindings on this element); this component only owns
- * the visual presentation.
+ * the visual presentation: a fixed leading check gutter (always reserved so labels align across rows
+ * regardless of selection state) followed by the option label.
  */
 @Component({
   selector: 'org-combobox-option',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ListItem],
+  imports: [Icon],
   templateUrl: './combobox-option.html',
+  styleUrl: './combobox-option.css',
   hostDirectives: [
     {
       directive: ComboboxOptionBrainDirective,
       inputs: ['option'],
-    },
-  ],
-  // re-provides the parent List so the inner ListItem's host-scoped inject(List, { host: true })
-  // can still resolve past this wrapper component
-  viewProviders: [
-    {
-      provide: List,
-      useFactory: () => inject(List, { skipSelf: true }),
     },
   ],
 })

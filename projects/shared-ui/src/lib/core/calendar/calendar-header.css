@@ -7,34 +7,14 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: var(--spacing-2);
+    gap: var(--calendar-header-gap);
     padding: var(--spacing-2);
     border-bottom: var(--border-width) solid var(--color-border-soft);
   }
 
-  .selectors {
+  .cluster {
     display: flex;
     align-items: center;
-    gap: var(--spacing-2);
-  }
-
-  .selector {
-    padding: var(--spacing-1) var(--spacing-2);
-    font-size: var(--font-size-base);
-    line-height: var(--line-height-normal);
-    letter-spacing: var(--letter-spacing-normal);
-    border-radius: var(--radius-sm);
-    color: var(--color-fg);
-  }
-
-  /* select base — kept here because border/bg are overridden by :focus-visible below */
-  :host select {
-    border: var(--border-width) solid var(--color-border);
-    background-color: var(--color-bg-surface);
-  }
-
-  :host select:focus-visible {
-    border-color: var(--color-focus-ring);
-    background-color: var(--color-bg-surface);
+    gap: var(--calendar-header-cluster-gap);
   }
 }
