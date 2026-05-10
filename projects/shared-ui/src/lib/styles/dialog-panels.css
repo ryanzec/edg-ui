@@ -1,6 +1,9 @@
 /*
  * positioning styles for the cdk-overlay-pane that wraps the dialog brain's overlay. the dialog core component
  * sets data-position on its host, and these :has() rules pull that value up the dom tree to position the pane.
+ *
+ * scrim styling targets the cdk-overlay-backdrop sibling rendered by the cdk overlay container when a dialog is
+ * present in the same overlay host.
  */
 
 @layer components {
@@ -9,20 +12,24 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    max-width: calc(100vw - var(--dialog-stage-padding));
+    max-height: var(--dialog-max-vh);
   }
 
   .cdk-overlay-pane:has(org-dialog[data-position='top']) {
     position: fixed !important;
-    top: var(--spacing-5); /* 20px */
-    left: 50%;
-    transform: translateX(-50%);
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100vw;
   }
 
   .cdk-overlay-pane:has(org-dialog[data-position='bottom']) {
     position: fixed !important;
-    bottom: var(--spacing-5); /* 20px */
-    left: 50%;
-    transform: translateX(-50%);
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100vw;
   }
 
   .cdk-overlay-pane:has(org-dialog[data-position='left']) {
@@ -39,5 +46,12 @@
     top: 0;
     height: 100vh;
     bottom: 0;
+  }
+
+  /* scrim styling — translucent backdrop with light blur sitting under the dialog panel */
+  .cdk-overlay-container:has(.cdk-overlay-pane org-dialog) .cdk-overlay-backdrop:not(.cdk-overlay-transparent-backdrop) {
+    background-color: var(--dialog-scrim);
+    backdrop-filter: blur(var(--dialog-scrim-blur));
+    -webkit-backdrop-filter: blur(var(--dialog-scrim-blur));
   }
 }

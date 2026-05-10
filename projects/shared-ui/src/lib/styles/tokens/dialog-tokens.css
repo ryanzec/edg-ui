@@ -1,0 +1,42 @@
+:root {
+  /* layout */
+  --dialog-padding-x: var(--spacing-5); /* 20px */
+  --dialog-header-y: var(--spacing-4); /* 16px */
+  --dialog-content-y: var(--spacing-4); /* 16px */
+  --dialog-footer-y: var(--spacing-4); /* 16px */
+  --dialog-header-end-reserve: var(--spacing-9); /* 36px */
+  --dialog-header-gap: var(--spacing-3); /* 12px */
+  --dialog-footer-gap: var(--spacing-2); /* 8px */
+  --dialog-close-inset: var(--spacing-2); /* 8px */
+  --dialog-close-size: var(--sizing-10xs); /* 32px */
+  --dialog-close-radius: var(--radius-sm); /* 6px */
+
+  /* sizing */
+  --dialog-default-width: var(--sizing-base); /* 28rem / 448px */
+  --dialog-drawer-width: var(--sizing-sm); /* 24rem / 384px */
+  --dialog-sheet-height: var(--sizing-2xs); /* 18rem / 288px */
+  --dialog-sm-width: var(--sizing-2xs); /* 18rem / 288px */
+  --dialog-lg-width: var(--sizing-lg); /* 32rem / 512px */
+  --dialog-min-height: var(--sizing-9xs); /* 48px */
+  --dialog-max-vh: calc(100vh - var(--spacing-6)); /* 100vh - 24px */
+  --dialog-stage-padding: var(--spacing-6); /* 24px */
+
+  /* surface */
+  --dialog-radius: var(--radius-lg); /* 12px */
+  --dialog-bg: var(--color-bg-surface);
+  --dialog-fg: var(--color-fg);
+  --dialog-border: var(--color-border);
+
+  /* scrim */
+  --dialog-scrim: rgba(15, 18, 24, 0.45);
+  --dialog-scrim-blur: 0.125rem; /* 2px */
+
+  /* motion */
+  --dialog-motion-duration: var(--motion-duration-slow);
+  --dialog-motion-ease: var(--motion-ease-entrance);
+  --dialog-motion-shift: 1.5rem; /* 24px translation for top/bottom/left/right entrance */
+}
+
+.dark {
+  --dialog-scrim: rgba(0, 0, 0, 0.62);
+}

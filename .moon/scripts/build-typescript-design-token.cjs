@@ -34,6 +34,7 @@ const CHECKBOX_TOGGLE_TOKENS_CSS = path.join(
 );
 const CHECKLIST_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/checklist-tokens.css');
 const COMBOBOX_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/combobox-tokens.css');
+const DIALOG_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/dialog-tokens.css');
 const DESIGN_SYSTEM_DEMO_TOKENS_CSS = path.join(
   REPO_ROOT,
   'projects/shared-ui/src/lib/styles/tokens/design-system-demo-tokens.css',
@@ -241,6 +242,7 @@ async function main() {
   const checkboxToggleContent = cleanCss(fs.readFileSync(CHECKBOX_TOGGLE_TOKENS_CSS, 'utf-8'));
   const checklistContent = cleanCss(fs.readFileSync(CHECKLIST_TOKENS_CSS, 'utf-8'));
   const comboboxContent = cleanCss(fs.readFileSync(COMBOBOX_TOKENS_CSS, 'utf-8'));
+  const dialogContent = cleanCss(fs.readFileSync(DIALOG_TOKENS_CSS, 'utf-8'));
   const designSystemDemoContent = cleanCss(fs.readFileSync(DESIGN_SYSTEM_DEMO_TOKENS_CSS, 'utf-8'));
   const dividerContent = cleanCss(fs.readFileSync(DIVIDER_TOKENS_CSS, 'utf-8'));
   const emptyIndicatorContent = cleanCss(fs.readFileSync(EMPTY_INDICATOR_TOKENS_CSS, 'utf-8'));
@@ -272,6 +274,7 @@ async function main() {
     ...findBlocks(checkboxToggleContent, ':root').map(extractVariables),
     ...findBlocks(checklistContent, ':root').map(extractVariables),
     ...findBlocks(comboboxContent, ':root').map(extractVariables),
+    ...findBlocks(dialogContent, ':root').map(extractVariables),
     ...findBlocks(designSystemDemoContent, ':root').map(extractVariables),
     ...findBlocks(dividerContent, ':root').map(extractVariables),
     ...findBlocks(emptyIndicatorContent, ':root').map(extractVariables),
@@ -300,6 +303,7 @@ async function main() {
     ...findBlocks(checkboxToggleContent, '.dark').map(extractVariables),
     ...findBlocks(checklistContent, '.dark').map(extractVariables),
     ...findBlocks(comboboxContent, '.dark').map(extractVariables),
+    ...findBlocks(dialogContent, '.dark').map(extractVariables),
     ...findBlocks(designSystemDemoContent, '.dark').map(extractVariables),
     ...findBlocks(dividerContent, '.dark').map(extractVariables),
     ...findBlocks(emptyIndicatorContent, '.dark').map(extractVariables),

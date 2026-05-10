@@ -4,9 +4,8 @@ alwaysApply: true
 # IMPORTANT: These rules override general typescript / angular rules
 # General Storybook Patterns
 - Filing naming patterns:
-    - `{DIRECTORY_NAME}.stories.ts` - Development level stories for working in isolation.
+    - `{DIRECTORY_NAME}.stories.ts` - Development level stories for working in isolation and testing use cases.
     - `{DIRECTORY_NAME}.tests.stories.ts` - Test level stories for running storybook is testing mode through the command line.
-    - `{DIRECTORY_NAME}.use-cases.stories.ts` - Use case level stories for calling out specific use cases for the component that are not obviously otherwise.
 - **ALWAYS** split out general stories from stories specifically for using Storybook testing functionality into seperate files.
 - Storybook files specific for using storybook testing feature must end with `.tests.stories.ts` and its title must end with `/Tests`.
 - **ALWAYS** create a storybook file (`*.stories.ts`) in the same folder as the component with stories for all the unique state, DO NOT create any play / test related stories in this file.

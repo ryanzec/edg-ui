@@ -8,7 +8,7 @@ The prompt provides the directory of the component to refactor.
 
 # Scope
 - **ONLY** refactor the development stories file: `{component-name}.stories.ts`.
-- **NEVER** touch `.tests.stories.ts` or `.use-cases.stories.ts`.
+- **NEVER** touch `.tests.stories.ts`.
 
 # Available design-system-demo components
 You may use these and **ONLY** these (in `projects/shared-ui/src/lib/example/design-system-demo/`):

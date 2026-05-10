@@ -1,12 +1,28 @@
 @layer components {
   :host {
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: var(--dialog-header-gap);
+    padding-block: var(--dialog-header-y);
+    padding-inline-start: var(--dialog-padding-x);
+    padding-inline-end: var(--dialog-header-end-reserve);
+    flex-shrink: 0;
+  }
+
+  /* adjacency: header directly above content/footer drops header's trailing block padding so only one slot contributes the gap */
+  :host(:has(+ org-dialog-content)),
+  :host(:has(+ org-dialog-footer)) {
+    padding-block-end: 0;
   }
 
   .title {
+    flex: 1 1 auto;
+    min-width: 0;
+    margin: 0;
     font-size: var(--font-size-xl);
-    line-height: var(--line-height-normal);
-    letter-spacing: var(--letter-spacing-normal);
+    line-height: var(--line-height-tight);
+    letter-spacing: var(--letter-spacing-tight);
     font-weight: var(--font-weight-semibold);
+    color: var(--dialog-fg);
   }
 }

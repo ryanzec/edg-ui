@@ -1,24 +1,64 @@
 import type { Meta, StoryObj } from '@storybook/angular';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  input,
+  signal,
+  TemplateRef,
+  ViewChild,
+} from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { DIALOG_TRIGGER, DialogBrainDirective } from '../../brain/dialog-brain/dialog-brain';
-import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
-import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
 import { Button } from '../../core/button/button';
-import { ChangeDetectionStrategy, Component, inject, input, ViewChild, signal, TemplateRef } from '@angular/core';
-import { DialogHeader } from '../../core/dialog/dialog-header';
-import { DialogContent } from '../../core/dialog/dialog-content';
-import { DialogFooter } from '../../core/dialog/dialog-footer';
-import { Dialog, DialogPosition, allDialogPositions } from '../../core/dialog/dialog';
-import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
+import { ButtonToggle, ButtonToggleItem } from '../../core/button-toggle/button-toggle';
 import { CheckboxToggle } from '../../core/checkbox-toggle/checkbox-toggle';
+import { Icon } from '../../core/icon/icon';
 import { TypedContextDirective } from '../../core/typed-context-directive/typed-context-directive';
+import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
+import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
+import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
+import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
+import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
+import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
+import { Dialog, DialogPosition, allDialogPositions } from '../../core/dialog/dialog';
+import { DialogContent } from '../../core/dialog/dialog-content';
+import { DialogFooter, DialogFooterAlignment, allDialogFooterAlignments } from '../../core/dialog/dialog-footer';
+import { DialogHeader } from '../../core/dialog/dialog-header';
+import { DialogIcon, DialogIconColor } from '../../core/dialog/dialog-icon';
 
 type EXAMPLEDialogData = {
   title: string;
   message: string;
+  position?: DialogPosition;
   hasRoundedCorners?: boolean;
   onEscapeKeyToggle?: (enabled: boolean) => void;
   onShowCloseIconToggle?: (show: boolean) => void;
 };
+
+type LiveDemoHeaderIconChoice = 'none' | 'info' | 'safe' | 'caution' | 'warning' | 'danger';
+
+const allLiveDemoHeaderIconChoices = ['none', 'info', 'safe', 'caution', 'warning', 'danger'] as const;
+
+const liveDemoPositionItems: ButtonToggleItem[] = allDialogPositions.map((position) => ({
+  label: position,
+  value: position,
+  buttonColor: 'primary',
+}));
+
+const liveDemoFooterAlignmentItems: ButtonToggleItem[] = allDialogFooterAlignments.map((alignment) => ({
+  label: alignment,
+  value: alignment,
+  buttonColor: 'primary',
+}));
+
+const liveDemoHeaderIconItems: ButtonToggleItem[] = allLiveDemoHeaderIconChoices.map((choice) => ({
+  label: choice,
+  value: choice,
+  buttonColor: 'primary',
+}));
 
 @Component({
   selector: 'story-example-dialog',
@@ -26,7 +66,7 @@ type EXAMPLEDialogData = {
   imports: [Button, DialogHeader, DialogContent, DialogFooter, Dialog],
   template: `
     @if (isInDialog) {
-      <org-dialog [position]="position()" [hasRoundedCorners]="hasRoundedCorners()">
+      <org-dialog [position]="resolvedPosition()" [hasRoundedCorners]="resolvedHasRoundedCorners()">
         <org-dialog-header [title]="data.title" />
         <org-dialog-content>{{ data.message }}</org-dialog-content>
         <org-dialog-footer>
@@ -43,7 +83,6 @@ type EXAMPLEDialogData = {
       outputs: ['closed'],
     },
   ],
-  host: {},
 })
 class EXAMPLEDialog {
   private readonly _selfBrain = inject(DialogBrainDirective, { self: true });
@@ -61,8 +100,27 @@ class EXAMPLEDialog {
   };
   protected readonly isInDialog = !!this._dialogRef;
 
+  /** position used by the panel: prefers the value forwarded through DIALOG_DATA from the trigger instance */
+  protected readonly resolvedPosition = computed<DialogPosition>(() => this.data.position ?? this.position());
+
+  /** rounded-corners flag used by the panel: prefers the value forwarded through DIALOG_DATA */
+  protected readonly resolvedHasRoundedCorners = computed<boolean>(
+    () => this.data.hasRoundedCorners ?? this.hasRoundedCorners(),
+  );
+
   public openDialog(data?: EXAMPLEDialogData): DialogRef<EXAMPLEDialog, EXAMPLEDialog> | null {
-    return this._brain.openDialog<EXAMPLEDialog>(EXAMPLEDialog, data as Record<string, unknown> | undefined);
+    // forward the trigger instance's visual inputs through DIALOG_DATA — cdk dialog does not bind component
+    // inputs on the spawned instance, so without this the in-overlay instance would always render with defaults.
+    const payload: EXAMPLEDialogData = {
+      title: data?.title ?? '',
+      message: data?.message ?? '',
+      position: data?.position ?? this.position(),
+      hasRoundedCorners: data?.hasRoundedCorners ?? this.hasRoundedCorners(),
+      onEscapeKeyToggle: data?.onEscapeKeyToggle,
+      onShowCloseIconToggle: data?.onShowCloseIconToggle,
+    };
+
+    return this._brain.openDialog<EXAMPLEDialog>(EXAMPLEDialog, payload as Record<string, unknown>);
   }
 
   public closeDialog(): void {
@@ -103,7 +161,6 @@ class EXAMPLEDialog {
     />
     <org-button label="Open Dialog" (click)="openDialog()" />
   `,
-  host: {},
 })
 class EXAMPLEStoryDialog {
   public position = input<DialogPosition>('center');
@@ -132,28 +189,26 @@ const meta: Meta<EXAMPLEStoryDialog> = {
       description: {
         component: `
 <div class="docs-top-level-overview">
-  ## Angular CDK Dialog Example
+  ## Dialog Component
 
-  A minimalistic example demonstrating Angular CDK's Dialog functionality. Consumers create a custom dialog component that applies the \`DialogBrainDirective\` as a \`hostDirective\`, exposes \`openDialog()\` / \`closeDialog()\` methods, and conditionally renders its modal content when \`DialogRef\` is injected (i.e. when the component is being rendered inside the cdk overlay).
+  A modal surface composed of a header (title + optional leading semantic icon), a scrollable content region, a footer (configurable alignment), and a floating close button. Lives inside a stage that owns the scrim + position.
 
-  ### Features
-  - Uses Angular CDK Dialog module for accessible modals
-  - Configurable position, backdrop, rounded corners, escape-key behavior, and close-icon visibility
-  - Backdrop click to close (disabled by default, can be enabled via enableCloseOnClickOutside input)
-  - Keyboard support (Escape to close, controlled via enableEscapeKey input)
-  - Automatic focus management
-  - Programmatic dialog opening and closing
+  ### Anatomy
+  - **org-dialog** — the panel; controls position and rounded corners.
+  - **org-dialog-close-button** — auto-rendered floating close affordance in the top-right.
+  - **org-dialog-header** — title slot with optional projected leading icon.
+  - **org-dialog-icon** — optional semantic-tinted leading icon next to the header title.
+  - **org-dialog-content** — scrollable body region (uses org-scroll-area internally).
+  - **org-dialog-footer** — actions row with start / center / end alignment.
 
-  ### Usage Example
-  \`\`\`html
-  <app-confirm-dialog #dlg position="center" (closed)="onClosed()" />
-  <org-button label="Open" (clicked)="dlg.openDialog({ title, message })" />
-  \`\`\`
+  ### Positions
+  - **center** — default centered modal.
+  - **top / bottom** — sheet (full-width banner along the matching edge).
+  - **left / right** — drawer (full-height edge panel).
 
-  ### CDK Dialog Concepts
-  - **Brain Directive**: Wraps the cdk \`Dialog\` service, escape-key gating, and the close-icon state signals
-  - **Single Component**: The same component class plays both the trigger role (in the parent template) and the content role (rendered inside the cdk overlay)
-  - **Data Passing**: Send data to the dialog content via \`openDialog(data)\`
+  ### Sizing
+  - Default centered width is 28rem; drawer flips to 24rem; sheet uses 18rem height.
+  - Apply \`.org-dialog-w-sm\` (18rem) or \`.org-dialog-w-lg\` (32rem) on the host for an explicit width override.
 </div>
         `,
       },
@@ -219,155 +274,517 @@ export const Default: Story = {
   }),
 };
 
-export const Positions: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Demonstration of different dialog positions using custom panel classes.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Dialog Positions"
-        currentState="Comparing different dialog positioning configurations"
-      >
-        <org-storybook-example-container-section label="Center (Default)">
-          <story-example-story-dialog position="center" />
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Top">
-          <story-example-story-dialog position="top" />
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Bottom">
-          <story-example-story-dialog position="bottom" />
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Left">
-          <story-example-story-dialog position="left" [hasRoundedCorners]="false" />
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Right">
-          <story-example-story-dialog position="right" [hasRoundedCorners]="false" />
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="flex flex-col gap-1 mt-1 list-inside list-disc">
-          <li><strong>Center</strong>: Dialog appears in the center of the screen</li>
-          <li><strong>Top</strong>: Dialog appears at the top of the screen</li>
-          <li><strong>Bottom</strong>: Dialog appears at the bottom of the screen</li>
-          <li><strong>Left</strong>: Dialog appears at the left like a peek panel</li>
-          <li><strong>Right</strong>: Dialog appears at the right like a peek panel</li>
-          <li>Click the backdrop or press Escape to close the dialog</li>
-          <li>Focus is automatically managed when dialog opens/closes</li>
-        </ul>
-      </org-storybook-example-container>
+@Component({
+  selector: 'story-dialog-live-demo',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    ReactiveFormsModule,
+    Button,
+    ButtonToggle,
+    CheckboxToggle,
+    Dialog,
+    DialogHeader,
+    DialogIcon,
+    DialogContent,
+    DialogFooter,
+    Icon,
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoControls,
+    DesignSystemDemoControlGroup,
+    DesignSystemDemoCanvas,
+    EXAMPLEDialog,
+  ],
+  styles: [
+    `
+      :host {
+        display: block;
+      }
+      .canvas-stage {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+        min-height: 6rem;
+      }
+      .canvas-stage org-dialog {
+        align-self: center;
+      }
     `,
-    moduleMetadata: {
-      imports: [EXAMPLEStoryDialog, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
+  ],
+  template: `
+    <form [formGroup]="liveDemoForm">
+      <org-design-system-demo>
+        <org-design-system-demo-header
+          slot="header"
+          title="Live demo"
+          description="Every input on the dialog is driven by the controls below. The inline preview reflects the panel; click the button to open the same configuration in a real cdk overlay."
+        />
+        <org-design-system-demo-controls slot="controls">
+          <org-design-system-demo-control-group label="Position">
+            <org-button-toggle [items]="positionItems" formControlName="position" buttonSize="sm" />
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Footer alignment">
+            <org-button-toggle [items]="footerAlignmentItems" formControlName="footerAlignment" buttonSize="sm" />
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Header icon">
+            <org-button-toggle [items]="headerIconItems" formControlName="headerIcon" buttonSize="sm" />
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Rounded corners">
+            <org-checkbox-toggle name="live-demo-rounded" value="rounded" formControlName="hasRoundedCorners">
+              {{ liveDemoForm.controls.hasRoundedCorners.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Backdrop">
+            <org-checkbox-toggle name="live-demo-backdrop" value="backdrop" formControlName="hasBackdrop">
+              {{ liveDemoForm.controls.hasBackdrop.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Close on click outside">
+            <org-checkbox-toggle
+              name="live-demo-close-outside"
+              value="close-outside"
+              formControlName="enableCloseOnClickOutside"
+            >
+              {{ liveDemoForm.controls.enableCloseOnClickOutside.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Escape key">
+            <org-checkbox-toggle name="live-demo-escape" value="escape" formControlName="enableEscapeKey">
+              {{ liveDemoForm.controls.enableEscapeKey.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Close icon">
+            <org-checkbox-toggle name="live-demo-close-icon" value="close-icon" formControlName="showCloseIcon">
+              {{ liveDemoForm.controls.showCloseIcon.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
+        </org-design-system-demo-controls>
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="canvas-stage">
+            <org-dialog [hasRoundedCorners]="liveDemoForm.controls.hasRoundedCorners.value">
+              <org-dialog-header title="Live preview">
+                @if (liveDemoForm.controls.headerIcon.value !== 'none') {
+                  <org-dialog-icon icon [color]="headerIconColor()">
+                    <org-icon [name]="headerIconName()" size="2xl" />
+                  </org-dialog-icon>
+                }
+              </org-dialog-header>
+              <org-dialog-content>
+                Adjust the controls above to see how each input changes the dialog. Click the button below to open the
+                same configuration in a real cdk overlay.
+              </org-dialog-content>
+              <org-dialog-footer [alignment]="liveDemoForm.controls.footerAlignment.value">
+                <org-button color="neutral" label="Cancel" />
+                <org-button color="primary" label="Save" />
+              </org-dialog-footer>
+            </org-dialog>
+            <story-example-dialog
+              #dialogComponent
+              [position]="liveDemoForm.controls.position.value"
+              [hasRoundedCorners]="liveDemoForm.controls.hasRoundedCorners.value"
+              [hasBackdrop]="liveDemoForm.controls.hasBackdrop.value"
+              [enableCloseOnClickOutside]="liveDemoForm.controls.enableCloseOnClickOutside.value"
+              [enableEscapeKey]="liveDemoForm.controls.enableEscapeKey.value"
+              [showCloseIcon]="liveDemoForm.controls.showCloseIcon.value"
+            />
+            <org-button label="Open in cdk overlay" (click)="openDialog()" />
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+    </form>
+  `,
+})
+class DialogLiveDemoStory {
+  protected readonly positionItems = liveDemoPositionItems;
+  protected readonly footerAlignmentItems = liveDemoFooterAlignmentItems;
+  protected readonly headerIconItems = liveDemoHeaderIconItems;
 
-export const HasRoundedCorners: Story = {
+  protected readonly liveDemoForm = new FormGroup({
+    position: new FormControl<DialogPosition>('center', { nonNullable: true }),
+    footerAlignment: new FormControl<DialogFooterAlignment>('end', { nonNullable: true }),
+    headerIcon: new FormControl<LiveDemoHeaderIconChoice>('none', { nonNullable: true }),
+    hasRoundedCorners: new FormControl<boolean>(true, { nonNullable: true }),
+    hasBackdrop: new FormControl<boolean>(true, { nonNullable: true }),
+    enableCloseOnClickOutside: new FormControl<boolean>(false, { nonNullable: true }),
+    enableEscapeKey: new FormControl<boolean>(true, { nonNullable: true }),
+    showCloseIcon: new FormControl<boolean>(true, { nonNullable: true }),
+  });
+
+  @ViewChild('dialogComponent')
+  public readonly dialogComponent!: EXAMPLEDialog;
+
+  protected headerIconColor(): DialogIconColor {
+    const choice = this.liveDemoForm.controls.headerIcon.value;
+
+    return choice === 'none' ? 'info' : choice;
+  }
+
+  protected headerIconName(): 'info' | 'circle-check' | 'circle-alert' | 'triangle-alert' | 'circle-x' {
+    switch (this.liveDemoForm.controls.headerIcon.value) {
+      case 'safe':
+        return 'circle-check';
+      case 'caution':
+        return 'circle-alert';
+      case 'warning':
+        return 'triangle-alert';
+      case 'danger':
+        return 'circle-x';
+      default:
+        return 'info';
+    }
+  }
+
+  protected openDialog(): void {
+    this.dialogComponent.openDialog({
+      title: 'Live demo',
+      message: 'This dialog reflects the live demo controls — close on click outside, escape key, and close icon all honor the chosen settings.',
+    });
+  }
+}
+
+export const LiveDemo: Story = {
   parameters: {
     docs: {
       description: {
         story:
-          'Demonstration of the hasRoundedCorners input. Left/right position dialogs typically disable rounded corners since they span the full height.',
+          'Fully interactive demo. Drive every visual and behavioural input on the dialog, observe the inline preview, and open the same configuration in a real cdk overlay to test the runtime behaviours (escape key, click outside, close button).',
       },
     },
   },
   render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Dialog Rounded Corners"
-        currentState="Comparing rounded vs sharp corners"
-      >
-        <org-storybook-example-container-section label="Rounded Corners (Default)">
-          <story-example-story-dialog position="center" [hasRoundedCorners]="true" />
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="No Rounded Corners">
-          <story-example-story-dialog position="center" [hasRoundedCorners]="false" />
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="flex flex-col gap-1 mt-1 list-inside list-disc">
-          <li><strong>Rounded (default)</strong>: Dialog container has rounded corners via border-radius</li>
-          <li><strong>No rounded corners</strong>: Dialog container has sharp square corners — intended for full-edge positions like left/right</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
+    template: `<story-dialog-live-demo />`,
     moduleMetadata: {
-      imports: [EXAMPLEStoryDialog, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [DialogLiveDemoStory],
     },
   }),
 };
 
-export const CloseOnClickOutsideEnabled: Story = {
+export const Showcase: Story = {
   parameters: {
     docs: {
       description: {
         story:
-          'Example demonstrating dialog with enableCloseOnClickOutside set to true. This allows users to close the dialog by clicking the backdrop, in addition to using the Escape key or action buttons.',
+          'Comprehensive showcase of every dialog visual axis — surface variants, header semantic icons, footer alignment, sizing, scrolling content, positions, and close-behaviour configuration — in a single scrollable view.',
       },
     },
   },
   render: () => ({
     template: `
-      <org-storybook-example-container
-        title="Dialog with Close on Click Outside Enabled"
-        currentState="Demonstrating backdrop click to close functionality"
-      >
-        <org-storybook-example-container-section label="Try Interactions">
-          <story-example-story-dialog position="center" [enableCloseOnClickOutside]="true" />
-        </org-storybook-example-container-section>
+      <div class="flex flex-col gap-4">
+        <org-design-system-demo>
+          <org-design-system-demo-header
+            slot="header"
+            title="Surface variants"
+            description="Two corner treatments. Rounded is the default. Sharp corners are used when the dialog hosts edge-bleeding media or when the application chrome already runs square."
+          />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="flex gap-4 items-start">
+              <org-dialog>
+                <org-dialog-header title="Invite teammate" />
+                <org-dialog-content>
+                  Send a workspace invite by email. They'll receive a link valid for 7 days.
+                </org-dialog-content>
+                <org-dialog-footer>
+                  <org-button color="neutral" label="Cancel" />
+                  <org-button color="primary" label="Send invite" />
+                </org-dialog-footer>
+              </org-dialog>
+              <org-dialog [hasRoundedCorners]="false">
+                <org-dialog-header title="Invite teammate" />
+                <org-dialog-content>
+                  Send a workspace invite by email. They'll receive a link valid for 7 days.
+                </org-dialog-content>
+                <org-dialog-footer>
+                  <org-button color="neutral" label="Cancel" />
+                  <org-button color="primary" label="Send invite" />
+                </org-dialog-footer>
+              </org-dialog>
+            </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>Rounded (default)</strong>: Container has rounded corners via radius-lg</li>
+            <li><strong>Sharp</strong>: Reserved for full-bleed media — set [hasRoundedCorners]="false"</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
 
-        <ul expected-behaviour class="flex flex-col gap-1 mt-1 list-inside list-disc">
-          <li><strong>Backdrop Click</strong>: Click outside dialog to close it (enabled in this story)</li>
-          <li><strong>Escape Key</strong>: Press Escape to close the dialog</li>
-          <li><strong>Confirm Button</strong>: Logs confirmation and closes dialog</li>
-          <li><strong>Cancel Button</strong>: Logs cancellation and closes dialog</li>
-          <li><strong>Focus Management</strong>: Focus is trapped within dialog when open</li>
-          <li><strong>Navigation</strong>: Dialog closes automatically on navigation</li>
-        </ul>
-      </org-storybook-example-container>
+        <org-design-system-demo>
+          <org-design-system-demo-header
+            slot="header"
+            title="Header — leading semantic icon"
+            description="Optional leading icon sits to the left of the title. Its tone reads from the shared semantic ramp via the dialog-icon color input — info, safe, caution, warning, danger."
+          />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="flex flex-wrap gap-4 items-start">
+              <org-dialog>
+                <org-dialog-header title="Heads up — release notes">
+                  <org-dialog-icon icon color="info"><org-icon name="info" size="2xl" /></org-dialog-icon>
+                </org-dialog-header>
+                <org-dialog-content>A short note about something you might care about. Informational tone.</org-dialog-content>
+                <org-dialog-footer>
+                  <org-button color="neutral" label="Cancel" />
+                  <org-button color="primary" label="Continue" />
+                </org-dialog-footer>
+              </org-dialog>
+              <org-dialog>
+                <org-dialog-header title="Workspace verified">
+                  <org-dialog-icon icon color="safe"><org-icon name="circle-check" size="2xl" /></org-dialog-icon>
+                </org-dialog-header>
+                <org-dialog-content>Your workspace passed every health check. No action needed.</org-dialog-content>
+                <org-dialog-footer>
+                  <org-button color="neutral" label="Cancel" />
+                  <org-button color="primary" label="Continue" />
+                </org-dialog-footer>
+              </org-dialog>
+              <org-dialog>
+                <org-dialog-header title="Approaching plan limit">
+                  <org-dialog-icon icon color="caution"><org-icon name="circle-alert" size="2xl" /></org-dialog-icon>
+                </org-dialog-header>
+                <org-dialog-content>You're at 82% of your monthly query budget. Consider upgrading before the cap.</org-dialog-content>
+                <org-dialog-footer>
+                  <org-button color="neutral" label="Cancel" />
+                  <org-button color="primary" label="Continue" />
+                </org-dialog-footer>
+              </org-dialog>
+              <org-dialog>
+                <org-dialog-header title="Connection unstable">
+                  <org-dialog-icon icon color="warning"><org-icon name="triangle-alert" size="2xl" /></org-dialog-icon>
+                </org-dialog-header>
+                <org-dialog-content>We lost contact with one source — auto-reconnect is in progress.</org-dialog-content>
+                <org-dialog-footer>
+                  <org-button color="neutral" label="Cancel" />
+                  <org-button color="primary" label="Continue" />
+                </org-dialog-footer>
+              </org-dialog>
+              <org-dialog>
+                <org-dialog-header title="Delete project?">
+                  <org-dialog-icon icon color="danger"><org-icon name="circle-x" size="2xl" /></org-dialog-icon>
+                </org-dialog-header>
+                <org-dialog-content>This permanently removes the project, its records, and every connected source.</org-dialog-content>
+                <org-dialog-footer>
+                  <org-button color="neutral" label="Cancel" />
+                  <org-button color="danger" label="Delete project" />
+                </org-dialog-footer>
+              </org-dialog>
+            </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>Bare glyph</strong>: No background tile — color alone carries the meaning</li>
+            <li><strong>Same convention</strong>: Mirrors Tag / Indicator / Button semantic colors</li>
+            <li><strong>Default tone</strong>: info — override per dialog with the color input</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header
+            slot="header"
+            title="Footer — alignment"
+            description="Three values on the footer's alignment input: start, center, end. End is the most common — primary action far right, supporting actions to its left."
+          />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="flex flex-col gap-4">
+              <org-dialog>
+                <org-dialog-header title="Save changes" />
+                <org-dialog-content>Your draft will be saved to this project.</org-dialog-content>
+                <org-dialog-footer alignment="end">
+                  <org-button color="neutral" label="Cancel" />
+                  <org-button color="primary" label="Save" />
+                </org-dialog-footer>
+              </org-dialog>
+              <org-dialog>
+                <org-dialog-header title="Welcome back" />
+                <org-dialog-content>We've prepared your workspace for the new release.</org-dialog-content>
+                <org-dialog-footer alignment="center">
+                  <org-button color="primary" label="Get started" />
+                </org-dialog-footer>
+              </org-dialog>
+              <org-dialog>
+                <org-dialog-header title="Read the changelog" />
+                <org-dialog-content>Browse what's new since your last visit.</org-dialog-content>
+                <org-dialog-footer alignment="start">
+                  <org-button color="primary" variant="text" label="View changelog" postIcon="arrow-right" />
+                </org-dialog-footer>
+              </org-dialog>
+            </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>End</strong>: Default — primary action far right, supporting actions to its left</li>
+            <li><strong>Center</strong>: Single confirmation actions sit centered</li>
+            <li><strong>Start</strong>: Secondary-only or tertiary actions hug the leading edge</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header
+            slot="header"
+            title="Sizing"
+            description="The default centered width comes from --dialog-default-width (28rem). Drop .org-dialog-w-sm (18rem) or .org-dialog-w-lg (32rem) on the host to override per use."
+          />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="flex flex-col gap-4">
+              <org-dialog class="org-dialog-w-sm">
+                <org-dialog-header title="Confirm" />
+                <org-dialog-content>Continue?</org-dialog-content>
+                <org-dialog-footer>
+                  <org-button color="neutral" label="No" />
+                  <org-button color="primary" label="Yes" />
+                </org-dialog-footer>
+              </org-dialog>
+              <org-dialog>
+                <org-dialog-header title="Edit profile" />
+                <org-dialog-content>Update the name and avatar your teammates see in this workspace.</org-dialog-content>
+                <org-dialog-footer>
+                  <org-button color="neutral" label="Cancel" />
+                  <org-button color="primary" label="Save" />
+                </org-dialog-footer>
+              </org-dialog>
+              <org-dialog class="org-dialog-w-lg">
+                <org-dialog-header title="Connect a data source" />
+                <org-dialog-content>
+                  Choose a source to import records from. We support CSV, Postgres, Snowflake, and the Airbyte
+                  connector library.
+                </org-dialog-content>
+                <org-dialog-footer>
+                  <org-button color="neutral" label="Back" />
+                  <org-button color="primary" label="Continue" />
+                </org-dialog-footer>
+              </org-dialog>
+            </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>Default (28rem)</strong>: From --dialog-default-width</li>
+            <li><strong>org-dialog-w-sm (18rem)</strong>: For confirm-style dialogs</li>
+            <li><strong>org-dialog-w-lg (32rem)</strong>: For dialogs that need more breathing room</li>
+            <li><strong>max-width</strong>: Clamped to 100% so the panel never bursts the viewport</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header
+            slot="header"
+            title="Scrolling content"
+            description="When the body grows past --dialog-max-vh, scrolling lives inside org-dialog-content. The header and footer pin so the title and the primary action are always visible, regardless of how far the body has scrolled."
+          />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="canvas-scroll-stage">
+              <org-dialog>
+                <org-dialog-header title="Terms of service">
+                  <org-dialog-icon icon color="caution"><org-icon name="circle-alert" size="2xl" /></org-dialog-icon>
+                </org-dialog-header>
+                <org-dialog-content>
+                  <p>These terms describe the rules for using the workspace and the data, code, and content you place inside it. By continuing, you agree to abide by every section below.</p>
+                  <p class="mt-3">1. Account integrity. You are responsible for the accuracy of the workspace name, the membership list, and the connected data sources you publish to other members of the workspace.</p>
+                  <p class="mt-3">2. Acceptable use. Workspaces are for product, research, and analytics use cases. Reverse-engineering, scraping, or attempting to extract source code is prohibited.</p>
+                  <p class="mt-3">3. Data residency. Data ingested through connected sources is stored in the region selected at workspace creation time. Region migration is available on request.</p>
+                  <p class="mt-3">4. Service availability. We target 99.9% uptime measured monthly, excluding scheduled maintenance windows announced at least 72 hours in advance.</p>
+                  <p class="mt-3">5. Termination. Workspaces inactive for more than 180 days will be archived. Archived workspaces can be restored within 30 days; after that, data is permanently deleted.</p>
+                </org-dialog-content>
+                <org-dialog-footer>
+                  <org-button color="neutral" label="Decline" />
+                  <org-button color="primary" label="Accept" />
+                </org-dialog-footer>
+              </org-dialog>
+            </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>Header pins</strong>: Title and leading icon stay visible while content scrolls</li>
+            <li><strong>Footer pins</strong>: Primary action stays visible while content scrolls</li>
+            <li><strong>Content scrolls</strong>: Body region uses org-scroll-area internally</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Positions" description="Center is the default. Top / bottom render as full-width sheets; left / right render as full-height drawers." />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="flex flex-wrap gap-2">
+              <story-example-story-dialog position="center" />
+              <story-example-story-dialog position="top" />
+              <story-example-story-dialog position="bottom" />
+              <story-example-story-dialog position="left" [hasRoundedCorners]="false" />
+              <story-example-story-dialog position="right" [hasRoundedCorners]="false" />
+            </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>Center</strong>: Centered modal (default)</li>
+            <li><strong>Top / Bottom</strong>: Full-width sheet anchored to the matching edge</li>
+            <li><strong>Left / Right</strong>: Full-height drawer; rounded corners are dropped automatically</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header
+            slot="header"
+            title="Close on click outside"
+            description="Click the backdrop to close. Disabled by default to prevent accidental dismissal during data entry."
+          />
+          <org-design-system-demo-canvas slot="canvas">
+            <story-example-story-dialog position="center" [enableCloseOnClickOutside]="true" />
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>Backdrop click</strong>: Closes the dialog when enableCloseOnClickOutside is true</li>
+            <li><strong>Escape key</strong>: Always available for keyboard users</li>
+            <li><strong>Default behaviour</strong>: Backdrop click is disabled to avoid accidental dismissal</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header
+            slot="header"
+            title="Escape key disabled"
+            description="When enableEscapeKey is false at open time, the escape key cannot close the dialog and the close icon is also disabled."
+          />
+          <org-design-system-demo-canvas slot="canvas">
+            <story-example-story-dialog position="center" [enableEscapeKey]="false" />
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>Escape key</strong>: Does NOT close the dialog</li>
+            <li><strong>Close icon</strong>: Rendered with reduced opacity and not clickable</li>
+            <li><strong>Footer buttons</strong>: Still close the dialog normally</li>
+            <li><strong>Use case</strong>: Critical operations where dismissal must be intentional</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+      </div>
     `,
+    styles: [
+      `
+        .canvas-scroll-stage {
+          height: 18rem;
+          display: flex;
+          justify-content: center;
+        }
+      `,
+    ],
     moduleMetadata: {
-      imports: [EXAMPLEStoryDialog, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const EnableEscapeKey: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Demonstration of enableEscapeKey set to false at open time. The escape key will not close this dialog — use the Cancel or Confirm buttons instead.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Dialog with Escape Key Disabled"
-        currentState="Demonstrating escape key disabled at open time"
-      >
-        <org-storybook-example-container-section label="Escape Key Disabled">
-          <story-example-story-dialog position="center" [enableEscapeKey]="false" />
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="flex flex-col gap-1 mt-1 list-inside list-disc">
-          <li><strong>Escape Key</strong>: Pressing Escape does NOT close this dialog</li>
-          <li><strong>Close Icon</strong>: The X button is also disabled (opacity reduced, not clickable)</li>
-          <li><strong>Buttons</strong>: Cancel and Confirm buttons still close the dialog normally</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    moduleMetadata: {
-      imports: [EXAMPLEStoryDialog, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [
+        Button,
+        Dialog,
+        DialogHeader,
+        DialogIcon,
+        DialogContent,
+        DialogFooter,
+        Icon,
+        EXAMPLEStoryDialog,
+        DesignSystemDemo,
+        DesignSystemDemoHeader,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
+      ],
     },
   }),
 };
@@ -389,7 +806,6 @@ export const EnableEscapeKey: Story = {
       }
     </div>
   `,
-  host: {},
 })
 class EXAMPLEStoryDialogWithClosedEvent {
   protected readonly closeCount = signal(0);
@@ -421,25 +837,32 @@ export const ClosedEvent: Story = {
   },
   render: () => ({
     template: `
-      <org-storybook-example-container
-        title="Dialog with Closed Event"
-        currentState="Demonstrating dialog closed event handling"
-      >
-        <org-storybook-example-container-section label="Try Opening and Closing">
-          <story-example-story-dialog-with-closed-event />
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="flex flex-col gap-1 mt-1 list-inside list-disc">
-          <li><strong>Closed Event</strong>: Emitted whenever dialog closes by any means</li>
-          <li><strong>Event Counter</strong>: Tracks how many times the dialog has been closed</li>
-          <li><strong>Console Logging</strong>: Check console for logged close events</li>
-          <li><strong>State Management</strong>: Useful for clearing selected data when dialog closes</li>
-          <li><strong>Multiple Close Methods</strong>: Works with backdrop click, Escape key, and button clicks</li>
-        </ul>
-      </org-storybook-example-container>
+      <div class="flex flex-col gap-4">
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Dialog with Closed Event" />
+          <org-design-system-demo-canvas slot="canvas">
+            <story-example-story-dialog-with-closed-event />
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>Closed Event</strong>: Emitted whenever dialog closes by any means</li>
+            <li><strong>Event Counter</strong>: Tracks how many times the dialog has been closed</li>
+            <li><strong>Console Logging</strong>: Check console for logged close events</li>
+            <li><strong>State Management</strong>: Useful for clearing selected data when dialog closes</li>
+            <li><strong>Multiple Close Methods</strong>: Works with backdrop click, Escape key, and button clicks</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+      </div>
     `,
     moduleMetadata: {
-      imports: [EXAMPLEStoryDialogWithClosedEvent, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [
+        EXAMPLEStoryDialogWithClosedEvent,
+        DesignSystemDemo,
+        DesignSystemDemoHeader,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
+      ],
     },
   }),
 };
@@ -469,7 +892,6 @@ export const ClosedEvent: Story = {
       <org-button label="Open Dialog" (click)="openDialog()" />
     </div>
   `,
-  host: {},
 })
 class EXAMPLEStoryDialogWithBackdropToggle {
   protected readonly hasBackdrop = signal(true);
@@ -500,25 +922,32 @@ export const Backdrop: Story = {
   },
   render: () => ({
     template: `
-      <org-storybook-example-container
-        title="Dialog Backdrop Toggle"
-        currentState="Demonstrating dialog with backdrop enabled/disabled"
-      >
-        <org-storybook-example-container-section label="Try Backdrop Toggle">
-          <story-example-story-dialog-with-backdrop-toggle />
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="flex flex-col gap-1 mt-1 list-inside list-disc">
-          <li><strong>Backdrop Enabled</strong>: Dialog appears with a semi-transparent overlay covering the page content</li>
-          <li><strong>Backdrop Disabled</strong>: Dialog appears without overlay, allowing interaction with page content behind it</li>
-          <li><strong>Escape Key</strong>: Works to close dialog regardless of backdrop setting</li>
-          <li><strong>Page Interaction</strong>: When backdrop is disabled, you can interact with elements behind the dialog</li>
-          <li><strong>Visual Contrast</strong>: Backdrop provides visual separation and focus on the dialog content</li>
-        </ul>
-      </org-storybook-example-container>
+      <div class="flex flex-col gap-4">
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Dialog Backdrop Toggle" />
+          <org-design-system-demo-canvas slot="canvas">
+            <story-example-story-dialog-with-backdrop-toggle />
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>Backdrop Enabled</strong>: Dialog appears with a semi-transparent overlay covering the page content</li>
+            <li><strong>Backdrop Disabled</strong>: Dialog appears without overlay, allowing interaction with page content behind it</li>
+            <li><strong>Escape Key</strong>: Works to close dialog regardless of backdrop setting</li>
+            <li><strong>Page Interaction</strong>: When backdrop is disabled, you can interact with elements behind the dialog</li>
+            <li><strong>Visual Contrast</strong>: Backdrop provides visual separation and focus on the dialog content</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+      </div>
     `,
     moduleMetadata: {
-      imports: [EXAMPLEStoryDialogWithBackdropToggle, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [
+        EXAMPLEStoryDialogWithBackdropToggle,
+        DesignSystemDemo,
+        DesignSystemDemoHeader,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
+      ],
     },
   }),
 };
@@ -624,7 +1053,6 @@ class EXAMPLEDialogWithCloseIconToggle {
       <org-button label="Open Dialog" (click)="openDialog()" />
     </div>
   `,
-  host: {},
 })
 class EXAMPLEStoryDialogWithCloseIcon {
   @ViewChild('dialogComponent')
@@ -652,25 +1080,32 @@ export const CloseIcon: Story = {
   },
   render: () => ({
     template: `
-      <org-storybook-example-container
-        title="Dialog Close Icon"
-        currentState="Demonstrating dialog close icon (X button)"
-      >
-        <org-storybook-example-container-section label="Try Close Icon Toggle">
-          <story-example-story-dialog-with-close-icon />
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="flex flex-col gap-1 mt-1 list-inside list-disc">
-          <li><strong>Close Icon</strong>: X button appears in the top-right corner when enabled (default: enabled)</li>
-          <li><strong>Click to Close</strong>: Clicking the X button closes the dialog</li>
-          <li><strong>Toggle Inside Dialog</strong>: Use the checkbox inside the dialog to show or hide the close icon in real-time</li>
-          <li><strong>Accessibility</strong>: Close icon has proper aria-label for screen readers</li>
-          <li><strong>Styling</strong>: Matches the notifications pattern (text variant, neutral color)</li>
-        </ul>
-      </org-storybook-example-container>
+      <div class="flex flex-col gap-4">
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Dialog Close Icon" />
+          <org-design-system-demo-canvas slot="canvas">
+            <story-example-story-dialog-with-close-icon />
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>Close Icon</strong>: X button appears in the top-right corner when enabled (default: enabled)</li>
+            <li><strong>Click to Close</strong>: Clicking the X button closes the dialog</li>
+            <li><strong>Toggle Inside Dialog</strong>: Use the checkbox inside the dialog to show or hide the close icon in real-time</li>
+            <li><strong>Accessibility</strong>: Close icon has proper aria-label for screen readers</li>
+            <li><strong>Styling</strong>: Matches the notifications pattern (text variant, neutral color)</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+      </div>
     `,
     moduleMetadata: {
-      imports: [EXAMPLEStoryDialogWithCloseIcon, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [
+        EXAMPLEStoryDialogWithCloseIcon,
+        DesignSystemDemo,
+        DesignSystemDemoHeader,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
+      ],
     },
   }),
 };
@@ -776,7 +1211,6 @@ class EXAMPLEDialogWithEscapeToggle {
       <org-button label="Open Dialog" (click)="openDialog()" />
     </div>
   `,
-  host: {},
 })
 class EXAMPLEStoryDialogDynamicEscapeKey {
   @ViewChild('dialogComponent')
@@ -804,27 +1238,34 @@ export const DynamicCloseControl: Story = {
   },
   render: () => ({
     template: `
-      <org-storybook-example-container
-        title="Dialog Dynamic Close Control"
-        currentState="Demonstrating dynamic close icon and escape key control"
-      >
-        <org-storybook-example-container-section label="Try Dynamic Toggle">
-          <story-example-story-dialog-dynamic-escape-key />
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="flex flex-col gap-1 mt-1 list-inside list-disc">
-          <li><strong>Open Dialog</strong>: Click the button to open the dialog</li>
-          <li><strong>Inside Dialog Toggle</strong>: Use the checkbox INSIDE the dialog to enable/disable escape key and close icon</li>
-          <li><strong>Synchronized State</strong>: Close icon (X button) and escape key are always in sync</li>
-          <li><strong>Real-time Update</strong>: Close icon becomes enabled/disabled immediately when toggled while dialog is open</li>
-          <li><strong>Disabled State</strong>: When disabled, the X button appears with reduced opacity (40%) and does not respond to clicks</li>
-          <li><strong>Use Case</strong>: Useful for preventing accidental closes during critical operations (like form submission)</li>
-          <li><strong>Button Close</strong>: Cancel and Confirm buttons still work regardless of escape key setting</li>
-        </ul>
-      </org-storybook-example-container>
+      <div class="flex flex-col gap-4">
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Dialog Dynamic Close Control" />
+          <org-design-system-demo-canvas slot="canvas">
+            <story-example-story-dialog-dynamic-escape-key />
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>Open Dialog</strong>: Click the button to open the dialog</li>
+            <li><strong>Inside Dialog Toggle</strong>: Use the checkbox INSIDE the dialog to enable/disable escape key and close icon</li>
+            <li><strong>Synchronized State</strong>: Close icon (X button) and escape key are always in sync</li>
+            <li><strong>Real-time Update</strong>: Close icon becomes enabled/disabled immediately when toggled while dialog is open</li>
+            <li><strong>Disabled State</strong>: When disabled, the X button appears with reduced opacity (40%) and does not respond to clicks</li>
+            <li><strong>Use Case</strong>: Useful for preventing accidental closes during critical operations (like form submission)</li>
+            <li><strong>Button Close</strong>: Cancel and Confirm buttons still work regardless of escape key setting</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+      </div>
     `,
     moduleMetadata: {
-      imports: [EXAMPLEStoryDialogDynamicEscapeKey, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [
+        EXAMPLEStoryDialogDynamicEscapeKey,
+        DesignSystemDemo,
+        DesignSystemDemoHeader,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
+      ],
     },
   }),
 };
@@ -853,7 +1294,6 @@ export const DynamicCloseControl: Story = {
     </div>
   `,
   hostDirectives: [DialogBrainDirective],
-  host: {},
 })
 class EXAMPLEStoryTemplateDialog {
   private readonly _brain = inject(DialogBrainDirective, { self: true });
@@ -894,24 +1334,31 @@ export const TemplateBasedDialog: Story = {
   },
   render: () => ({
     template: `
-      <org-storybook-example-container
-        title="Template-Based Dialog"
-        currentState="Demonstrating inline template content without a separate component"
-      >
-        <org-storybook-example-container-section label="Template Dialog">
-          <story-example-story-template-dialog position="center" />
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="flex flex-col gap-1 mt-1 list-inside list-disc">
-          <li><strong>No Separate Component</strong>: Dialog content is defined inline in the parent template</li>
-          <li><strong>Parent Scope Access</strong>: Template bindings call methods directly on the parent component</li>
-          <li><strong>Template Context</strong>: Data passed to openDialog() is available via the let-* binding (typed via the orgTypedContext directive)</li>
-          <li><strong>Escape Key</strong>: Works the same as component-based dialogs</li>
-        </ul>
-      </org-storybook-example-container>
+      <div class="flex flex-col gap-4">
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Template-Based Dialog" />
+          <org-design-system-demo-canvas slot="canvas">
+            <story-example-story-template-dialog position="center" />
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>No Separate Component</strong>: Dialog content is defined inline in the parent template</li>
+            <li><strong>Parent Scope Access</strong>: Template bindings call methods directly on the parent component</li>
+            <li><strong>Template Context</strong>: Data passed to openDialog() is available via the let-* binding (typed via the orgTypedContext directive)</li>
+            <li><strong>Escape Key</strong>: Works the same as component-based dialogs</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+      </div>
     `,
     moduleMetadata: {
-      imports: [EXAMPLEStoryTemplateDialog, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [
+        EXAMPLEStoryTemplateDialog,
+        DesignSystemDemo,
+        DesignSystemDemoHeader,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
+      ],
     },
   }),
 };

@@ -1,0 +1,37 @@
+@layer components {
+  :host {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: var(--_color);
+  }
+
+  :host([data-color='primary']) {
+    --_color: var(--color-primary);
+  }
+
+  :host([data-color='neutral']) {
+    --_color: var(--color-neutral);
+  }
+
+  :host([data-color='info']) {
+    --_color: var(--color-info);
+  }
+
+  :host([data-color='safe']) {
+    --_color: var(--color-safe);
+  }
+
+  :host([data-color='caution']) {
+    --_color: var(--color-caution);
+  }
+
+  :host([data-color='warning']) {
+    --_color: var(--color-warning);
+  }
+
+  :host([data-color='danger']) {
+    --_color: var(--color-danger);
+  }
+}

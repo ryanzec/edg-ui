@@ -1,12 +1,22 @@
 @layer components {
   :host {
-    display: contents;
+    display: flex;
+    align-items: center;
+    gap: var(--dialog-footer-gap);
+    padding-block: var(--dialog-footer-y);
+    padding-inline: var(--dialog-padding-x);
+    flex-shrink: 0;
   }
 
-  .footer {
-    display: flex;
-    gap: var(--spacing-2);
+  :host([data-alignment='start']) {
+    justify-content: flex-start;
+  }
+
+  :host([data-alignment='center']) {
+    justify-content: center;
+  }
+
+  :host([data-alignment='end']) {
     justify-content: flex-end;
-    margin-top: auto;
   }
 }

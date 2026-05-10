@@ -21,7 +21,7 @@ export const DIALOG_HAS_ROUNDED_CORNERS_DEFAULT = true;
   styleUrl: './dialog.css',
   host: {
     '[attr.data-position]': 'position()',
-    '[attr.data-has-rounded-corners]': 'hasRoundedCorners() ? "" : null',
+    '[attr.data-rounded]': 'hasRoundedCorners() ? "" : null',
   },
 })
 export class Dialog {
