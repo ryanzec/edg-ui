@@ -1,88 +1,186 @@
 @layer components {
   :host {
     display: block;
+    font-family: var(--code-block-font-family);
+    color: var(--code-block-fg);
   }
 
-  /* Inline variant */
-  :host([data-variant='inline']) {
-    display: inline;
-  }
+  /* ===== block variant ===== */
 
-  /* Block variant */
   :host([data-variant='block']) {
     position: relative;
-  }
-
-  .code-block-copy-wrapper {
-    position: absolute;
-  }
-
-  .code-block-copy-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: var(--spacing-1);
-    border: none;
-    border-radius: var(--radius-sm);
-    background-color: transparent;
-    color: var(--color-fg);
-    cursor: pointer;
-  }
-
-  .code-block-body {
-    position: relative;
-    display: block;
-    border: var(--border-width) solid var(--color-border);
-    border-radius: var(--radius-base);
-    background-color: var(--color-neutral-soft);
-  }
-
-  :host([data-variant='block']) .code-block-copy-wrapper {
-    top: -1.5rem; /* -24px */
-    right: 0;
-  }
-
-  :host([data-variant='block']) .code-block-copy-btn {
-    opacity: 0.1;
-  }
-
-  :host([data-variant='block']) .code-block-copy-btn:focus-visible {
-    opacity: 0.8;
-  }
-
-  :host([data-variant='block']):hover .code-block-copy-btn {
-    opacity: 0.8;
-  }
-
-  :host([data-variant='block']) .code-block-pre {
-    margin: 0;
-    white-space: pre;
-    font-family: monospace;
-    font-size: var(--font-size-base);
-    line-height: normal;
-    color: var(--color-fg);
-  }
-
-  /* Ellipsis styling */
-  :host([data-has-ellipsis][data-variant='block']) .code-block-pre {
+    display: flex;
+    flex-direction: column;
     overflow: hidden;
-    white-space: pre-wrap;
-    word-break: break-all;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: var(--ellipsis-lines);
-    line-clamp: var(--ellipsis-lines);
+    border: var(--border-width) solid var(--code-block-border);
+    border-radius: var(--code-block-radius);
+    background-color: var(--code-block-bg);
+    font-size: var(--code-block-font-size);
+    user-select: text;
   }
 
-  /* Inline code element */
-  .code-block-inline {
+  /* header */
+
+  .header {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: var(--code-block-header-gap);
+    padding-block: var(--code-block-header-padding-block);
+    padding-inline: var(--code-block-header-padding-inline);
+    border-bottom: var(--border-width) solid var(--code-block-header-border);
+    background-color: var(--code-block-header-bg);
+    color: var(--code-block-header-fg);
+    font-size: var(--code-block-header-font-size);
+    font-weight: var(--code-block-header-font-weight);
+  }
+
+  .header-label {
+    display: inline-flex;
+    flex: 0 1 auto;
+    align-items: center;
+    gap: var(--code-block-header-label-gap);
+    min-width: 0;
+  }
+
+  .header-label-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .header-icon {
+    color: var(--code-block-header-icon-color);
+  }
+
+  .header-spacer {
+    flex: 1 1 auto;
+  }
+
+  /* body + pre */
+
+  .body {
+    position: relative;
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: var(--code-block-body-padding);
+    overflow: hidden;
+  }
+
+  .pre {
+    margin: 0;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: var(--code-block-line-height);
+    color: inherit;
+    white-space: pre;
+    tab-size: 2;
+  }
+
+  .pre code {
+    font: inherit;
+    color: inherit;
+    background: transparent;
+  }
+
+  /* wrap mode — long lines wrap instead of horizontally scrolling */
+
+  :host([data-wrap]) .pre {
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  /* ellipsis clamp + fade mask */
+
+  :host([data-has-ellipsis]) .body {
+    max-height: calc(var(--ellipsis-lines) * var(--code-block-line-height) * 1em);
+  }
+
+  :host([data-has-ellipsis][data-overflowing]:not([data-expanded])) .body {
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 calc(100% - 2.25em), transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 0%, #000 calc(100% - 2.25em), transparent 100%);
+  }
+
+  :host([data-has-ellipsis][data-expanded]) .body {
+    max-height: none;
+  }
+
+  /* copy affordance — opacity routing for resting / active states */
+
+  .copy {
+    opacity: var(--code-block-copy-resting-opacity);
+    transition: opacity var(--code-block-copy-transition-duration) var(--code-block-copy-transition-easing);
+  }
+
+  :host([data-variant='block']):hover .copy,
+  :host([data-variant='block']):focus-within .copy,
+  .copy:focus-visible {
+    opacity: var(--code-block-copy-active-opacity);
+  }
+
+  /* floating copy (block, no header) */
+
+  .copy.floating {
+    position: absolute;
+    top: var(--spacing-1_5);
+    right: var(--spacing-1_5);
+    z-index: var(--z-index-raised);
+  }
+
+  /* copy confirm state */
+
+  :host([data-copied]) .copy {
+    opacity: var(--code-block-copy-active-opacity);
+    color: var(--code-block-copy-confirm-color);
+  }
+
+  /* show-more affordance — anchored bottom-right of the block */
+
+  .show-more {
+    position: absolute;
+    right: var(--spacing-2);
+    bottom: var(--spacing-2);
+    z-index: var(--z-index-raised);
+  }
+
+  /* ===== inline variant ===== */
+
+  :host([data-variant='inline']) {
     display: inline;
-    padding-block: var(--spacing-0_5); /* 2px */
-    padding-inline: var(--spacing-1_5); /* 6px */
-    border-radius: var(--radius-sm);
-    background-color: var(--color-neutral-soft);
-    font-family: monospace;
-    font-size: var(--font-size-base);
-    color: var(--color-fg);
+    font-size: var(--code-block-inline-font-size);
+    line-height: inherit;
+  }
+
+  .inline {
+    display: inline;
+    padding-block: var(--code-block-inline-padding-block);
+    padding-inline: var(--code-block-inline-padding-inline);
+    border: var(--border-width) solid var(--code-block-tone-border);
+    border-radius: var(--code-block-inline-radius);
+    background-color: var(--code-block-tone-bg);
+    color: var(--code-block-tone-fg);
+    font-family: inherit;
+    font-size: inherit;
+    white-space: nowrap;
+  }
+
+  /* inline tones — variants override the design tokens, never the css properties */
+
+  :host([data-variant='inline'][data-tone='token']) {
+    --code-block-tone-bg: var(--code-block-tone-token-bg);
+    --code-block-tone-fg: var(--code-block-tone-token-fg);
+    --code-block-tone-border: var(--code-block-tone-token-border);
+  }
+
+  :host([data-variant='inline'][data-tone='danger']) {
+    --code-block-tone-bg: var(--code-block-tone-danger-bg);
+    --code-block-tone-fg: var(--code-block-tone-danger-fg);
+    --code-block-tone-border: var(--code-block-tone-danger-border);
+  }
+
+  :host([data-variant='inline'][data-tone='safe']) {
+    --code-block-tone-bg: var(--code-block-tone-safe-bg);
+    --code-block-tone-fg: var(--code-block-tone-safe-fg);
+    --code-block-tone-border: var(--code-block-tone-safe-border);
   }
 }

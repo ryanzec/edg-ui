@@ -1,0 +1,58 @@
+:root {
+  /* shared (block + inline) */
+  --code-block-font-family: var(--font-mono);
+  --code-block-fg: var(--color-fg);
+  --code-block-bg: var(--color-bg-surface-2);
+  --code-block-border: var(--color-border-soft);
+
+  /* block */
+  --code-block-radius: var(--radius-base);
+  --code-block-font-size: var(--font-size-sm);
+  --code-block-line-height: var(--line-height-relaxed);
+  --code-block-body-padding: var(--spacing-3);
+
+  /* block header */
+  --code-block-header-bg: var(--color-bg-surface);
+  --code-block-header-fg: var(--color-fg-muted);
+  --code-block-header-border: var(--color-border-soft);
+  --code-block-header-padding-block: var(--spacing-1_5);
+  --code-block-header-padding-inline: var(--spacing-3);
+  --code-block-header-gap: var(--spacing-2);
+  --code-block-header-label-gap: var(--spacing-1_5);
+  --code-block-header-icon-color: var(--color-fg-faint);
+  --code-block-header-font-size: var(--font-size-xs);
+  --code-block-header-font-weight: var(--font-weight-medium);
+
+  /* copy affordance */
+  --code-block-copy-resting-opacity: 0.35;
+  --code-block-copy-active-opacity: 1;
+  --code-block-copy-transition-duration: var(--motion-duration-base);
+  --code-block-copy-transition-easing: var(--motion-ease-standard);
+  --code-block-copy-confirm-color: var(--color-safe);
+
+  /* inline */
+  --code-block-inline-font-size: 0.85em;
+  --code-block-inline-padding-block: var(--spacing-0_5);
+  --code-block-inline-padding-inline: var(--spacing-1_5);
+  --code-block-inline-radius: var(--radius-xs);
+
+  /* inline tone — default (no tone) */
+  --code-block-tone-bg: var(--color-bg-surface-2);
+  --code-block-tone-fg: var(--color-fg);
+  --code-block-tone-border: var(--color-border-soft);
+
+  /* inline tone — token */
+  --code-block-tone-token-bg: var(--color-primary-soft);
+  --code-block-tone-token-fg: var(--color-fg);
+  --code-block-tone-token-border: transparent;
+
+  /* inline tone — danger */
+  --code-block-tone-danger-bg: var(--color-danger-soft);
+  --code-block-tone-danger-fg: var(--color-danger);
+  --code-block-tone-danger-border: transparent;
+
+  /* inline tone — safe */
+  --code-block-tone-safe-bg: var(--color-safe-soft);
+  --code-block-tone-safe-fg: var(--color-safe);
+  --code-block-tone-safe-border: transparent;
+}
