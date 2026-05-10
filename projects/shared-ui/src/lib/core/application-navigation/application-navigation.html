@@ -19,12 +19,7 @@
     <org-list>
       @for (item of navigationItems(); track item.id) {
         @if (collapsed()) {
-          <ng-template #navItemTooltip>
-            <div class="tooltip-content">
-              {{ item.label }}
-            </div>
-          </ng-template>
-          <org-tooltip [templateRef]="navItemTooltip" xPosition="right" yPosition="center">
+          <org-tooltip placement="right">
             <org-list-item
               asTag="a"
               [routerLink]="item.routePath"
@@ -34,6 +29,9 @@
             >
               <org-list-item-icon pre [name]="item.icon" />
             </org-list-item>
+            <ng-template #tooltipContent>
+              <org-tooltip-content>{{ item.label }}</org-tooltip-content>
+            </ng-template>
           </org-tooltip>
         } @else {
           <org-list-item
@@ -54,10 +52,7 @@
     <org-list>
       @if (settingsMenuItems().length > 0) {
         @if (collapsed()) {
-          <ng-template #settingsTooltip>
-            <div class="tooltip-content">Settings</div>
-          </ng-template>
-          <org-tooltip [templateRef]="settingsTooltip" xPosition="right" yPosition="center">
+          <org-tooltip placement="right">
             <org-list-item
               [cdkMenuTriggerFor]="settingsMenu"
               [cdkMenuPosition]="menuPosition"
@@ -68,6 +63,9 @@
             >
               <org-list-item-icon pre name="cog" />
             </org-list-item>
+            <ng-template #tooltipContent>
+              <org-tooltip-content>Settings</org-tooltip-content>
+            </ng-template>
           </org-tooltip>
         } @else {
           <org-list-item
@@ -82,13 +80,13 @@
         }
       }
       @if (collapsed()) {
-        <ng-template #logoutTooltip>
-          <div class="tooltip-content">Logout</div>
-        </ng-template>
-        <org-tooltip [templateRef]="logoutTooltip" xPosition="right" yPosition="center">
+        <org-tooltip placement="right">
           <org-list-item asTag="button" label="Logout" [hideLabel]="true" (clicked)="onLogoutClick()">
             <org-list-item-icon pre name="log-out" />
           </org-list-item>
+          <ng-template #tooltipContent>
+            <org-tooltip-content>Logout</org-tooltip-content>
+          </ng-template>
         </org-tooltip>
       } @else {
         <org-list-item asTag="button" label="Logout" (clicked)="onLogoutClick()">
@@ -106,13 +104,11 @@
 @if (userName()) {
   <div class="user-section">
     @if (collapsed()) {
-      <ng-template #userTooltip>
-        <div class="tooltip-content">
-          {{ userName() }}
-        </div>
-      </ng-template>
-      <org-tooltip [templateRef]="userTooltip" xPosition="right" yPosition="center">
+      <org-tooltip placement="right">
         <org-avatar [label]="userName()" />
+        <ng-template #tooltipContent>
+          <org-tooltip-content>{{ userName() }}</org-tooltip-content>
+        </ng-template>
       </org-tooltip>
     } @else {
       <org-avatar [label]="userName()" [showLabel]="true" />

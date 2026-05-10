@@ -9,6 +9,7 @@ import { ListItemIcon } from '../list/list-item-icon';
 import { Avatar } from '../avatar/avatar';
 import { OverlayMenu, type OverlayMenuItem } from '../overlay-menu/overlay-menu';
 import { Tooltip } from '../tooltip/tooltip';
+import { TooltipContent } from '../tooltip/tooltip-content';
 import { RouterLink } from '@angular/router';
 
 export type NavigationItem = {
@@ -48,6 +49,7 @@ export const APPLICATION_NAVIGATION_COLLAPSED_DEFAULT = false;
     RouterLink,
     Icon,
     Tooltip,
+    TooltipContent,
   ],
   templateUrl: './application-navigation.html',
   styleUrl: './application-navigation.css',

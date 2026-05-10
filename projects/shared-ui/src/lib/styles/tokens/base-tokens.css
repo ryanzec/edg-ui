@@ -16,6 +16,12 @@
   --color-fg-faint: oklch(0.62 0.008 260);
   --color-fg-on-accent: oklch(0.985 0.003 95);
 
+  --color-bg-inverse: oklch(0.22 0.008 260);
+  --color-bg-inverse-soft: oklch(0.32 0.008 260);
+  --color-fg-inverse: oklch(0.985 0.003 95);
+  --color-fg-inverse-muted: oklch(0.78 0.008 260);
+  --color-border-inverse: oklch(0.34 0.009 260);
+
   --color-inherit: inherit;
 
   --color-primary: oklch(0.22 0.008 260);
@@ -266,6 +272,12 @@
   --color-fg-muted: oklch(0.7 0.008 260);
   --color-fg-faint: oklch(0.5 0.008 260);
   --color-fg-on-accent: oklch(0.18 0.006 260);
+
+  --color-bg-inverse: oklch(0.96 0.005 95);
+  --color-bg-inverse-soft: oklch(0.86 0.005 95);
+  --color-fg-inverse: oklch(0.18 0.006 260);
+  --color-fg-inverse-muted: oklch(0.42 0.008 260);
+  --color-border-inverse: oklch(0.86 0.005 95);
 
   --color-primary: oklch(0.96 0.005 95);
   --color-primary-hover: oklch(0.88 0.005 95);

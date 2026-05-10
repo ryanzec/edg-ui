@@ -1,0 +1,10 @@
+@layer components {
+  :host {
+    display: block;
+    margin: 0;
+    color: var(--tooltip-body-color);
+    font-size: var(--tooltip-body-font-size);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--tooltip-body-line-height);
+  }
+}

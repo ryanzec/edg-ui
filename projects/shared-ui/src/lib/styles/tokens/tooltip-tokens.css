@@ -1,0 +1,70 @@
+:root {
+  /* surface */
+  --tooltip-bg: var(--color-bg-inverse);
+  --tooltip-fg: var(--color-fg-inverse);
+  --tooltip-border: var(--color-border-inverse);
+  --tooltip-border-width: var(--border-width);
+  --tooltip-radius: var(--radius-base);
+  --tooltip-shadow: var(--shadow-base);
+  --tooltip-z-index: var(--z-index-tooltip);
+
+  /* type slots (default size: base) */
+  --tooltip-padding-x: var(--spacing-2);
+  --tooltip-padding-y: var(--spacing-1_5);
+  --tooltip-font-size: var(--font-size-sm);
+  --tooltip-font-weight: var(--font-weight-medium);
+  --tooltip-line-height: var(--line-height-normal);
+  --tooltip-gap: var(--spacing-1_5);
+
+  /* layout sizing slots (default layout: label) */
+  --tooltip-max-width: var(--sizing-3xs);
+  --tooltip-pointer-events: none;
+  --tooltip-flex-direction: row;
+  --tooltip-align-items: center;
+
+  /* rich-layout slots */
+  --tooltip-rich-gap: var(--spacing-1);
+  --tooltip-rich-action-gap: var(--spacing-1);
+  --tooltip-rich-max-width: var(--sizing-2xs);
+
+  /* title */
+  --tooltip-title-color: var(--color-fg-inverse);
+  --tooltip-title-font-size: var(--font-size-sm);
+  --tooltip-title-font-weight: var(--font-weight-semibold);
+
+  /* body */
+  --tooltip-body-color: var(--color-fg-inverse-muted);
+  --tooltip-body-font-size: var(--font-size-xs);
+  --tooltip-body-line-height: var(--line-height-normal);
+
+  /* action */
+  --tooltip-action-color: var(--color-fg-inverse);
+  --tooltip-action-font-size: var(--font-size-xs);
+  --tooltip-action-font-weight: var(--font-weight-medium);
+  --tooltip-action-underline-offset: 0.125rem; /* 2px */
+  --tooltip-action-underline-thickness: 0.0625rem; /* 1px */
+  --tooltip-action-underline-thickness-hover: 0.125rem; /* 2px */
+
+  /* keyboard hint */
+  --tooltip-kbd-bg: var(--color-bg-inverse-soft);
+  --tooltip-kbd-fg: var(--color-fg-inverse);
+  --tooltip-kbd-radius: var(--radius-xs);
+  --tooltip-kbd-font-size: var(--font-size-2xs);
+  --tooltip-kbd-font-weight: var(--font-weight-medium);
+  --tooltip-kbd-height: 1.125rem; /* 18px */
+  --tooltip-kbd-padding-inline: var(--spacing-1);
+
+  /* arrow */
+  --tooltip-arrow-size: 0.5rem; /* 8px */
+  --tooltip-arrow-offset: -0.21875rem; /* -3.5px */
+  --tooltip-arrow-edge-inset: var(--spacing-3);
+
+  /* anchor wrapper offset (consumer-side spacing) */
+  --tooltip-anchor-offset: var(--spacing-2);
+
+  /* motion */
+  --tooltip-motion-duration: var(--motion-duration-fast);
+  --tooltip-motion-ease: var(--motion-ease-standard);
+  --tooltip-motion-translate: 0.125rem; /* 2px */
+  --tooltip-motion-enter-translate: none;
+}

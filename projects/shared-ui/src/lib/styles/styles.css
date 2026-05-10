@@ -19,6 +19,7 @@
 @import './tokens/link-tokens.css';
 @import './tokens/loading-blocker-tokens.css';
 @import './tokens/tag-tokens.css';
+@import './tokens/tooltip-tokens.css';
 @import './tokens/chat-tokens.css';
 @import './tokens/design-system-demo-tokens.css';
 @import './tokens/empty-indicator-tokens.css';

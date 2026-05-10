@@ -1,0 +1,20 @@
+@layer components {
+  :host {
+    display: inline-flex;
+    margin-top: var(--tooltip-rich-action-gap);
+  }
+
+  a {
+    display: inline-flex;
+    color: var(--tooltip-action-color);
+    font-size: var(--tooltip-action-font-size);
+    font-weight: var(--tooltip-action-font-weight);
+    text-decoration: underline;
+    text-underline-offset: var(--tooltip-action-underline-offset);
+    text-decoration-thickness: var(--tooltip-action-underline-thickness);
+  }
+
+  a:hover {
+    text-decoration-thickness: var(--tooltip-action-underline-thickness-hover);
+  }
+}

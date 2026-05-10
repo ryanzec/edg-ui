@@ -1,11 +1,175 @@
 @layer components {
   :host {
-    display: block;
-    padding-block: var(--spacing-1);
-    padding-inline: var(--spacing-2);
-    background-color: var(--color-bg-surface-2);
-    color: var(--color-fg);
-    border: var(--border-width) solid var(--color-border);
-    border-radius: var(--radius-base);
+    display: inline-flex;
+    align-items: var(--tooltip-align-items);
+    flex-direction: var(--tooltip-flex-direction);
+    gap: var(--tooltip-gap);
+    max-width: var(--tooltip-max-width);
+    padding-block: var(--tooltip-padding-y);
+    padding-inline: var(--tooltip-padding-x);
+    background-color: var(--tooltip-bg);
+    color: var(--tooltip-fg);
+    border: var(--tooltip-border-width) solid var(--tooltip-border);
+    border-radius: var(--tooltip-radius);
+    box-shadow: var(--tooltip-shadow);
+    font-size: var(--tooltip-font-size);
+    font-weight: var(--tooltip-font-weight);
+    line-height: var(--tooltip-line-height);
+    text-align: left;
+    white-space: normal;
+    text-wrap: pretty;
+    word-break: break-word;
+    position: relative;
+    z-index: var(--tooltip-z-index);
+    pointer-events: var(--tooltip-pointer-events);
+    user-select: none;
+  }
+
+  /* size variants — override slot tokens only */
+  :host([data-size='sm']) {
+    --tooltip-padding-x: var(--spacing-1_5);
+    --tooltip-padding-y: var(--spacing-1);
+    --tooltip-font-size: var(--font-size-xs);
+    --tooltip-gap: var(--spacing-1);
+  }
+
+  /* layout: rich (vertical stack with title / body / action) */
+  :host([data-layout='rich']) {
+    --tooltip-flex-direction: column;
+    --tooltip-align-items: flex-start;
+    --tooltip-gap: var(--tooltip-rich-gap);
+    --tooltip-max-width: var(--tooltip-rich-max-width);
+    --tooltip-pointer-events: auto;
+    width: max-content;
+  }
+
+  /* arrow: a 0.5rem square rotated 45deg, half-overlapping the surface body */
+  :host::before {
+    content: '';
+    position: absolute;
+    width: var(--tooltip-arrow-size);
+    height: var(--tooltip-arrow-size);
+    background-color: var(--tooltip-bg);
+    border-top: var(--tooltip-border-width) solid var(--tooltip-border);
+    border-left: var(--tooltip-border-width) solid var(--tooltip-border);
+    transform: rotate(45deg);
+  }
+
+  :host([data-arrow='off'])::before {
+    display: none;
+  }
+
+  /* arrow per-side positioning */
+  :host([data-placement^='top'])::before {
+    bottom: var(--tooltip-arrow-offset);
+    transform: rotate(225deg);
+  }
+
+  :host([data-placement^='bottom'])::before {
+    top: var(--tooltip-arrow-offset);
+    transform: rotate(45deg);
+  }
+
+  :host([data-placement^='left'])::before {
+    right: var(--tooltip-arrow-offset);
+    transform: rotate(135deg);
+  }
+
+  :host([data-placement^='right'])::before {
+    left: var(--tooltip-arrow-offset);
+    transform: rotate(315deg);
+  }
+
+  /* arrow per-alignment x / y axis */
+  :host([data-placement='top'])::before,
+  :host([data-placement='bottom'])::before {
+    left: 50%;
+    margin-left: calc(var(--tooltip-arrow-size) / -2);
+  }
+
+  :host([data-placement='top-start'])::before,
+  :host([data-placement='bottom-start'])::before {
+    left: var(--tooltip-arrow-edge-inset);
+  }
+
+  :host([data-placement='top-end'])::before,
+  :host([data-placement='bottom-end'])::before {
+    right: var(--tooltip-arrow-edge-inset);
+  }
+
+  :host([data-placement='left'])::before,
+  :host([data-placement='right'])::before {
+    top: 50%;
+    margin-top: calc(var(--tooltip-arrow-size) / -2);
+  }
+
+  :host([data-placement='left-start'])::before,
+  :host([data-placement='right-start'])::before {
+    top: var(--tooltip-arrow-edge-inset);
+  }
+
+  :host([data-placement='left-end'])::before,
+  :host([data-placement='right-end'])::before {
+    bottom: var(--tooltip-arrow-edge-inset);
+  }
+
+  /* state machine — only animates when data-state is present */
+  :host([data-state]) {
+    transition:
+      opacity var(--tooltip-motion-duration) var(--tooltip-motion-ease),
+      transform var(--tooltip-motion-duration) var(--tooltip-motion-ease);
+  }
+
+  :host([data-state='closed']),
+  :host([data-state='closing']) {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  :host([data-state='open']) {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+
+  /* opening / closing: fade out, slide in from the trigger side */
+  :host([data-state='opening']) {
+    opacity: 0;
+    transform: var(--tooltip-motion-enter-translate);
+  }
+
+  :host([data-placement^='top'][data-state='opening']),
+  :host([data-placement^='top'][data-state='closing']) {
+    --tooltip-motion-enter-translate: translateY(var(--tooltip-motion-translate));
+  }
+
+  :host([data-placement^='bottom'][data-state='opening']),
+  :host([data-placement^='bottom'][data-state='closing']) {
+    --tooltip-motion-enter-translate: translateY(calc(var(--tooltip-motion-translate) * -1));
+  }
+
+  :host([data-placement^='left'][data-state='opening']),
+  :host([data-placement^='left'][data-state='closing']) {
+    --tooltip-motion-enter-translate: translateX(var(--tooltip-motion-translate));
+  }
+
+  :host([data-placement^='right'][data-state='opening']),
+  :host([data-placement^='right'][data-state='closing']) {
+    --tooltip-motion-enter-translate: translateX(calc(var(--tooltip-motion-translate) * -1));
+  }
+
+  :host([data-state='closing']) {
+    transform: var(--tooltip-motion-enter-translate);
+  }
+
+  /* respect reduced-motion preferences: keep the fade, drop the slide */
+  @media (prefers-reduced-motion: reduce) {
+    :host([data-state]) {
+      transition: opacity var(--tooltip-motion-duration) var(--tooltip-motion-ease);
+    }
+
+    :host([data-state='opening']),
+    :host([data-state='closing']) {
+      transform: none;
+    }
   }
 }

@@ -43,14 +43,6 @@
     margin-top: auto;
   }
 
-  .tooltip-content {
-    padding: var(--spacing-1) var(--spacing-2);
-    border: var(--border-width) solid var(--color-border);
-    border-radius: var(--radius-base);
-    background-color: var(--color-bg-surface-2);
-    color: var(--color-fg);
-  }
-
   .logout-text {
     font-weight: var(--font-weight-medium);
   }
