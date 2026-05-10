@@ -1,25 +1,28 @@
-@if (isBlock()) {
+@if (brain.variant() === 'block') {
   <div class="code-highlighter-copy-wrapper">
-    @if (allowCopy()) {
-      <button type="button" class="code-highlighter-copy-btn" [cdkCopyToClipboard]="text()" aria-label="Copy code">
+    @if (brain.canCopy()) {
+      <button
+        [type]="brain.copyButtonType"
+        class="code-highlighter-copy-btn"
+        (click)="brain.copy()"
+        [attr.aria-label]="brain.copyAriaLabel()"
+      >
         <org-icon name="copy" />
       </button>
     }
   </div>
-  <div class="code-highlighter-body" role="region" aria-label="Code block">
-    <org-scroll-area direction="both" [onlyShowOnHover]="true" [scrollClass]="scrollClass()">
-      @if (_highlightedHtml()) {
-        <div
-          class="code-highlighter-content"
-          [style]="hasEllipsis() ? { '--ellipsis-lines': ellipsisAt() } : null"
-          [innerHTML]="_highlightedHtml()"
-        ></div>
-      } @else {
-        <pre class="code-highlighter-fallback"><code>{{ text() }}</code></pre>
-      }
+  <div class="code-highlighter-body">
+    <org-scroll-area direction="both" [onlyShowOnHover]="true" [scrollClass]="scrollClass()" spacingClass="p-2">
+      <pre
+        class="code-highlighter-pre"
+        [style]="hasEllipsis() ? { '--ellipsis-lines': ellipsisAt() } : null"
+      >@if (brain.highlightedHtml(); as html) {<code [attr.data-language]="brain.language()" [innerHTML]="html"></code>} @else {<code [attr.data-language]="brain.language()">{{ brain.text() }}</code>}</pre>
     </org-scroll-area>
   </div>
-}
-@if (isInline()) {
-  <code class="code-highlighter-inline">{{ text() }}</code>
+} @else if (brain.variant() === 'inline') {
+  @if (brain.highlightedHtml(); as html) {
+    <code class="code-highlighter-inline" [attr.data-language]="brain.language()" [innerHTML]="html"></code>
+  } @else {
+    <code class="code-highlighter-inline" [attr.data-language]="brain.language()">{{ brain.text() }}</code>
+  }
 }

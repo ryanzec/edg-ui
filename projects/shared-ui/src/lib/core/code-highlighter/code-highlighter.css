@@ -3,10 +3,12 @@
     display: block;
   }
 
+  /* inline variant */
   :host([data-variant='inline']) {
     display: inline;
   }
 
+  /* block variant */
   :host([data-variant='block']) {
     position: relative;
   }
@@ -25,15 +27,14 @@
     background-color: transparent;
     color: var(--color-fg);
     cursor: pointer;
-    z-index: var(--z-index-raised);
   }
 
   .code-highlighter-body {
     position: relative;
     display: block;
-    overflow: hidden;
     border: var(--border-width) solid var(--color-border);
     border-radius: var(--radius-base);
+    background-color: var(--color-neutral-soft);
   }
 
   :host([data-variant='block']) .code-highlighter-copy-wrapper {
@@ -53,53 +54,27 @@
     opacity: 0.8;
   }
 
-  /* Shiki injects its own <pre> element — pierce encapsulation to style it */
-  :host([data-variant='block']) ::ng-deep .shiki {
+  :host([data-variant='block']) .code-highlighter-pre {
     margin: 0;
-    border-radius: 0;
-    font-family: monospace;
-    font-size: var(--font-size-base);
-    line-height: normal;
-    /* padding lives here so it scrolls with the content, not around it */
-    padding: var(--spacing-2);
-    /* prevent the pre from shrinking below its content width */
-    min-width: max-content;
-    /* --viewport-height is explicitly set by ngx-scrollbar on the ng-scrollbar host */
-    min-height: calc(var(--viewport-height) * 1px);
-  }
-
-  :host([data-variant='block']) ::ng-deep .shiki code {
-    display: block;
-  }
-
-  /* Ellipsis styling applied to the wrapper div */
-  :host([data-has-ellipsis][data-variant='block']) .code-highlighter-content {
-    overflow: hidden;
-  }
-
-  :host([data-has-ellipsis][data-variant='block']) ::ng-deep .shiki code {
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: var(--ellipsis-lines);
-    line-clamp: var(--ellipsis-lines);
-    overflow: hidden;
-    white-space: pre-wrap;
-    word-break: break-all;
-  }
-
-  /* Fallback state while Shiki initializes */
-  :host([data-variant='block']) .code-highlighter-fallback {
-    margin: 0;
-    padding: var(--spacing-2);
     white-space: pre;
     font-family: monospace;
     font-size: var(--font-size-base);
     line-height: normal;
     color: var(--color-fg);
-    background-color: var(--color-neutral-soft);
-    min-width: max-content;
   }
 
+  /* ellipsis styling */
+  :host([data-has-ellipsis][data-variant='block']) .code-highlighter-pre {
+    overflow: hidden;
+    white-space: pre-wrap;
+    word-break: break-all;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: var(--ellipsis-lines);
+    line-clamp: var(--ellipsis-lines);
+  }
+
+  /* inline code element */
   .code-highlighter-inline {
     display: inline;
     padding-block: var(--spacing-0_5); /* 2px */
@@ -109,5 +84,56 @@
     font-family: monospace;
     font-size: var(--font-size-base);
     color: var(--color-fg);
+  }
+
+  /*
+   * syntax token palette — color-only rules; light/dark via base tokens. ::ng-deep is required so
+   * the rules apply to <span class="org-syntax-*"> markup injected via [innerHTML], which is not
+   * tagged with the component's _ngcontent-* attribute and therefore bypasses view encapsulation.
+   */
+  :host ::ng-deep .org-syntax-comment {
+    color: var(--color-fg-faint);
+    font-style: italic;
+  }
+
+  :host ::ng-deep .org-syntax-keyword,
+  :host ::ng-deep .org-syntax-decorator {
+    color: var(--color-info);
+  }
+
+  :host ::ng-deep .org-syntax-string,
+  :host ::ng-deep .org-syntax-regex,
+  :host ::ng-deep .org-syntax-escape,
+  :host ::ng-deep .org-syntax-inserted {
+    color: var(--color-safe);
+  }
+
+  :host ::ng-deep .org-syntax-number {
+    color: var(--color-warning);
+  }
+
+  :host ::ng-deep .org-syntax-function,
+  :host ::ng-deep .org-syntax-property,
+  :host ::ng-deep .org-syntax-attribute {
+    color: var(--color-info);
+  }
+
+  :host ::ng-deep .org-syntax-variable {
+    color: var(--color-fg);
+  }
+
+  :host ::ng-deep .org-syntax-tag,
+  :host ::ng-deep .org-syntax-deleted {
+    color: var(--color-danger);
+  }
+
+  :host ::ng-deep .org-syntax-operator,
+  :host ::ng-deep .org-syntax-punctuation {
+    color: var(--color-fg-muted);
+  }
+
+  :host ::ng-deep .org-syntax-class,
+  :host ::ng-deep .org-syntax-builtin {
+    color: var(--color-caution);
   }
 }
