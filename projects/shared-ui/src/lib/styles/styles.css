@@ -8,6 +8,7 @@
 @import './tokens/card-tokens.css';
 @import './tokens/checkbox-toggle-tokens.css';
 @import './tokens/checkbox-tokens.css';
+@import './tokens/checkbox-group-tokens.css';
 @import './tokens/checklist-tokens.css';
 @import './tokens/code-block-tokens.css';
 @import './tokens/combobox-tokens.css';
@@ -32,6 +33,7 @@
 @import './tokens/divider-tokens.css';
 @import './tokens/drop-down-selector-tokens.css';
 @import './tokens/empty-indicator-tokens.css';
+@import './tokens/file-upload-tokens.css';
 @import './tokens/input-tokens.css';
 @import './tokens/overlay-menu-tokens.css';
 @import './tokens/pagination-tokens.css';

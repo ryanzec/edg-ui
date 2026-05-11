@@ -1,0 +1,65 @@
+:root {
+  /* layout */
+  --file-upload-radius: var(--radius-base);
+  --file-upload-border-width: var(--border-width);
+  --file-upload-border-style: dashed;
+  --file-upload-disabled-opacity: var(--opacity-disabled);
+
+  /* sizing */
+  --file-upload-min-height: 6.5rem; /* 104px */
+
+  /* spacing */
+  --file-upload-padding: var(--spacing-5);
+  --file-upload-padding-row: var(--spacing-2);
+  --file-upload-stack-gap: var(--spacing-2);
+  --file-upload-icon-prompt-gap: var(--spacing-2);
+  --file-upload-row-gap: var(--spacing-2_5);
+  --file-upload-text-stack-gap: var(--spacing-0_5);
+
+  /* color × state slot tokens (defaults to idle) */
+  --file-upload-bg: var(--color-bg-surface-2);
+  --file-upload-border-color: var(--color-border);
+  --file-upload-icon-color: var(--color-fg-muted);
+
+  /* prompt + hint */
+  --file-upload-prompt-color: var(--color-fg);
+  --file-upload-hint-color: var(--color-fg-muted);
+  --file-upload-cta-color: var(--color-link);
+
+  /* hover (drag-over) state ramp */
+  --file-upload-bg-hover: var(--color-info-soft);
+  --file-upload-border-color-hover: var(--color-info-border);
+  --file-upload-icon-color-hover: var(--color-info);
+
+  /* error state ramp */
+  --file-upload-bg-error: var(--color-danger-soft);
+  --file-upload-border-color-error: var(--color-danger-border);
+  --file-upload-icon-color-error: var(--color-danger);
+  --file-upload-hint-color-error: var(--color-danger);
+
+  /* file row */
+  --file-upload-file-name-color: var(--color-fg);
+  --file-upload-file-meta-color: var(--color-fg-faint);
+  --file-upload-file-meta-color-success: var(--color-safe);
+  --file-upload-file-meta-color-failure: var(--color-danger);
+
+  /* remove button */
+  --file-upload-remove-size: 1.5rem; /* 24px */
+  --file-upload-remove-radius: var(--radius-sm);
+  --file-upload-remove-color: var(--color-fg-muted);
+  --file-upload-remove-color-hover: var(--color-danger);
+  --file-upload-remove-bg-hover: var(--color-bg-hover);
+
+  /* typography */
+  --file-upload-prompt-font-size: var(--font-size-base);
+  --file-upload-prompt-font-weight: var(--font-weight-medium);
+  --file-upload-prompt-line-height: var(--line-height-normal);
+  --file-upload-hint-font-size: var(--font-size-sm);
+  --file-upload-file-name-font-size: var(--font-size-base);
+  --file-upload-file-name-font-weight: var(--font-weight-medium);
+  --file-upload-file-meta-font-size: var(--font-size-xs);
+
+  /* motion */
+  --file-upload-transition-duration: var(--motion-duration-base);
+  --file-upload-transition-easing: var(--motion-ease-standard);
+}

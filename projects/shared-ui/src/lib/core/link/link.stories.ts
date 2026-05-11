@@ -299,7 +299,7 @@ export const Showcase: Story = {
             <div class="flex gap-4 items-baseline">
               <span class="text-muted text-xs uppercase letter-spacing-wide" style="min-width: 11rem;">Leading icon</span>
               <org-link href="/spec">
-                <ng-template #pre><org-icon class="link-icon" name="book-open" data-pos="leading" /></ng-template>
+                <ng-template #pre><org-icon class="link-icon" name="book-open" data-position="leading" /></ng-template>
                 Read the spec
               </org-link>
             </div>

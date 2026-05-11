@@ -1,44 +1,50 @@
-<button
-  type="button"
-  class="file-upload-zone"
-  orgFileUploadBrain
-  #brain="orgFileUploadBrain"
-  [fileTypes]="fileTypes()"
-  [ariaLabel]="ariaLabel()"
-  (fileSelected)="onBrainFileSelected($event)"
->
+<label class="org-file-upload">
   <input
     type="file"
-    #fileInputRef
-    class="native-input"
+    class="org-file-upload-input"
     [accept]="brain.fileTypesAsString()"
-    (change)="brain.nativeFileSelected($event)"
+    [disabled]="brain.isDisabled()"
+    (change)="onNativeChange($event)"
     data-testid="file-upload-input"
   />
 
-  @if (brain.fileName()) {
-    <div class="file-message">
-      <org-icon name="check" size="lg" class="icon-safe"></org-icon>
-      <span class="primary-text">{{ brain.fileName() }} ready!</span>
-      <small class="secondary-text">Click or drag another file to replace.</small>
-    </div>
-  } @else {
-    <div class="file-message">
-      <org-icon name="upload" size="lg" class="icon-info"></org-icon>
-      <span class="primary-text">Drag &amp; Drop your file here</span>
-      <small class="secondary-text">or <b class="click-text">click</b> to select one</small>
-    </div>
-  }
+  <span class="org-file-upload-empty">
+    <org-icon name="upload" size="4xl" class="org-file-upload-empty-icon" />
+    <span class="org-file-upload-prompt">
+      {{ prompt() }}
+      @if (browseLabel()) {
+        <span class="org-file-upload-cta">{{ browseLabel() }}</span>
+      }
+    </span>
+    @if (hint() || brain.error()) {
+      <span
+        class="org-file-upload-hint"
+        [id]="brain.errorRegionId"
+        [attr.role]="brain.error() ? brain.errorRole : null"
+        [attr.aria-live]="brain.error() ? brain.errorAriaLive : null"
+      >
+        {{ brain.error() ?? hint() }}
+      </span>
+    }
+  </span>
 
-  @if (brain.error()) {
-    <div
-      class="file-upload-error"
-      [id]="brain.errorRegionId"
-      [attr.role]="brain.errorRole"
-      [attr.aria-live]="brain.errorAriaLive"
+  <span class="org-file-upload-file">
+    <org-icon name="paperclip" size="2xl" class="org-file-upload-file-icon" />
+    <span class="org-file-upload-file-text">
+      <span class="org-file-upload-file-name">{{ brain.fileName() }}</span>
+      @if (resolvedFileMeta()) {
+        <span class="org-file-upload-file-meta">{{ resolvedFileMeta() }}</span>
+      }
+    </span>
+    <button
+      type="button"
+      class="org-file-upload-remove"
+      [attr.aria-label]="removeAriaLabel()"
+      [disabled]="brain.isDisabled()"
+      (click)="onRemoveClick($event)"
+      data-testid="file-upload-remove"
     >
-      <org-icon name="x" class="icon-danger"></org-icon>
-      <span>{{ brain.error() }}</span>
-    </div>
-  }
-</button>
+      <org-icon name="x" size="base" />
+    </button>
+  </span>
+</label>

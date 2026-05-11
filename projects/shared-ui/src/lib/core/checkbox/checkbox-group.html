@@ -1,0 +1,14 @@
+@if (legend() || description()) {
+  <div class="header">
+    @if (legend()) {
+      <span class="legend" [id]="legendId" [attr.data-required]="required() ? '1' : null">{{ legend() }}</span>
+    }
+    @if (description()) {
+      <p class="description">{{ description() }}</p>
+    }
+  </div>
+}
+
+<div class="options">
+  <ng-content />
+</div>

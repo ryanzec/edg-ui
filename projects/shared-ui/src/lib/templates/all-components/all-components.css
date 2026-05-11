@@ -1,0 +1,50 @@
+@layer application {
+  :host {
+    display: block;
+    container-type: inline-size;
+  }
+
+  .masonry {
+    column-count: 3;
+    column-gap: var(--spacing-2);
+  }
+
+  .component-block {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-1);
+    padding: var(--spacing-2);
+    margin-block-end: var(--spacing-2);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background-color: var(--color-bg-surface);
+    break-inside: avoid;
+    min-width: 0;
+  }
+
+  .component-block-name {
+    margin: 0;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-fg-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* host wrappers for components that need a sized viewport */
+  .application-navigation-host {
+    block-size: 20rem;
+  }
+
+  .chart-host {
+    block-size: 12rem;
+  }
+
+  .loading-blocker-host {
+    block-size: 5rem;
+  }
+
+  .splitter-host {
+    block-size: 6rem;
+  }
+}

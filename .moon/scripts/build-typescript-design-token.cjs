@@ -34,6 +34,10 @@ const CALENDAR_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/sty
 const CARD_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/card-tokens.css');
 const CHAT_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/chat-tokens.css');
 const CHECKBOX_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/checkbox-tokens.css');
+const CHECKBOX_GROUP_TOKENS_CSS = path.join(
+  REPO_ROOT,
+  'projects/shared-ui/src/lib/styles/tokens/checkbox-group-tokens.css',
+);
 const CHECKBOX_TOGGLE_TOKENS_CSS = path.join(
   REPO_ROOT,
   'projects/shared-ui/src/lib/styles/tokens/checkbox-toggle-tokens.css',
@@ -73,6 +77,7 @@ const EMPTY_INDICATOR_TOKENS_CSS = path.join(
   REPO_ROOT,
   'projects/shared-ui/src/lib/styles/tokens/empty-indicator-tokens.css',
 );
+const FILE_UPLOAD_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/file-upload-tokens.css');
 const INPUT_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/input-tokens.css');
 const OUTPUT_TS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/design-tokens.ts');
 
@@ -270,6 +275,7 @@ async function main() {
   const cardContent = cleanCss(fs.readFileSync(CARD_TOKENS_CSS, 'utf-8'));
   const chatContent = cleanCss(fs.readFileSync(CHAT_TOKENS_CSS, 'utf-8'));
   const checkboxContent = cleanCss(fs.readFileSync(CHECKBOX_TOKENS_CSS, 'utf-8'));
+  const checkboxGroupContent = cleanCss(fs.readFileSync(CHECKBOX_GROUP_TOKENS_CSS, 'utf-8'));
   const checkboxToggleContent = cleanCss(fs.readFileSync(CHECKBOX_TOGGLE_TOKENS_CSS, 'utf-8'));
   const checklistContent = cleanCss(fs.readFileSync(CHECKLIST_TOKENS_CSS, 'utf-8'));
   const codeBlockContent = cleanCss(fs.readFileSync(CODE_BLOCK_TOKENS_CSS, 'utf-8'));
@@ -280,6 +286,7 @@ async function main() {
   const dividerContent = cleanCss(fs.readFileSync(DIVIDER_TOKENS_CSS, 'utf-8'));
   const dropDownSelectorContent = cleanCss(fs.readFileSync(DROP_DOWN_SELECTOR_TOKENS_CSS, 'utf-8'));
   const emptyIndicatorContent = cleanCss(fs.readFileSync(EMPTY_INDICATOR_TOKENS_CSS, 'utf-8'));
+  const fileUploadContent = cleanCss(fs.readFileSync(FILE_UPLOAD_TOKENS_CSS, 'utf-8'));
   const inputContent = cleanCss(fs.readFileSync(INPUT_TOKENS_CSS, 'utf-8'));
   const overlayMenuContent = cleanCss(fs.readFileSync(OVERLAY_MENU_TOKENS_CSS, 'utf-8'));
   const paginationContent = cleanCss(fs.readFileSync(PAGINATION_TOKENS_CSS, 'utf-8'));
@@ -315,6 +322,7 @@ async function main() {
     ...findBlocks(cardContent, ':root').map(extractVariables),
     ...findBlocks(chatContent, ':root').map(extractVariables),
     ...findBlocks(checkboxContent, ':root').map(extractVariables),
+    ...findBlocks(checkboxGroupContent, ':root').map(extractVariables),
     ...findBlocks(checkboxToggleContent, ':root').map(extractVariables),
     ...findBlocks(checklistContent, ':root').map(extractVariables),
     ...findBlocks(codeBlockContent, ':root').map(extractVariables),
@@ -325,6 +333,7 @@ async function main() {
     ...findBlocks(dividerContent, ':root').map(extractVariables),
     ...findBlocks(dropDownSelectorContent, ':root').map(extractVariables),
     ...findBlocks(emptyIndicatorContent, ':root').map(extractVariables),
+    ...findBlocks(fileUploadContent, ':root').map(extractVariables),
     ...findBlocks(inputContent, ':root').map(extractVariables),
     ...findBlocks(overlayMenuContent, ':root').map(extractVariables),
     ...findBlocks(paginationContent, ':root').map(extractVariables),
@@ -357,6 +366,7 @@ async function main() {
     ...findBlocks(cardContent, '.dark').map(extractVariables),
     ...findBlocks(chatContent, '.dark').map(extractVariables),
     ...findBlocks(checkboxContent, '.dark').map(extractVariables),
+    ...findBlocks(checkboxGroupContent, '.dark').map(extractVariables),
     ...findBlocks(checkboxToggleContent, '.dark').map(extractVariables),
     ...findBlocks(checklistContent, '.dark').map(extractVariables),
     ...findBlocks(codeBlockContent, '.dark').map(extractVariables),
@@ -367,6 +377,7 @@ async function main() {
     ...findBlocks(dividerContent, '.dark').map(extractVariables),
     ...findBlocks(dropDownSelectorContent, '.dark').map(extractVariables),
     ...findBlocks(emptyIndicatorContent, '.dark').map(extractVariables),
+    ...findBlocks(fileUploadContent, '.dark').map(extractVariables),
     ...findBlocks(inputContent, '.dark').map(extractVariables),
     ...findBlocks(overlayMenuContent, '.dark').map(extractVariables),
     ...findBlocks(paginationContent, '.dark').map(extractVariables),

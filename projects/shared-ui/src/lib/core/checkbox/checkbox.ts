@@ -67,6 +67,7 @@ export const CHECKBOX_DESCRIPTION_DEFAULT = '';
     '[attr.data-checked]': 'brain.checked() ? "" : null',
     '[attr.data-indeterminate]': 'brain.indeterminate() ? "" : null',
     '[attr.data-state]': 'brain.ariaInvalid() ? "error" : null',
+    '[attr.data-disabled]': 'brain.disabled() ? "1" : null',
   },
   providers: [
     {

@@ -69,6 +69,7 @@ export * from './pagination/pagination';
 export * from './scroll-area/scroll-area';
 export * from './slide-container/slide-container';
 export * from './slide-container/slide-container-item';
+export * from './checkbox/checkbox-group';
 export * from './radio/radio';
 export * from './radio/radio-group';
 export * from './skeleton/skeleton';

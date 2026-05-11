@@ -3,6 +3,7 @@ export * from './date';
 export * from './string';
 export * from './email';
 export * from './css';
+export * from './file';
 export * from './dom';
 export * from './http';
 export * from './log-manager';

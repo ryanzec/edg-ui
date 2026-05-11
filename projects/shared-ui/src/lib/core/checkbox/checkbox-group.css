@@ -1,0 +1,81 @@
+@layer components {
+  :host {
+    display: flex;
+    flex-direction: column;
+    gap: var(--checkbox-group-header-stack);
+    color: var(--color-fg);
+    width: 100%;
+    min-width: 0;
+  }
+
+  :host .header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--checkbox-group-header-stack);
+  }
+
+  :host .legend {
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--checkbox-group-required-gap);
+    font-size: var(--checkbox-group-legend-font-size);
+    font-weight: var(--checkbox-group-legend-font-weight);
+    line-height: var(--line-height-tight);
+    color: var(--color-fg);
+  }
+
+  /* required marker — trailing asterisk in danger color */
+  :host .legend[data-required='1']::after {
+    content: '*';
+    color: var(--checkbox-group-required-color);
+    margin-left: var(--checkbox-group-required-gap);
+  }
+
+  :host .description {
+    margin: 0;
+    font-size: var(--checkbox-group-description-font-size);
+    color: var(--checkbox-group-description-color);
+    line-height: var(--line-height-normal);
+  }
+
+  :host .options {
+    display: flex;
+    flex-direction: column;
+    gap: var(--checkbox-group-options-stack);
+    min-width: 0;
+  }
+
+  /*
+   * card-variant tightening — when any child checkbox is rendered as a card, widen the inter-option gap so the
+   * tiles do not feel like a single welded surface. spacing stays uniform across sizes by design.
+   */
+  :host(:has(org-checkbox[data-variant='card'])) .options {
+    gap: var(--checkbox-group-options-stack-card);
+  }
+
+  /*
+   * error cascade — the group's error state pushes the danger indicator color tokens onto every child checkbox
+   * that has not already pinned its own data-state. css custom properties inherit through the dom, so writing
+   * them at the org-checkbox element propagates into the checkbox's own indicator styles for free.
+   */
+  :host([data-state='error']) org-checkbox:not([data-state]) {
+    --checkbox-indicator-color: var(--color-danger);
+    --checkbox-indicator-color-hover: var(--color-danger);
+    --checkbox-indicator-color-checked: var(--color-danger);
+    --checkbox-indicator-color-checked-hover: var(--color-danger-hover);
+    --checkbox-indicator-color-checked-active: var(--color-danger-active);
+    --checkbox-card-border-selected: var(--color-danger);
+  }
+
+  /*
+   * disabled cascade — every child checkbox without its own data-disabled gets the disabled visual treatment
+   * plus pointer-events: none so activation is blocked at the css layer. children with their own data-disabled
+   * (i.e. checkboxes individually disabled via their own disabled input) keep their own treatment from the
+   * checkbox component's css.
+   */
+  :host([data-disabled='1']) org-checkbox:not([data-disabled]) {
+    opacity: var(--opacity-disabled);
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+}

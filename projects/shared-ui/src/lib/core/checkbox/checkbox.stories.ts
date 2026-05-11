@@ -23,6 +23,7 @@ import {
   allCheckboxSizes,
   allCheckboxVariants,
 } from './checkbox';
+import { CheckboxGroup } from './checkbox-group';
 
 const liveDemoSizeItems: ButtonToggleItem[] = allCheckboxSizes.map((size) => ({
   label: size,
@@ -735,6 +736,159 @@ export const Showcase: Story = {
         <org-design-system-demo>
           <org-design-system-demo-header
             slot="header"
+            title="Checkbox Group"
+            description="A vertical stack of org-checkbox options inside a labelled wrapper. Owns layout + legend, description, and required marker — children remain independent controls."
+          />
+          <org-design-system-demo-canvas slot="canvas">
+            <org-checkbox-group
+              legend="Notifications"
+              description="Pick the events you want emailed."
+              [required]="true"
+            >
+              <org-checkbox name="cbg-default-features" value="features" [checked]="true">
+                New features
+              </org-checkbox>
+              <org-checkbox name="cbg-default-comments" value="comments">Comments on my posts</org-checkbox>
+              <org-checkbox name="cbg-default-mentions" value="mentions">Mentions</org-checkbox>
+              <org-checkbox name="cbg-default-newsletter" value="newsletter">Weekly newsletter</org-checkbox>
+            </org-checkbox-group>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li>The legend names the group; the description gives helper context</li>
+            <li>The required asterisk lives on the legend, not on individual checkboxes</li>
+            <li>Each child checkbox stays an independent control with its own checked / disabled state</li>
+            <li>Inter-option gap stays constant across sizes by design — siblings keep vertical alignment</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header
+            slot="header"
+            title="Checkbox Group — sizes"
+            description="data-size cascades to every child checkbox. Indicator and label scale; the stack rhythm stays uniform."
+          />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="flex gap-6">
+              <org-checkbox-group size="sm" legend="Small">
+                <org-checkbox name="cbg-sm-a" value="a">Option A</org-checkbox>
+                <org-checkbox name="cbg-sm-b" value="b" [checked]="true">Option B</org-checkbox>
+                <org-checkbox name="cbg-sm-c" value="c">Option C</org-checkbox>
+              </org-checkbox-group>
+              <org-checkbox-group size="base" legend="Base">
+                <org-checkbox name="cbg-base-a" value="a">Option A</org-checkbox>
+                <org-checkbox name="cbg-base-b" value="b" [checked]="true">Option B</org-checkbox>
+                <org-checkbox name="cbg-base-c" value="c">Option C</org-checkbox>
+              </org-checkbox-group>
+              <org-checkbox-group size="lg" legend="Large">
+                <org-checkbox name="cbg-lg-a" value="a">Option A</org-checkbox>
+                <org-checkbox name="cbg-lg-b" value="b" [checked]="true">Option B</org-checkbox>
+                <org-checkbox name="cbg-lg-c" value="c">Option C</org-checkbox>
+              </org-checkbox-group>
+            </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li>Each child checkbox picks up its size from the group via data-size cascade</li>
+            <li>You can still override an individual child's size by setting size on the child directly</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header
+            slot="header"
+            title="Checkbox Group — card variant"
+            description="When any child checkbox uses variant=&quot;card&quot;, the group widens its inter-option gap so the tiles do not feel welded together."
+          />
+          <org-design-system-demo-canvas slot="canvas">
+            <org-checkbox-group legend="Permissions" description="What this teammate can do in the workspace.">
+              <org-checkbox
+                name="cbg-card-read"
+                value="read"
+                variant="card"
+                [checked]="true"
+                description="View projects, files, and comments. No write access."
+              >
+                Read
+              </org-checkbox>
+              <org-checkbox
+                name="cbg-card-write"
+                value="write"
+                variant="card"
+                description="Create, edit, and delete projects and files."
+              >
+                Write
+              </org-checkbox>
+              <org-checkbox
+                name="cbg-card-admin"
+                value="admin"
+                variant="card"
+                description="Manage members, billing, and workspace settings."
+              >
+                Admin
+              </org-checkbox>
+            </org-checkbox-group>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li>The presence of any card-variant child widens the inter-option gap via :has()</li>
+            <li>Card spacing stays uniform across sizes so groups stay aligned vertically with siblings</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header
+            slot="header"
+            title="Checkbox Group — disabled cascade"
+            description="disabled on the group dims every child that has not pinned its own disabled state. Children stay focusable for assistive tech but cannot be activated."
+          />
+          <org-design-system-demo-canvas slot="canvas">
+            <org-checkbox-group legend="Locked while saving" [disabled]="true">
+              <org-checkbox name="cbg-disabled-a" value="a">Option A</org-checkbox>
+              <org-checkbox name="cbg-disabled-b" value="b" [checked]="true">Option B</org-checkbox>
+              <org-checkbox name="cbg-disabled-c" value="c">Option C</org-checkbox>
+            </org-checkbox-group>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li>Every child reads as disabled — reduced opacity, not-allowed cursor, pointer-events blocked</li>
+            <li>A child with its own disabled input gets its own disabled treatment and bypasses the group cascade</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header
+            slot="header"
+            title="Checkbox Group — error cascade"
+            description="Wrap the group in an org-form-field with a validationMessage. Every child checkbox without its own data-state picks up the danger indicator color."
+          />
+          <org-design-system-demo-canvas slot="canvas">
+            <org-form-fields>
+              <org-form-field validationMessage="Pick at least one notification type">
+                <org-checkbox-group legend="Notifications" [required]="true">
+                  <org-checkbox name="cbg-error-features" value="features">New features</org-checkbox>
+                  <org-checkbox name="cbg-error-mentions" value="mentions">Mentions</org-checkbox>
+                  <org-checkbox name="cbg-error-newsletter" value="newsletter">Weekly newsletter</org-checkbox>
+                </org-checkbox-group>
+              </org-form-field>
+            </org-form-fields>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li>The group sets data-state="error" on itself when the parent org-form-field has a validation message</li>
+            <li>The danger indicator color cascades to every child via css custom property inheritance</li>
+            <li>A child with its own data-state opts out of the cascade and keeps its explicit state</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header
+            slot="header"
             title="Validation Space Reservation"
             description="When reserveValidationSpace is true, space is always reserved for validation messages so rows do not jump as errors appear and disappear."
           />
@@ -776,6 +930,7 @@ export const Showcase: Story = {
     moduleMetadata: {
       imports: [
         Checkbox,
+        CheckboxGroup,
         FormFields,
         FormField,
         CheckboxSelectAllSection,

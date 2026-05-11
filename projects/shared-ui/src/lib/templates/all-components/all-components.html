@@ -1,1 +1,519 @@
-<p>all-components works!</p>
+<div class="masonry">
+  <div class="component-block">
+    <h3 class="component-block-name">Application Navigation</h3>
+    <div class="application-navigation-host">
+      <org-application-navigation
+        userName="Sarah Chen"
+        [navigationItems]="navigationItems"
+        [settingsMenuItems]="settingsMenuItems"
+      />
+    </div>
+  </div>
+
+  <div class="component-block">
+    <h3 class="component-block-name">Avatar</h3>
+    <div class="flex items-center gap-2">
+      <org-avatar label="Ada Lovelace" [showLabel]="true" size="sm" />
+      <org-avatar label="Grace Hopper" [showLabel]="true" subLabel="Engineer" />
+      <org-avatar label="Linus Torvalds" [showLabel]="true" size="lg" [hasIndicator]="true" indicatorColor="safe" />
+    </div>
+    <org-avatar-stack size="base">
+      <org-avatar label="Ada" />
+      <org-avatar label="Grace" />
+      <org-avatar label="Linus" />
+      <org-avatar-stack-overflow [count]="4" />
+    </org-avatar-stack>
+  </div>
+
+  <div class="component-block">
+    <h3 class="component-block-name">Box</h3>
+    <div class="flex flex-col gap-1">
+      @for (color of allColors; track color) {
+        <org-box [color]="color" padding="sm" background="colored" border="bordered">{{ color }}</org-box>
+      }
+    </div>
+  </div>
+
+  <div class="component-block">
+    <h3 class="component-block-name">Button</h3>
+    <div class="flex flex-wrap gap-1">
+      @for (color of allColors; track color) {
+        <org-button [color]="color" [label]="color" size="sm" />
+      }
+    </div>
+    <div class="flex flex-wrap gap-1">
+      <org-button color="primary" variant="ghost" label="Ghost" size="sm" />
+      <org-button color="primary" variant="text" label="Text" size="sm" />
+      <org-button color="primary" label="Loading" [loading]="true" size="sm" />
+      <org-button color="primary" preIcon="settings" [iconOnly]="true" label="Settings" size="sm" />
+    </div>
+  </div>
+
+  <div class="component-block">
+    <h3 class="component-block-name">Button Group</h3>
+    <org-button-group>
+      <org-button color="neutral" label="Left" size="sm" />
+      <org-button color="neutral" label="Middle" size="sm" />
+      <org-button color="neutral" label="Right" size="sm" />
+    </org-button-group>
+  </div>
+
+  <div class="component-block">
+    <h3 class="component-block-name">Button Toggle</h3>
+    <org-button-toggle
+      [items]="buttonToggleItems"
+      [value]="buttonToggleValue()"
+      (changed)="onButtonToggleChanged($event)"
+    />
+  </div>
+
+  <div class="component-block">
+    <h3 class="component-block-name">Calendar</h3>
+    <org-calendar />
+  </div>
+
+  <div class="component-block">
+    <h3 class="component-block-name">Card</h3>
+    <org-card>
+      <org-card-header title="Project Aurora" subtitle="Mobile redesign" />
+      <org-card-content>A short body of card content.</org-card-content>
+      <org-card-footer alignment="end">
+        <org-button color="neutral" label="Cancel" size="sm" />
+        <org-button color="primary" label="Save" size="sm" />
+      </org-card-footer>
+    </org-card>
+  </div>
+
+  <div class="component-block">
+    <h3 class="component-block-name">Chart</h3>
+    <div class="chart-host">
+      <org-chart [config]="chartConfig" />
+    </div>
+  </div>
+
+  <div class="component-block">
+    <h3 class="component-block-name">Chat</h3>
+    <org-chat>
+      <org-chat-message role="user" runPosition="only" authorName="Sarah Chen" time="2:14 PM">
+        Hey — can you summarise the release?
+      </org-chat-message>
+      <org-chat-message role="assistant" runPosition="only" authorName="Assistant" time="2:14 PM">
+        Sure: build #421 was promoted to prod, no regressions in tests.
+      </org-chat-message>
+    </org-chat>
+  </div>
+
+  <div class="component-block">
+    <h3 class="component-block-name">Checkbox</h3>
+    <div class="flex items-center gap-2">
+      <org-checkbox name="cb-1" value="a" [checked]="true" />
+      <org-checkbox name="cb-2" value="b" />
+      <org-checkbox name="cb-3" value="c" [indeterminate]="true" />
+      <org-checkbox name="cb-4" value="d" [disabled]="true" />
+    </div>
+  </div>
+
+  <div class="component-block">
+    <h3 class="component-block-name">Checkbox Group</h3>
+    <org-checkbox-group legend="Notify me by" description="Choose any channel">
+      <org-checkbox name="email" value="email" [checked]="true" />
+      <span>Email</span>
+      <org-checkbox name="sms" value="sms" />
+      <span>SMS</span>
+    </org-checkbox-group>
+  </div>
+
+  <div class="component-block">
+    <h3 class="component-block-name">Checkbox Toggle</h3>
+    <div class="flex flex-col gap-2">
+      <org-checkbox-toggle name="toggle-1" value="on" [checked]="true">Enabled</org-checkbox-toggle>
+      <org-checkbox-toggle name="toggle-2" value="off">Disabled by default</org-checkbox-toggle>
+      <org-checkbox-toggle name="toggle-3" value="dis" [disabled]="true">Disabled state</org-checkbox-toggle>
+    </div>
+  </div>
+
+  <div class="component-block">
+    <h3 class="component-block-name">Checklist</h3>
+    <org-checklist [items]="checklistItems" />
+  </div>
+
+  <div class="component-block">
+    <h3 class="component-block-name">Code Block</h3>
+    <org-code-block [text]="codeSample" />
+  </div>
+
+  <div class="component-block">
+    <h3 class="component-block-name">Code Highlighter</h3>
+    <org-code-highlighter [text]="codeSample" language="typescript" />
+  </div>
+
+  <div class="component-block">
+    <h3 class="component-block-name">Combobox</h3>
+    <org-combobox name="combobox-1" [options]="comboboxOptions" placeholder="Pick a fruit" />
+  </div>
+
+  <div class="component-block">
+    <h3 class="component-block-name">Date Picker Input</h3>
+    <org-date-picker-input name="date-picker-1" />
+  </div>
+
+  <div class="component-block">
+    <h3 class="component-block-name">Date Pipe</h3>
+    <div>{{ nowDateTime | orgDate }}</div>
+    <div>{{ twoHoursAgo | orgDate: { relative: true } }}</div>
+    <div>{{ nowDateTime | orgDate: { dateFormat: 'LLL yyyy' } }}</div>
+  </div>
+
+  <div class="component-block">
+    <h3 class="component-block-name">Dialog (preview)</h3>
+    <org-dialog>
+      <org-dialog-header title="Confirm action" />
+      <org-dialog-content>Inline preview of the dialog chrome.</org-dialog-content>
+      <org-dialog-footer>
+        <org-button color="neutral" label="Cancel" size="sm" />
+        <org-button color="primary" label="Confirm" size="sm" />
+      </org-dialog-footer>
+    </org-dialog>
+  </div>
+
+  <div class="component-block">
+    <h3 class="component-block-name">Divider</h3>
+    <div>Above</div>
+    <org-divider />
+    <div>Below solid</div>
+    <org-divider lineStyle="dashed" />
+    <div>Below dashed</div>
+  </div>
+
+  <div class="component-block">
+    <h3 class="component-block-name">Drop-down Selector</h3>
+    <org-drop-down-selector
+      [items]="dropDownItems"
+      label="Sort by"
+      [selectedItems]="dropDownSelectedItems()"
+      (selectedItemsChange)="onDropDownSelectedItemsChange($event)"
+    />
+  </div>
+
+  <div class="component-block">
+    <h3 class="component-block-name">Empty Indicator</h3>
+    <org-empty-indicator header="No results" description="Try adjusting filters" />
+  </div>
+
+  <div class="component-block">
+    <h3 class="component-block-name">File Upload</h3>
+    <org-file-upload (filesSelected)="onLog('files-selected', $event)" />
+  </div>
+
+  <div class="component-block">
+    <h3 class="component-block-name">Form Field / Form Fields</h3>
+    <form [formGroup]="form">
+      <org-form-fields>
+        <org-form-field validationMessage="Looks good">
+          <org-label text="Display name" />
+          <org-input name="form-field-input" placeholder="Display name" formControlName="text" />
+        </org-form-field>
+      </org-form-fields>
+    </form>
+  </div>
+
+  <div class="component-block">
+    <h3 class="component-block-name">Icon</h3>
+    <div class="flex flex-wrap gap-1">
+      @for (iconName of sampleIconNames; track iconName) {
+        <org-icon [name]="iconName" />
+      }
+    </div>
+    <div class="flex items-center gap-2">
+      <org-icon name="sparkles" size="xs" />
+      <org-icon name="sparkles" size="sm" />
+      <org-icon name="sparkles" size="base" />
+      <org-icon name="sparkles" size="lg" />
+      <org-icon name="sparkles" size="xl" color="primary" />
+    </div>
+  </div>
+
+  <div class="component-block">
+    <h3 class="component-block-name">Indicator</h3>
+    <div class="flex items-center gap-2">
+      <org-indicator color="safe" />
+      <org-indicator color="caution" />
+      <org-indicator color="warning" />
+      <org-indicator color="danger" />
+      <org-indicator color="neutral" />
+    </div>
+    <div class="flex items-center gap-2">
+      <org-indicator color="primary" [number]="3" />
+      <org-indicator color="danger" [number]="12" />
+      <org-indicator color="info" [number]="99" />
+    </div>
+  </div>
+
+  <div class="component-block">
+    <h3 class="component-block-name">Input</h3>
+    <form [formGroup]="form" class="flex flex-col gap-1">
+      <org-input name="input-1" placeholder="Bordered" formControlName="text" />
+      <org-input name="input-2" placeholder="Pre / Post icon" preIcon="search" postIcon="x" formControlName="text" />
+      <org-input name="input-3" placeholder="Borderless" variant="borderless" />
+      <org-input name="input-4" placeholder="Disabled" [disabled]="true" />
+    </form>
+  </div>
+
+  <div class="component-block">
+    <h3 class="component-block-name">Label</h3>
+    <org-label text="First name" />
+    <org-label text="Email address" [isRequired]="true" />
+    <org-label text="Loading label" [isLoading]="true" />
+  </div>
+
+  <div class="component-block">
+    <h3 class="component-block-name">Last Updated</h3>
+    <org-last-updated [dateTime]="twoHoursAgo" />
+    <org-last-updated [dateTime]="nowDateTime" state="loading" />
+  </div>
+
+  <div class="component-block">
+    <h3 class="component-block-name">Link</h3>
+    <org-link href="#">Default link</org-link>
+    <org-link href="https://example.com" target="_blank" [affordance]="true">External link</org-link>
+    <org-link href="#" [disabled]="true">Disabled link</org-link>
+  </div>
+
+  <div class="component-block">
+    <h3 class="component-block-name">List</h3>
+    <org-list size="sm" borderVariant="outer">
+      <org-list-item label="Home">
+        <org-list-item-icon name="house" />
+      </org-list-item>
+      <org-list-item label="Settings">
+        <org-list-item-icon name="settings" />
+      </org-list-item>
+      <org-list-item label="Team" [isSelected]="true">
+        <org-list-item-icon name="users" />
+      </org-list-item>
+      <org-list-item label="Logout" [disabled]="true">
+        <org-list-item-icon name="log-out" />
+      </org-list-item>
+    </org-list>
+  </div>
+
+  <div class="component-block">
+    <h3 class="component-block-name">Loading Blocker</h3>
+    <div class="relative loading-blocker-host">
+      <org-loading-blocker [isVisible]="true" label="Loading" />
+    </div>
+  </div>
+
+  <div class="component-block">
+    <h3 class="component-block-name">Loading Spinner</h3>
+    <div class="flex items-center gap-2">
+      <org-loading-spinner size="sm" />
+      <org-loading-spinner />
+      <org-loading-spinner size="lg" />
+      <org-loading-spinner iconColor="primary" />
+      <org-loading-spinner iconColor="safe" />
+      <org-loading-spinner iconColor="warning" />
+    </div>
+  </div>
+
+  <div class="component-block">
+    <h3 class="component-block-name">Markdown</h3>
+    <org-markdown [markdown]="markdownSample" />
+  </div>
+
+  <div class="component-block">
+    <h3 class="component-block-name">Notifications</h3>
+    <org-button color="primary" label="Push notification" size="sm" (clicked)="onPushNotification()" />
+    <org-notifications position="top-right" />
+  </div>
+
+  <div class="component-block">
+    <h3 class="component-block-name">Overlay Menu</h3>
+    <org-overlay-menu [items]="overlayMenuItems" label="Actions" (itemClicked)="onLog('overlay-menu-click', $event)" />
+  </div>
+
+  <div class="component-block">
+    <h3 class="component-block-name">Pagination</h3>
+    <org-pagination
+      [totalItems]="100"
+      [currentPage]="paginationCurrentPage()"
+      [itemsPerPage]="paginationItemsPerPage()"
+      (currentPageChange)="onPaginationPageChange($event)"
+      (itemsPerPageChange)="onPaginationItemsPerPageChange($event)"
+    />
+  </div>
+
+  <div class="component-block">
+    <h3 class="component-block-name">Radio</h3>
+    <div class="flex items-center gap-2">
+      <org-radio name="radio-solo" value="a" />
+      <org-radio name="radio-solo" value="b" />
+      <org-radio name="radio-solo" value="c" [disabled]="true" />
+    </div>
+  </div>
+
+  <div class="component-block">
+    <h3 class="component-block-name">Radio Group</h3>
+    <form [formGroup]="form">
+      <org-radio-group formControlName="radio" legend="Primary channel">
+        <org-radio name="primary-channel" value="email" />
+        <span>Email</span>
+        <org-radio name="primary-channel" value="sms" />
+        <span>SMS</span>
+        <org-radio name="primary-channel" value="push" />
+        <span>Push</span>
+      </org-radio-group>
+    </form>
+  </div>
+
+  <div class="component-block">
+    <h3 class="component-block-name">Scroll Area</h3>
+    <org-scroll-area scrollClass="scroll-area-demo">
+      <div class="flex flex-col gap-1">
+        @for (n of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; track n) {
+          <div>Scrollable line {{ n }}</div>
+        }
+      </div>
+    </org-scroll-area>
+  </div>
+
+  <div class="component-block">
+    <h3 class="component-block-name">Skeleton</h3>
+    <org-skeleton variant="card" />
+  </div>
+
+  <div class="component-block">
+    <h3 class="component-block-name">Slide Container</h3>
+    <org-slide-container ariaLabel="Slide demo">
+      <org-slide-container-item>
+        <org-box color="primary" padding="sm" background="colored">Slide 1 — primary</org-box>
+      </org-slide-container-item>
+      <org-slide-container-item>
+        <org-box color="safe" padding="sm" background="colored">Slide 2 — safe</org-box>
+      </org-slide-container-item>
+      <org-slide-container-item>
+        <org-box color="danger" padding="sm" background="colored">Slide 3 — danger</org-box>
+      </org-slide-container-item>
+    </org-slide-container>
+  </div>
+
+  <div class="component-block">
+    <h3 class="component-block-name">Splitter</h3>
+    <div class="splitter-host">
+      <org-splitter direction="horizontal">
+        <ng-template #section><div class="bg-safe-soft w-full h-full"></div></ng-template>
+        <ng-template #section><div class="bg-danger-soft w-full h-full"></div></ng-template>
+      </org-splitter>
+    </div>
+  </div>
+
+  <div class="component-block">
+    <h3 class="component-block-name">Table</h3>
+    <org-table [data]="tableUsers" size="sm" [hover]="false">
+      <ng-template #header>
+        <org-table-th>Project</org-table-th>
+        <org-table-th>Owner</org-table-th>
+        <org-table-th [numeric]="true">Records</org-table-th>
+      </ng-template>
+      <ng-template [orgTypedContext]="tableUsers" #body let-user>
+        <org-table-td>{{ user.name }}</org-table-td>
+        <org-table-td>{{ user.owner }}</org-table-td>
+        <org-table-td [numeric]="true">{{ user.records }}</org-table-td>
+      </ng-template>
+    </org-table>
+  </div>
+
+  <div class="component-block">
+    <h3 class="component-block-name">Tabs</h3>
+    <org-tabs [value]="activeTabValue()" (valueChange)="onTabChanged($event)">
+      @for (tab of tabItems; track tab.value) {
+        <org-tab [value]="tab.value">{{ tab.label }}</org-tab>
+      }
+    </org-tabs>
+    <org-tabs [value]="activeTabValue()" (valueChange)="onTabChanged($event)" variant="pills">
+      @for (tab of tabItems; track tab.value) {
+        <org-tab [value]="tab.value">{{ tab.label }}</org-tab>
+      }
+    </org-tabs>
+  </div>
+
+  <div class="component-block">
+    <h3 class="component-block-name">Tag</h3>
+    <div class="flex flex-wrap gap-1">
+      @for (color of allColors; track color) {
+        <org-tag [color]="color">{{ color }}</org-tag>
+      }
+    </div>
+    <div class="flex flex-wrap gap-1">
+      @for (color of allColors; track color) {
+        <org-tag [color]="color" variant="strong">{{ color }}</org-tag>
+      }
+    </div>
+    <div class="flex items-center gap-1">
+      <org-tag color="primary" size="xs">xs</org-tag>
+      <org-tag color="primary" size="sm">sm</org-tag>
+      <org-tag color="primary" size="base">base</org-tag>
+      <org-tag color="primary" [removable]="true" (removed)="onLog('tag-removed', 'tag')">Removable</org-tag>
+    </div>
+  </div>
+
+  <div class="component-block">
+    <h3 class="component-block-name">Text Directive</h3>
+    <div orgText textColor="primary">primary text</div>
+    <div orgText textColor="safe">safe text</div>
+    <div orgText textColor="danger">danger text</div>
+    <div orgText textSize="xs">xs sized text</div>
+    <div orgText textSize="lg">lg sized text</div>
+  </div>
+
+  <div class="component-block">
+    <h3 class="component-block-name">Textarea</h3>
+    <form [formGroup]="form">
+      <org-textarea name="textarea-1" formControlName="textarea" placeholder="Type a few lines" />
+    </form>
+  </div>
+
+  <div class="component-block">
+    <h3 class="component-block-name">Time Input</h3>
+    <org-time-input name="time-1" />
+  </div>
+
+  <div class="component-block">
+    <h3 class="component-block-name">Timeline</h3>
+    <org-timeline>
+      <org-timeline-item color="safe" dotIcon="check">
+        <org-timeline-header>Deployment succeeded</org-timeline-header>
+        <org-timeline-time>2h ago</org-timeline-time>
+        <org-timeline-content>Build #421 promoted.</org-timeline-content>
+      </org-timeline-item>
+      <org-timeline-item color="info" dotIcon="upload">
+        <org-timeline-header>Build artifact uploaded</org-timeline-header>
+        <org-timeline-time>3h ago</org-timeline-time>
+        <org-timeline-content>Stored to artifact registry.</org-timeline-content>
+      </org-timeline-item>
+    </org-timeline>
+  </div>
+
+  <div class="component-block">
+    <h3 class="component-block-name">Tooltip</h3>
+    <div class="flex items-center gap-2">
+      <org-tooltip placement="top">
+        <org-button color="neutral" label="Hover" size="sm" />
+        <ng-template #tooltipContent>
+          <org-tooltip-content>Save changes</org-tooltip-content>
+        </ng-template>
+      </org-tooltip>
+      <org-tooltip placement="bottom" triggerType="click">
+        <org-button color="primary" label="Click" size="sm" />
+        <ng-template #tooltipContent>
+          <org-tooltip-content layout="rich">Click triggered rich tooltip.</org-tooltip-content>
+        </ng-template>
+      </org-tooltip>
+    </div>
+  </div>
+
+  <div class="component-block">
+    <h3 class="component-block-name">Unsaved Changes Dialog</h3>
+    <org-button color="primary" label="Open" size="sm" (clicked)="onOpenUnsavedChangesDialog()" />
+  </div>
+</div>
