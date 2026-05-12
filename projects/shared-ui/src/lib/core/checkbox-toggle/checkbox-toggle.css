@@ -28,12 +28,12 @@
     position: relative;
     flex: 0 0 auto;
     display: inline-block;
-    width: var(--checkbox-toggle-track-w);
-    height: var(--checkbox-toggle-track-h);
+    width: var(--checkbox-toggle-track-width);
+    height: var(--checkbox-toggle-track-height);
     border-radius: var(--checkbox-toggle-track-radius);
     background-color: var(--checkbox-toggle-track-bg);
     /* optical alignment with the first label line */
-    margin-top: calc((1em * var(--line-height-normal) - var(--checkbox-toggle-track-h)) / 2);
+    margin-top: calc((1em * var(--line-height-normal) - var(--checkbox-toggle-track-height)) / 2);
     transition:
       background-color var(--checkbox-toggle-transition-slow) var(--checkbox-toggle-easing),
       box-shadow var(--checkbox-toggle-transition-fast) var(--checkbox-toggle-easing);
@@ -97,7 +97,9 @@
 
   /* checked: knob slides, on-icon fades in, off-icon fades out, track recolors */
   :host([data-checked]) .knob {
-    left: calc(var(--checkbox-toggle-track-w) - var(--checkbox-toggle-knob-size) - var(--checkbox-toggle-knob-inset));
+    left: calc(
+      var(--checkbox-toggle-track-width) - var(--checkbox-toggle-knob-size) - var(--checkbox-toggle-knob-inset)
+    );
   }
 
   :host([data-checked]) .icon-off {
@@ -148,30 +150,30 @@
   /* ===== SIZE VARIANTS ===== */
 
   :host([data-size='sm']) {
-    --checkbox-toggle-track-w: var(--spacing-7); /* 28px */
-    --checkbox-toggle-track-h: var(--spacing-4); /* 16px */
-    --checkbox-toggle-knob-size: var(--spacing-3); /* 12px */
-    --checkbox-toggle-icon-size: var(--spacing-2_5); /* 10px */
-    --checkbox-toggle-row-gap: var(--spacing-2); /* 8px */
-    --checkbox-toggle-label-font-size: var(--font-size-sm); /* 13px */
+    --checkbox-toggle-track-width: var(--spacing-7);
+    --checkbox-toggle-track-height: var(--spacing-4);
+    --checkbox-toggle-knob-size: var(--spacing-3);
+    --checkbox-toggle-icon-size: var(--spacing-2_5);
+    --checkbox-toggle-row-gap: var(--spacing-2);
+    --checkbox-toggle-label-font-size: var(--font-size-sm);
   }
 
   :host([data-size='base']) {
-    --checkbox-toggle-track-w: var(--spacing-9); /* 36px */
-    --checkbox-toggle-track-h: var(--spacing-5); /* 20px */
-    --checkbox-toggle-knob-size: var(--spacing-4); /* 16px */
-    --checkbox-toggle-icon-size: var(--spacing-3); /* 12px */
-    --checkbox-toggle-row-gap: var(--spacing-2_5); /* 10px */
-    --checkbox-toggle-label-font-size: var(--font-size-base); /* 14px */
+    --checkbox-toggle-track-width: var(--spacing-9);
+    --checkbox-toggle-track-height: var(--spacing-5);
+    --checkbox-toggle-knob-size: var(--spacing-4);
+    --checkbox-toggle-icon-size: var(--spacing-3);
+    --checkbox-toggle-row-gap: var(--spacing-2_5);
+    --checkbox-toggle-label-font-size: var(--font-size-base);
   }
 
   :host([data-size='lg']) {
-    --checkbox-toggle-track-w: 2.75rem; /* 44px */
-    --checkbox-toggle-track-h: var(--spacing-6); /* 24px */
-    --checkbox-toggle-knob-size: var(--spacing-5); /* 20px */
-    --checkbox-toggle-icon-size: var(--spacing-3_5); /* 14px */
-    --checkbox-toggle-row-gap: var(--spacing-3); /* 12px */
-    --checkbox-toggle-label-font-size: var(--font-size-lg); /* 16px */
+    --checkbox-toggle-track-width: 2.75rem; /* 44px */
+    --checkbox-toggle-track-height: var(--spacing-6);
+    --checkbox-toggle-knob-size: var(--spacing-5);
+    --checkbox-toggle-icon-size: var(--spacing-3_5);
+    --checkbox-toggle-row-gap: var(--spacing-3);
+    --checkbox-toggle-label-font-size: var(--font-size-lg);
   }
 
   /* ===== COLOR VARIANTS ===== */
@@ -211,8 +213,8 @@
   }
 
   /* ===== LABEL POSITION ===== */
-  /* `end` (default): track first, label trailing — uses the natural row order */
-  /* `start`: label first, track trailing; body grows so the track sits at the end */
+  /* `end` (default): track first, label post — uses the natural row order */
+  /* `start`: label first, track post; body grows so the track sits at the end */
   :host([data-label-position='start']) .checkbox-toggle-label {
     flex-direction: row-reverse;
   }
@@ -248,7 +250,7 @@
     flex: 1 1 auto;
   }
 
-  /* card variant supports an explicit data-label-position='end' override to put the track on the leading edge */
+  /* card variant supports an explicit data-label-position='end' override to put the track on the pre edge */
   :host([data-variant='card'][data-label-position='end']) .checkbox-toggle-label {
     flex-direction: row;
   }
@@ -266,14 +268,14 @@
 
   /* card variant size overrides — override the design token, not the property */
   :host([data-variant='card'][data-size='sm']) {
-    --checkbox-toggle-card-padding: var(--spacing-2_5); /* 10px */
+    --checkbox-toggle-card-padding: var(--spacing-2_5);
   }
 
   :host([data-variant='card'][data-size='base']) {
-    --checkbox-toggle-card-padding: var(--spacing-3); /* 12px */
+    --checkbox-toggle-card-padding: var(--spacing-3);
   }
 
   :host([data-variant='card'][data-size='lg']) {
-    --checkbox-toggle-card-padding: var(--spacing-4); /* 16px */
+    --checkbox-toggle-card-padding: var(--spacing-4);
   }
 }

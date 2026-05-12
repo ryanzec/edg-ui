@@ -122,7 +122,7 @@ export class CheckboxToggle implements ControlValueAccessor {
   /** the visual variant of the checkbox-toggle (default row, or bordered card tile) */
   public readonly variant = input<CheckboxToggleVariant>(CHECKBOX_TOGGLE_VARIANT_DEFAULT);
 
-  /** the position of the label relative to the track (end = track-leading, start = track-trailing) */
+  /** the position of the label relative to the track (end = track-pre, start = track-post) */
   public readonly labelPosition = input<CheckboxToggleLabelPosition>(CHECKBOX_TOGGLE_LABEL_POSITION_DEFAULT);
 
   /** optional description sub-line rendered beneath the label */

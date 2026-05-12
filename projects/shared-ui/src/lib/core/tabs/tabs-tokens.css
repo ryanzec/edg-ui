@@ -19,7 +19,7 @@
   --spacing-tabs-gap-pills: var(--spacing-1);
   --spacing-tabs-gap-enclosed: var(--spacing-0);
 
-  /* gap between leading icon, label, and trailing tag inside a single tab */
+  /* gap between pre icon, label, and post tag inside a single tab */
   --spacing-tabs-tab-gap: var(--spacing-2);
 
   /* shared rail / fg / focus colors */

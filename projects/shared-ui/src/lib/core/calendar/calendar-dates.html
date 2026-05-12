@@ -14,7 +14,8 @@
   @for (week of calendarComponent.calendarDates(); track $index) {
     <div role="row" class="week-row">
       @for (dateData of week; track dateData.date.toISO()) {
-        <div
+        <button
+          type="button"
           role="gridcell"
           class="day"
           tabindex="-1"
@@ -33,7 +34,7 @@
           <span class="day-band"></span>
           <span class="day-chip"></span>
           <span class="day-num">{{ getDay(dateData) }}</span>
-        </div>
+        </button>
       }
     </div>
   }

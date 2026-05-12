@@ -105,7 +105,7 @@ class EXAMPLEDialog {
 
   /** rounded-corners flag used by the panel: prefers the value forwarded through DIALOG_DATA */
   protected readonly resolvedHasRoundedCorners = computed<boolean>(
-    () => this.data.hasRoundedCorners ?? this.hasRoundedCorners(),
+    () => this.data.hasRoundedCorners ?? this.hasRoundedCorners()
   );
 
   public openDialog(data?: EXAMPLEDialogData): DialogRef<EXAMPLEDialog, EXAMPLEDialog> | null {
@@ -191,13 +191,13 @@ const meta: Meta<EXAMPLEStoryDialog> = {
 <div class="docs-top-level-overview">
   ## Dialog Component
 
-  A modal surface composed of a header (title + optional leading semantic icon), a scrollable content region, a footer (configurable alignment), and a floating close button. Lives inside a stage that owns the scrim + position.
+  A modal surface composed of a header (title + optional pre semantic icon), a scrollable content region, a footer (configurable alignment), and a floating close button. Lives inside a stage that owns the scrim + position.
 
   ### Anatomy
   - **org-dialog** — the panel; controls position and rounded corners.
   - **org-dialog-close-button** — auto-rendered floating close affordance in the top-right.
-  - **org-dialog-header** — title slot with optional projected leading icon.
-  - **org-dialog-icon** — optional semantic-tinted leading icon next to the header title.
+  - **org-dialog-header** — title slot with optional projected pre icon.
+  - **org-dialog-icon** — optional semantic-tinted pre icon next to the header title.
   - **org-dialog-content** — scrollable body region (uses org-scroll-area internally).
   - **org-dialog-footer** — actions row with start / center / end alignment.
 
@@ -438,7 +438,8 @@ class DialogLiveDemoStory {
   protected openDialog(): void {
     this.dialogComponent.openDialog({
       title: 'Live demo',
-      message: 'This dialog reflects the live demo controls — close on click outside, escape key, and close icon all honor the chosen settings.',
+      message:
+        'This dialog reflects the live demo controls — close on click outside, escape key, and close icon all honor the chosen settings.',
     });
   }
 }
@@ -513,8 +514,8 @@ export const Showcase: Story = {
         <org-design-system-demo>
           <org-design-system-demo-header
             slot="header"
-            title="Header — leading semantic icon"
-            description="Optional leading icon sits to the left of the title. Its tone reads from the shared semantic ramp via the dialog-icon color input — info, safe, caution, warning, danger."
+            title="Header — pre semantic icon"
+            description="Optional pre icon sits to the left of the title. Its tone reads from the shared semantic ramp via the dialog-icon color input — info, safe, caution, warning, danger."
           />
           <org-design-system-demo-canvas slot="canvas">
             <div class="flex flex-wrap gap-4 items-start">
@@ -616,7 +617,7 @@ export const Showcase: Story = {
           <ul class="list-inside list-disc flex flex-col gap-1">
             <li><strong>End</strong>: Default — primary action far right, supporting actions to its left</li>
             <li><strong>Center</strong>: Single confirmation actions sit centered</li>
-            <li><strong>Start</strong>: Secondary-only or tertiary actions hug the leading edge</li>
+            <li><strong>Start</strong>: Secondary-only or tertiary actions hug the pre edge</li>
           </ul>
         </org-design-system-demo-expected-behaviour>
 
@@ -697,7 +698,7 @@ export const Showcase: Story = {
         </org-design-system-demo>
         <org-design-system-demo-expected-behaviour>
           <ul class="list-inside list-disc flex flex-col gap-1">
-            <li><strong>Header pins</strong>: Title and leading icon stay visible while content scrolls</li>
+            <li><strong>Header pins</strong>: Title and pre icon stay visible while content scrolls</li>
             <li><strong>Footer pins</strong>: Primary action stays visible while content scrolls</li>
             <li><strong>Content scrolls</strong>: Body region uses org-scroll-area internally</li>
           </ul>

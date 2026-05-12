@@ -20,13 +20,14 @@
         <thead>
           <org-table-tr variant="header">
             @if (brain.selectionData()) {
-              <org-table-th [selectCol]="true">
+              <org-table-th [selectColumn]="true">
                 <org-form-field [reserveValidationSpace]="false">
                   <org-checkbox
                     name="select-all"
                     value="select-all"
                     [checked]="brain.selectionData()!.areAllSelected(asSelectableData(data()))"
                     [indeterminate]="brain.selectionData()!.areSomeSelected(asSelectableData(data()))"
+                    (click)="$event.stopPropagation()"
                     (checkedChange)="brain.selectionData()!.setMultiple(asSelectableData(data()), $event)"
                   />
                 </org-form-field>
@@ -48,16 +49,19 @@
             @for (item of data(); track trackByItem(item)) {
               <org-table-tr
                 [selected]="isItemSelected(item)"
-                [clickable]="hasRowClickedListener()"
+                [expanded]="isItemExpanded(item)"
+                [clickable]="isRowClickable()"
+                (click)="$event.stopPropagation()"
                 (clicked)="onRowClicked(item)"
               >
                 @if (brain.selectionData()) {
-                  <org-table-td [selectCol]="true">
+                  <org-table-td [selectColumn]="true">
                     <org-form-field [reserveValidationSpace]="false">
                       <org-checkbox
                         [name]="'select-' + asSelectable(item).id"
                         [value]="asSelectable(item).id"
                         [checked]="brain.selectionData()!.isSelected(asSelectable(item))"
+                        (click)="$event.stopPropagation()"
                         (checkedChange)="brain.selectionData()!.set(asSelectable(item), $event)"
                       />
                     </org-form-field>
@@ -65,6 +69,13 @@
                 }
                 <ng-container *ngTemplateOutlet="bodyTemplate()!; context: { $implicit: item }" />
               </org-table-tr>
+              @if (expandedTemplate() && isItemExpanded(item)) {
+                <org-table-tr [expandedSection]="true">
+                  <td class="expanded-cell" [attr.colspan]="100">
+                    <ng-container *ngTemplateOutlet="expandedTemplate()!; context: { $implicit: item }" />
+                  </td>
+                </org-table-tr>
+              }
             }
           }
         </tbody>

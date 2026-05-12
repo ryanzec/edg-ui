@@ -9,15 +9,7 @@ export const allFileUploadExternalStates = ['uploading', 'success', 'failure'] a
 export type FileUploadExternalState = (typeof allFileUploadExternalStates)[number];
 
 /** all valid resolved file-upload states (the value applied to `data-state`) */
-export const allFileUploadStates = [
-  'idle',
-  'hover',
-  'selected',
-  'uploading',
-  'success',
-  'failure',
-  'error',
-] as const;
+export const allFileUploadStates = ['idle', 'hover', 'selected', 'uploading', 'success', 'failure', 'error'] as const;
 
 /** the resolved state surfaced via `data-state` on the host */
 export type FileUploadState = (typeof allFileUploadStates)[number];
@@ -91,10 +83,10 @@ export class FileUploadBrainDirective {
   public readonly disabled = input<boolean>(FILE_UPLOAD_DISABLED_DEFAULT);
 
   /** externally-driven state overlay for upload-pipeline visuals; only honoured when a file is selected */
-  public readonly externalState = input<FileUploadExternalState | undefined, FileUploadExternalState | null | undefined>(
-    FILE_UPLOAD_EXTERNAL_STATE_DEFAULT,
-    { transform: angularUtils.transformNullToUndefined }
-  );
+  public readonly externalState = input<
+    FileUploadExternalState | undefined,
+    FileUploadExternalState | null | undefined
+  >(FILE_UPLOAD_EXTERNAL_STATE_DEFAULT, { transform: angularUtils.transformNullToUndefined });
 
   /** externally-driven error message; takes precedence over the brain's internal validation error when set */
   public readonly errorMessage = input<string | undefined, string | null | undefined>(

@@ -109,15 +109,15 @@ const liveDemoListSizeItems: ButtonToggleItem[] = allOverlayMenuListSizes.map((s
         <org-design-system-demo-header
           slot="header"
           title="Live demo"
-          description="The overlay menu below is real and interactive — toggle the row size, enable shortcuts, trailing icons, a Beta tag, a divider, or a disabled row, and click an item to fire itemClicked."
+          description="The overlay menu below is real and interactive — toggle the row size, enable shortcuts, post icons, a Beta tag, a divider, or a disabled row, and click an item to fire itemClicked."
         />
         <org-design-system-demo-controls slot="controls">
           <org-design-system-demo-control-group label="Row size">
             <org-button-toggle [items]="listSizeItems" formControlName="listSize" buttonSize="sm" />
           </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Leading icons">
-            <org-checkbox-toggle name="live-demo-leading" value="leadingIcons" formControlName="showLeadingIcons">
-              {{ liveDemoForm.controls.showLeadingIcons.value ? 'on' : 'off' }}
+          <org-design-system-demo-control-group label="Pre icons">
+            <org-checkbox-toggle name="live-demo-pre" value="preIcons" formControlName="showPreIcons">
+              {{ liveDemoForm.controls.showPreIcons.value ? 'on' : 'off' }}
             </org-checkbox-toggle>
           </org-design-system-demo-control-group>
           <org-design-system-demo-control-group label="Shortcuts">
@@ -125,9 +125,9 @@ const liveDemoListSizeItems: ButtonToggleItem[] = allOverlayMenuListSizes.map((s
               {{ liveDemoForm.controls.showShortcut.value ? 'on' : 'off' }}
             </org-checkbox-toggle>
           </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Trailing icon">
-            <org-checkbox-toggle name="live-demo-trailing-icon" value="trailingIcon" formControlName="showTrailingIcon">
-              {{ liveDemoForm.controls.showTrailingIcon.value ? 'on' : 'off' }}
+          <org-design-system-demo-control-group label="Post icon">
+            <org-checkbox-toggle name="live-demo-post-icon" value="postIcon" formControlName="showPostIcon">
+              {{ liveDemoForm.controls.showPostIcon.value ? 'on' : 'off' }}
             </org-checkbox-toggle>
           </org-design-system-demo-control-group>
           <org-design-system-demo-control-group label="Beta tag">
@@ -170,9 +170,9 @@ class OverlayMenuLiveDemoStory {
 
   protected readonly liveDemoForm = new FormGroup({
     listSize: new FormControl<OverlayMenuListSize>('sm', { nonNullable: true }),
-    showLeadingIcons: new FormControl<boolean>(true, { nonNullable: true }),
+    showPreIcons: new FormControl<boolean>(true, { nonNullable: true }),
     showShortcut: new FormControl<boolean>(false, { nonNullable: true }),
-    showTrailingIcon: new FormControl<boolean>(false, { nonNullable: true }),
+    showPostIcon: new FormControl<boolean>(false, { nonNullable: true }),
     showTag: new FormControl<boolean>(false, { nonNullable: true }),
     showDivider: new FormControl<boolean>(false, { nonNullable: true }),
     showDisabled: new FormControl<boolean>(false, { nonNullable: true }),
@@ -185,9 +185,9 @@ class OverlayMenuLiveDemoStory {
 
   protected readonly liveDemoItems = computed<OverlayMenuItem[]>(() => {
     const value = this._formValue();
-    const useLeadingIcons = value.showLeadingIcons ?? true;
+    const usePreIcons = value.showPreIcons ?? true;
     const useShortcut = value.showShortcut ?? false;
-    const useTrailingIcon = value.showTrailingIcon ?? false;
+    const usePostIcon = value.showPostIcon ?? false;
     const useTag = value.showTag ?? false;
     const useDivider = value.showDivider ?? false;
     const useDisabled = value.showDisabled ?? false;
@@ -196,22 +196,22 @@ class OverlayMenuLiveDemoStory {
       {
         id: 'edit',
         label: 'Edit',
-        icon: useLeadingIcons ? 'pencil' : null,
+        icon: usePreIcons ? 'pencil' : null,
         shortcut: useShortcut ? '⌘ E' : undefined,
         tag: useTag ? { label: 'Beta', color: 'info' } : undefined,
       },
       {
         id: 'duplicate',
         label: 'Duplicate',
-        icon: useLeadingIcons ? 'copy' : null,
+        icon: usePreIcons ? 'copy' : null,
         shortcut: useShortcut ? '⌘ D' : undefined,
         disabled: useDisabled,
       },
       {
         id: 'archive',
         label: 'Archive',
-        icon: useLeadingIcons ? 'inbox' : null,
-        trailingIcon: useTrailingIcon ? 'chevron-right' : undefined,
+        icon: usePreIcons ? 'inbox' : null,
+        postIcon: usePostIcon ? 'chevron-right' : undefined,
       },
     ];
 
@@ -222,7 +222,7 @@ class OverlayMenuLiveDemoStory {
     items.push({
       id: 'delete',
       label: 'Delete',
-      icon: useLeadingIcons ? 'trash' : null,
+      icon: usePreIcons ? 'trash' : null,
       shortcut: useShortcut ? '⌫' : undefined,
     });
 
@@ -346,7 +346,7 @@ const meta: Meta<EXAMPLEOverlayMenu> = {
   - Fluid sizing: short menus read tight, long labels wrap up to a 20rem cap
   - Two row densities (\`listSize\`: \`sm\` default, \`base\`)
   - Optional reveal motion via \`state\` (\`'open'\` / \`'closed'\`) with a \`prefers-reduced-motion\` fallback
-  - Trailing meta per row — keyboard shortcut text, sub-menu chevron, status tag (Beta) — via the typed item entry
+  - Post meta per row — keyboard shortcut text, sub-menu chevron, status tag (Beta) — via the typed item entry
   - Disabled rows are painted muted, suppressed by CDK keyboard nav, and skip activation
   - Production positioning, click-outside, focus trap, Esc, and arrow-key model are owned by Angular CDK Menu (\`CdkMenuTrigger\`); the brain wires \`role="menu"\` and \`role="menuitem"\` automatically
 
@@ -360,7 +360,7 @@ const meta: Meta<EXAMPLEOverlayMenu> = {
         icon: IconName | null;
         disabled?: boolean;
         shortcut?: string;
-        trailingIcon?: IconName;
+        postIcon?: IconName;
         tag?: { label: string; color: string };
         meta?: TMeta;
       }
@@ -413,7 +413,7 @@ export const LiveDemo: Story = {
     docs: {
       description: {
         story:
-          'Fully interactive demo. Use the controls to flip the row size, enable shortcuts, trailing icons, a Beta tag, a divider, or a disabled row — and click an item to fire the itemClicked output.',
+          'Fully interactive demo. Use the controls to flip the row size, enable shortcuts, post icons, a Beta tag, a divider, or a disabled row — and click an item to fire the itemClicked output.',
       },
     },
   },
@@ -430,7 +430,7 @@ export const Showcase: Story = {
     docs: {
       description: {
         story:
-          'Comprehensive showcase of every overlay menu axis — row states, trailing meta variants (shortcuts, sub-menu chevrons, Beta tag), sizing (short, base density, long-label wrapping), live anchored triggers (icon-only, button, avatar), in-context use (table-row overflow, right-click context menu), grouped dividers, and the aria-label hook.',
+          'Comprehensive showcase of every overlay menu axis — row states, post meta variants (shortcuts, sub-menu chevrons, Beta tag), sizing (short, base density, long-label wrapping), live anchored triggers (icon-only, button, avatar), in-context use (table-row overflow, right-click context menu), grouped dividers, and the aria-label hook.',
       },
     },
   },
@@ -478,7 +478,7 @@ export const Showcase: Story = {
         </org-design-system-demo-expected-behaviour>
 
         <org-design-system-demo>
-          <org-design-system-demo-header slot="header" title="Trailing meta" />
+          <org-design-system-demo-header slot="header" title="Post meta" />
           <org-design-system-demo-canvas slot="canvas">
             <div class="flex gap-4 items-start flex-wrap">
               <org-overlay-menu
@@ -499,8 +499,8 @@ export const Showcase: Story = {
                   { id: '2', label: 'List view', icon: 'list' },
                   { id: '3', label: 'Board', icon: 'rows-3', tag: { label: 'Beta', color: 'info' } },
                   { id: 'd1', type: 'divider' },
-                  { id: '4', label: 'Filter by', icon: 'filter', trailingIcon: 'chevron-right' },
-                  { id: '5', label: 'Sort by', icon: null, trailingIcon: 'chevron-right' }
+                  { id: '4', label: 'Filter by', icon: 'filter', postIcon: 'chevron-right' },
+                  { id: '5', label: 'Sort by', icon: null, postIcon: 'chevron-right' }
                 ]"
               />
             </div>
@@ -508,8 +508,8 @@ export const Showcase: Story = {
         </org-design-system-demo>
         <org-design-system-demo-expected-behaviour>
           <ul class="list-inside list-disc flex flex-col gap-1">
-            <li><strong>Shortcut</strong>: <code>shortcut</code> renders as muted, tabular-numeral text in the trailing meta slot — long shortcuts (<code>⇧ ⌘ Z</code>) align cleanly against shorter ones (<code>⌘ Z</code>)</li>
-            <li><strong>Sub-menu chevron</strong>: <code>trailingIcon: 'chevron-right'</code> hints that the row opens a sub-menu</li>
+            <li><strong>Shortcut</strong>: <code>shortcut</code> renders as muted, tabular-numeral text in the post meta slot — long shortcuts (<code>⇧ ⌘ Z</code>) align cleanly against shorter ones (<code>⌘ Z</code>)</li>
+            <li><strong>Sub-menu chevron</strong>: <code>postIcon: 'chevron-right'</code> hints that the row opens a sub-menu</li>
             <li><strong>Tag</strong>: <code>tag</code> renders an inline status pill (e.g. "Beta") at the right edge — color maps to a real <code>org-tag</code> color</li>
           </ul>
         </org-design-system-demo-expected-behaviour>
@@ -620,7 +620,7 @@ export const Showcase: Story = {
           <ul class="list-inside list-disc flex flex-col gap-1">
             <li><strong>Trigger ↔ panel</strong>: Click any trigger to toggle the menu; Esc closes; clicking outside closes; ↑ / ↓ moves the keyboard cursor; Enter activates a row</li>
             <li><strong>Icon-only trigger</strong>: An icon-only ellipsis button is the canonical "more actions" affordance</li>
-            <li><strong>Trailing chevron</strong>: A button with a trailing chevron-down communicates that it opens a panel</li>
+            <li><strong>Post chevron</strong>: A button with a post chevron-down communicates that it opens a panel</li>
             <li><strong>Avatar trigger</strong>: Any element can carry <code>cdkMenuTriggerFor</code> — including a real <code>org-avatar</code></li>
           </ul>
         </org-design-system-demo-expected-behaviour>

@@ -34,7 +34,7 @@ export const NOTIFICATION_ITEM_CAN_CLOSE_DEFAULT = true;
 /** intent colors that use role="alert" for screen-reader interruption; everything else uses role="status" */
 const ALERT_ROLE_COLORS = new Set<CardColor>(['danger', 'warning']);
 
-/** maps each intent color to its default leading icon when the consumer does not supply one */
+/** maps each intent color to its default pre icon when the consumer does not supply one */
 const INTENT_DEFAULT_ICON: Record<CardColor, IconName> = {
   info: 'info',
   safe: 'circle-check',
@@ -102,17 +102,20 @@ export class NotificationItem {
     transform: angularUtils.transformNullToUndefined,
   });
 
-  /** overrides the intent-default leading icon */
+  /** overrides the intent-default pre icon */
   public readonly icon = input<IconName | undefined, IconName | null | undefined>(NOTIFICATION_ITEM_ICON_DEFAULT, {
     transform: angularUtils.transformNullToUndefined,
   });
 
-  /** when supplied, the leading media slot renders a circular avatar image instead of an icon */
-  public readonly avatarUrl = input<string | undefined, string | null | undefined>(NOTIFICATION_ITEM_AVATAR_URL_DEFAULT, {
-    transform: angularUtils.transformNullToUndefined,
-  });
+  /** when supplied, the pre media slot renders a circular avatar image instead of an icon */
+  public readonly avatarUrl = input<string | undefined, string | null | undefined>(
+    NOTIFICATION_ITEM_AVATAR_URL_DEFAULT,
+    {
+      transform: angularUtils.transformNullToUndefined,
+    }
+  );
 
-  /** the semantic intent driving the rail accent, leading icon color, and screen-reader role */
+  /** the semantic intent driving the rail accent, pre icon color, and screen-reader role */
   public readonly color = input<CardColor | undefined, CardColor | null | undefined>(NOTIFICATION_ITEM_COLOR_DEFAULT, {
     transform: angularUtils.transformNullToUndefined,
   });
@@ -123,10 +126,10 @@ export class NotificationItem {
   /** resolved intent color used for the host data-color attribute; falls back to 'info' when no color is supplied */
   protected readonly resolvedColor = computed<CardColor>(() => this.color() ?? 'info');
 
-  /** resolved leading icon: explicit icon input wins, otherwise the intent-default icon */
+  /** resolved pre icon: explicit icon input wins, otherwise the intent-default icon */
   protected readonly resolvedIcon = computed<IconName>(() => this.icon() ?? INTENT_DEFAULT_ICON[this.resolvedColor()]);
 
-  /** whether the leading media slot should render an avatar image vs an icon */
+  /** whether the pre media slot should render an avatar image vs an icon */
   protected readonly hasAvatar = computed<boolean>(() => this.avatarUrl() !== undefined);
 
   /** whether the progress bar element should be rendered (only when there is a positive auto-close duration) */

@@ -254,11 +254,7 @@ export const Default: Story = {
             </org-checkbox-toggle>
           </org-design-system-demo-control-group>
           <org-design-system-demo-control-group label="Last tab disabled">
-            <org-checkbox-toggle
-              name="live-demo-last-disabled"
-              value="last-disabled"
-              formControlName="lastTabDisabled"
-            >
+            <org-checkbox-toggle name="live-demo-last-disabled" value="last-disabled" formControlName="lastTabDisabled">
               {{ liveDemoForm.controls.lastTabDisabled.value ? 'on' : 'off' }}
             </org-checkbox-toggle>
           </org-design-system-demo-control-group>
@@ -484,12 +480,7 @@ class TabsIconsCountsShowcase {
   template: `
     <div class="flex flex-col gap-4">
       <div class="stretch-row">
-        <org-tabs
-          [value]="periodValue()"
-          (valueChange)="periodValue.set($event)"
-          variant="pills"
-          [stretch]="true"
-        >
+        <org-tabs [value]="periodValue()" (valueChange)="periodValue.set($event)" variant="pills" [stretch]="true">
           <org-tab value="day">Daily</org-tab>
           <org-tab value="week">Weekly</org-tab>
           <org-tab value="month">Monthly</org-tab>
@@ -717,7 +708,7 @@ export const Showcase: Story = {
           <org-design-system-demo-header
             slot="header"
             title="With icons + counts"
-            description="A tab is a flex row of optional slots: leading org-icon, label text, and trailing org-tag. Inner gap is governed by --spacing-tabs-tab-gap so glyphs and counts sit at consistent rhythm."
+            description="A tab is a flex row of optional slots: pre org-icon, label text, and post org-tag. Inner gap is governed by --spacing-tabs-tab-gap so glyphs and counts sit at consistent rhythm."
           />
           <org-design-system-demo-canvas slot="canvas">
             <story-tabs-icons-counts />
@@ -726,7 +717,7 @@ export const Showcase: Story = {
         <org-design-system-demo-expected-behaviour>
           <ul class="list-inside list-disc flex flex-col gap-1">
             <li>The disabled "Audit log" tab uses <code>aria-disabled="true"</code> — focus still lands on it during arrow-key navigation but selection does not.</li>
-            <li>A trailing tag at <code>color="danger"</code> reads as an actionable count (e.g. open alerts).</li>
+            <li>A post tag at <code>color="danger"</code> reads as an actionable count (e.g. open alerts).</li>
           </ul>
         </org-design-system-demo-expected-behaviour>
 
@@ -751,7 +742,7 @@ export const Showcase: Story = {
           <org-design-system-demo-header
             slot="header"
             title="Closable"
-            description="Editor-style tabs with a trailing × that emits a closed event for the host to remove the tab. The host swaps from button to div role=tab so the close button can nest legally."
+            description="Editor-style tabs with a post × that emits a closed event for the host to remove the tab. The host swaps from button to div role=tab so the close button can nest legally."
           />
           <org-design-system-demo-canvas slot="canvas">
             <story-tabs-closable />
@@ -906,7 +897,10 @@ export const Showcase: Story = {
       <org-design-system-demo-expected-behaviour>
         <ul class="list-inside list-disc flex flex-col gap-1">
           <li><strong>Programmatic Control</strong>: Tab selection can be controlled externally via signal.</li>
-          <li><strong>Auto-Scroll</strong>: When scrollable is enabled, the tabs container automatically scrolls to center the active tab.</li>
+          <li>
+            <strong>Auto-Scroll</strong>: When scrollable is enabled, the tabs container automatically scrolls to center
+            the active tab.
+          </li>
           <li><strong>Smooth Transition</strong>: The scroll animation is smooth and updates scroll button states.</li>
           <li><strong>Use Case</strong>: Useful for deep linking, navigation guards, or workflow steps.</li>
         </ul>

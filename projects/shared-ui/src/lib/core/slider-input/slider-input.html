@@ -1,0 +1,39 @@
+<div class="track" (pointerdown)="brain.onTrackPointerDown($event)">
+  <div
+    class="fill"
+    [style.--slider-input-fill-start]="brain.fillStartPercent() + '%'"
+    [style.--slider-input-fill-end]="brain.fillEndPercent() + '%'"
+  ></div>
+  @if (showTicks()) {
+    <div class="ticks">
+      @for (tick of ticks(); track tick.percent) {
+        <div class="tick" [style.--slider-input-tick-position]="tick.percent + '%'">
+          <span class="tick-mark"></span>
+          <span class="tick-label">{{ tick.value }}</span>
+        </div>
+      }
+    </div>
+  }
+  @for (value of brain.values(); track $index) {
+    <button
+      type="button"
+      class="thumb"
+      [attr.data-thumb-index]="$index"
+      role="slider"
+      [attr.aria-valuemin]="brain.thumbAriaValueMin($index)"
+      [attr.aria-valuemax]="brain.thumbAriaValueMax($index)"
+      [attr.aria-valuenow]="value"
+      [attr.aria-orientation]="brain.ariaOrientation()"
+      [attr.aria-disabled]="brain.isDisabled() ? 'true' : null"
+      [attr.aria-label]="thumbAriaLabel($index)"
+      [attr.tabindex]="brain.tabIndex()"
+      [disabled]="brain.isDisabled()"
+      [style.--slider-input-thumb-position]="brain.thumbPercent($index) + '%'"
+      (pointerdown)="brain.onThumbPointerDown($event, $index)"
+      (pointermove)="brain.onThumbPointerMove($event)"
+      (pointerup)="brain.onThumbPointerUp($event)"
+      (pointercancel)="brain.onThumbPointerCancel()"
+      (keydown)="brain.onThumbKeyDown($event, $index)"
+    ></button>
+  }
+</div>

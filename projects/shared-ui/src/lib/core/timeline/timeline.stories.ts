@@ -14,7 +14,14 @@ import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/d
 import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
 import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
 import { Timeline } from './timeline';
-import { TimelineItem, TIMELINE_ITEM_COLOR_DEFAULT, TimelineItemColor } from './timeline-item';
+import {
+  TimelineItem,
+  TIMELINE_ITEM_COLOR_DEFAULT,
+  TIMELINE_ITEM_COLOR_MODE_DEFAULT,
+  TimelineItemColor,
+  TimelineItemColorMode,
+  allTimelineItemColorModes,
+} from './timeline-item';
 import { TimelineTime } from './timeline-time';
 import { TimelineHeader } from './timeline-header';
 import { TimelineContent } from './timeline-content';
@@ -22,6 +29,12 @@ import { TimelineContent } from './timeline-content';
 const liveDemoColorItems: ButtonToggleItem[] = allComponentColors.map((color) => ({
   label: color,
   value: color,
+  buttonColor: 'primary',
+}));
+
+const liveDemoColorModeItems: ButtonToggleItem[] = allTimelineItemColorModes.map((mode) => ({
+  label: mode,
+  value: mode,
   buttonColor: 'primary',
 }));
 
@@ -81,6 +94,9 @@ const liveDemoIconItems: ButtonToggleItem[] = allLiveDemoIconChoices.map((choice
           <org-design-system-demo-control-group label="Color">
             <org-button-toggle [items]="colorItems" formControlName="color" buttonSize="sm" />
           </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Color mode">
+            <org-button-toggle [items]="colorModeItems" formControlName="colorMode" buttonSize="sm" />
+          </org-design-system-demo-control-group>
           <org-design-system-demo-control-group label="Dot icon">
             <org-button-toggle [items]="iconItems" formControlName="icon" buttonSize="sm" />
           </org-design-system-demo-control-group>
@@ -88,17 +104,29 @@ const liveDemoIconItems: ButtonToggleItem[] = allLiveDemoIconChoices.map((choice
         <org-design-system-demo-canvas slot="canvas">
           <div class="canvas-stage">
             <org-timeline>
-              <org-timeline-item [color]="liveDemoForm.controls.color.value" [dotIcon]="dotIcon()">
+              <org-timeline-item
+                [color]="liveDemoForm.controls.color.value"
+                [colorMode]="liveDemoForm.controls.colorMode.value"
+                [dotIcon]="dotIcon()"
+              >
                 <org-timeline-time>10:00 AM</org-timeline-time>
                 <org-timeline-header>Order Placed</org-timeline-header>
                 <org-timeline-content>Your order has been received.</org-timeline-content>
               </org-timeline-item>
-              <org-timeline-item [color]="liveDemoForm.controls.color.value" [dotIcon]="dotIcon()">
+              <org-timeline-item
+                [color]="liveDemoForm.controls.color.value"
+                [colorMode]="liveDemoForm.controls.colorMode.value"
+                [dotIcon]="dotIcon()"
+              >
                 <org-timeline-time>11:30 AM</org-timeline-time>
                 <org-timeline-header>Processing</org-timeline-header>
                 <org-timeline-content>Your order is being prepared.</org-timeline-content>
               </org-timeline-item>
-              <org-timeline-item [color]="liveDemoForm.controls.color.value" [dotIcon]="dotIcon()">
+              <org-timeline-item
+                [color]="liveDemoForm.controls.color.value"
+                [colorMode]="liveDemoForm.controls.colorMode.value"
+                [dotIcon]="dotIcon()"
+              >
                 <org-timeline-time>2:00 PM</org-timeline-time>
                 <org-timeline-header>Shipped</org-timeline-header>
                 <org-timeline-content>Your order is on its way.</org-timeline-content>
@@ -112,10 +140,12 @@ const liveDemoIconItems: ButtonToggleItem[] = allLiveDemoIconChoices.map((choice
 })
 class TimelineLiveDemoStory {
   protected readonly colorItems = liveDemoColorItems;
+  protected readonly colorModeItems = liveDemoColorModeItems;
   protected readonly iconItems = liveDemoIconItems;
 
   protected readonly liveDemoForm = new FormGroup({
     color: new FormControl<TimelineItemColor>('neutral', { nonNullable: true }),
+    colorMode: new FormControl<TimelineItemColorMode>(TIMELINE_ITEM_COLOR_MODE_DEFAULT, { nonNullable: true }),
     icon: new FormControl<LiveDemoIconChoice>('none', { nonNullable: true }),
   });
 
@@ -147,10 +177,15 @@ const meta: Meta<TimelineItem> = {
 
   ### Components
   - **Timeline**: The outer container that holds all timeline items
-  - **TimelineItem**: Each individual event row; accepts a \`color\` input (drives dot + connector below) and an optional \`dotIcon\` input (renders an icon inside the dot, growing the dot to host it)
+  - **TimelineItem**: Each individual event row; accepts a \`color\` input (drives dot + connector below), a \`colorMode\` input (\`line\` default, \`content\`, or \`both\`) that picks which surfaces the color paints, and an optional \`dotIcon\` input (renders an icon inside the dot, growing the dot to host it)
   - **TimelineTime**: Displays an uppercase eyebrow time label
   - **TimelineHeader**: Displays the event heading (the heading level is controlled via the brain directive)
   - **TimelineContent**: Displays the main body content for the event
+
+  ### Color Modes
+  - **line** (default): the dot and connector use the color; projected text has no explicit color and inherits from the surrounding context
+  - **content**: projected text picks up the color; the dot and connector are forced to neutral regardless of the color input
+  - **both**: both the marker and the projected text pick up the color
 
   ### Color Options
   - **neutral**: Default — neutral / quiet
@@ -190,6 +225,7 @@ type Story = StoryObj<TimelineItem>;
 export const Default: Story = {
   args: {
     color: TIMELINE_ITEM_COLOR_DEFAULT,
+    colorMode: TIMELINE_ITEM_COLOR_MODE_DEFAULT,
     dotIcon: undefined,
   },
   argTypes: {
@@ -197,6 +233,12 @@ export const Default: Story = {
       control: 'select',
       options: allComponentColors,
       description: 'the semantic color applied to the dot and the connector below it',
+    },
+    colorMode: {
+      control: 'select',
+      options: allTimelineItemColorModes,
+      description:
+        'which surfaces the color paints: `line` (dot/connector only), `content` (text only, marker forced neutral), or `both`',
     },
     dotIcon: {
       control: 'select',
@@ -207,7 +249,8 @@ export const Default: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'default timeline with a single color applied to all items. use the controls below to interact with the component.',
+        story:
+          'default timeline with a single color applied to all items. use the controls below to interact with the component.',
       },
     },
   },
@@ -215,17 +258,17 @@ export const Default: Story = {
     props: args,
     template: `
       <org-timeline>
-        <org-timeline-item [color]="color" [dotIcon]="dotIcon">
+        <org-timeline-item [color]="color" [colorMode]="colorMode" [dotIcon]="dotIcon">
           <org-timeline-time>10:00 AM</org-timeline-time>
           <org-timeline-header>Order Placed</org-timeline-header>
           <org-timeline-content>Your order has been received and is being processed.</org-timeline-content>
         </org-timeline-item>
-        <org-timeline-item [color]="color" [dotIcon]="dotIcon">
+        <org-timeline-item [color]="color" [colorMode]="colorMode" [dotIcon]="dotIcon">
           <org-timeline-time>11:30 AM</org-timeline-time>
           <org-timeline-header>Processing</org-timeline-header>
           <org-timeline-content>Your order is being prepared for shipment.</org-timeline-content>
         </org-timeline-item>
-        <org-timeline-item [color]="color" [dotIcon]="dotIcon">
+        <org-timeline-item [color]="color" [colorMode]="colorMode" [dotIcon]="dotIcon">
           <org-timeline-time>2:00 PM</org-timeline-time>
           <org-timeline-header>Shipped</org-timeline-header>
           <org-timeline-content>Your order has been shipped and is on its way.</org-timeline-content>
@@ -359,6 +402,44 @@ export const Showcase: Story = {
               <org-timeline-item color="info" dotIcon="info">
                 <org-timeline-header>With icon — info (released)</org-timeline-header>
                 <org-timeline-content>Mix and match — the dot variant is per-item, not per-list.</org-timeline-content>
+              </org-timeline-item>
+            </org-timeline>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Color Modes" />
+          <org-design-system-demo-canvas slot="canvas">
+            <org-timeline>
+              <org-timeline-item color="safe" colorMode="line" dotIcon="check">
+                <org-timeline-time>colorMode="line" (default)</org-timeline-time>
+                <org-timeline-header>Dot and connector carry the color</org-timeline-header>
+                <org-timeline-content>Text has no explicit color — it inherits from the surrounding context.</org-timeline-content>
+              </org-timeline-item>
+              <org-timeline-item color="safe" colorMode="content" dotIcon="check">
+                <org-timeline-time>colorMode="content"</org-timeline-time>
+                <org-timeline-header>Content text carries the color</org-timeline-header>
+                <org-timeline-content>The dot and connector stay neutral regardless of the color input.</org-timeline-content>
+              </org-timeline-item>
+              <org-timeline-item color="safe" colorMode="both" dotIcon="check">
+                <org-timeline-time>colorMode="both"</org-timeline-time>
+                <org-timeline-header>Marker and content both carry the color</org-timeline-header>
+                <org-timeline-content>The colored body inherits via the host while the dot and connector also pick up the ramp.</org-timeline-content>
+              </org-timeline-item>
+              <org-timeline-item color="danger" colorMode="line">
+                <org-timeline-time>colorMode="line" · danger</org-timeline-time>
+                <org-timeline-header>Same axes, different ramp</org-timeline-header>
+                <org-timeline-content>Use line when the body should read as normal text.</org-timeline-content>
+              </org-timeline-item>
+              <org-timeline-item color="danger" colorMode="content">
+                <org-timeline-time>colorMode="content" · danger</org-timeline-time>
+                <org-timeline-header>Body reads in the danger ramp</org-timeline-header>
+                <org-timeline-content>The marker is forced neutral so the body color does the talking.</org-timeline-content>
+              </org-timeline-item>
+              <org-timeline-item color="danger" colorMode="both">
+                <org-timeline-time>colorMode="both" · danger</org-timeline-time>
+                <org-timeline-header>Full-bleed emphasis</org-timeline-header>
+                <org-timeline-content>Reach for both when the row should feel saturated in the ramp top-to-bottom.</org-timeline-content>
               </org-timeline-item>
             </org-timeline>
           </org-design-system-demo-canvas>

@@ -1,18 +1,19 @@
 :root {
   /* layout */
-  --timeline-rail-width: var(--sizing-12xs); /* 16px */
-  --timeline-gutter: var(--spacing-3); /* 12px */
-  --timeline-row-stack: var(--spacing-4); /* 16px */
-  --timeline-marker-padding-top: var(--spacing-1_5); /* 6px */
-  --timeline-content-padding-bottom: var(--spacing-1); /* 4px */
+  --timeline-rail-width: var(--sizing-12xs);
+  --timeline-gutter: var(--spacing-3);
+  --timeline-row-stack: var(--spacing-4);
+  --timeline-marker-padding-top: var(--spacing-1_5);
+  --timeline-content-padding-bottom: var(--spacing-1);
 
   /* dot */
   --timeline-dot-size: 0.6875rem; /* 11px */
-  --timeline-dot-icon-host-size: 1.125rem; /* 18px */
+  /* since the icon size is odd, this must be odd to keep it truly centered */
+  --timeline-dot-icon-host-size: 1.1875rem; /* 19px */
   --timeline-dot-radius: var(--radius-pill);
 
   /* connector */
-  --timeline-connector-width: var(--border-width); /* 1px */
+  --timeline-connector-width: var(--border-width);
 
   /* time eyebrow */
   --timeline-time-font-size: var(--font-size-xs);
@@ -30,6 +31,15 @@
   /* per-item color (defaults to neutral, overridden via data-color) */
   --timeline-item-color: var(--color-neutral);
   --timeline-item-icon-color: var(--color-neutral-on);
+
+  /*
+   * marker (dot + connector) colors — these live on :host in timeline-item.css so the var()
+   * substitution happens at the host element where --timeline-item-color has already been
+   * resolved against the data-color cascade. defaults below mirror the host-level resolution
+   * so the typescript design-token export reads correctly.
+   */
+  --timeline-item-marker-color: var(--color-neutral);
+  --timeline-item-marker-icon-color: var(--color-neutral-on);
 
   /* motion */
   --timeline-motion-duration: var(--motion-duration-base);

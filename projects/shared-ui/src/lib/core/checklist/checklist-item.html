@@ -1,5 +1,11 @@
 @if (hasNestedItems()) {
-  <button type="button" class="row" data-clickable="1" (click)="brain.toggle()" [attr.aria-expanded]="brain.isExpanded()">
+  <button
+    type="button"
+    class="row"
+    data-clickable="1"
+    (click)="brain.toggle()"
+    [attr.aria-expanded]="brain.isExpanded()"
+  >
     <org-checklist-status-icon [status]="item().status" />
 
     <span class="label">{{ item().label }}</span>

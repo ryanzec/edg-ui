@@ -13,7 +13,7 @@ export type BaseChecklistItemData = {
   id: string;
   label: string;
   status: ChecklistItemStatus;
-  /** optional trailing detail (durations, tail status, free-form). renders in the meta slot. */
+  /** optional post detail (durations, tail status, free-form). renders in the meta slot. */
   meta?: string;
   /** optional count pill content (e.g. `2/4`). only meaningful on parent rows. */
   count?: string;

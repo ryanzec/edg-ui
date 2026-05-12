@@ -15,7 +15,7 @@
           @if (item.icon; as iconName) {
             <org-list-item-icon pre [name]="iconName" />
           }
-          @if (item.tag || item.shortcut || item.trailingIcon) {
+          @if (item.tag || item.shortcut || item.postIcon) {
             <org-overlay-menu-item-meta post>
               @if (item.tag; as itemTag) {
                 <org-tag [color]="toTagColor(itemTag.color)" size="xs">{{ itemTag.label }}</org-tag>
@@ -23,8 +23,8 @@
               @if (item.shortcut; as shortcut) {
                 <span>{{ shortcut }}</span>
               }
-              @if (item.trailingIcon; as trailingIcon) {
-                <org-list-item-icon [name]="trailingIcon" />
+              @if (item.postIcon; as postIcon) {
+                <org-list-item-icon [name]="postIcon" />
               }
             </org-overlay-menu-item-meta>
           }

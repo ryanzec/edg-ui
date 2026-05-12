@@ -248,7 +248,13 @@ export const Default: Story = {
                         <org-button [iconOnly]="true" label="attach" ariaLabel="attach" variant="text" preIcon="plus" />
                       </org-textarea-toolbar-item>
                       <org-textarea-toolbar-item>
-                        <org-button [iconOnly]="true" label="mention" ariaLabel="mention" variant="text" preIcon="at-sign" />
+                        <org-button
+                          [iconOnly]="true"
+                          label="mention"
+                          ariaLabel="mention"
+                          variant="text"
+                          preIcon="at-sign"
+                        />
                       </org-textarea-toolbar-item>
                     </org-textarea-toolbar>
                   }
@@ -270,14 +276,22 @@ export const Default: Story = {
                       <org-button [iconOnly]="true" label="attach" ariaLabel="attach" variant="text" preIcon="plus" />
                     </org-textarea-toolbar-item>
                     <org-textarea-toolbar-item>
-                      <org-button [iconOnly]="true" label="mention" ariaLabel="mention" variant="text" preIcon="at-sign" />
+                      <org-button
+                        [iconOnly]="true"
+                        label="mention"
+                        ariaLabel="mention"
+                        variant="text"
+                        preIcon="at-sign"
+                      />
                     </org-textarea-toolbar-item>
                   </org-textarea-toolbar>
                 }
               </org-textarea>
             }
             <p class="meta">
-              data-variant="{{ liveDemoForm.controls.variant.value }}", lines={{ liveDemoForm.controls.minLines.value }}–8
+              data-variant="{{ liveDemoForm.controls.variant.value }}", lines={{
+                liveDemoForm.controls.minLines.value
+              }}–8
             </p>
           </div>
         </org-design-system-demo-canvas>
@@ -339,7 +353,11 @@ export const LiveDemo: Story = {
   template: `
     <div class="flex flex-col gap-4">
       <org-design-system-demo>
-        <org-design-system-demo-header slot="header" title="Variants" description="Two shell treatments, all sharing the Input ramp." />
+        <org-design-system-demo-header
+          slot="header"
+          title="Variants"
+          description="Two shell treatments, all sharing the Input ramp."
+        />
         <org-design-system-demo-canvas slot="canvas">
           <org-textarea name="showcase-bordered" placeholder="Tell us what you’re working on..." />
           <org-textarea name="showcase-borderless" variant="borderless" placeholder="Add a comment..." />
@@ -353,14 +371,26 @@ export const LiveDemo: Story = {
       </org-design-system-demo-expected-behaviour>
 
       <org-design-system-demo>
-        <org-design-system-demo-header slot="header" title="Visual States" description="Every state, shown for the bordered variant." />
+        <org-design-system-demo-header
+          slot="header"
+          title="Visual States"
+          description="Every state, shown for the bordered variant."
+        />
         <org-design-system-demo-canvas slot="canvas">
           <org-textarea name="showcase-state-default" placeholder="Write a reply..." />
           <org-form-field validationMessage="Description must be at least 20 characters.">
             <org-textarea name="showcase-state-error" />
           </org-form-field>
-          <org-textarea name="showcase-state-disabled" [disabled]="true" placeholder="This payload is locked while the job runs." />
-          <org-textarea name="showcase-state-readonly" [readonly]="true" value="Auto-generated from the latest commit message." />
+          <org-textarea
+            name="showcase-state-disabled"
+            [disabled]="true"
+            placeholder="This payload is locked while the job runs."
+          />
+          <org-textarea
+            name="showcase-state-readonly"
+            [readonly]="true"
+            value="Auto-generated from the latest commit message."
+          />
           <org-textarea name="showcase-state-loading" [loading]="true" value="Streaming in progress..." />
         </org-design-system-demo-canvas>
       </org-design-system-demo>
@@ -375,7 +405,11 @@ export const LiveDemo: Story = {
       </org-design-system-demo-expected-behaviour>
 
       <org-design-system-demo>
-        <org-design-system-demo-header slot="header" title="Toolbar" description="An optional bottom strip merged into the same shell — no internal divider. Holds tool buttons on the left and a built-in send button (with optional keyboard hint) on the right." />
+        <org-design-system-demo-header
+          slot="header"
+          title="Toolbar"
+          description="An optional bottom strip merged into the same shell — no internal divider. Holds tool buttons on the left and a built-in send button (with optional keyboard hint) on the right."
+        />
         <org-design-system-demo-canvas slot="canvas">
           <org-textarea name="showcase-toolbar-followup" placeholder="Ask a follow-up...">
             <org-textarea-toolbar [showHint]="true">
@@ -418,15 +452,30 @@ export const LiveDemo: Story = {
       <org-design-system-demo-expected-behaviour>
         <ul class="list-inside list-disc flex flex-col gap-1">
           <li>Toolbar is part of the shell — no internal divider, no separate background</li>
-          <li><strong>Default slot</strong>: Project <code>org-textarea-toolbar-item</code> elements for the left edge</li>
-          <li><strong><code>[toolbar-right]</code> slot</strong>: Project custom buttons that sit before the built-in send button</li>
-          <li><strong><code>showSendButton</code></strong>: Drop the built-in send button entirely (e.g. drafts with Save / Publish)</li>
-          <li><strong><code>showHint</code> + <code>hintLabel</code></strong>: Show a small kbd-styled keyboard hint (e.g. "↵ to send")</li>
+          <li>
+            <strong>Default slot</strong>: Project <code>org-textarea-toolbar-item</code> elements for the left edge
+          </li>
+          <li>
+            <strong><code>[toolbar-right]</code> slot</strong>: Project custom buttons that sit before the built-in send
+            button
+          </li>
+          <li>
+            <strong><code>showSendButton</code></strong
+            >: Drop the built-in send button entirely (e.g. drafts with Save / Publish)
+          </li>
+          <li>
+            <strong><code>showHint</code> + <code>hintLabel</code></strong
+            >: Show a small kbd-styled keyboard hint (e.g. "↵ to send")
+          </li>
         </ul>
       </org-design-system-demo-expected-behaviour>
 
       <org-design-system-demo>
-        <org-design-system-demo-header slot="header" title="Auto-grow" description="The shell sits between minLines and maxLines. Typing past maxLines scrolls inside the textarea — the field never grows past its ceiling." />
+        <org-design-system-demo-header
+          slot="header"
+          title="Auto-grow"
+          description="The shell sits between minLines and maxLines. Typing past maxLines scrolls inside the textarea — the field never grows past its ceiling."
+        />
         <org-design-system-demo-canvas slot="canvas">
           <org-textarea
             name="showcase-grow-single"
@@ -452,12 +501,18 @@ export const LiveDemo: Story = {
         <ul class="list-inside list-disc flex flex-col gap-1">
           <li><strong>minLines</strong> sets the floor — the textarea never collapses below this height</li>
           <li><strong>maxLines</strong> sets the ceiling — content past this scrolls inside the textarea</li>
-          <li>Auto-grow is driven by CSS <code>field-sizing: content</code> + <code>1lh</code> bounds — no JavaScript runs</li>
+          <li>
+            Auto-grow is driven by CSS <code>field-sizing: content</code> + <code>1lh</code> bounds — no JavaScript runs
+          </li>
         </ul>
       </org-design-system-demo-expected-behaviour>
 
       <org-design-system-demo>
-        <org-design-system-demo-header slot="header" title="In context — with Label" description="Stacked with a label and helper / error message via FormField." />
+        <org-design-system-demo-header
+          slot="header"
+          title="In context — with Label"
+          description="Stacked with a label and helper / error message via FormField."
+        />
         <org-design-system-demo-canvas slot="canvas">
           <org-form-fields>
             <org-form-field>
@@ -473,8 +528,14 @@ export const LiveDemo: Story = {
       </org-design-system-demo>
       <org-design-system-demo-expected-behaviour>
         <ul class="list-inside list-disc flex flex-col gap-1">
-          <li><strong>FormField wrapping</strong>: Provides validation message + reserved space; the textarea's error state is driven directly by the FormField</li>
-          <li><strong>Label association</strong>: The label's <code>htmlFor</code> matches the textarea's <code>name</code> (which is also used as the element id)</li>
+          <li>
+            <strong>FormField wrapping</strong>: Provides validation message + reserved space; the textarea's error
+            state is driven directly by the FormField
+          </li>
+          <li>
+            <strong>Label association</strong>: The label's <code>htmlFor</code> matches the textarea's
+            <code>name</code> (which is also used as the element id)
+          </li>
         </ul>
       </org-design-system-demo-expected-behaviour>
     </div>
@@ -515,11 +576,7 @@ export const Showcase: Story = {
       <org-design-system-demo>
         <org-design-system-demo-header slot="header" title="Non-Form Usage" />
         <org-design-system-demo-canvas slot="canvas">
-          <org-textarea
-            name="non-form-textarea"
-            placeholder="Type to update the value below"
-            [(value)]="value"
-          >
+          <org-textarea name="non-form-textarea" placeholder="Type to update the value below" [(value)]="value">
             <org-textarea-toolbar
               [showHint]="true"
               [sendDisabled]="value().trim().length === 0"
@@ -619,8 +676,13 @@ export const NonFormUsage: Story = {
       <org-design-system-demo-expected-behaviour>
         <ul class="list-inside list-disc flex flex-col gap-1">
           <li>Uses <strong>formControlName</strong> for reactive forms via <code>ControlValueAccessor</code></li>
-          <li>The <code>org-form-field</code> wraps each textarea and drives <code>data-state="error"</code> via <code>validationMessage</code></li>
-          <li>Programmatic <strong>form.disable()</strong> / <strong>control.disable()</strong> reflects in the textarea</li>
+          <li>
+            The <code>org-form-field</code> wraps each textarea and drives <code>data-state="error"</code> via
+            <code>validationMessage</code>
+          </li>
+          <li>
+            Programmatic <strong>form.disable()</strong> / <strong>control.disable()</strong> reflects in the textarea
+          </li>
         </ul>
       </org-design-system-demo-expected-behaviour>
     </div>

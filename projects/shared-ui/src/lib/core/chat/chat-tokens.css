@@ -1,15 +1,15 @@
 :root {
   /* thread layout */
-  --chat-thread-max-width: var(--sizing-3xl); /* 768px */
-  --chat-thread-padding: var(--spacing-4); /* 16px */
-  --chat-message-max-width: var(--sizing-2xl); /* 672px */
+  --chat-thread-max-width: var(--sizing-3xl);
+  --chat-thread-padding: var(--spacing-4);
+  --chat-message-max-width: var(--sizing-2xl);
 
   /* run rhythm */
   --chat-run-gap-between: var(--spacing-5); /* 20px between different senders */
   --chat-run-gap-within: var(--spacing-1); /* 4px within a run */
 
   /* avatar gutter */
-  --chat-avatar-size: var(--spacing-8); /* 32px */
+  --chat-avatar-size: var(--spacing-8);
   --chat-avatar-gap: var(--spacing-3); /* 12px gutter to body column */
 
   /* author / meta */
@@ -31,8 +31,8 @@
   --chat-block-meta-fg: var(--color-fg-muted);
   --chat-block-tool-accent: var(--color-info);
   --chat-block-thinking-accent: var(--color-fg-faint);
-  --chat-block-running-rail-width: var(--border-width-emphasize); /* 8px */
-  --chat-block-rail-width: var(--border-width); /* 1px */
+  --chat-block-running-rail-width: var(--border-width-emphasize);
+  --chat-block-rail-width: var(--border-width);
 
   --chat-suggestion-bg: var(--color-bg-surface);
   --chat-suggestion-fg: var(--color-fg);

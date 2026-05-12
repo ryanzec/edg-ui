@@ -157,7 +157,7 @@
     --tag-gap: var(--spacing-1);
   }
 
-  /* trailing-slot ordering — spinner first, stepper last, others (clear / password toggle / post icon) middle */
+  /* post-slot ordering — spinner first, stepper last, others (clear / password toggle / post icon) middle */
   .post org-loading-spinner {
     order: -1;
   }
@@ -261,7 +261,7 @@
     color: var(--input-fg-muted);
   }
 
-  /* type-specific: search leading icon explicitly muted */
+  /* type-specific: search pre icon explicitly muted */
   :host([data-type='search']) .pre {
     color: var(--input-fg-muted);
   }

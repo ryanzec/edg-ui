@@ -68,12 +68,12 @@ const meta: Meta<Checklist> = {
 <div class="docs-top-level-overview">
   ## Checklist Component
 
-  A vertical list of status-bearing rows for multi-step processes, validation rule readouts, and AI step traces. Each row carries a fixed-footprint status glyph, a label, an optional count pill, optional trailing meta, and (for parent rows) a chevron that rotates 90° when expanded.
+  A vertical list of status-bearing rows for multi-step processes, validation rule readouts, and AI step traces. Each row carries a fixed-footprint status glyph, a label, an optional count pill, optional post meta, and (for parent rows) a chevron that rotates 90° when expanded.
 
   ### Features
   - 4 status types — \`not-started\` / \`in-progress\` / \`valid\` / \`invalid\`
   - Optional count pill (tabular fraction, e.g. \`2/4\`)
-  - Optional trailing meta (durations, tail status)
+  - Optional post meta (durations, tail status)
   - Optional one level of nested sub-items with expand/collapse
   - Consumer opt-in to emphasize invalid rows in danger color
   - Consumer opt-in to paint a soft tile background behind every status glyph
@@ -312,7 +312,7 @@ const showcaseStatusItems: ChecklistItemData[] = [
 
 const showcaseAnatomyItems: ChecklistItemData[] = [
   { id: 'anatomy-1', label: 'Label only', status: 'valid' },
-  { id: 'anatomy-2', label: 'Label with trailing meta', status: 'valid', meta: '2m 35s' },
+  { id: 'anatomy-2', label: 'Label with post meta', status: 'valid', meta: '2m 35s' },
   {
     id: 'anatomy-3',
     label: 'Parent — count + meta + chevron',
@@ -391,7 +391,7 @@ export const Showcase: Story = {
           <org-design-system-demo-header
             slot="header"
             title="Anatomy"
-            description="A row is a single horizontal line: a fixed-footprint status slot, a label (flex), an optional count pill, optional trailing meta, and — when the item has children — a chevron that rotates 90° when expanded."
+            description="A row is a single horizontal line: a fixed-footprint status slot, a label (flex), an optional count pill, optional post meta, and — when the item has children — a chevron that rotates 90° when expanded."
           />
           <org-design-system-demo-canvas slot="canvas">
             <org-checklist [items]="anatomyItems" />
@@ -402,7 +402,7 @@ export const Showcase: Story = {
             <li><strong>Status slot</strong>: Fixed footprint so labels align across rows regardless of which glyph renders</li>
             <li><strong>Label</strong>: Single-line, ellipsis-truncated, only flex-grow element</li>
             <li><strong>Count pill</strong>: Optional fraction; tabular numerals so values like 1/3 vs 12/12 don't wobble</li>
-            <li><strong>Meta</strong>: Optional trailing detail (durations, tail status)</li>
+            <li><strong>Meta</strong>: Optional post detail (durations, tail status)</li>
             <li><strong>Chevron</strong>: Parent rows only; rotates 90° when expanded — no glyph swap</li>
           </ul>
         </org-design-system-demo-expected-behaviour>

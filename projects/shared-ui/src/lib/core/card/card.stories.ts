@@ -49,8 +49,7 @@ const liveDemoFooterAlignmentItems: ButtonToggleItem[] = allCardAlignments.map((
   buttonColor: 'primary',
 }));
 
-const SAMPLE_IMAGE_TOP =
-  'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=800&q=80';
+const SAMPLE_IMAGE_TOP = 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=800&q=80';
 const SAMPLE_IMAGE_INSET =
   'https://images.unsplash.com/photo-1604079628040-94301bb21b91?auto=format&fit=crop&w=800&q=80';
 const SAMPLE_IMAGE_BOTTOM =
@@ -293,8 +292,8 @@ export const Default: Story = {
                 }
                 @if (liveDemoForm.controls.content.value) {
                   <org-card-content>
-                    Cards group related content into a discrete visual block. Drop any composition inside —
-                    settings rows, KPI tiles, prose, or sub-components from elsewhere in the system.
+                    Cards group related content into a discrete visual block. Drop any composition inside — settings
+                    rows, KPI tiles, prose, or sub-components from elsewhere in the system.
                   </org-card-content>
                 }
                 @if (liveDemoForm.controls.footer.value) {

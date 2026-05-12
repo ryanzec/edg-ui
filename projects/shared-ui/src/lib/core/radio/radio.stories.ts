@@ -14,15 +14,7 @@ import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/d
 import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
 import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
 import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
-import {
-  Radio,
-  RadioColor,
-  RadioSize,
-  RadioVariant,
-  allRadioColors,
-  allRadioSizes,
-  allRadioVariants,
-} from './radio';
+import { Radio, RadioColor, RadioSize, RadioVariant, allRadioColors, allRadioSizes, allRadioVariants } from './radio';
 import { RadioGroup } from './radio-group';
 
 const liveDemoSizeItems: ButtonToggleItem[] = allRadioSizes.map((size) => ({
@@ -251,9 +243,7 @@ export const Default: Story = {
         <org-design-system-demo-canvas slot="canvas">
           <div class="canvas-stage">
             <org-form-fields>
-              <org-form-field
-                [validationMessage]="liveDemoForm.controls.error.value ? 'This field is required' : null"
-              >
+              <org-form-field [validationMessage]="liveDemoForm.controls.error.value ? 'This field is required' : null">
                 <org-radio-group
                   name="live-demo"
                   [value]="liveDemoForm.controls.checked.value ? 'live' : ''"
@@ -314,14 +304,7 @@ export const LiveDemo: Story = {
 @Component({
   selector: 'story-radio-group-default-section',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    ReactiveFormsModule,
-    Radio,
-    RadioGroup,
-    DesignSystemDemo,
-    DesignSystemDemoHeader,
-    DesignSystemDemoCanvas,
-  ],
+  imports: [ReactiveFormsModule, Radio, RadioGroup, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
   template: `
     <org-design-system-demo>
       <org-design-system-demo-header
@@ -558,7 +541,7 @@ export const Showcase: Story = {
         <org-design-system-demo-expected-behaviour>
           <ul class="list-inside list-disc flex flex-col gap-1">
             <li>The legend reads as a small uppercase-cased section title — distinct from a Label so it doesn't compete with field-row labels in the same form</li>
-            <li>The required marker is a trailing asterisk in danger color</li>
+            <li>The required marker is a post asterisk in danger color</li>
             <li>The description sits below the legend, above the options — never interleaved</li>
             <li>Inter-option gap is constant across sizes; density should change indicator size, not vertical rhythm</li>
           </ul>
@@ -686,9 +669,14 @@ export const NonFormUsage: Story = {
       </org-design-system-demo>
       <org-design-system-demo-expected-behaviour>
         <ul class="list-inside list-disc flex flex-col gap-1">
-          <li>Uses <strong>formControlName</strong> on <code>org-radio-group</code> for reactive forms integration via ControlValueAccessor</li>
+          <li>
+            Uses <strong>formControlName</strong> on <code>org-radio-group</code> for reactive forms integration via
+            ControlValueAccessor
+          </li>
           <li>Form state updates automatically as the user picks an option — no manual change handlers needed</li>
-          <li>Each <code>org-radio-group</code> is its own form control; multiple groups in the same form stay independent</li>
+          <li>
+            Each <code>org-radio-group</code> is its own form control; multiple groups in the same form stay independent
+          </li>
         </ul>
       </org-design-system-demo-expected-behaviour>
     </div>
@@ -702,7 +690,7 @@ class RadioReactiveFormStory {
 
   protected readonly formValueDisplay = toSignal(
     this.radioForm.valueChanges.pipe(map((value) => JSON.stringify(value))),
-    { initialValue: JSON.stringify(this.radioForm.value) },
+    { initialValue: JSON.stringify(this.radioForm.value) }
   );
 }
 

@@ -128,7 +128,8 @@ export const Default: Story = {
     externalState: {
       control: 'select',
       options: [undefined, ...allFileUploadExternalStates],
-      description: 'Externally driven state overlay for upload-pipeline visuals (only honoured when a file is selected)',
+      description:
+        'Externally driven state overlay for upload-pipeline visuals (only honoured when a file is selected)',
     },
     removeAriaLabel: {
       control: 'text',
@@ -293,19 +294,11 @@ export const LiveDemo: Story = {
             </div>
             <div class="flex flex-col gap-1">
               <small class="font-weight-medium text-muted text-uppercase letter-spacing-wide">Upload · Success</small>
-              <org-file-upload
-                [formControl]="successFile"
-                externalState="success"
-                fileMeta="Uploaded · 2.4 MB"
-              />
+              <org-file-upload [formControl]="successFile" externalState="success" fileMeta="Uploaded · 2.4 MB" />
             </div>
             <div class="flex flex-col gap-1">
               <small class="font-weight-medium text-muted text-uppercase letter-spacing-wide">Upload · Failure</small>
-              <org-file-upload
-                [formControl]="failureFile"
-                externalState="failure"
-                fileMeta="Upload failed · retry"
-              />
+              <org-file-upload [formControl]="failureFile" externalState="failure" fileMeta="Upload failed · retry" />
             </div>
             <div class="flex flex-col gap-1">
               <small class="font-weight-medium text-muted text-uppercase letter-spacing-wide">Error · Validation</small>
@@ -321,11 +314,24 @@ export const LiveDemo: Story = {
       <org-design-system-demo-expected-behaviour>
         <ul class="list-inside list-disc flex flex-col gap-1">
           <li><strong>Idle</strong>: Resting drop zone with surface-2 background and default-color dashed border</li>
-          <li><strong>Hover</strong>: Drag-over only — info-tinted border + background + icon (not driven by CSS :hover)</li>
-          <li><strong>Selected</strong>: File row replaces the empty stack; outer padding tightens; remove button revealed</li>
-          <li><strong>Uploading / Success / Failure</strong>: Externally driven overlays for hosts wrapping their own upload pipeline; meta text recolors per state</li>
-          <li><strong>Error</strong>: Empty stack stays; danger-tinted border + background + icon; hint slot carries the message</li>
-          <li><strong>Disabled</strong>: Fades the zone, blocks pointer events, and disables both the input and the remove button</li>
+          <li>
+            <strong>Hover</strong>: Drag-over only — info-tinted border + background + icon (not driven by CSS :hover)
+          </li>
+          <li>
+            <strong>Selected</strong>: File row replaces the empty stack; outer padding tightens; remove button revealed
+          </li>
+          <li>
+            <strong>Uploading / Success / Failure</strong>: Externally driven overlays for hosts wrapping their own
+            upload pipeline; meta text recolors per state
+          </li>
+          <li>
+            <strong>Error</strong>: Empty stack stays; danger-tinted border + background + icon; hint slot carries the
+            message
+          </li>
+          <li>
+            <strong>Disabled</strong>: Fades the zone, blocks pointer events, and disables both the input and the remove
+            button
+          </li>
         </ul>
       </org-design-system-demo-expected-behaviour>
 
@@ -406,7 +412,9 @@ export const Showcase: Story = {
       <org-design-system-demo-expected-behaviour>
         <ul class="list-inside list-disc flex flex-col gap-1">
           <li>Listens to the <code>fileSelected</code> output to track the picked file</li>
-          <li>Listens to the <code>removed</code> output to clear local state when the user clicks the remove button</li>
+          <li>
+            Listens to the <code>removed</code> output to clear local state when the user clicks the remove button
+          </li>
           <li>The host owns the file reference — no Angular Forms binding involved</li>
         </ul>
       </org-design-system-demo-expected-behaviour>
@@ -468,7 +476,11 @@ export const NonFormUsage: Story = {
             <org-form-fields>
               <org-form-field>
                 <org-label text="Resume" />
-                <org-file-upload [fileTypes]="['application/pdf']" hint="PDF only · 5 MB max." formControlName="resume" />
+                <org-file-upload
+                  [fileTypes]="['application/pdf']"
+                  hint="PDF only · 5 MB max."
+                  formControlName="resume"
+                />
               </org-form-field>
             </org-form-fields>
           </form>
@@ -478,7 +490,10 @@ export const NonFormUsage: Story = {
         <ul class="list-inside list-disc flex flex-col gap-1">
           <li>Uses <strong>formControlName</strong> for reactive forms integration via ControlValueAccessor</li>
           <li>Form value is the picked <code>File</code> instance, or <code>null</code> when removed</li>
-          <li>Calling <strong>form.disable()</strong> or <strong>control.disable()</strong> reflects in the drop zone via setDisabledState</li>
+          <li>
+            Calling <strong>form.disable()</strong> or <strong>control.disable()</strong> reflects in the drop zone via
+            setDisabledState
+          </li>
         </ul>
       </org-design-system-demo-expected-behaviour>
     </div>
@@ -489,10 +504,9 @@ class FileUploadReactiveFormStory {
     resume: new FormControl<File | null>(null),
   });
 
-  protected readonly formValueDisplay = toSignal(
-    this.uploadForm.valueChanges.pipe(map((value) => !!value.resume)),
-    { initialValue: false }
-  );
+  protected readonly formValueDisplay = toSignal(this.uploadForm.valueChanges.pipe(map((value) => !!value.resume)), {
+    initialValue: false,
+  });
 }
 
 export const ReactiveFormIntegration: Story = {

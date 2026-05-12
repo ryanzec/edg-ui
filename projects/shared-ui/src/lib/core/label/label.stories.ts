@@ -30,7 +30,7 @@ const meta: Meta<Label> = {
   ### Features
   - Required indicator generated as a decorative \`::after\` marker (danger color, semibold)
   - Loading indicator composed from \`org-loading-spinner\`, restyled to muted foreground
-  - Trailing slot for help icons, inline links, badges, character counters — children inherit muted foreground unless they opt into a different color
+  - Post slot for help icons, inline links, badges, character counters — children inherit muted foreground unless they opt into a different color
   - Renders as native \`<label>\` (default) or as \`<div>\` for compound fields
 
   ### Accessibility
@@ -49,9 +49,9 @@ const meta: Meta<Label> = {
   <!-- loading -->
   <org-label htmlFor="org" text="Organization" [isLoading]="true" />
 
-  <!-- trailing slot -->
+  <!-- post slot -->
   <org-label htmlFor="bio" text="Bio">
-    <span trailing>24 / 160</span>
+    <span post>24 / 160</span>
   </org-label>
 
   <!-- compound field -->
@@ -226,7 +226,7 @@ export const Showcase: Story = {
     docs: {
       description: {
         story:
-          'Comprehensive showcase of every label variant axis — the indicator matrix (asLabel x required x loading), the trailing slot (help icon, inline link, character counter, combinations with required and loading), and real-world stacked-form composition.',
+          'Comprehensive showcase of every label variant axis — the indicator matrix (asLabel x required x loading), the post slot (help icon, inline link, character counter, combinations with required and loading), and real-world stacked-form composition.',
       },
     },
   },
@@ -278,48 +278,48 @@ export const Showcase: Story = {
         </org-design-system-demo-expected-behaviour>
 
         <org-design-system-demo>
-          <org-design-system-demo-header slot="header" title="Trailing slot" />
+          <org-design-system-demo-header slot="header" title="Post slot" />
           <org-design-system-demo-canvas slot="canvas">
             <div class="grid grid-cols-2 gap-3 items-center">
               <span class="text-xs font-weight-medium text-muted">HELP ICON</span>
-              <org-label htmlFor="trailing-help-icon" text="API key">
-                <org-icon trailing name="circle-help" size="sm" color="inherit" />
+              <org-label htmlFor="post-help-icon" text="API key">
+                <org-icon post name="circle-help" size="sm" color="inherit" />
               </org-label>
 
               <span class="text-xs font-weight-medium text-muted">INLINE LINK</span>
-              <org-label htmlFor="trailing-link" text="Password">
-                <org-link trailing href="#" ariaLabel="Forgot password">Forgot?</org-link>
+              <org-label htmlFor="post-link" text="Password">
+                <org-link post href="#" ariaLabel="Forgot password">Forgot?</org-link>
               </org-label>
 
               <span class="text-xs font-weight-medium text-muted">CHARACTER COUNTER</span>
-              <org-label htmlFor="trailing-counter" text="Bio">
-                <span trailing>24 / 160</span>
+              <org-label htmlFor="post-counter" text="Bio">
+                <span post>24 / 160</span>
               </org-label>
 
-              <span class="text-xs font-weight-medium text-muted">REQUIRED + TRAILING</span>
-              <org-label htmlFor="trailing-required" text="Display name" [isRequired]="true">
-                <org-icon trailing name="circle-check" size="sm" color="inherit" />
+              <span class="text-xs font-weight-medium text-muted">REQUIRED + POST</span>
+              <org-label htmlFor="post-required" text="Display name" [isRequired]="true">
+                <org-icon post name="circle-check" size="sm" color="inherit" />
               </org-label>
 
-              <span class="text-xs font-weight-medium text-muted">REQUIRED + LOADING + TRAILING</span>
+              <span class="text-xs font-weight-medium text-muted">REQUIRED + LOADING + POST</span>
               <org-label
-                htmlFor="trailing-required-loading"
+                htmlFor="post-required-loading"
                 text="Organization"
                 [isRequired]="true"
                 [isLoading]="true"
               >
-                <org-icon trailing name="circle-check" size="sm" color="inherit" />
+                <org-icon post name="circle-check" size="sm" color="inherit" />
               </org-label>
             </div>
           </org-design-system-demo-canvas>
         </org-design-system-demo>
         <org-design-system-demo-expected-behaviour>
           <ul class="list-inside list-disc flex flex-col gap-1">
-            <li><strong>Trailing slot</strong>: Project content with the <code>trailing</code> attribute. Sits after the loading spinner, in the muted foreground color.</li>
+            <li><strong>Post slot</strong>: Project content with the <code>post</code> attribute. Sits after the loading spinner, in the muted foreground color.</li>
             <li><strong>Help icon</strong>: An <code>org-icon</code> as a help affordance.</li>
             <li><strong>Inline link</strong>: An <code>org-link</code> for jump-to-recovery / "Forgot?" patterns.</li>
-            <li><strong>Character counter</strong>: A bare <code>&lt;span trailing&gt;</code> for live counters.</li>
-            <li><strong>Combinations</strong>: Trailing content composes with the required asterisk and the loading spinner; the spinner always sits between the text and the trailing content.</li>
+            <li><strong>Character counter</strong>: A bare <code>&lt;span post&gt;</code> for live counters.</li>
+            <li><strong>Combinations</strong>: Post content composes with the required asterisk and the loading spinner; the spinner always sits between the text and the post content.</li>
           </ul>
         </org-design-system-demo-expected-behaviour>
 
@@ -334,7 +334,7 @@ export const Showcase: Story = {
 
               <div class="flex flex-col gap-1">
                 <org-label htmlFor="ctx-password" text="Password" [isRequired]="true">
-                  <org-link trailing href="#" ariaLabel="Forgot password">Forgot?</org-link>
+                  <org-link post href="#" ariaLabel="Forgot password">Forgot?</org-link>
                 </org-label>
                 <org-input name="ctx-password" type="password" placeholder="••••••••" />
               </div>
@@ -346,7 +346,7 @@ export const Showcase: Story = {
 
               <div class="flex flex-col gap-1">
                 <org-label htmlFor="ctx-display-name" text="Display name">
-                  <span trailing>7 / 40</span>
+                  <span post>7 / 40</span>
                 </org-label>
                 <org-input name="ctx-display-name" placeholder="Noah F." />
               </div>
@@ -365,9 +365,9 @@ export const Showcase: Story = {
         <org-design-system-demo-expected-behaviour>
           <ul class="list-inside list-disc flex flex-col gap-1">
             <li><strong>Stacked layout</strong>: The label sits above the control it labels with a small gap between them.</li>
-            <li><strong>Required + trailing</strong>: A "Forgot?" inline link composes with the required asterisk in the same label.</li>
+            <li><strong>Required + post</strong>: A "Forgot?" inline link composes with the required asterisk in the same label.</li>
             <li><strong>Loading mid-flow</strong>: A field can announce live validation via the spinner without changing layout.</li>
-            <li><strong>Character counter</strong>: A trailing counter pairs naturally with the field's max length.</li>
+            <li><strong>Character counter</strong>: A post counter pairs naturally with the field's max length.</li>
           </ul>
         </org-design-system-demo-expected-behaviour>
       </div>

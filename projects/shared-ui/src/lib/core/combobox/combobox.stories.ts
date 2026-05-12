@@ -62,7 +62,7 @@ const meta: Meta<Combobox> = {
 <div class="docs-top-level-overview">
   ## Combobox Component
 
-  A select-like form field with an \`org-input\` shell as the trigger and an anchored panel of selectable rows. Built for type-to-filter pickers in single or multi-select modes, with an always-on leading check gutter so labels align whether or not a row is selected.
+  A select-like form field with an \`org-input\` shell as the trigger and an anchored panel of selectable rows. Built for type-to-filter pickers in single or multi-select modes, with an always-on pre check gutter so labels align whether or not a row is selected.
 
   ### Features
   - Single and multi-select modes
@@ -73,7 +73,7 @@ const meta: Meta<Combobox> = {
   - Reactive forms support (ControlValueAccessor)
   - Auto-show options on focus
   - Anchored overlay positioning with CDK
-  - Always-reserved leading check gutter so labels align across rows
+  - Always-reserved pre check gutter so labels align across rows
 
   ### Keyboard Navigation
   - **Enter**: Select focused option
@@ -665,7 +665,9 @@ export const Showcase: Story = {
               <org-button color="secondary" size="sm" label="Clear" (clicked)="combobox.setSelectedOptions([])" />
             </div>
             <div class="text-sm flex flex-col gap-1">
-              <div><strong>Selected:</strong> {{ selectedValues().length > 0 ? (selectedValues() | json) : 'None' }}</div>
+              <div>
+                <strong>Selected:</strong> {{ selectedValues().length > 0 ? (selectedValues() | json) : 'None' }}
+              </div>
               <div><strong>Input:</strong> "{{ inputValue() }}"</div>
             </div>
           </div>
@@ -675,7 +677,10 @@ export const Showcase: Story = {
         <ul class="list-inside list-disc flex flex-col gap-1">
           <li>Use <code>(selectedValuesChanged)</code> to listen for selection changes</li>
           <li>Use <code>(inputValueChanged)</code> to listen for filter-text changes</li>
-          <li>Use the public api (<code>open()</code>, <code>close()</code>, <code>setSelectedOptions()</code>) to drive the combobox imperatively</li>
+          <li>
+            Use the public api (<code>open()</code>, <code>close()</code>, <code>setSelectedOptions()</code>) to drive
+            the combobox imperatively
+          </li>
         </ul>
       </org-design-system-demo-expected-behaviour>
     </div>

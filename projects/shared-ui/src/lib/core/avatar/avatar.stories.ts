@@ -235,7 +235,7 @@ const meta: Meta<Avatar> = {
 
   ### Companion Components
   - **org-avatar-stack** — overlapping row layout container
-  - **org-avatar-stack-overflow** — trailing "+N" pill for collapsed stacks
+  - **org-avatar-stack-overflow** — post "+N" pill for collapsed stacks
 </div>
         `,
       },
@@ -637,7 +637,7 @@ export const StackShowcase: StackStory = {
     docs: {
       description: {
         story:
-          'Comprehensive showcase of every avatar-stack variant axis — size variants, image / initials / gravatar children, multi-word labels, and the trailing overflow pill that collapses long tails.',
+          'Comprehensive showcase of every avatar-stack variant axis — size variants, image / initials / gravatar children, multi-word labels, and the post overflow pill that collapses long tails.',
       },
     },
   },
@@ -671,7 +671,7 @@ export const StackShowcase: StackStory = {
           <ul class="list-inside list-disc flex flex-col gap-1">
             <li><strong>sm</strong> / <strong>base</strong> / <strong>lg</strong>: stack overlap scales with circle diameter (60% of the circle)</li>
             <li>Each stacked circle gets a surface-colored ring so adjacent siblings stay visually separated</li>
-            <li>The trailing <code>org-avatar-stack-overflow</code> reads as a count, not a person</li>
+            <li>The post <code>org-avatar-stack-overflow</code> reads as a count, not a person</li>
           </ul>
         </org-design-system-demo-expected-behaviour>
 

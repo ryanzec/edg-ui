@@ -104,7 +104,7 @@
     min-width: 0;
   }
 
-  /* when there is no leading media slot, the body spans both columns so the surface stays balanced */
+  /* when there is no pre media slot, the body spans both columns so the surface stays balanced */
   :host:not(:has(> .media)) .body {
     grid-column: 1 / -1;
   }

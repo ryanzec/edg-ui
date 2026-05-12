@@ -35,11 +35,7 @@
       (clicked)="brain.copy()"
     />
   }
-  <div
-    #bodyRef
-    class="body"
-    [style.--ellipsis-lines]="brain.hasEllipsis() ? brain.ellipsisAt() : null"
-  >
+  <div #bodyRef class="body" [style.--ellipsis-lines]="brain.hasEllipsis() ? brain.ellipsisAt() : null">
     <org-scroll-area direction="both" [onlyShowOnHover]="true" [scrollClass]="scrollClass()">
       <pre class="pre"><code>{{ brain.text() }}</code></pre>
     </org-scroll-area>

@@ -37,21 +37,21 @@
   :host([data-size='sm']) {
     --indicator-dot-size: 0.375rem; /* 6px */
     --indicator-height: 0.875rem; /* 14px */
-    --indicator-pad-x: var(--spacing-1); /* 4px */
+    --indicator-pad-x: var(--spacing-1);
     --indicator-font-size: var(--font-size-2xs);
   }
 
   :host([data-size='base']) {
-    --indicator-dot-size: var(--spacing-2); /* 8px */
-    --indicator-height: var(--spacing-4); /* 16px */
-    --indicator-pad-x: var(--spacing-1); /* 4px */
+    --indicator-dot-size: var(--spacing-2);
+    --indicator-height: var(--spacing-4);
+    --indicator-pad-x: var(--spacing-1);
     --indicator-font-size: var(--font-size-xs);
   }
 
   :host([data-size='lg']) {
-    --indicator-dot-size: var(--spacing-2_5); /* 10px */
-    --indicator-height: var(--spacing-5); /* 20px */
-    --indicator-pad-x: var(--spacing-1_5); /* 6px */
+    --indicator-dot-size: var(--spacing-2_5);
+    --indicator-height: var(--spacing-5);
+    --indicator-pad-x: var(--spacing-1_5);
     --indicator-font-size: var(--font-size-sm);
   }
 

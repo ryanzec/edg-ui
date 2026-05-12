@@ -398,6 +398,14 @@
   </div>
 
   <div class="component-block">
+    <h3 class="component-block-name">Slider Input</h3>
+    <div class="flex flex-col gap-3">
+      <org-slider-input direction="horizontal" [values]="[40]" />
+      <org-slider-input direction="horizontal" [values]="[25, 75]" color="info" [showTicks]="true" [tickCount]="3" />
+    </div>
+  </div>
+
+  <div class="component-block">
     <h3 class="component-block-name">Splitter</h3>
     <div class="splitter-host">
       <org-splitter direction="horizontal">

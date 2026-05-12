@@ -11,7 +11,10 @@ import { TableRowBrainDirective } from '../../brain/table-row-brain/table-row-br
       [attr.data-selected]="brain.selected() ? '' : null"
       [attr.data-clickable]="brain.clickable() ? '' : null"
       [attr.data-empty]="brain.empty() ? '' : null"
+      [attr.data-expanded]="brain.expanded() ? '' : null"
+      [attr.data-expanded-section]="brain.expandedSection() ? '' : null"
       [attr.aria-selected]="brain.ariaSelected()"
+      [attr.aria-expanded]="brain.ariaExpanded()"
       [attr.tabindex]="brain.clickable() ? 0 : null"
       [attr.role]="brain.clickable() ? 'button' : null"
       (click)="brain.activate()"
@@ -25,7 +28,7 @@ import { TableRowBrainDirective } from '../../brain/table-row-brain/table-row-br
   hostDirectives: [
     {
       directive: TableRowBrainDirective,
-      inputs: ['variant', 'selected', 'clickable', 'empty'],
+      inputs: ['variant', 'selected', 'clickable', 'empty', 'expanded', 'expandedSection'],
       outputs: ['clicked'],
     },
   ],

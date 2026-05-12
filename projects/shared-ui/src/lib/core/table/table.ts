@@ -76,7 +76,7 @@ export const TABLE_TRACK_BY_DEFAULT = (item: unknown): unknown => item;
   hostDirectives: [
     {
       directive: TableBrainDirective,
-      inputs: ['isLoading', 'isBackgroundLoading', 'selectionData'],
+      inputs: ['isLoading', 'isBackgroundLoading', 'selectionData', 'expandedData'],
     },
   ],
   host: {
@@ -115,7 +115,7 @@ export class Table<T = unknown> {
   /** whether the auto-rendered header row is sticky to the top of the scroll viewport */
   public readonly stickyHeader = input<boolean>(TABLE_STICKY_HEADER_DEFAULT);
 
-  /** whether the first column is pinned to the leading edge during horizontal scroll */
+  /** whether the first column is pinned to the pre edge during horizontal scroll */
   public readonly stickyFirstColumn = input<boolean>(TABLE_STICKY_FIRST_COLUMN_DEFAULT);
 
   /** whether the first body cell of each row is rendered with the emphasized weight + tone */
@@ -131,6 +131,8 @@ export class Table<T = unknown> {
 
   protected readonly bodyTemplate = contentChild<TemplateRef<{ $implicit: T }>>('body');
 
+  protected readonly expandedTemplate = contentChild<TemplateRef<{ $implicit: T }>>('expanded');
+
   protected readonly selectedActionsTemplate = contentChild<TemplateRef<void>>('selectedActions');
 
   protected readonly emptyTemplate = contentChild<TemplateRef<void>>('empty');
@@ -143,8 +145,13 @@ export class Table<T = unknown> {
   /** whether the data array is currently empty (no rows to render) */
   protected readonly isEmpty = computed<boolean>(() => this.data().length === 0);
 
-  /** whether any consumer is listening to rowClicked; rows render as clickable when true */
+  /** whether any consumer is listening to rowClicked; one of the inputs that drives row clickability */
   protected readonly hasRowClickedListener = computed<boolean>(() => this._rowClicked$.observed);
+
+  /** whether body rows are interactive (focusable + role=button) — true when expansion, selection, or a rowClicked listener is active */
+  protected readonly isRowClickable = computed<boolean>(
+    () => this.brain.hasExpansionEnabled() || this.brain.hasSelectionEnabled() || this.hasRowClickedListener()
+  );
 
   private readonly _scrollAreaComponent = viewChild<ScrollArea>('scrollAreaComponent');
 
@@ -188,8 +195,32 @@ export class Table<T = unknown> {
     return this.brain.selectionData()?.isSelected(this.asSelectable(item)) ?? false;
   }
 
-  /** dispatches the rowClicked output for the given item */
+  /** whether the given item is currently expanded via the expansion store */
+  protected isItemExpanded(item: T): boolean {
+    return this.brain.expandedData()?.isSelected(this.asSelectable(item)) ?? false;
+  }
+
+  /**
+   * routes a body row click based on which stores are wired:
+   *   expansion mode wins over selection; if neither is active, the rowClicked output is emitted
+   */
   protected onRowClicked(item: T): void {
+    const expandedData = this.brain.expandedData();
+
+    if (expandedData) {
+      expandedData.toggle(this.asSelectable(item));
+
+      return;
+    }
+
+    const selectionData = this.brain.selectionData();
+
+    if (selectionData) {
+      selectionData.toggle(this.asSelectable(item));
+
+      return;
+    }
+
     this._rowClicked$.next(item);
   }
 }

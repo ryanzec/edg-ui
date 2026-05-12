@@ -9,11 +9,11 @@
   }
 
   tr[data-variant='header'] {
-    height: var(--table-header-h);
+    height: var(--table-header-height);
   }
 
   tr[data-variant='body'] {
-    height: var(--table-row-h);
+    height: var(--table-row-height);
   }
 
   tr[data-variant='body'][data-selected] {

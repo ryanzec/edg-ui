@@ -577,7 +577,7 @@ export class TooltipBrainDirective implements OnDestroy {
 
   private _buildPositionStrategy(
     trigger: HTMLElement | null,
-    placement: TooltipPlacement,
+    placement: TooltipPlacement
   ): FlexibleConnectedPositionStrategy {
     const positions = this._getPositionsForPlacement(placement);
     // when first wired, the trigger may not be resolved yet — fall back to the host element so the strategy can be

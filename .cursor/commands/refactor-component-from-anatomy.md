@@ -7,9 +7,9 @@ You are tasked to refactor the reference component using the referenced image as
 
 # Design Tokens
 
-You are to create a new component tokens css file in `projects/shared-ui/src/lib/styles` or update the existing one if needed.
+You are to create a new component tokens css file co-located with the component in `projects/shared-ui/src/lib/core/{component-name}/` (and add an import for it in `projects/shared-ui/src/lib/core/tokens.css`) or update the existing one if needed.
 
-If the image reference design tokens / css variables that are not available, you can create them in the component tokens css files **ALWAYS** using the base tokens from `projects/shared-ui/src/lib/styles/tokens/base-tokens.css` and the value for the component tokens (if a value can't be found, use the closest value that is available).
+If the image reference design tokens / css variables that are not available, you can create them in the component tokens css files **ALWAYS** using the base tokens from `projects/shared-ui/src/lib/styles/base-tokens.css` and the value for the component tokens (if a value can't be found, use the closest value that is available).
 
 # Storybook
 

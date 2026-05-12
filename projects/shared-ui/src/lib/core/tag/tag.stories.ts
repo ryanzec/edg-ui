@@ -124,7 +124,7 @@ const meta: Meta<Tag> = {
 <div class="docs-top-level-overview">
   ## Tag Component
 
-  A small inline pill / chip for status, categories, and filters. Pill-shaped (fully rounded) so it never reads as a button. Two variants × eight semantic colors × three sizes; optional leading/trailing icons; optional built-in removable "×" affordance.
+  A small inline pill / chip for status, categories, and filters. Pill-shaped (fully rounded) so it never reads as a button. Two variants × eight semantic colors × three sizes; optional pre/post icons; optional built-in removable "×" affordance.
 
   ### Composition Parts
   - **org-tag** — the pill container. Drives color, size, variant, and the built-in removable affordance.
@@ -135,7 +135,7 @@ const meta: Meta<Tag> = {
   - Two visual variants: soft (default) and strong
   - Eight color options: primary, secondary, neutral, safe, info, caution, warning, danger
   - Composable pre / post icons via &lt;org-tag-icon /&gt;
-  - Built-in removable affordance via the tag-level \`removable\` input (overrides any trailing tag-icon)
+  - Built-in removable affordance via the tag-level \`removable\` input (overrides any post tag-icon)
   - Clickable icon support via the icon's \`clicked\` output
 
   ### Variants
@@ -160,13 +160,13 @@ const meta: Meta<Tag> = {
   <!-- Strong variant -->
   <org-tag color="primary" variant="strong">Strong Tag</org-tag>
 
-  <!-- Tag with leading icon -->
+  <!-- Tag with pre icon -->
   <org-tag color="info">
     <org-tag-icon name="cog" />
     Settings
   </org-tag>
 
-  <!-- Tag with trailing icon -->
+  <!-- Tag with post icon -->
   <org-tag color="safe">
     Completed
     <org-tag-icon name="check" />
@@ -175,7 +175,7 @@ const meta: Meta<Tag> = {
   <!-- Built-in removable affordance -->
   <org-tag color="neutral" [removable]="true" (removed)="onRemove()">priority:high</org-tag>
 
-  <!-- Removable + leading icon (the leading icon is preserved) -->
+  <!-- Removable + pre icon (the pre icon is preserved) -->
   <org-tag color="info" [removable]="true" (removed)="onRemove()">
     <org-tag-icon name="cog" />
     Settings
@@ -220,7 +220,7 @@ export const Default: Story = {
     },
     removable: {
       control: 'boolean',
-      description: 'When true, renders a built-in X affordance and overrides any trailing tag-icon',
+      description: 'When true, renders a built-in X affordance and overrides any post tag-icon',
     },
     removeAriaLabel: {
       control: 'text',
@@ -304,14 +304,14 @@ export const Default: Story = {
           <org-design-system-demo-control-group label="Label">
             <org-input name="live-demo-label" formControlName="label" ariaLabel="Tag label" />
           </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Leading icon">
-            <org-checkbox-toggle name="live-demo-leading-icon" value="leadingIcon" formControlName="leadingIcon">
-              {{ liveDemoForm.controls.leadingIcon.value ? 'on' : 'off' }}
+          <org-design-system-demo-control-group label="Pre icon">
+            <org-checkbox-toggle name="live-demo-pre-icon" value="preIcon" formControlName="preIcon">
+              {{ liveDemoForm.controls.preIcon.value ? 'on' : 'off' }}
             </org-checkbox-toggle>
           </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Trailing icon">
-            <org-checkbox-toggle name="live-demo-trailing-icon" value="trailingIcon" formControlName="trailingIcon">
-              {{ liveDemoForm.controls.trailingIcon.value ? 'on' : 'off' }}
+          <org-design-system-demo-control-group label="Post icon">
+            <org-checkbox-toggle name="live-demo-post-icon" value="postIcon" formControlName="postIcon">
+              {{ liveDemoForm.controls.postIcon.value ? 'on' : 'off' }}
             </org-checkbox-toggle>
           </org-design-system-demo-control-group>
           <org-design-system-demo-control-group label="Removable">
@@ -328,11 +328,11 @@ export const Default: Story = {
               [size]="liveDemoForm.controls.size.value"
               [removable]="liveDemoForm.controls.removable.value"
             >
-              @if (liveDemoForm.controls.leadingIcon.value) {
+              @if (liveDemoForm.controls.preIcon.value) {
                 <org-tag-icon name="cog" />
               }
               {{ liveDemoForm.controls.label.value }}
-              @if (liveDemoForm.controls.trailingIcon.value) {
+              @if (liveDemoForm.controls.postIcon.value) {
                 <org-tag-icon name="arrow-right" />
               }
             </org-tag>
@@ -352,8 +352,8 @@ class TagLiveDemoStory {
     variant: new FormControl<TagVariant>('strong', { nonNullable: true }),
     size: new FormControl<TagSize>('base', { nonNullable: true }),
     label: new FormControl<string>('Design', { nonNullable: true }),
-    leadingIcon: new FormControl<boolean>(false, { nonNullable: true }),
-    trailingIcon: new FormControl<boolean>(false, { nonNullable: true }),
+    preIcon: new FormControl<boolean>(false, { nonNullable: true }),
+    postIcon: new FormControl<boolean>(false, { nonNullable: true }),
     removable: new FormControl<boolean>(false, { nonNullable: true }),
   });
 }
@@ -576,10 +576,10 @@ export const Showcase: Story = {
         </org-design-system-demo>
         <org-design-system-demo-expected-behaviour>
           <ul class="list-inside list-disc flex flex-col gap-1">
-            <li>Place an <strong>org-tag-icon</strong> before the text for a leading icon</li>
-            <li>Place an <strong>org-tag-icon</strong> after the text for a trailing icon</li>
+            <li>Place an <strong>org-tag-icon</strong> before the text for a pre icon</li>
+            <li>Place an <strong>org-tag-icon</strong> after the text for a post icon</li>
             <li>The icon inherits the tag's color and per-size dimension automatically</li>
-            <li>Setting <strong>removable</strong> on the parent tag suppresses the trailing icon</li>
+            <li>Setting <strong>removable</strong> on the parent tag suppresses the post icon</li>
           </ul>
         </org-design-system-demo-expected-behaviour>
 
@@ -588,8 +588,8 @@ export const Showcase: Story = {
           <ul class="list-inside list-disc flex flex-col gap-1">
             <li>Setting <strong>removable</strong> on <strong>org-tag</strong> renders a built-in X affordance</li>
             <li>The X click emits the <strong>removed</strong> output on <strong>org-tag</strong></li>
-            <li>If a trailing <strong>org-tag-icon</strong> is also slotted, it is suppressed (overridden)</li>
-            <li>Leading <strong>org-tag-icon</strong>s are still rendered alongside the built-in X</li>
+            <li>If a post <strong>org-tag-icon</strong> is also slotted, it is suppressed (overridden)</li>
+            <li>Pre <strong>org-tag-icon</strong>s are still rendered alongside the built-in X</li>
             <li>Use <strong>removeAriaLabel</strong> to give the X a meaningful accessible label</li>
           </ul>
         </org-design-system-demo-expected-behaviour>

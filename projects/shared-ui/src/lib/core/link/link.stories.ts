@@ -35,7 +35,7 @@ const meta: Meta<Link> = {
   ### Features
   - Renders as a real \`<a>\` (or a \`<span>\` when disabled, since native \`<a>\` has no disabled state)
   - Inherits font-size and font-weight from the surrounding text — no size variants
-  - Auto-injects a trailing affordance icon for \`target="_blank"\` (external-link) and \`download\` (download)
+  - Auto-injects a post affordance icon for \`target="_blank"\` (external-link) and \`download\` (download)
   - Suppress the auto-affordance via \`affordance="false"\` or by projecting your own \`#post\` template
   - Optional \`#pre\` and \`#post\` template projection slots for inline icons
   - Auto-applies \`rel="noopener noreferrer"\` when \`target="_blank"\` and no consumer rel is provided
@@ -56,7 +56,7 @@ const meta: Meta<Link> = {
   <!-- suppress the auto affordance icon -->
   <org-link href="https://example.com" target="_blank" [affordance]="false">Open in new tab</org-link>
 
-  <!-- leading icon via the #pre slot -->
+  <!-- pre icon via the #pre slot -->
   <org-link href="/help">
     <ng-template #pre><org-icon name="book-open" /></ng-template>
     Get help
@@ -297,9 +297,9 @@ export const Showcase: Story = {
               <org-link href="https://example.com/data.csv" target="_blank" download>Save the source CSV</org-link>
             </div>
             <div class="flex gap-4 items-baseline">
-              <span class="text-muted text-xs uppercase letter-spacing-wide" style="min-width: 11rem;">Leading icon</span>
+              <span class="text-muted text-xs uppercase letter-spacing-wide" style="min-width: 11rem;">Pre icon</span>
               <org-link href="/spec">
-                <ng-template #pre><org-icon class="link-icon" name="book-open" data-position="leading" /></ng-template>
+                <ng-template #pre><org-icon class="link-icon" name="book-open" data-position="pre" /></ng-template>
                 Read the spec
               </org-link>
             </div>
@@ -315,8 +315,8 @@ export const Showcase: Story = {
             <li><strong>External</strong>: <code>target="_blank"</code> auto-injects the external-link icon</li>
             <li><strong>Download</strong>: <code>[download]</code> auto-injects the download icon</li>
             <li><strong>External + download</strong>: Download wins because it's the more specific action</li>
-            <li><strong>Leading icon</strong>: A <code>#pre</code> template renders an icon before the label</li>
-            <li><strong>Suppress affordance</strong>: <code>[affordance]="false"</code> opts out of the auto-injected trailing icon</li>
+            <li><strong>Pre icon</strong>: A <code>#pre</code> template renders an icon before the label</li>
+            <li><strong>Suppress affordance</strong>: <code>[affordance]="false"</code> opts out of the auto-injected post icon</li>
           </ul>
         </org-design-system-demo-expected-behaviour>
 
@@ -349,7 +349,7 @@ export const Showcase: Story = {
           <ul class="list-inside list-disc flex flex-col gap-1">
             <li><strong>Inherits font</strong>: The link picks up the surrounding text's font-size and font-weight via <code>font: inherit</code></li>
             <li><strong>No size variants</strong>: There is no size input — control sizing through the surrounding text</li>
-            <li><strong>Affordance icons scale</strong>: Trailing icons use 1em sizing so they stay visually proportional from caption text up through page-title-adjacent copy</li>
+            <li><strong>Affordance icons scale</strong>: Post icons use 1em sizing so they stay visually proportional from caption text up through page-title-adjacent copy</li>
           </ul>
         </org-design-system-demo-expected-behaviour>
 

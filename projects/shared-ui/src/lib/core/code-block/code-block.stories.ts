@@ -10,13 +10,7 @@ import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/d
 import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
 import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
 import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
-import {
-  CodeBlock,
-  CodeBlockTone,
-  CodeBlockVariant,
-  allCodeBlockTones,
-  allCodeBlockVariants,
-} from './code-block';
+import { CodeBlock, CodeBlockTone, CodeBlockVariant, allCodeBlockTones, allCodeBlockVariants } from './code-block';
 
 const liveDemoVariantItems: ButtonToggleItem[] = allCodeBlockVariants.map((variant) => ({
   label: variant,
@@ -255,11 +249,7 @@ export const Default: Story = {
             } @else {
               <div>
                 Override the
-                <org-code-block
-                  variant="inline"
-                  [tone]="liveDemoForm.controls.tone.value"
-                  [text]="inlineSample"
-                />
+                <org-code-block variant="inline" [tone]="liveDemoForm.controls.tone.value" [text]="inlineSample" />
                 token to retheme the surface.
               </div>
             }
@@ -544,7 +534,13 @@ export const Showcase: Story = {
       themeOverrideSample: showcaseThemeOverrideSample,
     },
     moduleMetadata: {
-      imports: [CodeBlock, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas, DesignSystemDemoExpectedBehaviour],
+      imports: [
+        CodeBlock,
+        DesignSystemDemo,
+        DesignSystemDemoHeader,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
+      ],
     },
   }),
 };

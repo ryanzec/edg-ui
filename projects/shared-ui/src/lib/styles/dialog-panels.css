@@ -49,7 +49,8 @@
   }
 
   /* scrim styling — translucent backdrop with light blur sitting under the dialog panel */
-  .cdk-overlay-container:has(.cdk-overlay-pane org-dialog) .cdk-overlay-backdrop:not(.cdk-overlay-transparent-backdrop) {
+  .cdk-overlay-container:has(.cdk-overlay-pane org-dialog)
+    .cdk-overlay-backdrop:not(.cdk-overlay-transparent-backdrop) {
     background-color: var(--dialog-scrim);
     backdrop-filter: blur(var(--dialog-scrim-blur));
     -webkit-backdrop-filter: blur(var(--dialog-scrim-blur));

@@ -343,7 +343,13 @@ export const Showcase: Story = {
       </div>
     `,
     moduleMetadata: {
-      imports: [Skeleton, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas, DesignSystemDemoExpectedBehaviour],
+      imports: [
+        Skeleton,
+        DesignSystemDemo,
+        DesignSystemDemoHeader,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
+      ],
     },
   }),
 };

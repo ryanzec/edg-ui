@@ -287,7 +287,11 @@ export const Default: Story = {
             </org-checkbox-toggle>
           </org-design-system-demo-control-group>
           <org-design-system-demo-control-group label="Show description">
-            <org-checkbox-toggle name="live-demo-show-description" value="show-description" formControlName="showDescription">
+            <org-checkbox-toggle
+              name="live-demo-show-description"
+              value="show-description"
+              formControlName="showDescription"
+            >
               {{ liveDemoForm.controls.showDescription.value ? 'on' : 'off' }}
             </org-checkbox-toggle>
           </org-design-system-demo-control-group>
@@ -482,7 +486,10 @@ const showcaseIconColors: readonly EmptyIndicatorIconColor[] = allEmptyIndicator
           <li><strong>Header only</strong>: Just the centered &lt;h3&gt;</li>
           <li><strong>+ Description</strong>: Description is muted, capped at a 44ch reading column</li>
           <li><strong>+ Icon</strong>: 4xl glyph above the stack with extra breathing room</li>
-          <li><strong>+ Action</strong>: Button sits below the description with extra top margin so it reads as a separate decision</li>
+          <li>
+            <strong>+ Action</strong>: Button sits below the description with extra top margin so it reads as a separate
+            decision
+          </li>
         </ul>
       </org-design-system-demo-expected-behaviour>
 
@@ -577,7 +584,9 @@ const showcaseIconColors: readonly EmptyIndicatorIconColor[] = allEmptyIndicator
       </org-design-system-demo>
       <org-design-system-demo-expected-behaviour>
         <ul class="list-inside list-disc flex flex-col gap-1">
-          <li><strong>boxColor</strong>: Forwarded to the inner Box; combine with semantic icon tints to reinforce meaning</li>
+          <li>
+            <strong>boxColor</strong>: Forwarded to the inner Box; combine with semantic icon tints to reinforce meaning
+          </li>
           <li><strong>boxBorder</strong>: bordered / borderless / border-thick / border-emphasize</li>
           <li><strong>boxBackground</strong>: colored tints the Box background, colorless leaves it transparent</li>
         </ul>
@@ -613,10 +622,7 @@ const showcaseIconColors: readonly EmptyIndicatorIconColor[] = allEmptyIndicator
             </div>
             <div>
               <span class="section-label">padding · base</span>
-              <org-empty-indicator
-                header="No items"
-                description="When you add items, they'll appear here."
-              >
+              <org-empty-indicator header="No items" description="When you add items, they'll appear here.">
                 <org-empty-indicator-icon name="package" />
               </org-empty-indicator>
             </div>
@@ -636,7 +642,10 @@ const showcaseIconColors: readonly EmptyIndicatorIconColor[] = allEmptyIndicator
       <org-design-system-demo-expected-behaviour>
         <ul class="list-inside list-disc flex flex-col gap-1">
           <li><strong>none / sm / base</strong>: Default internal spacing rhythm</li>
-          <li><strong>lg</strong>: Stack, icon, and action gaps shift up one notch so the layout still feels balanced at scale</li>
+          <li>
+            <strong>lg</strong>: Stack, icon, and action gaps shift up one notch so the layout still feels balanced at
+            scale
+          </li>
         </ul>
       </org-design-system-demo-expected-behaviour>
 
@@ -679,7 +688,10 @@ const showcaseIconColors: readonly EmptyIndicatorIconColor[] = allEmptyIndicator
       <org-design-system-demo-expected-behaviour>
         <ul class="list-inside list-disc flex flex-col gap-1">
           <li><strong>Empty list pattern</strong>: Swap the List for an EmptyIndicator when the data set is empty</li>
-          <li><strong>Box knobs</strong>: borderless + lg padding lets the indicator own the panel without competing borders</li>
+          <li>
+            <strong>Box knobs</strong>: borderless + lg padding lets the indicator own the panel without competing
+            borders
+          </li>
           <li><strong>Action</strong>: Wire the Add / Create call-to-action through the actionTriggered output</li>
         </ul>
       </org-design-system-demo-expected-behaviour>

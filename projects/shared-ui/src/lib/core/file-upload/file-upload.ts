@@ -79,10 +79,10 @@ export class FileUploadComponent implements ControlValueAccessor {
   public readonly disabled = input<boolean>(FILE_UPLOAD_DISABLED_DEFAULT);
 
   /** externally-driven state overlay for upload-pipeline visuals (uploading | success | failure) */
-  public readonly externalState = input<FileUploadExternalState | undefined, FileUploadExternalState | null | undefined>(
-    FILE_UPLOAD_EXTERNAL_STATE_DEFAULT,
-    { transform: angularUtils.transformNullToUndefined }
-  );
+  public readonly externalState = input<
+    FileUploadExternalState | undefined,
+    FileUploadExternalState | null | undefined
+  >(FILE_UPLOAD_EXTERNAL_STATE_DEFAULT, { transform: angularUtils.transformNullToUndefined });
 
   /** externally-driven error message; takes precedence over internal validation errors when set */
   public readonly errorMessage = input<string | undefined, string | null | undefined>(

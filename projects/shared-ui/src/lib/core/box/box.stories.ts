@@ -106,7 +106,10 @@ const liveDemoBackgroundItems: ButtonToggleItem[] = allBoxBackgrounds.map((backg
             >
               <div class="flex flex-col gap-1">
                 <strong>Box content</strong>
-                <span>This is a foundational container. Drop any composition inside — text, controls, key/value rows, or another component.</span>
+                <span
+                  >This is a foundational container. Drop any composition inside — text, controls, key/value rows, or
+                  another component.</span
+                >
               </div>
             </org-box>
           </div>
@@ -538,7 +541,13 @@ export const Showcase: Story = {
       </div>
     `,
     moduleMetadata: {
-      imports: [Box, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas, DesignSystemDemoExpectedBehaviour],
+      imports: [
+        Box,
+        DesignSystemDemo,
+        DesignSystemDemoHeader,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
+      ],
     },
   }),
 };

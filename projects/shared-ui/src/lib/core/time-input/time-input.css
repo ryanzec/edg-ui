@@ -25,8 +25,8 @@
       color var(--motion-duration-base) var(--motion-ease-standard);
   }
 
-  /* leading slot — the clock icon */
-  .org-input[data-time-input='1'] .org-input-leading {
+  /* pre slot — the clock icon */
+  .org-input[data-time-input='1'] .org-input-pre {
     display: inline-flex;
     align-items: center;
     flex: 0 0 auto;
@@ -49,8 +49,8 @@
     min-width: 0;
   }
 
-  /* leading slot owns the start padding, track drops its start padding */
-  .org-input[data-time-input='1'][data-has-leading='1'] .org-input-track {
+  /* pre slot owns the start padding, track drops its start padding */
+  .org-input[data-time-input='1'][data-has-pre='1'] .org-input-track {
     padding-inline-start: var(--input-pad-x-tight);
   }
 
@@ -94,8 +94,7 @@
   }
 
   /* a selected empty segment in a focused field gets a stronger tone */
-  .org-input[data-time-input='1'][data-focused='1']
-    .org-time-input-segment[data-empty='1'][data-selected='1'] {
+  .org-input[data-time-input='1'][data-focused='1'] .org-time-input-segment[data-empty='1'][data-selected='1'] {
     color: var(--color-time-input-segment-active-fg);
   }
 
@@ -174,7 +173,7 @@
   }
 
   .org-input[data-time-input='1'][data-variant='inline'] .org-input-track,
-  .org-input[data-time-input='1'][data-variant='inline'] .org-input-leading {
+  .org-input[data-time-input='1'][data-variant='inline'] .org-input-pre {
     padding: 0;
     height: auto;
     width: auto;

@@ -73,6 +73,7 @@ export * from './checkbox/checkbox-group';
 export * from './radio/radio';
 export * from './radio/radio-group';
 export * from './skeleton/skeleton';
+export * from './slider-input/slider-input';
 export * from './sortable-directive/sortable-directive';
 export * from './splitter/splitter';
 export * from './sorting-store/sorting-store';

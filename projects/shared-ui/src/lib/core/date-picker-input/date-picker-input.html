@@ -56,7 +56,11 @@
   (attach)="onOverlayAttach()"
   (detach)="onOverlayDetach()"
 >
-  <div orgDatePickerInputDialogBrain class="org-date-picker-input-popover" [attr.data-state]="isOverlayOpen() ? 'open' : 'closed'">
+  <div
+    orgDatePickerInputDialogBrain
+    class="org-date-picker-input-popover"
+    [attr.data-state]="isOverlayOpen() ? 'open' : 'closed'"
+  >
     <org-calendar
       #calendarComponent
       [defaultDisplayDate]="defaultDisplayDate()"
@@ -91,13 +95,7 @@
             </div>
             <div class="footer-actions-right">
               @if (isManualCommitMode()) {
-                <org-button
-                  variant="ghost"
-                  color="neutral"
-                  size="sm"
-                  label="Cancel"
-                  (clicked)="onCancelClick()"
-                />
+                <org-button variant="ghost" color="neutral" size="sm" label="Cancel" (clicked)="onCancelClick()" />
                 <org-button
                   variant="filled"
                   color="primary"

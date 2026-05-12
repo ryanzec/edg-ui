@@ -3,7 +3,7 @@ import { outputFromObservable } from '@angular/core/rxjs-interop';
 import { Subject } from 'rxjs';
 import { angularUtils } from '@organization/shared-utils';
 
-/** semantic identifiers for the trailing affordance icon auto-injected for external / download links */
+/** semantic identifiers for the post affordance icon auto-injected for external / download links */
 export const allLinkAffordanceIcons = ['external-link', 'download'] as const;
 
 /** the affordance icon name auto-injected for external / download links */
@@ -60,7 +60,7 @@ export const LINK_AFFORDANCE_DEFAULT = true;
 /**
  * headless brain directive for the link. owns href / target / rel / download / hreflang / referrerpolicy
  * navigation behavior, action-link mode (no href emits clicked), keyboard activation via enter / space, the
- * full accessibility surface (role, tabindex, data-disabled, aria-label), and the auto-injected trailing
+ * full accessibility surface (role, tabindex, data-disabled, aria-label), and the auto-injected post
  * affordance icon decision for external / download links. carries no styling — apply it to a native anchor
  * (or span when disabled) inside a presentation component.
  */
@@ -126,7 +126,7 @@ export class LinkBrainDirective {
   /** whether the link is disabled and non-interactive; sets data-disabled, removes href, and gates click / keydown */
   public readonly disabled = input<boolean>(LINK_DISABLED_DEFAULT);
 
-  /** when true, a trailing affordance icon (external-link or download) is auto-rendered when applicable */
+  /** when true, a post affordance icon (external-link or download) is auto-rendered when applicable */
   public readonly affordance = input<boolean>(LINK_AFFORDANCE_DEFAULT);
 
   /** emitted when an action-link is activated by mouse or keyboard, only when href is not provided */
@@ -214,7 +214,7 @@ export class LinkBrainDirective {
   });
 
   /**
-   * the auto-injected trailing affordance icon for external / download links.
+   * the auto-injected post affordance icon for external / download links.
    * returns undefined when affordance is disabled, when the link is disabled, when the link is in
    * action-link mode, or when neither target="_blank" nor download is set. download wins over external-link
    * when both are present since downloading is the more specific action.

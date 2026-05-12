@@ -26,7 +26,6 @@ import {
   allLoadingBlockerScopes,
   allLoadingBlockerSpinnerSizes,
 } from './loading-blocker';
-import { LOADING_BLOCKER_LABEL_DEFAULT } from '../../brain/loading-blocker-brain/loading-blocker-brain';
 
 type LiveDemoColorChoice = 'none' | ComponentColor;
 
@@ -589,7 +588,7 @@ class LoadingBlockerIntensitySection {}
       <org-design-system-demo-header
         slot="header"
         title="Color"
-        description='Optional semantic tint applied to the spinner + text foreground. Default is the surrounding fg; the eight semantic colors mirror the rest of the system so the same data-color reads the same here as on a Button or Indicator.'
+        description="Optional semantic tint applied to the spinner + text foreground. Default is the surrounding fg; the eight semantic colors mirror the rest of the system so the same data-color reads the same here as on a Button or Indicator."
       />
       <org-design-system-demo-canvas slot="canvas">
         <div class="grid">
@@ -787,7 +786,10 @@ class LoadingBlockerColorSection {}
               <org-card>
                 <div class="panel">
                   <strong>App-level loader</strong>
-                  <span>For real route transitions use scope="viewport" so the blocker covers the whole window and uses the app background as the scrim.</span>
+                  <span
+                    >For real route transitions use scope="viewport" so the blocker covers the whole window and uses the
+                    app background as the scrim.</span
+                  >
                 </div>
               </org-card>
               <org-loading-blocker [isVisible]="true" scope="region" intensity="heavy" label="Loading workspace..." />
@@ -994,15 +996,7 @@ class LoadingBlockerInContextCardSection {}
 @Component({
   selector: 'story-loading-blocker-in-context-list',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    LoadingBlocker,
-    Card,
-    List,
-    ListItem,
-    DesignSystemDemo,
-    DesignSystemDemoHeader,
-    DesignSystemDemoCanvas,
-  ],
+  imports: [LoadingBlocker, Card, List, ListItem, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
   styles: [
     `
       :host {

@@ -3,7 +3,26 @@
     display: grid;
     grid-template-columns: var(--timeline-rail-width) 1fr;
     column-gap: var(--timeline-gutter);
+
+    /*
+     * resolve the marker tokens at the host so they see the data-color cascade applied to
+     * --timeline-item-color on this same element. defining them at :root would substitute
+     * --timeline-item-color against the root's neutral value and lock the marker to neutral.
+     */
+    --timeline-item-marker-color: var(--timeline-item-color);
+    --timeline-item-marker-icon-color: var(--timeline-item-icon-color);
+  }
+
+  /* content and both modes propagate the item color to projected text via inheritance */
+  :host([data-color-mode='content']),
+  :host([data-color-mode='both']) {
     color: var(--timeline-item-color);
+  }
+
+  /* content mode forces the marker to neutral regardless of the color input */
+  :host([data-color-mode='content']) {
+    --timeline-item-marker-color: var(--color-neutral);
+    --timeline-item-marker-icon-color: var(--color-neutral-on);
   }
 
   :host(:not(:first-child)) {
@@ -26,15 +45,15 @@
     width: var(--timeline-connector-width);
     top: var(--timeline-dot-size);
     bottom: calc(-1 * var(--timeline-row-stack) - var(--timeline-marker-padding-top));
-    background: var(--timeline-item-color);
+    background: var(--timeline-item-marker-color);
   }
 
   /* when the dot hosts an icon the dot is larger so the connector starts further down */
   :host([data-has-icon]) .marker::before {
-    top: calc(var(--timeline-marker-padding-top) + var(--timeline-dot-icon-host-size));
+    top: var(--timeline-dot-icon-host-size);
   }
 
-  /* the last item never paints a trailing connector */
+  /* the last item never paints a post connector */
   :host(:last-child) .marker::before {
     display: none;
   }
@@ -47,8 +66,8 @@
     width: var(--timeline-dot-size);
     height: var(--timeline-dot-size);
     border-radius: var(--timeline-dot-radius);
-    background: var(--timeline-item-color);
-    color: var(--timeline-item-icon-color);
+    background: var(--timeline-item-marker-color);
+    color: var(--timeline-item-marker-icon-color);
     transition:
       background var(--timeline-motion-duration),
       width var(--timeline-motion-duration),

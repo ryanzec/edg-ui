@@ -6,11 +6,7 @@ import {
   type TooltipPlacement,
 } from '../../brain/tooltip-brain/tooltip-brain';
 
-export {
-  TOOLTIP_PLACEMENT_DEFAULT,
-  type TooltipPhase,
-  type TooltipPlacement,
-};
+export { TOOLTIP_PLACEMENT_DEFAULT, type TooltipPhase, type TooltipPlacement };
 
 /** all valid tooltip layout values */
 export const allTooltipLayoutValues = ['label', 'rich'] as const;

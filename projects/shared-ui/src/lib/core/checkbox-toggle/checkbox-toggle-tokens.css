@@ -1,23 +1,23 @@
 :root {
   /* layout */
   --checkbox-toggle-disabled-opacity: var(--opacity-disabled);
-  --checkbox-toggle-knob-inset: var(--spacing-0_5); /* 2px */
+  --checkbox-toggle-knob-inset: var(--spacing-0_5);
   --checkbox-toggle-track-radius: var(--radius-pill);
   --checkbox-toggle-knob-radius: var(--radius-pill);
-  --checkbox-toggle-body-gap: var(--spacing-0_5); /* 2px */
+  --checkbox-toggle-body-gap: var(--spacing-0_5);
   --checkbox-toggle-transition-fast: 150ms;
   --checkbox-toggle-transition-slow: 250ms;
   --checkbox-toggle-easing: var(--motion-ease-standard);
 
   /* size: base (placeholder — actual values set by [data-size='base']) */
-  --checkbox-toggle-track-w: var(--spacing-9); /* 36px */
-  --checkbox-toggle-track-h: var(--spacing-5); /* 20px */
-  --checkbox-toggle-knob-size: var(--spacing-4); /* 16px */
-  --checkbox-toggle-icon-size: var(--spacing-3); /* 12px */
-  --checkbox-toggle-row-gap: var(--spacing-2_5); /* 10px */
-  --checkbox-toggle-row-min-h: var(--spacing-8); /* 32px */
-  --checkbox-toggle-label-font-size: var(--font-size-base); /* 14px */
-  --checkbox-toggle-description-font-size: var(--font-size-xs); /* 12px */
+  --checkbox-toggle-track-width: var(--spacing-9);
+  --checkbox-toggle-track-height: var(--spacing-5);
+  --checkbox-toggle-knob-size: var(--spacing-4);
+  --checkbox-toggle-icon-size: var(--spacing-3);
+  --checkbox-toggle-row-gap: var(--spacing-2_5);
+  --checkbox-toggle-row-min-height: var(--spacing-8);
+  --checkbox-toggle-label-font-size: var(--font-size-base);
+  --checkbox-toggle-description-font-size: var(--font-size-xs);
 
   /* color: primary (placeholder — actual values set by [data-color='primary']) */
   --checkbox-toggle-track-bg: var(--color-bg-active);
@@ -38,7 +38,7 @@
   --checkbox-toggle-focus-ring-width: 0.1875rem; /* 3px */
 
   /* card variant (placeholder — actual values set by [data-variant='card']) */
-  --checkbox-toggle-card-padding: var(--spacing-3); /* 12px */
+  --checkbox-toggle-card-padding: var(--spacing-3);
   --checkbox-toggle-card-radius: var(--radius-base);
   --checkbox-toggle-card-bg: var(--color-bg-surface);
   --checkbox-toggle-card-border: var(--color-border);

@@ -315,11 +315,11 @@ export const Showcase: Story = {
                   data-variant="bordered"
                   data-format="12-hour"
                   data-focused="1"
-                  data-has-leading="1"
+                  data-has-pre="1"
                   role="group"
                   aria-label="Hours focused"
                 >
-                  <span class="org-input-leading"><org-icon name="clock" /></span>
+                  <span class="org-input-pre"><org-icon name="clock" /></span>
                   <div class="org-input-track">
                     <span class="org-time-input-segment" data-segment="hh" data-selected="1">09</span>
                     <span class="org-time-input-separator">:</span>
@@ -333,11 +333,11 @@ export const Showcase: Story = {
                   data-variant="bordered"
                   data-format="12-hour"
                   data-focused="1"
-                  data-has-leading="1"
+                  data-has-pre="1"
                   role="group"
                   aria-label="Minutes focused"
                 >
-                  <span class="org-input-leading"><org-icon name="clock" /></span>
+                  <span class="org-input-pre"><org-icon name="clock" /></span>
                   <div class="org-input-track">
                     <span class="org-time-input-segment" data-segment="hh">09</span>
                     <span class="org-time-input-separator">:</span>
@@ -351,11 +351,11 @@ export const Showcase: Story = {
                   data-variant="bordered"
                   data-format="12-hour"
                   data-focused="1"
-                  data-has-leading="1"
+                  data-has-pre="1"
                   role="group"
                   aria-label="Meridiem focused"
                 >
-                  <span class="org-input-leading"><org-icon name="clock" /></span>
+                  <span class="org-input-pre"><org-icon name="clock" /></span>
                   <div class="org-input-track">
                     <span class="org-time-input-segment" data-segment="hh">09</span>
                     <span class="org-time-input-separator">:</span>
@@ -371,11 +371,11 @@ export const Showcase: Story = {
                   data-variant="bordered"
                   data-format="12-hour"
                   data-focused="1"
-                  data-has-leading="1"
+                  data-has-pre="1"
                   role="group"
                   aria-label="Hours focused, empty"
                 >
-                  <span class="org-input-leading"><org-icon name="clock" /></span>
+                  <span class="org-input-pre"><org-icon name="clock" /></span>
                   <div class="org-input-track">
                     <span class="org-time-input-segment" data-segment="hh" data-selected="1" data-empty="1">--</span>
                     <span class="org-time-input-separator">:</span>
@@ -389,11 +389,11 @@ export const Showcase: Story = {
                   data-variant="bordered"
                   data-format="12-hour"
                   data-focused="1"
-                  data-has-leading="1"
+                  data-has-pre="1"
                   role="group"
                   aria-label="Minutes focused, partial"
                 >
-                  <span class="org-input-leading"><org-icon name="clock" /></span>
+                  <span class="org-input-pre"><org-icon name="clock" /></span>
                   <div class="org-input-track">
                     <span class="org-time-input-segment" data-segment="hh">09</span>
                     <span class="org-time-input-separator">:</span>
@@ -407,11 +407,11 @@ export const Showcase: Story = {
                   data-variant="bordered"
                   data-format="12-hour"
                   data-focused="1"
-                  data-has-leading="1"
+                  data-has-pre="1"
                   role="group"
                   aria-label="Meridiem focused, empty"
                 >
-                  <span class="org-input-leading"><org-icon name="clock" /></span>
+                  <span class="org-input-pre"><org-icon name="clock" /></span>
                   <div class="org-input-track">
                     <span class="org-time-input-segment" data-segment="hh">09</span>
                     <span class="org-time-input-separator">:</span>
@@ -514,7 +514,13 @@ export const Showcase: Story = {
 @Component({
   selector: 'story-time-input-non-form-usage',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [TimeInput, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas, DesignSystemDemoExpectedBehaviour],
+  imports: [
+    TimeInput,
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoCanvas,
+    DesignSystemDemoExpectedBehaviour,
+  ],
   styles: [
     `
       :host {
@@ -614,7 +620,9 @@ export const NonFormUsage: Story = {
           <div class="canvas-stage">
             <org-time-input name="reactive-form-time-input" [formControl]="timeControl" />
             <div class="text-sm flex flex-col gap-1">
-              <div><strong>Value:</strong> <code>{{ timeControl.value || '(empty)' }}</code></div>
+              <div>
+                <strong>Value:</strong> <code>{{ timeControl.value || '(empty)' }}</code>
+              </div>
               <div><strong>Valid:</strong> {{ timeControl.valid }}</div>
               <div><strong>Touched:</strong> {{ timeControl.touched }}</div>
               <div><strong>Dirty:</strong> {{ timeControl.dirty }}</div>

@@ -9,7 +9,7 @@
     line-height: var(--line-height-normal);
   }
 
-  /* adjacency: content directly above footer drops content's trailing block padding (footer carries the gap) */
+  /* adjacency: content directly above footer drops content's post block padding (footer carries the gap) */
   :host(:has(+ org-dialog-footer)) {
     padding-block-end: 0;
   }

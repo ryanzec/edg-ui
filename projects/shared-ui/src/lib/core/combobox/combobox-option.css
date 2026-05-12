@@ -21,23 +21,12 @@
     pointer-events: none;
   }
 
-  .check {
-    flex: 0 0 var(--sizing-combobox-check-gutter);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--color-combobox-option-check);
-    opacity: 0;
-    transition: opacity var(--motion-duration-fast);
+  :host([aria-selected='true']) {
+    background: var(--color-combobox-option-bg-active);
   }
 
-  :host([aria-selected='true']) .check {
-    opacity: 1;
-  }
-
-  :host([aria-disabled='true']) .check,
-  :host([aria-disabled='true']):hover {
-    background-color: transparent;
+  :host:hover {
+    background: var(--color-combobox-option-bg-hover);
   }
 
   .label {

@@ -97,7 +97,7 @@
       color var(--checklist-chevron-transition-duration) var(--checklist-chevron-transition-easing);
   }
 
-  /* if neither count nor meta is rendered, the chevron picks up the trailing slot */
+  /* if neither count nor meta is rendered, the chevron picks up the post slot */
   .label + .chevron {
     margin-left: auto;
   }

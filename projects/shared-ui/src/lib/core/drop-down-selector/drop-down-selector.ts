@@ -114,7 +114,7 @@ export class DropDownSelector<TValue = unknown> {
   /** the position of the dropdown menu relative to the trigger */
   public readonly position = input<DropDownSelectorPosition>(DROP_DOWN_SELECTOR_POSITION_DEFAULT);
 
-  /** the optional icon rendered before the trigger label; when undefined, no leading icon is rendered */
+  /** the optional icon rendered before the trigger label; when undefined, no pre icon is rendered */
   public readonly iconName = input<IconName | undefined, IconName | null | undefined>(
     DROP_DOWN_SELECTOR_ICON_NAME_DEFAULT,
     { transform: angularUtils.transformNullToUndefined }

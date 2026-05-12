@@ -65,7 +65,12 @@ const STATUS_LABEL: Record<User['status'], string> = {
 
 type LiveDemoState = 'default' | 'loading' | 'loading-overlay' | 'empty';
 
-const allLiveDemoStates = ['default', 'loading', 'loading-overlay', 'empty'] as const satisfies readonly LiveDemoState[];
+const allLiveDemoStates = [
+  'default',
+  'loading',
+  'loading-overlay',
+  'empty',
+] as const satisfies readonly LiveDemoState[];
 
 const liveDemoSizeItems: ButtonToggleItem[] = allTableSizes.map((size) => ({
   label: size,
@@ -140,6 +145,11 @@ const liveDemoStateItems: ButtonToggleItem[] = allLiveDemoStates.map((state) => 
               {{ liveDemoForm.controls.selectable.value ? 'on' : 'off' }}
             </org-checkbox-toggle>
           </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Expandable rows">
+            <org-checkbox-toggle name="live-demo-expandable" value="expandable" formControlName="expandable">
+              {{ liveDemoForm.controls.expandable.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
           <org-design-system-demo-control-group label="Sortable">
             <org-checkbox-toggle name="live-demo-sortable" value="sortable" formControlName="sortable">
               {{ liveDemoForm.controls.sortable.value ? 'on' : 'off' }}
@@ -166,6 +176,7 @@ const liveDemoStateItems: ButtonToggleItem[] = allLiveDemoStates.map((state) => 
               [stickyFirstColumn]="liveDemoForm.controls.stickyFirstColumn.value!"
               [stickyHeader]="liveDemoForm.controls.stickyHeader.value!"
               [selectionData]="selectionDataValue()"
+              [expandedData]="expandedDataValue()"
               [isLoading]="isLoading()"
               [isBackgroundLoading]="isBackgroundLoading()"
               [style.maxHeight]="'18rem'"
@@ -209,6 +220,16 @@ const liveDemoStateItems: ButtonToggleItem[] = allLiveDemoStates.map((state) => 
                 <org-table-td [faint]="true">{{ user.updated }}</org-table-td>
                 <org-table-td [numeric]="true">{{ user.records }}</org-table-td>
               </ng-template>
+              <ng-template [orgTypedContext]="data()" #expanded let-user>
+                <div class="p-3 flex flex-col gap-1 text-sm">
+                  <div><span class="font-semibold">Project id:</span> {{ user.id }}</div>
+                  <div><span class="font-semibold">Status:</span> {{ user.status }}</div>
+                  <div>
+                    <span class="font-semibold">Notes:</span>
+                    Expanded details panel — click the row again to collapse.
+                  </div>
+                </div>
+              </ng-template>
             </org-table>
           </div>
         </org-design-system-demo-canvas>
@@ -226,15 +247,18 @@ class TableLiveDemo {
     striped: new FormControl<boolean>(false, { nonNullable: true }),
     hover: new FormControl<boolean>(true, { nonNullable: true }),
     selectable: new FormControl<boolean>(false, { nonNullable: true }),
+    expandable: new FormControl<boolean>(false, { nonNullable: true }),
     sortable: new FormControl<boolean>(false, { nonNullable: true }),
     stickyFirstColumn: new FormControl<boolean>(false, { nonNullable: true }),
     stickyHeader: new FormControl<boolean>(false, { nonNullable: true }),
   });
 
   protected readonly selectionStore = new DataSelectionStore<User>();
+  protected readonly expansionStore = new DataSelectionStore<User>();
 
   private readonly _stateValue = signal<LiveDemoState>('default');
   private readonly _selectableValue = signal<boolean>(false);
+  private readonly _expandableValue = signal<boolean>(false);
 
   protected readonly data = computed<User[]>(() => (this._stateValue() === 'empty' ? [] : SAMPLE_USERS));
 
@@ -246,9 +270,14 @@ class TableLiveDemo {
     this._selectableValue() ? this.selectionStore : undefined
   );
 
+  protected readonly expandedDataValue = computed<DataSelectionStore<User> | undefined>(() =>
+    this._expandableValue() ? this.expansionStore : undefined
+  );
+
   constructor() {
     this.liveDemoForm.controls.state.valueChanges.subscribe((value) => this._stateValue.set(value!));
     this.liveDemoForm.controls.selectable.valueChanges.subscribe((value) => this._selectableValue.set(value!));
+    this.liveDemoForm.controls.expandable.valueChanges.subscribe((value) => this._expandableValue.set(value!));
   }
 }
 
@@ -504,12 +533,7 @@ type WideUser = User & {
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [Table, TableHeader, TableCell, Tag, TypedContextDirective],
   template: `
-    <org-table
-      [data]="users"
-      [stickyFirstColumn]="true"
-      [hover]="false"
-      [style]="{ maxWidth: '38rem' }"
-    >
+    <org-table [data]="users" [stickyFirstColumn]="true" [hover]="false" [style]="{ maxWidth: '38rem' }">
       <ng-template #header>
         <org-table-th>Project</org-table-th>
         <org-table-th>Owner</org-table-th>
@@ -593,7 +617,9 @@ class TableStickyFirstColumnDemo {
         <org-table-th>Updated</org-table-th>
         <org-table-th [numeric]="true">Records</org-table-th>
       </ng-template>
-      <ng-template #empty> No projects match the current filter. Try a different status, or reset filters. </ng-template>
+      <ng-template #empty>
+        No projects match the current filter. Try a different status, or reset filters.
+      </ng-template>
       <ng-template [orgTypedContext]="emptyUsers" #body let-user>
         <org-table-td>{{ user.name }}</org-table-td>
         <org-table-td>{{ user.owner }}</org-table-td>
@@ -606,6 +632,131 @@ class TableStickyFirstColumnDemo {
 class TableLoadingEmptyDemo {
   protected readonly loadingUsers = SAMPLE_USERS.slice(0, 4);
   protected readonly emptyUsers: User[] = [];
+}
+
+@Component({
+  selector: 'story-table-expandable-demo',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [Table, TableHeader, TableCell, Tag, TypedContextDirective],
+  styles: [
+    `
+      :host {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+      .expanded-content {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        padding: 0.75rem 0;
+      }
+      .expanded-content .row {
+        display: flex;
+        gap: 0.5rem;
+        font-size: 0.875rem;
+      }
+      .expanded-content .label {
+        font-weight: 600;
+        min-width: 6rem;
+      }
+      .demo-caption {
+        font-size: 0.875rem;
+        color: var(--color-fg-muted);
+      }
+    `,
+  ],
+  template: `
+    <div>
+      <div class="demo-caption">
+        Expansion only — click a row to expand / collapse. Multiple rows can be open at once.
+      </div>
+      <org-table [data]="users" [expandedData]="expansionOnlyStore" [hover]="true">
+        <ng-template #header>
+          <org-table-th>Project</org-table-th>
+          <org-table-th>Owner</org-table-th>
+          <org-table-th>Status</org-table-th>
+          <org-table-th [numeric]="true">Records</org-table-th>
+        </ng-template>
+        <ng-template [orgTypedContext]="users" #body let-user>
+          <org-table-td>{{ user.name }}</org-table-td>
+          <org-table-td>{{ user.owner }}</org-table-td>
+          <org-table-td>
+            <org-tag [color]="statusColor(user.status)" variant="soft">{{ statusLabel(user.status) }}</org-tag>
+          </org-table-td>
+          <org-table-td [numeric]="true">{{ user.records }}</org-table-td>
+        </ng-template>
+        <ng-template [orgTypedContext]="users" #expanded let-user>
+          <div class="expanded-content">
+            <div class="row">
+              <span class="label">Project id</span><span>{{ user.id }}</span>
+            </div>
+            <div class="row">
+              <span class="label">Updated</span><span>{{ user.updated }}</span>
+            </div>
+            <div class="row">
+              <span class="label">Notes</span><span>Click the row again to collapse this section.</span>
+            </div>
+          </div>
+        </ng-template>
+      </org-table>
+    </div>
+    <div>
+      <div class="demo-caption">
+        Expansion + selection — selection lives on the checkbox column; the row body triggers expansion.
+      </div>
+      <org-table
+        [data]="users"
+        [selectionData]="selectionStore"
+        [expandedData]="expansionWithSelectionStore"
+        [hover]="true"
+      >
+        <ng-template #header>
+          <org-table-th>Project</org-table-th>
+          <org-table-th>Owner</org-table-th>
+          <org-table-th>Status</org-table-th>
+          <org-table-th [numeric]="true">Records</org-table-th>
+        </ng-template>
+        <ng-template [orgTypedContext]="users" #body let-user>
+          <org-table-td>{{ user.name }}</org-table-td>
+          <org-table-td>{{ user.owner }}</org-table-td>
+          <org-table-td>
+            <org-tag [color]="statusColor(user.status)" variant="soft">{{ statusLabel(user.status) }}</org-tag>
+          </org-table-td>
+          <org-table-td [numeric]="true">{{ user.records }}</org-table-td>
+        </ng-template>
+        <ng-template [orgTypedContext]="users" #expanded let-user>
+          <div class="expanded-content">
+            <div class="row">
+              <span class="label">Project id</span><span>{{ user.id }}</span>
+            </div>
+            <div class="row">
+              <span class="label">Updated</span><span>{{ user.updated }}</span>
+            </div>
+          </div>
+        </ng-template>
+      </org-table>
+    </div>
+  `,
+})
+class TableExpandableDemo {
+  protected readonly users = SAMPLE_USERS.slice(0, 4);
+  protected readonly expansionOnlyStore = new DataSelectionStore<User>();
+  protected readonly expansionWithSelectionStore = new DataSelectionStore<User>();
+  protected readonly selectionStore = new DataSelectionStore<User>();
+
+  constructor() {
+    this.expansionOnlyStore.set(this.users[0], true);
+    this.expansionOnlyStore.set(this.users[2], true);
+  }
+
+  protected statusColor(status: User['status']): 'safe' | 'info' | 'neutral' | 'warning' {
+    return STATUS_TAG_COLOR[status];
+  }
+
+  protected statusLabel(status: User['status']): string {
+    return STATUS_LABEL[status];
+  }
 }
 
 @Component({
@@ -696,10 +847,12 @@ const meta: Meta<Table> = {
   ### Features
   - Three size variants (\`sm\`, \`base\`, \`lg\`) tracking the same control ramp as Button and Input
   - Visual modifiers: \`bordered\`, \`striped\`, \`hover\`, \`stickyHeader\`, \`stickyFirstColumn\`, \`emphasizeFirst\`
-  - Per-cell modifiers on \`<org-table-td>\` and \`<org-table-th>\`: \`numeric\`, \`muted\`, \`faint\`, \`selectCol\`
-  - Row state: selected (auto-driven by \`selectionData\`), clickable (auto-enabled when \`(rowClicked)\` is bound), empty
+  - Per-cell modifiers on \`<org-table-td>\` and \`<org-table-th>\`: \`numeric\`, \`muted\`, \`faint\`, \`selectColumn\`
+  - Row state: selected (auto-driven by \`selectionData\`), expanded (auto-driven by \`expandedData\`), clickable, empty
   - Sortable headers via the existing \`[orgSortableKey]\` directive — the chevron + \`aria-sort\` are owned by the header
   - Auto-rendered selection column when a \`DataSelectionStore\` is supplied via \`selectionData\`
+  - Per-row expanded section via a \`<ng-template #expanded>\` projected template + \`expandedData\` store; multiple rows can be open at once
+  - Row click routing: when \`expandedData\` is set, a row click toggles expansion; else when \`selectionData\` is set, a row click toggles selection; else the \`(rowClicked)\` output fires
   - Loading state with \`<org-loading-blocker>\` overlay (\`isLoading\`) and a corner spinner for refreshes (\`isBackgroundLoading\`)
   - Empty-state row when \`data().length === 0\` and a \`<ng-template #empty>\` is provided
 </div>
@@ -711,13 +864,14 @@ const meta: Meta<Table> = {
 
 export default meta;
 
-// inputs forwarded via host directives (isLoading / isBackgroundLoading / selectionData) are not visible to
-// storybook's signal-input type extraction, so they are augmented onto the args type here.
+// inputs forwarded via host directives (isLoading / isBackgroundLoading / selectionData / expandedData) are
+// not visible to storybook's signal-input type extraction, so they are augmented onto the args type here.
 type Story = StoryObj<
   Table & {
     isLoading: boolean;
     isBackgroundLoading: boolean;
     selectionData: DataSelectionStore<{ id: string }> | undefined;
+    expandedData: DataSelectionStore<{ id: string }> | undefined;
   }
 >;
 
@@ -850,7 +1004,7 @@ export const Showcase: Story = {
           <org-design-system-demo-header
             slot="header"
             title="Anatomy"
-            description="A real <table> with three groups: thead, tbody, and an optional tfoot. The header sits on a quiet shelf — same surface as the body, faint uppercase eyebrow type. Body rows are separated by a soft hairline; the trailing inset on the first and last cell makes the table edge read as a margin."
+            description="A real <table> with three groups: thead, tbody, and an optional tfoot. The header sits on a quiet shelf — same surface as the body, faint uppercase eyebrow type. Body rows are separated by a soft hairline; the post inset on the first and last cell makes the table edge read as a margin."
           />
           <org-design-system-demo-canvas slot="canvas">
             <story-table-anatomy-demo />
@@ -917,7 +1071,7 @@ export const Showcase: Story = {
             <li>Click a header to toggle sort: asc → desc → none</li>
             <li>Active sort lifts both the label color and the chevron</li>
             <li>aria-sort on the &lt;th&gt; reflects the current direction for screen readers</li>
-            <li>Numeric sortable columns place the chevron on the leading edge so the number stays flush right</li>
+            <li>Numeric sortable columns place the chevron on the pre edge so the number stays flush right</li>
           </ul>
         </org-design-system-demo-expected-behaviour>
 
@@ -925,7 +1079,7 @@ export const Showcase: Story = {
           <org-design-system-demo-header
             slot="header"
             title="Sticky first column"
-            description="[stickyFirstColumn] pins the leading column when the body scrolls horizontally — the column shares the body surface but draws a trailing hairline so it reads as a pinned rail. Striping, hover, and selection all carry over to the sticky cell."
+            description="[stickyFirstColumn] pins the pre column when the body scrolls horizontally — the column shares the body surface but draws a post hairline so it reads as a pinned rail. Striping, hover, and selection all carry over to the sticky cell."
           />
           <org-design-system-demo-canvas slot="canvas">
             <story-table-sticky-first-column-demo />
@@ -961,6 +1115,26 @@ export const Showcase: Story = {
         <org-design-system-demo>
           <org-design-system-demo-header
             slot="header"
+            title="Expandable rows"
+            description="Provide an [expandedData] store to enable per-row expansion. A row click toggles expansion when expandedData is supplied; combine with selectionData to keep the checkbox column as the sole authority for selection while the row body drives expansion. Multiple rows can be expanded simultaneously."
+          />
+          <org-design-system-demo-canvas slot="canvas">
+            <story-table-expandable-demo />
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li>A row click toggles the expanded section when [expandedData] is supplied</li>
+            <li>Multiple rows can be expanded at the same time</li>
+            <li>When both [selectionData] and [expandedData] are supplied, the checkbox handles selection and the row body handles expansion</li>
+            <li>When neither is supplied, the (rowClicked) output fires with the row's data</li>
+            <li>The expanded section row spans the full table width and skips hover / striped / selected treatments</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header
+            slot="header"
             title="In context"
             description="A fully composed table — selection, pagination, avatars, links, status tags. The Table component owns the surface; pagination is a sibling. Composed cell content (Avatar, Tag, Link) carries its existing system treatment without re-wrapping."
           />
@@ -985,6 +1159,7 @@ export const Showcase: Story = {
         TableSortableDemo,
         TableStickyFirstColumnDemo,
         TableLoadingEmptyDemo,
+        TableExpandableDemo,
         TableInContextDemo,
         DesignSystemDemo,
         DesignSystemDemoHeader,

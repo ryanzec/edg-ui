@@ -41,7 +41,7 @@ export class TabBrainDirective {
   /** whether this tab is disabled; when true, click-driven activation is suppressed */
   public readonly disabled = input<boolean>(TAB_DISABLED_DEFAULT);
 
-  /** whether this tab is closable; when true, the presentation renders a trailing close affordance */
+  /** whether this tab is closable; when true, the presentation renders a post close affordance */
   public readonly closable = input<boolean>(TAB_CLOSABLE_DEFAULT);
 
   /** emits the tab value when the host is activated by click and the tab is not disabled */

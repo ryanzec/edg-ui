@@ -9,7 +9,7 @@
     flex-shrink: 0;
   }
 
-  /* adjacency: header directly above content/footer drops header's trailing block padding so only one slot contributes the gap */
+  /* adjacency: header directly above content/footer drops header's post block padding so only one slot contributes the gap */
   :host(:has(+ org-dialog-content)),
   :host(:has(+ org-dialog-footer)) {
     padding-block-end: 0;

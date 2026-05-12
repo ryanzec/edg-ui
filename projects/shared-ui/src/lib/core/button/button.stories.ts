@@ -33,9 +33,9 @@ const liveDemoSizeItems: ButtonToggleItem[] = allButtonSizes.map((size) => ({
   buttonColor: 'primary',
 }));
 
-type LiveDemoIconChoice = 'none' | 'leading' | 'trailing' | 'both' | 'only';
+type LiveDemoIconChoice = 'none' | 'pre' | 'post' | 'both' | 'only';
 
-const allLiveDemoIconChoices = ['none', 'leading', 'trailing', 'both', 'only'] as const;
+const allLiveDemoIconChoices = ['none', 'pre', 'post', 'both', 'only'] as const;
 
 const liveDemoIconItems: ButtonToggleItem[] = allLiveDemoIconChoices.map((choice) => ({
   label: choice,
@@ -364,7 +364,7 @@ export const Default: Story = {
                   }
                 </org-button>
               }
-              @case ('leading') {
+              @case ('pre') {
                 <org-button
                   [color]="liveDemoForm.controls.color.value"
                   [variant]="liveDemoForm.controls.variant.value"
@@ -386,7 +386,7 @@ export const Default: Story = {
                   }
                 </org-button>
               }
-              @case ('trailing') {
+              @case ('post') {
                 <org-button
                   [color]="liveDemoForm.controls.color.value"
                   [variant]="liveDemoForm.controls.variant.value"

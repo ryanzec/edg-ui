@@ -88,7 +88,7 @@ export class CodeBlockBrainDirective {
 
   /** whether the show-more affordance should render (clamped, overflowing, and not yet expanded) */
   public readonly showShowMore = computed<boolean>(
-    () => this.hasEllipsis() && this.isOverflowing() && !this.expanded(),
+    () => this.hasEllipsis() && this.isOverflowing() && !this.expanded()
   );
 
   /** aria-expanded value applied to the show-more button to communicate the clamp state */

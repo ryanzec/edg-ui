@@ -24,7 +24,7 @@ export const TAG_REMOVE_BUTTON_TYPE = 'button';
   exportAs: 'orgTagBrain',
 })
 export class TagBrainDirective {
-  /** when true, the tag exposes a built-in remove (x) affordance and overrides any trailing slot icon */
+  /** when true, the tag exposes a built-in remove (x) affordance and overrides any post slot icon */
   public readonly removable = input<boolean>(TAG_REMOVABLE_DEFAULT);
 
   /** accessible label for the built-in remove button; defaults to "Remove tag" when omitted */

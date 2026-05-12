@@ -7,7 +7,7 @@ import { type IconName } from '../../brain/icon-brain/icon-brain';
 /** default value for the numeric input */
 export const TABLE_HEADER_NUMERIC_DEFAULT = false;
 
-/** default value for the selectCol input */
+/** default value for the selectColumn input */
 export const TABLE_HEADER_SELECT_COL_DEFAULT = false;
 
 @Component({
@@ -32,8 +32,8 @@ export class TableHeader {
   /** whether the cell renders the numeric layout — right-align + tabular numerals */
   public readonly numeric = input<boolean>(TABLE_HEADER_NUMERIC_DEFAULT);
 
-  /** whether the cell is the leading checkbox-selection column (fixed-width, centered) */
-  public readonly selectCol = input<boolean>(TABLE_HEADER_SELECT_COL_DEFAULT);
+  /** whether the cell is the pre checkbox-selection column (fixed-width, centered) */
+  public readonly selectColumn = input<boolean>(TABLE_HEADER_SELECT_COL_DEFAULT);
 
   /** the icon name shown in the sort chevron based on the active sort direction */
   protected readonly sortIconName = computed<IconName>(() => {

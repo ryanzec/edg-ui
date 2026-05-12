@@ -13,7 +13,7 @@ export type ChatBlockKind = (typeof allChatBlockKinds)[number];
 /** all available chat block state values */
 export const allChatBlockStates = ['idle', 'running'] as const;
 
-/** the lifecycle state of a chat block; running thickens the leading info rail */
+/** the lifecycle state of a chat block; running thickens the pre info rail */
 export type ChatBlockState = (typeof allChatBlockStates)[number];
 
 /** default value for the kind input */
@@ -67,10 +67,10 @@ export class ChatBlock {
     CHAT_BLOCK_TITLE_EMPHASIS_DEFAULT,
     {
       transform: angularUtils.transformNullToUndefined,
-    },
+    }
   );
 
-  /** the trailing meta line rendered after the title (e.g. duration, line count, status) */
+  /** the post meta line rendered after the title (e.g. duration, line count, status) */
   public readonly meta = input<string | undefined, string | null | undefined>(CHAT_BLOCK_META_DEFAULT, {
     transform: angularUtils.transformNullToUndefined,
   });

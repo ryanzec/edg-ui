@@ -53,7 +53,7 @@ const TAG_REMOVE_ICON_SIZE: Record<TagSize, IconSize> = {
   },
 })
 export class Tag {
-  /** all slotted tag-icon content children, used by TagIcon to detect which one is the suppressed trailing icon */
+  /** all slotted tag-icon content children, used by TagIcon to detect which one is the suppressed post icon */
   private readonly _tagIcons = contentChildren(TagIcon);
 
   /** reference to the host tag brain directive owning the removable affordance state and a11y derivation */
@@ -71,7 +71,7 @@ export class Tag {
   /** computed mirror of the brain's removable state, exposed so child TagIcons can react */
   public readonly isRemovable = computed<boolean>(() => this.brain.removable());
 
-  /** the last slotted TagIcon under this tag, exposed so the trailing TagIcon can suppress itself */
+  /** the last slotted TagIcon under this tag, exposed so the post TagIcon can suppress itself */
   public readonly lastTagIcon = computed<TagIcon | undefined>(() => {
     const icons = this._tagIcons();
 

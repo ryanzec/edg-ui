@@ -5,85 +5,92 @@ const path = require('path');
 const prettier = require('prettier');
 
 const REPO_ROOT = path.resolve(__dirname, '..', '..');
-const BASE_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/base-tokens.css');
-const CHART_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/chart-tokens.css');
-const SCROLLBAR_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/scrollbar-tokens.css');
-const AVATAR_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/avatar-tokens.css');
-const ICON_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/icon-tokens.css');
-const INDICATOR_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/indicator-tokens.css');
-const LABEL_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/label-tokens.css');
-const LAST_UPDATED_TOKENS_CSS = path.join(
+const BASE_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/base-tokens.css');
+const SCROLLBAR_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/scrollbar-tokens.css');
+const DESIGN_SYSTEM_DEMO_TOKENS_CSS = path.join(
   REPO_ROOT,
-  'projects/shared-ui/src/lib/styles/tokens/last-updated-tokens.css',
+  'projects/shared-ui/src/lib/example/design-system-demo/design-system-demo-tokens.css',
 );
-const LINK_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/link-tokens.css');
-const LOADING_BLOCKER_TOKENS_CSS = path.join(
-  REPO_ROOT,
-  'projects/shared-ui/src/lib/styles/tokens/loading-blocker-tokens.css',
-);
-const NOTIFICATION_TOKENS_CSS = path.join(
-  REPO_ROOT,
-  'projects/shared-ui/src/lib/styles/tokens/notification-tokens.css',
-);
-const TABS_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/tabs-tokens.css');
-const TAG_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/tag-tokens.css');
-const TIMELINE_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/timeline-tokens.css');
-const TOOLTIP_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/tooltip-tokens.css');
-const BUTTON_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/button-tokens.css');
-const CALENDAR_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/calendar-tokens.css');
-const CARD_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/card-tokens.css');
-const CHAT_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/chat-tokens.css');
-const CHECKBOX_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/checkbox-tokens.css');
+const AVATAR_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/core/avatar/avatar-tokens.css');
+const BUTTON_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/core/button/button-tokens.css');
+const CALENDAR_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/core/calendar/calendar-tokens.css');
+const CARD_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/core/card/card-tokens.css');
+const CHART_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/core/chart/chart-tokens.css');
+const CHAT_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/core/chat/chat-tokens.css');
+const CHECKBOX_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/core/checkbox/checkbox-tokens.css');
 const CHECKBOX_GROUP_TOKENS_CSS = path.join(
   REPO_ROOT,
-  'projects/shared-ui/src/lib/styles/tokens/checkbox-group-tokens.css',
+  'projects/shared-ui/src/lib/core/checkbox/checkbox-group-tokens.css',
 );
 const CHECKBOX_TOGGLE_TOKENS_CSS = path.join(
   REPO_ROOT,
-  'projects/shared-ui/src/lib/styles/tokens/checkbox-toggle-tokens.css',
+  'projects/shared-ui/src/lib/core/checkbox-toggle/checkbox-toggle-tokens.css',
 );
-const CHECKLIST_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/checklist-tokens.css');
-const CODE_BLOCK_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/code-block-tokens.css');
-const COMBOBOX_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/combobox-tokens.css');
+const CHECKLIST_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/core/checklist/checklist-tokens.css');
+const CODE_BLOCK_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/core/code-block/code-block-tokens.css');
+const COMBOBOX_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/core/combobox/combobox-tokens.css');
 const DATE_PICKER_INPUT_TOKENS_CSS = path.join(
   REPO_ROOT,
-  'projects/shared-ui/src/lib/styles/tokens/date-picker-input-tokens.css',
+  'projects/shared-ui/src/lib/core/date-picker-input/date-picker-input-tokens.css',
 );
-const DIALOG_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/dialog-tokens.css');
-const DESIGN_SYSTEM_DEMO_TOKENS_CSS = path.join(
-  REPO_ROOT,
-  'projects/shared-ui/src/lib/styles/tokens/design-system-demo-tokens.css',
-);
-const DIVIDER_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/divider-tokens.css');
+const DIALOG_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/core/dialog/dialog-tokens.css');
+const DIVIDER_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/core/divider/divider-tokens.css');
 const DROP_DOWN_SELECTOR_TOKENS_CSS = path.join(
   REPO_ROOT,
-  'projects/shared-ui/src/lib/styles/tokens/drop-down-selector-tokens.css',
-);
-const OVERLAY_MENU_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/overlay-menu-tokens.css');
-const PAGINATION_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/pagination-tokens.css');
-const RADIO_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/radio-tokens.css');
-const RADIO_GROUP_TOKENS_CSS = path.join(
-  REPO_ROOT,
-  'projects/shared-ui/src/lib/styles/tokens/radio-group-tokens.css',
-);
-const SKELETON_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/skeleton-tokens.css');
-const TABLE_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/table-tokens.css');
-const TEXTAREA_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/textarea-tokens.css');
-const TIME_INPUT_TOKENS_CSS = path.join(
-  REPO_ROOT,
-  'projects/shared-ui/src/lib/styles/tokens/time-input-tokens.css',
+  'projects/shared-ui/src/lib/core/drop-down-selector/drop-down-selector-tokens.css',
 );
 const EMPTY_INDICATOR_TOKENS_CSS = path.join(
   REPO_ROOT,
-  'projects/shared-ui/src/lib/styles/tokens/empty-indicator-tokens.css',
+  'projects/shared-ui/src/lib/core/empty-indicator/empty-indicator-tokens.css',
 );
-const FILE_UPLOAD_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/file-upload-tokens.css');
-const INPUT_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/tokens/input-tokens.css');
+const FILE_UPLOAD_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/core/file-upload/file-upload-tokens.css');
+const ICON_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/core/icon/icon-tokens.css');
+const INDICATOR_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/core/indicator/indicator-tokens.css');
+const INPUT_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/core/input/input-tokens.css');
+const LABEL_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/core/label/label-tokens.css');
+const LAST_UPDATED_TOKENS_CSS = path.join(
+  REPO_ROOT,
+  'projects/shared-ui/src/lib/core/last-updated/last-updated-tokens.css',
+);
+const LINK_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/core/link/link-tokens.css');
+const LOADING_BLOCKER_TOKENS_CSS = path.join(
+  REPO_ROOT,
+  'projects/shared-ui/src/lib/core/loading-blocker/loading-blocker-tokens.css',
+);
+const NOTIFICATIONS_TOKENS_CSS = path.join(
+  REPO_ROOT,
+  'projects/shared-ui/src/lib/core/notifications/notifications-tokens.css',
+);
+const OVERLAY_MENU_TOKENS_CSS = path.join(
+  REPO_ROOT,
+  'projects/shared-ui/src/lib/core/overlay-menu/overlay-menu-tokens.css',
+);
+const PAGINATION_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/core/pagination/pagination-tokens.css');
+const RADIO_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/core/radio/radio-tokens.css');
+const RADIO_GROUP_TOKENS_CSS = path.join(
+  REPO_ROOT,
+  'projects/shared-ui/src/lib/core/radio/radio-group-tokens.css',
+);
+const SKELETON_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/core/skeleton/skeleton-tokens.css');
+const SLIDER_INPUT_TOKENS_CSS = path.join(
+  REPO_ROOT,
+  'projects/shared-ui/src/lib/core/slider-input/slider-input-tokens.css',
+);
+const TABLE_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/core/table/table-tokens.css');
+const TABS_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/core/tabs/tabs-tokens.css');
+const TAG_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/core/tag/tag-tokens.css');
+const TEXTAREA_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/core/textarea/textarea-tokens.css');
+const TIME_INPUT_TOKENS_CSS = path.join(
+  REPO_ROOT,
+  'projects/shared-ui/src/lib/core/time-input/time-input-tokens.css',
+);
+const TIMELINE_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/core/timeline/timeline-tokens.css');
+const TOOLTIP_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/core/tooltip/tooltip-tokens.css');
 const OUTPUT_TS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/design-tokens.ts');
 
 /**
  * Extract CSS custom property declarations from a block of CSS text.
- * Returns a map of variable name (without leading --) to raw string value.
+ * Returns a map of variable name (without pre --) to raw string value.
  * Later declarations overwrite earlier ones, matching CSS cascade behavior.
  */
 function extractVariables(blockContent) {
@@ -99,11 +106,11 @@ function extractVariables(blockContent) {
 
     if (colonIdx === -1) continue;
 
-    // Strip the leading -- from the property name
+    // Strip the pre -- from the property name
     const name = trimmed.substring(2, colonIdx).trim();
     const rawValue = trimmed.substring(colonIdx + 1);
 
-    // Strip trailing semicolon and inline comments
+    // Strip post semicolon and inline comments
     const value = rawValue.replace(/;.*$/, '').trim();
 
     if (name && value) {
@@ -143,7 +150,7 @@ function findBlocks(css, selector) {
 }
 
 /**
- * Convert a CSS variable name segment (without leading --) to a dot-notation path key.
+ * Convert a CSS variable name segment (without pre --) to a dot-notation path key.
  * Handles embedded double-dashes as nested separators, e.g.:
  *   "text-xs--line-height" → "text.xs.line.height"
  *   "font-weight-normal"   → "font.weight.normal"
@@ -198,7 +205,7 @@ function buildTokenMap(vars, isColor, allVars) {
 
 /**
  * Returns true when a key must be quoted to be a valid JS property name.
- * Keys with dots, hyphens, or leading digits all require quoting.
+ * Keys with dots, hyphens, or pre digits all require quoting.
  */
 function needsQuotes(key) {
   return !/^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(key);
@@ -265,7 +272,7 @@ async function main() {
   const lastUpdatedContent = cleanCss(fs.readFileSync(LAST_UPDATED_TOKENS_CSS, 'utf-8'));
   const linkContent = cleanCss(fs.readFileSync(LINK_TOKENS_CSS, 'utf-8'));
   const loadingBlockerContent = cleanCss(fs.readFileSync(LOADING_BLOCKER_TOKENS_CSS, 'utf-8'));
-  const notificationContent = cleanCss(fs.readFileSync(NOTIFICATION_TOKENS_CSS, 'utf-8'));
+  const notificationsContent = cleanCss(fs.readFileSync(NOTIFICATIONS_TOKENS_CSS, 'utf-8'));
   const tabsContent = cleanCss(fs.readFileSync(TABS_TOKENS_CSS, 'utf-8'));
   const tagContent = cleanCss(fs.readFileSync(TAG_TOKENS_CSS, 'utf-8'));
   const timelineContent = cleanCss(fs.readFileSync(TIMELINE_TOKENS_CSS, 'utf-8'));
@@ -293,6 +300,7 @@ async function main() {
   const radioContent = cleanCss(fs.readFileSync(RADIO_TOKENS_CSS, 'utf-8'));
   const radioGroupContent = cleanCss(fs.readFileSync(RADIO_GROUP_TOKENS_CSS, 'utf-8'));
   const skeletonContent = cleanCss(fs.readFileSync(SKELETON_TOKENS_CSS, 'utf-8'));
+  const sliderInputContent = cleanCss(fs.readFileSync(SLIDER_INPUT_TOKENS_CSS, 'utf-8'));
   const tableContent = cleanCss(fs.readFileSync(TABLE_TOKENS_CSS, 'utf-8'));
   const textareaContent = cleanCss(fs.readFileSync(TEXTAREA_TOKENS_CSS, 'utf-8'));
   const timeInputContent = cleanCss(fs.readFileSync(TIME_INPUT_TOKENS_CSS, 'utf-8'));
@@ -312,7 +320,7 @@ async function main() {
     ...findBlocks(lastUpdatedContent, ':root').map(extractVariables),
     ...findBlocks(linkContent, ':root').map(extractVariables),
     ...findBlocks(loadingBlockerContent, ':root').map(extractVariables),
-    ...findBlocks(notificationContent, ':root').map(extractVariables),
+    ...findBlocks(notificationsContent, ':root').map(extractVariables),
     ...findBlocks(tabsContent, ':root').map(extractVariables),
     ...findBlocks(tagContent, ':root').map(extractVariables),
     ...findBlocks(timelineContent, ':root').map(extractVariables),
@@ -340,6 +348,7 @@ async function main() {
     ...findBlocks(radioContent, ':root').map(extractVariables),
     ...findBlocks(radioGroupContent, ':root').map(extractVariables),
     ...findBlocks(skeletonContent, ':root').map(extractVariables),
+    ...findBlocks(sliderInputContent, ':root').map(extractVariables),
     ...findBlocks(tableContent, ':root').map(extractVariables),
     ...findBlocks(textareaContent, ':root').map(extractVariables),
     ...findBlocks(timeInputContent, ':root').map(extractVariables),
@@ -356,7 +365,7 @@ async function main() {
     ...findBlocks(lastUpdatedContent, '.dark').map(extractVariables),
     ...findBlocks(linkContent, '.dark').map(extractVariables),
     ...findBlocks(loadingBlockerContent, '.dark').map(extractVariables),
-    ...findBlocks(notificationContent, '.dark').map(extractVariables),
+    ...findBlocks(notificationsContent, '.dark').map(extractVariables),
     ...findBlocks(tabsContent, '.dark').map(extractVariables),
     ...findBlocks(tagContent, '.dark').map(extractVariables),
     ...findBlocks(timelineContent, '.dark').map(extractVariables),
@@ -384,6 +393,7 @@ async function main() {
     ...findBlocks(radioContent, '.dark').map(extractVariables),
     ...findBlocks(radioGroupContent, '.dark').map(extractVariables),
     ...findBlocks(skeletonContent, '.dark').map(extractVariables),
+    ...findBlocks(sliderInputContent, '.dark').map(extractVariables),
     ...findBlocks(tableContent, '.dark').map(extractVariables),
     ...findBlocks(textareaContent, '.dark').map(extractVariables),
     ...findBlocks(timeInputContent, '.dark').map(extractVariables),

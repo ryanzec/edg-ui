@@ -7,9 +7,9 @@
   --indicator-z-index: var(--z-index-raised);
 
   /* size: base (default) */
-  --indicator-dot-size: var(--spacing-2); /* 8px */
-  --indicator-height: var(--spacing-4); /* 16px */
-  --indicator-pad-x: var(--spacing-1); /* 4px */
+  --indicator-dot-size: var(--spacing-2);
+  --indicator-height: var(--spacing-4);
+  --indicator-pad-x: var(--spacing-1);
   --indicator-icon-pad-x: 0.1875rem; /* 3px */
   --indicator-font-size: var(--font-size-xs);
 

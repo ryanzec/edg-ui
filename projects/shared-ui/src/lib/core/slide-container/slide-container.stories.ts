@@ -152,7 +152,11 @@ export const Default: Story = {
       <div class="flex gap-2 items-center">
         <org-button [disabled]="activeIndex() === 0" label="Previous" (clicked)="onPrev()" />
         <span>{{ activeIndex() + 1 }} / {{ containerComponent.slideCount() }}</span>
-        <org-button [disabled]="activeIndex() === containerComponent.slideCount() - 1" label="Next" (clicked)="onNext()" />
+        <org-button
+          [disabled]="activeIndex() === containerComponent.slideCount() - 1"
+          label="Next"
+          (clicked)="onNext()"
+        />
       </div>
     </div>
   `,
@@ -205,7 +209,11 @@ class SlideContainerStableHorizontalDemo {
       <div class="flex gap-2 items-center">
         <org-button [disabled]="activeIndex() === 0" label="Previous" (clicked)="onPrev()" />
         <span>{{ activeIndex() + 1 }} / {{ containerComponent.slideCount() }}</span>
-        <org-button [disabled]="activeIndex() === containerComponent.slideCount() - 1" label="Next" (clicked)="onNext()" />
+        <org-button
+          [disabled]="activeIndex() === containerComponent.slideCount() - 1"
+          label="Next"
+          (clicked)="onNext()"
+        />
       </div>
     </div>
   `,
@@ -296,7 +304,11 @@ export const Stable: Story = {
       <div class="flex gap-2 items-center">
         <org-button [disabled]="activeIndex() === 0" label="Previous" (clicked)="onPrev()" />
         <span>{{ activeIndex() + 1 }} / {{ containerComponent.slideCount() }}</span>
-        <org-button [disabled]="activeIndex() === containerComponent.slideCount() - 1" label="Next" (clicked)="onNext()" />
+        <org-button
+          [disabled]="activeIndex() === containerComponent.slideCount() - 1"
+          label="Next"
+          (clicked)="onNext()"
+        />
       </div>
     </div>
   `,
@@ -353,7 +365,11 @@ class SlideContainerDynamicHorizontalDemo {
       <div class="flex gap-2 items-center">
         <org-button [disabled]="activeIndex() === 0" label="Previous" (clicked)="onPrev()" />
         <span>{{ activeIndex() + 1 }} / {{ containerComponent.slideCount() }}</span>
-        <org-button [disabled]="activeIndex() === containerComponent.slideCount() - 1" label="Next" (clicked)="onNext()" />
+        <org-button
+          [disabled]="activeIndex() === containerComponent.slideCount() - 1"
+          label="Next"
+          (clicked)="onNext()"
+        />
       </div>
     </div>
   `,

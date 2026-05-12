@@ -24,6 +24,19 @@ Architecture Rules
 - Styling: Retains all the CSS/SCSS and structural HTML.
 - Integration: Must import and internally utilize the new Brain component to function.
 
+# Important Use Case Patterns
+- `.claude/rules/use-cases/angular-content-projection.md`
+- `.claude/rules/use-cases/css-local-variables.md`
+- `.claude/rules/use-cases/needing-multiple-ng-content-element.md`
+
+Before finishing the plan to be presented, **MAKE SURE** to account for the following:
+- Follow **ALL* rules
+- the style implement following the same style as the existing components.
+- The standard `Default` / `Live Demo` / `Showcase` stories are accounted for (and any additional stories the might be needed).
+- **ALL** a11y related functionality for the given compnent is account for
+- **ALL** common / standard keyboard shortcut are account for and **EXPLICITLY** listed in the plan.
+- The new component is accounted for in the `projects/shared-ui/src/lib/templates/all-components`.
+
 You **MUST** follow all the rules.
 
 You **MUST** present your plan as to what new sub-component you recommend before make **ANY** code changes.

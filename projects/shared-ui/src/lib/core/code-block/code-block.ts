@@ -120,9 +120,12 @@ export class CodeBlock implements AfterViewInit {
   });
 
   /** the optional icon rendered before the header label */
-  public readonly headerIcon = input<IconName | undefined, IconName | null | undefined>(CODE_BLOCK_HEADER_ICON_DEFAULT, {
-    transform: angularUtils.transformNullToUndefined,
-  });
+  public readonly headerIcon = input<IconName | undefined, IconName | null | undefined>(
+    CODE_BLOCK_HEADER_ICON_DEFAULT,
+    {
+      transform: angularUtils.transformNullToUndefined,
+    }
+  );
 
   /** additional css class applied to the inner scroll-area element */
   public readonly scrollClass = input<string>(CODE_BLOCK_SCROLL_CLASS_DEFAULT);

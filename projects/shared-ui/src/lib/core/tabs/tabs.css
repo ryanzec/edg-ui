@@ -1,7 +1,7 @@
 @layer components {
   :host {
     /* size-driven locals (default base) */
-    --_tabs-row-h: var(--sizing-tabs-row-h-base);
+    --_tabs-row-height: var(--sizing-tabs-row-h-base);
     --_tabs-tab-x: var(--spacing-tabs-tab-x-base);
     --_tabs-font: var(--font-size-tabs-base);
 
@@ -40,19 +40,19 @@
 
   /* size variants */
   :host([data-size='sm']) {
-    --_tabs-row-h: var(--sizing-tabs-row-h-sm);
+    --_tabs-row-height: var(--sizing-tabs-row-h-sm);
     --_tabs-tab-x: var(--spacing-tabs-tab-x-sm);
     --_tabs-font: var(--font-size-tabs-sm);
   }
 
   :host([data-size='base']) {
-    --_tabs-row-h: var(--sizing-tabs-row-h-base);
+    --_tabs-row-height: var(--sizing-tabs-row-h-base);
     --_tabs-tab-x: var(--spacing-tabs-tab-x-base);
     --_tabs-font: var(--font-size-tabs-base);
   }
 
   :host([data-size='lg']) {
-    --_tabs-row-h: var(--sizing-tabs-row-h-lg);
+    --_tabs-row-height: var(--sizing-tabs-row-h-lg);
     --_tabs-tab-x: var(--spacing-tabs-tab-x-lg);
     --_tabs-font: var(--font-size-tabs-lg);
   }

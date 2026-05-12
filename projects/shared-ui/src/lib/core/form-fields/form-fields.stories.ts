@@ -245,7 +245,7 @@ export const Showcase: Story = {
     docs: {
       description: {
         story:
-          'Comprehensive showcase of every form-fields / form-field axis — mixed form-element types, validation messaging across both wrapper and standalone usage, multi-group composition, reserved validation space (container default and per-field override), and inputs with leading/trailing icons — in a single scrollable view.',
+          'Comprehensive showcase of every form-fields / form-field axis — mixed form-element types, validation messaging across both wrapper and standalone usage, multi-group composition, reserved validation space (container default and per-field override), and inputs with pre/post icons — in a single scrollable view.',
       },
     },
   },

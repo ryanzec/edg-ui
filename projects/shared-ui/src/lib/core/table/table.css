@@ -11,8 +11,8 @@
     color: var(--table-fg);
 
     /* default to base — overridden by :host([data-size]) below */
-    --table-row-h: var(--table-row-height-base);
-    --table-header-h: var(--table-header-height-base);
+    --table-row-height: var(--table-row-height-base);
+    --table-header-height: var(--table-header-height-base);
     --table-cell-py: var(--table-cell-padding-y-base);
     --table-cell-px: var(--table-cell-padding-x-base);
     --table-edge-x: var(--table-edge-inset-base);
@@ -20,8 +20,8 @@
   }
 
   :host([data-size='sm']) {
-    --table-row-h: var(--table-row-height-sm);
-    --table-header-h: var(--table-header-height-sm);
+    --table-row-height: var(--table-row-height-sm);
+    --table-header-height: var(--table-header-height-sm);
     --table-cell-py: var(--table-cell-padding-y-sm);
     --table-cell-px: var(--table-cell-padding-x-sm);
     --table-edge-x: var(--table-edge-inset-sm);
@@ -29,8 +29,8 @@
   }
 
   :host([data-size='lg']) {
-    --table-row-h: var(--table-row-height-lg);
-    --table-header-h: var(--table-header-height-lg);
+    --table-row-height: var(--table-row-height-lg);
+    --table-header-height: var(--table-header-height-lg);
     --table-cell-py: var(--table-cell-padding-y-lg);
     --table-cell-px: var(--table-cell-padding-x-lg);
     --table-edge-x: var(--table-edge-inset-lg);
@@ -94,6 +94,13 @@
     vertical-align: middle;
   }
 
+  /* the expanded-section cell — owned by org-table and projected into the expanded section <tr> via <ng-content> */
+  .expanded-cell {
+    padding-block: var(--table-expanded-padding-y);
+    padding-inline: var(--table-expanded-padding-x);
+    background-color: var(--table-expanded-bg);
+  }
+
   /* ellipsis support — global utility class set on the inner div by org-table-td */
   .org-table-ellipsis {
     --ellipsis-lines: 1;
@@ -123,35 +130,66 @@
     padding-right: var(--table-edge-x);
   }
 
-  /* row separator — top hairline on every body row except the first */
-  org-table tbody > org-table-tr:not(:first-child) > tr > org-table-td > td,
-  org-table tbody > org-table-tr:not(:first-child) > tr > org-table-th > th {
+  /* row separator — top hairline on every body row except the first; expanded section rows belong to the row above so they skip it */
+  org-table tbody > org-table-tr:not(:first-child) > tr:not([data-expanded-section]) > org-table-td > td,
+  org-table tbody > org-table-tr:not(:first-child) > tr:not([data-expanded-section]) > org-table-th > th {
     border-top: var(--table-border-width) solid var(--table-border-soft);
   }
 
-  /* striped rows — every even non-selected, non-empty body row */
-  org-table[data-striped] tbody > org-table-tr:nth-child(even) > tr:not([data-selected]):not([data-empty]) > org-table-td > td {
+  /* striped rows — every even non-selected, non-empty body row (expanded section rows excluded) */
+  org-table[data-striped]
+    tbody
+    > org-table-tr:nth-child(even)
+    > tr:not([data-selected]):not([data-empty]):not([data-expanded-section])
+    > org-table-td
+    > td {
     background-color: var(--table-row-bg-stripe);
   }
 
-  /* hover rows — when opted in, body rows tint on hover unless empty / selected */
-  org-table[data-hover] tbody > org-table-tr > tr[data-variant='body']:not([data-selected]):not([data-empty]):hover > org-table-td > td {
+  /* hover rows — when opted in, body rows tint on hover unless empty / selected / expanded-section */
+  org-table[data-hover]
+    tbody
+    > org-table-tr
+    > tr[data-variant='body']:not([data-selected]):not([data-empty]):not([data-expanded-section]):hover
+    > org-table-td
+    > td {
     background-color: var(--table-row-bg-hover);
   }
 
   /* selected + hover combination wins over plain hover */
-  org-table[data-hover] tbody > org-table-tr > tr[data-variant='body'][data-selected]:hover > org-table-td > td {
+  org-table[data-hover]
+    tbody
+    > org-table-tr
+    > tr[data-variant='body'][data-selected]:not([data-expanded-section]):hover
+    > org-table-td
+    > td {
     background-color: var(--table-row-bg-selected-hover);
   }
 
   /* selected row — fill propagates to every cell so the row reads as one band */
-  org-table tbody > org-table-tr > tr[data-variant='body'][data-selected] > org-table-td > td {
+  org-table
+    tbody
+    > org-table-tr
+    > tr[data-variant='body'][data-selected]:not([data-expanded-section])
+    > org-table-td
+    > td {
     background-color: var(--table-row-bg-selected);
   }
 
   /* emphasize-first — the first non-select-col cell of each body row carries the lifted weight + tone */
-  org-table[data-emphasize-first] tbody > org-table-tr > tr[data-variant='body'] > org-table-td:first-child:not(:has(td[data-select-col])) > td,
-  org-table[data-emphasize-first] tbody > org-table-tr > tr[data-variant='body'] > org-table-td:first-child:has(td[data-select-col]) + org-table-td > td {
+  org-table[data-emphasize-first]
+    tbody
+    > org-table-tr
+    > tr[data-variant='body']
+    > org-table-td:first-child:not(:has(td[data-select-col]))
+    > td,
+  org-table[data-emphasize-first]
+    tbody
+    > org-table-tr
+    > tr[data-variant='body']
+    > org-table-td:first-child:has(td[data-select-col])
+    + org-table-td
+    > td {
     font-weight: var(--table-emphasize-first-font-weight);
     color: var(--table-fg);
   }
@@ -163,7 +201,7 @@
     z-index: var(--z-index-raised);
   }
 
-  /* sticky first column — pin the leading cell of every row */
+  /* sticky first column — pin the pre cell of every row */
   org-table[data-sticky-first-column] tr > org-table-th:first-child > th,
   org-table[data-sticky-first-column] tr > org-table-td:first-child > td {
     position: sticky;
@@ -179,19 +217,39 @@
   }
 
   /* repaint the sticky first cell with the row's current state surface so the column reads through scroll */
-  org-table[data-sticky-first-column][data-striped] tbody > org-table-tr:nth-child(even) > tr:not([data-selected]):not([data-empty]) > org-table-td:first-child > td {
+  org-table[data-sticky-first-column][data-striped]
+    tbody
+    > org-table-tr:nth-child(even)
+    > tr:not([data-selected]):not([data-empty])
+    > org-table-td:first-child
+    > td {
     background-color: var(--table-row-bg-stripe);
   }
 
-  org-table[data-sticky-first-column][data-hover] tbody > org-table-tr > tr[data-variant='body']:not([data-selected]):not([data-empty]):hover > org-table-td:first-child > td {
+  org-table[data-sticky-first-column][data-hover]
+    tbody
+    > org-table-tr
+    > tr[data-variant='body']:not([data-selected]):not([data-empty]):hover
+    > org-table-td:first-child
+    > td {
     background-color: var(--table-row-bg-hover);
   }
 
-  org-table[data-sticky-first-column] tbody > org-table-tr > tr[data-variant='body'][data-selected] > org-table-td:first-child > td {
+  org-table[data-sticky-first-column]
+    tbody
+    > org-table-tr
+    > tr[data-variant='body'][data-selected]
+    > org-table-td:first-child
+    > td {
     background-color: var(--table-row-bg-selected);
   }
 
-  org-table[data-sticky-first-column][data-hover] tbody > org-table-tr > tr[data-variant='body'][data-selected]:hover > org-table-td:first-child > td {
+  org-table[data-sticky-first-column][data-hover]
+    tbody
+    > org-table-tr
+    > tr[data-variant='body'][data-selected]:hover
+    > org-table-td:first-child
+    > td {
     background-color: var(--table-row-bg-selected-hover);
   }
 

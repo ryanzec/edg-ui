@@ -22,13 +22,10 @@
     @if (isLeadOfRun()) {
       <div class="message-author">
         <span class="author-name">{{ authorName() }}</span>
-        @if (hasTrailingMeta()) {
-          <span
-            class="author-trailing"
-            [class.author-trailing-meta]="trailingIsMeta()"
-            [class.author-trailing-time]="!trailingIsMeta()"
-            >{{ trailingMeta() }}</span
-          >
+        @if (hasPostMeta()) {
+          <span class="author-post" [class.author-post-meta]="postIsMeta()" [class.author-post-time]="!postIsMeta()">{{
+            postMeta()
+          }}</span>
         }
         @if (hasEdited()) {
           <span class="author-edited">(edited)</span>
@@ -39,13 +36,7 @@
     <ng-content select="[quote]" />
 
     @if (useSurface()) {
-      <org-box
-        class="message-body-wrap"
-        [color]="boxColor()"
-        [border]="boxBorder()"
-        padding="sm"
-        background="colored"
-      >
+      <org-box class="message-body-wrap" [color]="boxColor()" [border]="boxBorder()" padding="sm" background="colored">
         <ng-container [ngTemplateOutlet]="bodyTemplate" />
       </org-box>
     } @else {

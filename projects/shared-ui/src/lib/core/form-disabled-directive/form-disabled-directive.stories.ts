@@ -38,7 +38,11 @@ import { StorybookExampleContainerSection } from '../../private/storybook-exampl
       </org-storybook-example-container-section>
 
       <org-storybook-example-container-section label="Controls">
-        <org-button buttonVariant="outline" [label]="(isDisabled() ? 'Enable' : 'Disable') + ' Field'" (clicked)="toggleDisabled()" />
+        <org-button
+          buttonVariant="outline"
+          [label]="(isDisabled() ? 'Enable' : 'Disable') + ' Field'"
+          (clicked)="toggleDisabled()"
+        />
       </org-storybook-example-container-section>
     </org-storybook-example-container>
   `,

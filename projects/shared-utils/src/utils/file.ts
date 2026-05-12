@@ -20,7 +20,7 @@ const formatBytes = (bytes: number): string => {
 };
 
 /**
- * Extracts a file's extension (uppercased, no leading dot) from its name.
+ * Extracts a file's extension (uppercased, no pre dot) from its name.
  * Returns the empty string when no extension is present.
  */
 const getFileExtension = (fileName: string): string => {

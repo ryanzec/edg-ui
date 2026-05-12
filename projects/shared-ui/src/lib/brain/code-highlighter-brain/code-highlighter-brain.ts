@@ -77,7 +77,7 @@ const _getShikiHighlighter = (): ReturnType<typeof createHighlighter> => {
  * specific prefixes (e.g. `keyword.operator`, `support.type.property-name`) must come before
  * broader ones with the same head (e.g. `keyword`, `support.type`).
  */
-const _scopePrefixMap: Array<{ prefix: string; kind: SyntaxKind }> = [
+const _scopePrefixMap: { prefix: string; kind: SyntaxKind }[] = [
   { prefix: 'comment', kind: 'comment' },
   { prefix: 'punctuation.definition.decorator', kind: 'decorator' },
   { prefix: 'meta.decorator', kind: 'decorator' },

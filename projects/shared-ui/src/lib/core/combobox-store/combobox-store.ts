@@ -140,6 +140,8 @@ export class ComboboxStore {
     const state = this._state();
     let filtered = [...state.options];
 
+    return filtered;
+
     // apply custom option filter if provided, otherwise use default label search
     if (state.config.optionFilter) {
       filtered = filtered.filter((option) => state.config.optionFilter!(state.inputValue, option));

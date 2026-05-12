@@ -9,8 +9,6 @@ import {
   ChatMessageBrainDirective,
   CHAT_MESSAGE_ROLE_DEFAULT,
   CHAT_MESSAGE_STATE_DEFAULT,
-  type ChatMessageRole,
-  type ChatMessageState,
 } from '../../brain/chat-message-brain/chat-message-brain';
 
 /** all available chat message run-position values */
@@ -56,11 +54,11 @@ export { CHAT_MESSAGE_ROLE_DEFAULT, CHAT_MESSAGE_STATE_DEFAULT };
  * single chat message rendered as a two-column grid (avatar gutter + body column). composes
  * `ChatMessageBrainDirective` for the role-driven aria semantics (system → status, others → article) and the
  * pending / failed aria states. user and error roles wrap the body slot in an `org-box` for the bubble surface;
- * assistant renders the body bare; system collapses the grid to a centred chrome pill with an optional leading
+ * assistant renders the body bare; system collapses the grid to a centred chrome pill with an optional pre
  * `systemIcon`. the gutter avatar is rendered internally as an `org-avatar` driven by the `authorName`,
  * `avatarImgSrc`, `avatarImgEmail`, and `avatarShape` inputs — there is no avatar projection slot. consumers
  * project content via three named slots: `[quote]` for an optional quoted-reply preview above the body, `[body]`
- * for the body content (auto-wrapped for user / error), and the default slot for trailing column items
+ * for the body content (auto-wrapped for user / error), and the default slot for post column items
  * (suggestions, reactions). hover-actions sit on a separate row via `[hoverActions]`.
  */
 @Component({
@@ -107,22 +105,22 @@ export class ChatMessage {
   /** explicit image url forwarded to the avatar; takes priority over avatarImgEmail */
   public readonly avatarImgSrc = input<string | undefined, string | null | undefined>(
     CHAT_MESSAGE_AVATAR_IMG_SRC_DEFAULT,
-    { transform: angularUtils.transformNullToUndefined },
+    { transform: angularUtils.transformNullToUndefined }
   );
 
   /** email forwarded to the avatar to fetch a gravatar image when avatarImgSrc is absent */
   public readonly avatarImgEmail = input<string | undefined, string | null | undefined>(
     CHAT_MESSAGE_AVATAR_IMG_EMAIL_DEFAULT,
-    { transform: angularUtils.transformNullToUndefined },
+    { transform: angularUtils.transformNullToUndefined }
   );
 
   /** shape variant forwarded to the avatar; circle for people, square for organisations / teams / projects */
   public readonly avatarShape = input<AvatarShapeVariant>(CHAT_MESSAGE_AVATAR_SHAPE_DEFAULT);
 
-  /** optional leading icon for the system pill; ignored for non-system roles */
+  /** optional pre icon for the system pill; ignored for non-system roles */
   public readonly systemIcon = input<IconName | undefined, IconName | null | undefined>(
     CHAT_MESSAGE_SYSTEM_ICON_DEFAULT,
-    { transform: angularUtils.transformNullToUndefined },
+    { transform: angularUtils.transformNullToUndefined }
   );
 
   /** convenience: true when the message role renders as a centered system pill */
@@ -146,22 +144,20 @@ export class ChatMessage {
   protected readonly boxColor = computed<BoxColor>(() => (this.brain.role() === 'error' ? 'danger' : 'neutral'));
 
   /** the box border style mapped from the role; only consulted when useSurface() is true */
-  protected readonly boxBorder = computed<BoxBorder>(() =>
-    this.brain.role() === 'error' ? 'bordered' : 'borderless',
-  );
+  protected readonly boxBorder = computed<BoxBorder>(() => (this.brain.role() === 'error' ? 'bordered' : 'borderless'));
 
-  /** the trailing meta label rendered after the author name; meta() takes precedence over time() */
-  protected readonly trailingMeta = computed<string | undefined>(() => this.meta() ?? this.time());
+  /** the post meta label rendered after the author name; meta() takes precedence over time() */
+  protected readonly postMeta = computed<string | undefined>(() => this.meta() ?? this.time());
 
-  /** whether the trailing meta label should render */
-  protected readonly hasTrailingMeta = computed<boolean>(() => !!this.trailingMeta());
+  /** whether the post meta label should render */
+  protected readonly hasPostMeta = computed<boolean>(() => !!this.postMeta());
 
-  /** whether the meta input is the source of the trailing label (drives the muted styling vs. faint time) */
-  protected readonly trailingIsMeta = computed<boolean>(() => !!this.meta());
+  /** whether the meta input is the source of the post label (drives the muted styling vs. faint time) */
+  protected readonly postIsMeta = computed<boolean>(() => !!this.meta());
 
   /** whether to render the "(edited)" marker */
   protected readonly hasEdited = computed<boolean>(() => this.edited());
 
-  /** whether the system pill should render its leading icon */
+  /** whether the system pill should render its pre icon */
   protected readonly hasSystemIcon = computed<boolean>(() => !!this.systemIcon());
 }

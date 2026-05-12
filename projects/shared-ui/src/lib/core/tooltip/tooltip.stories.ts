@@ -85,7 +85,7 @@ const meta: Meta<Tooltip> = {
   - **org-tooltip-title** / **org-tooltip-body** / **org-tooltip-action** — rich-layout slot components.
 
   ### Layouts
-  - **label** (default) — one-line text, optionally with a trailing &lt;org-tooltip-kbd&gt;. For icon-only buttons, truncated names, and brief affordances.
+  - **label** (default) — one-line text, optionally with a post &lt;org-tooltip-kbd&gt;. For icon-only buttons, truncated names, and brief affordances.
   - **rich** — title + body + optional action link. For click-mode tooltips that hold a small amount of contextual help.
 
   ### Placements
@@ -262,11 +262,7 @@ export const Default: Story = {
             <org-button-toggle [items]="delayItems" formControlName="closeDelay" buttonSize="sm" />
           </org-design-system-demo-control-group>
           <org-design-system-demo-control-group label="Keep open on hover">
-            <org-checkbox-toggle
-              name="live-demo-keep-open"
-              value="keepOpenOnHover"
-              formControlName="keepOpenOnHover"
-            >
+            <org-checkbox-toggle name="live-demo-keep-open" value="keepOpenOnHover" formControlName="keepOpenOnHover">
               {{ liveDemoForm.controls.keepOpenOnHover.value ? 'on' : 'off' }}
             </org-checkbox-toggle>
           </org-design-system-demo-control-group>
@@ -601,7 +597,7 @@ export const Showcase: Story = {
         <org-design-system-demo-expected-behaviour>
           <ul class="list-inside list-disc flex flex-col gap-1">
             <li><strong>Side</strong>: top / bottom / left / right control which side of the trigger the tooltip lands on</li>
-            <li><strong>Alignment</strong>: -start anchors to the trigger's leading edge, -end to the trailing edge, no suffix centers</li>
+            <li><strong>Alignment</strong>: -start anchors to the trigger's pre edge, -end to the post edge, no suffix centers</li>
             <li><strong>Arrow</strong>: tracks the resolved placement; if auto-flip changes the side, the arrow re-orients to keep pointing at the trigger</li>
           </ul>
         </org-design-system-demo-expected-behaviour>

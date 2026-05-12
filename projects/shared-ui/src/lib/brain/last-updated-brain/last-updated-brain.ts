@@ -6,14 +6,14 @@ import { type ComponentColor } from '../../core/types/component-types';
 /** all valid state values for the last-updated component */
 export const allLastUpdatedStates = ['fresh', 'stale', 'error', 'loading'] as const;
 
-/** the state driving the last-updated leading slot, indicator color, and label tone */
+/** the state driving the last-updated pre slot, indicator color, and label tone */
 export type LastUpdatedState = (typeof allLastUpdatedStates)[number];
 
-/** all valid leading slot identifiers; selects which leading element the presentation renders */
-export const allLastUpdatedLeadingSlots = ['indicator', 'refresh', 'spinner'] as const;
+/** all valid pre slot identifiers; selects which pre element the presentation renders */
+export const allLastUpdatedPreSlots = ['indicator', 'refresh', 'spinner'] as const;
 
-/** the leading slot identifier */
-export type LastUpdatedLeadingSlot = (typeof allLastUpdatedLeadingSlots)[number];
+/** the pre slot identifier */
+export type LastUpdatedPreSlot = (typeof allLastUpdatedPreSlots)[number];
 
 /** sentinel format values handled internally; any other string is passed to luxon's `DateTime.toFormat()` */
 export const allLastUpdatedFormatSentinels = ['relative', 'absolute'] as const;
@@ -44,7 +44,7 @@ export const LAST_UPDATED_TOOLTIP_TEXT_DEFAULT: string | undefined = undefined;
 
 /**
  * headless brain directive for the last-updated component. owns the state, format, datetime, label, and
- * refreshability inputs along with the derived leading slot, indicator color, formatted time string, and
+ * refreshability inputs along with the derived pre slot, indicator color, formatted time string, and
  * accessibility surface (role, aria-label) for the presentation to bind. carries no styling or template —
  * apply it to the host of a presentation component via hostDirectives.
  */
@@ -69,7 +69,7 @@ export class LastUpdatedBrainDirective {
   /** the label rendered before the time (e.g., "Last updated", "Failed", "Refreshing…") */
   public readonly label = input<string>(LAST_UPDATED_LABEL_DEFAULT);
 
-  /** when true and not loading, the leading slot becomes a refresh button */
+  /** when true and not loading, the pre slot becomes a refresh button */
   public readonly refreshable = input<boolean>(LAST_UPDATED_REFRESHABLE_DEFAULT);
 
   /** optional tooltip text surfaced on hover via the org-tooltip component */
@@ -83,8 +83,8 @@ export class LastUpdatedBrainDirective {
   /** emitted when the refresh button is invoked; gated by `state !== 'loading'` */
   public readonly refresh = output<void>();
 
-  /** the leading slot identifier — drives which leading element the presentation renders */
-  public readonly leadingSlot = computed<LastUpdatedLeadingSlot>(() => {
+  /** the pre slot identifier — drives which pre element the presentation renders */
+  public readonly preSlot = computed<LastUpdatedPreSlot>(() => {
     if (this.state() === 'loading') {
       return 'spinner';
     }

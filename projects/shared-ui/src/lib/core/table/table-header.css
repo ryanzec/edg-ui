@@ -4,7 +4,7 @@
   }
 
   .header-cell {
-    height: var(--table-header-h);
+    height: var(--table-header-height);
     padding: var(--table-cell-py) var(--table-cell-px);
     background-color: var(--table-header-bg);
     color: var(--table-header-fg);

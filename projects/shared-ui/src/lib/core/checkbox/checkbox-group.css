@@ -24,7 +24,7 @@
     color: var(--color-fg);
   }
 
-  /* required marker — trailing asterisk in danger color */
+  /* required marker — post asterisk in danger color */
   :host .legend[data-required='1']::after {
     content: '*';
     color: var(--checkbox-group-required-color);

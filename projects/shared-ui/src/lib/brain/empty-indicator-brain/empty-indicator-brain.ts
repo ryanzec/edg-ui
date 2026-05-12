@@ -3,7 +3,7 @@ import { Observable, Subject } from 'rxjs';
 import { outputFromObservable } from '@angular/core/rxjs-interop';
 
 /** default value for the statusRole input */
-export const EMPTY_INDICATOR_BRAIN_STATUS_ROLE_DEFAULT: boolean = true;
+export const EMPTY_INDICATOR_BRAIN_STATUS_ROLE_DEFAULT = true;
 
 /**
  * headless brain directive for the empty-indicator component. owns the action click event plumbing,

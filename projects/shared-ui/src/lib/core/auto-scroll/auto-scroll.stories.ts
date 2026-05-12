@@ -99,7 +99,10 @@ type Story = StoryObj<AutoScroll>;
     <org-storybook-example-container title="Interactive Auto Scroll Test" [currentState]="currentState()">
       <org-storybook-example-container-section label="Interactive Demo">
         <div class="mb-4 flex flex-wrap gap-2">
-          <org-button [label]="intervalActive() ? 'Stop Adding Items' : 'Start Adding Items'" (click)="toggleInterval()" />
+          <org-button
+            [label]="intervalActive() ? 'Stop Adding Items' : 'Start Adding Items'"
+            (click)="toggleInterval()"
+          />
           <org-button label="Clear Items" (click)="clearItems()" />
           <div class="w-full"></div>
           <org-button label="Set State: Enabled" (click)="setState('enabled')" />
@@ -503,7 +506,11 @@ export const ProgrammaticDemo: Story = {
     <org-storybook-example-container title="Dynamic Scrollable Parent Detection" [currentState]="currentState()">
       <org-storybook-example-container-section label="Interactive Demo">
         <div class="mb-4 flex gap-2">
-          <org-button buttonStyle="primary" [label]="showLargeContainer() ? 'Switch to Small Container' : 'Switch to Large Container'" (click)="toggleContainer()" />
+          <org-button
+            buttonStyle="primary"
+            [label]="showLargeContainer() ? 'Switch to Small Container' : 'Switch to Large Container'"
+            (click)="toggleContainer()"
+          />
           <org-button buttonStyle="secondary" label="Add Item" (click)="addItem()" />
         </div>
 

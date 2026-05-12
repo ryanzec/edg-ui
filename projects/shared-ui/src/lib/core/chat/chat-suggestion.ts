@@ -27,7 +27,7 @@ export class ChatSuggestion {
   /** the visible label rendered inside the chip */
   public readonly label = input<string>(CHAT_SUGGESTION_LABEL_DEFAULT);
 
-  /** optional leading icon rendered before the label */
+  /** optional pre icon rendered before the label */
   public readonly icon = input<IconName | undefined, IconName | null | undefined>(CHAT_SUGGESTION_ICON_DEFAULT, {
     transform: angularUtils.transformNullToUndefined,
   });

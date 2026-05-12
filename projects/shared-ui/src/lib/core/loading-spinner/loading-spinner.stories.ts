@@ -139,7 +139,7 @@ export const Default: Story = {
         <org-design-system-demo-header
           slot="header"
           title="Live demo"
-          description='Pick a size and color. Both are pass-throughs to the underlying Icon — they map to --sizing-icon-* and the semantic color tokens.'
+          description="Pick a size and color. Both are pass-throughs to the underlying Icon — they map to --sizing-icon-* and the semantic color tokens."
         />
         <org-design-system-demo-controls slot="controls">
           <org-design-system-demo-control-group label="Size">
@@ -295,7 +295,7 @@ class LoadingSpinnerInheritSection {}
       <org-design-system-demo-header
         slot="header"
         title="Inside Button"
-        description='When a Button is in data-loading="1", swap the leading icon for an org-loading-spinner wrapping data-icon="loader" data-context="button". The icon&apos;s button context already takes care of size and color.'
+        description='When a Button is in data-loading="1", swap the pre icon for an org-loading-spinner wrapping data-icon="loader" data-context="button". The icon&apos;s button context already takes care of size and color.'
       />
       <org-design-system-demo-canvas slot="canvas">
         <div class="row">
@@ -307,7 +307,15 @@ class LoadingSpinnerInheritSection {}
             <org-button color="safe" size="sm" label="Publishing..." [loading]="true" />
           </div>
           <div class="cell">
-            <org-button color="danger" size="sm" label="Deleting" preIcon="trash" [iconOnly]="true" ariaLabel="Deleting" [loading]="true" />
+            <org-button
+              color="danger"
+              size="sm"
+              label="Deleting"
+              preIcon="trash"
+              [iconOnly]="true"
+              ariaLabel="Deleting"
+              [loading]="true"
+            />
           </div>
         </div>
         <div class="row">
@@ -331,7 +339,15 @@ class LoadingSpinnerInheritSection {}
             <org-button color="warning" size="lg" label="Working..." [loading]="true" />
           </div>
           <div class="cell">
-            <org-button color="neutral" size="lg" label="Refreshing" preIcon="refresh-cw" [iconOnly]="true" ariaLabel="Refreshing" [loading]="true" />
+            <org-button
+              color="neutral"
+              size="lg"
+              label="Refreshing"
+              preIcon="refresh-cw"
+              [iconOnly]="true"
+              ariaLabel="Refreshing"
+              [loading]="true"
+            />
           </div>
         </div>
       </org-design-system-demo-canvas>
@@ -554,7 +570,7 @@ export const Showcase: Story = {
         <story-loading-spinner-inside-button-section />
         <org-design-system-demo-expected-behaviour>
           <ul class="list-inside list-disc flex flex-col gap-1">
-            <li>The Button swaps its leading slot for a spinner when <code>[loading]="true"</code> — the spinner inherits the button's color and size</li>
+            <li>The Button swaps its pre slot for a spinner when <code>[loading]="true"</code> — the spinner inherits the button's color and size</li>
             <li>Icon-only buttons replace the icon with the spinner so the button keeps its width during loading</li>
           </ul>
         </org-design-system-demo-expected-behaviour>

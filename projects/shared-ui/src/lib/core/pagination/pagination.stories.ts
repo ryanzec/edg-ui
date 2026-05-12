@@ -222,11 +222,7 @@ export const Default: Story = {
             <org-button-toggle [items]="visiblePagesItems" formControlName="visiblePages" buttonSize="sm" />
           </org-design-system-demo-control-group>
           <org-design-system-demo-control-group label="Items per page options">
-            <org-button-toggle
-              [items]="itemsPerPagePresetItems"
-              formControlName="itemsPerPagePreset"
-              buttonSize="sm"
-            />
+            <org-button-toggle [items]="itemsPerPagePresetItems" formControlName="itemsPerPagePreset" buttonSize="sm" />
           </org-design-system-demo-control-group>
           <org-design-system-demo-control-group label="Disabled">
             <org-checkbox-toggle name="live-demo-disabled" value="disabled" formControlName="disabled">

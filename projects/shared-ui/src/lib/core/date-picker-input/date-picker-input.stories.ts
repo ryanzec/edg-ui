@@ -344,7 +344,9 @@ class DatePickerInputLiveDemoStory {
       <org-design-system-demo-expected-behaviour>
         <ul class="list-inside list-disc flex flex-col gap-1">
           <li><strong>On or after</strong> commits a start-only selection and reads as "On or after {{ '{date}' }}"</li>
-          <li><strong>On or before</strong> commits an end-only selection and reads as "On or before {{ '{date}' }}"</li>
+          <li>
+            <strong>On or before</strong> commits an end-only selection and reads as "On or before {{ '{date}' }}"
+          </li>
           <li>The calendar exposes a radio selector to switch modes inside the popover</li>
         </ul>
       </org-design-system-demo-expected-behaviour>
@@ -541,7 +543,9 @@ class DatePickerInputLiveDemoStory {
       <org-design-system-demo-expected-behaviour>
         <ul class="list-inside list-disc flex flex-col gap-1">
           <li><strong>reserveValidationSpace=true</strong> always reserves space so layout never shifts</li>
-          <li><strong>reserveValidationSpace=false</strong> collapses to the trigger height when no message is shown</li>
+          <li>
+            <strong>reserveValidationSpace=false</strong> collapses to the trigger height when no message is shown
+          </li>
         </ul>
       </org-design-system-demo-expected-behaviour>
     </div>
@@ -695,7 +699,9 @@ class DatePickerInputShowcaseStory {
       </org-design-system-demo>
       <org-design-system-demo-expected-behaviour>
         <ul class="list-inside list-disc flex flex-col gap-1">
-          <li>The component implements <strong>ControlValueAccessor</strong> and pairs with <code>formControlName</code></li>
+          <li>
+            The component implements <strong>ControlValueAccessor</strong> and pairs with <code>formControlName</code>
+          </li>
           <li>Each form control value is an object with <code>startDate</code> and <code>endDate</code> properties</li>
           <li>Form value updates immediately when the selection commits</li>
           <li>The form is marked as touched when the popover closes for any reason</li>
@@ -724,10 +730,9 @@ class DatePickerInputReactiveFormStory {
     }),
   });
 
-  protected readonly formValueDisplay = toSignal(
-    this.form.valueChanges.pipe(map((value) => JSON.stringify(value))),
-    { initialValue: JSON.stringify(this.form.value) }
-  );
+  protected readonly formValueDisplay = toSignal(this.form.valueChanges.pipe(map((value) => JSON.stringify(value))), {
+    initialValue: JSON.stringify(this.form.value),
+  });
 
   protected setSingleToday(): void {
     this.form.controls.singleDate.setValue({ startDate: this.now, endDate: null });
@@ -809,7 +814,9 @@ class DatePickerInputReactiveFormStory {
       </org-design-system-demo>
       <org-design-system-demo-expected-behaviour>
         <ul class="list-inside list-disc flex flex-col gap-1">
-          <li>Drives the picker without reactive forms via <code>[selectedStartDate]</code> + <code>(dateSelected)</code></li>
+          <li>
+            Drives the picker without reactive forms via <code>[selectedStartDate]</code> + <code>(dateSelected)</code>
+          </li>
           <li>The parent owns the signal that backs the picker's selected dates</li>
           <li>The <code>dateSelected</code> output fires immediately when a selection commits</li>
         </ul>
@@ -969,7 +976,10 @@ export const Default: Story = {
       options: Object.values(TimeFormat),
       description: 'The time format for display',
     },
-    allowPartialRangeSelection: { control: 'boolean', description: 'Allow partial range selection (on or after/before)' },
+    allowPartialRangeSelection: {
+      control: 'boolean',
+      description: 'Allow partial range selection (on or after/before)',
+    },
     partialRangeSelectionType: {
       control: 'select',
       options: ['range', 'onOrBefore', 'onOrAfter'],
@@ -982,7 +992,7 @@ export const Default: Story = {
     allowClear: { control: 'boolean', description: 'Show clear button in calendar footer' },
     allowTriggerClear: {
       control: 'boolean',
-      description: 'Render the inline clear button at the trigger trailing edge',
+      description: 'Render the inline clear button at the trigger post edge',
     },
     commitMode: {
       control: 'select',

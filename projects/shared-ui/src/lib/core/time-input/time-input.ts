@@ -65,7 +65,7 @@ const MERIDIEM_PLACEHOLDER = '--';
     '[attr.data-focused]': 'brain.isFocused() ? "1" : null',
     '[attr.data-disabled]': 'isDisabled() ? "" : null',
     '[attr.data-readonly]': 'readonly() ? "" : null',
-    '[attr.data-has-leading]': '"1"',
+    '[attr.data-has-pre]': '"1"',
     '[attr.aria-label]': 'brain.ariaLabel()',
     '[attr.aria-disabled]': 'isDisabled() ? "true" : null',
     '(focus)': 'onShellFocus()',

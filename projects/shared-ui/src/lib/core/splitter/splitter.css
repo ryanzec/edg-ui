@@ -100,11 +100,11 @@
 
   /* enabled: 2px divider */
   :host([data-enabled][data-direction='horizontal']) .splitter-divider {
-    width: var(--spacing-0_5); /* 2px */
+    width: var(--spacing-0_5);
   }
 
   :host([data-enabled][data-direction='vertical']) .splitter-divider {
-    height: var(--spacing-0_5); /* 2px */
+    height: var(--spacing-0_5);
   }
 
   /* enabled hover/focus effect conveys draggability */

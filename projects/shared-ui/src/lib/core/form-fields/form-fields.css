@@ -17,7 +17,7 @@
 
   .form-field-validation {
     padding: 0 var(--spacing-1);
-    min-height: var(--spacing-5); /* 20px */
+    min-height: var(--spacing-5);
     color: var(--color-danger);
     font-size: var(--font-size-base);
     line-height: var(--line-height-normal);

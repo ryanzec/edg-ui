@@ -50,6 +50,7 @@ export * from './radio-group-brain/radio-group-brain';
 export * from './skeleton-brain/skeleton-brain';
 export * from './slide-container-brain/slide-container-brain';
 export * from './slide-container-item-brain/slide-container-item-brain';
+export * from './slider-input-brain/slider-input-brain';
 export * from './sortable-brain/sortable-brain';
 export * from './splitter-brain/splitter-brain';
 export * from './tab-brain/tab-brain';

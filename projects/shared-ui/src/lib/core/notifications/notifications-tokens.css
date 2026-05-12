@@ -10,7 +10,7 @@
   /* progress rail */
   --notification-progress-track: var(--color-bg-surface-2);
 
-  /* per-intent accent (drives the left rail + leading icon color) */
+  /* per-intent accent (drives the left rail + pre icon color) */
   --notification-accent-info: var(--color-info);
   --notification-accent-safe: var(--color-safe);
   --notification-accent-caution: var(--color-caution);

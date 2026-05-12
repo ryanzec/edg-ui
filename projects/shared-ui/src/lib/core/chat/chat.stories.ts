@@ -335,7 +335,7 @@ export const ToolAndThinkingBlocks: Story = {
     docs: {
       description: {
         story:
-          'Collapsible cards inside an assistant message body, used for AI tool-call traces and reasoning. The header is always visible; the body collapses on click via the [(expanded)] two-way binding. A running block grows a thicker info rail on its leading edge so it stands apart from a finished one.',
+          'Collapsible cards inside an assistant message body, used for AI tool-call traces and reasoning. The header is always visible; the body collapses on click via the [(expanded)] two-way binding. A running block grows a thicker info rail on its pre edge so it stands apart from a finished one.',
       },
     },
   },
@@ -373,7 +373,7 @@ export const ToolAndThinkingBlocks: Story = {
           <li>Header is always visible; body collapses via the two-way <code>expanded</code> model on click</li>
           <li><code>kind="tool"</code> uses the info accent and a mono title-emphasis fragment</li>
           <li><code>kind="thinking"</code> uses the muted accent and an italic sans title-emphasis fragment</li>
-          <li><code>state="running"</code> thickens the leading info rail; idle keeps the standard hairline</li>
+          <li><code>state="running"</code> thickens the pre info rail; idle keeps the standard hairline</li>
         </ul>
       </org-storybook-example-container>
     `,

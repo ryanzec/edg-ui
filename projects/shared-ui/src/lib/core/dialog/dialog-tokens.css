@@ -1,15 +1,15 @@
 :root {
   /* layout */
-  --dialog-padding-x: var(--spacing-5); /* 20px */
-  --dialog-header-y: var(--spacing-4); /* 16px */
-  --dialog-content-y: var(--spacing-4); /* 16px */
-  --dialog-footer-y: var(--spacing-4); /* 16px */
-  --dialog-header-end-reserve: var(--spacing-9); /* 36px */
-  --dialog-header-gap: var(--spacing-3); /* 12px */
-  --dialog-footer-gap: var(--spacing-2); /* 8px */
-  --dialog-close-inset: var(--spacing-2); /* 8px */
-  --dialog-close-size: var(--sizing-10xs); /* 32px */
-  --dialog-close-radius: var(--radius-sm); /* 6px */
+  --dialog-padding-x: var(--spacing-5);
+  --dialog-header-y: var(--spacing-4);
+  --dialog-content-y: var(--spacing-4);
+  --dialog-footer-y: var(--spacing-4);
+  --dialog-header-end-reserve: var(--spacing-9);
+  --dialog-header-gap: var(--spacing-3);
+  --dialog-footer-gap: var(--spacing-2);
+  --dialog-close-inset: var(--spacing-2);
+  --dialog-close-size: var(--sizing-10xs);
+  --dialog-close-radius: var(--radius-sm);
 
   /* sizing */
   --dialog-default-width: var(--sizing-base); /* 28rem / 448px */
@@ -17,12 +17,12 @@
   --dialog-sheet-height: var(--sizing-2xs); /* 18rem / 288px */
   --dialog-sm-width: var(--sizing-2xs); /* 18rem / 288px */
   --dialog-lg-width: var(--sizing-lg); /* 32rem / 512px */
-  --dialog-min-height: var(--sizing-9xs); /* 48px */
+  --dialog-min-height: var(--sizing-9xs);
   --dialog-max-vh: calc(100vh - var(--spacing-6)); /* 100vh - 24px */
-  --dialog-stage-padding: var(--spacing-6); /* 24px */
+  --dialog-stage-padding: var(--spacing-6);
 
   /* surface */
-  --dialog-radius: var(--radius-lg); /* 12px */
+  --dialog-radius: var(--radius-lg);
   --dialog-bg: var(--color-bg-surface);
   --dialog-fg: var(--color-fg);
   --dialog-border: var(--color-border);

@@ -63,7 +63,7 @@ const meta: Meta<Input> = {
 <div class="docs-top-level-overview">
   ## Input Component
 
-  A single-line text-entry shell. The native &lt;input&gt; lives inside a styled wrapper so the wrapper can host slot adornments (leading icon, trailing buttons, chips), render the focused border, and grow to fit chips that wrap onto multiple rows.
+  A single-line text-entry shell. The native &lt;input&gt; lives inside a styled wrapper so the wrapper can host slot adornments (pre icon, post buttons, chips), render the focused border, and grow to fit chips that wrap onto multiple rows.
 
   ### Features
   - Three variants: \`bordered\` (default), \`borderless\`, \`inline\`
@@ -286,14 +286,14 @@ export const Default: Story = {
           <org-design-system-demo-control-group label="ShowClear">
             <org-button-toggle [items]="showClearItems" formControlName="showClear" buttonSize="sm" />
           </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Leading">
-            <org-checkbox-toggle name="live-demo-leading" value="leading" formControlName="leading">
-              {{ liveDemoForm.controls.leading.value ? 'on' : 'off' }}
+          <org-design-system-demo-control-group label="Pre">
+            <org-checkbox-toggle name="live-demo-pre" value="pre" formControlName="pre">
+              {{ liveDemoForm.controls.pre.value ? 'on' : 'off' }}
             </org-checkbox-toggle>
           </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Trailing">
-            <org-checkbox-toggle name="live-demo-trailing" value="trailing" formControlName="trailing">
-              {{ liveDemoForm.controls.trailing.value ? 'on' : 'off' }}
+          <org-design-system-demo-control-group label="Post">
+            <org-checkbox-toggle name="live-demo-post" value="post" formControlName="post">
+              {{ liveDemoForm.controls.post.value ? 'on' : 'off' }}
             </org-checkbox-toggle>
           </org-design-system-demo-control-group>
           <org-design-system-demo-control-group label="Disabled">
@@ -326,8 +326,8 @@ export const Default: Story = {
                   [disabled]="liveDemoForm.controls.disabled.value"
                   [readonly]="liveDemoForm.controls.readonly.value"
                   [loading]="liveDemoForm.controls.loading.value"
-                  [preIcon]="liveDemoForm.controls.leading.value ? 'mail' : null"
-                  [postIcon]="liveDemoForm.controls.trailing.value ? 'check' : null"
+                  [preIcon]="liveDemoForm.controls.pre.value ? 'mail' : null"
+                  [postIcon]="liveDemoForm.controls.post.value ? 'check' : null"
                 />
               </org-form-field>
             } @else {
@@ -341,8 +341,8 @@ export const Default: Story = {
                 [disabled]="liveDemoForm.controls.disabled.value"
                 [readonly]="liveDemoForm.controls.readonly.value"
                 [loading]="liveDemoForm.controls.loading.value"
-                [preIcon]="liveDemoForm.controls.leading.value ? 'mail' : null"
-                [postIcon]="liveDemoForm.controls.trailing.value ? 'check' : null"
+                [preIcon]="liveDemoForm.controls.pre.value ? 'mail' : null"
+                [postIcon]="liveDemoForm.controls.post.value ? 'check' : null"
               />
             }
           </div>
@@ -362,8 +362,8 @@ class InputLiveDemoStory {
     type: new FormControl<InputType>('text', { nonNullable: true }),
     state: new FormControl<'idle' | 'error'>('idle', { nonNullable: true }),
     showClear: new FormControl<InputShowClearMode>('active', { nonNullable: true }),
-    leading: new FormControl<boolean>(false, { nonNullable: true }),
-    trailing: new FormControl<boolean>(false, { nonNullable: true }),
+    pre: new FormControl<boolean>(false, { nonNullable: true }),
+    post: new FormControl<boolean>(false, { nonNullable: true }),
     disabled: new FormControl<boolean>(false, { nonNullable: true }),
     readonly: new FormControl<boolean>(false, { nonNullable: true }),
     loading: new FormControl<boolean>(false, { nonNullable: true }),
@@ -437,15 +437,15 @@ export const LiveDemo: Story = {
           <li><strong>Error</strong>: Border switches to danger red and survives hover / focus</li>
           <li><strong>Disabled</strong>: Reduced opacity, pointer events blocked</li>
           <li><strong>Readonly</strong>: Slightly tinted background, value still selectable</li>
-          <li><strong>Loading</strong>: Spinner appears in the trailing slot, native input forced readonly</li>
+          <li><strong>Loading</strong>: Spinner appears in the post slot, native input forced readonly</li>
         </ul>
       </org-design-system-demo-expected-behaviour>
 
       <org-design-system-demo>
         <org-design-system-demo-header slot="header" title="Adornments" />
         <org-design-system-demo-canvas slot="canvas">
-          <org-input name="showcase-leading-icon" preIcon="mail" placeholder="Email address" />
-          <org-input name="showcase-trailing-icon" postIcon="check" value="acme" />
+          <org-input name="showcase-pre-icon" preIcon="mail" placeholder="Email address" />
+          <org-input name="showcase-post-icon" postIcon="check" value="acme" />
           <org-input name="showcase-text-prefix">
             <ng-template #pre><span>https://</span></ng-template>
           </org-input>
@@ -457,8 +457,13 @@ export const LiveDemo: Story = {
       </org-design-system-demo>
       <org-design-system-demo-expected-behaviour>
         <ul class="list-inside list-disc flex flex-col gap-1">
-          <li><strong>preIcon / postIcon</strong>: Shorthand inputs that render an <code>org-icon</code> into the slot</li>
-          <li><strong>#pre / #post templates</strong>: Project any markup (icon, text adornment, custom button); takes precedence over the shorthand</li>
+          <li>
+            <strong>preIcon / postIcon</strong>: Shorthand inputs that render an <code>org-icon</code> into the slot
+          </li>
+          <li>
+            <strong>#pre / #post templates</strong>: Project any markup (icon, text adornment, custom button); takes
+            precedence over the shorthand
+          </li>
           <li>Slots automatically tighten the native pad-x on their side so the field reads tight</li>
         </ul>
       </org-design-system-demo-expected-behaviour>
@@ -467,19 +472,17 @@ export const LiveDemo: Story = {
         <org-design-system-demo-header slot="header" title="Type-specific Affordances" />
         <org-design-system-demo-canvas slot="canvas">
           <org-input name="showcase-search" type="search" preIcon="search" placeholder="Search" value="design" />
-          <org-input
-            name="showcase-password"
-            type="password"
-            [showPasswordToggle]="true"
-            value="hunter2hunter2"
-          />
+          <org-input name="showcase-password" type="password" [showPasswordToggle]="true" value="hunter2hunter2" />
           <org-input name="showcase-number" type="number" value="12" />
         </org-design-system-demo-canvas>
       </org-design-system-demo>
       <org-design-system-demo-expected-behaviour>
         <ul class="list-inside list-disc flex flex-col gap-1">
-          <li><strong>Search</strong>: Native browser clear cross is suppressed; pair with a leading search icon</li>
-          <li><strong>Password</strong>: When <code>showPasswordToggle</code> is true the trailing eye icon swaps text/password</li>
+          <li><strong>Search</strong>: Native browser clear cross is suppressed; pair with a pre search icon</li>
+          <li>
+            <strong>Password</strong>: When <code>showPasswordToggle</code> is true the post eye icon swaps
+            text/password
+          </li>
           <li><strong>Number</strong>: Native browser spinners are suppressed; the shell renders its own stepper</li>
         </ul>
       </org-design-system-demo-expected-behaviour>
@@ -510,11 +513,7 @@ export const LiveDemo: Story = {
             placeholder="Add another filter..."
             [inlineItems]="searchChips"
           />
-          <org-input
-            name="showcase-chips-tag"
-            placeholder="tag"
-            [inlineItems]="tagChips"
-          >
+          <org-input name="showcase-chips-tag" placeholder="tag" [inlineItems]="tagChips">
             <ng-template #chip let-item>
               <org-tag color="info" [removable]="true">{{ item.label }}</org-tag>
             </ng-template>
@@ -523,9 +522,18 @@ export const LiveDemo: Story = {
       </org-design-system-demo>
       <org-design-system-demo-expected-behaviour>
         <ul class="list-inside list-disc flex flex-col gap-1">
-          <li><strong>inlineItems</strong>: An array of <code>InputInlineItem</code> renders default <code>org-tag</code>s with the input track owning the layout</li>
-          <li><strong>#chip template</strong>: Project an <code>&lt;ng-template #chip let-item&gt;</code> to fully customize each chip; receives the item as the implicit context</li>
-          <li>The track owns row-gap so chips wrap naturally; the input's chip-size pinning makes every tag honor a single rhythm</li>
+          <li>
+            <strong>inlineItems</strong>: An array of <code>InputInlineItem</code> renders default <code>org-tag</code>s
+            with the input track owning the layout
+          </li>
+          <li>
+            <strong>#chip template</strong>: Project an <code>&lt;ng-template #chip let-item&gt;</code> to fully
+            customize each chip; receives the item as the implicit context
+          </li>
+          <li>
+            The track owns row-gap so chips wrap naturally; the input's chip-size pinning makes every tag honor a single
+            rhythm
+          </li>
         </ul>
       </org-design-system-demo-expected-behaviour>
 
@@ -555,8 +563,14 @@ export const LiveDemo: Story = {
       </org-design-system-demo>
       <org-design-system-demo-expected-behaviour>
         <ul class="list-inside list-disc flex flex-col gap-1">
-          <li><strong>FormField wrapping</strong>: Provides validation message + reserved space; the input's error state is driven directly by the FormField</li>
-          <li><strong>Label association</strong>: The label's <code>inputId</code> matches the input's <code>name</code> (which is also used as the element id)</li>
+          <li>
+            <strong>FormField wrapping</strong>: Provides validation message + reserved space; the input's error state
+            is driven directly by the FormField
+          </li>
+          <li>
+            <strong>Label association</strong>: The label's <code>inputId</code> matches the input's
+            <code>name</code> (which is also used as the element id)
+          </li>
         </ul>
       </org-design-system-demo-expected-behaviour>
     </div>
@@ -702,8 +716,13 @@ export const NonFormUsage: Story = {
       <org-design-system-demo-expected-behaviour>
         <ul class="list-inside list-disc flex flex-col gap-1">
           <li>Uses <strong>formControlName</strong> for reactive forms via <code>ControlValueAccessor</code></li>
-          <li>The <code>org-form-field</code> wraps each input and drives the <code>data-state="error"</code> via <code>validationMessage</code></li>
-          <li>Programmatic <strong>form.disable()</strong> / <strong>control.disable()</strong> reflects in the input</li>
+          <li>
+            The <code>org-form-field</code> wraps each input and drives the <code>data-state="error"</code> via
+            <code>validationMessage</code>
+          </li>
+          <li>
+            Programmatic <strong>form.disable()</strong> / <strong>control.disable()</strong> reflects in the input
+          </li>
         </ul>
       </org-design-system-demo-expected-behaviour>
     </div>

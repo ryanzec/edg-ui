@@ -7,16 +7,16 @@
   --color-time-input-separator: var(--color-fg-muted);
 
   /* spacing inside / between segments */
-  --spacing-time-input-segment-x: var(--spacing-1); /* 4px */
+  --spacing-time-input-segment-x: var(--spacing-1);
   --spacing-time-input-segment-gap: 0;
-  --spacing-time-input-meridiem-gap: var(--spacing-1_5); /* 6px */
+  --spacing-time-input-meridiem-gap: var(--spacing-1_5);
 
   /* segment chip radius */
-  --radius-time-input-segment: var(--radius-xs); /* 4px */
+  --radius-time-input-segment: var(--radius-xs);
 
   /* transition duration applied to segment bg / fg */
   --motion-time-input-duration: var(--motion-duration-base);
 
   /* min-width for the meridiem segment so "AM" / "PM" sit at the same width */
-  --sizing-time-input-segment-meridiem: var(--sizing-11xs); /* 24px */
+  --sizing-time-input-segment-meridiem: var(--sizing-11xs);
 }

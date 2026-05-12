@@ -19,5 +19,6 @@
   --font-size-combobox-empty: var(--font-size-sm);
 
   /* color */
-  --color-combobox-option-check: var(--color-fg);
+  --color-combobox-option-bg-hover: var(--color-neutral-soft-hover);
+  --color-combobox-option-bg-active: var(--color-neutral-soft);
 }

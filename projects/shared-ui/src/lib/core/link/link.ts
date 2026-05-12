@@ -84,7 +84,7 @@ export class Link {
   /** when true the link renders styled as disabled with cursor not-allowed and is non-interactive */
   public readonly disabled = input<boolean>(LINK_DISABLED_DEFAULT);
 
-  /** when true, an external-link or download icon is auto-injected as a trailing affordance when applicable */
+  /** when true, an external-link or download icon is auto-injected as a post affordance when applicable */
   public readonly affordance = input<boolean>(LINK_AFFORDANCE_DEFAULT);
 
   /** emitted when the link is activated by mouse or keyboard, only when href is not provided so consumers can handle action-style clicks */
@@ -93,7 +93,7 @@ export class Link {
   /** whether the link is rendering as an action-link (no href provided) */
   public readonly isActionLink = computed<boolean>(() => this._linkBrainDirective().isActionLink());
 
-  /** the icon name for the auto-injected trailing affordance icon, or undefined when none should render */
+  /** the icon name for the auto-injected post affordance icon, or undefined when none should render */
   protected readonly affordanceIcon = computed<IconName | undefined>(() => {
     const icon = this._linkBrainDirective().affordanceIcon();
 

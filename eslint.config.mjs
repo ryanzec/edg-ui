@@ -39,6 +39,7 @@ export default tseslint.config(
     },
     processor: angular.processInlineTemplates,
     rules: {
+      'no-fallthrough': 'off',
       '@stylistic/padding-line-between-statements': [
         'error',
         { blankLine: 'always', prev: 'block-like', next: '*' },

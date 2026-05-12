@@ -1,9 +1,4 @@
-<button
-  type="button"
-  class="suggestion-button"
-  [disabled]="disabled()"
-  (click)="onClick()"
->
+<button type="button" class="suggestion-button" [disabled]="disabled()" (click)="onClick()">
   @if (icon()) {
     <org-icon [name]="icon()!" size="xs" />
   }

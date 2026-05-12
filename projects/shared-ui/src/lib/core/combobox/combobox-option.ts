@@ -10,8 +10,7 @@ export const COMBOBOX_OPTION_DISPLAY_LABEL_PREFIX_DEFAULT: string | undefined = 
 /**
  * renders a single option inside the combobox dropdown. all interaction state, a11y attributes, and
  * mouse routing live on the brain (applied as host bindings on this element); this component only owns
- * the visual presentation: a fixed leading check gutter (always reserved so labels align across rows
- * regardless of selection state) followed by the option label.
+ * the visual presentation: the optional label plus background effect.
  */
 @Component({
   selector: 'org-combobox-option',

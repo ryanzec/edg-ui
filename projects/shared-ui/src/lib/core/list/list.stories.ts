@@ -22,15 +22,15 @@ import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-
 
 type LiveDemoAsTag = 'static' | 'a' | 'button';
 
-type LiveDemoLeading = 'none' | 'icon' | 'image';
+type LiveDemoPre = 'none' | 'icon' | 'image';
 
-type LiveDemoTrailing = 'none' | 'icon';
+type LiveDemoPost = 'none' | 'icon';
 
 const allLiveDemoAsTags = ['static', 'a', 'button'] as const;
 
-const allLiveDemoLeading = ['none', 'icon', 'image'] as const;
+const allLiveDemoPre = ['none', 'icon', 'image'] as const;
 
-const allLiveDemoTrailing = ['none', 'icon'] as const;
+const allLiveDemoPost = ['none', 'icon'] as const;
 
 const liveDemoSizeItems: ButtonToggleItem[] = allListSizes.map((size) => ({
   label: size,
@@ -44,13 +44,13 @@ const liveDemoAsTagItems: ButtonToggleItem[] = allLiveDemoAsTags.map((value) => 
   buttonColor: 'primary',
 }));
 
-const liveDemoLeadingItems: ButtonToggleItem[] = allLiveDemoLeading.map((value) => ({
+const liveDemoPreItems: ButtonToggleItem[] = allLiveDemoPre.map((value) => ({
   label: value,
   value,
   buttonColor: 'primary',
 }));
 
-const liveDemoTrailingItems: ButtonToggleItem[] = allLiveDemoTrailing.map((value) => ({
+const liveDemoPostItems: ButtonToggleItem[] = allLiveDemoPost.map((value) => ({
   label: value,
   value,
   buttonColor: 'primary',
@@ -120,11 +120,11 @@ const liveDemoListItems = [
           <org-design-system-demo-control-group label="asTag">
             <org-button-toggle [items]="asTagItems" formControlName="asTag" buttonSize="sm" />
           </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Leading">
-            <org-button-toggle [items]="leadingItems" formControlName="leading" buttonSize="sm" />
+          <org-design-system-demo-control-group label="Pre">
+            <org-button-toggle [items]="preItems" formControlName="pre" buttonSize="sm" />
           </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Trailing">
-            <org-button-toggle [items]="trailingItems" formControlName="trailing" buttonSize="sm" />
+          <org-design-system-demo-control-group label="Post">
+            <org-button-toggle [items]="postItems" formControlName="post" buttonSize="sm" />
           </org-design-system-demo-control-group>
           <org-design-system-demo-control-group label="selectMode">
             <org-button-toggle [items]="selectModeItems" formControlName="selectMode" buttonSize="sm" />
@@ -198,13 +198,13 @@ const liveDemoListItems = [
             [label]="item.label"
             (clicked)="(undefined)"
           >
-            @if (liveDemoForm.controls.leading.value === 'icon') {
+            @if (liveDemoForm.controls.pre.value === 'icon') {
               <org-list-item-icon pre name="mail" />
             }
-            @if (liveDemoForm.controls.leading.value === 'image') {
+            @if (liveDemoForm.controls.pre.value === 'image') {
               <org-list-item-image pre [src]="item.imageSrc" [alt]="item.label + ' avatar'" />
             }
-            @if (liveDemoForm.controls.trailing.value === 'icon') {
+            @if (liveDemoForm.controls.post.value === 'icon') {
               <org-list-item-icon post name="chevron-right" />
             }
           </org-list-item>
@@ -216,16 +216,16 @@ const liveDemoListItems = [
 class ListLiveDemoStory {
   protected readonly sizeItems = liveDemoSizeItems;
   protected readonly asTagItems = liveDemoAsTagItems;
-  protected readonly leadingItems = liveDemoLeadingItems;
-  protected readonly trailingItems = liveDemoTrailingItems;
+  protected readonly preItems = liveDemoPreItems;
+  protected readonly postItems = liveDemoPostItems;
   protected readonly selectModeItems = liveDemoSelectModeItems;
   protected readonly items = liveDemoListItems;
 
   protected readonly liveDemoForm = new FormGroup({
     size: new FormControl<ListSize>('base', { nonNullable: true }),
     asTag: new FormControl<LiveDemoAsTag>('static', { nonNullable: true }),
-    leading: new FormControl<LiveDemoLeading>('none', { nonNullable: true }),
-    trailing: new FormControl<LiveDemoTrailing>('none', { nonNullable: true }),
+    pre: new FormControl<LiveDemoPre>('none', { nonNullable: true }),
+    post: new FormControl<LiveDemoPost>('none', { nonNullable: true }),
     selectMode: new FormControl<ListSelectMode>('single', { nonNullable: true }),
     isSelected: new FormControl<boolean>(true, { nonNullable: true }),
     disabled: new FormControl<boolean>(false, { nonNullable: true }),
@@ -295,10 +295,10 @@ const meta: Meta<List> = {
 
   <!-- With pre / post icons via content projection -->
   <org-list>
-    <org-list-item label="Item with leading icon">
+    <org-list-item label="Item with pre icon">
       <org-list-item-icon pre name="arrow-down" />
     </org-list-item>
-    <org-list-item label="Item with trailing icon">
+    <org-list-item label="Item with post icon">
       <org-list-item-icon post name="arrow-right" />
     </org-list-item>
     <org-list-item label="Inbox">
@@ -354,7 +354,7 @@ export const LiveDemo: Story = {
     docs: {
       description: {
         story:
-          'Fully interactive demo. Use the controls to drive every visual input on the list (size, asTag, leading, trailing, select mode, isSelected, disabled, isExternalHref, forceClickable, hideLabel, wrap in box) and observe the live result in the canvas.',
+          'Fully interactive demo. Use the controls to drive every visual input on the list (size, asTag, pre, post, select mode, isSelected, disabled, isExternalHref, forceClickable, hideLabel, wrap in box) and observe the live result in the canvas.',
       },
     },
   },
@@ -471,7 +471,7 @@ export const Showcase: Story = {
           <org-design-system-demo-header
             slot="header"
             title="In context"
-            description="Five realistic uses. Notice that all of them are built from the same primitives — only the leading slot, label, and meta change."
+            description="Five realistic uses. Notice that all of them are built from the same primitives — only the pre slot, label, and meta change."
           />
           <org-design-system-demo-canvas slot="canvas">
             <div class="grid grid-cols-2 gap-6 w-full">
@@ -499,7 +499,7 @@ export const Showcase: Story = {
               </div>
 
               <div class="flex flex-col gap-2">
-                <p class="text-2xs uppercase letter-spacing-wide text-muted">Settings menu (no leading icons)</p>
+                <p class="text-2xs uppercase letter-spacing-wide text-muted">Settings menu (no pre icons)</p>
                 <org-box [padding]="'none'">
                   <org-list selectMode="single">
                     <org-list-item asTag="button" label="General" (clicked)="undefined" />

@@ -49,7 +49,11 @@ export const DATE_PICKER_INPUT_ALLOW_CLEAR_DEFAULT = true;
 export const DATE_PICKER_INPUT_ALLOW_TRIGGER_CLEAR_DEFAULT = false;
 
 // re-export the brain's commit-mode public surface so consumers can import from the presentation entry point
-export { type DatePickerInputCommitMode, DATE_PICKER_INPUT_COMMIT_MODE_DEFAULT, DATE_PICKER_INPUT_RESET_ON_MODE_CHANGE_DEFAULT };
+export {
+  type DatePickerInputCommitMode,
+  DATE_PICKER_INPUT_COMMIT_MODE_DEFAULT,
+  DATE_PICKER_INPUT_RESET_ON_MODE_CHANGE_DEFAULT,
+};
 
 /**
  * date picker input component for date selection in forms
@@ -164,7 +168,7 @@ export class DatePickerInput implements ControlValueAccessor {
   // additional input properties
   public readonly disabled = input<boolean>(DATE_PICKER_INPUT_DISABLED_DEFAULT);
   public readonly allowClear = input<boolean>(DATE_PICKER_INPUT_ALLOW_CLEAR_DEFAULT);
-  /** when true, renders an inline clear button at the trigger's trailing edge that wipes the value without opening the popover */
+  /** when true, renders an inline clear button at the trigger's post edge that wipes the value without opening the popover */
   public readonly allowTriggerClear = input<boolean>(DATE_PICKER_INPUT_ALLOW_TRIGGER_CLEAR_DEFAULT);
   /** auto commits on completion of the calendar selection; manual requires the user to press Apply in the popover footer */
   public readonly commitMode = input<DatePickerInputCommitMode>(DATE_PICKER_INPUT_COMMIT_MODE_DEFAULT);
@@ -192,7 +196,7 @@ export class DatePickerInput implements ControlValueAccessor {
   protected readonly isClearDisabled = computed<boolean>(() => this.brain.isClearDisabled());
   protected readonly canApply = computed<boolean>(() => this.brain.canApply());
   protected readonly isManualCommitMode = computed<boolean>(() => this.commitMode() === 'manual');
-  /** true when the trailing trigger clear-button slot should render (opt-in via allowTriggerClear, gated by value + disabled) */
+  /** true when the post trigger clear-button slot should render (opt-in via allowTriggerClear, gated by value + disabled) */
   protected readonly showTriggerClearButton = computed<boolean>(
     () => this.allowTriggerClear() && !this.isClearDisabled() && !this.isDisabled()
   );
@@ -225,7 +229,7 @@ export class DatePickerInput implements ControlValueAccessor {
         return `On or after ${startDate.toFormat(format)}`;
       }
 
-      // in-progress / pending end — trailing em-dash reads as "and ..."
+      // in-progress / pending end — post em-dash reads as "and ..."
       return `${startDate.toFormat(format)} —`;
     }
 

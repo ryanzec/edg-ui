@@ -62,9 +62,19 @@ const DEMO_USERS: User[] = [
       <org-storybook-example-container-section label="Actions">
         <div class="flex flex-wrap gap-2">
           <org-button color="primary" size="sm" label="Select All" (click)="selectionStore.selectAll(users)" />
-          <org-button color="primary" size="sm" label="Toggle Select All" (click)="selectionStore.toggleSelectAll(users)" />
+          <org-button
+            color="primary"
+            size="sm"
+            label="Toggle Select All"
+            (click)="selectionStore.toggleSelectAll(users)"
+          />
           <org-button color="secondary" size="sm" label="Select First User" (click)="selectionStore.select(users[0])" />
-          <org-button color="secondary" size="sm" label="Select Users 2 &amp; 3" (click)="selectionStore.selectMultiple([users[1], users[2]])" />
+          <org-button
+            color="secondary"
+            size="sm"
+            label="Select Users 2 &amp; 3"
+            (click)="selectionStore.selectMultiple([users[1], users[2]])"
+          />
           <org-button color="neutral" size="sm" label="Clear Selection" (click)="selectionStore.clear()" />
         </div>
       </org-storybook-example-container-section>
@@ -151,7 +161,12 @@ class DataSelectionWithSelectionDemo {
 
       <org-storybook-example-container-section label="Actions">
         <div class="flex flex-wrap gap-2">
-          <org-button color="primary" size="sm" label="Toggle Select All" (click)="selectionStore.toggleSelectAll(users)" />
+          <org-button
+            color="primary"
+            size="sm"
+            label="Toggle Select All"
+            (click)="selectionStore.toggleSelectAll(users)"
+          />
           <org-button color="neutral" size="sm" label="Clear" (click)="selectionStore.clear()" />
         </div>
       </org-storybook-example-container-section>

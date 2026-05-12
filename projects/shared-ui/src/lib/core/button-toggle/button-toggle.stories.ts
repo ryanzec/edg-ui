@@ -329,7 +329,13 @@ export const Showcase: Story = {
       ] as ButtonToggleItem[],
     },
     moduleMetadata: {
-      imports: [ButtonToggle, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas, DesignSystemDemoExpectedBehaviour],
+      imports: [
+        ButtonToggle,
+        DesignSystemDemo,
+        DesignSystemDemoHeader,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
+      ],
     },
   }),
 };

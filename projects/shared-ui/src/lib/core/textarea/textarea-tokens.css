@@ -19,7 +19,7 @@
   --textarea-toolbar-gap: var(--spacing-2);
   --textarea-toolbar-pad-y: var(--spacing-1);
   --textarea-toolbar-stack: var(--spacing-1);
-  --textarea-toolbar-min-h: var(--spacing-7); /* 28px */
+  --textarea-toolbar-min-height: var(--spacing-7);
 
   /* keyboard hint + kbd */
   --textarea-hint-font-size: var(--font-size-xs);

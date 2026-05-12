@@ -139,9 +139,9 @@ const meta: Meta<LastUpdated> = {
   A small "as of" line that pairs an indicator dot (or a refresh button, or a loading spinner) with a label + timestamp. Sits next to data — beside a chart title, in a table footer, on a dashboard card. Tightly subordinate; the data is the point, this just stamps it.
 
   ### Features
-  - Four \`state\` values: \`fresh\` (safe dot), \`stale\` (caution), \`error\` (danger), \`loading\` (spinner replaces the leading slot).
+  - Four \`state\` values: \`fresh\` (safe dot), \`stale\` (caution), \`error\` (danger), \`loading\` (spinner replaces the pre slot).
   - Three \`format\` choices for the time string: \`absolute\` (built-in standard format), \`relative\` (from-now), or any luxon \`toFormat\` string for custom shapes.
-  - Optional refresh affordance via \`refreshable\` — when on (and not loading), the leading slot becomes an icon-only button that emits \`(refresh)\`.
+  - Optional refresh affordance via \`refreshable\` — when on (and not loading), the pre slot becomes an icon-only button that emits \`(refresh)\`.
   - Optional \`tooltipText\` — wires \`org-tooltip\` to surface a hover hint (typically the absolute time when displaying a relative one).
   - Tabular-numeral time so a "1:09 → 1:10" tick doesn't shift the layout.
   - Accessible: \`role="status"\` with a derived \`aria-label\` summarizing state + label + time.
@@ -216,7 +216,7 @@ export const Default: Story = {
     state: {
       control: 'select',
       options: [...allLastUpdatedStates],
-      description: 'The current state — drives indicator color, label tone, and the leading slot',
+      description: 'The current state — drives indicator color, label tone, and the pre slot',
     },
     format: {
       control: 'select',
@@ -229,7 +229,7 @@ export const Default: Story = {
     },
     refreshable: {
       control: 'boolean',
-      description: 'When true (and not loading), the leading slot becomes a refresh button',
+      description: 'When true (and not loading), the pre slot becomes a refresh button',
     },
     tooltipText: {
       control: 'text',

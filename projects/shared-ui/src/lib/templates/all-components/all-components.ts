@@ -63,6 +63,7 @@ import { ScrollArea } from '../../core/scroll-area/scroll-area';
 import { Skeleton } from '../../core/skeleton/skeleton';
 import { SlideContainer } from '../../core/slide-container/slide-container';
 import { SlideContainerItem } from '../../core/slide-container/slide-container-item';
+import { SliderInput } from '../../core/slider-input/slider-input';
 import { Splitter } from '../../core/splitter/splitter';
 import { Table } from '../../core/table/table';
 import { TableCell } from '../../core/table/table-cell';
@@ -154,6 +155,7 @@ type TableUser = {
     Skeleton,
     SlideContainer,
     SlideContainerItem,
+    SliderInput,
     Splitter,
     Table,
     TableCell,
@@ -181,7 +183,16 @@ export class AllComponents {
   private readonly _cdkDialog = inject(CdkDialog);
 
   /** all semantic component colors used across the showcase rows */
-  protected readonly allColors = ['primary', 'secondary', 'neutral', 'safe', 'info', 'caution', 'warning', 'danger'] as const;
+  protected readonly allColors = [
+    'primary',
+    'secondary',
+    'neutral',
+    'safe',
+    'info',
+    'caution',
+    'warning',
+    'danger',
+  ] as const;
 
   /** a representative sample of icon names to render in the icon grid */
   protected readonly sampleIconNames: IconName[] = [

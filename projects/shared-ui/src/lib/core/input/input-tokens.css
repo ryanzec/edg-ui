@@ -13,7 +13,7 @@
   --input-slot-gap: var(--spacing-1);
   --input-chip-gap: var(--spacing-1);
   --input-chip-row-gap: var(--spacing-1_5);
-  --input-chip-height: var(--sizing-11xs); /* 24px */
+  --input-chip-height: var(--sizing-11xs);
   --input-font-size: var(--font-size-base);
 
   /* color × variant slot tokens (defaults to bordered) */
@@ -29,7 +29,7 @@
   --input-fg-muted: var(--color-fg-muted);
 
   /* number stepper */
-  --input-stepper-width: var(--spacing-5); /* 20px */
+  --input-stepper-width: var(--spacing-5);
   --input-stepper-button-height: calc(var(--input-height) / 2);
   --input-stepper-bg-hover: var(--color-bg-hover);
   --input-stepper-bg-active: var(--color-bg-active);

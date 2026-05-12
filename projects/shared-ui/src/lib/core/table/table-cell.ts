@@ -12,7 +12,7 @@ export const TABLE_CELL_MUTED_DEFAULT = false;
 /** default value for the faint input */
 export const TABLE_CELL_FAINT_DEFAULT = false;
 
-/** default value for the selectCol input */
+/** default value for the selectColumn input */
 export const TABLE_CELL_SELECT_COL_DEFAULT = false;
 
 @Component({
@@ -35,8 +35,8 @@ export class TableCell {
   /** whether the cell text is rendered in the faint (least-prominent) tone */
   public readonly faint = input<boolean>(TABLE_CELL_FAINT_DEFAULT);
 
-  /** whether the cell is the leading checkbox-selection column (fixed-width, centered) */
-  public readonly selectCol = input<boolean>(TABLE_CELL_SELECT_COL_DEFAULT);
+  /** whether the cell is the pre checkbox-selection column (fixed-width, centered) */
+  public readonly selectColumn = input<boolean>(TABLE_CELL_SELECT_COL_DEFAULT);
 
   /** whether ellipsis truncation is active */
   protected readonly useEllipsis = computed<boolean>(() => this.ellipsisLines() > 0);

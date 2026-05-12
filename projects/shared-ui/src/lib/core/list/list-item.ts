@@ -40,7 +40,7 @@ export const LIST_ITEM_FORCE_CLICKABLE_DEFAULT = false;
 /** the default hide-label state of the list item */
 export const LIST_ITEM_HIDE_LABEL_DEFAULT = false;
 
-/** the icon auto-rendered as a trailing indicator when isExternalHref is true */
+/** the icon auto-rendered as a post indicator when isExternalHref is true */
 const EXTERNAL_HREF_ICON_NAME: IconName = 'arrow-up-right';
 
 @Component({
@@ -97,7 +97,7 @@ export class ListItem {
     transform: angularUtils.transformNullToUndefined,
   });
 
-  /** whether the href is an external url that should open in a new tab; auto-renders a trailing external-link icon */
+  /** whether the href is an external url that should open in a new tab; auto-renders a post external-link icon */
   public readonly isExternalHref = input<boolean>(LIST_ITEM_IS_EXTERNAL_HREF_DEFAULT);
 
   /** overrides the size inherited from the parent list component for this item only */
@@ -147,7 +147,7 @@ export class ListItem {
     return this.parentList.size();
   });
 
-  /** the icon name auto-rendered as a trailing indicator when isExternalHref is true */
+  /** the icon name auto-rendered as a post indicator when isExternalHref is true */
   protected readonly externalHrefIconName: IconName = EXTERNAL_HREF_ICON_NAME;
 
   constructor() {

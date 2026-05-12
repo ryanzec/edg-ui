@@ -393,11 +393,7 @@ export const Default: Story = {
             </org-checkbox-toggle>
           </org-design-system-demo-control-group>
           <org-design-system-demo-control-group label="Indeterminate">
-            <org-checkbox-toggle
-              name="live-demo-indeterminate"
-              value="indeterminate"
-              formControlName="indeterminate"
-            >
+            <org-checkbox-toggle name="live-demo-indeterminate" value="indeterminate" formControlName="indeterminate">
               {{ liveDemoForm.controls.indeterminate.value ? 'on' : 'off' }}
             </org-checkbox-toggle>
           </org-design-system-demo-control-group>
@@ -975,7 +971,10 @@ export const Showcase: Story = {
       </org-design-system-demo>
       <org-design-system-demo-expected-behaviour>
         <ul class="list-inside list-disc flex flex-col gap-1">
-          <li>Bind <strong>[checked]</strong> to a signal (or any value) and listen to <strong>(checkedChange)</strong> to update it</li>
+          <li>
+            Bind <strong>[checked]</strong> to a signal (or any value) and listen to <strong>(checkedChange)</strong> to
+            update it
+          </li>
           <li>No reactive form required — the host owns the state</li>
         </ul>
       </org-design-system-demo-expected-behaviour>

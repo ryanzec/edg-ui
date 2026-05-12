@@ -10,13 +10,13 @@
 }
 
 <ng-template #content>
-  @switch (brain.leadingSlot()) {
+  @switch (brain.preSlot()) {
     @case ('indicator') {
-      <org-indicator class="leading" size="sm" [color]="brain.indicatorColor()" />
+      <org-indicator class="pre" size="sm" [color]="brain.indicatorColor()" />
     }
     @case ('refresh') {
       <org-button
-        class="leading refresh"
+        class="pre refresh"
         variant="text"
         color="neutral"
         size="sm"
@@ -28,7 +28,7 @@
       />
     }
     @case ('spinner') {
-      <org-loading-spinner class="leading spinner" size="sm" iconColor="info" />
+      <org-loading-spinner class="pre spinner" size="sm" iconColor="info" />
     }
   }
   <span class="cluster">

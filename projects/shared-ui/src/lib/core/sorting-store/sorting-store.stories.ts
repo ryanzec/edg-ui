@@ -24,14 +24,24 @@ import { StorybookExampleContainerSection } from '../../private/storybook-exampl
         <div class="flex flex-wrap gap-2">
           <org-button color="primary" size="sm" label="Toggle Sort: Name" (click)="sortingStore.toggleSort('name')" />
           <org-button color="primary" size="sm" label="Toggle Sort: Date" (click)="sortingStore.toggleSort('date')" />
-          <org-button color="primary" size="sm" label="Toggle Sort: Status" (click)="sortingStore.toggleSort('status')" />
+          <org-button
+            color="primary"
+            size="sm"
+            label="Toggle Sort: Status"
+            (click)="sortingStore.toggleSort('status')"
+          />
         </div>
       </org-storybook-example-container-section>
 
       <org-storybook-example-container-section label="Set Sort">
         <div class="flex flex-wrap gap-2">
           <org-button color="secondary" size="sm" label="Set: Name ASC" (click)="sortingStore.setSort('name', 'asc')" />
-          <org-button color="secondary" size="sm" label="Set: Date DESC" (click)="sortingStore.setSort('date', 'desc')" />
+          <org-button
+            color="secondary"
+            size="sm"
+            label="Set: Date DESC"
+            (click)="sortingStore.setSort('date', 'desc')"
+          />
           <org-button color="neutral" size="sm" label="Clear Sort" (click)="sortingStore.clearSort()" />
         </div>
       </org-storybook-example-container-section>

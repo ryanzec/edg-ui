@@ -1,0 +1,287 @@
+@layer components {
+  :host {
+    display: flex;
+    position: relative;
+    touch-action: none;
+  }
+
+  :host([data-direction='horizontal']) {
+    width: 100%;
+    align-items: center;
+    padding-block: calc(var(--slider-input-thumb-size) / 2);
+  }
+
+  :host([data-direction='vertical']) {
+    height: 100%;
+    justify-content: center;
+    padding-inline: calc(var(--slider-input-thumb-size) / 2);
+  }
+
+  :host([data-disabled]) {
+    opacity: var(--slider-input-disabled-opacity);
+    cursor: not-allowed;
+  }
+
+  :host([data-dragging]) {
+    user-select: none;
+  }
+
+  /* track is the relative positioning context for fill + thumbs + ticks */
+  :host .track {
+    position: relative;
+    background-color: var(--slider-input-track-bg);
+    border-radius: var(--slider-input-track-radius);
+    cursor: pointer;
+  }
+
+  :host([data-direction='horizontal']) .track {
+    width: 100%;
+    height: var(--slider-input-track-thickness);
+  }
+
+  :host([data-direction='vertical']) .track {
+    height: 100%;
+    width: var(--slider-input-track-thickness);
+  }
+
+  :host([data-disabled]) .track {
+    cursor: not-allowed;
+  }
+
+  /* fill bar — colored segment between the active thumbs (or 0 → thumb for single-thumb) */
+  :host .fill {
+    position: absolute;
+    background-color: var(--slider-input-fill-bg);
+    border-radius: var(--slider-input-track-radius);
+    pointer-events: none;
+  }
+
+  :host([data-direction='horizontal']) .fill {
+    top: 0;
+    bottom: 0;
+    left: var(--slider-input-fill-start);
+    right: calc(100% - var(--slider-input-fill-end));
+  }
+
+  :host([data-direction='vertical']) .fill {
+    left: 0;
+    right: 0;
+    bottom: var(--slider-input-fill-start);
+    top: calc(100% - var(--slider-input-fill-end));
+  }
+
+  /* thumb — the draggable circle */
+  :host .thumb {
+    position: absolute;
+    width: var(--slider-input-thumb-size);
+    height: var(--slider-input-thumb-size);
+    border: var(--slider-input-thumb-border-width) solid var(--slider-input-thumb-border-color);
+    border-radius: var(--slider-input-thumb-radius);
+    background-color: var(--slider-input-thumb-bg);
+    cursor: grab;
+    padding: 0;
+    outline: none;
+    box-sizing: border-box;
+  }
+
+  :host([data-direction='horizontal']) .thumb {
+    top: 50%;
+    left: var(--slider-input-thumb-position);
+    transform: translate(-50%, -50%);
+  }
+
+  :host([data-direction='vertical']) .thumb {
+    left: 50%;
+    bottom: var(--slider-input-thumb-position);
+    transform: translate(-50%, 50%);
+  }
+
+  :host .thumb:not(:disabled):hover {
+    background-color: var(--slider-input-thumb-bg-hover);
+    border-color: var(--slider-input-thumb-border-color-hover);
+    /* raise the hovered thumb so it is always grabbable when thumbs overlap during crossing */
+    z-index: var(--z-index-raised);
+  }
+
+  :host .thumb:not(:disabled):focus-visible {
+    background-color: var(--slider-input-thumb-bg-hover);
+    border-color: var(--slider-input-thumb-border-color-hover);
+    box-shadow: 0 0 0 var(--slider-input-focus-ring-width) var(--slider-input-focus-ring-color);
+    /* raise the focused thumb so keyboard interaction is always on the visible thumb */
+    z-index: var(--z-index-raised);
+  }
+
+  :host .thumb:not(:disabled):active {
+    background-color: var(--slider-input-thumb-bg-active);
+    border-color: var(--slider-input-thumb-border-color-active);
+    cursor: grabbing;
+    /* dragging thumb stays on top of any overlapping siblings */
+    z-index: var(--z-index-raised);
+  }
+
+  :host([data-dragging]) .thumb {
+    cursor: grabbing;
+  }
+
+  :host .thumb:disabled {
+    cursor: not-allowed;
+  }
+
+  /* ticks container spans the track */
+  :host .ticks {
+    position: absolute;
+    pointer-events: none;
+  }
+
+  :host([data-direction='horizontal']) .ticks {
+    top: 100%;
+    left: 0;
+    right: 0;
+    margin-top: var(--slider-input-tick-gap);
+  }
+
+  :host([data-direction='vertical']) .ticks {
+    top: 0;
+    bottom: 0;
+    left: 100%;
+    margin-left: var(--slider-input-tick-gap);
+  }
+
+  :host .tick {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  :host([data-direction='horizontal']) .tick {
+    flex-direction: column;
+    top: 0;
+    left: var(--slider-input-tick-position);
+    transform: translateX(-50%);
+  }
+
+  :host([data-direction='vertical']) .tick {
+    flex-direction: row;
+    left: 0;
+    bottom: var(--slider-input-tick-position);
+    transform: translateY(50%);
+  }
+
+  :host .tick-mark {
+    display: block;
+    width: var(--slider-input-tick-size);
+    height: var(--slider-input-tick-size);
+    border-radius: var(--radius-pill);
+    background-color: var(--slider-input-tick-color);
+  }
+
+  :host .tick-label {
+    font-size: var(--slider-input-tick-label-font-size);
+    color: var(--slider-input-tick-label-color);
+    line-height: 1;
+    margin-top: var(--spacing-0_5);
+  }
+
+  :host([data-direction='vertical']) .tick-label {
+    margin-top: 0;
+    margin-left: var(--spacing-1);
+  }
+
+  /* ===== SIZE VARIANTS ===== */
+
+  :host([data-size='sm']) {
+    --slider-input-track-thickness: 0.1875rem; /* 3px */
+    --slider-input-thumb-size: 0.75rem; /* 12px */
+    --slider-input-tick-size: 0.1875rem; /* 3px */
+    --slider-input-tick-label-font-size: var(--font-size-2xs);
+  }
+
+  :host([data-size='base']) {
+    --slider-input-track-thickness: 0.25rem; /* 4px */
+    --slider-input-thumb-size: 1rem; /* 16px */
+    --slider-input-tick-size: 0.25rem; /* 4px */
+    --slider-input-tick-label-font-size: var(--font-size-xs);
+  }
+
+  :host([data-size='lg']) {
+    --slider-input-track-thickness: 0.375rem; /* 6px */
+    --slider-input-thumb-size: 1.25rem; /* 20px */
+    --slider-input-tick-size: 0.3125rem; /* 5px */
+    --slider-input-tick-label-font-size: var(--font-size-sm);
+  }
+
+  /* ===== COLOR VARIANTS ===== */
+
+  :host([data-color='primary']) {
+    --slider-input-fill-bg: var(--color-primary);
+    --slider-input-thumb-border-color: var(--color-primary);
+    --slider-input-thumb-bg-hover: var(--color-primary);
+    --slider-input-thumb-border-color-hover: var(--color-primary-hover);
+    --slider-input-thumb-bg-active: var(--color-primary-active);
+    --slider-input-thumb-border-color-active: var(--color-primary-active);
+  }
+
+  :host([data-color='secondary']) {
+    --slider-input-fill-bg: var(--color-secondary);
+    --slider-input-thumb-border-color: var(--color-secondary);
+    --slider-input-thumb-bg-hover: var(--color-secondary);
+    --slider-input-thumb-border-color-hover: var(--color-secondary-hover);
+    --slider-input-thumb-bg-active: var(--color-secondary-active);
+    --slider-input-thumb-border-color-active: var(--color-secondary-active);
+  }
+
+  :host([data-color='neutral']) {
+    --slider-input-fill-bg: var(--color-neutral);
+    --slider-input-thumb-border-color: var(--color-neutral);
+    --slider-input-thumb-bg-hover: var(--color-neutral);
+    --slider-input-thumb-border-color-hover: var(--color-neutral-hover);
+    --slider-input-thumb-bg-active: var(--color-neutral-active);
+    --slider-input-thumb-border-color-active: var(--color-neutral-active);
+  }
+
+  :host([data-color='safe']) {
+    --slider-input-fill-bg: var(--color-safe);
+    --slider-input-thumb-border-color: var(--color-safe);
+    --slider-input-thumb-bg-hover: var(--color-safe);
+    --slider-input-thumb-border-color-hover: var(--color-safe-hover);
+    --slider-input-thumb-bg-active: var(--color-safe-active);
+    --slider-input-thumb-border-color-active: var(--color-safe-active);
+  }
+
+  :host([data-color='info']) {
+    --slider-input-fill-bg: var(--color-info);
+    --slider-input-thumb-border-color: var(--color-info);
+    --slider-input-thumb-bg-hover: var(--color-info);
+    --slider-input-thumb-border-color-hover: var(--color-info-hover);
+    --slider-input-thumb-bg-active: var(--color-info-active);
+    --slider-input-thumb-border-color-active: var(--color-info-active);
+  }
+
+  :host([data-color='caution']) {
+    --slider-input-fill-bg: var(--color-caution);
+    --slider-input-thumb-border-color: var(--color-caution);
+    --slider-input-thumb-bg-hover: var(--color-caution);
+    --slider-input-thumb-border-color-hover: var(--color-caution-hover);
+    --slider-input-thumb-bg-active: var(--color-caution-active);
+    --slider-input-thumb-border-color-active: var(--color-caution-active);
+  }
+
+  :host([data-color='warning']) {
+    --slider-input-fill-bg: var(--color-warning);
+    --slider-input-thumb-border-color: var(--color-warning);
+    --slider-input-thumb-bg-hover: var(--color-warning);
+    --slider-input-thumb-border-color-hover: var(--color-warning-hover);
+    --slider-input-thumb-bg-active: var(--color-warning-active);
+    --slider-input-thumb-border-color-active: var(--color-warning-active);
+  }
+
+  :host([data-color='danger']) {
+    --slider-input-fill-bg: var(--color-danger);
+    --slider-input-thumb-border-color: var(--color-danger);
+    --slider-input-thumb-bg-hover: var(--color-danger);
+    --slider-input-thumb-border-color-hover: var(--color-danger-hover);
+    --slider-input-thumb-bg-active: var(--color-danger-active);
+    --slider-input-thumb-border-color-active: var(--color-danger-active);
+  }
+}

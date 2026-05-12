@@ -30,7 +30,7 @@ export class TagIcon {
   /** the size inherited from the parent tag */
   protected readonly size = computed(() => this._tagComponent.size());
 
-  /** true when the parent tag's removable input is set and this is the trailing tag-icon being overridden */
+  /** true when the parent tag's removable input is set and this is the post tag-icon being overridden */
   protected readonly isSuppressedByParent = computed<boolean>(() => {
     return this._tagComponent.isRemovable() && this._tagComponent.lastTagIcon() === this;
   });

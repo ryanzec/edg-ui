@@ -8,7 +8,7 @@ export const allOverlayMenuItemTypes = ['item', 'divider'] as const;
 /** the rendering variant for an overlay menu item */
 export type OverlayMenuItemType = (typeof allOverlayMenuItemTypes)[number];
 
-/** an inline tag rendered as trailing meta on an overlay menu item (e.g. a "Beta" badge) */
+/** an inline tag rendered as post meta on an overlay menu item (e.g. a "Beta" badge) */
 export type OverlayMenuItemTag = {
   /** display label rendered inside the tag */
   label: string;
@@ -28,15 +28,15 @@ export type OverlayMenuItemEntry<
   type?: 'item';
   /** display label for the menu item */
   label: string;
-  /** optional leading icon displayed before the menu item label */
+  /** optional pre icon displayed before the menu item label */
   icon: IconName | null;
   /** when true, the row paints muted, is non-interactive, and is skipped by cdk keyboard nav */
   disabled?: boolean;
-  /** optional trailing keyboard shortcut text rendered as muted meta (e.g. "⌘ Z") */
+  /** optional post keyboard shortcut text rendered as muted meta (e.g. "⌘ Z") */
   shortcut?: string;
-  /** optional trailing icon rendered as muted meta (e.g. `chevron-right` for a sub-menu indicator) */
-  trailingIcon?: IconName;
-  /** optional trailing tag rendered as a status pill (e.g. a "Beta" badge) */
+  /** optional post icon rendered as muted meta (e.g. `chevron-right` for a sub-menu indicator) */
+  postIcon?: IconName;
+  /** optional post tag rendered as a status pill (e.g. a "Beta" badge) */
   tag?: OverlayMenuItemTag;
   /** optional consumer-defined metadata associated with the menu item */
   meta?: TMeta;

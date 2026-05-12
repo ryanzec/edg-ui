@@ -12,7 +12,7 @@
     gap: var(--spacing-tabs-tab-gap);
     flex: 1 1 auto;
     min-width: 0;
-    height: var(--_tabs-row-h);
+    height: var(--_tabs-row-height);
     padding: 0 var(--_tabs-tab-x);
     margin-bottom: var(--_tab-margin-bottom, 0);
     background: var(--_tab-bg, transparent);
@@ -70,13 +70,13 @@
     border-bottom-color: var(--_tab-border-bottom-color, transparent);
   }
 
-  /* keep leading icon and trailing tag at their natural width inside the tab */
+  /* keep pre icon and post tag at their natural width inside the tab */
   .tab-btn > org-icon,
   .tab-btn > org-tag {
     flex: 0 0 auto;
   }
 
-  /* close affordance hugs the trailing edge so the × reads as quiet chrome */
+  /* close affordance hugs the post edge so the × reads as quiet chrome */
   .tab-btn > org-button {
     flex: 0 0 auto;
     margin-left: var(--spacing-0_5);

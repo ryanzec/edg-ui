@@ -79,6 +79,7 @@ export class NotificationBrainDirective {
 
       if (autoCloseIn === undefined || autoCloseIn <= 0) {
         this._progress.set(1);
+
         return;
       }
 

@@ -93,14 +93,14 @@ const meta: Meta<Notifications> = {
 <div class="docs-top-level-overview">
   ## Notifications Component
 
-  A fixed corner stack that hosts one or more toast notifications. Each toast has a left intent rail, leading icon or avatar, title, optional description, optional action buttons, a close button, and an optional countdown progress bar.
+  A fixed corner stack that hosts one or more toast notifications. Each toast has a left intent rail, pre icon or avatar, title, optional description, optional action buttons, a close button, and an optional countdown progress bar.
 
   ### Features
-  - **One look only**: subtle surface with a left intent rail + tinted leading glyph
+  - **One look only**: subtle surface with a left intent rail + tinted pre glyph
   - **One size only**: variation is via \`[data-color]\` (intent) and \`[position]\` (stack location)
   - **Pause-on-hover / focus**: hovering or focusing a toast pauses its auto-close timer; \`resetTimerOnHover\` restarts it
   - **Progress bar**: countdown progress is rendered when \`autoCloseIn\` is set
-  - **Avatar variant**: pass \`avatarUrl\` to swap the leading icon for a circular avatar
+  - **Avatar variant**: pass \`avatarUrl\` to swap the pre icon for a circular avatar
   - **Custom content**: pass a \`contentTemplate\` to render arbitrary body content
   - **Action row**: pass an \`actionsTemplate\` for buttons / links below the description
   - **Reduced-motion**: enter / leave animations collapse to 1ms under \`prefers-reduced-motion: reduce\`
@@ -230,11 +230,7 @@ export const Default: Story = {
             </org-checkbox-toggle>
           </org-design-system-demo-control-group>
           <org-design-system-demo-control-group label="Reset timer on hover">
-            <org-checkbox-toggle
-              name="live-demo-reset-timer"
-              value="reset-timer"
-              formControlName="resetTimerOnHover"
-            >
+            <org-checkbox-toggle name="live-demo-reset-timer" value="reset-timer" formControlName="resetTimerOnHover">
               {{ liveDemoForm.controls.resetTimerOnHover.value ? 'on' : 'off' }}
             </org-checkbox-toggle>
           </org-design-system-demo-control-group>
@@ -300,7 +296,7 @@ export const LiveDemo: Story = {
     docs: {
       description: {
         story:
-          'Fully interactive demo. Use the controls to drive every input on the notification (position, intent color, leading icon / avatar, auto-close, manual close, reset-timer-on-hover) then push toasts to observe behaviour.',
+          'Fully interactive demo. Use the controls to drive every input on the notification (position, intent color, pre icon / avatar, auto-close, manual close, reset-timer-on-hover) then push toasts to observe behaviour.',
       },
     },
   },
@@ -507,7 +503,12 @@ class NotificationsCompositionStory implements OnDestroy {
     <div class="positions-stage">
       <div class="flex gap-2 items-center">
         <span class="text-sm font-medium">Position:</span>
-        <org-button-toggle [items]="positionItems" [value]="currentPosition()" (changed)="changePosition($event)" buttonSize="sm" />
+        <org-button-toggle
+          [items]="positionItems"
+          [value]="currentPosition()"
+          (changed)="changePosition($event)"
+          buttonSize="sm"
+        />
       </div>
       <div class="flex gap-2">
         <org-button color="info" label="Push info" (click)="push('info')" />
@@ -625,12 +626,7 @@ class NotificationsAutoCloseStory implements OnDestroy {
   imports: [Notifications, Button],
   template: `
     <div class="flex flex-wrap gap-2">
-      <org-button
-        color="info"
-        label="Add persistent"
-        [disabled]="!!notificationId()"
-        (click)="addPersistent()"
-      />
+      <org-button color="info" label="Add persistent" [disabled]="!!notificationId()" (click)="addPersistent()" />
       <org-button
         color="safe"
         label="Update to closeable success"
@@ -703,7 +699,7 @@ export const Showcase: Story = {
           <org-design-system-demo-header
             slot="header"
             title="Intents"
-            description="Seven intents alias the shared semantic ramp. Surface, border, and type stay subtle across all of them; only the rail and leading glyph carry the color so a stack of mixed intents reads as a quiet column."
+            description="Seven intents alias the shared semantic ramp. Surface, border, and type stay subtle across all of them; only the rail and pre glyph carry the color so a stack of mixed intents reads as a quiet column."
           />
           <org-design-system-demo-canvas slot="canvas">
             <story-notifications-intents />
@@ -717,7 +713,7 @@ export const Showcase: Story = {
             <li><strong>warning</strong>: higher-urgency warning (orange) — uses <code>role="alert"</code></li>
             <li><strong>danger</strong>: destructive / error — uses <code>role="alert"</code></li>
             <li><strong>primary / secondary / neutral</strong>: brand / generic announcements</li>
-            <li><strong>Surface / border / type</strong> stay subtle across every intent; only the rail and leading glyph carry the color</li>
+            <li><strong>Surface / border / type</strong> stay subtle across every intent; only the rail and pre glyph carry the color</li>
           </ul>
         </org-design-system-demo-expected-behaviour>
 
@@ -737,7 +733,7 @@ export const Showcase: Story = {
             <li><strong>Title + description</strong>: pass <code>title</code> + <code>message</code></li>
             <li><strong>With actions</strong>: pass an <code>actionsTemplate</code> for inline buttons / links</li>
             <li><strong>Inline link in body</strong>: pass a <code>contentTemplate</code> for arbitrary body content with embedded <code>org-link</code></li>
-            <li><strong>Avatar variant</strong>: pass <code>avatarUrl</code> to swap the leading icon for a circular avatar</li>
+            <li><strong>Avatar variant</strong>: pass <code>avatarUrl</code> to swap the pre icon for a circular avatar</li>
             <li><strong>No close · auto-dismiss</strong>: set <code>canClose: false</code> with a positive <code>autoCloseIn</code> to show the progress bar without a close button</li>
           </ul>
         </org-design-system-demo-expected-behaviour>

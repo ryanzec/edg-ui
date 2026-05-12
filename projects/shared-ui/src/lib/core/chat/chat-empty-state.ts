@@ -25,7 +25,7 @@ export const CHAT_EMPTY_STATE_SUPPORTING_COPY_DEFAULT: string | undefined = unde
   styleUrl: './chat-empty-state.css',
 })
 export class ChatEmptyState {
-  /** the leading icon rendered above the heading */
+  /** the pre icon rendered above the heading */
   public readonly icon = input<IconName | undefined, IconName | null | undefined>(CHAT_EMPTY_STATE_ICON_DEFAULT, {
     transform: angularUtils.transformNullToUndefined,
   });
@@ -38,6 +38,6 @@ export class ChatEmptyState {
     CHAT_EMPTY_STATE_SUPPORTING_COPY_DEFAULT,
     {
       transform: angularUtils.transformNullToUndefined,
-    },
+    }
   );
 }

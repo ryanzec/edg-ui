@@ -141,6 +141,7 @@ export class TabsBrainDirective {
       }
 
       case 'Delete':
+
       case 'Backspace': {
         const focusedTab = tabs[currentIndex];
 

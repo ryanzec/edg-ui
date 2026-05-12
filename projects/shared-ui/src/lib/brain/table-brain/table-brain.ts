@@ -16,6 +16,12 @@ export const TABLE_IS_BACKGROUND_LOADING_DEFAULT = false;
 /** default value for the selectionData input */
 export const TABLE_SELECTION_DATA_DEFAULT: DataSelectionStore<{ id: string }> | undefined = undefined;
 
+/** default value for the expandedData input */
+export const TABLE_EXPANDED_DATA_DEFAULT: DataSelectionStore<{ id: string }> | undefined = undefined;
+
+/** the routing mode for a body row click; the presentation chooses behavior from this */
+export type TableRowClickMode = 'expand' | 'select' | 'emit' | 'none';
+
 /**
  * headless brain directive for the table component. owns the loading state, selection state, scroll-needed
  * state, the static / dynamic accessibility surface (aria-busy), and the clear-selection event handler.
@@ -46,6 +52,12 @@ export class TableBrainDirective {
     DataSelectionStore<{ id: string }> | null | undefined
   >(TABLE_SELECTION_DATA_DEFAULT, { transform: angularUtils.transformNullToUndefined });
 
+  /** expansion store driving which rows render their expanded section */
+  public readonly expandedData = input<
+    DataSelectionStore<{ id: string }> | undefined,
+    DataSelectionStore<{ id: string }> | null | undefined
+  >(TABLE_EXPANDED_DATA_DEFAULT, { transform: angularUtils.transformNullToUndefined });
+
   /** whether either scroll axis currently needs scrolling */
   public readonly isScrollNeeded = computed<boolean>(() => this._state().isScrollNeeded);
 
@@ -54,6 +66,12 @@ export class TableBrainDirective {
 
   /** whether any rows are currently selected */
   public readonly hasSelection = computed<boolean>(() => this.selectionData()?.hasSelection() ?? false);
+
+  /** whether selection mode is active (selectionData was supplied) */
+  public readonly hasSelectionEnabled = computed<boolean>(() => !!this.selectionData());
+
+  /** whether expansion mode is active (expandedData was supplied) */
+  public readonly hasExpansionEnabled = computed<boolean>(() => !!this.expandedData());
 
   /** the resolved aria-busy value, returning 'true' when loading and null otherwise */
   public readonly ariaBusy = computed<'true' | null>(() => {
@@ -82,5 +100,10 @@ export class TableBrainDirective {
   /** clears the current selection via the provided selectionData store */
   public clearSelection(): void {
     this.selectionData()?.clear();
+  }
+
+  /** clears the current expansion via the provided expandedData store */
+  public clearExpansion(): void {
+    this.expandedData()?.clear();
   }
 }

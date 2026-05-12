@@ -63,10 +63,10 @@ A vertical stack of `org-checkbox` options with an optional legend, description,
 
 ## Card-variant tightening
 
-When *any* child carries `data-variant="card"`, the group uses a tighter stack:
+When _any_ child carries `data-variant="card"`, the group uses a tighter stack:
 
 ```css
-.org-checkbox-group:has(.org-checkbox[data-variant="card"]) {
+.org-checkbox-group:has(.org-checkbox[data-variant='card']) {
   --_cbg-stack: var(--spacing-2);
 }
 ```
@@ -78,7 +78,7 @@ Card spacing also stays uniform across sizes — for the same alignment reason a
 - Cascades the danger border into every child Checkbox that hasn't already been pinned to its own state:
 
 ```css
-.org-checkbox-group[data-state="error"] .org-checkbox:not([data-state]) {
+.org-checkbox-group[data-state='error'] .org-checkbox:not([data-state]) {
   --_cb-border-color: var(--color-danger);
   --_cb-border-color-hover: var(--color-danger);
 }
@@ -93,11 +93,11 @@ A child Checkbox with its own `data-state="error"` keeps that explicit state.
 - Dims every child that hasn't opted out with `data-disabled="0"`:
 
 ```css
-.org-checkbox-group[data-disabled="1"] .org-checkbox:not([data-disabled="0"]) {
+.org-checkbox-group[data-disabled='1'] .org-checkbox:not([data-disabled='0']) {
   opacity: var(--opacity-disabled);
   cursor: not-allowed;
 }
-.org-checkbox-group[data-disabled="1"] .org-checkbox:not([data-disabled="0"]) .org-checkbox-native {
+.org-checkbox-group[data-disabled='1'] .org-checkbox:not([data-disabled='0']) .org-checkbox-native {
   pointer-events: none;
 }
 ```
@@ -109,7 +109,7 @@ Children stay technically focusable for assistive tech but cannot be activated.
 - **Wraps real `org-checkbox` rows.** The group never repaints checkbox internals; it owns layout + group-level state cascade only.
 - **Vertical-only.** Per agreed spec — no horizontal or grid layout. Use Checkbox Group, not a custom flex row, when you have a labelled set.
 - **Native `fieldset` + `legend`.** Accessibility is built on the native semantics; don't replace with `div` + `aria-labelledby` unless you have a constraint that forbids fieldset.
-- **Required asterisk lives on the legend.** Don't stamp asterisks onto individual checkboxes — required means the *group* must have at least one selection (or whatever the consumer's rule is).
+- **Required asterisk lives on the legend.** Don't stamp asterisks onto individual checkboxes — required means the _group_ must have at least one selection (or whatever the consumer's rule is).
 - **Per-child state wins.** A Checkbox with its own `data-state` or `data-disabled="0"` opts out of the group cascade. Use this sparingly — usually the whole group's state is uniform.
 - **Sit beside a Radio Group cleanly.** Two Choice Groups share the `--spacing-choice-*` tokens, so vertically stacked groups in the same form align at the legend, description, and option rows.
 - Defaults when omitted: `data-size="base"`, no error state, not disabled.

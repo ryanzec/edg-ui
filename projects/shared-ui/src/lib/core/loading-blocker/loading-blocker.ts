@@ -76,7 +76,7 @@ export class LoadingBlocker {
     LOADING_BLOCKER_COLOR_DEFAULT,
     {
       transform: angularUtils.transformNullToUndefined,
-    },
+    }
   );
 
   /** size variant forwarded to the inner org-loading-spinner */

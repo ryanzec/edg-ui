@@ -29,7 +29,7 @@ export const CHAT_REACTION_DISABLED_DEFAULT = false;
   },
 })
 export class ChatReaction {
-  /** the emoji rendered as the leading glyph of the chip */
+  /** the emoji rendered as the pre glyph of the chip */
   public readonly emoji = input<string>(CHAT_REACTION_EMOJI_DEFAULT);
 
   /** the count rendered after the emoji */

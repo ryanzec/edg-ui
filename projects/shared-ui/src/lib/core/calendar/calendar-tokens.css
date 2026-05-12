@@ -1,20 +1,20 @@
 :root {
   /* container */
-  --calendar-padding: var(--spacing-3); /* 12px */
-  --calendar-stack-gap: var(--spacing-2); /* 8px */
-  --calendar-radius: var(--radius-base); /* 8px */
+  --calendar-padding: var(--spacing-3);
+  --calendar-stack-gap: var(--spacing-2);
+  --calendar-radius: var(--radius-base);
   --calendar-bg: var(--color-bg-surface);
   --calendar-border: var(--color-border);
   --calendar-fg: var(--color-fg);
 
   /* day cell */
   --calendar-cell-size: 2.25rem; /* 36px */
-  --calendar-cell-font-size: var(--font-size-sm); /* 13px */
+  --calendar-cell-font-size: var(--font-size-sm);
   --calendar-cell-font-weight: var(--font-weight-medium);
 
   /* chip layer (hover / today / selected paint) */
-  --calendar-chip-inset: var(--spacing-0_5); /* 2px */
-  --calendar-chip-radius: var(--radius-sm); /* 6px */
+  --calendar-chip-inset: var(--spacing-0_5);
+  --calendar-chip-radius: var(--radius-sm);
   --calendar-chip-hover-bg: var(--color-bg-hover);
   --calendar-chip-selected-bg: var(--color-primary);
   --calendar-chip-selected-fg: var(--color-primary-on);
@@ -27,7 +27,7 @@
 
   /* range band layer (drawn under the chip; insets at endpoints) */
   --calendar-band-bg: var(--color-primary-soft);
-  --calendar-band-inset-y: var(--spacing-0_5); /* 2px */
+  --calendar-band-inset-y: var(--spacing-0_5);
 
   /* outside month */
   --calendar-outside-month-fg: var(--color-fg-faint);
@@ -37,18 +37,18 @@
 
   /* weekday strip */
   --calendar-weekday-strip-height: 1.5rem; /* 24px */
-  --calendar-weekday-font-size: var(--font-size-2xs); /* 10px */
+  --calendar-weekday-font-size: var(--font-size-2xs);
   --calendar-weekday-font-weight: var(--font-weight-semibold);
   --calendar-weekday-letter-spacing: var(--letter-spacing-wide);
   --calendar-weekday-fg: var(--color-fg-faint);
 
   /* header cluster */
-  --calendar-header-gap: var(--spacing-2); /* 8px */
-  --calendar-header-cluster-gap: var(--spacing-1_5); /* 6px */
+  --calendar-header-gap: var(--spacing-2);
+  --calendar-header-cluster-gap: var(--spacing-1_5);
 
   /* footer */
-  --calendar-footer-padding-top: var(--spacing-2); /* 8px */
-  --calendar-footer-gap: var(--spacing-2); /* 8px */
+  --calendar-footer-padding-top: var(--spacing-2);
+  --calendar-footer-gap: var(--spacing-2);
   --calendar-footer-border: var(--color-border-soft);
 
   /* motion */

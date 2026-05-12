@@ -149,8 +149,18 @@ class StoryUnsavedChangesCustomDialogView implements UnsavedChangesAware {
     >
       <org-storybook-example-container-section label="Navigation">
         <div class="flex gap-2">
-          <org-button color="primary" label="Standard Dialog" (clicked)="navigateTo('/standard')" data-testid="nav-standard-dialog" />
-          <org-button color="neutral" label="Custom Dialog" (clicked)="navigateTo('/custom')" data-testid="nav-custom-dialog" />
+          <org-button
+            color="primary"
+            label="Standard Dialog"
+            (clicked)="navigateTo('/standard')"
+            data-testid="nav-standard-dialog"
+          />
+          <org-button
+            color="neutral"
+            label="Custom Dialog"
+            (clicked)="navigateTo('/custom')"
+            data-testid="nav-custom-dialog"
+          />
         </div>
       </org-storybook-example-container-section>
 

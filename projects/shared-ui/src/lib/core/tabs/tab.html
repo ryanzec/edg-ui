@@ -1,6 +1,7 @@
 @if (brain.closable()) {
-  <div
+  <button
     #buttonRef
+    type="button"
     class="tab-btn"
     [attr.role]="brain.tabRole"
     [attr.aria-selected]="brain.isActive() ? 'true' : 'false'"
@@ -21,7 +22,7 @@
       (click)="$event.stopPropagation()"
       (clicked)="brain.requestClose()"
     />
-  </div>
+  </button>
 } @else {
   <button
     #buttonRef

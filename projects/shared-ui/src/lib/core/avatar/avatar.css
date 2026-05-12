@@ -49,8 +49,8 @@
   }
 
   :host > button:focus-visible {
-    outline: var(--spacing-0_5) solid var(--color-focus-ring); /* 2px */
-    outline-offset: var(--spacing-0_5); /* 2px */
+    outline: var(--spacing-0_5) solid var(--color-focus-ring);
+    outline-offset: var(--spacing-0_5);
   }
 
   :host([data-disabled='true']) > button {

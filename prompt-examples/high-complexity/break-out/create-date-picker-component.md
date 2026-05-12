@@ -138,7 +138,7 @@ the value of the input MUST be populate using the following of the logic:
   -- there is a `selectedStartDate`, the input should display that date formatted
 - if `allowRangeSelection` is `true`:
   -- there is no `selectedStartDate` or `selectedEndDate`, the placeholder should display
-  -- there is a `selectedStartDate` but no end date and `allowPartialRangeSelection` is false, the input should display that date formatted with a trailing `-` like `{FORMATTED START DATE} - `
+  -- there is a `selectedStartDate` but no end date and `allowPartialRangeSelection` is false, the input should display that date formatted with a post `-` like `{FORMATTED START DATE} - `
   -- there is a `selectedStartDate` but no end date and `allowPartialRangeSelection` is true, the input should display that date formatted with an after at like `On or after {FORMATTED START DATE}`
   -- there is a `selectedEndDate` but no start date and `allowPartialRangeSelection` is false, the input should display that date formatted with a preceeding `-` like ` - {FORMATTED END DATE}`
   -- there is a `selectedEndDate` but no start date and `allowPartialRangeSelection` is true, the input should display that date formatted with an before at like `On or before {FORMATTED END DATE}`

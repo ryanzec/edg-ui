@@ -443,7 +443,13 @@ export const Showcase: Story = {
       </div>
     `,
     moduleMetadata: {
-      imports: [Divider, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas, DesignSystemDemoExpectedBehaviour],
+      imports: [
+        Divider,
+        DesignSystemDemo,
+        DesignSystemDemoHeader,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
+      ],
     },
   }),
 };

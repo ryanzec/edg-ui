@@ -117,7 +117,7 @@
     display: none;
   }
 
-  /* running rail thickens the leading edge to the info accent */
+  /* running rail thickens the pre edge to the info accent */
   :host([data-state='running']) {
     border-left-color: var(--chat-block-tool-accent);
     border-left-width: var(--chat-block-running-rail-width);

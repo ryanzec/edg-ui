@@ -5,7 +5,7 @@
     display: flex;
     align-items: center;
     gap: var(--textarea-toolbar-gap);
-    min-height: var(--textarea-toolbar-min-h);
+    min-height: var(--textarea-toolbar-min-height);
     padding: var(--textarea-toolbar-pad-y) var(--textarea-pad-x) var(--textarea-pad-y);
     margin-top: calc(var(--textarea-toolbar-stack) * -1);
   }

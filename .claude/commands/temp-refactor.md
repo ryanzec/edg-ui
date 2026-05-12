@@ -34,7 +34,7 @@ These must **ALWAYS** be followed and override anything in the implementation no
 - If a component can be used has a form input, you must create a Non Form Usage and Reactive Form Integration stories (like we do in `projects/shared-ui/src/lib/core/button-toggle/button-toggle.stories.ts`).
 - All references to `md` for size / design tokens must **ALWAYS** use `base` instead.
 - All values from the reference images and markdown notes are close, not exact, always use the existing base design token that closest match.
-- If you add a new file in `projects/shared-ui/src/lib/styles/tokens`, you **MUST** add an import for it to `projects/shared-ui/src/lib/styles/styles.css`.
+- If you add a new component `*-tokens.css` file (co-located with the component in `projects/shared-ui/src/lib/core/{component-name}/`), you **MUST** add an import for it to `projects/shared-ui/src/lib/core/tokens.css`.
 - The rules in `.claude/rules/use-cases/css-local-variables.md` **ALWAYS** override the implementation plan referenced markdown file.
 - **ALWAYS** use the custom component over a native one if available regardless of what the referenced implementation markdown file says.
 

@@ -6,14 +6,14 @@
     --_radius: var(--radius-overlay-menu);
     --_shadow: var(--shadow-overlay-menu);
     --_pad: var(--spacing-overlay-menu-pad);
-    --_min-w: var(--sizing-overlay-menu-min-width);
-    --_max-w: var(--sizing-overlay-menu-max-width);
+    --_min-width: var(--sizing-overlay-menu-min-widthidth);
+    --_max-width: var(--sizing-overlay-menu-max-width);
     --_motion-dur: var(--motion-overlay-menu-duration);
 
     display: block;
     width: max-content;
-    min-width: var(--_min-w);
-    max-width: var(--_max-w);
+    min-width: var(--_min-width);
+    max-width: var(--_max-width);
     padding: var(--_pad);
     background-color: var(--_surface);
     border: var(--border-width) solid var(--_border);
@@ -22,7 +22,8 @@
     color: var(--color-fg);
     z-index: var(--z-index-popover);
     overflow: hidden;
-    transition: opacity var(--_motion-dur) var(--motion-ease-standard),
+    transition:
+      opacity var(--_motion-dur) var(--motion-ease-standard),
       transform var(--_motion-dur) var(--motion-ease-standard);
   }
 

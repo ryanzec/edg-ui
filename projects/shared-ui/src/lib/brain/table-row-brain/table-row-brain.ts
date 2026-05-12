@@ -20,6 +20,12 @@ export const TABLE_ROW_CLICKABLE_DEFAULT = false;
 /** default value for the empty input */
 export const TABLE_ROW_EMPTY_DEFAULT = false;
 
+/** default value for the expanded input */
+export const TABLE_ROW_EXPANDED_DEFAULT = false;
+
+/** default value for the expandedSection input */
+export const TABLE_ROW_EXPANDED_SECTION_DEFAULT = false;
+
 /**
  * headless brain directive for the table row component. owns the structural variant (header / body) plus
  * the body-row state surface — selected, clickable, empty — and the keyboard activation logic that
@@ -46,16 +52,31 @@ export class TableRowBrainDirective {
   /** whether the row is the empty-state row */
   public readonly empty = input<boolean>(TABLE_ROW_EMPTY_DEFAULT);
 
+  /** whether the row currently has an expanded section rendered beneath it */
+  public readonly expanded = input<boolean>(TABLE_ROW_EXPANDED_DEFAULT);
+
+  /** whether this row IS the expanded section row sitting beneath a body row */
+  public readonly expandedSection = input<boolean>(TABLE_ROW_EXPANDED_SECTION_DEFAULT);
+
   /** whether the row is a body row (selected / clickable / empty only apply to body rows) */
   public readonly isBodyRow = computed<boolean>(() => this.variant() === 'body');
 
   /** the resolved `aria-selected` value; only present on body rows where selection is meaningful */
   public readonly ariaSelected = computed<'true' | 'false' | null>(() => {
-    if (!this.isBodyRow()) {
+    if (!this.isBodyRow() || this.expandedSection()) {
       return null;
     }
 
     return this.selected() ? 'true' : 'false';
+  });
+
+  /** the resolved `aria-expanded` value; only present on body rows that own an expanded section */
+  public readonly ariaExpanded = computed<'true' | 'false' | null>(() => {
+    if (!this.isBodyRow() || this.expandedSection()) {
+      return null;
+    }
+
+    return this.expanded() ? 'true' : 'false';
   });
 
   /** emitted when the row is activated via click or keyboard while clickable */

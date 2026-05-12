@@ -37,15 +37,15 @@
     margin-inline-start: var(--label-spinner-margin-inline-start);
   }
 
-  .org-label-trailing {
+  .org-label-post {
     display: inline-flex;
     align-items: center;
-    gap: var(--label-trailing-gap);
-    color: var(--label-trailing-color);
+    gap: var(--label-post-gap);
+    color: var(--label-post-color);
   }
 
-  /* hide the trailing wrapper entirely when no content was projected so the root gap does not add stray spacing */
-  .org-label-trailing:empty {
+  /* hide the post wrapper entirely when no content was projected so the root gap does not add stray spacing */
+  .org-label-post:empty {
     display: none;
   }
 }

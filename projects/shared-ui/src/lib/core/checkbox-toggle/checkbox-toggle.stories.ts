@@ -83,7 +83,7 @@ const meta: Meta<CheckboxToggle> = {
   - Three sizes: \`sm\`, \`base\` (default), \`lg\`
   - Three colors: \`primary\` (default), \`safe\` (positive on-state), \`danger\` (destructive on-state)
   - Two variants: \`default\` (row), \`card\` (bordered tile)
-  - Two label positions: \`end\` (default — track-leading) / \`start\` (label-leading)
+  - Two label positions: \`end\` (default — track-pre) / \`start\` (label-pre)
   - Optional knob icons (\`iconOff\` / \`iconOn\`) that crossfade with state
   - Optional description sub-line beneath the label
   - Disabled state
@@ -559,7 +559,7 @@ export const Showcase: Story = {
           <org-design-system-demo-header
             slot="header"
             title="Label position"
-            description="By default the track sits on the leading edge with the label trailing. Set labelPosition='start' to flip — useful for settings rows where the label takes the available width and the track sits at the trailing edge. (The card variant defaults to label-first — same idiom, no attribute needed.)"
+            description="By default the track sits on the pre edge with the label post. Set labelPosition='start' to flip — useful for settings rows where the label takes the available width and the track sits at the post edge. (The card variant defaults to label-first — same idiom, no attribute needed.)"
           />
           <org-design-system-demo-canvas slot="canvas">
             <div class="flex flex-col gap-3">
@@ -574,8 +574,8 @@ export const Showcase: Story = {
         </org-design-system-demo>
         <org-design-system-demo-expected-behaviour>
           <ul class="list-inside list-disc flex flex-col gap-1">
-            <li><strong>end</strong> (default): track on the leading edge, label trailing</li>
-            <li><strong>start</strong>: label takes the available width, track sits at the trailing edge</li>
+            <li><strong>end</strong> (default): track on the pre edge, label post</li>
+            <li><strong>start</strong>: label takes the available width, track sits at the post edge</li>
           </ul>
         </org-design-system-demo-expected-behaviour>
 
@@ -679,7 +679,7 @@ export const Showcase: Story = {
           <org-design-system-demo-header
             slot="header"
             title="Card variant"
-            description="Wraps the row in a bordered tile — the canonical settings-list pattern. Card defaults to label-first (copy on the leading edge, track on the trailing edge); the whole tile is the hit target. When checked, the border picks up the on-color."
+            description="Wraps the row in a bordered tile — the canonical settings-list pattern. Card defaults to label-first (copy on the pre edge, track on the post edge); the whole tile is the hit target. When checked, the border picks up the on-color."
           />
           <org-design-system-demo-canvas slot="canvas">
             <div class="flex flex-col gap-2 w-full">
@@ -843,7 +843,10 @@ export const Showcase: Story = {
       </org-design-system-demo>
       <org-design-system-demo-expected-behaviour>
         <ul class="list-inside list-disc flex flex-col gap-1">
-          <li>Bind <strong>[checked]</strong> to a signal (or any value) and listen to <strong>(checkedChange)</strong> to update it</li>
+          <li>
+            Bind <strong>[checked]</strong> to a signal (or any value) and listen to <strong>(checkedChange)</strong> to
+            update it
+          </li>
           <li>No reactive form required — the host owns the state</li>
         </ul>
       </org-design-system-demo-expected-behaviour>

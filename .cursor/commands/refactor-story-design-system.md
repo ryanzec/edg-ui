@@ -52,7 +52,7 @@ Inspect every existing exported story and categorize each as exactly one of:
   - `<org-design-system-demo-controls slot="controls">` containing one `<org-design-system-demo-control-group label="...">` per input. Inside each control group:
     - For multi-option string inputs (color, size, variant, …) — use `<org-button-toggle [items]="..." formControlName="..." buttonSize="sm" />`.
     - For boolean inputs (disabled, loading, …) — use `<org-checkbox-toggle name="live-demo-X" value="X" formControlName="X">{{ form.controls.X.value ? 'on' : 'off' }}</org-checkbox-toggle>`.
-    - For complex inputs (e.g., icon position with discrete choices: none / leading / trailing / both / only) — define a string-literal type, build a `ButtonToggleItem[]` array, and use `<org-button-toggle>`.
+    - For complex inputs (e.g., icon position with discrete choices: none / pre / post / both / only) — define a string-literal type, build a `ButtonToggleItem[]` array, and use `<org-button-toggle>`.
   - `<org-design-system-demo-canvas slot="canvas">` containing the live preview wrapped in a centered stage (a `<div>` with `display: flex; align-items: center; justify-content: center; min-height: 6rem;` styled inline via the wrapper's `styles: [...]` block).
 - The wrapper renders the live component using `@switch` / `@if` over the form controls when needed (e.g., for icon-position variations).
 - The exported `LiveDemo: Story` simply renders the wrapper: `template: '<story-{component}-live-demo />'` with `moduleMetadata.imports: [WrapperClass]`.

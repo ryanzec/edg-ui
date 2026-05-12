@@ -123,7 +123,7 @@ const meta: Meta<DropDownSelectorHost> = {
   A button-like trigger that opens an overlay menu of selectable options. Selection logic is owned by the
   headless \`DropDownSelectorBrainDirective\`, while the presentation layer composes the trigger as a real
   \`<org-button>\` with a projected \`#content\` template, an overlay panel surfaced via the CDK overlay,
-  and \`<org-list-item>\` rows. The trigger displays a chevron, an optional leading icon, an optional label
+  and \`<org-list-item>\` rows. The trigger displays a chevron, an optional pre icon, an optional label
   (controlled by \`showLabelWithValue\`), and either the selected value text (single mode / one selection)
   or an \`<org-tag>\` count chip (multi mode with two or more selections).
 
@@ -366,7 +366,7 @@ export const LiveDemo: Story = {
     docs: {
       description: {
         story:
-          'Fully interactive demo. Use the controls to drive selection mode, size, position, leading icon, label visibility, and disabled state on a live drop-down selector.',
+          'Fully interactive demo. Use the controls to drive selection mode, size, position, pre icon, label visibility, and disabled state on a live drop-down selector.',
       },
     },
   },
@@ -383,7 +383,7 @@ export const Showcase: Story = {
     docs: {
       description: {
         story:
-          'Comprehensive showcase of every drop-down selector variant axis — trigger states, selection modes, sizes, positions, leading icons, existing selection, overflow scrolling, and disabled state — in a single scrollable view.',
+          'Comprehensive showcase of every drop-down selector variant axis — trigger states, selection modes, sizes, positions, pre icons, existing selection, overflow scrolling, and disabled state — in a single scrollable view.',
       },
     },
   },
@@ -484,7 +484,7 @@ export const Showcase: Story = {
             <li><strong>Small</strong>: Compact trigger for dense toolbars</li>
             <li><strong>Base</strong>: Standard trigger size for most use cases (default)</li>
             <li><strong>Large</strong>: Prominent trigger for primary surfaces</li>
-            <li>The leading icon and chevron sizes scale with the trigger size variant</li>
+            <li>The pre icon and chevron sizes scale with the trigger size variant</li>
           </ul>
         </org-design-system-demo-expected-behaviour>
 
@@ -506,7 +506,7 @@ export const Showcase: Story = {
         </org-design-system-demo-expected-behaviour>
 
         <org-design-system-demo>
-          <org-design-system-demo-header slot="header" title="Leading Icon" />
+          <org-design-system-demo-header slot="header" title="Pre Icon" />
           <org-design-system-demo-canvas slot="canvas">
             <story-drop-down-selector-host [items]="statusItems" label="Status" size="sm" iconName="settings" />
             <story-drop-down-selector-host [items]="statusItems" label="Status" size="base" iconName="settings" />

@@ -217,14 +217,14 @@
 
   /* card variant size overrides — override the design token, not the property */
   :host([data-variant='card'][data-size='sm']) {
-    --radio-card-padding: var(--spacing-2_5); /* 10px */
+    --radio-card-padding: var(--spacing-2_5);
   }
 
   :host([data-variant='card'][data-size='base']) {
-    --radio-card-padding: var(--spacing-3); /* 12px */
+    --radio-card-padding: var(--spacing-3);
   }
 
   :host([data-variant='card'][data-size='lg']) {
-    --radio-card-padding: var(--spacing-4); /* 16px */
+    --radio-card-padding: var(--spacing-4);
   }
 }

@@ -57,13 +57,13 @@
     font-weight: var(--font-weight-semibold);
   }
 
-  .author-trailing-time {
+  .author-post-time {
     color: var(--color-fg-faint);
     font-size: var(--font-size-xs);
     font-weight: var(--font-weight-regular);
   }
 
-  .author-trailing-meta {
+  .author-post-meta {
     color: var(--color-fg-muted);
     font-size: var(--font-size-xs);
     font-weight: var(--font-weight-regular);
