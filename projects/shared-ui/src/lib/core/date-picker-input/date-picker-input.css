@@ -5,7 +5,6 @@
     --_popover-radius: var(--radius-date-picker-input-popover);
     --_popover-shadow: var(--shadow-date-picker-input-popover);
     --_motion-dur: var(--motion-date-picker-input-duration);
-    --_footer-gap: var(--spacing-date-picker-input-footer-gap);
 
     position: relative;
     display: block;
@@ -65,21 +64,6 @@
   .org-date-picker-input-popover[data-state='open'] {
     opacity: 1;
     transform: translateY(0);
-  }
-
-  /* footer layout for Clear (left) + Cancel / Apply (right) — split via space-between */
-  .footer-actions {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--_footer-gap);
-  }
-
-  .footer-actions-left,
-  .footer-actions-right {
-    display: flex;
-    align-items: center;
-    gap: var(--_footer-gap);
   }
 
   /* respect the user's reduced-motion preference — drop both the slide and the chevron rotation */

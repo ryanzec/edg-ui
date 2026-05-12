@@ -979,7 +979,6 @@ const nonColorTokens: Record<string, string> = {
   'spacing.combobox.option.y': '0.375rem',
   'spacing.combobox.panel.pad': '0.25rem',
   'spacing.date.picker.input.anchor.gap': '0.25rem',
-  'spacing.date.picker.input.footer.gap': '0.5rem',
   'spacing.drop.down.selector.gap': '0.375rem',
   'spacing.drop.down.selector.gap.lg': '0.5rem',
   'spacing.drop.down.selector.gap.sm': '0.25rem',

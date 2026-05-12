@@ -8,7 +8,4 @@
 
   /* reveal motion */
   --motion-date-picker-input-duration: var(--motion-duration-fast);
-
-  /* footer layout inside the popover when range mode renders Apply / Cancel + Clear */
-  --spacing-date-picker-input-footer-gap: var(--spacing-2);
 }

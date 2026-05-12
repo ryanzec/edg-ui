@@ -10,6 +10,8 @@ export * from './calendar/calendar';
 export * from './calendar/calendar-header';
 export * from './calendar/calendar-dates';
 export * from './calendar/calendar-footer';
+export * from './calendar/calendar-footer-left-actions';
+export * from './calendar/calendar-footer-right-actions';
 export * from './card/card';
 export * from './card/card-content';
 export * from './card/card-footer';

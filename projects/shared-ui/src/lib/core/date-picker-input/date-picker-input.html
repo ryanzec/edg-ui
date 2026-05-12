@@ -80,33 +80,31 @@
     >
       @if (allowClear() || isManualCommitMode()) {
         <org-calendar-footer>
-          <div class="footer-actions">
-            <div class="footer-actions-left">
-              @if (allowClear()) {
-                <org-button
-                  variant="ghost"
-                  color="neutral"
-                  size="sm"
-                  label="Clear"
-                  [disabled]="isClearDisabled()"
-                  (clicked)="onClearClick()"
-                />
-              }
-            </div>
-            <div class="footer-actions-right">
-              @if (isManualCommitMode()) {
-                <org-button variant="ghost" color="neutral" size="sm" label="Cancel" (clicked)="onCancelClick()" />
-                <org-button
-                  variant="filled"
-                  color="primary"
-                  size="sm"
-                  label="Apply"
-                  [disabled]="!canApply()"
-                  (clicked)="onApplyClick()"
-                />
-              }
-            </div>
-          </div>
+          @if (allowClear()) {
+            <org-calendar-footer-left-actions>
+              <org-button
+                variant="ghost"
+                color="neutral"
+                size="sm"
+                label="Clear"
+                [disabled]="isClearDisabled()"
+                (clicked)="onClearClick()"
+              />
+            </org-calendar-footer-left-actions>
+          }
+          @if (isManualCommitMode()) {
+            <org-calendar-footer-right-actions>
+              <org-button variant="ghost" color="neutral" size="sm" label="Cancel" (clicked)="onCancelClick()" />
+              <org-button
+                variant="filled"
+                color="primary"
+                size="sm"
+                label="Apply"
+                [disabled]="!canApply()"
+                (clicked)="onApplyClick()"
+              />
+            </org-calendar-footer-right-actions>
+          }
         </org-calendar-footer>
       }
     </org-calendar>

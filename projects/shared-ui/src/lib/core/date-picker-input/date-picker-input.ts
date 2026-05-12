@@ -17,6 +17,8 @@ import { DateTime } from 'luxon';
 import { Input } from '../input/input';
 import { Calendar } from '../calendar/calendar';
 import { CalendarFooter } from '../calendar/calendar-footer';
+import { CalendarFooterLeftActions } from '../calendar/calendar-footer-left-actions';
+import { CalendarFooterRightActions } from '../calendar/calendar-footer-right-actions';
 import { Button } from '../button/button';
 import { angularUtils, DateFormat, TimeFormat } from '@organization/shared-utils';
 import {
@@ -67,6 +69,8 @@ export {
     CdkConnectedOverlay,
     Calendar,
     CalendarFooter,
+    CalendarFooterLeftActions,
+    CalendarFooterRightActions,
     Button,
     Icon,
     DatePickerInputDialogBrainDirective,

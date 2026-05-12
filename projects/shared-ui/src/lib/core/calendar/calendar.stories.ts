@@ -16,6 +16,8 @@ import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-
 import { type CalendarPartialRangeSelectionType } from '../../brain/calendar-brain/calendar-brain';
 import { Calendar } from './calendar';
 import { CalendarFooter } from './calendar-footer';
+import { CalendarFooterLeftActions } from './calendar-footer-left-actions';
+import { CalendarFooterRightActions } from './calendar-footer-right-actions';
 
 const partialRangeTypeItems: ButtonToggleItem[] = [
   { value: 'range', label: 'Range', buttonColor: 'primary' },
@@ -37,6 +39,9 @@ const allowedRangeItems: ButtonToggleItem[] = [
     ReactiveFormsModule,
     Calendar,
     CalendarFooter,
+    CalendarFooterLeftActions,
+    CalendarFooterRightActions,
+    Button,
     ButtonToggle,
     CheckboxToggle,
     DesignSystemDemo,
@@ -131,13 +136,36 @@ const allowedRangeItems: ButtonToggleItem[] = [
               (partialRangeSelectionTypeChange)="onPartialTypeChange($event)"
             >
               @if (liveDemoForm.controls.showFooter.value) {
-                <org-calendar-footer
-                  [showToday]="true"
-                  [showCancelApply]="true"
-                  (today)="onTodayClicked(liveDemoCalendar)"
-                  (cancel)="onCancelClicked()"
-                  (apply)="onApplyClicked()"
-                />
+                <org-calendar-footer>
+                  <org-calendar-footer-left-actions>
+                    <org-button
+                      variant="ghost"
+                      color="neutral"
+                      size="sm"
+                      label="Today"
+                      [disabled]="liveDemoForm.controls.disabled.value"
+                      (clicked)="onTodayClicked(liveDemoCalendar)"
+                    />
+                  </org-calendar-footer-left-actions>
+                  <org-calendar-footer-right-actions>
+                    <org-button
+                      variant="ghost"
+                      color="neutral"
+                      size="sm"
+                      label="Cancel"
+                      [disabled]="liveDemoForm.controls.disabled.value"
+                      (clicked)="onCancelClicked()"
+                    />
+                    <org-button
+                      variant="filled"
+                      color="primary"
+                      size="sm"
+                      label="Apply"
+                      [disabled]="liveDemoForm.controls.disabled.value"
+                      (clicked)="onApplyClicked()"
+                    />
+                  </org-calendar-footer-right-actions>
+                </org-calendar-footer>
               }
             </org-calendar>
           </div>
@@ -201,6 +229,9 @@ class CalendarLiveDemoStory {
   imports: [
     Calendar,
     CalendarFooter,
+    CalendarFooterLeftActions,
+    CalendarFooterRightActions,
+    Button,
     DesignSystemDemo,
     DesignSystemDemoHeader,
     DesignSystemDemoCanvas,
@@ -322,13 +353,21 @@ class CalendarLiveDemoStory {
             [selectedEndDate]="footerSelectedEnd()"
             (dateSelected)="onFooterSelected($event)"
           >
-            <org-calendar-footer
-              [showToday]="true"
-              [showCancelApply]="true"
-              (today)="onFooterToday(footerCalendar)"
-              (cancel)="onFooterCancel()"
-              (apply)="onFooterApply()"
-            />
+            <org-calendar-footer>
+              <org-calendar-footer-left-actions>
+                <org-button
+                  variant="ghost"
+                  color="neutral"
+                  size="sm"
+                  label="Today"
+                  (clicked)="onFooterToday(footerCalendar)"
+                />
+              </org-calendar-footer-left-actions>
+              <org-calendar-footer-right-actions>
+                <org-button variant="ghost" color="neutral" size="sm" label="Cancel" (clicked)="onFooterCancel()" />
+                <org-button variant="filled" color="primary" size="sm" label="Apply" (clicked)="onFooterApply()" />
+              </org-calendar-footer-right-actions>
+            </org-calendar-footer>
           </org-calendar>
         </org-design-system-demo-canvas>
       </org-design-system-demo>
