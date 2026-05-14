@@ -1,47 +1,61 @@
 :root {
-  --color-avatar-0: var(--color-red);
-  --color-avatar-1: var(--color-orange);
-  --color-avatar-2: var(--color-yellow);
-  --color-avatar-3: var(--color-green);
-  --color-avatar-4: var(--color-teal);
-  --color-avatar-5: var(--color-blue);
-  --color-avatar-6: var(--color-purple);
-  --color-avatar-7: var(--color-pink);
+  /* indexed color palette — consumed by colorIndex rotation in avatar-shape.ts */
+  --avatar-color-0: var(--color-red);
+  --avatar-color-1: var(--color-orange);
+  --avatar-color-2: var(--color-yellow);
+  --avatar-color-3: var(--color-green);
+  --avatar-color-4: var(--color-teal);
+  --avatar-color-5: var(--color-blue);
+  --avatar-color-6: var(--color-purple);
+  --avatar-color-7: var(--color-pink);
 
-  --avatar-circle-size-sm: var(--spacing-8);
-  --avatar-circle-size-base: var(--spacing-12);
-  --avatar-circle-size-lg: var(--spacing-16);
+  /* shape slots */
+  --avatar-circle-size: var(--spacing-12);
+  --avatar-initials-font-size: var(--font-size-lg);
+  --avatar-initials-font-weight: var(--font-weight-semibold);
+  --avatar-radius: var(--radius-pill);
+  --avatar-color: var(--avatar-color-0);
+  --avatar-shape-fg: var(--color-fg-on-accent);
 
-  --avatar-initials-font-size-sm: var(--font-size-xs);
-  --avatar-initials-font-size-base: var(--font-size-lg);
-  --avatar-initials-font-size-lg: var(--font-size-2xl);
+  /* avatar wrapper slot */
+  --avatar-gap: var(--spacing-2_5);
 
-  --avatar-label-name-font-size-sm: var(--font-size-sm);
-  --avatar-label-name-font-size-base: var(--font-size-base);
-  --avatar-label-name-font-size-lg: var(--font-size-lg);
-
-  --avatar-label-sub-font-size-sm: var(--font-size-xs);
-  --avatar-label-sub-font-size-base: var(--font-size-xs);
-  --avatar-label-sub-font-size-lg: var(--font-size-sm);
-
-  --avatar-gap-sm: var(--spacing-2);
-  --avatar-gap-base: var(--spacing-2_5);
-  --avatar-gap-lg: var(--spacing-3);
-
+  /* label slots */
   --avatar-label-gap: var(--spacing-0_5);
+  --avatar-label-name-color: var(--color-fg);
+  --avatar-label-name-font-weight: var(--font-weight-medium);
+  --avatar-label-name-font-size: var(--font-size-base);
+  --avatar-label-sub-color: var(--color-fg-muted);
+  --avatar-label-sub-font-weight: var(--font-weight-regular);
+  --avatar-label-sub-font-size: var(--font-size-xs);
 
-  --avatar-ring-width-sm: var(--border-width-thick);
-  --avatar-ring-width-base: 0.1875rem; /* 3px */
-  --avatar-ring-width-lg: 0.1875rem; /* 3px */
+  /* shared typography */
+  --avatar-line-height: var(--line-height-tight);
+  --avatar-letter-spacing: var(--letter-spacing-wide);
 
+  /* stack ring slots */
+  --avatar-ring-width: 0.1875rem; /* 3px */
   --avatar-ring-color: var(--color-bg-app);
 
-  --avatar-radius-square: var(--radius-base);
-
-  --avatar-stack-overlap-sm: calc(var(--avatar-circle-size-sm) * -0.6); /* -19.2px */
-  --avatar-stack-overlap-base: calc(var(--avatar-circle-size-base) * -0.6); /* -28.8px */
-  --avatar-stack-overlap-lg: calc(var(--avatar-circle-size-lg) * -0.6); /* -38.4px */
-
-  --avatar-overflow-bg: var(--color-bg-surface-2);
+  /* stack overflow slots */
+  --avatar-overflow-bg: var(--color-bg-surface-secondary);
   --avatar-overflow-fg: var(--color-fg-muted);
+  --avatar-overflow-font-weight: var(--font-weight-semibold);
+
+  /* stack overlap — reactive formula off the circle size slot */
+  --avatar-stack-overlap: calc(var(--avatar-circle-size) * -0.6);
+
+  /* button (clickable avatar) slots */
+  --avatar-button-transition-duration: var(--motion-duration-base);
+  --avatar-button-transition-ease: var(--motion-ease-standard);
+  --avatar-button-hover-brightness: 0.96;
+  --avatar-button-active-brightness: 0.92;
+  --avatar-button-disabled-opacity: var(--opacity-disabled);
+  --avatar-button-focus-outline-width: var(--spacing-0_5);
+  --avatar-button-focus-outline-offset: var(--spacing-0_5);
+  --avatar-button-focus-outline-color: var(--color-focus-ring);
+}
+
+.dark {
+  --avatar-shape-fg: var(--color-fg);
 }

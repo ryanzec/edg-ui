@@ -99,6 +99,7 @@ export const Default: Story = {
     value: 'center',
     disabled: false,
     buttonSize: 'base',
+    fullWidth: false,
   },
   argTypes: {
     items: {
@@ -118,6 +119,10 @@ export const Default: Story = {
       options: ['sm', 'base', 'lg'],
       description: 'The size applied to every button rendered within the toggle',
     },
+    fullWidth: {
+      control: 'boolean',
+      description: 'Stretches the toggle to fill its parent and gives each button an equal share of the width',
+    },
   },
   parameters: {
     docs: {
@@ -134,6 +139,7 @@ export const Default: Story = {
         [value]="value"
         [disabled]="disabled"
         [buttonSize]="buttonSize"
+        [fullWidth]="fullWidth"
       />
     `,
     moduleMetadata: {
@@ -185,6 +191,11 @@ export const Default: Story = {
               {{ liveDemoForm.controls.disabled.value ? 'on' : 'off' }}
             </org-checkbox-toggle>
           </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Full Width">
+            <org-checkbox-toggle name="live-demo-full-width" value="fullWidth" formControlName="fullWidth">
+              {{ liveDemoForm.controls.fullWidth.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
         </org-design-system-demo-controls>
         <org-design-system-demo-canvas slot="canvas">
           <div class="canvas-stage">
@@ -193,6 +204,7 @@ export const Default: Story = {
               formControlName="value"
               [buttonSize]="liveDemoForm.controls.buttonSize.value"
               [disabled]="liveDemoForm.controls.disabled.value"
+              [fullWidth]="liveDemoForm.controls.fullWidth.value"
             />
           </div>
         </org-design-system-demo-canvas>
@@ -208,6 +220,7 @@ class ButtonToggleLiveDemoStory {
     value: new FormControl<string>('center', { nonNullable: true }),
     buttonSize: new FormControl<'sm' | 'base' | 'lg'>('base', { nonNullable: true }),
     disabled: new FormControl<boolean>(false, { nonNullable: true }),
+    fullWidth: new FormControl<boolean>(false, { nonNullable: true }),
   });
 }
 
@@ -299,6 +312,21 @@ export const Showcase: Story = {
             <li><strong>Wrapper disabled</strong>: every item is non-interactive and the whole toggle is dimmed</li>
             <li><strong>Per-item disabled</strong>: only the items with <code>buttonDisabled: true</code> are non-interactive</li>
             <li>An item is disabled when either the wrapper is disabled OR its own <code>buttonDisabled</code> is true</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Full Width" />
+          <org-design-system-demo-canvas slot="canvas">
+            <org-button-toggle [items]="items" value="center" [fullWidth]="true" />
+            <org-button-toggle [items]="brandItems" value="primary" [fullWidth]="true" />
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li>The toggle stretches to fill the full width of its parent container</li>
+            <li>Each button takes an equal share of the available width regardless of its label length</li>
+            <li>Equal sizing is preserved as the number of items in the toggle changes</li>
           </ul>
         </org-design-system-demo-expected-behaviour>
       </div>

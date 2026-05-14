@@ -4,14 +4,14 @@
   }
 
   :host([data-disabled]) {
-    opacity: var(--opacity-disabled);
+    opacity: var(--calendar-disabled-opacity);
   }
 
   .container {
     display: inline-flex;
     flex-direction: column;
     width: max-content;
-    border: var(--border-width) solid var(--calendar-border);
+    border: var(--calendar-border-width) solid var(--calendar-border);
     border-radius: var(--calendar-radius);
     background-color: var(--calendar-bg);
     color: var(--calendar-fg);
@@ -22,17 +22,5 @@
   /* suppress all interactive cell styling when the whole calendar is disabled */
   :host([data-disabled]) .container {
     cursor: not-allowed;
-  }
-
-  .sr-only {
-    position: absolute;
-    width: 0.0625rem; /* 1px */
-    height: 0.0625rem; /* 1px */
-    padding: 0;
-    margin: -0.0625rem; /* 1px */
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border-width: 0;
   }
 }

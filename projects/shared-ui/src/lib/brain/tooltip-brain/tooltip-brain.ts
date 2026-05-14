@@ -584,7 +584,11 @@ export class TooltipBrainDirective implements OnDestroy {
     // built without throwing; the next placement effect run will swap it in
     const anchor = trigger ?? this._elementRef.nativeElement;
 
-    const strategy = this._overlay.position().flexibleConnectedTo(anchor).withPositions(positions);
+    const strategy = this._overlay
+      .position()
+      .flexibleConnectedTo(anchor)
+      .withPositions(positions)
+      .withLockedPosition(false);
 
     strategy.positionChanges.pipe(takeUntilDestroyed(this._destroyRef)).subscribe((change) => {
       this._onPositionChange(change);

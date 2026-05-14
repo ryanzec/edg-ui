@@ -1,11 +1,11 @@
 @layer components {
   :host {
     display: block;
-    width: 100%;
+    width: var(--combobox-width);
   }
 
   .combobox-container {
     position: relative;
-    width: 100%;
+    width: var(--combobox-width);
   }
 }

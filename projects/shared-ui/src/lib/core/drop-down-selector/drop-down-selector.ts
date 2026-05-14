@@ -6,7 +6,6 @@ import { Button } from '../button/button';
 import { Icon, type IconSize } from '../icon/icon';
 import { List } from '../list/list';
 import { ListItem } from '../list/list-item';
-import { ListItemIcon } from '../list/list-item-icon';
 import { OverlayMenuDivider } from '../overlay-menu/overlay-menu-divider';
 import { ScrollArea } from '../scroll-area/scroll-area';
 import { Tag } from '../tag/tag';
@@ -56,12 +55,37 @@ const TRIGGER_ICON_SIZE_BY_TRIGGER_SIZE: Record<DropDownSelectorSize, IconSize> 
   lg: 'base',
 };
 
-/** the cdk overlay positions for each supported drop-down selector position */
+/**
+ * the cdk overlay positions for each supported drop-down selector position. each entry lists the primary
+ * position first followed by fallback candidates so the cdk overlay can flip on the primary axis (e.g.
+ * `below` → `above`) and on the cross-axis alignment (e.g. left-aligned → right-aligned) when the panel
+ * would otherwise be clipped by the viewport.
+ */
 const POSITION_CONFIGURATIONS: Record<DropDownSelectorPosition, ConnectedPosition[]> = {
-  below: [{ originX: 'start', originY: 'bottom', overlayX: 'start', overlayY: 'top', offsetY: 4 }],
-  above: [{ originX: 'start', originY: 'top', overlayX: 'start', overlayY: 'bottom', offsetY: -4 }],
-  before: [{ originX: 'start', originY: 'top', overlayX: 'end', overlayY: 'top', offsetX: -4 }],
-  after: [{ originX: 'end', originY: 'top', overlayX: 'start', overlayY: 'top', offsetX: 4 }],
+  below: [
+    { originX: 'start', originY: 'bottom', overlayX: 'start', overlayY: 'top', offsetY: 4 },
+    { originX: 'end', originY: 'bottom', overlayX: 'end', overlayY: 'top', offsetY: 4 },
+    { originX: 'start', originY: 'top', overlayX: 'start', overlayY: 'bottom', offsetY: -4 },
+    { originX: 'end', originY: 'top', overlayX: 'end', overlayY: 'bottom', offsetY: -4 },
+  ],
+  above: [
+    { originX: 'start', originY: 'top', overlayX: 'start', overlayY: 'bottom', offsetY: -4 },
+    { originX: 'end', originY: 'top', overlayX: 'end', overlayY: 'bottom', offsetY: -4 },
+    { originX: 'start', originY: 'bottom', overlayX: 'start', overlayY: 'top', offsetY: 4 },
+    { originX: 'end', originY: 'bottom', overlayX: 'end', overlayY: 'top', offsetY: 4 },
+  ],
+  before: [
+    { originX: 'start', originY: 'top', overlayX: 'end', overlayY: 'top', offsetX: -4 },
+    { originX: 'start', originY: 'bottom', overlayX: 'end', overlayY: 'bottom', offsetX: -4 },
+    { originX: 'end', originY: 'top', overlayX: 'start', overlayY: 'top', offsetX: 4 },
+    { originX: 'end', originY: 'bottom', overlayX: 'start', overlayY: 'bottom', offsetX: 4 },
+  ],
+  after: [
+    { originX: 'end', originY: 'top', overlayX: 'start', overlayY: 'top', offsetX: 4 },
+    { originX: 'end', originY: 'bottom', overlayX: 'start', overlayY: 'bottom', offsetX: 4 },
+    { originX: 'start', originY: 'top', overlayX: 'end', overlayY: 'top', offsetX: -4 },
+    { originX: 'start', originY: 'bottom', overlayX: 'end', overlayY: 'bottom', offsetX: -4 },
+  ],
 };
 
 /**
@@ -74,18 +98,7 @@ const POSITION_CONFIGURATIONS: Record<DropDownSelectorPosition, ConnectedPositio
 @Component({
   selector: 'org-drop-down-selector',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    Button,
-    CdkOverlayOrigin,
-    CdkConnectedOverlay,
-    Icon,
-    List,
-    ListItem,
-    ListItemIcon,
-    OverlayMenuDivider,
-    ScrollArea,
-    Tag,
-  ],
+  imports: [Button, CdkOverlayOrigin, CdkConnectedOverlay, Icon, List, ListItem, OverlayMenuDivider, ScrollArea, Tag],
   templateUrl: './drop-down-selector.html',
   styleUrl: './drop-down-selector.css',
   hostDirectives: [

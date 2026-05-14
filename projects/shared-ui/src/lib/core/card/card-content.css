@@ -1,14 +1,13 @@
 @layer components {
   :host {
     display: block;
-    padding: var(--card-padding-y) var(--card-padding-x);
-    font-size: var(--font-size-base);
-    line-height: var(--line-height-normal);
-    color: var(--color-fg);
+    font-size: var(--card-content-font-size);
+    line-height: var(--card-content-line-height);
+    color: var(--card-content-fg);
   }
 
   /* adjacent-region padding collapse: drop bottom padding when followed by footer */
   :host(:has(+ org-card-footer)) {
-    padding-bottom: 0;
+    --card-content-padding-bottom: 0;
   }
 }

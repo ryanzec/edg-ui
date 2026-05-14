@@ -26,7 +26,7 @@ import {
   type TooltipLayout,
   type TooltipSize,
 } from './tooltip-content';
-import { TooltipKbd } from './tooltip-kbd';
+import { Kbd } from '../kbd/kbd';
 import { TooltipTitle } from './tooltip-title';
 import { TooltipBody } from './tooltip-body';
 import { TooltipAction } from './tooltip-action';
@@ -81,11 +81,11 @@ const meta: Meta<Tooltip> = {
   ### Composition Parts
   - **org-tooltip** — wrapper component. Wraps the trigger via default content projection. Owns trigger interaction, overlay lifecycle, position, and a11y. Receives the surface template via a named &lt;ng-template tooltipContent&gt; child.
   - **org-tooltip-content** — the visible surface. Drives layout, size, placement (arrow direction), state, and arrow visibility via data-attributes.
-  - **org-tooltip-kbd** — inline keyboard-shortcut pill rendered after a label tooltip's text.
+  - **org-kbd** — inline keyboard-shortcut pill rendered after a label tooltip's text (promoted out of the tooltip folder for cross-component reuse).
   - **org-tooltip-title** / **org-tooltip-body** / **org-tooltip-action** — rich-layout slot components.
 
   ### Layouts
-  - **label** (default) — one-line text, optionally with a post &lt;org-tooltip-kbd&gt;. For icon-only buttons, truncated names, and brief affordances.
+  - **label** (default) — one-line text, optionally with a post &lt;org-kbd&gt;. For icon-only buttons, truncated names, and brief affordances.
   - **rich** — title + body + optional action link. For click-mode tooltips that hold a small amount of contextual help.
 
   ### Placements
@@ -111,7 +111,7 @@ const meta: Meta<Tooltip> = {
     <ng-template #tooltipContent>
       <org-tooltip-content>
         Search
-        <org-tooltip-kbd>&#8984;K</org-tooltip-kbd>
+        <org-kbd>&#8984;K</org-kbd>
       </org-tooltip-content>
     </ng-template>
   </org-tooltip>
@@ -208,7 +208,7 @@ export const Default: Story = {
     ReactiveFormsModule,
     Tooltip,
     TooltipContent,
-    TooltipKbd,
+    Kbd,
     TooltipTitle,
     TooltipBody,
     TooltipAction,
@@ -296,7 +296,7 @@ export const Default: Story = {
                     >
                       Save changes
                       @if (liveDemoForm.controls.showKbd.value) {
-                        <org-tooltip-kbd>&#8984;S</org-tooltip-kbd>
+                        <org-kbd>&#8984;S</org-kbd>
                       }
                     </org-tooltip-content>
                   }
@@ -491,6 +491,37 @@ export const Showcase: Story = {
         <org-design-system-demo>
           <org-design-system-demo-header
             slot="header"
+            title="Auto-flip"
+            description="When a tooltip would overflow the viewport on its preferred side, it flips to the opposite side. Hover the trigger near each container edge to see the flip behaviour."
+          />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="flex justify-between items-start gap-4">
+              <org-tooltip placement="left">
+                <org-button color="primary" label="Near left edge" />
+                <ng-template #tooltipContent>
+                  <org-tooltip-content>This tooltip prefers left but flips to right when there's no room</org-tooltip-content>
+                </ng-template>
+              </org-tooltip>
+              <org-tooltip placement="right">
+                <org-button color="primary" label="Near right edge" />
+                <ng-template #tooltipContent>
+                  <org-tooltip-content>This tooltip prefers right but flips to left when there's no room</org-tooltip-content>
+                </ng-template>
+              </org-tooltip>
+            </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>Primary placement</strong>: requested via the placement input</li>
+            <li><strong>Fallback chain</strong>: opposite side, then center — guarantees the tooltip always renders on screen</li>
+            <li><strong>data-placement</strong>: brain writes the resolved value back so the arrow tracks the actually-rendered side</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header
+            slot="header"
             title="Common patterns"
             description="The two most common production uses: labelling an icon-only button, explaining a disabled control via an enabled wrapper, abbreviating truncated text, and a wide rich tooltip."
           />
@@ -544,6 +575,40 @@ export const Showcase: Story = {
           </ul>
         </org-design-system-demo-expected-behaviour>
 
+        <story-tooltip-placement-grid />
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>Side</strong>: top / bottom / left / right control which side of the trigger the tooltip lands on</li>
+            <li><strong>Alignment</strong>: -start anchors to the trigger's pre edge, -end to the post edge, no suffix centers</li>
+            <li><strong>Arrow</strong>: tracks the resolved placement; if auto-flip changes the side, the arrow re-orients to keep pointing at the trigger</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header
+            slot="header"
+            title="Scroll tracking"
+            description="Tests overlay reposition during page scroll — the tooltip should stay anchored to the right-center of the trigger as you scroll the page."
+          />
+          <org-design-system-demo-canvas slot="canvas">
+            <org-tooltip placement="right">
+              <div class="h-lg w-fit border border-dashed border-soft rounded-base p-4 flex items-center justify-center font-mono">
+                Scroll me — 512px tall
+              </div>
+              <ng-template #tooltipContent>
+                <org-tooltip-content>Right-center tooltip — watch me as you scroll</org-tooltip-content>
+              </ng-template>
+            </org-tooltip>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>Anchor</strong>: overlay stays pinned to the right-center of the trigger as the page scrolls</li>
+            <li><strong>Reposition strategy</strong>: CDK's reposition fires on scroll / viewport changes so the tooltip never visually detaches from the trigger</li>
+            <li><strong>Auto-flip</strong>: still takes over if the trigger approaches the right viewport edge — flips to left</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
         <org-design-system-demo>
           <org-design-system-demo-header
             slot="header"
@@ -569,7 +634,7 @@ export const Showcase: Story = {
                 <ng-template #tooltipContent>
                   <org-tooltip-content size="sm">
                     Search
-                    <org-tooltip-kbd>&#8984;K</org-tooltip-kbd>
+                    <org-kbd>&#8984;K</org-kbd>
                   </org-tooltip-content>
                 </ng-template>
               </org-tooltip>
@@ -578,7 +643,7 @@ export const Showcase: Story = {
                 <ng-template #tooltipContent>
                   <org-tooltip-content>
                     Open command palette
-                    <org-tooltip-kbd>&#8984;K</org-tooltip-kbd>
+                    <org-kbd>&#8984;K</org-kbd>
                   </org-tooltip-content>
                 </ng-template>
               </org-tooltip>
@@ -589,47 +654,7 @@ export const Showcase: Story = {
           <ul class="list-inside list-disc flex flex-col gap-1">
             <li><strong>sm</strong>: 12px text, tighter padding — fits iconbar tooltips and inline labels</li>
             <li><strong>base</strong>: 13px text, default padding (default)</li>
-            <li><strong>kbd hint</strong>: Inline org-tooltip-kbd reads as a quiet inset pill; never bright fill</li>
-          </ul>
-        </org-design-system-demo-expected-behaviour>
-
-        <story-tooltip-placement-grid />
-        <org-design-system-demo-expected-behaviour>
-          <ul class="list-inside list-disc flex flex-col gap-1">
-            <li><strong>Side</strong>: top / bottom / left / right control which side of the trigger the tooltip lands on</li>
-            <li><strong>Alignment</strong>: -start anchors to the trigger's pre edge, -end to the post edge, no suffix centers</li>
-            <li><strong>Arrow</strong>: tracks the resolved placement; if auto-flip changes the side, the arrow re-orients to keep pointing at the trigger</li>
-          </ul>
-        </org-design-system-demo-expected-behaviour>
-
-        <org-design-system-demo>
-          <org-design-system-demo-header
-            slot="header"
-            title="Auto-flip"
-            description="When a tooltip would overflow the viewport on its preferred side, it flips to the opposite side. Hover the trigger near each container edge to see the flip behaviour."
-          />
-          <org-design-system-demo-canvas slot="canvas">
-            <div class="flex justify-between items-start gap-4">
-              <org-tooltip placement="left">
-                <org-button color="primary" label="Near left edge" />
-                <ng-template #tooltipContent>
-                  <org-tooltip-content>This tooltip prefers left but flips to right when there's no room</org-tooltip-content>
-                </ng-template>
-              </org-tooltip>
-              <org-tooltip placement="right">
-                <org-button color="primary" label="Near right edge" />
-                <ng-template #tooltipContent>
-                  <org-tooltip-content>This tooltip prefers right but flips to left when there's no room</org-tooltip-content>
-                </ng-template>
-              </org-tooltip>
-            </div>
-          </org-design-system-demo-canvas>
-        </org-design-system-demo>
-        <org-design-system-demo-expected-behaviour>
-          <ul class="list-inside list-disc flex flex-col gap-1">
-            <li><strong>Primary placement</strong>: requested via the placement input</li>
-            <li><strong>Fallback chain</strong>: opposite side, then center — guarantees the tooltip always renders on screen</li>
-            <li><strong>data-placement</strong>: brain writes the resolved value back so the arrow tracks the actually-rendered side</li>
+            <li><strong>kbd hint</strong>: Inline org-kbd reads as a quiet inset pill; never bright fill</li>
           </ul>
         </org-design-system-demo-expected-behaviour>
 
@@ -649,7 +674,7 @@ export const Showcase: Story = {
       imports: [
         Tooltip,
         TooltipContent,
-        TooltipKbd,
+        Kbd,
         TooltipTitle,
         TooltipBody,
         TooltipAction,

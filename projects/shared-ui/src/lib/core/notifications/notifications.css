@@ -6,7 +6,7 @@
     gap: var(--notification-stack-gap);
     width: var(--notification-stack-width);
     max-width: calc(100vw - (var(--notification-stack-inset) * 2));
-    z-index: var(--z-index-toast);
+    z-index: var(--notification-z-index);
     pointer-events: none;
   }
 

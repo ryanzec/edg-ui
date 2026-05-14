@@ -1,8 +1,9 @@
 @layer components {
   :host {
+    position: relative;
     display: flex;
     flex-direction: column;
-    background-color: var(--color-bg-app);
+    background-color: var(--color-bg-sidebar);
     border-right: var(--border-width) solid var(--color-border);
     min-width: var(--sizing-4xs);
     max-width: var(--sizing-4xs);
@@ -11,42 +12,162 @@
       max-width 200ms ease;
   }
 
+  :host([data-collapsed]) {
+    min-width: var(--sizing-9xs);
+    max-width: var(--sizing-9xs);
+  }
+
+  :host([data-collapsed]) ::ng-deep .list-item-content {
+    justify-content: center;
+  }
+
   .main-section {
     flex: 1;
     display: flex;
     flex-direction: column;
     gap: var(--spacing-3);
+    overflow: hidden;
   }
 
-  .logo-toggle {
+  /* workspace header */
+  .workspace-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    width: 100%;
+    padding: var(--spacing-2);
+    background: transparent;
+    border: none;
+    border-bottom: var(--border-width) solid var(--color-border);
+    color: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .workspace-header:is(:hover, :focus-visible) {
+    background-color: var(--color-bg-hover);
+  }
+
+  .workspace-icon {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
+    width: var(--sizing-10xs);
+    height: var(--sizing-10xs);
+    border-radius: var(--radius-sm);
+    background-color: var(--color-bg-surface);
+    color: var(--color-fg);
+    font-weight: var(--font-weight-semibold);
+    overflow: hidden;
+  }
+
+  .workspace-icon-image {
     width: 100%;
-    height: var(--sizing-9xs);
-    padding: var(--spacing-2);
-    border-bottom: var(--border-width) solid var(--color-border);
+    height: 100%;
+    object-fit: cover;
   }
 
-  .logo {
-    max-width: 100%;
-    max-height: 100%;
-    width: auto;
-    height: auto;
+  .workspace-icon-label {
+    font-size: var(--font-size-sm);
   }
 
+  .workspace-text {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .workspace-name {
+    font-weight: var(--font-weight-semibold);
+    font-size: var(--font-size-sm);
+    color: var(--color-fg);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .workspace-plan {
+    font-size: var(--font-size-xs);
+    color: var(--color-fg-muted);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .workspace-chevron {
+    flex-shrink: 0;
+    color: var(--color-fg-muted);
+  }
+
+  /* nav list */
   .nav {
     flex: 1;
+    overflow-y: auto;
   }
 
+  /* expandable group */
+  .nav-group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .nav-group-chevron {
+    color: var(--color-fg-muted);
+  }
+
+  .nav-sub-list {
+    position: relative;
+    padding-left: var(--spacing-5);
+  }
+
+  /* vertical guide rail to the left of nested sub-items */
+  .nav-sub-list::before {
+    content: '';
+    position: absolute;
+    top: var(--spacing-1);
+    bottom: var(--spacing-1);
+    left: var(--spacing-3);
+    width: var(--border-width);
+    background-color: var(--color-border);
+  }
+
+  /* right-edge collapse handle */
+  .collapse-handle {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translate(50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--sizing-11xs);
+    height: var(--sizing-10xs);
+    padding: 0;
+    background-color: var(--color-bg-surface);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-pill);
+    color: var(--color-fg-muted);
+    cursor: pointer;
+    z-index: 1;
+  }
+
+  .collapse-handle:is(:hover, :focus-visible) {
+    color: var(--color-fg);
+    background-color: var(--color-bg-hover);
+  }
+
+  /* settings */
   .settings-section {
-    margin-top: auto;
+    border-top: var(--border-width) solid var(--color-border);
   }
 
-  .logout-text {
-    font-weight: var(--font-weight-medium);
+  .settings-chevron {
+    color: var(--color-fg-muted);
   }
 
+  /* user section */
   .user-section {
     display: flex;
     flex-direction: column;
@@ -55,42 +176,12 @@
     border-top: var(--border-width) solid var(--color-border);
   }
 
-  .sr-only {
-    position: absolute;
-    width: 0.0625rem; /* 1px */
-    height: 0.0625rem; /* 1px */
-    padding: 0;
-    margin: -0.0625rem; /* 1px */
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border-width: 0;
+  /* collapsed adjustments — hide labels but keep them accessible */
+  :host([data-collapsed]) .workspace-header {
+    justify-content: center;
   }
 
-  :host([data-collapsed]) {
-    min-width: var(--sizing-9xs);
-    max-width: var(--sizing-9xs);
-  }
-
-  .logo-toggle .toggle-icon {
+  :host([data-collapsed]) .nav-sub-list {
     display: none;
-  }
-
-  /* when no logo is provided, the toggle icon is always visible */
-  .logo-toggle:not([data-has-logo]) .logo {
-    display: none;
-  }
-
-  .logo-toggle:not([data-has-logo]) .toggle-icon {
-    display: flex;
-  }
-
-  /* when a logo is provided, the icon replaces the logo on hover / focus */
-  .logo-toggle[data-has-logo]:is(:hover, :focus-visible) .logo {
-    display: none;
-  }
-
-  .logo-toggle[data-has-logo]:is(:hover, :focus-visible) .toggle-icon {
-    display: flex;
   }
 }

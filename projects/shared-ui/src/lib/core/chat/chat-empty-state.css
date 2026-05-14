@@ -5,28 +5,28 @@
     align-items: center;
     justify-content: center;
     text-align: center;
-    gap: var(--spacing-3);
-    min-height: 15rem; /* 240px */
-    padding: var(--spacing-4);
+    gap: var(--chat-empty-state-gap);
+    min-height: var(--chat-empty-state-min-height);
+    padding: var(--chat-empty-state-padding);
   }
 
   .empty-state-icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    color: var(--color-fg-muted);
+    color: var(--chat-empty-state-icon-fg);
   }
 
   .empty-state-heading {
-    font-size: var(--font-size-xl);
-    font-weight: var(--font-weight-semibold);
+    font-size: var(--chat-empty-state-heading-font-size);
+    font-weight: var(--chat-empty-state-heading-font-weight);
     margin: 0;
   }
 
   .empty-state-copy {
-    color: var(--color-fg-muted);
-    font-size: var(--font-size-sm);
+    color: var(--chat-empty-state-copy-fg);
+    font-size: var(--chat-empty-state-copy-font-size);
     margin: 0;
-    max-width: 28rem; /* 448px */
+    max-width: var(--chat-empty-state-copy-max-width);
   }
 }

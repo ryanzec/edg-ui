@@ -1,13 +1,6 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-
 /**
- * a quiet inset pill rendered inline after a label tooltip's text. presents a keyboard shortcut hint without
- * competing visually with the label.
+ * thin re-export preserved so existing imports of `TooltipKbd` keep resolving after the kbd primitive
+ * was promoted out of the tooltip folder. consumers should prefer the `Kbd` export and `<org-kbd>`
+ * selector going forward.
  */
-@Component({
-  selector: 'org-tooltip-kbd',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  template: '<kbd><ng-content /></kbd>',
-  styleUrl: './tooltip-kbd.css',
-})
-export class TooltipKbd {}
+export { Kbd as TooltipKbd } from '../kbd/kbd';

@@ -1,13 +1,13 @@
 ---
 name: component-development
-description: Use this skill when being prompted to work on an Angular component.
+description: Use this skill when being prompted to work on an Angular component in any way. This is includes rules for all type of component development with header describe which section are relavent when dealing with code in certain locations.
 ---
 
 # Definitions
 - Brain Component - A foundation loe level component devoid of styling located in `projects/shared-ui/src/lib/brain`. 
 - Core Component - A foundation low level component located in `projects/shared-ui/src/lib/core` that sometimes is paired with brain component.
 
-# IMPORTANT Componen tUse Case Patterns
+# IMPORTANT Component Use Case Patterns
 - `.claude/rules/use-cases/angular-content-projection.md`
 - `.claude/rules/use-cases/css-local-variables.md`
 - `.claude/rules/use-cases/detected-output-has-listener.md`
@@ -33,6 +33,9 @@ The rules in this section must **ONLY** be applied to core components.
 - Logic: Must be stripped of complex business logic. It should only contain the properties necessary to bridge the Brain component's API to the template.
 - Styling: Retains all the CSS/SCSS and structural HTML.
 - Integration: Must import and internally utilize the new Brain component to function.
+
+# General Rules
+- **ALWAYS** choose inference over duplication of inputs (instead of having both a `clickable` input() and `clicked` output(), just have a clicked subject+ `outputFromObservable()` to be able to infer `clickable`)
 
 # Storybook Management
 

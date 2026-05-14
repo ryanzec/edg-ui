@@ -1,34 +1,31 @@
 @layer components {
   :host {
-    --_width: var(--dialog-default-width);
-    --_radius: var(--dialog-radius);
-    --_motion-transform-from: scale(0.97) translateY(0.25rem);
-
     position: relative;
     display: flex;
     flex-direction: column;
-    width: var(--_width);
+    width: var(--dialog-width);
     max-width: 100%;
     min-height: var(--dialog-min-height);
     max-height: var(--dialog-max-vh);
     background-color: var(--dialog-bg);
     color: var(--dialog-fg);
     border: var(--border-width) solid var(--dialog-border);
-    border-radius: var(--_radius);
+    border-radius: var(--dialog-radius);
     overflow: hidden;
     animation: dialog-panel-enter var(--dialog-motion-duration) var(--dialog-motion-ease);
   }
 
   /* sharp corners when [data-rounded] is omitted */
   :host(:not([data-rounded])) {
-    --_radius: 0;
+    --dialog-radius: var(--dialog-radius-none);
   }
 
   /* drawer (left / right): full-height edge panel using drawer width */
   :host([data-position='left']),
   :host([data-position='right']) {
-    --_width: var(--dialog-drawer-width);
-    --_radius: 0;
+    --dialog-width: var(--dialog-drawer-width);
+    --dialog-radius: var(--dialog-radius-none);
+
     height: 100vh;
     max-height: 100vh;
     border: 0;
@@ -36,13 +33,13 @@
 
   /* drawer/sheet only carry a border on the side facing the viewport interior */
   :host([data-position='left']) {
-    --_motion-transform-from: translateX(calc(var(--dialog-motion-shift) * -1));
+    --dialog-motion-transform-from: translateX(calc(var(--dialog-motion-shift) * -1));
 
     border-right: var(--border-width) solid var(--dialog-border);
   }
 
   :host([data-position='right']) {
-    --_motion-transform-from: translateX(var(--dialog-motion-shift));
+    --dialog-motion-transform-from: translateX(var(--dialog-motion-shift));
 
     border-left: var(--border-width) solid var(--dialog-border);
   }
@@ -50,39 +47,39 @@
   /* sheet (top / bottom): full-width banner panel using sheet height */
   :host([data-position='top']),
   :host([data-position='bottom']) {
-    --_width: 100vw;
-    --_radius: 0;
+    --dialog-width: 100vw;
+    --dialog-radius: var(--dialog-radius-none);
+
     height: var(--dialog-sheet-height);
     max-width: 100vw;
     border: 0;
   }
 
   :host([data-position='top']) {
-    --_motion-transform-from: translateY(calc(var(--dialog-motion-shift) * -1));
+    --dialog-motion-transform-from: translateY(calc(var(--dialog-motion-shift) * -1));
 
     border-bottom: var(--border-width) solid var(--dialog-border);
   }
 
   :host([data-position='bottom']) {
-    --_motion-transform-from: translateY(var(--dialog-motion-shift));
+    --dialog-motion-transform-from: translateY(var(--dialog-motion-shift));
 
     border-top: var(--border-width) solid var(--dialog-border);
   }
 
   /* width override utility classes — drop on the dialog host to size beyond the position default */
   :host(.org-dialog-w-sm) {
-    --_width: var(--dialog-sm-width);
+    --dialog-width: var(--dialog-sm-width);
   }
 
   :host(.org-dialog-w-lg) {
-    --_width: var(--dialog-lg-width);
+    --dialog-width: var(--dialog-lg-width);
   }
 
   @media (prefers-reduced-motion: reduce) {
     :host {
-      --_motion-transform-from: none;
-
-      animation-duration: 0ms;
+      --dialog-motion-transform-from: none;
+      --dialog-motion-duration: 0ms;
     }
   }
 }

@@ -1,4 +1,7 @@
 :root {
+  /* root */
+  --checklist-color: var(--color-fg);
+
   /* layout */
   --checklist-row-padding-block: var(--spacing-1_5);
   --checklist-row-padding-inline: var(--spacing-2);
@@ -10,8 +13,6 @@
   --checklist-row-bg: transparent;
   --checklist-row-bg-hover: var(--color-bg-hover);
   --checklist-row-bg-active: var(--color-bg-active);
-  --checklist-row-focus-ring-width: var(--border-width-thick);
-  --checklist-row-focus-ring-color: var(--color-focus-ring);
 
   /* row transition */
   --checklist-row-transition-duration: var(--motion-duration-base);
@@ -29,6 +30,8 @@
   --checklist-status-icon-size: var(--spacing-4);
   --checklist-status-radius: var(--radius-pill);
   --checklist-status-bg: transparent;
+  --checklist-status-color: var(--checklist-status-color-not-started);
+  --checklist-status-line-height: var(--line-height-none);
 
   /* status colors per status */
   --checklist-status-color-not-started: var(--color-neutral);
@@ -48,6 +51,7 @@
   --checklist-count-radius: var(--radius-pill);
   --checklist-count-font-size: var(--font-size-2xs);
   --checklist-count-font-weight: var(--font-weight-medium);
+  --checklist-count-line-height: var(--line-height-none);
   --checklist-count-padding-block: 0;
   --checklist-count-padding-inline: var(--spacing-1_5);
   --checklist-count-min-width: var(--spacing-7);
@@ -57,7 +61,7 @@
   /* meta */
   --checklist-meta-color: var(--color-fg-faint);
   --checklist-meta-font-size: var(--font-size-xs);
-  --checklist-meta-line-height: 1;
+  --checklist-meta-line-height: var(--line-height-none);
 
   /* chevron */
   --checklist-chevron-size: var(--spacing-3_5);

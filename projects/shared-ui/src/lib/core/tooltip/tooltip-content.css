@@ -4,6 +4,7 @@
     align-items: var(--tooltip-align-items);
     flex-direction: var(--tooltip-flex-direction);
     gap: var(--tooltip-gap);
+    width: var(--tooltip-width);
     max-width: var(--tooltip-max-width);
     padding-block: var(--tooltip-padding-y);
     padding-inline: var(--tooltip-padding-x);
@@ -15,14 +16,18 @@
     font-size: var(--tooltip-font-size);
     font-weight: var(--tooltip-font-weight);
     line-height: var(--tooltip-line-height);
-    text-align: left;
-    white-space: normal;
-    text-wrap: pretty;
-    word-break: break-word;
+    text-align: var(--tooltip-text-align);
+    white-space: var(--tooltip-white-space);
+    text-wrap: var(--tooltip-text-wrap);
+    word-break: var(--tooltip-word-break);
     position: relative;
     z-index: var(--tooltip-z-index);
     pointer-events: var(--tooltip-pointer-events);
     user-select: none;
+
+    /* override kbd tokens within tooltip context so the pill remains legible on inverse surfaces */
+    --kbd-bg: var(--color-bg-inverse-soft);
+    --kbd-fg: var(--color-fg-inverse);
   }
 
   /* size variants — override slot tokens only */
@@ -38,83 +43,92 @@
     --tooltip-flex-direction: column;
     --tooltip-align-items: flex-start;
     --tooltip-gap: var(--tooltip-rich-gap);
+    --tooltip-width: var(--tooltip-rich-width);
     --tooltip-max-width: var(--tooltip-rich-max-width);
     --tooltip-pointer-events: auto;
-    width: max-content;
   }
 
   /* arrow: a 0.5rem square rotated 45deg, half-overlapping the surface body */
   :host::before {
     content: '';
+    display: var(--tooltip-arrow-display);
     position: absolute;
+    top: var(--tooltip-arrow-top);
+    bottom: var(--tooltip-arrow-bottom);
+    left: var(--tooltip-arrow-left);
+    right: var(--tooltip-arrow-right);
     width: var(--tooltip-arrow-size);
     height: var(--tooltip-arrow-size);
+    margin-left: var(--tooltip-arrow-margin-x);
+    margin-top: var(--tooltip-arrow-margin-y);
     background-color: var(--tooltip-bg);
     border-top: var(--tooltip-border-width) solid var(--tooltip-border);
     border-left: var(--tooltip-border-width) solid var(--tooltip-border);
-    transform: rotate(45deg);
+    transform: var(--tooltip-arrow-transform);
   }
 
-  :host([data-arrow='off'])::before {
-    display: none;
+  :host([data-arrow='off']) {
+    --tooltip-arrow-display: none;
   }
 
   /* arrow per-side positioning */
-  :host([data-placement^='top'])::before {
-    bottom: var(--tooltip-arrow-offset);
-    transform: rotate(225deg);
+  :host([data-placement^='top']) {
+    --tooltip-arrow-bottom: var(--tooltip-arrow-offset);
+    --tooltip-arrow-transform: rotate(225deg);
   }
 
-  :host([data-placement^='bottom'])::before {
-    top: var(--tooltip-arrow-offset);
-    transform: rotate(45deg);
+  :host([data-placement^='bottom']) {
+    --tooltip-arrow-top: var(--tooltip-arrow-offset);
+    --tooltip-arrow-transform: rotate(45deg);
   }
 
-  :host([data-placement^='left'])::before {
-    right: var(--tooltip-arrow-offset);
-    transform: rotate(135deg);
+  :host([data-placement^='left']) {
+    --tooltip-arrow-right: var(--tooltip-arrow-offset);
+    --tooltip-arrow-transform: rotate(135deg);
   }
 
-  :host([data-placement^='right'])::before {
-    left: var(--tooltip-arrow-offset);
-    transform: rotate(315deg);
+  :host([data-placement^='right']) {
+    --tooltip-arrow-left: var(--tooltip-arrow-offset);
+    --tooltip-arrow-transform: rotate(315deg);
   }
 
   /* arrow per-alignment x / y axis */
-  :host([data-placement='top'])::before,
-  :host([data-placement='bottom'])::before {
-    left: 50%;
-    margin-left: calc(var(--tooltip-arrow-size) / -2);
+  :host([data-placement='top']),
+  :host([data-placement='bottom']) {
+    --tooltip-arrow-left: 50%;
+    --tooltip-arrow-margin-x: calc(var(--tooltip-arrow-size) / -2);
   }
 
-  :host([data-placement='top-start'])::before,
-  :host([data-placement='bottom-start'])::before {
-    left: var(--tooltip-arrow-edge-inset);
+  :host([data-placement='top-start']),
+  :host([data-placement='bottom-start']) {
+    --tooltip-arrow-left: var(--tooltip-arrow-edge-inset);
   }
 
-  :host([data-placement='top-end'])::before,
-  :host([data-placement='bottom-end'])::before {
-    right: var(--tooltip-arrow-edge-inset);
+  :host([data-placement='top-end']),
+  :host([data-placement='bottom-end']) {
+    --tooltip-arrow-right: var(--tooltip-arrow-edge-inset);
   }
 
-  :host([data-placement='left'])::before,
-  :host([data-placement='right'])::before {
-    top: 50%;
-    margin-top: calc(var(--tooltip-arrow-size) / -2);
+  :host([data-placement='left']),
+  :host([data-placement='right']) {
+    --tooltip-arrow-top: 50%;
+    --tooltip-arrow-margin-y: calc(var(--tooltip-arrow-size) / -2);
   }
 
-  :host([data-placement='left-start'])::before,
-  :host([data-placement='right-start'])::before {
-    top: var(--tooltip-arrow-edge-inset);
+  :host([data-placement='left-start']),
+  :host([data-placement='right-start']) {
+    --tooltip-arrow-top: var(--tooltip-arrow-edge-inset);
   }
 
-  :host([data-placement='left-end'])::before,
-  :host([data-placement='right-end'])::before {
-    bottom: var(--tooltip-arrow-edge-inset);
+  :host([data-placement='left-end']),
+  :host([data-placement='right-end']) {
+    --tooltip-arrow-bottom: var(--tooltip-arrow-edge-inset);
   }
 
   /* state machine — only animates when data-state is present */
   :host([data-state]) {
+    opacity: var(--tooltip-opacity);
+    transform: var(--tooltip-transform);
     transition:
       opacity var(--tooltip-motion-duration) var(--tooltip-motion-ease),
       transform var(--tooltip-motion-duration) var(--tooltip-motion-ease);
@@ -122,19 +136,19 @@
 
   :host([data-state='closed']),
   :host([data-state='closing']) {
-    opacity: 0;
-    pointer-events: none;
+    --tooltip-opacity: 0;
+    --tooltip-pointer-events: none;
   }
 
   :host([data-state='open']) {
-    opacity: 1;
-    transform: translate(0, 0);
+    --tooltip-opacity: 1;
+    --tooltip-transform: translate(0, 0);
   }
 
   /* opening / closing: fade out, slide in from the trigger side */
   :host([data-state='opening']) {
-    opacity: 0;
-    transform: var(--tooltip-motion-enter-translate);
+    --tooltip-opacity: 0;
+    --tooltip-transform: var(--tooltip-motion-enter-translate);
   }
 
   :host([data-placement^='top'][data-state='opening']),
@@ -158,7 +172,7 @@
   }
 
   :host([data-state='closing']) {
-    transform: var(--tooltip-motion-enter-translate);
+    --tooltip-transform: var(--tooltip-motion-enter-translate);
   }
 
   /* respect reduced-motion preferences: keep the fade, drop the slide */
@@ -169,7 +183,7 @@
 
     :host([data-state='opening']),
     :host([data-state='closing']) {
-      transform: none;
+      --tooltip-transform: none;
     }
   }
 }

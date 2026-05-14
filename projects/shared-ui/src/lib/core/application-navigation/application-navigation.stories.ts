@@ -1,8 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/angular';
-import { ApplicationNavigation } from './application-navigation';
+import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
+import {
+  ApplicationNavigation,
+  type NavigationItem,
+  type SettingsMenuItem,
+  type Theme,
+} from './application-navigation';
 import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
 import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
-import { IconName } from '../../brain/icon-brain/icon-brain';
 
 const meta: Meta<ApplicationNavigation> = {
   title: 'Core/Components/Application Navigation',
@@ -15,49 +20,38 @@ const meta: Meta<ApplicationNavigation> = {
 <div class="docs-top-level-overview">
   ## Application Navigation Component
 
-  A vertical navigation sidebar component with customizable navigation items, settings menu, user display, and logo support.
+  A vertical navigation sidebar component with a workspace header, top-level and nested navigation items, indicator
+  badges, a right-edge collapse handle, a settings overlay menu (appearance toggle + items), and a user profile row.
 
   ### Features
-  - Customizable logo display
-  - Navigation items with icons and labels
-  - Settings dropdown menu powered by Angular CDK Menu
-  - User authentication display
-  - Logout functionality
-  - Full keyboard navigation support (Escape to close menus, arrow keys for menu items)
-  - Click-outside-to-close for settings menu
-  - Accessible with proper focus management and ARIA attributes
-
-  ### Key Capabilities
-  - **Logo**: Display custom logo image at the top
-  - **Navigation**: Clickable navigation items with icons and routing support
-  - **Settings**: Dropdown menu powered by CDK Menu with automatic keyboard navigation and accessibility
-  - **User Display**: Shows signed-in user name
-  - **Logout**: Dedicated logout button at the bottom
-  - **Keyboard Navigation**: Full support with Escape key and arrow keys via CDK Menu
+  - Workspace header with icon, name, plan, and switcher chevron
+  - Plain navigation items with optional numeric indicators
+  - Single-level expandable groups; nested sub-items render inline when expanded, or as an overlay menu when collapsed
+  - Right-edge collapse handle that flips between expand/collapse chevron
+  - Settings overlay menu with an optional theme toggle (Light / Dark / System) and a configurable list of items,
+    including a red destructive Sign out entry
+  - User profile row with avatar, name, optional email, and optional status indicator
+  - Full keyboard navigation support via Angular CDK Menu and CDK Tooltip
+  - Tooltips on every item when collapsed, with optional keyboard-shortcut hints rendered via &lt;org-kbd&gt;
 
   ### Usage Examples
   \`\`\`html
-  <!-- Basic usage -->
   <org-application-navigation
-    logo="path/to/logo.png"
-    userName="John Doe"
+    workspaceIconLabel="H"
+    workspaceName="Halcyon"
+    workspacePlan="Acme Inc · Pro"
     [navigationItems]="navItems"
-    [settingsMenuItems]="settings"
+    [settingsMenuItems]="settingsItems"
+    userName="Maya Brennan"
+    userEmail="maya@acme.co"
+    userStatusColor="safe"
+    [theme]="theme"
+    (themeChange)="theme = $event"
     (navigationItemClicked)="onNavClick($event)"
+    (subNavigationItemClicked)="onSubNavClick($event)"
     (settingsMenuItemClicked)="onSettingsClick($event)"
+    (workspaceClicked)="onWorkspaceClick()"
     (logout)="onLogout()"
-  />
-
-  <!-- Without logo -->
-  <org-application-navigation
-    userName="Jane Smith"
-    [navigationItems]="navItems"
-    (logout)="onLogout()"
-  />
-
-  <!-- Minimal configuration -->
-  <org-application-navigation
-    [navigationItems]="navItems"
   />
   \`\`\`
 </div>
@@ -70,86 +64,129 @@ const meta: Meta<ApplicationNavigation> = {
 export default meta;
 type Story = StoryObj<ApplicationNavigation>;
 
-const defaultNavigationItems = [
-  { id: '1', label: 'Dashboard', icon: 'circle' as IconName, routePath: '/dashboard' },
-  { id: '2', label: 'Projects', icon: 'circle-check-big' as IconName, routePath: '/projects' },
-  { id: '3', label: 'Tasks', icon: 'square-check-big' as IconName, routePath: '/tasks' },
-  { id: '4', label: 'Reports', icon: 'download' as IconName, routePath: '/reports' },
+const defaultNavigationItems: NavigationItem[] = [
+  { id: 'overview', label: 'Overview', icon: 'house', routePath: '/overview', shortcut: 'G O' },
+  { id: 'inbox', label: 'Inbox', icon: 'inbox', routePath: '/inbox', indicator: 3, shortcut: 'G I' },
+  {
+    id: 'projects',
+    label: 'Projects',
+    icon: 'folder',
+    shortcut: 'G P',
+    children: [
+      { id: 'projects-all', label: 'All projects', routePath: '/projects' },
+      { id: 'projects-active', label: 'Active', routePath: '/projects/active', indicator: 12 },
+      { id: 'projects-archived', label: 'Archived', routePath: '/projects/archived' },
+      { id: 'projects-templates', label: 'Templates', routePath: '/projects/templates' },
+    ],
+  },
+  { id: 'analytics', label: 'Analytics', icon: 'grid-2x2', routePath: '/analytics' },
+  { id: 'team', label: 'Team', icon: 'users', routePath: '/team' },
+  { id: 'docs', label: 'Docs', icon: 'file-text', routePath: '/docs' },
+  { id: 'billing', label: 'Billing', icon: 'credit-card', routePath: '/billing' },
 ];
 
-const defaultSettingsMenuItems = [
-  { id: '1', label: 'Profile Settings', icon: 'circle' as IconName },
-  { id: '2', label: 'Preferences', icon: 'cog' as IconName },
-  { id: '3', label: 'Help & Support', icon: 'mail' as IconName },
+const defaultSettingsItems: SettingsMenuItem[] = [
+  { id: 'workspace-settings', label: 'Workspace settings', icon: 'cog', shortcut: '⌘,' },
+  { id: 'account', label: 'Account', icon: 'at-sign' },
+  { id: 'shortcuts', label: 'Keyboard shortcuts', icon: 'sparkles', shortcut: '?' },
+  { id: 'help', label: 'Help & docs', icon: 'circle-help' },
+  { id: 'signout-divider', type: 'divider' },
+  { id: 'signout', label: 'Sign out', icon: 'log-out', color: 'danger' },
 ];
+
+const settingsItemsWithDivider: SettingsMenuItem[] = [
+  { id: 'workspace-settings', label: 'Workspace settings', icon: 'cog', shortcut: '⌘,' },
+  { id: 'account', label: 'Account', icon: 'at-sign' },
+  { id: 'shortcuts', label: 'Keyboard shortcuts', icon: 'sparkles', shortcut: '?' },
+  { id: 'help', label: 'Help & docs', icon: 'circle-help' },
+];
+
+@Component({
+  selector: 'story-application-navigation-host',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [ApplicationNavigation],
+  styles: [
+    `
+      :host {
+        display: block;
+        height: 100vh;
+      }
+      .layout {
+        display: flex;
+        height: 100%;
+      }
+      .canvas {
+        flex: 1;
+        padding: var(--spacing-3);
+        color: var(--color-fg-muted);
+      }
+    `,
+  ],
+  template: `
+    <div class="layout">
+      <org-application-navigation
+        workspaceIconLabel="H"
+        workspaceName="Halcyon"
+        workspacePlan="Acme Inc · Pro"
+        [navigationItems]="navigationItems"
+        [settingsMenuItems]="settingsItems"
+        [collapsed]="collapsed()"
+        (collapsedChange)="collapsed.set($event)"
+        [theme]="theme()"
+        (themeChange)="theme.set($event)"
+        userName="Maya Brennan"
+        userEmail="maya@acme.co"
+        userStatusColor="safe"
+        (workspaceClicked)="onWorkspaceClicked()"
+        (navigationItemClicked)="onNavigationItemClicked($event)"
+        (subNavigationItemClicked)="onSubNavigationItemClicked($event)"
+        (settingsMenuItemClicked)="onSettingsMenuItemClicked($event)"
+        (logout)="onLogout()"
+      />
+      <div class="canvas">Page content</div>
+    </div>
+  `,
+})
+class ApplicationNavigationHostStory {
+  protected readonly navigationItems = defaultNavigationItems;
+  protected readonly settingsItems = defaultSettingsItems;
+  protected readonly collapsed = signal<boolean>(false);
+  protected readonly theme = signal<Theme | undefined>('dark');
+
+  protected onWorkspaceClicked(): void {
+    console.log('workspace clicked');
+  }
+
+  protected onNavigationItemClicked(item: NavigationItem): void {
+    console.log('navigation clicked', item);
+  }
+
+  protected onSubNavigationItemClicked(subItem: unknown): void {
+    console.log('sub navigation clicked', subItem);
+  }
+
+  protected onSettingsMenuItemClicked(item: SettingsMenuItem): void {
+    console.log('settings clicked', item);
+  }
+
+  protected onLogout(): void {
+    console.log('logout');
+  }
+}
 
 export const Default: Story = {
-  args: {
-    logo: 'https://placehold.co/225x60/4F46E5/white?text=Logo',
-    userName: 'John Doe',
-    navigationItems: defaultNavigationItems,
-    settingsMenuItems: defaultSettingsMenuItems,
-    collapsed: false,
-  },
-  argTypes: {
-    logo: {
-      control: 'text',
-      description: 'URL or path to the logo image',
-    },
-    userName: {
-      control: 'text',
-      description: 'Name of the currently logged in user',
-    },
-    navigationItems: {
-      control: 'object',
-      description: 'Array of navigation items for the sidebar',
-    },
-    settingsMenuItems: {
-      control: 'object',
-      description: 'Array of settings menu items',
-    },
-    collapsed: {
-      control: 'boolean',
-      description: 'Whether the navigation starts in its collapsed icon-only state',
-    },
-  },
   parameters: {
     docs: {
       description: {
         story:
-          'Default application navigation with all features. Use the controls below to interact with the component.',
+          'Default application navigation matching the reference design — workspace header, plain items with badges, an expandable Projects group, settings overlay menu with appearance toggle and Sign out, and a user row with status dot.',
       },
     },
   },
-  render: (args) => ({
-    props: {
-      ...args,
-      onNavigationClick: (item: any) => {
-        console.log('Navigation clicked:', item);
-      },
-      onSettingsClick: (item: any) => {
-        console.log('Settings clicked:', item);
-      },
-      onLogout: () => {
-        console.log('Logout clicked');
-      },
-    },
-    template: `
-      <div class="h-screen">
-        <org-application-navigation
-          [logo]="logo"
-          [userName]="userName"
-          [navigationItems]="navigationItems"
-          [settingsMenuItems]="settingsMenuItems"
-          [collapsed]="collapsed"
-          (navigationItemClicked)="onNavigationClick($event)"
-          (settingsMenuItemClicked)="onSettingsClick($event)"
-          (logout)="onLogout()"
-        />
-      </div>
-    `,
+  render: () => ({
+    template: `<story-application-navigation-host />`,
     moduleMetadata: {
-      imports: [ApplicationNavigation],
+      imports: [ApplicationNavigationHostStory],
     },
   }),
 };
@@ -159,25 +196,30 @@ export const CollapsedState: Story = {
     docs: {
       description: {
         story:
-          'Navigation rendered in the collapsed icon-only state. Nav items, settings, logout and user avatar show tooltips on hover. Hovering the logo bar reveals the expand chevron.',
+          'Navigation rendered in the collapsed icon-only state. Nav items show tooltips on hover; expandable groups open as overlay menus next to the icon.',
       },
     },
   },
   render: () => ({
     template: `
-      <div class="h-screen">
+      <div style="height: 100vh; display: flex;">
         <org-application-navigation
-          logo="https://placehold.co/225x60/4F46E5/white?text=Logo"
-          userName="John Doe"
+          workspaceIconLabel="H"
+          workspaceName="Halcyon"
+          workspacePlan="Acme Inc · Pro"
           [navigationItems]="navigationItems"
-          [settingsMenuItems]="settingsMenuItems"
+          [settingsMenuItems]="settingsItems"
+          userName="Maya Brennan"
+          userEmail="maya@acme.co"
+          userStatusColor="safe"
+          theme="dark"
           [collapsed]="true"
         />
       </div>
     `,
     props: {
       navigationItems: defaultNavigationItems,
-      settingsMenuItems: defaultSettingsMenuItems,
+      settingsItems: defaultSettingsItems,
     },
     moduleMetadata: {
       imports: [ApplicationNavigation],
@@ -190,7 +232,7 @@ export const CollapseExpandComparison: Story = {
     docs: {
       description: {
         story:
-          'Side-by-side comparison of the expanded and collapsed states, including the no-logo variant where the toggle chevron is always visible.',
+          'Side-by-side comparison of the expanded and collapsed states. The right-edge handle toggles between the two.',
       },
     },
   },
@@ -198,54 +240,52 @@ export const CollapseExpandComparison: Story = {
     template: `
       <org-storybook-example-container
         title="Collapse / Expand States"
-        currentState="Expanded, collapsed, and no-logo collapsed variants"
+        currentState="Expanded and collapsed variants"
       >
         <org-storybook-example-container-section label="Expanded (default)">
-          <div class="h-sm">
+          <div style="height: 32rem; display: flex;">
             <org-application-navigation
-              logo="https://placehold.co/225x60/4F46E5/white?text=Logo"
-              userName="John Doe"
+              workspaceIconLabel="H"
+              workspaceName="Halcyon"
+              workspacePlan="Acme Inc · Pro"
               [navigationItems]="navigationItems"
-              [settingsMenuItems]="settingsMenuItems"
+              [settingsMenuItems]="settingsItems"
+              userName="Maya Brennan"
+              userEmail="maya@acme.co"
+              userStatusColor="safe"
+              theme="dark"
             />
           </div>
         </org-storybook-example-container-section>
 
         <org-storybook-example-container-section label="Collapsed">
-          <div class="h-sm">
+          <div style="height: 32rem; display: flex;">
             <org-application-navigation
-              logo="https://placehold.co/225x60/4F46E5/white?text=Logo"
-              userName="John Doe"
+              workspaceIconLabel="H"
+              workspaceName="Halcyon"
+              workspacePlan="Acme Inc · Pro"
               [navigationItems]="navigationItems"
-              [settingsMenuItems]="settingsMenuItems"
-              [collapsed]="true"
-            />
-          </div>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Collapsed Without Logo">
-          <div class="h-sm">
-            <org-application-navigation
-              userName="John Doe"
-              [navigationItems]="navigationItems"
-              [settingsMenuItems]="settingsMenuItems"
+              [settingsMenuItems]="settingsItems"
+              userName="Maya Brennan"
+              userEmail="maya@acme.co"
+              userStatusColor="safe"
+              theme="dark"
               [collapsed]="true"
             />
           </div>
         </org-storybook-example-container-section>
 
         <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li>Width transitions smoothly between expanded and collapsed states</li>
-          <li>Hovering or focusing the logo bar swaps the logo for the collapse / expand chevron</li>
-          <li>When no logo is provided, the chevron is always visible in the logo bar</li>
-          <li>Collapsed nav items, settings, logout and user show tooltips on hover for accessibility</li>
-          <li>Labels are visually hidden but remain in the accessibility tree for screen readers</li>
+          <li>Width transitions smoothly between expanded and collapsed states via the right-edge handle</li>
+          <li>Workspace header collapses to just the icon when in collapsed state</li>
+          <li>Plain items show tooltips on hover when collapsed; expandable groups open an overlay menu instead</li>
+          <li>The user avatar status dot remains visible in both states</li>
         </ul>
       </org-storybook-example-container>
     `,
     props: {
       navigationItems: defaultNavigationItems,
-      settingsMenuItems: defaultSettingsMenuItems,
+      settingsItems: defaultSettingsItems,
     },
     moduleMetadata: {
       imports: [ApplicationNavigation, StorybookExampleContainer, StorybookExampleContainerSection],
@@ -253,217 +293,89 @@ export const CollapseExpandComparison: Story = {
   }),
 };
 
-export const NavigationVariants: Story = {
+export const NestedNavigation: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Comparison of different navigation item configurations.',
+        story:
+          'Demonstrates the expandable group with one level of nested sub-items. Clicking the group toggles inline expansion; the vertical guide rail to the left of sub-items signals hierarchy.',
       },
     },
   },
   render: () => ({
     template: `
-      <org-storybook-example-container
-        title="Navigation Variants"
-        currentState="Different navigation item configurations"
-      >
-        <org-storybook-example-container-section label="Minimal Navigation">
-          <div class="h-sm">
-            <org-application-navigation
-              [navigationItems]="minimalNav"
-              [settingsMenuItems]="settingsMenuItems"
-              userName="User Name"
-            />
-          </div>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Standard Navigation">
-          <div class="h-sm">
-            <org-application-navigation
-              [navigationItems]="standardNav"
-              [settingsMenuItems]="settingsMenuItems"
-              userName="User Name"
-            />
-          </div>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Extended Navigation">
-          <div class="h-sm">
-            <org-application-navigation
-              [navigationItems]="extendedNav"
-              [settingsMenuItems]="settingsMenuItems"
-              userName="User Name"
-            />
-          </div>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li>Navigation items support icons and labels</li>
-          <li>Hover states provide visual feedback</li>
-          <li>Focus states support keyboard navigation</li>
-          <li>Items preserve href for right-click and cmd+click</li>
-          <li>Navigation list scrolls when content exceeds available space</li>
-        </ul>
-      </org-storybook-example-container>
+      <div style="height: 32rem; display: flex;">
+        <org-application-navigation
+          workspaceIconLabel="H"
+          workspaceName="Halcyon"
+          [navigationItems]="navigationItems"
+          [settingsMenuItems]="settingsItems"
+          userName="Maya Brennan"
+          userEmail="maya@acme.co"
+          userStatusColor="safe"
+          theme="dark"
+        />
+      </div>
     `,
     props: {
-      minimalNav: [
-        { id: '1', label: 'Home', icon: 'circle' as IconName, routePath: '/home' },
-        { id: '2', label: 'Settings', icon: 'cog' as IconName, routePath: '/settings' },
-      ],
-      standardNav: defaultNavigationItems,
-      extendedNav: [
-        { id: '1', label: 'Dashboard', icon: 'circle' as IconName, routePath: '/dashboard' },
-        { id: '2', label: 'Projects', icon: 'circle-check-big' as IconName, routePath: '/projects' },
-        { id: '3', label: 'Tasks', icon: 'square-check-big' as IconName, routePath: '/tasks' },
-        { id: '4', label: 'Calendar', icon: 'mail' as IconName, routePath: '/calendar' },
-        { id: '5', label: 'Reports', icon: 'download' as IconName, routePath: '/reports' },
-        { id: '6', label: 'Analytics', icon: 'arrow-down-up' as IconName, routePath: '/analytics' },
-        { id: '7', label: 'Team', icon: 'eye' as IconName, routePath: '/team' },
-        { id: '8', label: 'Settings', icon: 'cog' as IconName, routePath: '/settings' },
-      ],
-      settingsMenuItems: defaultSettingsMenuItems,
+      navigationItems: defaultNavigationItems,
+      settingsItems: defaultSettingsItems,
     },
     moduleMetadata: {
-      imports: [ApplicationNavigation, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [ApplicationNavigation],
     },
   }),
 };
 
-export const SettingsMenuVariants: Story = {
+export const AppearanceToggle: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Comparison of different settings menu configurations.',
+        story:
+          'When the `theme` model has a value, the settings overlay menu shows an Appearance section with a Light / Dark / System button toggle. Omitting the input hides the section entirely.',
       },
     },
   },
   render: () => ({
     template: `
       <org-storybook-example-container
-        title="Settings Menu Variants"
-        currentState="Different settings menu configurations"
+        title="Appearance Toggle"
+        currentState="Theme model controlling the appearance section"
       >
-        <org-storybook-example-container-section label="Standard Settings">
-          <div class="h-sm">
+        <org-storybook-example-container-section label="With theme (appearance section visible)">
+          <div style="height: 24rem; display: flex;">
             <org-application-navigation
+              workspaceIconLabel="H"
+              workspaceName="Halcyon"
               [navigationItems]="navigationItems"
-              [settingsMenuItems]="standardSettings"
-              userName="User Name"
+              [settingsMenuItems]="settingsItems"
+              userName="Maya Brennan"
+              theme="dark"
             />
           </div>
         </org-storybook-example-container-section>
 
-        <org-storybook-example-container-section label="Extended Settings">
-          <div class="h-sm">
+        <org-storybook-example-container-section label="Without theme (appearance section hidden)">
+          <div style="height: 24rem; display: flex;">
             <org-application-navigation
+              workspaceIconLabel="H"
+              workspaceName="Halcyon"
               [navigationItems]="navigationItems"
-              [settingsMenuItems]="extendedSettings"
-              userName="User Name"
-            />
-          </div>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Minimal Settings">
-          <div class="h-sm">
-            <org-application-navigation
-              [navigationItems]="navigationItems"
-              [settingsMenuItems]="minimalSettings"
-              userName="User Name"
+              [settingsMenuItems]="settingsItems"
+              userName="Maya Brennan"
             />
           </div>
         </org-storybook-example-container-section>
 
         <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li>Settings menu opens on button click (CDK Menu)</li>
-          <li>Menu closes when clicking outside (CDK Menu)</li>
-          <li>Menu closes when pressing Escape key (CDK Menu)</li>
-          <li>Menu closes after selecting an item (CDK Menu)</li>
-          <li>Arrow keys navigate between menu items (CDK Menu)</li>
-          <li>Settings menu items support icons</li>
+          <li>Opening Settings shows / hides the appearance section based on whether theme is supplied</li>
+          <li>Picking a theme emits a model change that the parent can persist</li>
         </ul>
       </org-storybook-example-container>
     `,
     props: {
       navigationItems: defaultNavigationItems,
-      standardSettings: defaultSettingsMenuItems,
-      extendedSettings: [
-        { id: '1', label: 'Profile', icon: 'circle' as IconName },
-        { id: '2', label: 'Account Settings', icon: 'cog' as IconName },
-        { id: '3', label: 'Notifications', icon: 'mail' as IconName },
-        { id: '4', label: 'Privacy', icon: 'eye' as IconName },
-        { id: '5', label: 'Security', icon: 'circle-check-big' as IconName },
-        { id: '6', label: 'Help Center', icon: 'circle' as IconName },
-      ],
-      minimalSettings: [
-        { id: '1', label: 'Settings', icon: 'cog' as IconName },
-        { id: '2', label: 'Help', icon: 'mail' as IconName },
-      ],
-    },
-    moduleMetadata: {
-      imports: [ApplicationNavigation, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const WithAndWithoutLogo: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'Comparison of navigation with and without logo.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Logo Variants"
-        currentState="With and without logo configurations"
-      >
-        <org-storybook-example-container-section label="With Logo">
-          <div class="h-sm">
-            <org-application-navigation
-              logo="https://placehold.co/225x60/10B981/white?text=AppLogo"
-              [navigationItems]="navigationItems"
-              [settingsMenuItems]="settingsMenuItems"
-              userName="John Doe"
-            />
-          </div>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Without Logo">
-          <div class="h-sm">
-            <org-application-navigation
-              logo=""
-              [navigationItems]="navigationItems"
-              [settingsMenuItems]="settingsMenuItems"
-              userName="John Doe"
-            />
-          </div>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Custom Logo">
-          <div class="h-sm">
-            <org-application-navigation
-              logo="https://placehold.co/225x60/EF4444/white?text=CustomApp"
-              [navigationItems]="navigationItems"
-              [settingsMenuItems]="settingsMenuItems"
-              userName="Jane Smith"
-            />
-          </div>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li>Logo section is hidden when no logo is provided</li>
-          <li>Navigation items move to the top when no logo is present</li>
-          <li>Logo accepts any valid image URL</li>
-          <li>Layout adjusts gracefully with or without logo</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    props: {
-      navigationItems: defaultNavigationItems,
-      settingsMenuItems: defaultSettingsMenuItems,
+      settingsItems: settingsItemsWithDivider,
     },
     moduleMetadata: {
       imports: [ApplicationNavigation, StorybookExampleContainer, StorybookExampleContainerSection],
@@ -475,7 +387,7 @@ export const UserDisplayVariants: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Comparison of different user display configurations.',
+        story: 'Variants of the bottom user row — with email + status, with just name, and with avatar image.',
       },
     },
   },
@@ -483,49 +395,59 @@ export const UserDisplayVariants: Story = {
     template: `
       <org-storybook-example-container
         title="User Display Variants"
-        currentState="Different user display configurations"
+        currentState="Different user row configurations"
       >
-        <org-storybook-example-container-section label="With User Name">
-          <div class="h-sm">
+        <org-storybook-example-container-section label="Name + email + status">
+          <div style="height: 24rem; display: flex;">
             <org-application-navigation
+              workspaceIconLabel="H"
+              workspaceName="Halcyon"
               [navigationItems]="navigationItems"
-              [settingsMenuItems]="settingsMenuItems"
-              userName="John Doe"
+              [settingsMenuItems]="settingsItems"
+              userName="Maya Brennan"
+              userEmail="maya@acme.co"
+              userStatusColor="safe"
             />
           </div>
         </org-storybook-example-container-section>
 
-        <org-storybook-example-container-section label="Without User Name">
-          <div class="h-sm">
+        <org-storybook-example-container-section label="Name only">
+          <div style="height: 24rem; display: flex;">
             <org-application-navigation
+              workspaceIconLabel="H"
+              workspaceName="Halcyon"
               [navigationItems]="navigationItems"
-              [settingsMenuItems]="settingsMenuItems"
-              userName=""
+              [settingsMenuItems]="settingsItems"
+              userName="Maya Brennan"
             />
           </div>
         </org-storybook-example-container-section>
 
-        <org-storybook-example-container-section label="Long User Name">
-          <div class="h-sm">
+        <org-storybook-example-container-section label="With avatar image">
+          <div style="height: 24rem; display: flex;">
             <org-application-navigation
+              workspaceIconLabel="H"
+              workspaceName="Halcyon"
               [navigationItems]="navigationItems"
-              [settingsMenuItems]="settingsMenuItems"
-              userName="Christopher Alexander Montgomery III"
+              [settingsMenuItems]="settingsItems"
+              userName="Maya Brennan"
+              userEmail="maya@acme.co"
+              userAvatarUrl="https://i.pravatar.cc/64?img=5"
+              userStatusColor="safe"
             />
           </div>
         </org-storybook-example-container-section>
 
         <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li>User name is displayed when provided</li>
-          <li>User section is hidden when no user name is provided</li>
-          <li>Long user names wrap appropriately</li>
-          <li>Logout button is always visible</li>
+          <li>The user row hides when userName is empty</li>
+          <li>userEmail renders as a sub-label under the name</li>
+          <li>userStatusColor pins a status dot to the bottom-right of the avatar</li>
         </ul>
       </org-storybook-example-container>
     `,
     props: {
       navigationItems: defaultNavigationItems,
-      settingsMenuItems: defaultSettingsMenuItems,
+      settingsItems: defaultSettingsItems,
     },
     moduleMetadata: {
       imports: [ApplicationNavigation, StorybookExampleContainer, StorybookExampleContainerSection],
@@ -537,7 +459,7 @@ export const EmptyStates: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Comparison of different empty state configurations.',
+        story: 'How the component renders when individual sections are empty.',
       },
     },
   },
@@ -548,138 +470,53 @@ export const EmptyStates: Story = {
         currentState="Different empty state configurations"
       >
         <org-storybook-example-container-section label="No Navigation Items">
-          <div class="h-sm">
+          <div style="height: 24rem; display: flex;">
             <org-application-navigation
-              logo="https://placehold.co/225x60/4F46E5/white?text=Logo"
-              userName="User Name"
+              workspaceIconLabel="H"
+              workspaceName="Halcyon"
+              userName="Maya Brennan"
               [navigationItems]="[]"
-              [settingsMenuItems]="settingsMenuItems"
+              [settingsMenuItems]="settingsItems"
             />
           </div>
         </org-storybook-example-container-section>
 
         <org-storybook-example-container-section label="No Settings Items">
-          <div class="h-sm">
+          <div style="height: 24rem; display: flex;">
             <org-application-navigation
-              logo="https://placehold.co/225x60/4F46E5/white?text=Logo"
-              userName="User Name"
+              workspaceIconLabel="H"
+              workspaceName="Halcyon"
+              userName="Maya Brennan"
               [navigationItems]="navigationItems"
               [settingsMenuItems]="[]"
             />
           </div>
         </org-storybook-example-container-section>
 
-        <org-storybook-example-container-section label="Minimal Configuration">
-          <div class="h-sm">
+        <org-storybook-example-container-section label="No User">
+          <div style="height: 24rem; display: flex;">
             <org-application-navigation
-              [navigationItems]="[]"
-              [settingsMenuItems]="[]"
+              workspaceIconLabel="H"
+              workspaceName="Halcyon"
+              [navigationItems]="navigationItems"
+              [settingsMenuItems]="settingsItems"
             />
           </div>
         </org-storybook-example-container-section>
 
         <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
           <li>Component gracefully handles empty data arrays</li>
-          <li>All sections remain functional with no data</li>
-          <li>Layout maintains structure without items</li>
-          <li>Settings button is hidden when no settings items are provided</li>
+          <li>Settings still renders the appearance toggle when theme is supplied even if no settingsMenuItems</li>
+          <li>The user row is hidden entirely when userName is empty</li>
         </ul>
       </org-storybook-example-container>
     `,
     props: {
       navigationItems: defaultNavigationItems,
-      settingsMenuItems: defaultSettingsMenuItems,
+      settingsItems: defaultSettingsItems,
     },
     moduleMetadata: {
       imports: [ApplicationNavigation, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const AriaCurrentPage: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Validates that the active navigation item has aria-current="page" set on the anchor element for screen reader accessibility.',
-      },
-    },
-  },
-  render: () => ({
-    template: `
-      <org-storybook-example-container
-        title="Aria Current Page"
-        currentState="Active navigation item should have aria-current=page on the anchor"
-      >
-        <org-storybook-example-container-section label="With Active Route">
-          <div class="h-sm">
-            <org-application-navigation
-              [navigationItems]="navigationItems"
-              [settingsMenuItems]="settingsMenuItems"
-              userName="User Name"
-            />
-          </div>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
-          <li>The anchor element of the active nav item must have aria-current="page"</li>
-          <li>Non-active nav items must not have aria-current set</li>
-          <li>Active state is detected automatically via RouterLinkActive — no manual isSelected binding needed</li>
-        </ul>
-      </org-storybook-example-container>
-    `,
-    props: {
-      navigationItems: defaultNavigationItems,
-      settingsMenuItems: defaultSettingsMenuItems,
-    },
-    moduleMetadata: {
-      imports: [ApplicationNavigation, StorybookExampleContainer, StorybookExampleContainerSection],
-    },
-  }),
-};
-
-export const InteractiveDemo: Story = {
-  args: {
-    logo: 'https://placehold.co/225x60/4F46E5/white?text=MyApp',
-    userName: 'Application User',
-    navigationItems: defaultNavigationItems,
-    settingsMenuItems: defaultSettingsMenuItems,
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: 'Interactive demo with event handlers logging to console. Open browser console to see events.',
-      },
-    },
-  },
-  render: (args) => ({
-    props: {
-      ...args,
-      onNavigationClick: (item: any) => {
-        console.log('Navigation item clicked:', item);
-      },
-      onSettingsClick: (item: any) => {
-        console.log('Settings item clicked:', item);
-      },
-      onLogout: () => {
-        console.log('Logout clicked');
-      },
-    },
-    template: `
-      <div class="h-screen">
-        <org-application-navigation
-          [logo]="logo"
-          [userName]="userName"
-          [navigationItems]="navigationItems"
-          [settingsMenuItems]="settingsMenuItems"
-          (navigationItemClicked)="onNavigationClick($event)"
-          (settingsMenuItemClicked)="onSettingsClick($event)"
-          (logout)="onLogout()"
-        />
-      </div>
-    `,
-    moduleMetadata: {
-      imports: [ApplicationNavigation],
     },
   }),
 };

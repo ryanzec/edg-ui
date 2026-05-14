@@ -5,6 +5,7 @@ import type { Meta, StoryObj } from '@storybook/angular';
 import { map } from 'rxjs';
 import { IconName } from '../../brain/icon-brain/icon-brain';
 import { ButtonToggle, ButtonToggleItem } from '../button-toggle/button-toggle';
+import { Card } from '../card/card';
 import { Input } from '../input/input';
 import { FormField } from '../form-fields/form-field';
 import { FormFields } from '../form-fields/form-fields';
@@ -19,11 +20,9 @@ import {
   CheckboxToggleColor,
   CheckboxToggleLabelPosition,
   CheckboxToggleSize,
-  CheckboxToggleVariant,
   allCheckboxToggleColors,
   allCheckboxToggleLabelPositions,
   allCheckboxToggleSizes,
-  allCheckboxToggleVariants,
 } from './checkbox-toggle';
 
 type LiveDemoIconChoice = 'none' | IconName;
@@ -37,12 +36,6 @@ const liveDemoSizeItems: ButtonToggleItem[] = allCheckboxToggleSizes.map((size) 
 const liveDemoColorItems: ButtonToggleItem[] = allCheckboxToggleColors.map((color) => ({
   label: color,
   value: color,
-  buttonColor: 'primary',
-}));
-
-const liveDemoVariantItems: ButtonToggleItem[] = allCheckboxToggleVariants.map((variant) => ({
-  label: variant,
-  value: variant,
   buttonColor: 'primary',
 }));
 
@@ -82,7 +75,6 @@ const meta: Meta<CheckboxToggle> = {
   ### Features
   - Three sizes: \`sm\`, \`base\` (default), \`lg\`
   - Three colors: \`primary\` (default), \`safe\` (positive on-state), \`danger\` (destructive on-state)
-  - Two variants: \`default\` (row), \`card\` (bordered tile)
   - Two label positions: \`end\` (default — track-pre) / \`start\` (label-pre)
   - Optional knob icons (\`iconOff\` / \`iconOn\`) that crossfade with state
   - Optional description sub-line beneath the label
@@ -108,15 +100,24 @@ const meta: Meta<CheckboxToggle> = {
     Two-factor authentication
   </org-checkbox-toggle>
 
-  <!-- Card variant (settings list) -->
-  <org-checkbox-toggle name="autosave" value="on" variant="card" description="Save changes as you type.">
-    Autosave
-  </org-checkbox-toggle>
-
   <!-- With knob icons -->
   <org-checkbox-toggle name="theme" value="dark" iconOff="eye-off" iconOn="eye">
     Visibility
   </org-checkbox-toggle>
+
+  <!-- Card-tile pattern: wrap with org-card and forward (clicked) to a toggle handler -->
+  <org-card (clicked)="autosaveOn.set(!autosaveOn())">
+    <org-checkbox-toggle
+      name="autosave"
+      value="on"
+      [checked]="autosaveOn()"
+      (checkedChange)="autosaveOn.set($event)"
+      labelPosition="start"
+      description="Save changes as you type."
+    >
+      Autosave
+    </org-checkbox-toggle>
+  </org-card>
 
   <!-- Reactive forms -->
   <form [formGroup]="myForm">
@@ -150,7 +151,6 @@ export const Default: Story = {
     disabled: false,
     size: 'base',
     color: 'primary',
-    variant: 'default',
     labelPosition: 'end',
     description: '',
     iconOff: undefined,
@@ -182,11 +182,6 @@ export const Default: Story = {
       control: 'select',
       options: allCheckboxToggleColors,
       description: 'Color variant — drives the on-state ramp',
-    },
-    variant: {
-      control: 'select',
-      options: allCheckboxToggleVariants,
-      description: 'Visual variant: default (row) or card (bordered tile)',
     },
     labelPosition: {
       control: 'select',
@@ -223,7 +218,6 @@ export const Default: Story = {
         [disabled]="disabled"
         [size]="size"
         [color]="color"
-        [variant]="variant"
         [labelPosition]="labelPosition"
         [description]="description"
         [iconOff]="iconOff"
@@ -271,7 +265,7 @@ export const Default: Story = {
         <org-design-system-demo-header
           slot="header"
           title="Live demo"
-          description="Toggle the inputs to walk every documented combination — label, description, size, color, variant, label-position, optional icon-off / icon-on, checked, disabled."
+          description="Toggle the inputs to walk every documented combination — label, description, size, color, label-position, optional icon-off / icon-on, checked, disabled."
         />
         <org-design-system-demo-controls slot="controls">
           <org-design-system-demo-control-group label="Label">
@@ -285,9 +279,6 @@ export const Default: Story = {
           </org-design-system-demo-control-group>
           <org-design-system-demo-control-group label="Color">
             <org-button-toggle [items]="colorItems" formControlName="color" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Variant">
-            <org-button-toggle [items]="variantItems" formControlName="variant" buttonSize="sm" />
           </org-design-system-demo-control-group>
           <org-design-system-demo-control-group label="Label position">
             <org-button-toggle [items]="labelPositionItems" formControlName="labelPosition" buttonSize="sm" />
@@ -316,7 +307,6 @@ export const Default: Story = {
               value="live-demo"
               [size]="liveDemoForm.controls.size.value"
               [color]="liveDemoForm.controls.color.value"
-              [variant]="liveDemoForm.controls.variant.value"
               [labelPosition]="liveDemoForm.controls.labelPosition.value"
               [checked]="liveDemoForm.controls.checked.value"
               [disabled]="liveDemoForm.controls.disabled.value"
@@ -335,7 +325,6 @@ export const Default: Story = {
 class CheckboxToggleLiveDemoStory {
   protected readonly sizeItems = liveDemoSizeItems;
   protected readonly colorItems = liveDemoColorItems;
-  protected readonly variantItems = liveDemoVariantItems;
   protected readonly labelPositionItems = liveDemoLabelPositionItems;
   protected readonly iconOffItems = liveDemoIconOffItems;
   protected readonly iconOnItems = liveDemoIconOnItems;
@@ -345,7 +334,6 @@ class CheckboxToggleLiveDemoStory {
     description: new FormControl<string>('Up to once a week.', { nonNullable: true }),
     size: new FormControl<CheckboxToggleSize>('base', { nonNullable: true }),
     color: new FormControl<CheckboxToggleColor>('primary', { nonNullable: true }),
-    variant: new FormControl<CheckboxToggleVariant>('default', { nonNullable: true }),
     labelPosition: new FormControl<CheckboxToggleLabelPosition>('end', { nonNullable: true }),
     iconOff: new FormControl<LiveDemoIconChoice>('none', { nonNullable: true }),
     iconOn: new FormControl<LiveDemoIconChoice>('none', { nonNullable: true }),
@@ -371,7 +359,7 @@ export const LiveDemo: Story = {
     docs: {
       description: {
         story:
-          'Fully interactive demo. Walk every combination — size, color, variant, label-position, icon-off / icon-on, checked, disabled — and edit the label / description text.',
+          'Fully interactive demo. Walk every combination — size, color, label-position, icon-off / icon-on, checked, disabled — and edit the label / description text.',
       },
     },
   },
@@ -382,6 +370,79 @@ export const LiveDemo: Story = {
     },
   }),
 };
+
+@Component({
+  selector: 'story-checkbox-toggle-card-section',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [Card, CheckboxToggle, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
+  template: `
+    <org-design-system-demo>
+      <org-design-system-demo-header
+        slot="header"
+        title="Card-tile pattern"
+        description="Wrap each toggle in org-card and bind (clicked) so the entire tile flips the switch underneath. This is the canonical settings-list pattern."
+      />
+      <org-design-system-demo-canvas slot="canvas">
+        <div class="flex flex-col gap-2 w-full">
+          <org-card (clicked)="toggle('autosave')">
+            <org-checkbox-toggle
+              name="card-autosave"
+              value="autosave"
+              labelPosition="start"
+              [checked]="settings().autosave"
+              (click)="$event.stopPropagation()"
+              (checkedChange)="setSetting('autosave', $event)"
+              description="Save changes as you type. Recover any version from the history."
+            >
+              Autosave
+            </org-checkbox-toggle>
+          </org-card>
+          <org-card (clicked)="toggle('slack')">
+            <org-checkbox-toggle
+              name="card-slack"
+              value="slack"
+              labelPosition="start"
+              [checked]="settings().slack"
+              (click)="$event.stopPropagation()"
+              (checkedChange)="setSetting('slack', $event)"
+              description="Send a message to #updates whenever a deploy succeeds or fails."
+            >
+              Slack notifications
+            </org-checkbox-toggle>
+          </org-card>
+          <org-card (clicked)="toggle('public')">
+            <org-checkbox-toggle
+              name="card-public"
+              value="public"
+              labelPosition="start"
+              [checked]="settings().public"
+              (click)="$event.stopPropagation()"
+              (checkedChange)="setSetting('public', $event)"
+              description="Anyone on the internet can view this workspace's contents and member list."
+            >
+              Public workspace
+            </org-checkbox-toggle>
+          </org-card>
+        </div>
+      </org-design-system-demo-canvas>
+    </org-design-system-demo>
+  `,
+})
+class CheckboxToggleCardSection {
+  protected readonly settings = signal<{ autosave: boolean; slack: boolean; public: boolean }>({
+    autosave: true,
+    slack: false,
+    public: false,
+  });
+
+  protected toggle(key: 'autosave' | 'slack' | 'public'): void {
+    this.settings.update((current) => ({ ...current, [key]: !current[key] }));
+  }
+
+  protected setSetting(key: 'autosave' | 'slack' | 'public', value: boolean): void {
+    this.settings.update((current) => ({ ...current, [key]: value }));
+  }
+}
 
 @Component({
   selector: 'story-checkbox-toggle-validation-section',
@@ -435,7 +496,7 @@ export const Showcase: Story = {
     docs: {
       description: {
         story:
-          'Comprehensive showcase of every checkbox-toggle variant axis — sizes, colors, states, label-position, knob icons, description sub-line, card variant, grouping, validation, and validation space reservation — in a single scrollable view.',
+          'Comprehensive showcase of every checkbox-toggle axis — sizes, colors, states, label-position, knob icons, description sub-line, card-tile pattern, grouping, validation, and validation space reservation — in a single scrollable view.',
       },
     },
   },
@@ -559,7 +620,7 @@ export const Showcase: Story = {
           <org-design-system-demo-header
             slot="header"
             title="Label position"
-            description="By default the track sits on the pre edge with the label post. Set labelPosition='start' to flip — useful for settings rows where the label takes the available width and the track sits at the post edge. (The card variant defaults to label-first — same idiom, no attribute needed.)"
+            description="By default the track sits on the pre edge with the label post. Set labelPosition='start' to flip — useful for settings rows where the label takes the available width and the track sits at the post edge."
           />
           <org-design-system-demo-canvas slot="canvas">
             <div class="flex flex-col gap-3">
@@ -675,47 +736,12 @@ export const Showcase: Story = {
           </ul>
         </org-design-system-demo-expected-behaviour>
 
-        <org-design-system-demo>
-          <org-design-system-demo-header
-            slot="header"
-            title="Card variant"
-            description="Wraps the row in a bordered tile — the canonical settings-list pattern. Card defaults to label-first (copy on the pre edge, track on the post edge); the whole tile is the hit target. When checked, the border picks up the on-color."
-          />
-          <org-design-system-demo-canvas slot="canvas">
-            <div class="flex flex-col gap-2 w-full">
-              <org-checkbox-toggle
-                name="card-autosave"
-                value="autosave"
-                variant="card"
-                [checked]="true"
-                description="Save changes as you type. Recover any version from the history."
-              >
-                Autosave
-              </org-checkbox-toggle>
-              <org-checkbox-toggle
-                name="card-slack"
-                value="slack"
-                variant="card"
-                description="Send a message to #updates whenever a deploy succeeds or fails."
-              >
-                Slack notifications
-              </org-checkbox-toggle>
-              <org-checkbox-toggle
-                name="card-public"
-                value="public"
-                variant="card"
-                description="Anyone on the internet can view this workspace's contents and member list."
-              >
-                Public workspace
-              </org-checkbox-toggle>
-            </div>
-          </org-design-system-demo-canvas>
-        </org-design-system-demo>
+        <story-checkbox-toggle-card-section />
         <org-design-system-demo-expected-behaviour>
           <ul class="list-inside list-disc flex flex-col gap-1">
-            <li>Each card is its own surface — border + background change on hover</li>
-            <li>Selected (checked) cards highlight their border with the chosen color</li>
-            <li>Combine with <strong>description</strong> to clarify what each setting controls</li>
+            <li>Wrap each toggle in <strong>org-card</strong> and bind its <strong>(clicked)</strong> output to flip the inner toggle</li>
+            <li>Card already supplies the bordered tile, hover/pressed tint, focus ring, and role=button affordance — no bespoke styling needed</li>
+            <li>Use <strong>labelPosition="start"</strong> on the toggle so the label fills the tile width and the track sits at the post edge — the settings-list idiom</li>
           </ul>
         </org-design-system-demo-expected-behaviour>
 
@@ -802,6 +828,7 @@ export const Showcase: Story = {
         CheckboxToggle,
         FormFields,
         FormField,
+        CheckboxToggleCardSection,
         CheckboxToggleValidationSection,
         DesignSystemDemo,
         DesignSystemDemoHeader,

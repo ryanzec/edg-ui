@@ -8,8 +8,8 @@
     align-items: center;
     justify-content: space-between;
     gap: var(--calendar-header-gap);
-    padding: var(--spacing-2);
-    border-bottom: var(--border-width) solid var(--color-border-soft);
+    padding: var(--calendar-section-padding);
+    border-bottom: var(--calendar-section-border-width) solid var(--calendar-divider);
   }
 
   .cluster {

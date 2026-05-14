@@ -8,43 +8,31 @@
 
   .label,
   .sub-label {
-    line-height: var(--line-height-tight);
+    line-height: var(--avatar-line-height);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
   .label {
-    font-weight: var(--font-weight-medium);
-    color: var(--color-fg);
+    font-size: var(--avatar-label-name-font-size);
+    font-weight: var(--avatar-label-name-font-weight);
+    color: var(--avatar-label-name-color);
   }
 
   .sub-label {
-    font-weight: var(--font-weight-regular);
-    color: var(--color-fg-muted);
+    font-size: var(--avatar-label-sub-font-size);
+    font-weight: var(--avatar-label-sub-font-weight);
+    color: var(--avatar-label-sub-color);
   }
 
-  :host([data-size='sm']) .label {
-    font-size: var(--avatar-label-name-font-size-sm);
+  /* size variants override font-size slots (base matches slot defaults; sub stays xs for sm) */
+  :host([data-size='sm']) {
+    --avatar-label-name-font-size: var(--font-size-sm);
   }
 
-  :host([data-size='base']) .label {
-    font-size: var(--avatar-label-name-font-size-base);
-  }
-
-  :host([data-size='lg']) .label {
-    font-size: var(--avatar-label-name-font-size-lg);
-  }
-
-  :host([data-size='sm']) .sub-label {
-    font-size: var(--avatar-label-sub-font-size-sm);
-  }
-
-  :host([data-size='base']) .sub-label {
-    font-size: var(--avatar-label-sub-font-size-base);
-  }
-
-  :host([data-size='lg']) .sub-label {
-    font-size: var(--avatar-label-sub-font-size-lg);
+  :host([data-size='lg']) {
+    --avatar-label-name-font-size: var(--font-size-lg);
+    --avatar-label-sub-font-size: var(--font-size-sm);
   }
 }

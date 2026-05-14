@@ -1,7 +1,7 @@
 :root {
   /* layout */
   --indicator-radius: var(--radius-pill);
-  --indicator-line-height: 1;
+  --indicator-line-height: var(--line-height-none);
   --indicator-letter-spacing: -0.01em;
   --indicator-font-weight: var(--font-weight-semibold);
   --indicator-z-index: var(--z-index-raised);

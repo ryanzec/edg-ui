@@ -1,5 +1,5 @@
 import { Directive, computed, input, model, signal } from '@angular/core';
-import type { TabBrainDirective } from '../tab-brain/tab-brain';
+import type { TabBrainDirective } from './tab-brain';
 
 type TabListRole = 'tablist';
 

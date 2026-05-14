@@ -4,7 +4,6 @@
   --timeline-gutter: var(--spacing-3);
   --timeline-row-stack: var(--spacing-4);
   --timeline-marker-padding-top: var(--spacing-1_5);
-  --timeline-content-padding-bottom: var(--spacing-1);
 
   /* dot */
   --timeline-dot-size: 0.6875rem; /* 11px */
@@ -19,6 +18,7 @@
   --timeline-time-font-size: var(--font-size-xs);
   --timeline-time-font-weight: var(--font-weight-medium);
   --timeline-time-letter-spacing: var(--letter-spacing-wide);
+  --timeline-time-line-height: 1;
   --timeline-time-color: var(--color-fg-muted);
   --timeline-time-margin-bottom: var(--spacing-1);
 

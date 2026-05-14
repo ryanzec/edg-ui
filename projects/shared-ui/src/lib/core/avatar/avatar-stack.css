@@ -8,15 +8,16 @@
     position: relative;
   }
 
-  org-avatar-stack[data-size='sm'] > * ~ * {
-    margin-inline-start: var(--avatar-stack-overlap-sm);
+  org-avatar-stack > * ~ * {
+    margin-inline-start: var(--avatar-stack-overlap);
   }
 
-  org-avatar-stack[data-size='base'] > * ~ * {
-    margin-inline-start: var(--avatar-stack-overlap-base);
+  /* size variants override --avatar-circle-size; the overlap formula auto-recalculates */
+  org-avatar-stack[data-size='sm'] {
+    --avatar-circle-size: var(--spacing-8);
   }
 
-  org-avatar-stack[data-size='lg'] > * ~ * {
-    margin-inline-start: var(--avatar-stack-overlap-lg);
+  org-avatar-stack[data-size='lg'] {
+    --avatar-circle-size: var(--spacing-16);
   }
 }

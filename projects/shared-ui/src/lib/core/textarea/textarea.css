@@ -10,16 +10,16 @@
     border: var(--textarea-border-width) solid var(--textarea-border-color);
     background-color: var(--textarea-bg);
     color: var(--textarea-fg);
-    font-family: var(--font-sans);
+    font-family: var(--textarea-font-family);
     font-size: var(--textarea-font-size);
-    font-weight: var(--font-weight-regular);
+    font-weight: var(--textarea-font-weight);
     line-height: var(--textarea-line-height);
     letter-spacing: var(--textarea-letter-spacing);
     cursor: text;
     transition:
-      background-color var(--motion-duration-base) var(--motion-ease-standard),
-      border-color var(--motion-duration-base) var(--motion-ease-standard),
-      color var(--motion-duration-base) var(--motion-ease-standard);
+      background-color var(--textarea-transition-duration) var(--textarea-transition-easing),
+      border-color var(--textarea-transition-duration) var(--textarea-transition-easing),
+      color var(--textarea-transition-duration) var(--textarea-transition-easing);
   }
 
   /* native control — fills the content cell, padding lives here so click-anywhere-to-focus works */
@@ -49,7 +49,7 @@
   }
 
   .native::selection {
-    background-color: var(--color-primary-soft);
+    background-color: var(--textarea-selection-bg);
   }
 
   .native:disabled,
@@ -96,8 +96,8 @@
   }
 
   :host([data-readonly]) {
-    --textarea-bg: var(--color-bg-surface-2);
-    --textarea-bg-hover: var(--color-bg-surface-2);
+    --textarea-bg: var(--color-bg-surface-secondary);
+    --textarea-bg-hover: var(--color-bg-surface-secondary);
   }
 
   :host([data-loading]) org-loading-spinner {
@@ -119,7 +119,7 @@
   /* borderless: no chrome until interacted with — meant to live inside another bordered surface */
   :host([data-variant='borderless']) {
     --textarea-bg: transparent;
-    --textarea-bg-hover: var(--color-bg-surface-2);
+    --textarea-bg-hover: var(--color-bg-surface-secondary);
     --textarea-bg-focus: transparent;
     --textarea-border-color: transparent;
     --textarea-border-color-hover: transparent;

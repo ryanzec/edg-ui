@@ -6,13 +6,12 @@
   }
 
   /* size is inherited from the parent org-list-item's data-size attribute via css */
-  :host-context([data-size='sm']) ::ng-deep svg {
-    width: var(--spacing-4);
-    height: var(--spacing-4);
+  :host ::ng-deep svg {
+    width: var(--list-item-media-size);
+    height: var(--list-item-media-size);
   }
 
-  :host-context([data-size='base']) ::ng-deep svg {
-    width: var(--spacing-5);
-    height: var(--spacing-5);
+  :host-context([data-size='sm']) {
+    --list-item-media-size: var(--spacing-4);
   }
 }

@@ -4,11 +4,13 @@
   --notification-fg: var(--color-fg);
   --notification-fg-muted: var(--color-fg-muted);
   --notification-border: var(--color-border);
+  --notification-border-width: var(--border-width);
   --notification-radius: var(--radius-base);
   --notification-shadow: var(--shadow-base);
+  --notification-z-index: var(--z-index-toast);
 
   /* progress rail */
-  --notification-progress-track: var(--color-bg-surface-2);
+  --notification-progress-track: var(--color-bg-surface-secondary);
 
   /* per-intent accent (drives the left rail + pre icon color) */
   --notification-accent-info: var(--color-info);
@@ -28,6 +30,7 @@
   --notification-icon-size: var(--font-size-lg);
   --notification-avatar-size: var(--sizing-10xs);
   --notification-progress-height: var(--spacing-0_5);
+  --notification-avatar-radius: var(--radius-pill);
 
   /* spacing */
   --notification-pad-x: var(--spacing-3);
@@ -40,9 +43,11 @@
   --notification-close-inset: var(--spacing-1_5);
 
   /* typography */
+  --notification-font-family: var(--font-sans);
   --notification-title-font-size: var(--font-size-base);
   --notification-title-font-weight: var(--font-weight-semibold);
   --notification-title-line-height: var(--line-height-tight);
+  --notification-title-letter-spacing: var(--letter-spacing-tight);
   --notification-description-font-size: var(--font-size-sm);
   --notification-description-line-height: var(--line-height-normal);
 

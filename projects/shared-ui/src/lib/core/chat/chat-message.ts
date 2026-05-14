@@ -9,7 +9,7 @@ import {
   ChatMessageBrainDirective,
   CHAT_MESSAGE_ROLE_DEFAULT,
   CHAT_MESSAGE_STATE_DEFAULT,
-} from '../../brain/chat-message-brain/chat-message-brain';
+} from '../../brain/chat-brain/chat-message-brain';
 
 /** all available chat message run-position values */
 export const allChatMessageRunPositions = ['only', 'first', 'middle', 'last'] as const;

@@ -4,8 +4,8 @@
   }
 
   .footer {
-    padding: var(--spacing-2);
-    border-top: var(--border-width) solid var(--calendar-footer-border);
+    padding: var(--calendar-section-padding);
+    border-top: var(--calendar-section-border-width) solid var(--calendar-divider);
   }
 
   .actions {

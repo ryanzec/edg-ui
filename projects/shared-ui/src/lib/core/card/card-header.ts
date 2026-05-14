@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, computed, inject, input } from '@angular/core';
 import { angularUtils } from '@organization/shared-utils';
-import { CardHeaderBrainDirective } from '../../brain/card-header-brain/card-header-brain';
+import { CardHeaderBrainDirective } from '../../brain/card-brain/card-header-brain';
 
 /** default value for the card header title input */
 export const CARD_HEADER_TITLE_DEFAULT: string | undefined = undefined;

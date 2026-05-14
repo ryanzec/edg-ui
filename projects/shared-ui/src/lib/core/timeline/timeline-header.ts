@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
-import { TimelineHeaderBrainDirective } from '../../brain/timeline-header-brain/timeline-header-brain';
+import { TimelineHeaderBrainDirective } from '../../brain/timeline-brain/timeline-header-brain';
 
 /** displays the header for a timeline item, rendering as the html heading element selected by headingLevel */
 @Component({

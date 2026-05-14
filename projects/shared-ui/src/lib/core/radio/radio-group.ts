@@ -12,7 +12,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { v4 as uuidv4 } from 'uuid';
 import { ComponentSize } from '../types/component-types';
 import { FORM_FIELD_COMPONENT } from '../form-fields/form-field';
-import { RadioGroupBrainDirective } from '../../brain/radio-group-brain/radio-group-brain';
+import { RadioGroupBrainDirective } from '../../brain/radio-brain/radio-group-brain';
 
 /** injection token for accessing the radio group component from child components */
 export const RADIO_GROUP_COMPONENT = new InjectionToken<RadioGroup>('RadioGroup Component');

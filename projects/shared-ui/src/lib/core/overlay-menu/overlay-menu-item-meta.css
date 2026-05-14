@@ -3,8 +3,8 @@
     display: inline-flex;
     align-items: center;
     flex: 0 0 auto;
-    color: var(--color-fg-faint);
-    font-size: var(--font-size-xs);
+    color: var(--overlay-menu-item-meta-fg);
+    font-size: var(--overlay-menu-item-meta-font-size);
     font-variant-numeric: tabular-nums;
   }
 }

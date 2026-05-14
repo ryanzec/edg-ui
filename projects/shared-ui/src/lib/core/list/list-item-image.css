@@ -4,6 +4,8 @@
     display: inline-block;
     flex-shrink: 0;
     overflow: hidden;
+    width: var(--list-item-media-size);
+    height: var(--list-item-media-size);
   }
 
   :host img {
@@ -12,12 +14,6 @@
 
   /* size is inherited from the parent org-list-item's data-size attribute */
   :host-context([data-size='sm']) {
-    width: var(--spacing-4);
-    height: var(--spacing-4);
-  }
-
-  :host-context([data-size='base']) {
-    width: var(--spacing-5);
-    height: var(--spacing-5);
+    --list-item-media-size: var(--spacing-4);
   }
 }

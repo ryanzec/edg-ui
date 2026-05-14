@@ -66,7 +66,7 @@
     font-size: var(--checklist-count-font-size);
     font-weight: var(--checklist-count-font-weight);
     font-variant-numeric: tabular-nums;
-    line-height: 1;
+    line-height: var(--checklist-count-line-height);
   }
 
   .meta {
@@ -148,10 +148,10 @@
 
   /* parent checklist consumer-opt-in: emphasize invalid label in danger color */
   :host-context([data-emphasize-invalid]):host([data-status='invalid']) > .row > .label {
-    color: var(--checklist-label-color-emphasize-invalid);
+    --checklist-label-color: var(--checklist-label-color-emphasize-invalid);
   }
 
   :host-context([data-emphasize-invalid]) .nested-item[data-status='invalid'] .label {
-    color: var(--checklist-label-color-emphasize-invalid);
+    --checklist-label-color: var(--checklist-label-color-emphasize-invalid);
   }
 }

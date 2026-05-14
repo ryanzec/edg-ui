@@ -37,43 +37,43 @@
     grid-column: 2;
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-1);
+    gap: var(--chat-message-column-gap);
     min-width: 0;
   }
 
   .message-author {
     display: flex;
     align-items: center;
-    gap: var(--spacing-2);
+    gap: var(--chat-message-author-gap);
     min-height: var(--chat-author-min-height);
-    color: var(--color-fg);
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-semibold);
-    line-height: var(--line-height-tight);
+    color: var(--chat-message-author-fg);
+    font-size: var(--chat-message-author-font-size);
+    font-weight: var(--chat-message-author-font-weight);
+    line-height: var(--chat-message-author-line-height);
   }
 
   .author-name {
-    color: var(--color-fg);
-    font-weight: var(--font-weight-semibold);
+    color: var(--chat-message-author-fg);
+    font-weight: var(--chat-message-author-font-weight);
   }
 
   .author-post-time {
-    color: var(--color-fg-faint);
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-regular);
+    color: var(--chat-message-author-faint-fg);
+    font-size: var(--chat-message-author-meta-font-size);
+    font-weight: var(--chat-message-author-meta-font-weight);
   }
 
   .author-post-meta {
-    color: var(--color-fg-muted);
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-regular);
+    color: var(--chat-message-author-meta-fg);
+    font-size: var(--chat-message-author-meta-font-size);
+    font-weight: var(--chat-message-author-meta-font-weight);
   }
 
   .author-edited {
-    color: var(--color-fg-faint);
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-regular);
-    font-style: italic;
+    color: var(--chat-message-author-faint-fg);
+    font-size: var(--chat-message-author-meta-font-size);
+    font-weight: var(--chat-message-author-meta-font-weight);
+    font-style: var(--chat-message-author-edited-font-style);
   }
 
   /* user / error wrap the body in an org-box; clamp width so a long pasted prompt doesn't span the thread */
@@ -99,15 +99,15 @@
   .message-body ul,
   .message-body ol {
     margin: 0;
-    padding-inline-start: var(--spacing-5);
+    padding-inline-start: var(--chat-message-body-list-padding-inline-start);
   }
 
   .message-body li + li {
-    margin-top: var(--spacing-1);
+    margin-top: var(--chat-message-body-list-item-gap);
   }
 
   .message-body strong {
-    font-weight: var(--font-weight-semibold);
+    font-weight: var(--chat-message-body-emphasis-font-weight);
   }
 
   .message-body em {
@@ -116,13 +116,13 @@
 
   /* failed state: pull the inner box to the danger-soft surface */
   :host([data-state='failed']) .message-body-wrap {
-    --box-border-color: var(--color-danger-border-strong);
-    --box-bg: var(--color-danger-soft);
+    --box-border-color: var(--chat-message-failed-border-color);
+    --box-bg: var(--chat-message-failed-bg);
   }
 
   /* pending state: dim the inner surface to flag in-flight */
   :host([data-state='pending']) .message-body-wrap {
-    opacity: var(--opacity-disabled);
+    opacity: var(--chat-message-pending-opacity);
   }
 
   /* system role — collapse to a centred chrome pill */
@@ -131,32 +131,33 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: var(--spacing-2);
+    gap: var(--chat-message-system-gap);
     width: fit-content;
     max-width: 100%;
-    margin-block: var(--spacing-2);
+    margin-block: var(--chat-message-system-margin-block);
     margin-inline: auto;
-    padding-block: var(--spacing-2);
-    padding-inline: var(--spacing-3);
-    background: var(--chat-system-bg);
-    color: var(--chat-system-fg);
-    border: 0.0625rem solid var(--chat-system-border); /* 1px */
-    border-radius: var(--radius-pill);
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-tight);
+    padding-block: var(--chat-message-system-padding-block);
+    padding-inline: var(--chat-message-system-padding-inline);
+    background: var(--chat-message-system-bg);
+    color: var(--chat-message-system-fg);
+    border: var(--chat-message-system-border-width) solid var(--chat-message-system-border-color);
+    border-radius: var(--chat-message-system-radius);
+    font-size: var(--chat-message-system-font-size);
+    line-height: var(--chat-message-system-line-height);
     text-align: center;
   }
 
   /* hover actions wrapper — child projected with [hoverActions] reveals on hover / focus-within or when pinned */
   .message-hover-actions {
     grid-column: 2;
-    margin-top: var(--spacing-1_5);
+    margin-top: var(--chat-message-hover-actions-margin-top);
     opacity: 0;
-    transform: translateY(-0.125rem); /* -2px */
+    transform: translateY(var(--chat-message-hover-actions-offset-y));
     pointer-events: none;
     transition:
-      opacity var(--motion-duration-base) var(--motion-ease-standard),
-      transform var(--motion-duration-base) var(--motion-ease-standard);
+      opacity var(--chat-message-hover-actions-transition-duration) var(--chat-message-hover-actions-transition-easing),
+      transform var(--chat-message-hover-actions-transition-duration)
+        var(--chat-message-hover-actions-transition-easing);
   }
 
   /* keep the slot out of the layout when nothing is projected */

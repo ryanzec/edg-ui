@@ -15,7 +15,7 @@
     <org-scroll-area direction="both" [onlyShowOnHover]="true" [scrollClass]="scrollClass()" spacingClass="p-2">
       <pre
         class="code-highlighter-pre"
-        [style]="hasEllipsis() ? { '--ellipsis-lines': ellipsisAt() } : null"
+        [style]="hasEllipsis() ? { '--code-highlighter-ellipsis-lines': ellipsisAt() } : null"
       >@if (brain.highlightedHtml(); as html) {<code [attr.data-language]="brain.language()" [innerHTML]="html"></code>} @else {<code [attr.data-language]="brain.language()">{{ brain.text() }}</code>}</pre>
     </org-scroll-area>
   </div>

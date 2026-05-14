@@ -6,88 +6,73 @@
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    border-radius: var(--radius-pill);
-    background-color: var(--color-avatar-0);
-    color: var(--color-fg-on-accent);
-    font-weight: var(--font-weight-semibold);
-    line-height: var(--line-height-tight);
-    letter-spacing: var(--letter-spacing-wide);
+    width: var(--avatar-circle-size);
+    height: var(--avatar-circle-size);
+    border-radius: var(--avatar-radius);
+    background-color: var(--avatar-color);
+    color: var(--avatar-shape-fg);
+    font-size: var(--avatar-initials-font-size);
+    font-weight: var(--avatar-initials-font-weight);
+    line-height: var(--avatar-line-height);
+    letter-spacing: var(--avatar-letter-spacing);
     text-transform: uppercase;
     user-select: none;
   }
 
+  /* shape variants */
   :host([data-shape='square']) {
-    border-radius: var(--avatar-radius-square);
+    --avatar-radius: var(--radius-base);
   }
 
+  /* size variants (base matches slot defaults) */
   :host([data-size='sm']) {
-    width: var(--avatar-circle-size-sm);
-    height: var(--avatar-circle-size-sm);
-    font-size: var(--avatar-initials-font-size-sm);
-  }
-
-  :host([data-size='base']) {
-    width: var(--avatar-circle-size-base);
-    height: var(--avatar-circle-size-base);
-    font-size: var(--avatar-initials-font-size-base);
+    --avatar-circle-size: var(--spacing-8);
+    --avatar-initials-font-size: var(--font-size-xs);
   }
 
   :host([data-size='lg']) {
-    width: var(--avatar-circle-size-lg);
-    height: var(--avatar-circle-size-lg);
-    font-size: var(--avatar-initials-font-size-lg);
+    --avatar-circle-size: var(--spacing-16);
+    --avatar-initials-font-size: var(--font-size-2xl);
   }
 
-  :host([data-color-index='0']) {
-    background-color: var(--color-avatar-0);
-  }
-
+  /* indexed palette overrides (index 0 is the slot default) */
   :host([data-color-index='1']) {
-    background-color: var(--color-avatar-1);
+    --avatar-color: var(--avatar-color-1);
   }
 
   :host([data-color-index='2']) {
-    background-color: var(--color-avatar-2);
+    --avatar-color: var(--avatar-color-2);
   }
 
   :host([data-color-index='3']) {
-    background-color: var(--color-avatar-3);
+    --avatar-color: var(--avatar-color-3);
   }
 
   :host([data-color-index='4']) {
-    background-color: var(--color-avatar-4);
+    --avatar-color: var(--avatar-color-4);
   }
 
   :host([data-color-index='5']) {
-    background-color: var(--color-avatar-5);
+    --avatar-color: var(--avatar-color-5);
   }
 
   :host([data-color-index='6']) {
-    background-color: var(--color-avatar-6);
+    --avatar-color: var(--avatar-color-6);
   }
 
   :host([data-color-index='7']) {
-    background-color: var(--color-avatar-7);
+    --avatar-color: var(--avatar-color-7);
   }
 
+  /* stacked ring (only rendered inside an avatar stack) */
   :host([data-stacked='true']) {
     border-style: solid;
     border-color: var(--avatar-ring-color);
+    border-width: var(--avatar-ring-width);
   }
 
+  /* sm is the only ring-width that differs from the slot default */
   :host([data-stacked='true'][data-size='sm']) {
-    border-width: var(--avatar-ring-width-sm);
-  }
-
-  :host([data-stacked='true'][data-size='base']) {
-    border-width: var(--avatar-ring-width-base);
-  }
-
-  :host([data-stacked='true'][data-size='lg']) {
-    border-width: var(--avatar-ring-width-lg);
-  }
-
-  .dark :host {
-    color: var(--color-fg);
+    --avatar-ring-width: var(--border-width-thick);
   }
 }

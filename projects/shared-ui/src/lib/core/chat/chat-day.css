@@ -2,12 +2,12 @@
   :host {
     display: flex;
     align-items: center;
-    gap: var(--spacing-3);
-    margin-block: var(--spacing-4);
+    gap: var(--chat-day-gap);
+    margin-block: var(--chat-day-margin-block);
     color: var(--chat-day-fg);
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-medium);
-    letter-spacing: var(--letter-spacing-wide);
+    font-size: var(--chat-day-font-size);
+    font-weight: var(--chat-day-font-weight);
+    letter-spacing: var(--chat-day-letter-spacing);
     text-transform: uppercase;
     user-select: none;
   }
@@ -16,8 +16,8 @@
   :host::after {
     content: '';
     flex: 1 1 0;
-    height: 0.0625rem; /* 1px */
-    background: var(--chat-day-rule);
+    height: var(--chat-day-rule-height);
+    background: var(--chat-day-rule-color);
   }
 
   .day-label {

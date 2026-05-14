@@ -5,10 +5,10 @@
 
   .native-input {
     position: absolute;
-    width: var(--border-width);
-    height: var(--border-width);
+    width: var(--checkbox-toggle-border-width);
+    height: var(--checkbox-toggle-border-width);
     padding: 0;
-    margin: calc(-1 * var(--border-width));
+    margin: calc(-1 * var(--checkbox-toggle-border-width));
     overflow: hidden;
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
@@ -33,7 +33,7 @@
     border-radius: var(--checkbox-toggle-track-radius);
     background-color: var(--checkbox-toggle-track-bg);
     /* optical alignment with the first label line */
-    margin-top: calc((1em * var(--line-height-normal) - var(--checkbox-toggle-track-height)) / 2);
+    margin-top: calc((1em * var(--checkbox-toggle-line-height) - var(--checkbox-toggle-track-height)) / 2);
     transition:
       background-color var(--checkbox-toggle-transition-slow) var(--checkbox-toggle-easing),
       box-shadow var(--checkbox-toggle-transition-fast) var(--checkbox-toggle-easing);
@@ -51,7 +51,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: var(--shadow-xs);
+    box-shadow: var(--checkbox-toggle-knob-shadow);
     transition:
       left var(--checkbox-toggle-transition-slow) var(--checkbox-toggle-easing),
       background-color var(--checkbox-toggle-transition-fast) var(--checkbox-toggle-easing);
@@ -91,7 +91,7 @@
 
   :host .description {
     font-size: var(--checkbox-toggle-description-font-size);
-    line-height: var(--line-height-normal);
+    line-height: var(--checkbox-toggle-line-height);
     color: var(--checkbox-toggle-description-color);
   }
 
@@ -183,7 +183,6 @@
     --checkbox-toggle-track-bg-on-hover: var(--color-primary-hover);
     --checkbox-toggle-track-bg-on-active: var(--color-primary-active);
     --checkbox-toggle-knob-icon-color-on: var(--color-primary);
-    --checkbox-toggle-card-border-selected: var(--color-primary);
   }
 
   :host([data-color='safe']) {
@@ -191,7 +190,6 @@
     --checkbox-toggle-track-bg-on-hover: var(--color-safe-hover);
     --checkbox-toggle-track-bg-on-active: var(--color-safe-active);
     --checkbox-toggle-knob-icon-color-on: var(--color-safe);
-    --checkbox-toggle-card-border-selected: var(--color-safe);
   }
 
   :host([data-color='danger']) {
@@ -199,7 +197,6 @@
     --checkbox-toggle-track-bg-on-hover: var(--color-danger-hover);
     --checkbox-toggle-track-bg-on-active: var(--color-danger-active);
     --checkbox-toggle-knob-icon-color-on: var(--color-danger);
-    --checkbox-toggle-card-border-selected: var(--color-danger);
   }
 
   /* ===== ERROR STATE ===== */
@@ -209,7 +206,6 @@
     --checkbox-toggle-track-bg-on-hover: var(--color-danger-hover);
     --checkbox-toggle-track-bg-on-active: var(--color-danger-active);
     --checkbox-toggle-knob-icon-color-on: var(--color-danger);
-    --checkbox-toggle-card-border-selected: var(--color-danger);
   }
 
   /* ===== LABEL POSITION ===== */
@@ -221,61 +217,5 @@
 
   :host([data-label-position='start']) .body {
     flex: 1 1 auto;
-  }
-
-  /* ===== VARIANT: default ===== */
-  /* the default variant has no card chrome — base .checkbox-toggle-label rules apply directly. */
-
-  /* ===== VARIANT: card ===== */
-  :host([data-variant='card']) {
-    width: 100%;
-  }
-
-  :host([data-variant='card']) .checkbox-toggle-label {
-    align-items: center;
-    width: 100%;
-    padding: var(--checkbox-toggle-card-padding);
-    background-color: var(--checkbox-toggle-card-bg);
-    border: var(--border-width) solid var(--checkbox-toggle-card-border);
-    border-radius: var(--checkbox-toggle-card-radius);
-    /* card defaults to label-first — the conventional settings-row layout */
-    flex-direction: row-reverse;
-    transition:
-      background-color var(--checkbox-toggle-transition-fast) var(--checkbox-toggle-easing),
-      border-color var(--checkbox-toggle-transition-fast) var(--checkbox-toggle-easing),
-      box-shadow var(--checkbox-toggle-transition-fast) var(--checkbox-toggle-easing);
-  }
-
-  :host([data-variant='card']) .body {
-    flex: 1 1 auto;
-  }
-
-  /* card variant supports an explicit data-label-position='end' override to put the track on the pre edge */
-  :host([data-variant='card'][data-label-position='end']) .checkbox-toggle-label {
-    flex-direction: row;
-  }
-
-  :host([data-variant='card']):not([data-disabled]) .checkbox-toggle-label:hover {
-    background-color: var(--checkbox-toggle-card-bg-hover);
-    border-color: var(--checkbox-toggle-card-border-hover);
-  }
-
-  :host([data-variant='card'][data-checked]) .checkbox-toggle-label,
-  :host([data-variant='card'][data-state='error']) .checkbox-toggle-label {
-    border-color: var(--checkbox-toggle-card-border-selected);
-    box-shadow: inset 0 0 0 var(--border-width) var(--checkbox-toggle-card-border-selected);
-  }
-
-  /* card variant size overrides — override the design token, not the property */
-  :host([data-variant='card'][data-size='sm']) {
-    --checkbox-toggle-card-padding: var(--spacing-2_5);
-  }
-
-  :host([data-variant='card'][data-size='base']) {
-    --checkbox-toggle-card-padding: var(--spacing-3);
-  }
-
-  :host([data-variant='card'][data-size='lg']) {
-    --checkbox-toggle-card-padding: var(--spacing-4);
   }
 }

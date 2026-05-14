@@ -23,19 +23,18 @@
   --radio-bg: var(--color-bg-surface);
   --radio-bg-hover: var(--color-bg-surface);
 
-  /* description copy */
+  /* label / description copy */
+  --radio-label-color: var(--color-fg);
+  --radio-label-line-height: var(--line-height-normal);
   --radio-description-color: var(--color-fg-muted);
+  --radio-description-line-height: var(--line-height-normal);
+
+  /* motion */
+  --radio-transition-duration: var(--motion-duration-base);
+  --radio-transition-easing: var(--motion-ease-standard);
+  --radio-mark-transition-easing: var(--motion-ease-entrance);
 
   /* focus ring (a11y) */
   --radio-focus-ring-color: var(--color-focus-ring);
   --radio-focus-ring-width: 0.1875rem; /* 3px */
-
-  /* card variant (placeholder — actual values set by [data-variant='card']) */
-  --radio-card-padding: var(--spacing-3);
-  --radio-card-radius: var(--radius-base);
-  --radio-card-bg: var(--color-bg-surface);
-  --radio-card-bg-hover: var(--color-bg-hover);
-  --radio-card-border: var(--color-border);
-  --radio-card-border-hover: var(--color-fg-muted);
-  --radio-card-border-selected: var(--color-primary);
 }

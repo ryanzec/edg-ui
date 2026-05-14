@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import type { Meta, StoryObj } from '@storybook/angular';
 import { allBoxBorders, type BoxBorder } from '../box/box';
@@ -80,6 +80,12 @@ const meta: Meta<Card> = {
     \`[fullWidth]="false"\` to inset it inside the shared 12px gutter.
   - **CardContent**: Body slot. No layout opinion — children flow normally.
   - **CardFooter**: Button row with \`start\` / \`center\` / \`end\` alignment (default \`end\`).
+
+  ### Clickable
+  Card forwards the underlying Box's clickable affordance: binding the \`clicked\` output on \`org-card\` flips
+  the whole surface into an interactive button (cursor, hover/pressed tint, focus-visible ring, role=button,
+  tabindex=0, Enter/Space activation). Cards without a \`(clicked)\` listener remain purely presentational —
+  the forwarding mechanism short-circuits when no consumer is listening.
 
   ### Padding model
   Each sub-region owns its own 12px padding. Adjacent text regions collapse the doubled gap
@@ -256,53 +262,110 @@ export const Default: Story = {
           <org-design-system-demo-control-group label="Footer align">
             <org-button-toggle [items]="footerAlignmentItems" formControlName="footerAlignment" buttonSize="sm" />
           </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Clickable">
+            <org-checkbox-toggle name="live-demo-clickable" value="clickable" formControlName="clickable">
+              {{ liveDemoForm.controls.clickable.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
         </org-design-system-demo-controls>
         <org-design-system-demo-canvas slot="canvas">
           <div class="canvas-stage">
             <div class="card-shell">
-              <org-card
-                [color]="liveDemoForm.controls.color.value === 'none' ? null : liveDemoForm.controls.color.value"
-                [boxBorder]="liveDemoForm.controls.border.value"
-                [boxBackground]="liveDemoForm.controls.useBackgroundColor.value ? 'colored' : 'colorless'"
-              >
-                @if (liveDemoForm.controls.header.value || liveDemoForm.controls.actions.value) {
-                  <org-card-header
-                    [title]="liveDemoForm.controls.header.value ? 'Project settings' : null"
-                    [subtitle]="
-                      liveDemoForm.controls.header.value && liveDemoForm.controls.subtitle.value
-                        ? 'Configuration shared across every environment.'
-                        : null
-                    "
-                  >
-                    @if (liveDemoForm.controls.actions.value) {
-                      <org-button
-                        actions
-                        variant="text"
-                        color="neutral"
-                        label="More options"
-                        preIcon="ellipsis"
-                        [iconOnly]="true"
-                        ariaLabel="More options"
-                      />
-                    }
-                  </org-card-header>
-                }
-                @if (liveDemoForm.controls.image.value) {
-                  <org-card-image src="${SAMPLE_IMAGE_TOP}" alt="Workspace photo" />
-                }
-                @if (liveDemoForm.controls.content.value) {
-                  <org-card-content>
-                    Cards group related content into a discrete visual block. Drop any composition inside — settings
-                    rows, KPI tiles, prose, or sub-components from elsewhere in the system.
-                  </org-card-content>
-                }
-                @if (liveDemoForm.controls.footer.value) {
-                  <org-card-footer [alignment]="liveDemoForm.controls.footerAlignment.value">
-                    <org-button color="neutral" variant="ghost" label="Cancel" />
-                    <org-button color="primary" label="Save" />
-                  </org-card-footer>
-                }
-              </org-card>
+              @if (liveDemoForm.controls.clickable.value) {
+                <org-card
+                  [color]="liveDemoForm.controls.color.value === 'none' ? null : liveDemoForm.controls.color.value"
+                  [boxBorder]="liveDemoForm.controls.border.value"
+                  [boxBackground]="liveDemoForm.controls.useBackgroundColor.value ? 'colored' : 'colorless'"
+                  (clicked)="onCardClicked()"
+                >
+                  @if (liveDemoForm.controls.header.value || liveDemoForm.controls.actions.value) {
+                    <org-card-header
+                      [title]="liveDemoForm.controls.header.value ? 'Project settings' : null"
+                      [subtitle]="
+                        liveDemoForm.controls.header.value && liveDemoForm.controls.subtitle.value
+                          ? 'Configuration shared across every environment.'
+                          : null
+                      "
+                    >
+                      @if (liveDemoForm.controls.actions.value) {
+                        <org-button
+                          actions
+                          variant="text"
+                          color="neutral"
+                          label="More options"
+                          preIcon="ellipsis"
+                          [iconOnly]="true"
+                          ariaLabel="More options"
+                        />
+                      }
+                    </org-card-header>
+                  }
+                  @if (liveDemoForm.controls.image.value) {
+                    <org-card-image src="${SAMPLE_IMAGE_TOP}" alt="Workspace photo" />
+                  }
+                  @if (liveDemoForm.controls.content.value) {
+                    <org-card-content>
+                      Cards group related content into a discrete visual block. Drop any composition inside — settings
+                      rows, KPI tiles, prose, or sub-components from elsewhere in the system.
+                    </org-card-content>
+                  }
+                  @if (liveDemoForm.controls.footer.value) {
+                    <org-card-footer [alignment]="liveDemoForm.controls.footerAlignment.value">
+                      <org-button color="neutral" variant="ghost" label="Cancel" />
+                      <org-button color="primary" label="Save" />
+                    </org-card-footer>
+                  }
+                </org-card>
+              } @else {
+                <org-card
+                  [color]="liveDemoForm.controls.color.value === 'none' ? null : liveDemoForm.controls.color.value"
+                  [boxBorder]="liveDemoForm.controls.border.value"
+                  [boxBackground]="liveDemoForm.controls.useBackgroundColor.value ? 'colored' : 'colorless'"
+                >
+                  @if (liveDemoForm.controls.header.value || liveDemoForm.controls.actions.value) {
+                    <org-card-header
+                      [title]="liveDemoForm.controls.header.value ? 'Project settings' : null"
+                      [subtitle]="
+                        liveDemoForm.controls.header.value && liveDemoForm.controls.subtitle.value
+                          ? 'Configuration shared across every environment.'
+                          : null
+                      "
+                    >
+                      @if (liveDemoForm.controls.actions.value) {
+                        <org-button
+                          actions
+                          variant="text"
+                          color="neutral"
+                          label="More options"
+                          preIcon="ellipsis"
+                          [iconOnly]="true"
+                          ariaLabel="More options"
+                        />
+                      }
+                    </org-card-header>
+                  }
+                  @if (liveDemoForm.controls.image.value) {
+                    <org-card-image src="${SAMPLE_IMAGE_TOP}" alt="Workspace photo" />
+                  }
+                  @if (liveDemoForm.controls.content.value) {
+                    <org-card-content>
+                      Cards group related content into a discrete visual block. Drop any composition inside — settings
+                      rows, KPI tiles, prose, or sub-components from elsewhere in the system.
+                    </org-card-content>
+                  }
+                  @if (liveDemoForm.controls.footer.value) {
+                    <org-card-footer [alignment]="liveDemoForm.controls.footerAlignment.value">
+                      <org-button color="neutral" variant="ghost" label="Cancel" />
+                      <org-button color="primary" label="Save" />
+                    </org-card-footer>
+                  }
+                </org-card>
+              }
+              @if (liveDemoForm.controls.clickable.value) {
+                <div class="text-xs text-fg-muted mt-2">
+                  Card click count: <strong>{{ cardClickCount() }}</strong>
+                </div>
+              }
             </div>
           </div>
         </org-design-system-demo-canvas>
@@ -315,6 +378,8 @@ class CardLiveDemoStory {
   protected readonly borderItems = liveDemoBorderItems;
   protected readonly footerAlignmentItems = liveDemoFooterAlignmentItems;
 
+  protected readonly cardClickCount = signal<number>(0);
+
   protected readonly liveDemoForm = new FormGroup({
     color: new FormControl<LiveDemoColorChoice>('none', { nonNullable: true }),
     border: new FormControl<BoxBorder>(CARD_BOX_BORDER_DEFAULT, { nonNullable: true }),
@@ -326,7 +391,93 @@ class CardLiveDemoStory {
     content: new FormControl<boolean>(true, { nonNullable: true }),
     footer: new FormControl<boolean>(true, { nonNullable: true }),
     footerAlignment: new FormControl<CardAlignment>(CARD_FOOTER_ALIGNMENT_DEFAULT, { nonNullable: true }),
+    clickable: new FormControl<boolean>(false, { nonNullable: true }),
   });
+
+  protected onCardClicked(): void {
+    this.cardClickCount.update((count) => count + 1);
+  }
+}
+
+@Component({
+  selector: 'story-card-clickable-showcase',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    Card,
+    CardHeader,
+    CardContent,
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoCanvas,
+    DesignSystemDemoExpectedBehaviour,
+  ],
+  template: `
+    <org-design-system-demo>
+      <org-design-system-demo-header
+        slot="header"
+        title="Clickable"
+        description="Binding the clicked output on org-card forwards the underlying Box's clickable affordance to the whole surface. Static cards (no listener) remain purely presentational."
+      />
+      <org-design-system-demo-canvas slot="canvas">
+        <div class="grid grid-cols-2 gap-3 items-start max-w-3xl">
+          <org-card>
+            <org-card-header title="Static card" subtitle="No (clicked) listener." />
+            <org-card-content>
+              Hovering and focusing change nothing — the card is a purely presentational surface.
+            </org-card-content>
+          </org-card>
+          <org-card color="info" (clicked)="onClicked('info card')">
+            <org-card-header title="Clickable · info" subtitle="(clicked) is bound." />
+            <org-card-content>
+              The whole surface is interactive. Hover, click, or tab-then-Enter / Space.
+            </org-card-content>
+          </org-card>
+          <org-card color="safe" boxBorder="border-emphasize" (clicked)="onClicked('safe emphasize')">
+            <org-card-header title="Clickable · safe · emphasize" subtitle="Pairs with any visual variant." />
+            <org-card-content>The clickable affordance respects all other card visual inputs.</org-card-content>
+          </org-card>
+          <org-card color="caution" boxBackground="colorless" (clicked)="onClicked('caution colorless')">
+            <org-card-header title="Clickable · caution · colorless" subtitle="Hover / pressed use neutral tints." />
+            <org-card-content>
+              In colorless mode the hover and pressed states fall back to neutral background tokens.
+            </org-card-content>
+          </org-card>
+        </div>
+        <div class="text-xs text-fg-muted mt-3">
+          Last activation: <strong>{{ lastActivated() ?? '—' }}</strong> · Total clicks:
+          <strong>{{ totalClicks() }}</strong>
+        </div>
+      </org-design-system-demo-canvas>
+    </org-design-system-demo>
+    <org-design-system-demo-expected-behaviour>
+      <ul class="list-inside list-disc flex flex-col gap-1">
+        <li>
+          <strong>Auto-detect</strong>: a (clicked) listener on org-card flips the inner box into clickable mode — no
+          extra input
+        </li>
+        <li>
+          <strong>Static cards stay static</strong>: cards without a (clicked) listener show no cursor / hover / focus /
+          aria affordance
+        </li>
+        <li>
+          <strong>Forwarding is lazy</strong>: the card only wires up to the box's clicked when its own consumer is
+          listening
+        </li>
+        <li><strong>Keyboard</strong>: Enter and Space activate the card; Space's default page scroll is suppressed</li>
+        <li><strong>Aria</strong>: role="button" and tabindex="0" applied to the org-box host element</li>
+      </ul>
+    </org-design-system-demo-expected-behaviour>
+  `,
+})
+class CardClickableShowcaseStory {
+  protected readonly totalClicks = signal<number>(0);
+
+  protected readonly lastActivated = signal<string | null>(null);
+
+  protected onClicked(label: string): void {
+    this.totalClicks.update((count) => count + 1);
+    this.lastActivated.set(label);
+  }
 }
 
 export const LiveDemo: Story = {
@@ -728,6 +879,8 @@ export const Showcase: Story = {
             <li><strong>Color + border-emphasize</strong>: The 7px left rail and the soft background fill both pick up the color input</li>
           </ul>
         </org-design-system-demo-expected-behaviour>
+
+        <story-card-clickable-showcase />
       </div>
     `,
     moduleMetadata: {
@@ -743,6 +896,7 @@ export const Showcase: Story = {
         DesignSystemDemoHeader,
         DesignSystemDemoCanvas,
         DesignSystemDemoExpectedBehaviour,
+        CardClickableShowcaseStory,
       ],
     },
   }),

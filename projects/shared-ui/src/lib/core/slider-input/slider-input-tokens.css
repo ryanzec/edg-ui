@@ -25,10 +25,22 @@
   --slider-input-focus-ring-width: 0.1875rem; /* 3px */
   --slider-input-focus-ring-color: var(--color-focus-ring);
 
+  /* thumb z-index slot token (raised when hovered / focused / active so overlapping thumbs stay grabbable) */
+  --slider-input-thumb-z-index-raised: var(--z-index-raised);
+
   /* tick slot tokens */
   --slider-input-tick-size: 0.25rem; /* 4px */
   --slider-input-tick-color: var(--color-border-strong);
   --slider-input-tick-gap: var(--spacing-1);
+  --slider-input-tick-mark-radius: var(--radius-pill);
   --slider-input-tick-label-font-size: var(--font-size-xs);
   --slider-input-tick-label-color: var(--color-fg-muted);
+  --slider-input-tick-label-offset-horizontal: var(--spacing-0_5);
+  --slider-input-tick-label-offset-vertical: var(--spacing-1);
+
+  /* dynamic positional slot tokens (set inline via [style.--...] bindings; defaults are fallbacks) */
+  --slider-input-fill-start: 0%;
+  --slider-input-fill-end: 0%;
+  --slider-input-thumb-position: 0%;
+  --slider-input-tick-position: 0%;
 }

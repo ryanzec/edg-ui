@@ -1,17 +1,13 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import {
-  UiThemeSwitcher,
-  AuthenticationManager,
-  ApplicationNavigation,
-  SettingsMenuItem,
-} from '@organization/shared-ui';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { AuthenticationManager, ApplicationNavigation, SettingsMenuItem } from '@organization/shared-ui';
 import { CommonModule } from '@angular/common';
 import { cssUtils } from '@organization/shared-utils';
 
 @Component({
   selector: 'cp-root',
-  imports: [RouterOutlet, UiThemeSwitcher, CommonModule, ApplicationNavigation],
+  imports: [RouterOutlet, CommonModule, ApplicationNavigation, CdkScrollable],
   templateUrl: './app.html',
 })
 export class App {

@@ -3,7 +3,7 @@
     display: flex;
     flex-direction: column;
     gap: var(--checkbox-group-header-stack);
-    color: var(--color-fg);
+    color: var(--checkbox-group-color);
     width: 100%;
     min-width: 0;
   }
@@ -20,8 +20,8 @@
     gap: var(--checkbox-group-required-gap);
     font-size: var(--checkbox-group-legend-font-size);
     font-weight: var(--checkbox-group-legend-font-weight);
-    line-height: var(--line-height-tight);
-    color: var(--color-fg);
+    line-height: var(--checkbox-group-legend-line-height);
+    color: var(--checkbox-group-color);
   }
 
   /* required marker — post asterisk in danger color */
@@ -35,7 +35,7 @@
     margin: 0;
     font-size: var(--checkbox-group-description-font-size);
     color: var(--checkbox-group-description-color);
-    line-height: var(--line-height-normal);
+    line-height: var(--checkbox-group-description-line-height);
   }
 
   :host .options {
@@ -43,14 +43,6 @@
     flex-direction: column;
     gap: var(--checkbox-group-options-stack);
     min-width: 0;
-  }
-
-  /*
-   * card-variant tightening — when any child checkbox is rendered as a card, widen the inter-option gap so the
-   * tiles do not feel like a single welded surface. spacing stays uniform across sizes by design.
-   */
-  :host(:has(org-checkbox[data-variant='card'])) .options {
-    gap: var(--checkbox-group-options-stack-card);
   }
 
   /*
@@ -64,7 +56,6 @@
     --checkbox-indicator-color-checked: var(--color-danger);
     --checkbox-indicator-color-checked-hover: var(--color-danger-hover);
     --checkbox-indicator-color-checked-active: var(--color-danger-active);
-    --checkbox-card-border-selected: var(--color-danger);
   }
 
   /*
@@ -74,7 +65,7 @@
    * checkbox component's css.
    */
   :host([data-disabled='1']) org-checkbox:not([data-disabled]) {
-    opacity: var(--opacity-disabled);
+    opacity: var(--checkbox-group-disabled-opacity);
     cursor: not-allowed;
     pointer-events: none;
   }

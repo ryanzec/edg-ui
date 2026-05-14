@@ -11,8 +11,12 @@
   --dialog-close-size: var(--sizing-10xs);
   --dialog-close-radius: var(--radius-sm);
 
-  /* sizing */
-  --dialog-default-width: var(--sizing-base); /* 28rem / 448px */
+  /* sizing slot tokens (defaults to base width / rounded radius) */
+  --dialog-width: var(--sizing-base); /* 28rem / 448px */
+  --dialog-radius: var(--radius-lg);
+  --dialog-radius-none: 0;
+
+  /* sizing preset values (assigned to --dialog-width / --dialog-sheet-height by variants) */
   --dialog-drawer-width: var(--sizing-sm); /* 24rem / 384px */
   --dialog-sheet-height: var(--sizing-2xs); /* 18rem / 288px */
   --dialog-sm-width: var(--sizing-2xs); /* 18rem / 288px */
@@ -22,7 +26,6 @@
   --dialog-stage-padding: var(--spacing-6);
 
   /* surface */
-  --dialog-radius: var(--radius-lg);
   --dialog-bg: var(--color-bg-surface);
   --dialog-fg: var(--color-fg);
   --dialog-border: var(--color-border);
@@ -35,6 +38,10 @@
   --dialog-motion-duration: var(--motion-duration-slow);
   --dialog-motion-ease: var(--motion-ease-entrance);
   --dialog-motion-shift: 1.5rem; /* 24px translation for top/bottom/left/right entrance */
+  --dialog-motion-transform-from: scale(0.97) translateY(0.25rem);
+
+  /* dialog-icon color slot (defaults to info to match DIALOG_ICON_COLOR_DEFAULT) */
+  --dialog-icon-color: var(--color-info);
 }
 
 .dark {

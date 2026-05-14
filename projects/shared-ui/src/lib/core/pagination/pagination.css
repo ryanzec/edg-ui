@@ -3,52 +3,50 @@
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    gap: var(--spacing-pagination-row-gap);
-    font-size: var(--font-size-pagination);
-    font-variant-numeric: var(--font-variant-pagination);
-    color: var(--color-pagination-result);
+    gap: var(--pagination-row-gap);
+    font-size: var(--pagination-font-size);
+    font-variant-numeric: var(--pagination-font-variant);
+    color: var(--pagination-result-fg);
     width: 100%;
   }
 
   .info {
     display: flex;
     align-items: center;
-    gap: var(--spacing-pagination-group-gap);
+    gap: var(--pagination-group-gap);
     flex: 1 1 auto;
     min-width: 0;
   }
 
   .label {
-    font-size: var(--font-size-pagination-label);
-    font-weight: var(--font-weight-pagination-label);
-    color: var(--color-pagination-label);
+    font-size: var(--pagination-label-font-size);
+    font-weight: var(--pagination-label-font-weight);
+    color: var(--pagination-label-fg);
     white-space: nowrap;
   }
 
   .items-select {
-    width: var(--sizing-pagination-select);
-    min-width: var(--sizing-pagination-select);
     flex: 0 0 auto;
   }
 
   .result {
     display: inline-flex;
     align-items: baseline;
-    gap: var(--spacing-1);
+    gap: var(--pagination-result-gap);
     white-space: nowrap;
-    font-weight: var(--font-weight-pagination-result);
+    font-weight: var(--pagination-result-font-weight);
     margin-right: auto;
   }
 
   .result-em {
-    font-weight: var(--font-weight-pagination-emphasis);
-    color: var(--color-pagination-result-emphasis);
+    font-weight: var(--pagination-result-emphasis-font-weight);
+    color: var(--pagination-result-emphasis-fg);
   }
 
   .nav {
     display: inline-flex;
     align-items: center;
-    gap: var(--spacing-pagination-button-gap);
+    gap: var(--pagination-button-gap);
     flex: 0 0 auto;
   }
 
@@ -57,11 +55,11 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    width: var(--sizing-pagination-ellipsis);
-    height: var(--sizing-pagination-ellipsis);
-    color: var(--color-pagination-ellipsis);
+    width: var(--pagination-ellipsis-size);
+    height: var(--pagination-ellipsis-size);
+    color: var(--pagination-ellipsis-fg);
     user-select: none;
-    line-height: 1;
+    line-height: var(--pagination-ellipsis-line-height);
   }
 
   /* below 32rem of available container width, stack info + nav vertically */

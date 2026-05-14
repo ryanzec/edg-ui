@@ -2,7 +2,7 @@
   :host {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-2);
+    gap: var(--chat-composer-gap);
     width: 100%;
     max-width: var(--chat-thread-max-width);
     margin-inline: auto;
@@ -12,7 +12,7 @@
   }
 
   :host([data-disabled='1']) {
-    opacity: var(--opacity-disabled);
+    opacity: var(--chat-composer-disabled-opacity);
     pointer-events: none;
   }
 
@@ -24,7 +24,7 @@
   .attachments {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--spacing-2);
+    gap: var(--chat-composer-attachments-gap);
   }
 
   .attachments:empty {
@@ -36,7 +36,7 @@
   }
 
   .streaming-label {
-    color: var(--color-fg-muted);
-    font-size: var(--font-size-xs);
+    color: var(--chat-composer-streaming-label-fg);
+    font-size: var(--chat-composer-streaming-label-font-size);
   }
 }

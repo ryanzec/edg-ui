@@ -1,18 +1,42 @@
 :root {
   /* surface paint */
-  --color-overlay-menu-surface: var(--color-bg-surface-2);
-  --color-overlay-menu-border: var(--color-border);
+  --overlay-menu-bg: var(--color-bg-surface-secondary);
+  --overlay-menu-fg: var(--color-fg);
+  --overlay-menu-border: var(--color-border);
+  --overlay-menu-border-width: var(--border-width);
 
   /* geometry */
-  --radius-overlay-menu: var(--radius-base);
-  --shadow-overlay-menu: var(--shadow-base);
-  --spacing-overlay-menu-pad: var(--spacing-1);
-  --sizing-overlay-menu-min-width: 11rem; /* 176px */
-  --sizing-overlay-menu-max-width: 20rem; /* 320px */
-
-  /* docs-only anchor — gap between trigger and panel when stories use the static anchor wrapper */
-  --spacing-overlay-menu-anchor-gap: var(--spacing-1);
+  --overlay-menu-radius: var(--radius-base);
+  --overlay-menu-shadow: var(--shadow-base);
+  --overlay-menu-padding: var(--spacing-1);
+  --overlay-menu-min-width: 11rem; /* 176px */
+  --overlay-menu-max-width: 20rem; /* 320px */
+  --overlay-menu-z-index: var(--z-index-popover);
 
   /* reveal motion */
-  --motion-overlay-menu-duration: var(--motion-duration-fast);
+  --overlay-menu-motion-duration: var(--motion-duration-fast);
+  --overlay-menu-motion-ease: var(--motion-ease-standard);
+  --overlay-menu-motion-translate: 0.125rem; /* 2px */
+
+  /* divider sub-component */
+  --overlay-menu-divider-margin-block: 0;
+
+  /* item-meta sub-component */
+  --overlay-menu-item-meta-fg: var(--color-fg-faint);
+  --overlay-menu-item-meta-font-size: var(--font-size-xs);
+
+  /* item color override slot — set by data-color attribute on the row */
+  --overlay-menu-item-color: inherit;
+
+  /* section header */
+  --overlay-menu-header-padding-block: var(--spacing-1_5);
+  --overlay-menu-header-padding-inline: var(--spacing-2);
+  --overlay-menu-header-fg: var(--color-fg-faint);
+  --overlay-menu-header-font-size: var(--font-size-2xs);
+  --overlay-menu-header-font-weight: var(--font-weight-semibold);
+  --overlay-menu-header-letter-spacing: 0.05em;
+
+  /* embedded button-toggle row */
+  --overlay-menu-button-toggle-padding-block: var(--spacing-1_5);
+  --overlay-menu-button-toggle-padding-inline: var(--spacing-1);
 }

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
-import { ChecklistItemBrainDirective } from '../../brain/checklist-item-brain/checklist-item-brain';
+import { ChecklistItemBrainDirective } from '../../brain/checklist-brain/checklist-item-brain';
 import { Icon } from '../icon/icon';
 import { type ChecklistItemData } from './checklist';
 import { ChecklistStatusIcon } from './checklist-status-icon';

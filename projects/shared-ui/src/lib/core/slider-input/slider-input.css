@@ -100,7 +100,7 @@
     background-color: var(--slider-input-thumb-bg-hover);
     border-color: var(--slider-input-thumb-border-color-hover);
     /* raise the hovered thumb so it is always grabbable when thumbs overlap during crossing */
-    z-index: var(--z-index-raised);
+    z-index: var(--slider-input-thumb-z-index-raised);
   }
 
   :host .thumb:not(:disabled):focus-visible {
@@ -108,7 +108,7 @@
     border-color: var(--slider-input-thumb-border-color-hover);
     box-shadow: 0 0 0 var(--slider-input-focus-ring-width) var(--slider-input-focus-ring-color);
     /* raise the focused thumb so keyboard interaction is always on the visible thumb */
-    z-index: var(--z-index-raised);
+    z-index: var(--slider-input-thumb-z-index-raised);
   }
 
   :host .thumb:not(:disabled):active {
@@ -116,7 +116,7 @@
     border-color: var(--slider-input-thumb-border-color-active);
     cursor: grabbing;
     /* dragging thumb stays on top of any overlapping siblings */
-    z-index: var(--z-index-raised);
+    z-index: var(--slider-input-thumb-z-index-raised);
   }
 
   :host([data-dragging]) .thumb {
@@ -172,7 +172,7 @@
     display: block;
     width: var(--slider-input-tick-size);
     height: var(--slider-input-tick-size);
-    border-radius: var(--radius-pill);
+    border-radius: var(--slider-input-tick-mark-radius);
     background-color: var(--slider-input-tick-color);
   }
 
@@ -180,12 +180,12 @@
     font-size: var(--slider-input-tick-label-font-size);
     color: var(--slider-input-tick-label-color);
     line-height: 1;
-    margin-top: var(--spacing-0_5);
+    margin-top: var(--slider-input-tick-label-offset-horizontal);
   }
 
   :host([data-direction='vertical']) .tick-label {
     margin-top: 0;
-    margin-left: var(--spacing-1);
+    margin-left: var(--slider-input-tick-label-offset-vertical);
   }
 
   /* ===== SIZE VARIANTS ===== */

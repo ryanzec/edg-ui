@@ -5,7 +5,7 @@
 
   .header-cell {
     height: var(--table-header-height);
-    padding: var(--table-cell-py) var(--table-cell-px);
+    padding: var(--table-cell-padding-y) var(--table-cell-padding-x);
     background-color: var(--table-header-bg);
     color: var(--table-header-fg);
     font-size: var(--table-header-font-size);
@@ -25,7 +25,7 @@
   }
 
   .header-cell[data-select-col] {
-    width: 2.5rem; /* 40px */
+    width: var(--table-select-col-width);
     padding-left: 0;
     padding-right: 0;
     text-align: center;
@@ -67,7 +67,7 @@
   .sort-chevron {
     flex-shrink: 0;
     color: var(--table-sort-fg-rest);
-    transition: color var(--motion-duration-fast) var(--motion-ease-standard);
+    transition: color var(--table-sort-chevron-transition-duration) var(--table-sort-chevron-transition-easing);
   }
 
   .header-cell[data-sortable]:hover .sort-chevron,

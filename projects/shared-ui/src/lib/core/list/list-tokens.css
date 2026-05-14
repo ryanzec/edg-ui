@@ -1,0 +1,22 @@
+:root {
+  /* list */
+  --list-border-width: var(--border-width);
+  --list-border-color: var(--color-border);
+  --list-radius: var(--radius-base);
+
+  /* list-item: base (default) */
+  --list-item-gap: var(--spacing-2);
+  --list-item-padding-block: var(--spacing-2);
+  --list-item-padding-inline: var(--spacing-2_5);
+  --list-item-font-size: var(--font-size-lg);
+  --list-item-radius: var(--radius-base);
+  --list-item-min-height: 40px;
+
+  /* list-item: state colors */
+  --list-item-selected-bg: var(--color-primary-soft);
+  --list-item-hover-bg: var(--color-neutral-soft-hover);
+  --list-item-disabled-fg: var(--color-fg-faint);
+
+  /* list-item media (icon + image): base (default) */
+  --list-item-media-size: var(--spacing-5);
+}

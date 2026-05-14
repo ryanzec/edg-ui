@@ -1,0 +1,11 @@
+:root {
+  --kbd-bg: var(--color-bg-surface-tertiary);
+  --kbd-fg: var(--color-fg);
+  --kbd-radius: var(--radius-xs);
+  --kbd-font-family: var(--font-mono);
+  --kbd-font-size: var(--font-size-2xs);
+  --kbd-font-weight: var(--font-weight-medium);
+  --kbd-line-height: 1;
+  --kbd-height: 1.125rem; /* 18px */
+  --kbd-padding-inline: var(--spacing-1);
+}

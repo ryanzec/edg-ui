@@ -2,13 +2,18 @@
   /* spacing */
   --radio-group-header-stack: var(--spacing-1_5);
   --radio-group-options-stack: var(--spacing-1);
-  --radio-group-options-stack-card: var(--spacing-2);
+
+  /* host typography */
+  --radio-group-color: var(--color-fg);
 
   /* legend / description typography */
+  --radio-group-legend-color: var(--color-fg);
   --radio-group-legend-font-size: var(--font-size-base);
   --radio-group-legend-font-weight: var(--font-weight-semibold);
+  --radio-group-legend-line-height: var(--line-height-tight);
   --radio-group-description-font-size: var(--font-size-xs);
   --radio-group-description-color: var(--color-fg-muted);
+  --radio-group-description-line-height: var(--line-height-normal);
 
   /* required marker */
   --radio-group-required-color: var(--color-danger);

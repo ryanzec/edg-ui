@@ -3,7 +3,7 @@ import { angularUtils } from '@organization/shared-utils';
 import { Icon } from '../icon/icon';
 import { IconName } from '../../brain/icon-brain/icon-brain';
 import { ComponentColor } from '../types/component-types';
-import { TimelineItemBrainDirective } from '../../brain/timeline-item-brain/timeline-item-brain';
+import { TimelineItemBrainDirective } from '../../brain/timeline-brain/timeline-item-brain';
 
 /** color options for the timeline item component */
 export type TimelineItemColor = ComponentColor;

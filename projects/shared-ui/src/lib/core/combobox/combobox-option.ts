@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { angularUtils } from '@organization/shared-utils';
-import { Icon } from '../icon/icon';
-import { ComboboxOptionBrainDirective } from '../../brain/combobox-option-brain/combobox-option-brain';
+import { ComboboxOptionBrainDirective } from '../../brain/combobox-brain/combobox-option-brain';
 import type { ComboboxOption as ComboboxOptionData } from '../combobox-store/combobox-store';
 
 /** default value for the displayLabelPrefix input */
@@ -15,7 +14,6 @@ export const COMBOBOX_OPTION_DISPLAY_LABEL_PREFIX_DEFAULT: string | undefined = 
 @Component({
   selector: 'org-combobox-option',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Icon],
   templateUrl: './combobox-option.html',
   styleUrl: './combobox-option.css',
   hostDirectives: [

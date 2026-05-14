@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, computed, effect, inject, input } f
 import { NgTemplateOutlet } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { angularUtils, logManager } from '@organization/shared-utils';
-import { ListItemBrainDirective } from '../../brain/list-item-brain/list-item-brain';
+import { ListItemBrainDirective } from '../../brain/list-brain/list-item-brain';
 import { List, type ListSize } from './list';
 import { ListItemIcon } from './list-item-icon';
 import type { IconName } from '../../brain/icon-brain/icon-brain';

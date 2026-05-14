@@ -1,24 +1,40 @@
 :root {
-  /* spacing */
-  --spacing-combobox-panel-pad: var(--spacing-1);
-  --spacing-combobox-anchor-gap: var(--spacing-1);
-  --spacing-combobox-option-x: var(--spacing-2_5);
-  --spacing-combobox-option-y: var(--spacing-1_5);
-  --spacing-combobox-option-gap: var(--spacing-2);
-  --spacing-combobox-group-y: var(--spacing-1);
-  --spacing-combobox-empty-y: var(--spacing-3);
+  /* layout */
+  --combobox-width: 100%;
 
-  /* sizing */
-  --sizing-combobox-option-min-height: var(--sizing-10xs);
-  --sizing-combobox-check-gutter: var(--sizing-12xs);
-  --sizing-combobox-panel-max-height: var(--sizing-xs);
+  /* panel */
+  --combobox-panel-padding: var(--spacing-1);
+  --combobox-panel-max-height: var(--sizing-xs);
+  --combobox-panel-max-width: var(--overlay-menu-max-width);
+  --combobox-panel-bg: var(--overlay-menu-bg);
+  --combobox-panel-border-width: var(--border-width);
+  --combobox-panel-border-color: var(--overlay-menu-border);
+  --combobox-panel-radius: var(--overlay-menu-radius);
+  --combobox-panel-shadow: var(--overlay-menu-shadow);
+  --combobox-panel-fg: var(--color-fg);
 
-  /* typography */
-  --font-size-combobox-option: var(--font-size-base);
-  --font-size-combobox-group-label: var(--font-size-2xs);
-  --font-size-combobox-empty: var(--font-size-sm);
+  /* option */
+  --combobox-option-padding-inline: var(--spacing-2_5);
+  --combobox-option-padding-block: var(--spacing-1_5);
+  --combobox-option-gap: var(--spacing-2);
+  --combobox-option-min-height: var(--sizing-10xs);
+  --combobox-option-font-size: var(--font-size-base);
+  --combobox-option-bg: transparent;
+  --combobox-option-bg-hover: var(--color-neutral-soft-hover);
+  --combobox-option-bg-active: var(--color-neutral-soft);
+  --combobox-option-disabled-opacity: var(--opacity-disabled);
 
-  /* color */
-  --color-combobox-option-bg-hover: var(--color-neutral-soft-hover);
-  --color-combobox-option-bg-active: var(--color-neutral-soft);
+  /* group label */
+  --combobox-group-label-padding-block: var(--spacing-1);
+  --combobox-group-label-font-size: var(--font-size-2xs);
+  --combobox-group-label-font-weight: var(--font-weight-medium);
+  --combobox-group-label-letter-spacing: var(--letter-spacing-wide);
+  --combobox-group-label-fg: var(--color-fg-muted);
+  --combobox-group-label-bg: var(--overlay-menu-bg);
+  --combobox-group-label-z-index: var(--z-index-raised);
+
+  /* empty */
+  --combobox-empty-padding-block: var(--spacing-3);
+  --combobox-empty-font-size: var(--font-size-sm);
+  --combobox-empty-fg: var(--color-fg-muted);
 }

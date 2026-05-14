@@ -4,10 +4,10 @@ import { JsonPipe } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { startWith } from 'rxjs';
-import { type ConnectedPosition } from '@angular/cdk/overlay';
-import { CdkContextMenuTrigger, CdkMenuTrigger } from '@angular/cdk/menu';
+import { CdkContextMenuTrigger } from '@angular/cdk/menu';
 import { Avatar } from '../avatar/avatar';
 import { Button } from '../button/button';
+import { ScrollArea } from '../scroll-area/scroll-area';
 import { ButtonToggle, type ButtonToggleItem } from '../button-toggle/button-toggle';
 import { CheckboxToggle } from '../checkbox-toggle/checkbox-toggle';
 import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
@@ -20,18 +20,23 @@ import {
   OverlayMenu,
   type OverlayMenuItem,
   type OverlayMenuItemEntry,
+  type OverlayMenuEntryValueChange,
   type OverlayMenuListSize,
   allOverlayMenuListSizes,
 } from './overlay-menu';
-
-type OverlayMenuPosition = 'below' | 'above' | 'before' | 'after';
+import { OverlayMenuTriggerDirective, type OverlayMenuTriggerPosition } from './overlay-menu-trigger';
 
 @Component({
   selector: 'story-example-overlay-menu',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CdkMenuTrigger, Button, OverlayMenu],
+  imports: [OverlayMenuTriggerDirective, Button, OverlayMenu],
   template: `<div [class]="containerClass()">
-    <org-button [cdkMenuTriggerFor]="menu" [cdkMenuPosition]="menuPosition()" color="primary" label="Open Menu" />
+    <org-button
+      [orgOverlayMenuTrigger]="menu"
+      [overlayMenuTriggerPosition]="position()"
+      color="primary"
+      label="Open Menu"
+    />
 
     <ng-template #menu>
       <org-overlay-menu
@@ -46,24 +51,8 @@ type OverlayMenuPosition = 'below' | 'above' | 'before' | 'after';
   </div> `,
 })
 class EXAMPLEOverlayMenu {
-  public position = input<OverlayMenuPosition>('below');
+  public position = input<OverlayMenuTriggerPosition>('below');
   public containerClass = input<string>('');
-
-  protected readonly menuPosition = computed<ConnectedPosition[]>(() => {
-    if (this.position() === 'above') {
-      return [{ originX: 'start', originY: 'top', overlayX: 'start', overlayY: 'bottom' }];
-    }
-
-    if (this.position() === 'before') {
-      return [{ originX: 'start', originY: 'top', overlayX: 'end', overlayY: 'top' }];
-    }
-
-    if (this.position() === 'after') {
-      return [{ originX: 'end', originY: 'top', overlayX: 'start', overlayY: 'top' }];
-    }
-
-    return [{ originX: 'start', originY: 'bottom', overlayX: 'start', overlayY: 'top' }];
-  });
 }
 
 const liveDemoListSizeItems: ButtonToggleItem[] = allOverlayMenuListSizes.map((size) => ({
@@ -239,13 +228,20 @@ class OverlayMenuLiveDemoStory {
 @Component({
   selector: 'story-overlay-menu-clicked',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CdkMenuTrigger, Button, OverlayMenu, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
+  imports: [
+    OverlayMenuTriggerDirective,
+    Button,
+    OverlayMenu,
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoCanvas,
+  ],
   template: `
     <org-design-system-demo>
       <org-design-system-demo-header slot="header" title="Menu Item Clicked" />
       <org-design-system-demo-canvas slot="canvas">
         <div class="flex flex-col gap-2">
-          <org-button [cdkMenuTriggerFor]="menu" color="primary" label="Open Menu" />
+          <org-button [orgOverlayMenuTrigger]="menu" color="primary" label="Open Menu" />
           <ng-template #menu>
             <org-overlay-menu
               [items]="[
@@ -283,7 +279,7 @@ type ExampleMeta = {
   selector: 'story-overlay-menu-meta',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    CdkMenuTrigger,
+    OverlayMenuTriggerDirective,
     Button,
     OverlayMenu,
     JsonPipe,
@@ -296,7 +292,7 @@ type ExampleMeta = {
       <org-design-system-demo-header slot="header" title="Menu Item Meta" />
       <org-design-system-demo-canvas slot="canvas">
         <div class="flex flex-col gap-2">
-          <org-button [cdkMenuTriggerFor]="menu" color="primary" label="Open Menu" />
+          <org-button [orgOverlayMenuTrigger]="menu" color="primary" label="Open Menu" />
           <ng-template #menu>
             <org-overlay-menu [items]="menuItems" (itemClicked)="handleMenuItemClicked($event)" />
           </ng-template>
@@ -348,7 +344,7 @@ const meta: Meta<EXAMPLEOverlayMenu> = {
   - Optional reveal motion via \`state\` (\`'open'\` / \`'closed'\`) with a \`prefers-reduced-motion\` fallback
   - Post meta per row — keyboard shortcut text, sub-menu chevron, status tag (Beta) — via the typed item entry
   - Disabled rows are painted muted, suppressed by CDK keyboard nav, and skip activation
-  - Production positioning, click-outside, focus trap, Esc, and arrow-key model are owned by Angular CDK Menu (\`CdkMenuTrigger\`); the brain wires \`role="menu"\` and \`role="menuitem"\` automatically
+  - Production positioning, click-outside, focus trap, Esc, and arrow-key model are owned by Angular CDK Menu (wrapped by the \`[orgOverlayMenuTrigger]\` directive in this package); the brain wires \`role="menu"\` and \`role="menuitem"\` automatically
 
   ### Item entry shape
   \`\`\`ts
@@ -424,6 +420,144 @@ export const LiveDemo: Story = {
     },
   }),
 };
+
+@Component({
+  selector: 'story-overlay-menu-position-flip',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [OverlayMenuTriggerDirective, Button, OverlayMenu],
+  styles: [
+    `
+      :host {
+        display: block;
+      }
+      .flip-stage {
+        position: relative;
+        width: 100%;
+        height: 70vh;
+        min-height: 28rem; /* 448px */
+        border: 1px dashed var(--color-border, currentColor);
+        border-radius: 0.375rem; /* 6px */
+      }
+      .flip-corner {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem; /* 8px */
+      }
+      .top-left {
+        top: 0.5rem; /* 8px */
+        left: 0.5rem; /* 8px */
+      }
+      .top-right {
+        top: 0.5rem; /* 8px */
+        right: 0.5rem; /* 8px */
+      }
+      .bottom-left {
+        bottom: 0.5rem; /* 8px */
+        left: 0.5rem; /* 8px */
+      }
+      .bottom-right {
+        bottom: 0.5rem; /* 8px */
+        right: 0.5rem; /* 8px */
+      }
+    `,
+  ],
+  template: `
+    <div class="flip-stage">
+      <div class="flip-corner top-left">
+        <org-button [orgOverlayMenuTrigger]="menu" overlayMenuTriggerPosition="below" color="primary" label="below" />
+        <org-button [orgOverlayMenuTrigger]="menu" overlayMenuTriggerPosition="before" color="primary" label="before" />
+      </div>
+      <div class="flip-corner top-right">
+        <org-button [orgOverlayMenuTrigger]="menu" overlayMenuTriggerPosition="below" color="primary" label="below" />
+        <org-button [orgOverlayMenuTrigger]="menu" overlayMenuTriggerPosition="after" color="primary" label="after" />
+      </div>
+      <div class="flip-corner bottom-left">
+        <org-button [orgOverlayMenuTrigger]="menu" overlayMenuTriggerPosition="above" color="primary" label="above" />
+        <org-button [orgOverlayMenuTrigger]="menu" overlayMenuTriggerPosition="before" color="primary" label="before" />
+      </div>
+      <div class="flip-corner bottom-right">
+        <org-button [orgOverlayMenuTrigger]="menu" overlayMenuTriggerPosition="above" color="primary" label="above" />
+        <org-button [orgOverlayMenuTrigger]="menu" overlayMenuTriggerPosition="after" color="primary" label="after" />
+      </div>
+      <ng-template #menu>
+        <org-overlay-menu [items]="menuItems" />
+      </ng-template>
+    </div>
+  `,
+})
+class OverlayMenuPositionFlipStory {
+  protected readonly menuItems: OverlayMenuItem[] = [
+    { id: '1', label: 'Edit', icon: 'pencil' },
+    { id: '2', label: 'Duplicate', icon: 'copy' },
+    { id: '3', label: 'Archive', icon: 'inbox' },
+  ];
+}
+
+@Component({
+  selector: 'story-overlay-menu-scroll-behavior',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [OverlayMenuTriggerDirective, Button, OverlayMenu, ScrollArea],
+  styles: [
+    `
+      :host {
+        display: block;
+      }
+      .scroll-stage {
+        height: 18rem; /* 288px */
+        width: 100%;
+        border: 1px dashed var(--color-border, currentColor);
+        border-radius: 0.375rem; /* 6px */
+      }
+      .scroll-content {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem; /* 16px */
+        padding: 1rem; /* 16px */
+      }
+      .filler {
+        height: 4rem; /* 64px */
+        border: 1px solid var(--color-border, currentColor);
+        border-radius: 0.25rem; /* 4px */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--color-fg-muted, currentColor);
+      }
+    `,
+  ],
+  template: `
+    <div class="scroll-stage">
+      <org-scroll-area scrollClass="h-full w-full">
+        <div class="scroll-content">
+          <div class="filler">Filler row 1</div>
+          <div class="filler">Filler row 2</div>
+          <div class="filler">Filler row 3</div>
+          <org-button [orgOverlayMenuTrigger]="menu" color="primary" label="Open menu (anchored inside scroll area)" />
+          <div class="filler">Filler row 4</div>
+          <div class="filler">Filler row 5</div>
+          <div class="filler">Filler row 6</div>
+          <div class="filler">Filler row 7</div>
+          <div class="filler">Filler row 8</div>
+          <div class="filler">Filler row 9</div>
+        </div>
+      </org-scroll-area>
+      <ng-template #menu>
+        <org-overlay-menu
+          [items]="[
+            { id: '1', label: 'Edit', icon: 'pencil' },
+            { id: '2', label: 'Duplicate', icon: 'copy' },
+            { id: '3', label: 'Archive', icon: 'inbox' },
+          ]"
+        />
+      </ng-template>
+    </div>
+  `,
+})
+class OverlayMenuScrollBehaviorStory {
+  // anchor lives inside an org-scroll-area; opening the menu and scrolling the inner area should keep
+  // the menu attached to the trigger and scroll off-screen with it (instead of staying in viewport)
+}
 
 export const Showcase: Story = {
   parameters: {
@@ -558,7 +692,7 @@ export const Showcase: Story = {
           <org-design-system-demo-canvas slot="canvas">
             <div class="flex gap-4 items-start flex-wrap">
               <org-button
-                [cdkMenuTriggerFor]="iconOnlyMenu"
+                [orgOverlayMenuTrigger]="iconOnlyMenu"
                 color="neutral"
                 variant="ghost"
                 preIcon="ellipsis"
@@ -579,7 +713,7 @@ export const Showcase: Story = {
               </ng-template>
 
               <org-button
-                [cdkMenuTriggerFor]="sortMenu"
+                [orgOverlayMenuTrigger]="sortMenu"
                 color="neutral"
                 variant="ghost"
                 postIcon="chevron-down"
@@ -597,7 +731,7 @@ export const Showcase: Story = {
               </ng-template>
 
               <org-avatar
-                [cdkMenuTriggerFor]="avatarMenu"
+                [orgOverlayMenuTrigger]="avatarMenu"
                 size="sm"
                 label="Priya Shah"
                 [showLabel]="true"
@@ -621,7 +755,54 @@ export const Showcase: Story = {
             <li><strong>Trigger ↔ panel</strong>: Click any trigger to toggle the menu; Esc closes; clicking outside closes; ↑ / ↓ moves the keyboard cursor; Enter activates a row</li>
             <li><strong>Icon-only trigger</strong>: An icon-only ellipsis button is the canonical "more actions" affordance</li>
             <li><strong>Post chevron</strong>: A button with a post chevron-down communicates that it opens a panel</li>
-            <li><strong>Avatar trigger</strong>: Any element can carry <code>cdkMenuTriggerFor</code> — including a real <code>org-avatar</code></li>
+            <li><strong>Avatar trigger</strong>: Any element can carry <code>orgOverlayMenuTrigger</code> — including a real <code>org-avatar</code></li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Escape behavior" />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="flex gap-4 items-start flex-wrap">
+              <org-button
+                [orgOverlayMenuTrigger]="escapeDefaultMenu"
+                color="primary"
+                label="Closes on Escape (default)"
+              />
+              <ng-template #escapeDefaultMenu>
+                <org-overlay-menu
+                  label="Closes on Escape"
+                  [items]="[
+                    { id: '1', label: 'Edit', icon: 'pencil' },
+                    { id: '2', label: 'Duplicate', icon: 'copy' },
+                    { id: '3', label: 'Archive', icon: 'inbox' }
+                  ]"
+                />
+              </ng-template>
+
+              <org-button
+                [orgOverlayMenuTrigger]="escapeDisabledMenu"
+                [overlayMenuTriggerCloseOnEscape]="false"
+                color="primary"
+                label="Ignores Escape"
+              />
+              <ng-template #escapeDisabledMenu>
+                <org-overlay-menu
+                  label="Ignores Escape"
+                  [items]="[
+                    { id: '1', label: 'Edit', icon: 'pencil' },
+                    { id: '2', label: 'Duplicate', icon: 'copy' },
+                    { id: '3', label: 'Archive', icon: 'inbox' }
+                  ]"
+                />
+              </ng-template>
+            </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>Default</strong>: With <code>overlayMenuTriggerCloseOnEscape</code> omitted (defaults to <code>true</code>), pressing Escape while the menu is open dismisses the overlay regardless of where focus currently sits</li>
+            <li><strong>Disabled</strong>: Setting <code>[overlayMenuTriggerCloseOnEscape]="false"</code> keeps the menu open when Escape is pressed — useful when the host view owns its own Escape semantics (e.g. closing a parent dialog)</li>
+            <li>Click-outside dismissal still works in both cases</li>
           </ul>
         </org-design-system-demo-expected-behaviour>
 
@@ -637,7 +818,7 @@ export const Showcase: Story = {
                     <div class="flex items-center gap-3">
                       <span class="text-muted">1,204 records</span>
                       <org-button
-                        [cdkMenuTriggerFor]="rowMenu"
+                        [orgOverlayMenuTrigger]="rowMenu"
                         color="neutral"
                         variant="ghost"
                         size="sm"
@@ -653,7 +834,7 @@ export const Showcase: Story = {
                     <div class="flex items-center gap-3">
                       <span class="text-muted">342 records</span>
                       <org-button
-                        [cdkMenuTriggerFor]="rowMenu"
+                        [orgOverlayMenuTrigger]="rowMenu"
                         color="neutral"
                         variant="ghost"
                         size="sm"
@@ -669,7 +850,7 @@ export const Showcase: Story = {
                     <div class="flex items-center gap-3">
                       <span class="text-muted">87 records</span>
                       <org-button
-                        [cdkMenuTriggerFor]="rowMenu"
+                        [orgOverlayMenuTrigger]="rowMenu"
                         color="neutral"
                         variant="ghost"
                         size="sm"
@@ -719,7 +900,7 @@ export const Showcase: Story = {
         </org-design-system-demo>
         <org-design-system-demo-expected-behaviour>
           <ul class="list-inside list-disc flex flex-col gap-1">
-            <li><strong>Table-row overflow</strong>: An icon-only ellipsis button per row is the standard pattern for row-level "more actions" — each opens its own anchored menu via <code>cdkMenuTriggerFor</code></li>
+            <li><strong>Table-row overflow</strong>: An icon-only ellipsis button per row is the standard pattern for row-level "more actions" — each opens its own anchored menu via <code>orgOverlayMenuTrigger</code></li>
             <li><strong>Right-click surface</strong>: <code>cdkContextMenuTriggerFor</code> opens the menu at the pointer location for a native-feeling context menu</li>
           </ul>
         </org-design-system-demo-expected-behaviour>
@@ -764,16 +945,48 @@ export const Showcase: Story = {
             <li>Screen readers announce the menu name when the menu opens</li>
           </ul>
         </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Position Flipping" />
+          <org-design-system-demo-canvas slot="canvas">
+            <story-overlay-menu-position-flip />
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li>Each corner trigger requests its preferred position as a starting point only</li>
+            <li><strong>Below / Above</strong>: When there isn't enough room on the primary axis, the panel flips to the opposite side of the trigger</li>
+            <li><strong>Before / After</strong>: When there isn't enough room on the horizontal axis, the panel flips to the opposite side of the trigger</li>
+            <li><strong>Cross-axis alignment</strong>: Near a side edge, the panel also flips its alignment (e.g. left-aligned → right-aligned) so it stays inside the viewport</li>
+            <li>The four fallback candidates per anchor are owned by <code>[orgOverlayMenuTrigger]</code>; CDK Menu picks the first that fits and is also free to re-flip on scroll thanks to the directive's lock-position override</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Scroll Behavior" />
+          <org-design-system-demo-canvas slot="canvas">
+            <story-overlay-menu-scroll-behavior />
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li>Open the menu, then scroll the inner <code>org-scroll-area</code> up or down</li>
+            <li>The menu should stay attached to its trigger button and scroll along with it — including off-screen when the trigger leaves the viewport</li>
+            <li>This relies on <code>org-scroll-area</code> registering its viewport with CDK's <code>ScrollDispatcher</code>, so the overlay's reposition scroll strategy reacts to inner-container scrolling</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
       </div>
     `,
     moduleMetadata: {
       imports: [
         CdkContextMenuTrigger,
-        CdkMenuTrigger,
+        OverlayMenuTriggerDirective,
         Avatar,
         Button,
         OverlayMenu,
         EXAMPLEOverlayMenu,
+        OverlayMenuPositionFlipStory,
+        OverlayMenuScrollBehaviorStory,
         DesignSystemDemo,
         DesignSystemDemoHeader,
         DesignSystemDemoCanvas,
@@ -812,6 +1025,107 @@ export const MenuItemMeta: Story = {
     template: `<story-overlay-menu-meta />`,
     moduleMetadata: {
       imports: [OverlayMenuMetaStory],
+    },
+  }),
+};
+
+@Component({
+  selector: 'story-overlay-menu-extended',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [OverlayMenu, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
+  template: `
+    <div class="flex flex-col gap-4">
+      <org-design-system-demo>
+        <org-design-system-demo-header
+          slot="header"
+          title="Section header"
+          description="The optional uppercase header input renders above the first row."
+        />
+        <org-design-system-demo-canvas slot="canvas">
+          <org-overlay-menu
+            header="Projects"
+            [items]="[
+              { id: 'all', label: 'All projects', icon: null },
+              { id: 'active', label: 'Active', icon: null, indicator: 12 },
+              { id: 'archived', label: 'Archived', icon: null },
+              { id: 'templates', label: 'Templates', icon: null },
+            ]"
+          />
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+
+      <org-design-system-demo>
+        <org-design-system-demo-header
+          slot="header"
+          title="Colored row"
+          description="The color field paints both the icon and label so destructive actions stand out."
+        />
+        <org-design-system-demo-canvas slot="canvas">
+          <org-overlay-menu
+            [items]="[
+              { id: 'edit', label: 'Edit', icon: 'pencil' },
+              { id: 'duplicate', label: 'Duplicate', icon: 'copy' },
+              { id: 'd1', type: 'divider' },
+              { id: 'delete', label: 'Delete', icon: 'trash', color: 'danger' },
+            ]"
+          />
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+
+      <org-design-system-demo>
+        <org-design-system-demo-header
+          slot="header"
+          title="Button-toggle entry"
+          description="A button-toggle entry embeds an inline org-button-toggle that emits the entryValueChanged output."
+        />
+        <org-design-system-demo-canvas slot="canvas">
+          <org-overlay-menu
+            header="Appearance"
+            [items]="appearanceItems()"
+            (entryValueChanged)="onAppearanceChanged($event)"
+          />
+          <p>
+            Theme: <strong>{{ theme() }}</strong>
+          </p>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+    </div>
+  `,
+})
+class OverlayMenuExtendedStory {
+  protected readonly theme = signal<string>('dark');
+
+  protected readonly appearanceItems = computed<OverlayMenuItem[]>(() => [
+    {
+      id: 'appearance',
+      type: 'button-toggle',
+      value: this.theme(),
+      items: [
+        { label: 'Light', value: 'light', buttonColor: 'neutral' },
+        { label: 'Dark', value: 'dark', buttonColor: 'neutral' },
+        { label: 'System', value: 'system', buttonColor: 'neutral' },
+      ],
+    },
+  ]);
+
+  protected onAppearanceChanged(event: OverlayMenuEntryValueChange): void {
+    this.theme.set(event.value);
+  }
+}
+
+export const ExtendedFeatures: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Showcases the four api additions — header input, color field on items (danger Sign out), numeric indicator post meta, and the button-toggle entry that emits entryValueChanged.',
+      },
+    },
+  },
+  render: () => ({
+    template: `<story-overlay-menu-extended />`,
+    moduleMetadata: {
+      imports: [OverlayMenuExtendedStory],
     },
   }),
 };

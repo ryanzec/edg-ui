@@ -8,39 +8,40 @@
     height: var(--checklist-status-size);
     border-radius: var(--checklist-status-radius);
     background: var(--checklist-status-bg);
-    line-height: 1;
+    color: var(--checklist-status-color);
+    line-height: var(--checklist-status-line-height);
   }
 
   :host([data-status='not-started']) {
-    color: var(--checklist-status-color-not-started);
+    --checklist-status-color: var(--checklist-status-color-not-started);
   }
 
   :host([data-status='in-progress']) {
-    color: var(--checklist-status-color-in-progress);
+    --checklist-status-color: var(--checklist-status-color-in-progress);
   }
 
   :host([data-status='valid']) {
-    color: var(--checklist-status-color-valid);
+    --checklist-status-color: var(--checklist-status-color-valid);
   }
 
   :host([data-status='invalid']) {
-    color: var(--checklist-status-color-invalid);
+    --checklist-status-color: var(--checklist-status-color-invalid);
   }
 
   /* parent checklist consumer-opt-in: paint a soft tile background matching the status hue */
   :host-context([data-status-background]):host([data-status='not-started']) {
-    background: var(--checklist-status-bg-not-started);
+    --checklist-status-bg: var(--checklist-status-bg-not-started);
   }
 
   :host-context([data-status-background]):host([data-status='in-progress']) {
-    background: var(--checklist-status-bg-in-progress);
+    --checklist-status-bg: var(--checklist-status-bg-in-progress);
   }
 
   :host-context([data-status-background]):host([data-status='valid']) {
-    background: var(--checklist-status-bg-valid);
+    --checklist-status-bg: var(--checklist-status-bg-valid);
   }
 
   :host-context([data-status-background]):host([data-status='invalid']) {
-    background: var(--checklist-status-bg-invalid);
+    --checklist-status-bg: var(--checklist-status-bg-invalid);
   }
 }

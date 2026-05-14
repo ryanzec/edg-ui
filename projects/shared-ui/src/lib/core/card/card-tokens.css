@@ -1,13 +1,34 @@
 :root {
   /* layout */
-  --card-padding-x: var(--spacing-3);
-  --card-padding-y: var(--spacing-3);
   --card-header-grid-gap: var(--spacing-3);
   --card-header-titles-gap: var(--spacing-0_5);
   --card-header-actions-gap: var(--spacing-1_5);
   --card-footer-gap: var(--spacing-1_5);
+  --card-gap: var(--spacing-2);
+
+  /* content */
+  --card-content-font-size: var(--font-size-base);
+  --card-content-line-height: var(--line-height-normal);
+  --card-content-fg: var(--color-fg);
+
+  /* header title */
+  --card-header-title-font-size: var(--font-size-lg);
+  --card-header-title-font-weight: var(--font-weight-semibold);
+  --card-header-title-line-height: var(--line-height-tight);
+  --card-header-title-letter-spacing: var(--letter-spacing-tight);
+  --card-header-title-fg: var(--color-fg);
+
+  /* header subtitle */
+  --card-header-subtitle-font-size: var(--font-size-base);
+  --card-header-subtitle-line-height: var(--line-height-normal);
+  --card-header-subtitle-fg: var(--color-fg-muted);
 
   /* image */
   --card-image-inset-radius: var(--radius-sm);
   --card-image-fill-aspect-ratio: 16 / 9;
+  --card-image-padding-inline: 0;
+  --card-image-img-radius: 0;
+  --card-image-position: static;
+  --card-image-aspect-ratio: auto;
+  --card-image-img-height: auto;
 }

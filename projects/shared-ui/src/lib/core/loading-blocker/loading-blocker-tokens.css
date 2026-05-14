@@ -1,20 +1,29 @@
 :root {
   /* concrete scrim color tokens */
-  --color-loading-blocker-scrim: var(--color-bg-surface);
+  --loading-blocker-scrim-color: var(--color-bg-surface);
 
   /* concrete scrim opacity tokens (one per intensity step) */
-  --opacity-loading-blocker-scrim-light: 0.4;
-  --opacity-loading-blocker-scrim-medium: 0.7;
-  --opacity-loading-blocker-scrim-heavy: 0.92;
+  --loading-blocker-scrim-opacity-light: 0.4;
+  --loading-blocker-scrim-opacity-medium: 0.7;
+  --loading-blocker-scrim-opacity-heavy: 0.92;
 
-  /* backdrop-filter blur radii (one per intensity that uses blur) */
-  --blur-loading-blocker-medium: 0.25rem; /* 4px */
-  --blur-loading-blocker-heavy: 0.75rem; /* 12px */
+  /* concrete scrim opacity tokens for the no-blur backdrop-filter fallback */
+  --loading-blocker-scrim-opacity-light-no-blur: 0.72;
+  --loading-blocker-scrim-opacity-medium-no-blur: 0.88;
+
+  /* backdrop-filter blur radii (one per intensity step) */
+  --loading-blocker-blur-light: 0;
+  --loading-blocker-blur-medium: 0.25rem; /* 4px */
+  --loading-blocker-blur-heavy: 0.75rem; /* 12px */
+
+  /* concrete z-index tokens (one per scope) */
+  --loading-blocker-z-index-region: var(--z-index-overlay);
+  --loading-blocker-z-index-viewport: var(--z-index-modal);
 
   /* slot tokens — defaults that the component css overrides via data-* selectors */
-  --loading-blocker-scrim-bg: var(--color-loading-blocker-scrim);
-  --loading-blocker-scrim-opacity: var(--opacity-loading-blocker-scrim-medium);
-  --loading-blocker-blur: var(--blur-loading-blocker-medium);
+  --loading-blocker-scrim-bg: var(--loading-blocker-scrim-color);
+  --loading-blocker-scrim-opacity: var(--loading-blocker-scrim-opacity-medium);
+  --loading-blocker-blur: var(--loading-blocker-blur-medium);
   --loading-blocker-fg: var(--color-fg);
   --loading-blocker-stack-gap: var(--spacing-2);
   --loading-blocker-text-max-width: var(--sizing-base);
@@ -23,10 +32,9 @@
   --loading-blocker-text-line-height: var(--line-height-tight);
   --loading-blocker-text-letter-spacing: var(--letter-spacing-tight);
   --loading-blocker-motion-duration: var(--motion-duration-base);
-  --loading-blocker-z-index: var(--z-index-overlay);
-  --loading-blocker-disabled-opacity: var(--opacity-disabled);
+  --loading-blocker-z-index: var(--loading-blocker-z-index-region);
 }
 
 .dark {
-  --color-loading-blocker-scrim: var(--color-bg-surface);
+  --loading-blocker-scrim-color: var(--color-bg-surface);
 }

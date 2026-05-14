@@ -5,8 +5,8 @@
   }
 
   :host([data-border-variant='outer']) {
-    border: var(--border-width) solid var(--color-border);
-    border-radius: var(--radius-base);
+    border: var(--list-border-width) solid var(--list-border-color);
+    border-radius: var(--list-radius);
     overflow: hidden;
   }
 

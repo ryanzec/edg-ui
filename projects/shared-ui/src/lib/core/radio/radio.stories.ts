@@ -4,6 +4,7 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import type { Meta, StoryObj } from '@storybook/angular';
 import { map } from 'rxjs';
 import { ButtonToggle, ButtonToggleItem } from '../button-toggle/button-toggle';
+import { Card } from '../card/card';
 import { CheckboxToggle } from '../checkbox-toggle/checkbox-toggle';
 import { Input } from '../input/input';
 import { FormFields } from '../form-fields/form-fields';
@@ -14,7 +15,7 @@ import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/d
 import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
 import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
 import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
-import { Radio, RadioColor, RadioSize, RadioVariant, allRadioColors, allRadioSizes, allRadioVariants } from './radio';
+import { Radio, RadioColor, RadioSize, allRadioColors, allRadioSizes } from './radio';
 import { RadioGroup } from './radio-group';
 
 const liveDemoSizeItems: ButtonToggleItem[] = allRadioSizes.map((size) => ({
@@ -26,12 +27,6 @@ const liveDemoSizeItems: ButtonToggleItem[] = allRadioSizes.map((size) => ({
 const liveDemoColorItems: ButtonToggleItem[] = allRadioColors.map((color) => ({
   label: color,
   value: color,
-  buttonColor: 'primary',
-}));
-
-const liveDemoVariantItems: ButtonToggleItem[] = allRadioVariants.map((variant) => ({
-  label: variant,
-  value: variant,
   buttonColor: 'primary',
 }));
 
@@ -51,7 +46,6 @@ const meta: Meta<Radio> = {
   ### Features
   - Three sizes: \`sm\`, \`base\` (default), \`lg\`
   - Two colors: \`primary\` (default), \`danger\` — narrow palette by design (radios are commitment controls)
-  - Two variants: \`default\` (row), \`card\` (bordered tile)
   - Optional \`description\` sub-line beneath the label
   - Disabled state, error state (driven by parent \`org-form-field\` / \`org-radio-group\`)
   - Native arrow-key routing within shared \`name\` (handled by the browser, no custom keyboard logic)
@@ -67,10 +61,12 @@ const meta: Meta<Radio> = {
     Pro plan
   </org-radio>
 
-  <!-- Card variant (settings / plan picker pattern) -->
-  <org-radio name="plan" value="pro" variant="card" description="Up to 25 members.">
-    Pro plan
-  </org-radio>
+  <!-- Card-tile pattern: wrap with org-card and forward (clicked) to the radio-group -->
+  <org-radio-group [value]="selectedPlan()" (valueChange)="selectedPlan.set($event)" name="plan">
+    <org-card (clicked)="selectedPlan.set('pro')">
+      <org-radio value="pro" description="Up to 25 members.">Pro plan</org-radio>
+    </org-card>
+  </org-radio-group>
 
   <!-- Reactive forms via radio-group -->
   <form [formGroup]="form">
@@ -105,7 +101,6 @@ export const Default: Story = {
     disabled: false,
     size: 'base',
     color: 'primary',
-    variant: 'default',
     description: '',
   },
   argTypes: {
@@ -131,11 +126,6 @@ export const Default: Story = {
       options: allRadioColors,
       description: 'Color variant of the radio',
     },
-    variant: {
-      control: 'select',
-      options: allRadioVariants,
-      description: 'Visual variant: default (row) or card (bordered tile)',
-    },
     description: {
       control: 'text',
       description: 'Optional description sub-line beneath the label',
@@ -157,7 +147,6 @@ export const Default: Story = {
         [disabled]="disabled"
         [size]="size"
         [color]="color"
-        [variant]="variant"
         [description]="description"
       >
         Radio Label
@@ -206,7 +195,7 @@ export const Default: Story = {
         <org-design-system-demo-header
           slot="header"
           title="Live demo"
-          description="Toggle the inputs to walk every documented combination — label, description, size, color, variant, checked, disabled, error."
+          description="Toggle the inputs to walk every documented combination — label, description, size, color, checked, disabled, error."
         />
         <org-design-system-demo-controls slot="controls">
           <org-design-system-demo-control-group label="Label">
@@ -220,9 +209,6 @@ export const Default: Story = {
           </org-design-system-demo-control-group>
           <org-design-system-demo-control-group label="Color">
             <org-button-toggle [items]="colorItems" formControlName="color" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Variant">
-            <org-button-toggle [items]="variantItems" formControlName="variant" buttonSize="sm" />
           </org-design-system-demo-control-group>
           <org-design-system-demo-control-group label="Checked">
             <org-checkbox-toggle name="live-demo-checked" value="checked" formControlName="checked">
@@ -253,7 +239,6 @@ export const Default: Story = {
                     value="live"
                     [size]="liveDemoForm.controls.size.value"
                     [color]="liveDemoForm.controls.color.value"
-                    [variant]="liveDemoForm.controls.variant.value"
                     [description]="liveDemoForm.controls.description.value"
                   >
                     {{ liveDemoForm.controls.label.value }}
@@ -270,14 +255,12 @@ export const Default: Story = {
 class RadioLiveDemoStory {
   protected readonly sizeItems = liveDemoSizeItems;
   protected readonly colorItems = liveDemoColorItems;
-  protected readonly variantItems = liveDemoVariantItems;
 
   protected readonly liveDemoForm = new FormGroup({
     label: new FormControl<string>('Email me about new features', { nonNullable: true }),
     description: new FormControl<string>('Up to once a week.', { nonNullable: true }),
     size: new FormControl<RadioSize>('base', { nonNullable: true }),
     color: new FormControl<RadioColor>('primary', { nonNullable: true }),
-    variant: new FormControl<RadioVariant>('default', { nonNullable: true }),
     checked: new FormControl<boolean>(true, { nonNullable: true }),
     disabled: new FormControl<boolean>(false, { nonNullable: true }),
     error: new FormControl<boolean>(false, { nonNullable: true }),
@@ -289,7 +272,7 @@ export const LiveDemo: Story = {
     docs: {
       description: {
         story:
-          'Fully interactive demo. Walk every combination — size, color, variant, checked, disabled, error — and edit the label / description text.',
+          'Fully interactive demo. Walk every combination — size, color, checked, disabled, error — and edit the label / description text.',
       },
     },
   },
@@ -300,6 +283,55 @@ export const LiveDemo: Story = {
     },
   }),
 };
+
+@Component({
+  selector: 'story-radio-card-section',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [Card, Radio, RadioGroup, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
+  template: `
+    <org-design-system-demo>
+      <org-design-system-demo-header
+        slot="header"
+        title="Card-tile pattern"
+        description="Wrap each radio in org-card and bind (clicked) so the entire tile selects the option. Used for plan-pickers, settings pages, and any selection where each choice needs to read as its own surface."
+      />
+      <org-design-system-demo-canvas slot="canvas">
+        <org-radio-group name="card-plan" [value]="selectedPlan()" (valueChange)="selectedPlan.set($event)">
+          <org-card (clicked)="selectedPlan.set('free')">
+            <org-radio
+              value="free"
+              (click)="$event.stopPropagation()"
+              description="For individuals exploring the product. No credit card required."
+            >
+              Free
+            </org-radio>
+          </org-card>
+          <org-card (clicked)="selectedPlan.set('team')">
+            <org-radio
+              value="team"
+              (click)="$event.stopPropagation()"
+              description="Collaborative workspaces with shared billing. $12 / user / month."
+            >
+              Team
+            </org-radio>
+          </org-card>
+          <org-card (clicked)="selectedPlan.set('enterprise')">
+            <org-radio
+              value="enterprise"
+              (click)="$event.stopPropagation()"
+              description="SSO, audit logs, dedicated support, and custom contracts."
+            >
+              Enterprise
+            </org-radio>
+          </org-card>
+        </org-radio-group>
+      </org-design-system-demo-canvas>
+    </org-design-system-demo>
+  `,
+})
+class RadioCardSection {
+  protected readonly selectedPlan = signal<string>('team');
+}
 
 @Component({
   selector: 'story-radio-group-default-section',
@@ -341,7 +373,7 @@ export const Showcase: Story = {
     docs: {
       description: {
         story:
-          'Comprehensive showcase of every radio variant axis — sizes, colors, states, description sub-line, card variant, and the radio-group default — in a single scrollable view.',
+          'Comprehensive showcase of every radio axis — sizes, colors, states, description sub-line, card-tile pattern, and the radio-group default — in a single scrollable view.',
       },
     },
   },
@@ -497,43 +529,12 @@ export const Showcase: Story = {
           </ul>
         </org-design-system-demo-expected-behaviour>
 
-        <org-design-system-demo>
-          <org-design-system-demo-header
-            slot="header"
-            title="Card variant"
-            description="Wraps the indicator + body in a bordered tile — used for plan-pickers, settings pages, and any selection where the option needs to read as its own surface. The whole tile is the hit target; the indicator is unchanged."
-          />
-          <org-design-system-demo-canvas slot="canvas">
-            <org-radio-group name="card-plan" [value]="'team'">
-              <org-radio
-                value="free"
-                variant="card"
-                description="For individuals exploring the product. No credit card required."
-              >
-                Free
-              </org-radio>
-              <org-radio
-                value="team"
-                variant="card"
-                description="Collaborative workspaces with shared billing. $12 / user / month."
-              >
-                Team
-              </org-radio>
-              <org-radio
-                value="enterprise"
-                variant="card"
-                description="SSO, audit logs, dedicated support, and custom contracts."
-              >
-                Enterprise
-              </org-radio>
-            </org-radio-group>
-          </org-design-system-demo-canvas>
-        </org-design-system-demo>
+        <story-radio-card-section />
         <org-design-system-demo-expected-behaviour>
           <ul class="list-inside list-disc flex flex-col gap-1">
-            <li>Each card is its own surface — border + background change on hover</li>
-            <li>Selected cards highlight their border with the chosen color (the doubled border is an inset shadow, so the box model never shifts)</li>
-            <li>Combine with <strong>description</strong> to clarify what each option grants</li>
+            <li>Wrap each radio in <strong>org-card</strong> and bind its <strong>(clicked)</strong> output to set the radio-group's value</li>
+            <li>Card already supplies the bordered tile, hover/pressed tint, focus ring, and role=button affordance — no bespoke styling needed</li>
+            <li>Combine with the radio's <strong>description</strong> input to clarify what each option grants</li>
           </ul>
         </org-design-system-demo-expected-behaviour>
 
@@ -554,6 +555,7 @@ export const Showcase: Story = {
         RadioGroup,
         FormFields,
         FormField,
+        RadioCardSection,
         RadioGroupDefaultSection,
         DesignSystemDemo,
         DesignSystemDemoHeader,

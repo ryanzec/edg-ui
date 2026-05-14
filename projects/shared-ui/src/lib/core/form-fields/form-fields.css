@@ -6,22 +6,22 @@
   .form-fields-container {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-1_5);
+    gap: var(--form-fields-gap);
   }
 
   .form-field-container {
     display: flex;
     flex-direction: column;
-    gap: 0.125rem; /* 2px */
+    gap: var(--form-fields-field-gap);
   }
 
   .form-field-validation {
-    padding: 0 var(--spacing-1);
-    min-height: var(--spacing-5);
-    color: var(--color-danger);
-    font-size: var(--font-size-base);
-    line-height: var(--line-height-normal);
-    letter-spacing: var(--letter-spacing-normal);
+    padding: var(--form-fields-validation-padding-block) var(--form-fields-validation-padding-inline);
+    min-height: var(--form-fields-validation-min-height);
+    color: var(--form-fields-validation-color);
+    font-size: var(--form-fields-validation-font-size);
+    line-height: var(--form-fields-validation-line-height);
+    letter-spacing: var(--form-fields-validation-letter-spacing);
     visibility: hidden;
   }
 

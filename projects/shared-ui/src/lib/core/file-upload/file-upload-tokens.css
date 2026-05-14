@@ -7,6 +7,7 @@
 
   /* sizing */
   --file-upload-min-height: 6.5rem; /* 104px */
+  --file-upload-input-hidden-size: 0.0625rem; /* 1px */
 
   /* spacing */
   --file-upload-padding: var(--spacing-5);
@@ -17,7 +18,7 @@
   --file-upload-text-stack-gap: var(--spacing-0_5);
 
   /* color × state slot tokens (defaults to idle) */
-  --file-upload-bg: var(--color-bg-surface-2);
+  --file-upload-bg: var(--color-bg-surface-secondary);
   --file-upload-border-color: var(--color-border);
   --file-upload-icon-color: var(--color-fg-muted);
 
@@ -25,6 +26,10 @@
   --file-upload-prompt-color: var(--color-fg);
   --file-upload-hint-color: var(--color-fg-muted);
   --file-upload-cta-color: var(--color-link);
+  --file-upload-cta-underline-offset: 0.15em;
+
+  /* focus */
+  --file-upload-focus-ring: var(--shadow-focus-ring);
 
   /* hover (drag-over) state ramp */
   --file-upload-bg-hover: var(--color-info-soft);
@@ -62,4 +67,5 @@
   /* motion */
   --file-upload-transition-duration: var(--motion-duration-base);
   --file-upload-transition-easing: var(--motion-ease-standard);
+  --file-upload-remove-transition-duration: var(--motion-duration-fast);
 }

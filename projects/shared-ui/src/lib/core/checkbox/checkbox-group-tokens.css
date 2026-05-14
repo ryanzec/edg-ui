@@ -1,13 +1,18 @@
 :root {
+  /* layout */
+  --checkbox-group-color: var(--color-fg);
+  --checkbox-group-disabled-opacity: var(--opacity-disabled);
+
   /* spacing */
   --checkbox-group-header-stack: var(--spacing-1_5);
   --checkbox-group-options-stack: var(--spacing-1);
-  --checkbox-group-options-stack-card: var(--spacing-2);
 
   /* legend / description typography */
   --checkbox-group-legend-font-size: var(--font-size-base);
   --checkbox-group-legend-font-weight: var(--font-weight-semibold);
+  --checkbox-group-legend-line-height: var(--line-height-tight);
   --checkbox-group-description-font-size: var(--font-size-xs);
+  --checkbox-group-description-line-height: var(--line-height-normal);
   --checkbox-group-description-color: var(--color-fg-muted);
 
   /* required marker */

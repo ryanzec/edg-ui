@@ -1,35 +1,56 @@
+@if (brain.header(); as headerText) {
+  <div class="header">{{ headerText }}</div>
+}
 <org-list listRole="none" [size]="listSize()">
   @for (item of brain.items(); track item.id) {
-    @if (item.type === 'divider') {
-      <org-overlay-menu-divider />
-    } @else {
-      <button
-        type="button"
-        orgOverlayMenuItemBrain
-        [item]="item"
-        [disabled]="item.disabled ?? false"
-        (triggered)="onItemTriggered($event)"
-        class="menu-item-button"
-      >
-        <org-list-item [forceClickable]="true" [disabled]="item.disabled ?? false" [label]="item.label">
-          @if (item.icon; as iconName) {
-            <org-list-item-icon pre [name]="iconName" />
-          }
-          @if (item.tag || item.shortcut || item.postIcon) {
-            <org-overlay-menu-item-meta post>
-              @if (item.tag; as itemTag) {
-                <org-tag [color]="toTagColor(itemTag.color)" size="xs">{{ itemTag.label }}</org-tag>
-              }
-              @if (item.shortcut; as shortcut) {
-                <span>{{ shortcut }}</span>
-              }
-              @if (item.postIcon; as postIcon) {
-                <org-list-item-icon [name]="postIcon" />
-              }
-            </org-overlay-menu-item-meta>
-          }
-        </org-list-item>
-      </button>
+    @switch (item.type) {
+      @case ('divider') {
+        <org-overlay-menu-divider />
+      }
+      @case ('button-toggle') {
+        <div class="button-toggle-row">
+          <org-button-toggle
+            [items]="toButtonToggleItems(item.items)"
+            [value]="item.value"
+            buttonSize="sm"
+            [fullWidth]="true"
+            (changed)="onButtonToggleValueChanged(item, $event)"
+          />
+        </div>
+      }
+      @default {
+        <button
+          type="button"
+          orgOverlayMenuItemBrain
+          [item]="item"
+          [disabled]="item.disabled ?? false"
+          (triggered)="onItemTriggered($event)"
+          class="menu-item-button"
+          [attr.data-color]="item.color ?? null"
+        >
+          <org-list-item [forceClickable]="true" [disabled]="item.disabled ?? false" [label]="item.label">
+            @if (item.icon; as iconName) {
+              <org-list-item-icon pre [name]="iconName" />
+            }
+            @if (item.tag || item.shortcut || item.postIcon || item.indicator !== undefined) {
+              <org-overlay-menu-item-meta post>
+                @if (item.tag; as itemTag) {
+                  <org-tag [color]="toTagColor(itemTag.color)" size="xs">{{ itemTag.label }}</org-tag>
+                }
+                @if (item.indicator !== undefined) {
+                  <org-indicator color="neutral" size="sm" [number]="item.indicator" />
+                }
+                @if (item.shortcut; as shortcut) {
+                  <org-kbd>{{ shortcut }}</org-kbd>
+                }
+                @if (item.postIcon; as postIcon) {
+                  <org-list-item-icon [name]="postIcon" />
+                }
+              </org-overlay-menu-item-meta>
+            }
+          </org-list-item>
+        </button>
+      }
     }
   }
 </org-list>

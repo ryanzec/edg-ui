@@ -114,7 +114,11 @@ export class EXAMPLEColors {
         { name: 'Background App', cssVar: '--color-bg-app', description: 'App background' },
         { name: 'Background Sidebar', cssVar: '--color-bg-sidebar', description: 'Sidebar background' },
         { name: 'Background Surface', cssVar: '--color-bg-surface', description: 'Surface background' },
-        { name: 'Background Surface 2', cssVar: '--color-bg-surface-2', description: 'Elevated surface background' },
+        {
+          name: 'Background Surface 2',
+          cssVar: '--color-bg-surface-secondary',
+          description: 'Elevated surface background',
+        },
         { name: 'Background Hover', cssVar: '--color-bg-hover', description: 'Hover state background' },
         { name: 'Background Active', cssVar: '--color-bg-active', description: 'Active state background' },
       ],

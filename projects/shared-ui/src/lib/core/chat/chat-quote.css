@@ -2,33 +2,33 @@
   :host {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-0_5);
-    padding-block: var(--spacing-1_5);
-    padding-inline: var(--spacing-2_5);
-    margin-bottom: var(--spacing-1_5);
+    gap: var(--chat-quote-gap);
+    padding-block: var(--chat-quote-padding-block);
+    padding-inline: var(--chat-quote-padding-inline);
+    margin-bottom: var(--chat-quote-margin-bottom);
     background: var(--chat-quote-bg);
     color: var(--chat-quote-fg);
-    border-left: var(--chat-quote-rail-width) solid var(--chat-quote-rail);
-    border-radius: var(--radius-sm);
-    font-size: var(--font-size-xs);
-    line-height: var(--line-height-normal);
+    border-left: var(--chat-quote-rail-width) solid var(--chat-quote-rail-color);
+    border-radius: var(--chat-quote-radius);
+    font-size: var(--chat-quote-font-size);
+    line-height: var(--chat-quote-line-height);
     cursor: pointer;
-    transition: background var(--motion-duration-fast) var(--motion-ease-standard);
+    transition: background var(--chat-quote-transition-duration) var(--chat-quote-transition-easing);
   }
 
   :host:hover {
-    background: var(--color-bg-hover);
+    background: var(--chat-quote-bg-hover);
   }
 
   :host:focus-visible {
-    outline: 0.125rem solid var(--color-focus-ring); /* 2px */
-    outline-offset: 0.0625rem; /* 1px */
+    outline: var(--chat-quote-focus-ring-width) solid var(--chat-quote-focus-ring-color);
+    outline-offset: var(--chat-quote-focus-ring-offset);
   }
 
   .quote-author {
-    color: var(--color-fg);
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-semibold);
+    color: var(--chat-quote-author-fg);
+    font-size: var(--chat-quote-author-font-size);
+    font-weight: var(--chat-quote-author-font-weight);
   }
 
   .quote-body {

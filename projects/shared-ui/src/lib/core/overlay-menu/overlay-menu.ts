@@ -4,11 +4,16 @@ import { List, type ListSize } from '../list/list';
 import { ListItem } from '../list/list-item';
 import { ListItemIcon } from '../list/list-item-icon';
 import { Tag, type TagColor } from '../tag/tag';
+import { Indicator } from '../indicator/indicator';
+import { ButtonToggle, type ButtonToggleItem } from '../button-toggle/button-toggle';
+import { Kbd } from '../kbd/kbd';
 import {
   OverlayMenuBrainDirective,
   type OverlayMenuItemEntry,
+  type OverlayMenuButtonToggleEntry,
+  type OverlayMenuButtonToggleOption,
 } from '../../brain/overlay-menu-brain/overlay-menu-brain';
-import { OverlayMenuItemBrainDirective } from '../../brain/overlay-menu-item-brain/overlay-menu-item-brain';
+import { OverlayMenuItemBrainDirective } from '../../brain/overlay-menu-brain/overlay-menu-item-brain';
 import { OverlayMenuDivider } from './overlay-menu-divider';
 import { OverlayMenuItemMeta } from './overlay-menu-item-meta';
 
@@ -17,10 +22,14 @@ export {
   type OverlayMenuItemEntry,
   type OverlayMenuItemType,
   type OverlayMenuDividerEntry,
+  type OverlayMenuButtonToggleEntry,
+  type OverlayMenuButtonToggleOption,
   type OverlayMenuItemTag,
+  type OverlayMenuEntryValueChange,
   allOverlayMenuItemTypes,
   OVERLAY_MENU_ITEMS_DEFAULT,
   OVERLAY_MENU_LABEL_DEFAULT,
+  OVERLAY_MENU_HEADER_DEFAULT,
 } from '../../brain/overlay-menu-brain/overlay-menu-brain';
 
 /** all available overlay menu state values driving the optional reveal motion */
@@ -45,14 +54,25 @@ export const OVERLAY_MENU_STATE_DEFAULT: OverlayMenuState | undefined = undefine
 @Component({
   selector: 'org-overlay-menu',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [List, ListItem, ListItemIcon, Tag, OverlayMenuDivider, OverlayMenuItemMeta, OverlayMenuItemBrainDirective],
+  imports: [
+    List,
+    ListItem,
+    ListItemIcon,
+    Tag,
+    Indicator,
+    ButtonToggle,
+    Kbd,
+    OverlayMenuDivider,
+    OverlayMenuItemMeta,
+    OverlayMenuItemBrainDirective,
+  ],
   templateUrl: './overlay-menu.html',
   styleUrl: './overlay-menu.css',
   hostDirectives: [
     {
       directive: OverlayMenuBrainDirective,
-      inputs: ['label', 'items'],
-      outputs: ['itemClicked'],
+      inputs: ['label', 'items', 'header'],
+      outputs: ['itemClicked', 'entryValueChanged'],
     },
   ],
   host: {
@@ -83,5 +103,20 @@ export class OverlayMenu<
   /** narrows the brain entry type's loose `tag.color` (string) into the strict `TagColor` for rendering */
   protected toTagColor(value: string): TagColor {
     return value as TagColor;
+  }
+
+  /** forwards a button-toggle entry's `(changed)` event to the parent brain's `entryValueChanged` output */
+  protected onButtonToggleValueChanged(entry: OverlayMenuButtonToggleEntry, value: string): void {
+    this.brain.handleEntryValueChanged(entry.id, value);
+  }
+
+  /** maps the brain's button-toggle options into the `ButtonToggleItem[]` contract the toggle expects */
+  protected toButtonToggleItems(options: OverlayMenuButtonToggleOption[]): ButtonToggleItem[] {
+    return options.map((option) => ({
+      label: option.label,
+      value: option.value,
+      buttonColor: option.buttonColor,
+      buttonDisabled: option.buttonDisabled,
+    }));
   }
 }

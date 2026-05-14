@@ -2,14 +2,28 @@
   /* shared (block + inline) */
   --code-block-font-family: var(--font-mono);
   --code-block-fg: var(--color-fg);
-  --code-block-bg: var(--color-bg-surface-2);
+  --code-block-bg: var(--color-bg-surface-secondary);
   --code-block-border: var(--color-border-soft);
+  --code-block-border-width: var(--border-width);
 
   /* block */
   --code-block-radius: var(--radius-base);
   --code-block-font-size: var(--font-size-sm);
   --code-block-line-height: var(--line-height-relaxed);
   --code-block-body-padding: var(--spacing-3);
+  --code-block-tab-size: 2;
+
+  /* fade mask (ellipsis overflow indicator) */
+  --code-block-fade-mask-color: black;
+  --code-block-fade-mask-end-distance: 2.25em;
+
+  /* floating copy affordance */
+  --code-block-floating-copy-offset: var(--spacing-1_5);
+  --code-block-floating-copy-z-index: var(--z-index-raised);
+
+  /* show-more affordance */
+  --code-block-show-more-offset: var(--spacing-2);
+  --code-block-show-more-z-index: var(--z-index-raised);
 
   /* block header */
   --code-block-header-bg: var(--color-bg-surface);
@@ -37,7 +51,7 @@
   --code-block-inline-radius: var(--radius-xs);
 
   /* inline tone — default (no tone) */
-  --code-block-tone-bg: var(--color-bg-surface-2);
+  --code-block-tone-bg: var(--color-bg-surface-secondary);
   --code-block-tone-fg: var(--color-fg);
   --code-block-tone-border: var(--color-border-soft);
 

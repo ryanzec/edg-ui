@@ -4,7 +4,7 @@
   }
 
   .cell {
-    padding: var(--table-cell-py) var(--table-cell-px);
+    padding: var(--table-cell-padding-y) var(--table-cell-padding-x);
     color: var(--table-fg);
     vertical-align: middle;
   }
@@ -23,7 +23,7 @@
   }
 
   .cell[data-select-col] {
-    width: 2.5rem; /* 40px */
+    width: var(--table-select-col-width);
     padding-left: 0;
     padding-right: 0;
     text-align: center;

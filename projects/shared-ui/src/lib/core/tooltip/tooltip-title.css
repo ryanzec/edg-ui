@@ -4,6 +4,6 @@
     color: var(--tooltip-title-color);
     font-size: var(--tooltip-title-font-size);
     font-weight: var(--tooltip-title-font-weight);
-    line-height: var(--tooltip-line-height);
+    line-height: var(--tooltip-title-line-height);
   }
 }

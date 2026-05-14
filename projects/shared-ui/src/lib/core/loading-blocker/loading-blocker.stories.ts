@@ -578,7 +578,7 @@ class LoadingBlockerIntensitySection {}
 
       .placeholder {
         height: 0.5rem; /* 8px */
-        background-color: var(--color-bg-surface-2);
+        background-color: var(--color-bg-surface-secondary);
         border-radius: var(--radius-xs);
       }
     `,
@@ -845,7 +845,7 @@ class LoadingBlockerScopeSection {}
 
       .placeholder {
         height: 0.5rem; /* 8px */
-        background-color: var(--color-bg-surface-2);
+        background-color: var(--color-bg-surface-secondary);
         border-radius: var(--radius-xs);
       }
     `,

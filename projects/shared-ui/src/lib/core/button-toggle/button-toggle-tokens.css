@@ -1,0 +1,15 @@
+:root {
+  /* layout */
+  --button-toggle-display: inline-flex;
+  --button-toggle-width: auto;
+  --button-toggle-radius: var(--button-radius);
+  --button-toggle-border-width: var(--border-width);
+  --button-toggle-disabled-opacity: var(--opacity-disabled);
+
+  /* padding slot */
+  --button-toggle-padding: var(--spacing-1);
+
+  /* color slots */
+  --button-toggle-background: var(--color-bg-surface);
+  --button-toggle-border: var(--color-border);
+}

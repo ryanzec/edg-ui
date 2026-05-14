@@ -34,18 +34,18 @@
 
   /* intensity drives scrim opacity and backdrop blur */
   :host([data-intensity='light']) {
-    --loading-blocker-scrim-opacity: var(--opacity-loading-blocker-scrim-light);
-    --loading-blocker-blur: 0;
+    --loading-blocker-scrim-opacity: var(--loading-blocker-scrim-opacity-light);
+    --loading-blocker-blur: var(--loading-blocker-blur-light);
   }
 
   :host([data-intensity='medium']) {
-    --loading-blocker-scrim-opacity: var(--opacity-loading-blocker-scrim-medium);
-    --loading-blocker-blur: var(--blur-loading-blocker-medium);
+    --loading-blocker-scrim-opacity: var(--loading-blocker-scrim-opacity-medium);
+    --loading-blocker-blur: var(--loading-blocker-blur-medium);
   }
 
   :host([data-intensity='heavy']) {
-    --loading-blocker-scrim-opacity: var(--opacity-loading-blocker-scrim-heavy);
-    --loading-blocker-blur: var(--blur-loading-blocker-heavy);
+    --loading-blocker-scrim-opacity: var(--loading-blocker-scrim-opacity-heavy);
+    --loading-blocker-blur: var(--loading-blocker-blur-heavy);
   }
 
   /* viewport scope covers the full window and uses the app background as the scrim */
@@ -53,7 +53,7 @@
     position: fixed;
     inset: 0;
     border-radius: 0;
-    z-index: var(--z-index-modal);
+    --loading-blocker-z-index: var(--loading-blocker-z-index-viewport);
     --loading-blocker-scrim-bg: var(--color-bg-app);
   }
 
@@ -93,11 +93,11 @@
   /* backdrop-filter fallback — bump the scrim opacity so the scrim still reads as separation */
   @supports not ((backdrop-filter: blur(0.0625rem)) or (-webkit-backdrop-filter: blur(0.0625rem))) {
     :host([data-intensity='medium']) {
-      --loading-blocker-scrim-opacity: 0.88;
+      --loading-blocker-scrim-opacity: var(--loading-blocker-scrim-opacity-medium-no-blur);
     }
 
     :host([data-intensity='light']) {
-      --loading-blocker-scrim-opacity: 0.72;
+      --loading-blocker-scrim-opacity: var(--loading-blocker-scrim-opacity-light-no-blur);
     }
   }
 

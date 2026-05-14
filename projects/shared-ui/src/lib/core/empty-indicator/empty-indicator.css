@@ -5,52 +5,48 @@
   }
 
   .org-empty-indicator {
-    --_empty-stack-gap: var(--spacing-empty-stack);
-    --_empty-icon-gap: var(--spacing-empty-icon-gap);
-    --_empty-action-gap: var(--spacing-empty-action-gap);
-    --_empty-desc-max-width: var(--sizing-empty-desc-max-width);
-
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
-    gap: var(--_empty-stack-gap);
+    gap: var(--empty-indicator-stack-gap);
   }
 
+  /* lg padding overrides spacing slot tokens only */
   .org-empty-indicator[data-padding='lg'] {
-    --_empty-stack-gap: var(--spacing-empty-stack-lg);
-    --_empty-icon-gap: var(--spacing-empty-icon-gap-lg);
-    --_empty-action-gap: var(--spacing-empty-action-gap-lg);
+    --empty-indicator-stack-gap: var(--spacing-3);
+    --empty-indicator-icon-gap: var(--spacing-5);
+    --empty-indicator-action-gap: var(--spacing-4);
   }
 
   .header {
     margin: 0;
-    color: var(--color-fg);
+    color: var(--empty-indicator-header-color);
     font-family: inherit;
-    font-size: var(--font-size-empty-header);
-    font-weight: var(--font-weight-semibold);
-    line-height: var(--line-height-tight);
-    letter-spacing: var(--letter-spacing-tight);
+    font-size: var(--empty-indicator-header-font-size);
+    font-weight: var(--empty-indicator-header-font-weight);
+    line-height: var(--empty-indicator-header-line-height);
+    letter-spacing: var(--empty-indicator-header-letter-spacing);
   }
 
   .description {
     margin: 0;
-    max-width: var(--_empty-desc-max-width);
-    color: var(--color-fg-muted);
+    max-width: var(--empty-indicator-description-max-width);
+    color: var(--empty-indicator-description-color);
     font-family: inherit;
-    font-size: var(--font-size-empty-description);
-    line-height: var(--line-height-normal);
+    font-size: var(--empty-indicator-description-font-size);
+    line-height: var(--empty-indicator-description-line-height);
     text-wrap: pretty;
   }
 
   /* extra breathing room above the action so it reads as a separate decision, not a paragraph follow-up */
   .org-empty-indicator > org-button {
-    margin-top: calc(var(--_empty-action-gap) - var(--_empty-stack-gap));
+    margin-top: calc(var(--empty-indicator-action-gap) - var(--empty-indicator-stack-gap));
   }
 
   /* extra gap below the icon so it reads as a visual lead-in rather than a peer of the header */
   .org-empty-indicator > org-empty-indicator-icon {
-    margin-bottom: calc(var(--_empty-icon-gap) - var(--_empty-stack-gap));
+    margin-bottom: calc(var(--empty-indicator-icon-gap) - var(--empty-indicator-stack-gap));
   }
 }

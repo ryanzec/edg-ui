@@ -1,10 +1,14 @@
 @layer components {
   :host {
     /* internal locals — read once from the date-picker-input design tokens */
-    --_anchor-gap: var(--spacing-date-picker-input-anchor-gap);
     --_popover-radius: var(--radius-date-picker-input-popover);
     --_popover-shadow: var(--shadow-date-picker-input-popover);
+    --_popover-offset: var(--spacing-date-picker-input-popover-offset);
+    --_popover-z-index: var(--z-index-date-picker-input-popover);
+    --_chevron-fg: var(--color-date-picker-input-trigger-chevron-fg);
+    --_chevron-fg-hover: var(--color-date-picker-input-trigger-chevron-fg-hover);
     --_motion-dur: var(--motion-date-picker-input-duration);
+    --_motion-easing: var(--motion-date-picker-input-easing);
 
     position: relative;
     display: block;
@@ -22,16 +26,16 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    color: var(--color-fg-muted);
+    color: var(--_chevron-fg);
     background-color: transparent;
     border: 0;
     padding: 0;
     cursor: pointer;
-    transition: transform var(--_motion-dur) var(--motion-ease-standard);
+    transition: transform var(--_motion-dur) var(--_motion-easing);
   }
 
   .trigger-chevron:not(:disabled):hover {
-    color: var(--color-fg);
+    color: var(--_chevron-fg-hover);
   }
 
   .trigger-chevron:disabled {
@@ -49,15 +53,15 @@
     width: max-content;
     border-radius: var(--_popover-radius);
     box-shadow: var(--_popover-shadow);
-    z-index: var(--z-index-popover);
+    z-index: var(--_popover-z-index);
     transition:
-      opacity var(--_motion-dur) var(--motion-ease-standard),
-      transform var(--_motion-dur) var(--motion-ease-standard);
+      opacity var(--_motion-dur) var(--_motion-easing),
+      transform var(--_motion-dur) var(--_motion-easing);
   }
 
   .org-date-picker-input-popover[data-state='closed'] {
     opacity: 0;
-    transform: translateY(-0.125rem); /* 2px */
+    transform: translateY(calc(-1 * var(--_popover-offset)));
     pointer-events: none;
   }
 

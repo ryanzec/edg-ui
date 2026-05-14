@@ -2,30 +2,33 @@
   :host {
     display: inline-flex;
     align-items: stretch;
-    width: 100%;
-    max-width: 22rem;
-    min-height: var(--input-height);
+    width: var(--input-width);
+    max-width: var(--input-max-width);
+    min-height: var(--input-min-height);
     padding: 0;
     border-radius: var(--input-radius);
-    border: var(--input-border-width) solid var(--input-border-color);
+    border-style: solid;
+    border-width: var(--input-border-width-top) var(--input-border-width-right) var(--input-border-width-bottom)
+      var(--input-border-width-left);
+    border-color: var(--input-border-color);
     background-color: var(--input-bg);
     color: var(--input-fg);
-    font-family: var(--font-sans);
+    font-family: var(--input-font-family);
     font-size: var(--input-font-size);
-    font-weight: var(--font-weight-regular);
+    font-weight: var(--input-font-weight);
     line-height: var(--input-line-height);
     letter-spacing: var(--input-letter-spacing);
     cursor: text;
     transition:
-      background-color var(--motion-duration-base) var(--motion-ease-standard),
-      border-color var(--motion-duration-base) var(--motion-ease-standard),
-      color var(--motion-duration-base) var(--motion-ease-standard);
+      background-color var(--input-transition-duration) var(--input-transition-easing),
+      border-color var(--input-transition-duration) var(--input-transition-easing),
+      color var(--input-transition-duration) var(--input-transition-easing);
   }
 
   /* native control */
   .native {
-    flex: 1 1 8ch;
-    min-width: 8ch;
+    flex: 1 1 var(--input-native-min-width);
+    min-width: var(--input-native-min-width);
     width: auto;
     margin: 0;
     border: 0;
@@ -35,8 +38,7 @@
     font: inherit;
     letter-spacing: inherit;
     cursor: inherit;
-    padding: calc((var(--input-height) - 1em * var(--input-line-height)) / 2 - var(--input-border-width))
-      var(--input-pad-x);
+    padding: var(--input-native-pad-block) var(--input-pad-x);
   }
 
   .native::placeholder {
@@ -45,7 +47,7 @@
   }
 
   .native::selection {
-    background-color: var(--color-primary-soft);
+    background-color: var(--input-selection-bg);
   }
 
   .native:disabled,
@@ -53,7 +55,9 @@
     cursor: not-allowed;
   }
 
-  /* neutralise webkit autofill so the yellow flash never appears and colors stay aligned */
+  /* neutralise webkit autofill so the yellow flash never appears and colors stay aligned. the 9999s
+     transition is a defensive hack to defer the browser's autofill background fill — it is not a design
+     value so it lives as a raw constant. */
   .native:-webkit-autofill,
   .native:-webkit-autofill:hover,
   .native:-webkit-autofill:focus {
@@ -91,7 +95,7 @@
     gap: var(--input-slot-gap);
     color: var(--input-fg-muted);
     font-size: var(--input-font-size);
-    line-height: 1;
+    line-height: var(--input-slot-line-height);
   }
 
   .pre {
@@ -151,10 +155,10 @@
 
   /* pin chip size by overriding tag tokens — input track owns the rhythm regardless of any data-size on children */
   :host([data-has-chips]) .track {
-    --tag-padding-block: 0;
-    --tag-padding-inline: var(--spacing-2);
-    --tag-font-size: var(--font-size-xs);
-    --tag-gap: var(--spacing-1);
+    --tag-padding-block: var(--input-chip-padding-block);
+    --tag-padding-inline: var(--input-chip-padding-inline);
+    --tag-font-size: var(--input-chip-font-size);
+    --tag-gap: var(--input-chip-gap);
   }
 
   /* post-slot ordering — spinner first, stepper last, others (clear / password toggle / post icon) middle */
@@ -180,8 +184,8 @@
   }
 
   .icon-btn:focus-visible {
-    background-color: var(--color-primary-soft);
-    border-radius: var(--radius-sm);
+    background-color: var(--input-icon-btn-focus-bg);
+    border-radius: var(--input-icon-btn-radius);
   }
 
   .icon-btn:not(:disabled):hover {
@@ -219,8 +223,8 @@
     display: inline-flex;
     flex-direction: column;
     width: var(--input-stepper-width);
-    height: calc(var(--input-height) - 0.25rem);
-    border-radius: var(--radius-xs);
+    height: calc(var(--input-height) - var(--input-stepper-vertical-inset));
+    border-radius: var(--input-stepper-radius);
     overflow: hidden;
     flex-shrink: 0;
   }
@@ -272,16 +276,19 @@
   :host(.is-hover:not([data-state='error']):not([data-disabled])) {
     background-color: var(--input-bg-hover);
     border-color: var(--input-border-color-hover);
+    color: var(--input-fg-hover);
   }
 
   :host(:focus-within:not([data-state='error']):not([data-disabled])),
   :host(.is-focus:not([data-state='error']):not([data-disabled])) {
     background-color: var(--input-bg-focus);
     border-color: var(--input-border-color-focus);
+    color: var(--input-fg-focus);
   }
 
   :host([data-state='error']) {
     border-color: var(--input-border-color-error);
+    color: var(--input-fg-error);
   }
 
   :host([data-disabled]) {
@@ -291,8 +298,8 @@
   }
 
   :host([data-readonly]:not([data-variant='inline'])) {
-    --input-bg: var(--color-bg-surface-2);
-    --input-bg-hover: var(--color-bg-surface-2);
+    --input-bg: var(--color-bg-surface-secondary);
+    --input-bg-hover: var(--color-bg-surface-secondary);
   }
 
   /* === VARIANTS === */
@@ -310,7 +317,7 @@
   /* borderless: no chrome until interacted with — meant to live inside another bordered surface */
   :host([data-variant='borderless']) {
     --input-bg: transparent;
-    --input-bg-hover: var(--color-bg-surface-2);
+    --input-bg-hover: var(--color-bg-surface-secondary);
     --input-bg-focus: transparent;
     --input-border-color: transparent;
     --input-border-color-hover: transparent;
@@ -320,41 +327,26 @@
 
   /* inline: hugs its text, focused = single underline. Looks like editable inline copy */
   :host([data-variant='inline']) {
-    min-height: auto;
-    height: auto;
-    padding: 0;
-    border-width: 0;
-    border-bottom: var(--border-width) solid transparent;
-    border-radius: 0;
-    color: var(--color-fg-muted);
-    width: auto;
-    max-width: none;
-    background-color: transparent;
-  }
-
-  :host([data-variant='inline']) .native,
-  :host([data-variant='inline']) .pre,
-  :host([data-variant='inline']) .post {
-    padding: 0;
-    height: auto;
-    width: auto;
-  }
-
-  :host([data-variant='inline']:hover:not([data-state='error']):not([data-disabled])) {
-    color: var(--color-fg);
-    background-color: transparent;
-    border-color: transparent;
-  }
-
-  :host([data-variant='inline']:focus-within:not([data-state='error']):not([data-disabled])),
-  :host([data-variant='inline'].is-focus:not([data-state='error']):not([data-disabled])) {
-    color: var(--color-fg);
-    border-bottom-color: var(--color-info);
-    background-color: transparent;
-  }
-
-  :host([data-variant='inline'][data-state='error']) {
-    border-bottom-color: var(--color-danger);
-    color: var(--color-fg);
+    --input-min-height: auto;
+    --input-width: auto;
+    --input-max-width: none;
+    --input-radius: 0;
+    --input-pad-x: 0;
+    --input-pad-x-tight: 0;
+    --input-native-pad-block: 0;
+    --input-border-width-top: 0;
+    --input-border-width-right: 0;
+    --input-border-width-left: 0;
+    --input-bg: transparent;
+    --input-bg-hover: transparent;
+    --input-bg-focus: transparent;
+    --input-border-color: transparent;
+    --input-border-color-hover: transparent;
+    --input-border-color-focus: var(--color-info);
+    --input-border-color-error: var(--color-danger);
+    --input-fg: var(--color-fg-muted);
+    --input-fg-hover: var(--color-fg);
+    --input-fg-focus: var(--color-fg);
+    --input-fg-error: var(--color-fg);
   }
 }

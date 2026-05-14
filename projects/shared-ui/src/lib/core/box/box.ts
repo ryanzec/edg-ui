@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { angularUtils } from '@organization/shared-utils';
+import { BoxBrainDirective } from '../../brain/box-brain/box-brain';
 import { ComponentColor, allComponentColors } from '../types/component-types';
 
 /** the color variant type for the box component */
@@ -55,6 +56,12 @@ export const BOX_BACKGROUND_DEFAULT: BoxBackground = 'colored';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content />',
   styleUrl: './box.css',
+  hostDirectives: [
+    {
+      directive: BoxBrainDirective,
+      outputs: ['clicked'],
+    },
+  ],
   host: {
     '[attr.data-color]': 'color()',
     '[attr.data-border]': 'border()',

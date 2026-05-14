@@ -1,4 +1,17 @@
-import { Component, ChangeDetectionStrategy, input, viewChild, computed } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  input,
+  viewChild,
+  computed,
+  inject,
+  NgZone,
+  DestroyRef,
+  ElementRef,
+  AfterViewInit,
+} from '@angular/core';
+import { CdkScrollable, ScrollDispatcher } from '@angular/cdk/scrolling';
+import { Subject, type Observable } from 'rxjs';
 import { NgScrollbar } from 'ngx-scrollbar';
 import type { ScrollbarOrientation, ScrollbarVisibility } from 'ngx-scrollbar';
 import { angularUtils, cssUtils } from '@organization/shared-utils';
@@ -30,6 +43,43 @@ export const SCROLL_AREA_ROLE_DEFAULT: string | undefined = undefined;
 /** default value for the ariaLabel input */
 export const SCROLL_AREA_ARIA_LABEL_DEFAULT: string | undefined = undefined;
 
+/**
+ * minimal CdkScrollable-shaped adapter so CDK's ScrollDispatcher can be told about an `ngx-scrollbar`
+ * viewport element. ScrollDispatcher only needs `elementScrolled()` for its subscription bookkeeping,
+ * and `getElementRef()` for ancestor-containment checks performed by the cdk overlay's reposition logic.
+ */
+class _NgScrollbarCdkScrollable {
+  private readonly _elementScrolled$ = new Subject<Event>();
+  private readonly _elementRef: ElementRef<HTMLElement>;
+  private readonly _viewportElement: HTMLElement;
+  private readonly _onScroll: (event: Event) => void;
+
+  constructor(viewportElement: HTMLElement, ngZone: NgZone) {
+    this._viewportElement = viewportElement;
+    this._elementRef = new ElementRef(viewportElement);
+    this._onScroll = (event: Event) => this._elementScrolled$.next(event);
+    ngZone.runOutsideAngular(() => {
+      viewportElement.addEventListener('scroll', this._onScroll, { passive: true });
+    });
+  }
+
+  /** scroll stream consumed by CDK's ScrollDispatcher */
+  public elementScrolled(): Observable<Event> {
+    return this._elementScrolled$;
+  }
+
+  /** viewport element ref consumed by CDK's reposition strategy for ancestor checks */
+  public getElementRef(): ElementRef<HTMLElement> {
+    return this._elementRef;
+  }
+
+  /** removes the dom listener and completes the scroll stream */
+  public destroy(): void {
+    this._viewportElement.removeEventListener('scroll', this._onScroll);
+    this._elementScrolled$.complete();
+  }
+}
+
 @Component({
   selector: 'org-scroll-area',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -42,7 +92,10 @@ export const SCROLL_AREA_ARIA_LABEL_DEFAULT: string | undefined = undefined;
     '[attr.data-enabled]': 'enabled() ? "" : null',
   },
 })
-export class ScrollArea {
+export class ScrollArea implements AfterViewInit {
+  private readonly _scrollDispatcher = inject(ScrollDispatcher);
+  private readonly _ngZone = inject(NgZone);
+  private readonly _destroyRef = inject(DestroyRef);
   private readonly _ngScrollbarComponent = viewChild.required<NgScrollbar>('ngScrollbarComponent');
 
   /** scroll direction controlling which axes are scrollable */
@@ -96,4 +149,18 @@ export class ScrollArea {
   public readonly containerElement = computed<HTMLElement>(() => {
     return this._ngScrollbarComponent().adapter.viewportElement;
   });
+
+  public ngAfterViewInit(): void {
+    // register the ngx-scrollbar viewport with cdk's scrolldispatcher so cdk overlays anchored to a
+    // trigger inside this scroll area receive scroll events and reposition (or close) accordingly —
+    // without this, overlays stay fixed in viewport coordinates while the trigger moves underneath
+    const viewportElement = this.containerElement();
+    const scrollable = new _NgScrollbarCdkScrollable(viewportElement, this._ngZone);
+    this._scrollDispatcher.register(scrollable as unknown as CdkScrollable);
+
+    this._destroyRef.onDestroy(() => {
+      this._scrollDispatcher.deregister(scrollable as unknown as CdkScrollable);
+      scrollable.destroy();
+    });
+  }
 }

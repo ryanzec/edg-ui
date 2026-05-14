@@ -1,5 +1,5 @@
 import { Directive, DestroyRef, ElementRef, computed, effect, inject, input, output, signal } from '@angular/core';
-import { RadioGroupBrainDirective, RegisterableRadio } from '../radio-group-brain/radio-group-brain';
+import { RadioGroupBrainDirective, RegisterableRadio } from './radio-group-brain';
 
 /** default value for the disabled input */
 export const RADIO_DISABLED_DEFAULT = false;

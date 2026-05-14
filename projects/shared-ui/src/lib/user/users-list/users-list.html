@@ -12,7 +12,6 @@
 <div class="flex flex-row items-center justify-between gap-2">
   <div class="flex flex-row items-center gap-1 flex-1">
     <org-input
-      class="block w-3xs"
       name="users-list-search"
       placeholder="Search by name, email, or ID..."
       preIcon="search"
@@ -21,14 +20,14 @@
     <org-drop-down-selector
       label="Role"
       selectionMode="multiple"
-      iconName="chevron-down"
+      [showLabelWithValue]="true"
       [items]="roleFilterOptions"
       [(selectedItems)]="selectedRoleFilters"
     />
     <org-drop-down-selector
       label="Permission"
       selectionMode="multiple"
-      iconName="chevron-down"
+      [showLabelWithValue]="true"
       [items]="permissionFilterOptions"
       [(selectedItems)]="selectedPermissionFilters"
     />
@@ -63,7 +62,7 @@
     <ng-template [orgTypedContext]="users()" #body let-user>
       <org-table-td>
         <div class="flex flex-row items-center gap-1">
-          <org-avatar [label]="fullName(user)" />
+          <org-avatar [label]="fullName(user)" size="sm" />
           <div class="flex flex-col">
             <span orgText textSize="sm">{{ fullName(user) }}</span>
             <span orgText textSize="2xs" textColor="neutral">{{ subId(user) }}</span>
@@ -91,8 +90,8 @@
       <org-table-td>
         <div class="flex justify-end">
           <org-button
-            [cdkMenuTriggerFor]="userActionsMenu"
-            [cdkMenuPosition]="rowActionsMenuPosition"
+            orgTableActions
+            [orgOverlayMenuTrigger]="userActionsMenu"
             color="neutral"
             variant="ghost"
             [iconOnly]="true"

@@ -361,6 +361,72 @@ class DropDownSelectorLiveDemoStory {
   }
 }
 
+@Component({
+  selector: 'story-drop-down-selector-position-flip',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [DropDownSelectorHost],
+  styles: [
+    `
+      :host {
+        display: block;
+      }
+      .flip-stage {
+        position: relative;
+        width: 100%;
+        height: 70vh;
+        min-height: 28rem; /* 448px */
+        border: 1px dashed var(--color-border, currentColor);
+        border-radius: 0.375rem; /* 6px */
+      }
+      .flip-corner {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem; /* 8px */
+      }
+      .top-left {
+        top: 0.5rem; /* 8px */
+        left: 0.5rem; /* 8px */
+      }
+      .top-right {
+        top: 0.5rem; /* 8px */
+        right: 0.5rem; /* 8px */
+      }
+      .bottom-left {
+        bottom: 0.5rem; /* 8px */
+        left: 0.5rem; /* 8px */
+      }
+      .bottom-right {
+        bottom: 0.5rem; /* 8px */
+        right: 0.5rem; /* 8px */
+      }
+    `,
+  ],
+  template: `
+    <div class="flip-stage">
+      <div class="flip-corner top-left">
+        <story-drop-down-selector-host [items]="items" label="below" position="below" />
+        <story-drop-down-selector-host [items]="items" label="before" position="before" />
+      </div>
+      <div class="flip-corner top-right">
+        <story-drop-down-selector-host [items]="items" label="below" position="below" />
+        <story-drop-down-selector-host [items]="items" label="after" position="after" />
+      </div>
+      <div class="flip-corner bottom-left">
+        <story-drop-down-selector-host [items]="items" label="above" position="above" />
+        <story-drop-down-selector-host [items]="items" label="before" position="before" />
+      </div>
+      <div class="flip-corner bottom-right">
+        <story-drop-down-selector-host [items]="items" label="above" position="above" />
+        <story-drop-down-selector-host [items]="items" label="after" position="after" />
+      </div>
+    </div>
+  `,
+})
+class DropDownSelectorPositionFlipStory {
+  protected readonly items = STATUS_ITEMS;
+}
+
 export const LiveDemo: Story = {
   parameters: {
     docs: {
@@ -506,6 +572,22 @@ export const Showcase: Story = {
         </org-design-system-demo-expected-behaviour>
 
         <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Position Flipping" />
+          <org-design-system-demo-canvas slot="canvas">
+            <story-drop-down-selector-position-flip />
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li>Each corner trigger requests its preferred <code>position</code> as a starting point only</li>
+            <li><strong>Below / Above</strong>: When there isn't enough room on the primary axis, the panel flips to the opposite side of the trigger</li>
+            <li><strong>Before / After</strong>: When there isn't enough room on the horizontal axis, the panel flips to the opposite side of the trigger</li>
+            <li><strong>Cross-axis alignment</strong>: Near a side edge, the panel also flips its alignment (e.g. left-aligned → right-aligned) so it stays inside the viewport</li>
+            <li>Resize the Storybook canvas if needed — flipping is driven by the live viewport, so the corner triggers near each edge demonstrate the worst-case behavior</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
           <org-design-system-demo-header slot="header" title="Pre Icon" />
           <org-design-system-demo-canvas slot="canvas">
             <story-drop-down-selector-host [items]="statusItems" label="Status" size="sm" iconName="settings" />
@@ -621,6 +703,7 @@ export const Showcase: Story = {
     moduleMetadata: {
       imports: [
         DropDownSelectorHost,
+        DropDownSelectorPositionFlipStory,
         DesignSystemDemo,
         DesignSystemDemoHeader,
         DesignSystemDemoCanvas,

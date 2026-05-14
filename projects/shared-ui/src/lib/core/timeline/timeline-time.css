@@ -7,7 +7,7 @@
     color: var(--timeline-time-color);
     text-transform: uppercase;
     font-variant-numeric: tabular-nums;
-    line-height: 1;
+    line-height: var(--timeline-time-line-height);
     margin-bottom: var(--timeline-time-margin-bottom);
   }
 }

@@ -24,6 +24,9 @@ export const BUTTON_TOGGLE_DISABLED_DEFAULT = false;
 /** default value for the buttonSize input */
 export const BUTTON_TOGGLE_BUTTON_SIZE_DEFAULT: ButtonSize = 'base';
 
+/** default value for the fullWidth input */
+export const BUTTON_TOGGLE_FULL_WIDTH_DEFAULT = false;
+
 @Component({
   selector: 'org-button-toggle',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -41,6 +44,7 @@ export const BUTTON_TOGGLE_BUTTON_SIZE_DEFAULT: ButtonSize = 'base';
     role: 'group',
     '[attr.data-disabled]': 'isDisabled() ? "" : null',
     '[attr.aria-disabled]': 'isDisabled() ? "true" : null',
+    '[attr.data-full-width]': 'fullWidth() ? "" : null',
   },
   providers: [
     {
@@ -69,6 +73,9 @@ export class ButtonToggle implements ControlValueAccessor {
 
   /** the size applied to every button rendered within the toggle */
   public readonly buttonSize = input<ButtonSize>(BUTTON_TOGGLE_BUTTON_SIZE_DEFAULT);
+
+  /** when true, the toggle stretches to fill its parent's width and each button takes an equal share */
+  public readonly fullWidth = input<boolean>(BUTTON_TOGGLE_FULL_WIDTH_DEFAULT);
 
   /** the resolved current value — proxied from the brain */
   public readonly currentValue = computed<string>(() => this._brain.currentValue());

@@ -2,6 +2,7 @@
   @for (item of items(); track item.value) {
     <org-button
       variant="soft"
+      [class.w-full]="fullWidth()"
       [color]="item.buttonColor"
       [size]="buttonSize()"
       [isActive]="item.value === currentValue()"

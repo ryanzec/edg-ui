@@ -1,0 +1,4 @@
+:root {
+  /* slot token — defaults that the component css consumes */
+  --loading-spinner-animation: var(--animate-spin);
+}

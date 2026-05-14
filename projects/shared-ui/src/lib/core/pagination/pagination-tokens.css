@@ -1,25 +1,25 @@
 :root {
   /* layout */
-  --spacing-pagination-row-gap: var(--spacing-2);
-  --spacing-pagination-group-gap: var(--spacing-2);
-  --spacing-pagination-button-gap: var(--spacing-1);
-  --spacing-pagination-label-gap: var(--spacing-2);
+  --pagination-row-gap: var(--spacing-2);
+  --pagination-group-gap: var(--spacing-2);
+  --pagination-button-gap: var(--spacing-1);
+  --pagination-result-gap: var(--spacing-1);
 
   /* typography */
-  --font-size-pagination: var(--font-size-base);
-  --font-size-pagination-label: var(--font-size-xs);
-  --font-weight-pagination-label: var(--font-weight-regular);
-  --font-weight-pagination-result: var(--font-weight-regular);
-  --font-weight-pagination-emphasis: var(--font-weight-semibold);
-  --font-variant-pagination: tabular-nums;
+  --pagination-font-size: var(--font-size-base);
+  --pagination-font-variant: tabular-nums;
+  --pagination-label-font-size: var(--font-size-xs);
+  --pagination-label-font-weight: var(--font-weight-regular);
+  --pagination-result-font-weight: var(--font-weight-regular);
+  --pagination-result-emphasis-font-weight: var(--font-weight-semibold);
+  --pagination-ellipsis-line-height: 1;
 
   /* colors */
-  --color-pagination-result: var(--color-fg-muted);
-  --color-pagination-result-emphasis: var(--color-fg);
-  --color-pagination-label: var(--color-fg-muted);
-  --color-pagination-ellipsis: var(--color-fg-muted);
+  --pagination-result-fg: var(--color-fg-muted);
+  --pagination-result-emphasis-fg: var(--color-fg);
+  --pagination-label-fg: var(--color-fg-muted);
+  --pagination-ellipsis-fg: var(--color-fg-muted);
 
   /* sizing */
-  --sizing-pagination-select: var(--sizing-8xs);
-  --sizing-pagination-ellipsis: var(--sizing-11xs);
+  --pagination-ellipsis-size: var(--sizing-11xs);
 }

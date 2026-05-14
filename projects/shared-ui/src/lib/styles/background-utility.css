@@ -12,8 +12,8 @@
     background-color: var(--color-bg-surface);
   }
 
-  .bg-surface-2 {
-    background-color: var(--color-bg-surface-2);
+  .bg-surface-secondary {
+    background-color: var(--color-bg-surface-secondary);
   }
 
   .bg-hover {

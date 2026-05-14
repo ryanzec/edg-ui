@@ -45,10 +45,10 @@
 @keyframes skeleton-pulse {
   0%,
   100% {
-    opacity: var(--opacity-skeleton-pulse-max);
+    opacity: var(--skeleton-pulse-opacity-max);
   }
   50% {
-    opacity: var(--opacity-skeleton-pulse-min);
+    opacity: var(--skeleton-pulse-opacity-min);
   }
 }
 
@@ -113,7 +113,7 @@
 @keyframes dialog-panel-enter {
   from {
     opacity: 0;
-    transform: var(--_motion-transform-from);
+    transform: var(--dialog-motion-transform-from);
   }
   to {
     opacity: 1;

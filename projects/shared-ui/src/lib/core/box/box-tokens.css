@@ -1,0 +1,30 @@
+:root {
+  /* layout */
+  --box-radius: var(--radius-base);
+
+  /* padding slot */
+  --box-padding: var(--spacing-2);
+
+  /* unified border width / color slots */
+  --box-border-width: var(--border-width);
+  --box-border-color: var(--color-border);
+
+  /* per-side slots — default to the unified slot */
+  --box-border-top-width: var(--box-border-width);
+  --box-border-right-width: var(--box-border-width);
+  --box-border-bottom-width: var(--box-border-width);
+  --box-border-left-width: var(--box-border-width);
+
+  /* background slot */
+  --box-bg: var(--color-bg-surface);
+
+  /* clickable state slots — hover / pressed tints layer on top of --box-bg */
+  --box-bg-clickable-hover: var(--color-bg-hover);
+  --box-bg-clickable-pressed: var(--color-bg-active);
+
+  /* clickable focus ring */
+  --box-focus-ring: var(--shadow-focus-ring);
+
+  /* one-off design value */
+  --box-border-emphasize-left-width: 0.4375rem; /* 7px */
+}

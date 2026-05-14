@@ -1,13 +1,23 @@
 @layer components {
   :host {
-    display: inline-flex;
+    display: var(--button-toggle-display);
+    width: var(--button-toggle-width);
     background-color: var(--button-toggle-background);
-    border: var(--border-width) solid var(--button-toggle-border);
+    border: var(--button-toggle-border-width) solid var(--button-toggle-border);
     border-radius: var(--button-toggle-radius);
     padding: var(--button-toggle-padding);
   }
 
   :host([data-disabled]) {
-    opacity: var(--opacity-disabled);
+    opacity: var(--button-toggle-disabled-opacity);
+  }
+
+  :host([data-full-width]) {
+    --button-toggle-display: flex;
+    --button-toggle-width: 100%;
+  }
+
+  :host([data-full-width]) org-button-group {
+    flex: 1;
   }
 }

@@ -1,6 +1,6 @@
 @layer components {
   :host {
     display: block;
-    margin-block: var(--spacing-1);
+    margin-block: var(--overlay-menu-divider-margin-block);
   }
 }

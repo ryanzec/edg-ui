@@ -29,7 +29,7 @@
     margin-inline-start: var(--label-marker-margin-inline-start);
     color: var(--label-marker-color);
     font-weight: var(--label-marker-font-weight);
-    line-height: 1;
+    line-height: var(--label-marker-line-height);
   }
 
   .org-label .org-loading-spinner {

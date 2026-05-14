@@ -10,10 +10,12 @@
   .list-item-content {
     display: flex;
     align-items: center;
-    gap: var(--spacing-2);
+    gap: var(--list-item-gap);
     width: 100%;
     outline: none;
-    /*background-color: var(--color-bg-app);*/
+    padding: var(--list-item-padding-block) var(--list-item-padding-inline);
+    font-size: var(--list-item-font-size);
+    min-height: var(--list-item-min-height);
   }
 
   :host button.list-item-content {
@@ -21,14 +23,11 @@
     text-align: left;
   }
 
-  :host([data-size='base']) .list-item-content {
-    padding: var(--spacing-2) var(--spacing-2_5);
-    font-size: var(--font-size-lg);
-  }
-
-  :host([data-size='sm']) .list-item-content {
-    padding: var(--spacing-1) var(--spacing-1_5);
-    font-size: var(--font-size-base);
+  :host([data-size='sm']) {
+    --list-item-padding-block: var(--spacing-1);
+    --list-item-padding-inline: var(--spacing-1_5);
+    --list-item-font-size: var(--font-size-base);
+    --list-item-min-height: 30px;
   }
 
   :host([data-clickable]) .list-item-content {
@@ -36,22 +35,22 @@
   }
 
   :host([data-selected]) .list-item-content {
-    background-color: var(--color-primary-soft);
+    background-color: var(--list-item-selected-bg);
   }
 
   :host([data-clickable]) .list-item-content:is(:hover, :focus-visible) {
-    background-color: var(--color-neutral-soft-hover);
+    background-color: var(--list-item-hover-bg);
   }
 
   :host([aria-disabled='true']) .list-item-content {
-    color: var(--color-fg-faint);
+    color: var(--list-item-disabled-fg);
     cursor: not-allowed;
     pointer-events: auto;
   }
 
   /* single-mode parent list rounds the selected and hovered item content */
   :host([data-parent-select-mode='single']) .list-item-content {
-    border-radius: var(--radius-base);
+    border-radius: var(--list-item-radius);
   }
 
   /* keeps the auto-rendered external-href icon aligned to the rightmost edge of the row */

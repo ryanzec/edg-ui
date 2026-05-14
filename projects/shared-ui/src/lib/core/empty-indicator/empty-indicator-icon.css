@@ -3,47 +3,48 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    color: var(--color-fg);
+    /* the slot owns `color`; the inner icon is locked to "inherit" so it picks this up via currentColor */
+    color: var(--empty-indicator-icon-color);
   }
 
-  /* color tints — the slot owns `color`, the inner icon locked to "inherit" picks it up via currentColor */
+  /* color tints override the slot token, not the property */
   :host([data-color='muted']) {
-    color: var(--color-fg-muted);
+    --empty-indicator-icon-color: var(--color-fg-muted);
   }
 
   :host([data-color='faint']) {
-    color: var(--color-fg-faint);
+    --empty-indicator-icon-color: var(--color-fg-faint);
   }
 
   :host([data-color='primary']) {
-    color: var(--color-primary);
+    --empty-indicator-icon-color: var(--color-primary);
   }
 
   :host([data-color='secondary']) {
-    color: var(--color-secondary);
+    --empty-indicator-icon-color: var(--color-secondary);
   }
 
   :host([data-color='neutral']) {
-    color: var(--color-neutral);
+    --empty-indicator-icon-color: var(--color-neutral);
   }
 
   :host([data-color='safe']) {
-    color: var(--color-safe);
+    --empty-indicator-icon-color: var(--color-safe);
   }
 
   :host([data-color='info']) {
-    color: var(--color-info);
+    --empty-indicator-icon-color: var(--color-info);
   }
 
   :host([data-color='caution']) {
-    color: var(--color-caution);
+    --empty-indicator-icon-color: var(--color-caution);
   }
 
   :host([data-color='warning']) {
-    color: var(--color-warning);
+    --empty-indicator-icon-color: var(--color-warning);
   }
 
   :host([data-color='danger']) {
-    color: var(--color-danger);
+    --empty-indicator-icon-color: var(--color-danger);
   }
 }

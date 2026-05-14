@@ -1,22 +1,33 @@
 :root {
   /* segment selection band — the "this segment takes keystrokes" highlight */
-  --color-time-input-segment-active-bg: var(--color-info);
-  --color-time-input-segment-active-fg: var(--color-info-on);
+  --time-input-segment-active-bg: var(--color-info);
+  --time-input-segment-active-fg: var(--color-info-on);
+
+  /* segment default background */
+  --time-input-segment-bg: transparent;
+
+  /* segment foreground when the segment has no value yet */
+  --time-input-segment-empty-fg: var(--color-fg-faint);
 
   /* literal separators (colon between hh / mm) */
-  --color-time-input-separator: var(--color-fg-muted);
+  --time-input-separator-color: var(--color-fg-muted);
 
   /* spacing inside / between segments */
-  --spacing-time-input-segment-x: var(--spacing-1);
-  --spacing-time-input-segment-gap: 0;
-  --spacing-time-input-meridiem-gap: var(--spacing-1_5);
+  --time-input-segment-padding-inline: var(--spacing-1);
+  --time-input-segment-gap: 0;
+  --time-input-meridiem-gap: var(--spacing-1_5);
 
   /* segment chip radius */
-  --radius-time-input-segment: var(--radius-xs);
+  --time-input-segment-radius: var(--radius-xs);
 
-  /* transition duration applied to segment bg / fg */
-  --motion-time-input-duration: var(--motion-duration-base);
+  /* transition applied to segment bg / fg */
+  --time-input-transition-duration: var(--motion-duration-base);
+  --time-input-transition-easing: var(--motion-ease-standard);
 
-  /* min-width for the meridiem segment so "AM" / "PM" sit at the same width */
-  --sizing-time-input-segment-meridiem: var(--sizing-11xs);
+  /* meridiem segment sizing / typography */
+  --time-input-meridiem-min-width: var(--sizing-11xs);
+  --time-input-meridiem-letter-spacing: var(--letter-spacing-wide);
+
+  /* pre slot line-height (icon sits visually centered against the row) */
+  --time-input-pre-line-height: 1;
 }

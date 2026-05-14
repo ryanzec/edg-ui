@@ -4,6 +4,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs';
 import type { Meta, StoryObj } from '@storybook/angular';
 import { ButtonToggle, ButtonToggleItem } from '../button-toggle/button-toggle';
+import { Card } from '../card/card';
 import { CheckboxToggle } from '../checkbox-toggle/checkbox-toggle';
 import { Input } from '../input/input';
 import { FormFields } from '../form-fields/form-fields';
@@ -14,15 +15,7 @@ import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/d
 import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
 import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
 import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
-import {
-  Checkbox,
-  CheckboxColor,
-  CheckboxSize,
-  CheckboxVariant,
-  allCheckboxColors,
-  allCheckboxSizes,
-  allCheckboxVariants,
-} from './checkbox';
+import { Checkbox, CheckboxColor, CheckboxSize, allCheckboxColors, allCheckboxSizes } from './checkbox';
 import { CheckboxGroup } from './checkbox-group';
 
 const liveDemoSizeItems: ButtonToggleItem[] = allCheckboxSizes.map((size) => ({
@@ -34,12 +27,6 @@ const liveDemoSizeItems: ButtonToggleItem[] = allCheckboxSizes.map((size) => ({
 const liveDemoColorItems: ButtonToggleItem[] = allCheckboxColors.map((color) => ({
   label: color,
   value: color,
-  buttonColor: 'primary',
-}));
-
-const liveDemoVariantItems: ButtonToggleItem[] = allCheckboxVariants.map((variant) => ({
-  label: variant,
-  value: variant,
   buttonColor: 'primary',
 }));
 
@@ -136,6 +123,146 @@ class CheckboxSelectAllSection {
 }
 
 @Component({
+  selector: 'story-checkbox-card-section',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [Card, Checkbox, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
+  template: `
+    <org-design-system-demo>
+      <org-design-system-demo-header
+        slot="header"
+        title="Card-tile pattern"
+        description="Wrap each option in org-card and bind (clicked) so the whole tile toggles the checkbox underneath. Useful for permission pickers, feature opt-ins, and any list where each option needs to read as its own surface."
+      />
+      <org-design-system-demo-canvas slot="canvas">
+        <div class="flex flex-col gap-2 w-full">
+          <org-card (clicked)="toggle('read')">
+            <org-checkbox
+              name="card-read"
+              value="read"
+              [checked]="selections().read"
+              (click)="$event.stopPropagation()"
+              (checkedChange)="setSelection('read', $event)"
+              description="View projects, files, and comments. No write access."
+            >
+              Read
+            </org-checkbox>
+          </org-card>
+          <org-card (clicked)="toggle('write')">
+            <org-checkbox
+              name="card-write"
+              value="write"
+              [checked]="selections().write"
+              (click)="$event.stopPropagation()"
+              (checkedChange)="setSelection('write', $event)"
+              description="Create, edit, and delete projects and files."
+            >
+              Write
+            </org-checkbox>
+          </org-card>
+          <org-card (clicked)="toggle('admin')">
+            <org-checkbox
+              name="card-admin"
+              value="admin"
+              [checked]="selections().admin"
+              (click)="$event.stopPropagation()"
+              (checkedChange)="setSelection('admin', $event)"
+              description="Manage members, billing, and workspace settings."
+            >
+              Admin
+            </org-checkbox>
+          </org-card>
+        </div>
+      </org-design-system-demo-canvas>
+    </org-design-system-demo>
+  `,
+})
+class CheckboxCardSection {
+  protected readonly selections = signal<{ read: boolean; write: boolean; admin: boolean }>({
+    read: true,
+    write: true,
+    admin: false,
+  });
+
+  protected toggle(key: 'read' | 'write' | 'admin'): void {
+    this.selections.update((current) => ({ ...current, [key]: !current[key] }));
+  }
+
+  protected setSelection(key: 'read' | 'write' | 'admin', value: boolean): void {
+    this.selections.update((current) => ({ ...current, [key]: value }));
+  }
+}
+
+@Component({
+  selector: 'story-checkbox-group-card-section',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [Card, Checkbox, CheckboxGroup, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
+  template: `
+    <org-design-system-demo>
+      <org-design-system-demo-header
+        slot="header"
+        title="Checkbox Group — card-tile pattern"
+        description="Pair org-checkbox-group with org-card-wrapped children for a permissions-list layout. Each card forwards (clicked) to its checkbox so the entire surface is a hit target."
+      />
+      <org-design-system-demo-canvas slot="canvas">
+        <org-checkbox-group legend="Permissions" description="What this teammate can do in the workspace.">
+          <org-card (clicked)="toggle('read')">
+            <org-checkbox
+              name="cbg-card-read"
+              value="read"
+              [checked]="selections().read"
+              (click)="$event.stopPropagation()"
+              (checkedChange)="setSelection('read', $event)"
+              description="View projects, files, and comments. No write access."
+            >
+              Read
+            </org-checkbox>
+          </org-card>
+          <org-card (clicked)="toggle('write')">
+            <org-checkbox
+              name="cbg-card-write"
+              value="write"
+              [checked]="selections().write"
+              (click)="$event.stopPropagation()"
+              (checkedChange)="setSelection('write', $event)"
+              description="Create, edit, and delete projects and files."
+            >
+              Write
+            </org-checkbox>
+          </org-card>
+          <org-card (clicked)="toggle('admin')">
+            <org-checkbox
+              name="cbg-card-admin"
+              value="admin"
+              [checked]="selections().admin"
+              (click)="$event.stopPropagation()"
+              (checkedChange)="setSelection('admin', $event)"
+              description="Manage members, billing, and workspace settings."
+            >
+              Admin
+            </org-checkbox>
+          </org-card>
+        </org-checkbox-group>
+      </org-design-system-demo-canvas>
+    </org-design-system-demo>
+  `,
+})
+class CheckboxGroupCardSection {
+  protected readonly selections = signal<{ read: boolean; write: boolean; admin: boolean }>({
+    read: true,
+    write: false,
+    admin: false,
+  });
+
+  protected toggle(key: 'read' | 'write' | 'admin'): void {
+    this.selections.update((current) => ({ ...current, [key]: !current[key] }));
+  }
+
+  protected setSelection(key: 'read' | 'write' | 'admin', value: boolean): void {
+    this.selections.update((current) => ({ ...current, [key]: value }));
+  }
+}
+
+@Component({
   selector: 'story-checkbox-validation-section',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
@@ -191,12 +318,11 @@ const meta: Meta<Checkbox> = {
 <div class="docs-top-level-overview">
   ## Checkbox Component
 
-  A boolean opt-in — a styled square indicator (with a tick or a horizontal dash) paired with a label and an optional sub-line description. Native &lt;input type="checkbox"&gt; drives state; the visible square is a styled sibling. Three sizes &times; two colors &times; default and card variants &times; indeterminate / disabled / error states.
+  A boolean opt-in — a styled square indicator (with a tick or a horizontal dash) paired with a label and an optional sub-line description. Native &lt;input type="checkbox"&gt; drives state; the visible square is a styled sibling. Three sizes &times; two colors &times; indeterminate / disabled / error states.
 
   ### Features
   - Three sizes: \`sm\`, \`base\` (default), \`lg\`
   - Two colors: \`primary\` (default), \`danger\`
-  - Two variants: \`default\` (row), \`card\` (bordered tile)
   - Three checked states: unchecked, checked, indeterminate
   - Optional description sub-line beneath the label
   - Disabled state
@@ -219,14 +345,22 @@ const meta: Meta<Checkbox> = {
     Permanently delete this account
   </org-checkbox>
 
-  <!-- Card variant (permission picker) -->
-  <org-checkbox name="read" value="read" variant="card" description="View projects, files, and comments.">
-    Read
-  </org-checkbox>
-
   <!-- Different sizes -->
   <org-checkbox name="small" value="small" size="sm">Small</org-checkbox>
   <org-checkbox name="large" value="large" size="lg">Large</org-checkbox>
+
+  <!-- Card-tile pattern: wrap with org-card and forward (clicked) to a toggle handler -->
+  <org-card (clicked)="readSelected.set(!readSelected())">
+    <org-checkbox
+      name="read"
+      value="read"
+      [checked]="readSelected()"
+      (checkedChange)="readSelected.set($event)"
+      description="View projects, files, and comments."
+    >
+      Read
+    </org-checkbox>
+  </org-card>
 
   <!-- Reactive forms -->
   <form [formGroup]="myForm">
@@ -261,7 +395,6 @@ export const Default: Story = {
     disabled: false,
     size: 'base',
     color: 'primary',
-    variant: 'default',
     description: '',
   },
   argTypes: {
@@ -295,11 +428,6 @@ export const Default: Story = {
       options: allCheckboxColors,
       description: 'Color variant of the checkbox',
     },
-    variant: {
-      control: 'select',
-      options: allCheckboxVariants,
-      description: 'Visual variant: default (row) or card (bordered tile)',
-    },
     description: {
       control: 'text',
       description: 'Optional description sub-line beneath the label',
@@ -323,7 +451,6 @@ export const Default: Story = {
         [disabled]="disabled"
         [size]="size"
         [color]="color"
-        [variant]="variant"
         [description]="description"
       >
         Checkbox Label
@@ -369,7 +496,7 @@ export const Default: Story = {
         <org-design-system-demo-header
           slot="header"
           title="Live demo"
-          description="Toggle the inputs to walk every documented combination — label, description, size, color, variant, checked, indeterminate, disabled."
+          description="Toggle the inputs to walk every documented combination — label, description, size, color, checked, indeterminate, disabled."
         />
         <org-design-system-demo-controls slot="controls">
           <org-design-system-demo-control-group label="Label">
@@ -383,9 +510,6 @@ export const Default: Story = {
           </org-design-system-demo-control-group>
           <org-design-system-demo-control-group label="Color">
             <org-button-toggle [items]="colorItems" formControlName="color" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Variant">
-            <org-button-toggle [items]="variantItems" formControlName="variant" buttonSize="sm" />
           </org-design-system-demo-control-group>
           <org-design-system-demo-control-group label="Checked">
             <org-checkbox-toggle name="live-demo-checked" value="checked" formControlName="checked">
@@ -410,7 +534,6 @@ export const Default: Story = {
               value="live-demo"
               [size]="liveDemoForm.controls.size.value"
               [color]="liveDemoForm.controls.color.value"
-              [variant]="liveDemoForm.controls.variant.value"
               [checked]="liveDemoForm.controls.checked.value"
               [indeterminate]="liveDemoForm.controls.indeterminate.value"
               [disabled]="liveDemoForm.controls.disabled.value"
@@ -427,14 +550,12 @@ export const Default: Story = {
 class CheckboxLiveDemoStory {
   protected readonly sizeItems = liveDemoSizeItems;
   protected readonly colorItems = liveDemoColorItems;
-  protected readonly variantItems = liveDemoVariantItems;
 
   protected readonly liveDemoForm = new FormGroup({
     label: new FormControl<string>('Email me about new features', { nonNullable: true }),
     description: new FormControl<string>('Up to once a week.', { nonNullable: true }),
     size: new FormControl<CheckboxSize>('base', { nonNullable: true }),
     color: new FormControl<CheckboxColor>('primary', { nonNullable: true }),
-    variant: new FormControl<CheckboxVariant>('default', { nonNullable: true }),
     checked: new FormControl<boolean>(true, { nonNullable: true }),
     indeterminate: new FormControl<boolean>(false, { nonNullable: true }),
     disabled: new FormControl<boolean>(false, { nonNullable: true }),
@@ -446,7 +567,7 @@ export const LiveDemo: Story = {
     docs: {
       description: {
         story:
-          'Fully interactive demo. Walk every combination — size, color, variant, checked, indeterminate, disabled — and edit the label / description text.',
+          'Fully interactive demo. Walk every combination — size, color, checked, indeterminate, disabled — and edit the label / description text.',
       },
     },
   },
@@ -463,7 +584,7 @@ export const Showcase: Story = {
     docs: {
       description: {
         story:
-          'Comprehensive showcase of every checkbox variant axis — sizes, colors, states, description sub-line, card variant, grouping, select-all pattern, validation, and validation space reservation — in a single scrollable view.',
+          'Comprehensive showcase of every checkbox axis — sizes, colors, states, description sub-line, card-tile pattern, grouping, select-all pattern, validation, and validation space reservation — in a single scrollable view.',
       },
     },
   },
@@ -637,48 +758,12 @@ export const Showcase: Story = {
           </ul>
         </org-design-system-demo-expected-behaviour>
 
-        <org-design-system-demo>
-          <org-design-system-demo-header
-            slot="header"
-            title="Card variant"
-            description="Wraps the indicator + body in a bordered tile. Useful for permission pickers, feature opt-ins, and any list where each option needs to read as its own surface."
-          />
-          <org-design-system-demo-canvas slot="canvas">
-            <div class="flex flex-col gap-2 w-full">
-              <org-checkbox
-                name="card-read"
-                value="read"
-                variant="card"
-                [checked]="true"
-                description="View projects, files, and comments. No write access."
-              >
-                Read
-              </org-checkbox>
-              <org-checkbox
-                name="card-write"
-                value="write"
-                variant="card"
-                [checked]="true"
-                description="Create, edit, and delete projects and files."
-              >
-                Write
-              </org-checkbox>
-              <org-checkbox
-                name="card-admin"
-                value="admin"
-                variant="card"
-                description="Manage members, billing, and workspace settings."
-              >
-                Admin
-              </org-checkbox>
-            </div>
-          </org-design-system-demo-canvas>
-        </org-design-system-demo>
+        <story-checkbox-card-section />
         <org-design-system-demo-expected-behaviour>
           <ul class="list-inside list-disc flex flex-col gap-1">
-            <li>Each card is its own surface — border + background change on hover</li>
-            <li>Selected (checked / indeterminate) cards highlight their border with the chosen color</li>
-            <li>Combine with <strong>description</strong> to clarify what each option grants</li>
+            <li>Wrap each checkbox in <strong>org-card</strong> and bind its <strong>(clicked)</strong> output to toggle the inner checkbox</li>
+            <li>Card already supplies the bordered tile, hover/pressed tint, focus ring, and role=button affordance — no bespoke styling needed</li>
+            <li>Combine with the checkbox's <strong>description</strong> input to clarify what each option grants</li>
           </ul>
         </org-design-system-demo-expected-behaviour>
 
@@ -792,46 +877,12 @@ export const Showcase: Story = {
           </ul>
         </org-design-system-demo-expected-behaviour>
 
-        <org-design-system-demo>
-          <org-design-system-demo-header
-            slot="header"
-            title="Checkbox Group — card variant"
-            description="When any child checkbox uses variant=&quot;card&quot;, the group widens its inter-option gap so the tiles do not feel welded together."
-          />
-          <org-design-system-demo-canvas slot="canvas">
-            <org-checkbox-group legend="Permissions" description="What this teammate can do in the workspace.">
-              <org-checkbox
-                name="cbg-card-read"
-                value="read"
-                variant="card"
-                [checked]="true"
-                description="View projects, files, and comments. No write access."
-              >
-                Read
-              </org-checkbox>
-              <org-checkbox
-                name="cbg-card-write"
-                value="write"
-                variant="card"
-                description="Create, edit, and delete projects and files."
-              >
-                Write
-              </org-checkbox>
-              <org-checkbox
-                name="cbg-card-admin"
-                value="admin"
-                variant="card"
-                description="Manage members, billing, and workspace settings."
-              >
-                Admin
-              </org-checkbox>
-            </org-checkbox-group>
-          </org-design-system-demo-canvas>
-        </org-design-system-demo>
+        <story-checkbox-group-card-section />
         <org-design-system-demo-expected-behaviour>
           <ul class="list-inside list-disc flex flex-col gap-1">
-            <li>The presence of any card-variant child widens the inter-option gap via :has()</li>
-            <li>Card spacing stays uniform across sizes so groups stay aligned vertically with siblings</li>
+            <li>org-checkbox-group accepts any node as a child — wrap each checkbox in <strong>org-card</strong> to get the tiled surface treatment</li>
+            <li>Card's <strong>(clicked)</strong> output toggles the inner checkbox so the entire tile is the hit target</li>
+            <li>The legend, description, and required marker on org-checkbox-group continue to apply unchanged</li>
           </ul>
         </org-design-system-demo-expected-behaviour>
 
@@ -929,6 +980,8 @@ export const Showcase: Story = {
         CheckboxGroup,
         FormFields,
         FormField,
+        CheckboxCardSection,
+        CheckboxGroupCardSection,
         CheckboxSelectAllSection,
         CheckboxValidationSection,
         DesignSystemDemo,

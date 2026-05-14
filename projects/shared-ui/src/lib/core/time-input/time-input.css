@@ -4,25 +4,28 @@
   .org-input[data-time-input='1'] {
     display: inline-flex;
     align-items: stretch;
-    width: 100%;
-    max-width: 22rem;
-    min-height: var(--input-height);
+    width: var(--input-width);
+    max-width: var(--input-max-width);
+    min-height: var(--input-min-height);
     padding: 0;
     border-radius: var(--input-radius);
-    border: var(--input-border-width) solid var(--input-border-color);
+    border-style: solid;
+    border-width: var(--input-border-width-top) var(--input-border-width-right) var(--input-border-width-bottom)
+      var(--input-border-width-left);
+    border-color: var(--input-border-color);
     background-color: var(--input-bg);
     color: var(--input-fg);
-    font-family: var(--font-sans);
+    font-family: var(--input-font-family);
     font-size: var(--input-font-size);
-    font-weight: var(--font-weight-regular);
+    font-weight: var(--input-font-weight);
     line-height: var(--input-line-height);
     letter-spacing: var(--input-letter-spacing);
     cursor: default;
     outline: none;
     transition:
-      background-color var(--motion-duration-base) var(--motion-ease-standard),
-      border-color var(--motion-duration-base) var(--motion-ease-standard),
-      color var(--motion-duration-base) var(--motion-ease-standard);
+      background-color var(--input-transition-duration) var(--input-transition-easing),
+      border-color var(--input-transition-duration) var(--input-transition-easing),
+      color var(--input-transition-duration) var(--input-transition-easing);
   }
 
   /* pre slot — the clock icon */
@@ -33,7 +36,7 @@
     gap: var(--input-slot-gap);
     color: var(--input-fg-muted);
     font-size: var(--input-font-size);
-    line-height: 1;
+    line-height: var(--time-input-pre-line-height);
     padding-left: var(--input-pad-x);
   }
 
@@ -43,7 +46,7 @@
     flex-wrap: nowrap;
     align-items: center;
     flex: 1 1 auto;
-    gap: var(--spacing-time-input-segment-gap);
+    gap: var(--time-input-segment-gap);
     padding-inline: var(--input-pad-x);
     font-variant-numeric: tabular-nums;
     min-width: 0;
@@ -59,16 +62,16 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding-inline: var(--spacing-time-input-segment-x);
-    border-radius: var(--radius-time-input-segment);
+    padding-inline: var(--time-input-segment-padding-inline);
+    border-radius: var(--time-input-segment-radius);
     color: inherit;
-    background: transparent;
+    background: var(--time-input-segment-bg);
     cursor: pointer;
     user-select: none;
     line-height: var(--line-height-tight);
     transition:
-      background-color var(--motion-time-input-duration) var(--motion-ease-standard),
-      color var(--motion-time-input-duration) var(--motion-ease-standard);
+      background-color var(--time-input-transition-duration) var(--time-input-transition-easing),
+      color var(--time-input-transition-duration) var(--time-input-transition-easing);
   }
 
   .org-input[data-time-input='1'] .org-time-input-segment:focus-visible {
@@ -77,30 +80,30 @@
 
   /* meridiem-specific tracking + start margin */
   .org-input[data-time-input='1'] .org-time-input-segment[data-segment='meridiem'] {
-    min-width: var(--sizing-time-input-segment-meridiem);
-    letter-spacing: var(--letter-spacing-wide);
-    margin-inline-start: calc(var(--spacing-time-input-meridiem-gap) - var(--spacing-time-input-segment-gap));
+    min-width: var(--time-input-meridiem-min-width);
+    letter-spacing: var(--time-input-meridiem-letter-spacing);
+    margin-inline-start: calc(var(--time-input-meridiem-gap) - var(--time-input-segment-gap));
   }
 
   /* selected highlight — only paints when the shell itself owns focus */
   .org-input[data-time-input='1'][data-focused='1'] .org-time-input-segment[data-selected='1'] {
-    background-color: var(--color-time-input-segment-active-bg);
-    color: var(--color-time-input-segment-active-fg);
+    background-color: var(--time-input-segment-active-bg);
+    color: var(--time-input-segment-active-fg);
   }
 
   /* empty / placeholder ghost */
   .org-input[data-time-input='1'] .org-time-input-segment[data-empty='1'] {
-    color: var(--color-fg-faint);
+    color: var(--time-input-segment-empty-fg);
   }
 
   /* a selected empty segment in a focused field gets a stronger tone */
   .org-input[data-time-input='1'][data-focused='1'] .org-time-input-segment[data-empty='1'][data-selected='1'] {
-    color: var(--color-time-input-segment-active-fg);
+    color: var(--time-input-segment-active-fg);
   }
 
   /* separators are pointer-inert and use a softer tone */
   .org-input[data-time-input='1'] .org-time-input-separator {
-    color: var(--color-time-input-separator);
+    color: var(--time-input-separator-color);
     user-select: none;
     pointer-events: none;
     line-height: var(--line-height-tight);
@@ -116,15 +119,18 @@
   .org-input[data-time-input='1']:hover:not([data-state='error']):not([data-disabled]) {
     background-color: var(--input-bg-hover);
     border-color: var(--input-border-color-hover);
+    color: var(--input-fg-hover);
   }
 
   .org-input[data-time-input='1'][data-focused='1']:not([data-state='error']):not([data-disabled]) {
     background-color: var(--input-bg-focus);
     border-color: var(--input-border-color-focus);
+    color: var(--input-fg-focus);
   }
 
   .org-input[data-time-input='1'][data-state='error'] {
     border-color: var(--input-border-color-error);
+    color: var(--input-fg-error);
   }
 
   .org-input[data-time-input='1'][data-disabled] {
@@ -134,8 +140,8 @@
   }
 
   .org-input[data-time-input='1'][data-readonly]:not([data-variant='inline']) {
-    --input-bg: var(--color-bg-surface-2);
-    --input-bg-hover: var(--color-bg-surface-2);
+    --input-bg: var(--color-bg-surface-secondary);
+    --input-bg-hover: var(--color-bg-surface-secondary);
   }
 
   /* === VARIANTS (mirrors input shell) === */
@@ -151,7 +157,7 @@
 
   .org-input[data-time-input='1'][data-variant='borderless'] {
     --input-bg: transparent;
-    --input-bg-hover: var(--color-bg-surface-2);
+    --input-bg-hover: var(--color-bg-surface-secondary);
     --input-bg-focus: transparent;
     --input-border-color: transparent;
     --input-border-color-hover: transparent;
@@ -160,41 +166,25 @@
   }
 
   .org-input[data-time-input='1'][data-variant='inline'] {
-    min-height: auto;
-    height: auto;
-    padding: 0;
-    border-width: 0;
-    border-bottom: var(--border-width) solid transparent;
-    border-radius: 0;
-    color: var(--color-fg-muted);
-    width: auto;
-    max-width: none;
-    background-color: transparent;
-  }
-
-  .org-input[data-time-input='1'][data-variant='inline'] .org-input-track,
-  .org-input[data-time-input='1'][data-variant='inline'] .org-input-pre {
-    padding: 0;
-    height: auto;
-    width: auto;
-  }
-
-  .org-input[data-time-input='1'][data-variant='inline']:hover:not([data-state='error']):not([data-disabled]) {
-    color: var(--color-fg);
-    background-color: transparent;
-    border-color: transparent;
-  }
-
-  .org-input[data-time-input='1'][data-variant='inline'][data-focused='1']:not([data-state='error']):not(
-      [data-disabled]
-    ) {
-    color: var(--color-fg);
-    border-bottom-color: var(--color-info);
-    background-color: transparent;
-  }
-
-  .org-input[data-time-input='1'][data-variant='inline'][data-state='error'] {
-    border-bottom-color: var(--color-danger);
-    color: var(--color-fg);
+    --input-min-height: auto;
+    --input-width: auto;
+    --input-max-width: none;
+    --input-radius: 0;
+    --input-pad-x: 0;
+    --input-pad-x-tight: 0;
+    --input-border-width-top: 0;
+    --input-border-width-right: 0;
+    --input-border-width-left: 0;
+    --input-bg: transparent;
+    --input-bg-hover: transparent;
+    --input-bg-focus: transparent;
+    --input-border-color: transparent;
+    --input-border-color-hover: transparent;
+    --input-border-color-focus: var(--color-info);
+    --input-border-color-error: var(--color-danger);
+    --input-fg: var(--color-fg-muted);
+    --input-fg-hover: var(--color-fg);
+    --input-fg-focus: var(--color-fg);
+    --input-fg-error: var(--color-fg);
   }
 }

@@ -1,61 +1,57 @@
 @layer components {
   :host {
     display: block;
-    border: 0.0625rem solid var(--chat-block-border); /* 1px */
+    border: var(--chat-block-rail-width) solid var(--chat-block-border);
+    border-left-width: var(--chat-block-left-rail-width);
+    border-left-color: var(--chat-block-left-rail-color);
     background: var(--chat-block-bg);
-    border-radius: var(--radius-base);
-    font-size: var(--chat-body-font-size);
+    border-radius: var(--chat-block-radius);
+    font-size: var(--chat-block-font-size);
     color: var(--chat-block-fg);
   }
 
   /* stack adjacent blocks (and a block following body content) with a small gap */
   :host + :host,
   :host:not(:first-child) {
-    margin-top: var(--spacing-2);
+    margin-top: var(--chat-block-stack-gap);
   }
 
   .block-header {
     display: flex;
     align-items: center;
-    gap: var(--spacing-2);
+    gap: var(--chat-block-header-gap);
     width: 100%;
-    padding: var(--spacing-3);
+    padding: var(--chat-block-header-padding);
+    padding-left: var(--chat-block-header-padding-left);
     background: transparent;
     border: 0;
-    border-radius: var(--radius-base);
+    border-radius: var(--chat-block-header-radius);
     color: inherit;
     font: inherit;
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-medium);
+    font-size: var(--chat-block-header-font-size);
+    font-weight: var(--chat-block-header-font-weight);
     text-align: start;
     cursor: pointer;
     user-select: none;
   }
 
   .block-header:hover {
-    background: var(--color-bg-hover);
+    background: var(--chat-block-header-bg-hover);
   }
 
   .block-header:focus-visible {
-    outline: 0.125rem solid var(--color-focus-ring); /* 2px */
-    outline-offset: -0.125rem; /* -2px (inset) */
+    outline: var(--chat-block-focus-ring-width) solid var(--chat-block-focus-ring-color);
+    outline-offset: var(--chat-block-focus-ring-offset);
   }
 
   .block-kind {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 1.125rem; /* 18px */
-    height: 1.125rem; /* 18px */
+    width: var(--chat-block-kind-size);
+    height: var(--chat-block-kind-size);
     flex: 0 0 auto;
-  }
-
-  :host([data-kind='tool']) .block-kind {
-    color: var(--chat-block-tool-accent);
-  }
-
-  :host([data-kind='thinking']) .block-kind {
-    color: var(--chat-block-thinking-accent);
+    color: var(--chat-block-kind-color);
   }
 
   .block-title {
@@ -67,24 +63,31 @@
   }
 
   .block-title-emphasis {
-    font-size: 0.95em;
+    color: var(--chat-block-title-emphasis-color);
+    font-family: var(--chat-block-title-emphasis-font-family);
+    font-style: var(--chat-block-title-emphasis-font-style);
+    font-size: var(--chat-block-title-emphasis-font-size);
   }
 
-  :host([data-kind='tool']) .block-title-emphasis {
-    font-family: var(--font-mono);
-    color: var(--chat-block-tool-accent);
+  /* tool kind: info accent + monospace title emphasis */
+  :host([data-kind='tool']) {
+    --chat-block-kind-color: var(--color-info);
+    --chat-block-title-emphasis-color: var(--color-info);
+    --chat-block-title-emphasis-font-family: var(--font-mono);
   }
 
-  :host([data-kind='thinking']) .block-title-emphasis {
-    font-family: var(--font-sans);
-    font-style: italic;
-    color: var(--chat-block-thinking-accent);
+  /* thinking kind: faint fg accent + italic sans title emphasis */
+  :host([data-kind='thinking']) {
+    --chat-block-kind-color: var(--color-fg-faint);
+    --chat-block-title-emphasis-color: var(--color-fg-faint);
+    --chat-block-title-emphasis-font-family: var(--font-sans);
+    --chat-block-title-emphasis-font-style: italic;
   }
 
   .block-meta {
     color: var(--chat-block-meta-fg);
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-regular);
+    font-size: var(--chat-block-meta-font-size);
+    font-weight: var(--chat-block-meta-font-weight);
     flex: 0 0 auto;
     font-variant-numeric: tabular-nums;
   }
@@ -93,8 +96,8 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    color: var(--chat-block-meta-fg);
-    transition: transform var(--motion-duration-base) var(--motion-ease-standard);
+    color: var(--chat-block-chevron-fg);
+    transition: transform var(--chat-block-chevron-transition-duration) var(--chat-block-chevron-transition-easing);
   }
 
   :host([data-expanded='1']) .block-chevron {
@@ -102,29 +105,25 @@
   }
 
   .block-body {
-    padding-block-end: var(--spacing-3);
-    padding-inline: var(--spacing-3);
-    color: var(--chat-block-meta-fg);
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-normal);
+    padding-block-end: var(--chat-block-body-padding-block-end);
+    padding-inline: var(--chat-block-body-padding-inline);
+    color: var(--chat-block-body-fg);
+    font-size: var(--chat-block-body-font-size);
+    line-height: var(--chat-block-body-line-height);
   }
 
   .block-body > * + * {
-    margin-top: var(--spacing-2);
+    margin-top: var(--chat-block-body-child-gap);
   }
 
   :host([data-expanded='0']) .block-body {
     display: none;
   }
 
-  /* running rail thickens the pre edge to the info accent */
+  /* running state: thicken the left rail to the running accent and rebalance header padding so the icon does not shift */
   :host([data-state='running']) {
-    border-left-color: var(--chat-block-tool-accent);
-    border-left-width: var(--chat-block-running-rail-width);
-  }
-
-  /* re-balance the header inset so the icon doesn't shift when the rail thickens */
-  :host([data-state='running']) .block-header {
-    padding-left: 0.3125rem; /* 5px = 12px - 8px + 1px */
+    --chat-block-left-rail-width: var(--chat-block-running-rail-width);
+    --chat-block-left-rail-color: var(--chat-block-running-rail-color);
+    --chat-block-header-padding-left: var(--chat-block-header-padding-left-running);
   }
 }

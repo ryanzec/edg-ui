@@ -35,6 +35,9 @@
   --table-edge-inset: var(--table-edge-inset-base);
   --table-cell-font-size: var(--table-cell-font-size-base);
 
+  /* select column */
+  --table-select-col-width: var(--spacing-10);
+
   /* header typography */
   --table-header-font-size: var(--font-size-xs);
   --table-header-font-weight: var(--font-weight-semibold);
@@ -54,14 +57,14 @@
   --table-fg-faint: var(--color-fg-faint);
 
   /* header */
-  --table-header-bg: var(--color-bg-surface-2);
+  --table-header-bg: var(--color-bg-surface-secondary);
   --table-header-fg: var(--color-fg-muted);
   --table-header-fg-active: var(--color-fg);
 
   /* row state */
   --table-row-bg: transparent;
   --table-row-bg-hover: var(--color-bg-hover);
-  --table-row-bg-stripe: var(--color-bg-surface-2);
+  --table-row-bg-stripe: var(--color-bg-surface-secondary);
   --table-row-bg-selected: var(--color-neutral-soft);
   --table-row-bg-selected-hover: var(--color-neutral-soft-hover);
 
@@ -88,7 +91,21 @@
   --table-sort-fg-rest: var(--color-fg-faint);
   --table-sort-fg-active: var(--color-fg);
 
+  /* selected actions bar */
+  --table-actions-bar-bg: var(--color-info-soft);
+  --table-actions-bar-fg: var(--color-info);
+  --table-actions-bar-gap: var(--spacing-3);
+  --table-actions-bar-padding-y: var(--spacing-2);
+  --table-actions-bar-padding-x: var(--spacing-3);
+  --table-actions-bar-actions-gap: var(--spacing-2);
+  --table-actions-bar-count-font-weight: var(--font-weight-medium);
+
+  /* background loader */
+  --table-background-loader-offset: var(--spacing-2);
+
   /* motion */
   --table-row-transition-duration: var(--motion-duration-fast);
   --table-row-transition-easing: var(--motion-ease-standard);
+  --table-sort-chevron-transition-duration: var(--motion-duration-fast);
+  --table-sort-chevron-transition-easing: var(--motion-ease-standard);
 }

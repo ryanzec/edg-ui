@@ -4,6 +4,6 @@
   }
 
   :host org-icon {
-    animation: var(--animate-spin);
+    animation: var(--loading-spinner-animation);
   }
 }

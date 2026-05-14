@@ -11,7 +11,6 @@
     color: var(--tag-fg);
     font-family: inherit;
     font-size: var(--tag-font-size);
-    font-weight: var(--tag-font-weight);
     line-height: var(--tag-line-height);
     letter-spacing: var(--tag-letter-spacing);
     gap: var(--tag-gap);

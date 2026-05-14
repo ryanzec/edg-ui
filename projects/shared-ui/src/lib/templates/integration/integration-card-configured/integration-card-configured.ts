@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
-import { CdkMenuTrigger } from '@angular/cdk/menu';
 import { type DateTime } from 'luxon';
 import { Box } from '../../../core/box/box';
 import { Button } from '../../../core/button/button';
@@ -8,6 +7,7 @@ import { Divider } from '../../../core/divider/divider';
 import { type IconName } from '../../../brain/icon-brain/icon-brain';
 import { Icon } from '../../../core/icon/icon';
 import { OverlayMenu, type OverlayMenuItem, type OverlayMenuItemEntry } from '../../../core/overlay-menu/overlay-menu';
+import { OverlayMenuTriggerDirective } from '../../../core/overlay-menu/overlay-menu-trigger';
 import { Tag, type TagColor } from '../../../core/tag/tag';
 import { type ComponentColor } from '../../../core/types/component-types';
 
@@ -85,7 +85,7 @@ const statusLabelMap: Record<IntegrationStatus, string> = {
 @Component({
   selector: 'org-integration-card-configured',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Box, Button, CdkMenuTrigger, DatePipe, Divider, Icon, OverlayMenu, Tag],
+  imports: [Box, Button, DatePipe, Divider, Icon, OverlayMenu, OverlayMenuTriggerDirective, Tag],
   templateUrl: './integration-card-configured.html',
   host: {
     class: 'block',

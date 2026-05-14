@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, input, model } from '@ang
 import { angularUtils } from '@organization/shared-utils';
 import { Icon } from '../icon/icon';
 import { type IconName } from '../../brain/icon-brain/icon-brain';
-import { ChatBlockBrainDirective } from '../../brain/chat-block-brain/chat-block-brain';
+import { ChatBlockBrainDirective } from '../../brain/chat-brain/chat-block-brain';
 
 /** all available chat block kind values */
 export const allChatBlockKinds = ['tool', 'thinking'] as const;

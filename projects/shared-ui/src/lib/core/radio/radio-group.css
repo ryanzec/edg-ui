@@ -3,7 +3,7 @@
     display: flex;
     flex-direction: column;
     gap: var(--radio-group-header-stack);
-    color: var(--color-fg);
+    color: var(--radio-group-color);
     width: 100%;
     min-width: 0;
   }
@@ -20,8 +20,8 @@
     gap: var(--radio-group-required-gap);
     font-size: var(--radio-group-legend-font-size);
     font-weight: var(--radio-group-legend-font-weight);
-    line-height: var(--line-height-tight);
-    color: var(--color-fg);
+    line-height: var(--radio-group-legend-line-height);
+    color: var(--radio-group-legend-color);
   }
 
   /* required marker — post asterisk in danger color */
@@ -35,7 +35,7 @@
     margin: 0;
     font-size: var(--radio-group-description-font-size);
     color: var(--radio-group-description-color);
-    line-height: var(--line-height-normal);
+    line-height: var(--radio-group-description-line-height);
   }
 
   :host .options {
@@ -43,15 +43,5 @@
     flex-direction: column;
     gap: var(--radio-group-options-stack);
     min-width: 0;
-  }
-
-  /*
-   * card-variant tightening — when any child radio is rendered as a card, widen the inter-option gap so the
-   * tiles do not feel like a single welded surface. spacing stays uniform across sizes by design. error /
-   * disabled cascades flow through the brain (radio reads its parent group brain), not through descendant
-   * CSS, so no cross-component selectors are required here.
-   */
-  :host(:has(org-radio[data-variant='card'])) .options {
-    gap: var(--radio-group-options-stack-card);
   }
 }

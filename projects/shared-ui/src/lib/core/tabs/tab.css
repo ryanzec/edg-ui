@@ -1,73 +1,73 @@
 @layer components {
   :host {
     display: inline-flex;
-    flex: var(--_tab-flex, 0 0 auto);
+    flex: var(--tabs-tab-flex);
     min-width: 0;
   }
 
   .tab-btn {
     display: inline-flex;
     align-items: center;
-    justify-content: var(--_tab-justify, flex-start);
-    gap: var(--spacing-tabs-tab-gap);
+    justify-content: var(--tabs-tab-justify);
+    gap: var(--tabs-tab-gap);
     flex: 1 1 auto;
     min-width: 0;
-    height: var(--_tabs-row-height);
-    padding: 0 var(--_tabs-tab-x);
-    margin-bottom: var(--_tab-margin-bottom, 0);
-    background: var(--_tab-bg, transparent);
-    color: var(--color-tabs-tab-fg);
+    height: var(--tabs-row-height);
+    padding: 0 var(--tabs-tab-padding-x);
+    margin-bottom: var(--tabs-tab-margin-bottom);
+    background: var(--tabs-tab-bg);
+    color: var(--tabs-tab-fg);
     font: inherit;
-    font-size: var(--_tabs-font);
-    line-height: var(--line-height-normal);
+    font-size: var(--tabs-font-size);
+    line-height: var(--tabs-tab-line-height);
     white-space: nowrap;
     text-align: left;
     cursor: pointer;
     appearance: none;
-    border-top: var(--_tab-border-top-width, 0) solid var(--_tab-border-top-color, transparent);
-    border-right: var(--_tab-border-side-width, 0) solid var(--_tab-border-side-color, transparent);
-    border-bottom: var(--_tab-border-bottom-width, 0) solid var(--_tab-border-bottom-color, transparent);
-    border-left: var(--_tab-border-side-width, 0) solid var(--_tab-border-side-color, transparent);
-    border-top-left-radius: var(--_tab-radius-top, 0);
-    border-top-right-radius: var(--_tab-radius-top, 0);
-    border-bottom-right-radius: var(--_tab-radius-bottom, 0);
-    border-bottom-left-radius: var(--_tab-radius-bottom, 0);
+    border-top: var(--tabs-tab-border-top-width) solid var(--tabs-tab-border-top-color);
+    border-right: var(--tabs-tab-border-side-width) solid var(--tabs-tab-border-side-color);
+    border-bottom: var(--tabs-tab-border-bottom-width) solid var(--tabs-tab-border-bottom-color);
+    border-left: var(--tabs-tab-border-side-width) solid var(--tabs-tab-border-side-color);
+    border-top-left-radius: var(--tabs-tab-radius-top);
+    border-top-right-radius: var(--tabs-tab-radius-top);
+    border-bottom-right-radius: var(--tabs-tab-radius-bottom);
+    border-bottom-left-radius: var(--tabs-tab-radius-bottom);
     transition:
-      color var(--motion-tabs-duration) var(--motion-tabs-easing),
-      background-color var(--motion-tabs-duration) var(--motion-tabs-easing),
-      border-color var(--motion-tabs-duration) var(--motion-tabs-easing);
+      color var(--tabs-motion-duration) var(--tabs-motion-easing),
+      background-color var(--tabs-motion-duration) var(--tabs-motion-easing),
+      border-color var(--tabs-motion-duration) var(--tabs-motion-easing);
   }
 
   .tab-btn:hover {
-    color: var(--color-tabs-tab-fg-hover);
-    background: var(--_tab-bg-hover, transparent);
-    border-bottom-color: var(--_tab-border-bottom-color-hover, transparent);
+    color: var(--tabs-tab-fg-hover);
+    background: var(--tabs-tab-bg-hover);
+    border-bottom-color: var(--tabs-tab-border-bottom-color-hover);
   }
 
   .tab-btn:focus-visible {
-    outline: var(--border-width-thick) solid var(--color-tabs-focus-ring);
-    outline-offset: var(--spacing-0_5);
-    border-radius: var(--radius-sm);
+    outline: var(--tabs-tab-focus-outline-width) solid var(--tabs-tab-focus-outline-color);
+    outline-offset: var(--tabs-tab-focus-outline-offset);
+    border-radius: var(--tabs-tab-focus-radius);
   }
 
   .tab-btn[aria-selected='true'] {
-    color: var(--color-tabs-tab-fg-active);
-    background: var(--_tab-bg-active, transparent);
-    border-top-color: var(--_tab-border-side-color-active, transparent);
-    border-right-color: var(--_tab-border-side-color-active, transparent);
-    border-left-color: var(--_tab-border-side-color-active, transparent);
-    border-bottom-color: var(--_tab-border-bottom-color-active, transparent);
+    color: var(--tabs-tab-fg-active);
+    background: var(--tabs-tab-bg-active);
+    border-top-color: var(--tabs-tab-border-side-color-active);
+    border-right-color: var(--tabs-tab-border-side-color-active);
+    border-left-color: var(--tabs-tab-border-side-color-active);
+    border-bottom-color: var(--tabs-tab-border-bottom-color-active);
   }
 
   .tab-btn[aria-disabled='true'] {
-    opacity: var(--opacity-disabled);
+    opacity: var(--tabs-tab-disabled-opacity);
     cursor: not-allowed;
   }
 
   .tab-btn[aria-disabled='true']:hover {
-    background: var(--_tab-bg, transparent);
-    color: var(--color-tabs-tab-fg);
-    border-bottom-color: var(--_tab-border-bottom-color, transparent);
+    background: var(--tabs-tab-bg);
+    color: var(--tabs-tab-fg);
+    border-bottom-color: var(--tabs-tab-border-bottom-color);
   }
 
   /* keep pre icon and post tag at their natural width inside the tab */
@@ -79,7 +79,7 @@
   /* close affordance hugs the post edge so the × reads as quiet chrome */
   .tab-btn > org-button {
     flex: 0 0 auto;
-    margin-left: var(--spacing-0_5);
-    margin-right: calc(-1 * var(--spacing-1));
+    margin-left: var(--tabs-tab-close-margin-start);
+    margin-right: var(--tabs-tab-close-margin-end);
   }
 }

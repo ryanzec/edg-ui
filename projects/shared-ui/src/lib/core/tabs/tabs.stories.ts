@@ -708,7 +708,7 @@ export const Showcase: Story = {
           <org-design-system-demo-header
             slot="header"
             title="With icons + counts"
-            description="A tab is a flex row of optional slots: pre org-icon, label text, and post org-tag. Inner gap is governed by --spacing-tabs-tab-gap so glyphs and counts sit at consistent rhythm."
+            description="A tab is a flex row of optional slots: pre org-icon, label text, and post org-tag. Inner gap is governed by --tabs-tab-gap so glyphs and counts sit at consistent rhythm."
           />
           <org-design-system-demo-canvas slot="canvas">
             <story-tabs-icons-counts />

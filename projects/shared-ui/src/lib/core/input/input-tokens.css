@@ -2,9 +2,18 @@
   /* layout */
   --input-radius: var(--radius-sm);
   --input-border-width: var(--border-width);
+  --input-border-width-top: var(--input-border-width);
+  --input-border-width-right: var(--input-border-width);
+  --input-border-width-bottom: var(--input-border-width);
+  --input-border-width-left: var(--input-border-width);
   --input-line-height: var(--line-height-tight);
   --input-letter-spacing: var(--letter-spacing-normal);
   --input-disabled-opacity: var(--opacity-disabled);
+  --input-min-height: var(--input-height);
+  --input-width: 100%;
+  --input-max-width: 22rem;
+  --input-native-min-width: 8ch;
+  --input-slot-line-height: 1;
 
   /* size: base (default) */
   --input-height: 1.875rem; /* 30px */
@@ -14,7 +23,19 @@
   --input-chip-gap: var(--spacing-1);
   --input-chip-row-gap: var(--spacing-1_5);
   --input-chip-height: var(--sizing-11xs);
+  --input-chip-padding-block: 0;
+  --input-chip-padding-inline: var(--spacing-2);
+  --input-chip-font-size: var(--font-size-xs);
   --input-font-size: var(--font-size-base);
+  --input-font-family: var(--font-sans);
+  --input-font-weight: var(--font-weight-regular);
+  --input-native-pad-block: calc(
+    (var(--input-height) - 1em * var(--input-line-height)) / 2 - var(--input-border-width)
+  );
+
+  /* transitions */
+  --input-transition-duration: var(--motion-duration-base);
+  --input-transition-easing: var(--motion-ease-standard);
 
   /* color × variant slot tokens (defaults to bordered) */
   --input-bg: var(--color-bg-surface);
@@ -25,12 +46,22 @@
   --input-border-color-focus: var(--color-info);
   --input-border-color-error: var(--color-danger);
   --input-fg: var(--color-fg);
+  --input-fg-hover: var(--input-fg);
+  --input-fg-focus: var(--input-fg);
+  --input-fg-error: var(--input-fg);
   --input-fg-placeholder: var(--color-fg-faint);
   --input-fg-muted: var(--color-fg-muted);
+  --input-selection-bg: var(--color-primary-soft);
+
+  /* icon button */
+  --input-icon-btn-focus-bg: var(--color-primary-soft);
+  --input-icon-btn-radius: var(--radius-sm);
 
   /* number stepper */
   --input-stepper-width: var(--spacing-5);
   --input-stepper-button-height: calc(var(--input-height) / 2);
   --input-stepper-bg-hover: var(--color-bg-hover);
   --input-stepper-bg-active: var(--color-bg-active);
+  --input-stepper-radius: var(--radius-xs);
+  --input-stepper-vertical-inset: 0.25rem;
 }

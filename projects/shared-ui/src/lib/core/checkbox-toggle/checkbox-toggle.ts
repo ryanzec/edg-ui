@@ -30,12 +30,6 @@ export const allCheckboxToggleColors = ['primary', 'safe', 'danger'] as const;
 /** the color variant of the checkbox-toggle */
 export type CheckboxToggleColor = (typeof allCheckboxToggleColors)[number];
 
-/** all available checkbox-toggle variant values */
-export const allCheckboxToggleVariants = ['default', 'card'] as const;
-
-/** the visual variant of the checkbox-toggle */
-export type CheckboxToggleVariant = (typeof allCheckboxToggleVariants)[number];
-
 /** all available checkbox-toggle label-position values */
 export const allCheckboxToggleLabelPositions = ['end', 'start'] as const;
 
@@ -47,9 +41,6 @@ export const CHECKBOX_TOGGLE_SIZE_DEFAULT: CheckboxToggleSize = 'base';
 
 /** default value for the color input */
 export const CHECKBOX_TOGGLE_COLOR_DEFAULT: CheckboxToggleColor = 'primary';
-
-/** default value for the variant input */
-export const CHECKBOX_TOGGLE_VARIANT_DEFAULT: CheckboxToggleVariant = 'default';
 
 /** default value for the labelPosition input */
 export const CHECKBOX_TOGGLE_LABEL_POSITION_DEFAULT: CheckboxToggleLabelPosition = 'end';
@@ -79,7 +70,6 @@ export const CHECKBOX_TOGGLE_ICON_OFF_DEFAULT: IconName | undefined = undefined;
   host: {
     '[attr.data-size]': 'size()',
     '[attr.data-color]': 'color()',
-    '[attr.data-variant]': 'variant()',
     '[attr.data-label-position]': 'labelPosition()',
     '[attr.data-checked]': 'brain.checked() ? "" : null',
     '[attr.data-disabled]': 'brain.isDisabled() ? "" : null',
@@ -118,9 +108,6 @@ export class CheckboxToggle implements ControlValueAccessor {
 
   /** the color variant of the checkbox-toggle (drives the on-state ramp + on-icon color) */
   public readonly color = input<CheckboxToggleColor>(CHECKBOX_TOGGLE_COLOR_DEFAULT);
-
-  /** the visual variant of the checkbox-toggle (default row, or bordered card tile) */
-  public readonly variant = input<CheckboxToggleVariant>(CHECKBOX_TOGGLE_VARIANT_DEFAULT);
 
   /** the position of the label relative to the track (end = track-pre, start = track-post) */
   public readonly labelPosition = input<CheckboxToggleLabelPosition>(CHECKBOX_TOGGLE_LABEL_POSITION_DEFAULT);

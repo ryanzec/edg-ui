@@ -14,6 +14,12 @@
   --textarea-min-lines: 3;
   --textarea-max-lines: 8;
   --textarea-font-size: var(--font-size-base);
+  --textarea-font-family: var(--font-sans);
+  --textarea-font-weight: var(--font-weight-regular);
+
+  /* transitions */
+  --textarea-transition-duration: var(--motion-duration-base);
+  --textarea-transition-easing: var(--motion-ease-standard);
 
   /* toolbar */
   --textarea-toolbar-gap: var(--spacing-2);
@@ -21,12 +27,23 @@
   --textarea-toolbar-stack: var(--spacing-1);
   --textarea-toolbar-min-height: var(--spacing-7);
 
-  /* keyboard hint + kbd */
-  --textarea-hint-font-size: var(--font-size-xs);
-  --textarea-hint-fg: var(--color-fg-muted);
-  --textarea-hint-kbd-border: var(--color-border);
-  --textarea-hint-kbd-bg: var(--color-bg-surface-2);
-  --textarea-hint-kbd-fg: var(--color-fg-muted);
+  /* toolbar keyboard hint */
+  --textarea-toolbar-hint-gap: var(--spacing-1);
+  --textarea-toolbar-hint-line-height: var(--line-height-none);
+  --textarea-toolbar-hint-font-size: var(--font-size-xs);
+  --textarea-toolbar-hint-fg: var(--color-fg-muted);
+
+  /* toolbar keyboard hint kbd */
+  --textarea-toolbar-hint-kbd-min-width: 1.125rem; /* 18px */
+  --textarea-toolbar-hint-kbd-pad-x: var(--spacing-1);
+  --textarea-toolbar-hint-kbd-border-width: var(--border-width);
+  --textarea-toolbar-hint-kbd-radius: var(--radius-xs);
+  --textarea-toolbar-hint-kbd-font-family: var(--font-mono);
+  --textarea-toolbar-hint-kbd-font-size: 0.85em;
+  --textarea-toolbar-hint-kbd-line-height: 1.4;
+  --textarea-toolbar-hint-kbd-border: var(--color-border);
+  --textarea-toolbar-hint-kbd-bg: var(--color-bg-surface-secondary);
+  --textarea-toolbar-hint-kbd-fg: var(--color-fg-muted);
 
   /* color × variant slot tokens (defaults to bordered) */
   --textarea-bg: var(--color-bg-surface);
@@ -39,4 +56,5 @@
   --textarea-fg: var(--color-fg);
   --textarea-fg-placeholder: var(--color-fg-faint);
   --textarea-fg-muted: var(--color-fg-muted);
+  --textarea-selection-bg: var(--color-primary-soft);
 }

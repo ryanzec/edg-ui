@@ -6,8 +6,8 @@
   .link {
     font: inherit;
     color: var(--link-color);
-    text-decoration-line: underline;
-    text-decoration-color: transparent;
+    text-decoration-line: var(--link-text-decoration-line);
+    text-decoration-color: var(--link-text-decoration-color);
     text-decoration-thickness: var(--link-text-decoration-thickness);
     text-underline-offset: var(--link-text-underline-offset);
     cursor: pointer;
@@ -22,11 +22,11 @@
   /* underline only appears on hover or keyboard focus */
   .link:not([data-disabled='1']):hover {
     color: var(--link-color-hover);
-    text-decoration-color: currentColor;
+    text-decoration-color: var(--link-text-decoration-color-hover);
   }
 
   .link:not([data-disabled='1']):focus-visible {
-    text-decoration-color: currentColor;
+    text-decoration-color: var(--link-text-decoration-color-hover);
     outline: none;
   }
 
@@ -50,7 +50,7 @@
   .link[data-disabled='1'] {
     color: var(--link-color-disabled);
     cursor: not-allowed;
-    text-decoration-color: transparent;
+    text-decoration-color: var(--link-text-decoration-color);
     pointer-events: none;
   }
 
@@ -63,6 +63,6 @@
   }
 
   .link .link-icon[data-color] {
-    --icon-color: currentColor;
+    --icon-color: var(--link-icon-color);
   }
 }

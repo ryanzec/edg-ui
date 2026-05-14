@@ -6,21 +6,21 @@
   .suggestion-button {
     display: inline-flex;
     align-items: center;
-    gap: var(--spacing-1_5);
-    padding-block: var(--spacing-1_5);
-    padding-inline: var(--spacing-3);
+    gap: var(--chat-suggestion-gap);
+    padding-block: var(--chat-suggestion-padding-block);
+    padding-inline: var(--chat-suggestion-padding-inline);
     background: var(--chat-suggestion-bg);
     color: var(--chat-suggestion-fg);
-    border: 0.0625rem solid var(--chat-suggestion-border); /* 1px */
-    border-radius: var(--radius-pill);
+    border: var(--chat-suggestion-border-width) solid var(--chat-suggestion-border);
+    border-radius: var(--chat-suggestion-radius);
     font-family: inherit;
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-regular);
-    line-height: var(--line-height-tight);
+    font-size: var(--chat-suggestion-font-size);
+    font-weight: var(--chat-suggestion-font-weight);
+    line-height: var(--chat-suggestion-line-height);
     cursor: pointer;
     transition:
-      background var(--motion-duration-fast) var(--motion-ease-standard),
-      border-color var(--motion-duration-fast) var(--motion-ease-standard);
+      background var(--chat-suggestion-transition-duration) var(--chat-suggestion-transition-easing),
+      border-color var(--chat-suggestion-transition-duration) var(--chat-suggestion-transition-easing);
   }
 
   .suggestion-button:not(:disabled):hover {
@@ -28,13 +28,13 @@
   }
 
   .suggestion-button:focus-visible {
-    outline: 0.125rem solid var(--color-focus-ring); /* 2px */
-    outline-offset: 0.0625rem; /* 1px */
+    outline: var(--chat-suggestion-focus-ring-width) solid var(--chat-suggestion-focus-ring-color);
+    outline-offset: var(--chat-suggestion-focus-ring-offset);
   }
 
   .suggestion-button:disabled {
     cursor: not-allowed;
-    opacity: var(--opacity-disabled);
+    opacity: var(--chat-suggestion-disabled-opacity);
   }
 
   .suggestion-label {

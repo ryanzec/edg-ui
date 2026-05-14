@@ -5,7 +5,7 @@
 </div>
 
 <div role="grid" class="grid" (mouseleave)="calendarComponent.onMouseLeave()">
-  <div role="row" class="visually-hidden-row">
+  <div role="row" class="sr-only">
     @for (label of calendarComponent.dayLabels; track $index) {
       <div role="columnheader">{{ label.label }}</div>
     }

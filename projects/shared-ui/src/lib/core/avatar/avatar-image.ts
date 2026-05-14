@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
-import { AvatarImageBrainDirective } from '../../brain/avatar-image-brain/avatar-image-brain';
+import { AvatarImageBrainDirective } from '../../brain/avatar-brain/avatar-image-brain';
 import { AvatarBrainDirective } from '../../brain/avatar-brain/avatar-brain';
 
 @Component({

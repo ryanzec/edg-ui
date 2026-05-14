@@ -1,11 +1,19 @@
 :root {
-  /* anchor gap between the trigger and the popover (matches combobox / overlay-menu rhythm) */
-  --spacing-date-picker-input-anchor-gap: var(--spacing-1);
-
   /* popover surface geometry — matches the calendar radius so the wrapper clip mask aligns with calendar corners */
   --radius-date-picker-input-popover: var(--radius-base);
   --shadow-date-picker-input-popover: var(--shadow-base);
 
+  /* popover slide-in offset (magnitude — negation is applied at the usage site) */
+  --spacing-date-picker-input-popover-offset: 0.125rem; /* 2px */
+
+  /* popover stacking */
+  --z-index-date-picker-input-popover: var(--z-index-popover);
+
+  /* trigger chevron foreground colors */
+  --color-date-picker-input-trigger-chevron-fg: var(--color-fg-muted);
+  --color-date-picker-input-trigger-chevron-fg-hover: var(--color-fg);
+
   /* reveal motion */
   --motion-date-picker-input-duration: var(--motion-duration-fast);
+  --motion-date-picker-input-easing: var(--motion-ease-standard);
 }

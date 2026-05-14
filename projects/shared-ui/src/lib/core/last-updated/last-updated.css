@@ -6,7 +6,7 @@
     font-family: inherit;
     font-size: var(--last-updated-font-size);
     font-weight: var(--last-updated-font-weight);
-    line-height: var(--line-height-tight);
+    line-height: var(--last-updated-line-height);
     white-space: nowrap;
   }
 

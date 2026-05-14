@@ -1,0 +1,10 @@
+{
+  "name": "figma-plugin",
+  "version": "0.0.1",
+  "private": true,
+  "description": "design system generator plugin for figma desktop",
+  "devDependencies": {
+    "@figma/plugin-typings": "1.115.0",
+    "esbuild": "0.25.0"
+  }
+}

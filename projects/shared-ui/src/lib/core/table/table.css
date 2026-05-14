@@ -9,32 +9,24 @@
     height: 100%;
     background: var(--table-bg);
     color: var(--table-fg);
-
-    /* default to base — overridden by :host([data-size]) below */
-    --table-row-height: var(--table-row-height-base);
-    --table-header-height: var(--table-header-height-base);
-    --table-cell-py: var(--table-cell-padding-y-base);
-    --table-cell-px: var(--table-cell-padding-x-base);
-    --table-edge-x: var(--table-edge-inset-base);
-    --table-cell-fs: var(--table-cell-font-size-base);
   }
 
   :host([data-size='sm']) {
     --table-row-height: var(--table-row-height-sm);
     --table-header-height: var(--table-header-height-sm);
-    --table-cell-py: var(--table-cell-padding-y-sm);
-    --table-cell-px: var(--table-cell-padding-x-sm);
-    --table-edge-x: var(--table-edge-inset-sm);
-    --table-cell-fs: var(--table-cell-font-size-sm);
+    --table-cell-padding-y: var(--table-cell-padding-y-sm);
+    --table-cell-padding-x: var(--table-cell-padding-x-sm);
+    --table-edge-inset: var(--table-edge-inset-sm);
+    --table-cell-font-size: var(--table-cell-font-size-sm);
   }
 
   :host([data-size='lg']) {
     --table-row-height: var(--table-row-height-lg);
     --table-header-height: var(--table-header-height-lg);
-    --table-cell-py: var(--table-cell-padding-y-lg);
-    --table-cell-px: var(--table-cell-padding-x-lg);
-    --table-edge-x: var(--table-edge-inset-lg);
-    --table-cell-fs: var(--table-cell-font-size-lg);
+    --table-cell-padding-y: var(--table-cell-padding-y-lg);
+    --table-cell-padding-x: var(--table-cell-padding-x-lg);
+    --table-edge-inset: var(--table-edge-inset-lg);
+    --table-cell-font-size: var(--table-cell-font-size-lg);
   }
 
   :host([data-bordered]) {
@@ -49,21 +41,21 @@
   .selected-actions-bar {
     display: flex;
     align-items: center;
-    gap: var(--spacing-3);
-    padding: var(--spacing-2) var(--spacing-3);
-    background-color: var(--color-info-soft);
-    color: var(--color-info);
+    gap: var(--table-actions-bar-gap);
+    padding: var(--table-actions-bar-padding-y) var(--table-actions-bar-padding-x);
+    background-color: var(--table-actions-bar-bg);
+    color: var(--table-actions-bar-fg);
     border-bottom: var(--table-border-width) solid var(--table-border);
   }
 
   .selected-actions-bar .selected-count {
-    font-weight: var(--font-weight-medium);
+    font-weight: var(--table-actions-bar-count-font-weight);
   }
 
   .selected-actions-bar .actions {
     display: flex;
     align-items: center;
-    gap: var(--spacing-2);
+    gap: var(--table-actions-bar-actions-gap);
     flex: 1;
   }
 
@@ -74,20 +66,20 @@
     border-spacing: 0;
     text-align: left;
     line-height: var(--table-body-line-height);
-    font-size: var(--table-cell-fs);
+    font-size: var(--table-cell-font-size);
   }
 
   .background-loader {
     position: absolute;
-    top: var(--spacing-2);
-    right: var(--spacing-2);
+    top: var(--table-background-loader-offset);
+    right: var(--table-background-loader-offset);
     z-index: var(--z-index-raised);
   }
 
   /* the empty-state cell — owned by org-table and projected into the empty <tr> via <ng-content> */
   .empty-cell {
     padding-block: var(--table-empty-padding-y);
-    padding-inline: var(--table-edge-x);
+    padding-inline: var(--table-edge-inset);
     color: var(--table-empty-fg);
     font-size: var(--table-empty-font-size);
     text-align: center;
@@ -122,12 +114,12 @@
   /* edge inset — first / last cell of every row pulls a touch wider */
   org-table tr > org-table-th:first-child > th,
   org-table tr > org-table-td:first-child > td {
-    padding-left: var(--table-edge-x);
+    padding-left: var(--table-edge-inset);
   }
 
   org-table tr > org-table-th:last-child > th,
   org-table tr > org-table-td:last-child > td {
-    padding-right: var(--table-edge-x);
+    padding-right: var(--table-edge-inset);
   }
 
   /* row separator — top hairline on every body row except the first; expanded section rows belong to the row above so they skip it */

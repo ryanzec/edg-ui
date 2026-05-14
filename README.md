@@ -98,3 +98,19 @@ To save:
 you are tasked to add an input() to CHECKBOX of `iconName` that is used for the icon when it is checkbox is checked. also all an `iconColor` input() that is also passed to the icon component setting the default to
 
 Add a story
+
+# Figma Plugin
+
+How to use it
+
+1. moon figma-plugin:build — produces figma-plugin/dist/code.js + figma-plugin/dist/ui.html.
+2. Open Figma desktop → menu Plugins → Development → Import plugin from manifest… → select
+   figma-plugin/manifest.json.
+3. In a new blank Figma file, run Plugins → Development → Design System Generator.
+4. In the plugin UI, keep all checkboxes ticked and click Generate. First run takes 30–90
+   seconds — watch the status line for progress.
+5. When it finishes: File → Save local copy… to write a .fig file you can keep, share, or
+   re-open with the desktop app.
+
+Re-running the plugin on the same file replaces the variable collection and the [Design System]
+Components page (idempotent by name).

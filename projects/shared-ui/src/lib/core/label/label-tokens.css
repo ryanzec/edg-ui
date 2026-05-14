@@ -8,12 +8,13 @@
   --label-letter-spacing: var(--letter-spacing-normal);
 
   /* text wrapper */
-  --label-text-gap: 0.125rem; /* 2px */
+  --label-text-gap: var(--spacing-0_5);
 
   /* required marker */
   --label-marker-color: var(--color-danger);
   --label-marker-font-weight: var(--font-weight-semibold);
-  --label-marker-margin-inline-start: 0.125rem; /* 2px */
+  --label-marker-line-height: var(--line-height-none);
+  --label-marker-margin-inline-start: var(--spacing-0_5);
 
   /* loading spinner */
   --label-spinner-color: var(--color-fg-muted);

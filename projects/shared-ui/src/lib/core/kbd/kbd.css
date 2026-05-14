@@ -1,0 +1,22 @@
+@layer components {
+  :host {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  kbd {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: var(--kbd-height);
+    padding-inline: var(--kbd-padding-inline);
+    background-color: var(--kbd-bg);
+    color: var(--kbd-fg);
+    border-radius: var(--kbd-radius);
+    font-family: var(--kbd-font-family);
+    font-size: var(--kbd-font-size);
+    font-weight: var(--kbd-font-weight);
+    line-height: var(--kbd-line-height);
+  }
+}

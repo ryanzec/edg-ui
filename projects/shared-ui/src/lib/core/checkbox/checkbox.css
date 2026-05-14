@@ -7,10 +7,10 @@
 
   .native-input {
     position: absolute;
-    width: var(--border-width);
-    height: var(--border-width);
+    width: var(--checkbox-native-input-size);
+    height: var(--checkbox-native-input-size);
     padding: 0;
-    margin: calc(-1 * var(--border-width));
+    margin: calc(-1 * var(--checkbox-native-input-size));
     overflow: hidden;
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
@@ -44,7 +44,7 @@
 
   :host .checkbox-description {
     font-size: var(--checkbox-description-font-size);
-    line-height: var(--line-height-normal);
+    line-height: var(--checkbox-description-line-height);
     color: var(--checkbox-description-color);
   }
 
@@ -117,7 +117,6 @@
     --checkbox-indicator-color-checked: var(--color-primary);
     --checkbox-indicator-color-checked-hover: var(--color-primary-hover);
     --checkbox-indicator-color-checked-active: var(--color-primary-active);
-    --checkbox-card-border-selected: var(--color-primary);
   }
 
   :host([data-color='danger']) {
@@ -126,7 +125,6 @@
     --checkbox-indicator-color-checked: var(--color-danger);
     --checkbox-indicator-color-checked-hover: var(--color-danger-hover);
     --checkbox-indicator-color-checked-active: var(--color-danger-active);
-    --checkbox-card-border-selected: var(--color-danger);
   }
 
   /* ===== ERROR STATE ===== */
@@ -137,43 +135,5 @@
     --checkbox-indicator-color-checked: var(--color-danger);
     --checkbox-indicator-color-checked-hover: var(--color-danger-hover);
     --checkbox-indicator-color-checked-active: var(--color-danger-active);
-    --checkbox-card-border-selected: var(--color-danger);
-  }
-
-  /* ===== VARIANT: default ===== */
-  /* the default variant has no card chrome — base .checkbox-label rules apply directly. */
-
-  /* ===== VARIANT: card ===== */
-  :host([data-variant='card']) .checkbox-label {
-    align-items: flex-start;
-    width: 100%;
-    padding: var(--checkbox-card-padding);
-    background-color: var(--checkbox-card-bg);
-    border: var(--border-width) solid var(--checkbox-card-border);
-    border-radius: var(--checkbox-card-radius);
-  }
-
-  :host([data-variant='card']):not([aria-disabled='true']) .checkbox-label:hover {
-    background-color: var(--checkbox-card-bg-hover);
-    border-color: var(--checkbox-card-border-hover);
-  }
-
-  :host([data-variant='card'][data-checked]) .checkbox-label,
-  :host([data-variant='card'][data-indeterminate]) .checkbox-label,
-  :host([data-variant='card'][data-state='error']) .checkbox-label {
-    border-color: var(--checkbox-card-border-selected);
-  }
-
-  /* card variant size overrides — override the design token, not the property */
-  :host([data-variant='card'][data-size='sm']) {
-    --checkbox-card-padding: var(--spacing-2_5);
-  }
-
-  :host([data-variant='card'][data-size='base']) {
-    --checkbox-card-padding: var(--spacing-3);
-  }
-
-  :host([data-variant='card'][data-size='lg']) {
-    --checkbox-card-padding: var(--spacing-4);
   }
 }

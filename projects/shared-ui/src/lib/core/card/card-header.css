@@ -4,19 +4,12 @@
     grid-template-columns: minmax(0, 1fr) auto;
     align-items: start;
     gap: var(--card-header-grid-gap);
-    padding: var(--card-padding-y) var(--card-padding-x);
   }
 
   /* actions-only mode: single column, actions hugged right */
   :host([data-actions-only]) {
     grid-template-columns: 1fr;
     justify-items: end;
-  }
-
-  /* adjacent-region padding collapse: drop bottom padding when followed by content/footer */
-  :host(:has(+ org-card-content)),
-  :host(:has(+ org-card-footer)) {
-    padding-bottom: 0;
   }
 
   .header-titles {
@@ -28,19 +21,19 @@
 
   .header-title {
     margin: 0;
-    font-size: var(--font-size-lg);
-    font-weight: var(--font-weight-semibold);
-    line-height: var(--line-height-tight);
-    letter-spacing: var(--letter-spacing-tight);
-    color: var(--color-fg);
+    font-size: var(--card-header-title-font-size);
+    font-weight: var(--card-header-title-font-weight);
+    line-height: var(--card-header-title-line-height);
+    letter-spacing: var(--card-header-title-letter-spacing);
+    color: var(--card-header-title-fg);
     overflow-wrap: anywhere;
   }
 
   .header-subtitle {
     margin: 0;
-    font-size: var(--font-size-base);
-    line-height: var(--line-height-normal);
-    color: var(--color-fg-muted);
+    font-size: var(--card-header-subtitle-font-size);
+    line-height: var(--card-header-subtitle-line-height);
+    color: var(--card-header-subtitle-fg);
   }
 
   .header-actions {

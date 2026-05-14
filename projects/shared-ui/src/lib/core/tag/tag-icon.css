@@ -10,13 +10,13 @@
   }
 
   .tag-icon-btn[data-clickable]:hover {
-    opacity: 0.8;
+    opacity: var(--tag-icon-opacity-hover);
   }
 
   .tag-icon-btn[data-clickable]:focus-visible {
-    background-color: color-mix(in srgb, currentColor 15%, transparent);
-    border-radius: var(--radius-xs);
-    opacity: 0.8;
+    background-color: var(--tag-icon-focus-bg);
+    border-radius: var(--tag-icon-focus-radius);
+    opacity: var(--tag-icon-opacity-hover);
   }
 
   .tag-icon-btn:disabled {

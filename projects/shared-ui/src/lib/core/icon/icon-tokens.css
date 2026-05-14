@@ -1,6 +1,6 @@
 :root {
   /* size: base (default) */
-  --icon-size: calc(var(--font-size-base) + 0.125rem); /* 2px */
+  --icon-size: calc(var(--font-size-base) + 0.1875rem); /* 3px */
 
   /* color: inherit (default) */
   --icon-color: var(--color-inherit);

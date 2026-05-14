@@ -6,42 +6,43 @@
   .reaction-button {
     display: inline-flex;
     align-items: center;
-    gap: var(--spacing-1);
-    min-height: 1.375rem; /* 22px */
-    padding-block: var(--spacing-0_5);
-    padding-inline: var(--spacing-2);
+    gap: var(--chat-reaction-gap);
+    min-height: var(--chat-reaction-min-height);
+    padding-block: var(--chat-reaction-padding-block);
+    padding-inline: var(--chat-reaction-padding-inline);
     background: var(--chat-reaction-bg);
     color: var(--chat-reaction-fg);
-    border: 0.0625rem solid var(--chat-reaction-border); /* 1px */
-    border-radius: var(--radius-pill);
+    border: var(--chat-reaction-border-width) solid var(--chat-reaction-border);
+    border-radius: var(--chat-reaction-radius);
     font-family: inherit;
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-medium);
+    font-size: var(--chat-reaction-font-size);
+    font-weight: var(--chat-reaction-font-weight);
     cursor: pointer;
     transition:
-      background var(--motion-duration-fast) var(--motion-ease-standard),
-      color var(--motion-duration-fast) var(--motion-ease-standard),
-      border-color var(--motion-duration-fast) var(--motion-ease-standard);
+      background var(--chat-reaction-transition-duration) var(--chat-reaction-transition-easing),
+      color var(--chat-reaction-transition-duration) var(--chat-reaction-transition-easing),
+      border-color var(--chat-reaction-transition-duration) var(--chat-reaction-transition-easing);
   }
 
   .reaction-button:not(:disabled):hover {
-    background: var(--color-bg-hover);
+    background: var(--chat-reaction-bg-hover);
   }
 
   .reaction-button:focus-visible {
-    outline: 0.125rem solid var(--color-focus-ring); /* 2px */
-    outline-offset: 0.0625rem; /* 1px */
+    outline: var(--chat-reaction-focus-ring-width) solid var(--chat-reaction-focus-ring-color);
+    outline-offset: var(--chat-reaction-focus-ring-offset);
   }
 
-  :host([data-selected='1']) .reaction-button {
-    background: var(--chat-reaction-bg-selected);
-    color: var(--chat-reaction-fg-selected);
-    border-color: var(--chat-reaction-border-selected);
+  /* selected: override base reaction tokens so the button picks up the info accent */
+  :host([data-selected='1']) {
+    --chat-reaction-bg: var(--color-info-soft);
+    --chat-reaction-fg: var(--color-info);
+    --chat-reaction-border: var(--color-info);
   }
 
   .reaction-button:disabled {
     cursor: not-allowed;
-    opacity: var(--opacity-disabled);
+    opacity: var(--chat-reaction-disabled-opacity);
   }
 
   .reaction-count {

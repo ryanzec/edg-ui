@@ -1,35 +1,25 @@
 @layer components {
   :host {
-    /* internal locals — read once from the overlay-menu design tokens, then used throughout */
-    --_surface: var(--color-overlay-menu-surface);
-    --_border: var(--color-overlay-menu-border);
-    --_radius: var(--radius-overlay-menu);
-    --_shadow: var(--shadow-overlay-menu);
-    --_pad: var(--spacing-overlay-menu-pad);
-    --_min-width: var(--sizing-overlay-menu-min-widthidth);
-    --_max-width: var(--sizing-overlay-menu-max-width);
-    --_motion-dur: var(--motion-overlay-menu-duration);
-
     display: block;
     width: max-content;
-    min-width: var(--_min-width);
-    max-width: var(--_max-width);
-    padding: var(--_pad);
-    background-color: var(--_surface);
-    border: var(--border-width) solid var(--_border);
-    border-radius: var(--_radius);
-    box-shadow: var(--_shadow);
-    color: var(--color-fg);
-    z-index: var(--z-index-popover);
+    min-width: var(--overlay-menu-min-width);
+    max-width: var(--overlay-menu-max-width);
+    padding: var(--overlay-menu-padding);
+    background-color: var(--overlay-menu-bg);
+    color: var(--overlay-menu-fg);
+    border: var(--overlay-menu-border-width) solid var(--overlay-menu-border);
+    border-radius: var(--overlay-menu-radius);
+    box-shadow: var(--overlay-menu-shadow);
+    z-index: var(--overlay-menu-z-index);
     overflow: hidden;
     transition:
-      opacity var(--_motion-dur) var(--motion-ease-standard),
-      transform var(--_motion-dur) var(--motion-ease-standard);
+      opacity var(--overlay-menu-motion-duration) var(--overlay-menu-motion-ease),
+      transform var(--overlay-menu-motion-duration) var(--overlay-menu-motion-ease);
   }
 
   :host([data-state='closed']) {
     opacity: 0;
-    transform: translateY(-0.125rem); /* 2px */
+    transform: translateY(calc(var(--overlay-menu-motion-translate) * -1));
     pointer-events: none;
   }
 
@@ -58,5 +48,52 @@
     margin: 0;
     color: inherit;
     font: inherit;
+  }
+
+  .menu-item-button[data-color] {
+    color: var(--overlay-menu-item-color);
+  }
+
+  .menu-item-button[data-color='danger'] {
+    --overlay-menu-item-color: var(--color-danger);
+  }
+
+  .menu-item-button[data-color='warning'] {
+    --overlay-menu-item-color: var(--color-warning);
+  }
+
+  .menu-item-button[data-color='caution'] {
+    --overlay-menu-item-color: var(--color-caution);
+  }
+
+  .menu-item-button[data-color='info'] {
+    --overlay-menu-item-color: var(--color-info);
+  }
+
+  .menu-item-button[data-color='safe'] {
+    --overlay-menu-item-color: var(--color-safe);
+  }
+
+  .menu-item-button[data-color='primary'] {
+    --overlay-menu-item-color: var(--color-primary);
+  }
+
+  .menu-item-button[data-color='secondary'] {
+    --overlay-menu-item-color: var(--color-secondary);
+  }
+
+  .header {
+    padding-block: var(--overlay-menu-header-padding-block);
+    padding-inline: var(--overlay-menu-header-padding-inline);
+    color: var(--overlay-menu-header-fg);
+    font-size: var(--overlay-menu-header-font-size);
+    font-weight: var(--overlay-menu-header-font-weight);
+    letter-spacing: var(--overlay-menu-header-letter-spacing);
+    text-transform: uppercase;
+  }
+
+  .button-toggle-row {
+    padding-block: var(--overlay-menu-button-toggle-padding-block);
+    padding-inline: var(--overlay-menu-button-toggle-padding-inline);
   }
 }

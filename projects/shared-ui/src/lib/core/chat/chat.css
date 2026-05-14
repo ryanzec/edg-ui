@@ -3,8 +3,8 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    font-family: var(--font-sans);
-    color: var(--color-fg);
+    font-family: var(--chat-font-family);
+    color: var(--chat-fg);
   }
 
   .chat-thread {

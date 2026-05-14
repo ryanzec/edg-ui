@@ -1,7 +1,8 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import type { Meta, StoryObj } from '@storybook/angular';
 import { ButtonToggle, ButtonToggleItem } from '../button-toggle/button-toggle';
+import { CheckboxToggle } from '../checkbox-toggle/checkbox-toggle';
 import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
 import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
 import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
@@ -55,6 +56,7 @@ const liveDemoBackgroundItems: ButtonToggleItem[] = allBoxBackgrounds.map((backg
     ReactiveFormsModule,
     Box,
     ButtonToggle,
+    CheckboxToggle,
     DesignSystemDemo,
     DesignSystemDemoHeader,
     DesignSystemDemoControls,
@@ -80,7 +82,7 @@ const liveDemoBackgroundItems: ButtonToggleItem[] = allBoxBackgrounds.map((backg
         <org-design-system-demo-header
           slot="header"
           title="Live demo"
-          description="Box is purely presentational — no hover, focus, or pressed states. Toggle the inputs to see every visual combination."
+          description="Toggle the inputs to see every visual combination. Flip the 'clickable' toggle to attach a click handler — the box auto-detects the listener and gains cursor, hover, pressed, and focus-visible affordances along with role=button + keyboard activation."
         />
         <org-design-system-demo-controls slot="controls">
           <org-design-system-demo-control-group label="Color">
@@ -95,23 +97,43 @@ const liveDemoBackgroundItems: ButtonToggleItem[] = allBoxBackgrounds.map((backg
           <org-design-system-demo-control-group label="Background">
             <org-button-toggle [items]="backgroundItems" formControlName="background" buttonSize="sm" />
           </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Clickable">
+            <org-checkbox-toggle name="live-demo-clickable" value="clickable" formControlName="clickable">
+              {{ liveDemoForm.controls.clickable.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
         </org-design-system-demo-controls>
         <org-design-system-demo-canvas slot="canvas">
           <div class="canvas-stage">
-            <org-box
-              [color]="liveDemoForm.controls.color.value === 'none' ? null : liveDemoForm.controls.color.value"
-              [border]="liveDemoForm.controls.border.value"
-              [padding]="liveDemoForm.controls.padding.value"
-              [background]="liveDemoForm.controls.background.value"
-            >
-              <div class="flex flex-col gap-1">
-                <strong>Box content</strong>
-                <span
-                  >This is a foundational container. Drop any composition inside — text, controls, key/value rows, or
-                  another component.</span
-                >
-              </div>
-            </org-box>
+            @if (liveDemoForm.controls.clickable.value) {
+              <org-box
+                [color]="liveDemoForm.controls.color.value === 'none' ? null : liveDemoForm.controls.color.value"
+                [border]="liveDemoForm.controls.border.value"
+                [padding]="liveDemoForm.controls.padding.value"
+                [background]="liveDemoForm.controls.background.value"
+                (clicked)="onBoxClicked()"
+              >
+                <div class="flex flex-col gap-1">
+                  <strong>Clickable box</strong>
+                  <span>Click count: {{ clickCount() }}</span>
+                </div>
+              </org-box>
+            } @else {
+              <org-box
+                [color]="liveDemoForm.controls.color.value === 'none' ? null : liveDemoForm.controls.color.value"
+                [border]="liveDemoForm.controls.border.value"
+                [padding]="liveDemoForm.controls.padding.value"
+                [background]="liveDemoForm.controls.background.value"
+              >
+                <div class="flex flex-col gap-1">
+                  <strong>Box content</strong>
+                  <span
+                    >This is a foundational container. Drop any composition inside — text, controls, key/value rows, or
+                    another component.</span
+                  >
+                </div>
+              </org-box>
+            }
           </div>
         </org-design-system-demo-canvas>
       </org-design-system-demo>
@@ -124,12 +146,91 @@ class BoxLiveDemoStory {
   protected readonly paddingItems = liveDemoPaddingItems;
   protected readonly backgroundItems = liveDemoBackgroundItems;
 
+  protected readonly clickCount = signal<number>(0);
+
   protected readonly liveDemoForm = new FormGroup({
     color: new FormControl<LiveDemoColorChoice>('info', { nonNullable: true }),
     border: new FormControl<BoxBorder>('bordered', { nonNullable: true }),
     padding: new FormControl<BoxPadding>('base', { nonNullable: true }),
     background: new FormControl<BoxBackground>('colored', { nonNullable: true }),
+    clickable: new FormControl<boolean>(false, { nonNullable: true }),
   });
+
+  protected onBoxClicked(): void {
+    this.clickCount.update((count) => count + 1);
+  }
+}
+
+@Component({
+  selector: 'story-box-clickable-showcase',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [Box, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas, DesignSystemDemoExpectedBehaviour],
+  template: `
+    <org-design-system-demo>
+      <org-design-system-demo-header
+        slot="header"
+        title="Clickable"
+        description="Binding the clicked output auto-flips the box into an interactive surface. Compare the static and clickable boxes — only the clickable ones gain cursor, hover/pressed tint, focus-visible ring, role=button, tabindex=0, and Enter/Space activation."
+      />
+      <org-design-system-demo-canvas slot="canvas">
+        <div class="flex flex-col gap-3 max-w-md">
+          <org-box>
+            <div class="flex flex-col gap-1">
+              <strong>Static box</strong>
+              <span>No click handler — purely presentational. Hovering and focusing change nothing.</span>
+            </div>
+          </org-box>
+          <org-box color="info" (clicked)="onClicked('info')">
+            <div class="flex flex-col gap-1">
+              <strong>Clickable · info</strong>
+              <span>Try clicking, hovering, or tab-then-Enter / Space.</span>
+            </div>
+          </org-box>
+          <org-box color="safe" border="border-emphasize" (clicked)="onClicked('safe')">
+            <div class="flex flex-col gap-1">
+              <strong>Clickable · safe · border-emphasize</strong>
+              <span>The clickable affordance respects every other visual variant.</span>
+            </div>
+          </org-box>
+          <org-box color="danger" background="colorless" (clicked)="onClicked('danger')">
+            <div class="flex flex-col gap-1">
+              <strong>Clickable · danger · colorless</strong>
+              <span>Hover/pressed tints fall back to the neutral background slot in colorless mode.</span>
+            </div>
+          </org-box>
+          <div class="text-xs text-fg-muted">
+            Last activation: <strong>{{ lastActivated() ?? '—' }}</strong> · Total clicks:
+            <strong>{{ totalClicks() }}</strong>
+          </div>
+        </div>
+      </org-design-system-demo-canvas>
+    </org-design-system-demo>
+    <org-design-system-demo-expected-behaviour>
+      <ul class="list-inside list-disc flex flex-col gap-1">
+        <li>
+          <strong>Auto-detect</strong>: a (clicked) listener on the box flips it into clickable mode — no explicit input
+        </li>
+        <li><strong>Cursor</strong>: pointer cursor over clickable boxes only</li>
+        <li>
+          <strong>Hover / Pressed</strong>: background shifts to the color variant's *-soft-hover / *-soft-active token
+          (or neutral hover/active for colorless / no-color)
+        </li>
+        <li><strong>Focus-visible</strong>: visible focus ring via box-shadow on keyboard focus</li>
+        <li><strong>Keyboard</strong>: Enter and Space activate, Space's default page scroll is suppressed</li>
+        <li><strong>Aria</strong>: role="button" and tabindex="0" applied automatically</li>
+      </ul>
+    </org-design-system-demo-expected-behaviour>
+  `,
+})
+class BoxClickableShowcaseStory {
+  protected readonly totalClicks = signal<number>(0);
+
+  protected readonly lastActivated = signal<string | null>(null);
+
+  protected onClicked(label: string): void {
+    this.totalClicks.update((count) => count + 1);
+    this.lastActivated.set(label);
+  }
 }
 
 const meta: Meta<Box> = {
@@ -153,6 +254,8 @@ const meta: Meta<Box> = {
   - Configurable internal padding
   - Optional colorless background mode so color only affects the border
   - Accepts any content via ng-content
+  - Auto-detects clickable mode: binding the \`clicked\` output flips the box into an interactive surface
+    (cursor, hover/pressed tint, focus-visible ring, role=button, tabindex=0, Enter/Space activation)
 
   ### Border Options
   - **bordered**: Renders a visible border (default)
@@ -201,6 +304,11 @@ const meta: Meta<Box> = {
   <!-- colorless background so only the border is tinted -->
   <org-box color="danger" background="colorless">
     Danger border, default background.
+  </org-box>
+
+  <!-- clickable box — binding (clicked) auto-flips on the interactive affordance -->
+  <org-box color="info" (clicked)="onSelect()">
+    Click anywhere on this surface.
   </org-box>
   \`\`\`
 </div>
@@ -538,6 +646,8 @@ export const Showcase: Story = {
             <li><strong>Composition is the consumer's job</strong>: Box only frames the content; inner layout is up to you</li>
           </ul>
         </org-design-system-demo-expected-behaviour>
+
+        <story-box-clickable-showcase />
       </div>
     `,
     moduleMetadata: {
@@ -547,6 +657,7 @@ export const Showcase: Story = {
         DesignSystemDemoHeader,
         DesignSystemDemoCanvas,
         DesignSystemDemoExpectedBehaviour,
+        BoxClickableShowcaseStory,
       ],
     },
   }),

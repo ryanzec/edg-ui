@@ -1,16 +1,7 @@
-@if (hasInitialized() === false) {
-  <main>
-    <div>
-      <!-- loading this as hidden so the the theme is properly initialized while the application is loading -->
-      <org-ui-theme-switcher class="hidden"></org-ui-theme-switcher>
-      <div>Loading...</div>
-    </div>
-  </main>
-}
 @if (hasInitialized()) {
   <div
     [class]="
-      mergeClasses('h-full w-full', {
+      mergeClasses('flex h-full w-full', {
         flex: isAuthenticated(),
       })
     "
@@ -32,12 +23,7 @@
         class="h-full"
       />
     }
-    <main class="flex-1 p-4">
-      <div>
-        <div class="flex">
-          <org-ui-theme-switcher></org-ui-theme-switcher>
-        </div>
-      </div>
+    <main cdkScrollable class="flex-1 overflow-y-auto min-h-0">
       <router-outlet />
     </main>
   </div>

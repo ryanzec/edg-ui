@@ -2,16 +2,16 @@
   :host {
     display: inline-flex;
     align-items: center;
-    gap: var(--spacing-1);
-    padding-block: var(--spacing-2);
-    height: 1.25rem; /* 20px */
+    gap: var(--chat-typing-gap);
+    padding-block: var(--chat-typing-padding-block);
+    height: var(--chat-typing-height);
   }
 
   .typing-dot {
-    width: 0.375rem; /* 6px */
-    height: 0.375rem; /* 6px */
-    border-radius: 50%;
-    background: var(--chat-typing-dot);
+    width: var(--chat-typing-dot-size);
+    height: var(--chat-typing-dot-size);
+    border-radius: var(--chat-typing-dot-radius);
+    background: var(--chat-typing-dot-bg);
     animation: var(--animate-chat-typing-dot);
     animation-delay: 0s;
   }
@@ -27,7 +27,7 @@
   @media (prefers-reduced-motion: reduce) {
     .typing-dot {
       animation: none;
-      opacity: 0.7;
+      opacity: var(--chat-typing-opacity-reduced-motion);
     }
   }
 }

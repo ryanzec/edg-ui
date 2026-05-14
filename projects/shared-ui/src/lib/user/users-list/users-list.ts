@@ -11,7 +11,6 @@ import {
   signal,
 } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
-import { CdkMenuTrigger } from '@angular/cdk/menu';
 import { DateTime } from 'luxon';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
@@ -30,6 +29,7 @@ import { TableHeader } from '../../core/table/table-header';
 import { TableCell } from '../../core/table/table-cell';
 import { Tag, type TagColor } from '../../core/tag/tag';
 import { OverlayMenu, type OverlayMenuItem } from '../../core/overlay-menu/overlay-menu';
+import { OverlayMenuTriggerDirective } from '../../core/overlay-menu/overlay-menu-trigger';
 import { Skeleton } from '../../core/skeleton/skeleton';
 import { Input } from '../../core/input/input';
 import { Avatar } from '../../core/avatar/avatar';
@@ -37,6 +37,7 @@ import { DropDownSelector } from '../../core/drop-down-selector/drop-down-select
 import { type SelectionValue } from '../../brain/drop-down-selector-brain/drop-down-selector-brain';
 import { SortingStore } from '../../core/sorting-store/sorting-store';
 import { SortableDirective } from '../../core/sortable-directive/sortable-directive';
+import { TableActionsDirective } from '../../core/table-actions-directive/table-actions-directive';
 import { TextDirective } from '../../core/text-directive/text-directive';
 import { TypedContextDirective } from '../../core/typed-context-directive/typed-context-directive';
 import { Pagination } from '../../core/pagination/pagination';
@@ -81,24 +82,13 @@ const ROW_ACTIONS_MENU_ITEMS: OverlayMenuItem[] = [
   { id: 'delete', label: 'Delete', icon: 'trash' },
 ];
 
-/** action menu position relative to the row trigger button */
-const ROW_ACTIONS_MENU_POSITION = [
-  {
-    originX: 'end' as const,
-    originY: 'bottom' as const,
-    overlayX: 'end' as const,
-    overlayY: 'top' as const,
-    offsetY: 8,
-  },
-];
-
 @Component({
   selector: 'org-users-list',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     Button,
-    CdkMenuTrigger,
     OverlayMenu,
+    OverlayMenuTriggerDirective,
     Table,
     TableHeader,
     TableCell,
@@ -109,6 +99,7 @@ const ROW_ACTIONS_MENU_POSITION = [
     DropDownSelector,
     ReactiveFormsModule,
     SortableDirective,
+    TableActionsDirective,
     TextDirective,
     TypedContextDirective,
     Pagination,
@@ -158,9 +149,6 @@ export class UsersList implements AfterViewInit {
 
   /** action menu items rendered in the per-row 3-dot menu */
   protected readonly rowActionsMenuItems = ROW_ACTIONS_MENU_ITEMS;
-
-  /** position config for the per-row action menu overlay */
-  protected readonly rowActionsMenuPosition = ROW_ACTIONS_MENU_POSITION;
 
   /** model for the role filter selected items (drop-down-selector two-way binding) */
   protected readonly selectedRoleFilters = signal<SelectionValue<UserRoleName>[]>([]);

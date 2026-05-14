@@ -1,30 +1,44 @@
 :root {
-  /* color */
-  --color-drop-down-selector-label: var(--color-fg-muted);
-  --color-drop-down-selector-value: var(--color-fg);
-  --color-drop-down-selector-separator: var(--color-border-soft);
-  --color-drop-down-selector-clear: var(--color-fg-muted);
+  /* layout */
+  --drop-down-selector-border-width: var(--border-width);
+  --drop-down-selector-max-width: var(--sizing-2xs);
 
-  /* spacing — inner trigger rhythm + open-state vertical inset for the separator */
-  --spacing-drop-down-selector-gap: var(--spacing-1_5);
-  --spacing-drop-down-selector-gap-sm: var(--spacing-1);
-  --spacing-drop-down-selector-gap-lg: var(--spacing-2);
-  --spacing-drop-down-selector-separator-y: var(--spacing-1);
+  /* trigger label — defaults; overridden in the no-value state on :host */
+  --drop-down-selector-label-fg: var(--color-fg-muted);
+  --drop-down-selector-label-font-weight: var(--font-weight-regular);
 
-  /* sizing — trigger min-width per size and count chip height */
-  --sizing-drop-down-selector-min-width-sm: 6rem; /* 96px */
-  --sizing-drop-down-selector-min-width: 7.5rem; /* 120px */
-  --sizing-drop-down-selector-min-width-lg: 9rem; /* 144px */
-  --sizing-drop-down-selector-max-width: var(--sizing-2xs);
-  --sizing-drop-down-selector-count: var(--sizing-11xs);
+  /* trigger value */
+  --drop-down-selector-value-fg: var(--color-fg);
+  --drop-down-selector-value-font-weight: var(--font-weight-medium);
 
-  /* panel — re-uses the overlay-menu surface tokens for visual coherence */
-  --color-drop-down-selector-panel-surface: var(--color-overlay-menu-surface);
-  --color-drop-down-selector-panel-border: var(--color-overlay-menu-border);
-  --radius-drop-down-selector-panel: var(--radius-overlay-menu);
-  --shadow-drop-down-selector-panel: var(--shadow-overlay-menu);
-  --spacing-drop-down-selector-panel-pad: var(--spacing-overlay-menu-pad);
-  --sizing-drop-down-selector-panel-min-width: var(--sizing-overlay-menu-min-width);
-  --sizing-drop-down-selector-panel-max-width: var(--sizing-overlay-menu-max-width);
-  --sizing-drop-down-selector-panel-max-height: var(--sizing-lg);
+  /* trigger separator */
+  --drop-down-selector-separator-bg: var(--color-border-soft);
+  --drop-down-selector-separator-margin-block: var(--spacing-1);
+
+  /* trigger open-state button overrides — reads as a soft neutral surface */
+  --drop-down-selector-trigger-open-bg: var(--color-neutral-soft);
+  --drop-down-selector-trigger-open-bg-hover: var(--color-neutral-soft-hover);
+
+  /* chevron */
+  --drop-down-selector-chevron-transition-duration: var(--motion-duration-fast);
+  --drop-down-selector-chevron-transition-easing: var(--motion-ease-standard);
+  --drop-down-selector-chevron-rotate-open: 180deg;
+
+  /* panel — re-uses overlay-menu surface tokens for visual coherence */
+  --drop-down-selector-panel-bg: var(--overlay-menu-bg);
+  --drop-down-selector-panel-fg: var(--color-fg);
+  --drop-down-selector-panel-border: var(--overlay-menu-border);
+  --drop-down-selector-panel-radius: var(--overlay-menu-radius);
+  --drop-down-selector-panel-shadow: var(--overlay-menu-shadow);
+  --drop-down-selector-panel-padding: var(--overlay-menu-padding);
+  --drop-down-selector-panel-min-width: var(--overlay-menu-min-width);
+  --drop-down-selector-panel-max-width: var(--overlay-menu-max-width);
+  --drop-down-selector-panel-max-height: var(--sizing-lg);
+  --drop-down-selector-panel-z-index: var(--z-index-popover);
+
+  /* menu item */
+  --drop-down-selector-menu-item-active-bg: var(--color-neutral-soft-hover);
+
+  /* menu item clear — defaults; overridden on :hover */
+  --drop-down-selector-menu-item-clear-fg: var(--color-fg-muted);
 }

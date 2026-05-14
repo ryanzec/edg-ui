@@ -2,31 +2,28 @@
   :host {
     display: flex;
     align-items: center;
-    gap: var(--spacing-combobox-option-gap);
-    min-height: var(--sizing-combobox-option-min-height);
-    padding: var(--spacing-combobox-option-y) var(--spacing-combobox-option-x);
-    font-size: var(--font-size-combobox-option);
+    gap: var(--combobox-option-gap);
+    min-height: var(--combobox-option-min-height);
+    padding: var(--combobox-option-padding-block) var(--combobox-option-padding-inline);
+    font-size: var(--combobox-option-font-size);
+    background-color: var(--combobox-option-bg);
     cursor: pointer;
     user-select: none;
   }
 
   :host:hover,
   :host([data-active='1']) {
-    background-color: var(--color-bg-hover);
-  }
-
-  :host([aria-disabled='true']) {
-    opacity: var(--opacity-disabled);
-    cursor: not-allowed;
-    pointer-events: none;
+    --combobox-option-bg: var(--combobox-option-bg-hover);
   }
 
   :host([aria-selected='true']) {
-    background: var(--color-combobox-option-bg-active);
+    --combobox-option-bg: var(--combobox-option-bg-active);
   }
 
-  :host:hover {
-    background: var(--color-combobox-option-bg-hover);
+  :host([aria-disabled='true']) {
+    opacity: var(--combobox-option-disabled-opacity);
+    cursor: not-allowed;
+    pointer-events: none;
   }
 
   .label {

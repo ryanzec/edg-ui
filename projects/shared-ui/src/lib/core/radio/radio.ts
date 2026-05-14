@@ -28,12 +28,6 @@ export const allRadioColors = ['primary', 'danger'] as const;
 /** the color variant of the radio */
 export type RadioColor = (typeof allRadioColors)[number];
 
-/** all available radio variant values */
-export const allRadioVariants = ['default', 'card'] as const;
-
-/** the visual variant of the radio */
-export type RadioVariant = (typeof allRadioVariants)[number];
-
 /** default value for the name input */
 export const RADIO_NAME_DEFAULT = '';
 
@@ -42,9 +36,6 @@ export const RADIO_SIZE_DEFAULT: RadioSize = 'base';
 
 /** default value for the color input */
 export const RADIO_COLOR_DEFAULT: RadioColor = 'primary';
-
-/** default value for the variant input */
-export const RADIO_VARIANT_DEFAULT: RadioVariant = 'default';
 
 /** default value for the description input */
 export const RADIO_DESCRIPTION_DEFAULT = '';
@@ -65,7 +56,6 @@ export const RADIO_DESCRIPTION_DEFAULT = '';
   host: {
     '[attr.data-size]': 'size()',
     '[attr.data-color]': 'color()',
-    '[attr.data-variant]': 'variant()',
     '[attr.data-checked]': 'brain.isChecked() ? "" : null',
     '[attr.data-disabled]': 'brain.effectiveDisabled() ? "1" : null',
     '[attr.data-state]': 'brain.ariaInvalid() ? "error" : null',
@@ -89,9 +79,6 @@ export class Radio implements OnInit {
 
   /** the color variant of the radio */
   public readonly color = input<RadioColor>(RADIO_COLOR_DEFAULT);
-
-  /** the visual variant of the radio (default row, or bordered card tile) */
-  public readonly variant = input<RadioVariant>(RADIO_VARIANT_DEFAULT);
 
   /** optional description sub-line rendered beneath the label */
   public readonly description = input<string>(RADIO_DESCRIPTION_DEFAULT);

@@ -6,10 +6,14 @@
   --link-color-disabled: var(--color-link-disabled);
 
   /* underline */
+  --link-text-decoration-line: underline;
+  --link-text-decoration-color: transparent;
+  --link-text-decoration-color-hover: currentColor;
   --link-text-decoration-thickness: var(--border-width);
   --link-text-underline-offset: var(--spacing-0_5);
 
   /* inline icon */
+  --link-icon-color: currentColor;
   --link-icon-gap: var(--spacing-1);
   --link-icon-size: 1em;
   --link-icon-font-size: 0.95em;

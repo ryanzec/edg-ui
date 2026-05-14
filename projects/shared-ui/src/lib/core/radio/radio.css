@@ -39,9 +39,9 @@
     box-sizing: border-box;
     margin-top: var(--radio-indicator-top);
     transition:
-      border-color var(--motion-duration-base) var(--motion-ease-standard),
-      background-color var(--motion-duration-base) var(--motion-ease-standard),
-      box-shadow var(--motion-duration-base) var(--motion-ease-standard);
+      border-color var(--radio-transition-duration) var(--radio-transition-easing),
+      background-color var(--radio-transition-duration) var(--radio-transition-easing),
+      box-shadow var(--radio-transition-duration) var(--radio-transition-easing);
   }
 
   /* inner dot — scales 0 -> 1 when checked for a positive confirmation */
@@ -55,7 +55,7 @@
     border-radius: var(--radio-radius);
     background: var(--radio-mark-color);
     transform: translate(-50%, -50%) scale(0);
-    transition: transform var(--motion-duration-base) var(--motion-ease-entrance);
+    transition: transform var(--radio-transition-duration) var(--radio-mark-transition-easing);
   }
 
   :host .body {
@@ -66,15 +66,15 @@
   }
 
   :host .label-text {
-    color: var(--color-fg);
+    color: var(--radio-label-color);
     font-size: var(--radio-label-font-size);
-    line-height: var(--line-height-normal);
+    line-height: var(--radio-label-line-height);
   }
 
   :host .description {
     color: var(--radio-description-color);
     font-size: var(--radio-description-font-size);
-    line-height: var(--line-height-normal);
+    line-height: var(--radio-description-line-height);
   }
 
   /* hover (not disabled) — indicator border deepens */
@@ -156,7 +156,6 @@
     --radio-fill-hover: var(--color-primary-hover);
     --radio-fill-active: var(--color-primary-active);
     --radio-mark-color: var(--color-primary-on);
-    --radio-card-border-selected: var(--color-primary);
   }
 
   :host([data-color='danger']) {
@@ -164,7 +163,6 @@
     --radio-fill-hover: var(--color-danger-hover);
     --radio-fill-active: var(--color-danger-active);
     --radio-mark-color: var(--color-danger-on);
-    --radio-card-border-selected: var(--color-danger);
   }
 
   /* ===== ERROR STATE ===== */
@@ -177,54 +175,5 @@
     --radio-fill-hover: var(--color-danger-hover);
     --radio-fill-active: var(--color-danger-active);
     --radio-mark-color: var(--color-danger-on);
-    --radio-card-border-selected: var(--color-danger);
-  }
-
-  /* ===== VARIANT: card ===== */
-  :host([data-variant='card']) .label {
-    align-items: flex-start;
-    width: 100%;
-    padding: var(--radio-card-padding);
-    background: var(--radio-card-bg);
-    border: var(--radio-border-width) solid var(--radio-card-border);
-    border-radius: var(--radio-card-radius);
-    transition:
-      background-color var(--motion-duration-base) var(--motion-ease-standard),
-      border-color var(--motion-duration-base) var(--motion-ease-standard),
-      box-shadow var(--motion-duration-base) var(--motion-ease-standard);
-  }
-
-  :host([data-variant='card']:not([data-disabled='1'])) .label:hover {
-    background: var(--radio-card-bg-hover);
-    border-color: var(--radio-card-border-hover);
-  }
-
-  /*
-   * card selected state — the doubled border emphasis is drawn with an inset box-shadow, NOT a fake border.
-   * the real `border` carries 1px; the inset shadow adds the second px optically. this avoids changing the
-   * box model on selection.
-   */
-  :host([data-variant='card'][data-checked]) .label,
-  :host([data-variant='card'][data-state='error']) .label {
-    border-color: var(--radio-card-border-selected);
-    box-shadow: inset 0 0 0 var(--radio-border-width) var(--radio-card-border-selected);
-  }
-
-  /* card focus stacks the focus ring with the inner ring */
-  :host([data-variant='card']:not([data-disabled='1'])) .native:focus-visible ~ .indicator {
-    box-shadow: 0 0 0 var(--radio-focus-ring-width) var(--radio-focus-ring-color);
-  }
-
-  /* card variant size overrides — override the design token, not the property */
-  :host([data-variant='card'][data-size='sm']) {
-    --radio-card-padding: var(--spacing-2_5);
-  }
-
-  :host([data-variant='card'][data-size='base']) {
-    --radio-card-padding: var(--spacing-3);
-  }
-
-  :host([data-variant='card'][data-size='lg']) {
-    --radio-card-padding: var(--spacing-4);
   }
 }

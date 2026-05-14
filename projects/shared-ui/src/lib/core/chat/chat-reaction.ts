@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, input, model, output } from '@angular/core';
-import { ChatReactionBrainDirective } from '../../brain/chat-reaction-brain/chat-reaction-brain';
+import { ChatReactionBrainDirective } from '../../brain/chat-brain/chat-reaction-brain';
 
 /** default value for the emoji input */
 export const CHAT_REACTION_EMOJI_DEFAULT = '';

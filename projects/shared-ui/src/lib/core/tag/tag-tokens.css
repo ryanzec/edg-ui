@@ -29,4 +29,9 @@
 
   /* remove button negative end margin: -0.4 × current padding-inline so the X tucks under the pill curve */
   --tag-remove-margin-inline-end: calc(var(--tag-padding-inline) * -0.4);
+
+  /* tag-icon */
+  --tag-icon-focus-radius: var(--radius-xs);
+  --tag-icon-opacity-hover: 0.8;
+  --tag-icon-focus-bg: color-mix(in srgb, currentColor 15%, transparent);
 }

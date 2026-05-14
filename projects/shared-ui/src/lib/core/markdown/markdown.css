@@ -121,7 +121,7 @@
       border-radius: var(--radius-sm);
       font-family: var(--font-mono);
       font-size: var(--font-size-base);
-      background-color: var(--color-bg-surface-2);
+      background-color: var(--color-bg-surface-secondary);
       color: var(--color-fg);
     }
 
@@ -131,7 +131,7 @@
       border-radius: var(--radius-base);
       border: var(--border-width) solid var(--color-border);
       overflow-x: auto;
-      background-color: var(--color-bg-surface-2);
+      background-color: var(--color-bg-surface-secondary);
     }
 
     & pre code {

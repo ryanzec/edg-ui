@@ -32,10 +32,10 @@
   /* clipped native input — keyboard-accessible (focus + Enter/Space) but visually hidden */
   .org-file-upload-input {
     position: absolute;
-    width: 0.0625rem; /* 1px */
-    height: 0.0625rem; /* 1px */
+    width: var(--file-upload-input-hidden-size);
+    height: var(--file-upload-input-hidden-size);
     padding: 0;
-    margin: -0.0625rem; /* 1px */
+    margin: calc(-1 * var(--file-upload-input-hidden-size));
     overflow: hidden;
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
@@ -43,7 +43,7 @@
   }
 
   .org-file-upload:focus-within {
-    box-shadow: var(--shadow-focus-ring);
+    box-shadow: var(--file-upload-focus-ring);
   }
 
   /* empty state — shown for idle / hover / error */
@@ -75,7 +75,7 @@
   .org-file-upload-cta {
     color: var(--file-upload-cta-color);
     text-decoration: underline;
-    text-underline-offset: 0.15em;
+    text-underline-offset: var(--file-upload-cta-underline-offset);
   }
 
   .org-file-upload-hint {
@@ -136,7 +136,7 @@
     color: var(--file-upload-remove-color);
     cursor: pointer;
     transition-property: background, color;
-    transition-duration: var(--motion-duration-fast);
+    transition-duration: var(--file-upload-remove-transition-duration);
     transition-timing-function: var(--file-upload-transition-easing);
   }
 
@@ -147,7 +147,7 @@
 
   .org-file-upload-remove:focus-visible {
     outline: none;
-    box-shadow: var(--shadow-focus-ring);
+    box-shadow: var(--file-upload-focus-ring);
   }
 
   /* visibility toggling driven by data-state on the host */

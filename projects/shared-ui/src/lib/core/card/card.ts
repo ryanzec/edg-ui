@@ -1,5 +1,8 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, input, viewChild } from '@angular/core';
+import { outputFromObservable } from '@angular/core/rxjs-interop';
+import { Subject } from 'rxjs';
 import { angularUtils } from '@organization/shared-utils';
+import { BoxBrainDirective } from '../../brain/box-brain/box-brain';
 import { Box, BOX_BACKGROUND_DEFAULT, BOX_PADDING_DEFAULT } from '../box/box';
 import type { BoxBackground, BoxBorder, BoxPadding } from '../box/box';
 import { ComponentColor, allComponentColors } from '../types/component-types';
@@ -38,6 +41,10 @@ export const CARD_BOX_PADDING_DEFAULT = BOX_PADDING_DEFAULT;
   },
 })
 export class Card {
+  private readonly _boxBrainDirective = viewChild(BoxBrainDirective);
+
+  private readonly _clicked$ = new Subject<void>();
+
   /** the semantic color applied to the card border */
   public color = input<CardColor | undefined, CardColor | null | undefined>(CARD_COLOR_DEFAULT, {
     transform: angularUtils.transformNullToUndefined,
@@ -54,4 +61,36 @@ export class Card {
 
   /** the padding style variant of the card container */
   public boxPadding = input<BoxPadding>(CARD_BOX_PADDING_DEFAULT);
+
+  /**
+   * emitted when the card is clicked or activated via keyboard while in clickable mode; binding this output
+   * auto-flips the underlying box into its clickable affordance
+   */
+  public readonly clicked = outputFromObservable(this._clicked$);
+
+  constructor() {
+    // forward the inner box's clicked emissions to the card's own clicked subject, but only when the card
+    // itself has a consumer listening. this preserves the auto-detect contract so static cards do not
+    // inherit clickable affordances just because they wrap a clickable-capable box.
+    effect((onCleanup) => {
+      const brain = this._boxBrainDirective();
+
+      if (!brain) {
+        return;
+      }
+
+      if (!this._clicked$.observed) {
+        return;
+      }
+
+      brain.setExternallyClickable(true);
+
+      const subscription = brain.clicked.subscribe(() => this._clicked$.next());
+
+      onCleanup(() => {
+        brain.setExternallyClickable(false);
+        subscription.unsubscribe();
+      });
+    });
+  }
 }

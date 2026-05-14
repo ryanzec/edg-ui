@@ -3,7 +3,7 @@
   --design-system-demo-section-background: var(--color-bg-surface);
   --design-system-demo-section-border: var(--color-border-soft);
   --design-system-demo-section-radius: var(--radius-base);
-  --design-system-demo-section-padding: var(--spacing-6);
+  --design-system-demo-section-padding: var(--spacing-3);
   --design-system-demo-section-gap: var(--spacing-5);
   --design-system-demo-section-body-gap: var(--spacing-4);
 
@@ -22,7 +22,7 @@
   --design-system-demo-header-gap: var(--spacing-1);
 
   /* canvas */
-  --design-system-demo-canvas-background: var(--color-bg-surface);
+  --design-system-demo-canvas-background: var(--color-bg-app);
   --design-system-demo-canvas-border: var(--color-border-soft);
   --design-system-demo-canvas-border-width: var(--border-width);
   --design-system-demo-canvas-radius: var(--radius-sm);
@@ -32,7 +32,7 @@
   /* controls */
   --design-system-demo-controls-gap: var(--spacing-3);
   --design-system-demo-controls-padding: var(--spacing-4);
-  --design-system-demo-controls-background: var(--color-bg-surface-2);
+  --design-system-demo-controls-background: var(--color-bg-surface-secondary);
   --design-system-demo-controls-border: var(--color-border);
   --design-system-demo-controls-radius: var(--radius-sm);
 
@@ -46,7 +46,7 @@
 
   /* expected behaviour */
   --design-system-demo-expected-behaviour-gap: var(--spacing-2);
-  --design-system-demo-expected-behaviour-padding: var(--spacing-4);
+  --design-system-demo-expected-behaviour-padding: var(--spacing-3);
   --design-system-demo-expected-behaviour-background: var(--color-bg-surface);
   --design-system-demo-expected-behaviour-border: var(--color-border-soft);
   --design-system-demo-expected-behaviour-radius: var(--design-system-demo-section-radius);

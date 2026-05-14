@@ -1,0 +1,25 @@
+<org-application-navigation
+  workspaceIconLabel="H"
+  workspaceName="Halcyon"
+  workspacePlan="Acme Inc · Pro"
+  [navigationItems]="navigationItems"
+  [settingsMenuItems]="settingsMenuItems"
+  [(collapsed)]="collapsed"
+  [(theme)]="theme"
+  userName="Maya Brennan"
+  userEmail="maya@acme.co"
+  userStatusColor="safe"
+  (workspaceClicked)="onWorkspaceClicked()"
+  (navigationItemClicked)="onNavigationItemClicked($event)"
+  (subNavigationItemClicked)="onSubNavigationItemClicked($event)"
+  (settingsMenuItemClicked)="onSettingsMenuItemClicked($event)"
+  (logout)="onLogout()"
+/>
+<div class="flex-1 min-w-0 p-3">
+  <org-users-list
+    (editUser)="onEditUser($event)"
+    (deleteUser)="onDeleteUser($event)"
+    (bulkDeleteUsers)="onBulkDeleteUsers($event)"
+    (inviteMemberClicked)="onInviteMemberClicked()"
+  />
+</div>

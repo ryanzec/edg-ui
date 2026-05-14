@@ -29,20 +29,11 @@ export const allCheckboxColors = ['primary', 'danger'] as const;
 /** the color variant of the checkbox */
 export type CheckboxColor = (typeof allCheckboxColors)[number];
 
-/** all available checkbox variant values */
-export const allCheckboxVariants = ['default', 'card'] as const;
-
-/** the visual variant of the checkbox */
-export type CheckboxVariant = (typeof allCheckboxVariants)[number];
-
 /** default value for the size input */
 export const CHECKBOX_SIZE_DEFAULT: CheckboxSize = 'base';
 
 /** default value for the color input */
 export const CHECKBOX_COLOR_DEFAULT: CheckboxColor = 'primary';
-
-/** default value for the variant input */
-export const CHECKBOX_VARIANT_DEFAULT: CheckboxVariant = 'default';
 
 /** default value for the description input */
 export const CHECKBOX_DESCRIPTION_DEFAULT = '';
@@ -63,7 +54,6 @@ export const CHECKBOX_DESCRIPTION_DEFAULT = '';
   host: {
     '[attr.data-size]': 'size()',
     '[attr.data-color]': 'color()',
-    '[attr.data-variant]': 'variant()',
     '[attr.data-checked]': 'brain.checked() ? "" : null',
     '[attr.data-indeterminate]': 'brain.indeterminate() ? "" : null',
     '[attr.data-state]': 'brain.ariaInvalid() ? "error" : null',
@@ -102,9 +92,6 @@ export class Checkbox implements ControlValueAccessor {
 
   /** the color variant of the checkbox */
   public readonly color = input<CheckboxColor>(CHECKBOX_COLOR_DEFAULT);
-
-  /** the visual variant of the checkbox (default row, or bordered card tile) */
-  public readonly variant = input<CheckboxVariant>(CHECKBOX_VARIANT_DEFAULT);
 
   /** optional description sub-line rendered beneath the label */
   public readonly description = input<string>(CHECKBOX_DESCRIPTION_DEFAULT);

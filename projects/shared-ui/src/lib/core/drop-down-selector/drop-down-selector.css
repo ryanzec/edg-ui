@@ -1,37 +1,37 @@
 @layer components {
   :host {
     display: inline-flex;
-    max-width: var(--sizing-drop-down-selector-max-width);
+    max-width: var(--drop-down-selector-max-width);
   }
 
   /* armed state — open trigger reads as a soft neutral surface while keeping the standard border */
   :host([data-state='open']:not([aria-disabled='true'])) org-button {
-    --button-bg: var(--color-neutral-soft);
-    --button-bg-hover: var(--color-neutral-soft-hover);
-  }
-
-  .trigger-label {
-    color: var(--color-drop-down-selector-label);
-    font-weight: var(--font-weight-regular);
-    flex: 0 0 auto;
+    --button-bg: var(--drop-down-selector-trigger-open-bg);
+    --button-bg-hover: var(--drop-down-selector-trigger-open-bg-hover);
   }
 
   /* when no value is picked, the label stands in for the entire trigger label and reads at full weight */
-  :host(:not([data-has-value])) .trigger-label {
-    color: var(--color-drop-down-selector-value);
-    font-weight: var(--font-weight-medium);
+  :host(:not([data-has-value])) {
+    --drop-down-selector-label-fg: var(--drop-down-selector-value-fg);
+    --drop-down-selector-label-font-weight: var(--drop-down-selector-value-font-weight);
+  }
+
+  .trigger-label {
+    color: var(--drop-down-selector-label-fg);
+    font-weight: var(--drop-down-selector-label-font-weight);
+    flex: 0 0 auto;
   }
 
   .trigger-separator {
-    flex: 0 0 var(--border-width);
+    flex: 0 0 var(--drop-down-selector-border-width);
     align-self: stretch;
-    margin-block: var(--spacing-drop-down-selector-separator-y);
-    background-color: var(--color-drop-down-selector-separator);
+    margin-block: var(--drop-down-selector-separator-margin-block);
+    background-color: var(--drop-down-selector-separator-bg);
   }
 
   .trigger-value {
-    color: var(--color-drop-down-selector-value);
-    font-weight: var(--font-weight-medium);
+    color: var(--drop-down-selector-value-fg);
+    font-weight: var(--drop-down-selector-value-font-weight);
     flex: 1 1 auto;
     min-width: 0;
     overflow: hidden;
@@ -45,11 +45,12 @@
 
   .trigger-chevron {
     flex: 0 0 auto;
-    transition: transform var(--motion-duration-fast) var(--motion-ease-standard);
+    transition: transform var(--drop-down-selector-chevron-transition-duration)
+      var(--drop-down-selector-chevron-transition-easing);
   }
 
   :host([data-state='open']) .trigger-chevron {
-    transform: rotate(180deg);
+    transform: rotate(var(--drop-down-selector-chevron-rotate-open));
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -59,17 +60,17 @@
   }
 
   .menu-panel {
-    min-width: var(--sizing-drop-down-selector-panel-min-width);
-    max-width: var(--sizing-drop-down-selector-panel-max-width);
-    max-height: var(--sizing-drop-down-selector-panel-max-height);
-    background-color: var(--color-drop-down-selector-panel-surface);
-    border: var(--border-width) solid var(--color-drop-down-selector-panel-border);
-    border-radius: var(--radius-drop-down-selector-panel);
-    box-shadow: var(--shadow-drop-down-selector-panel);
-    padding: var(--spacing-drop-down-selector-panel-pad);
+    min-width: var(--drop-down-selector-panel-min-width);
+    max-width: var(--drop-down-selector-panel-max-width);
+    max-height: var(--drop-down-selector-panel-max-height);
+    background-color: var(--drop-down-selector-panel-bg);
+    border: var(--drop-down-selector-border-width) solid var(--drop-down-selector-panel-border);
+    border-radius: var(--drop-down-selector-panel-radius);
+    box-shadow: var(--drop-down-selector-panel-shadow);
+    padding: var(--drop-down-selector-panel-padding);
     overflow: hidden;
-    color: var(--color-fg);
-    z-index: var(--z-index-popover);
+    color: var(--drop-down-selector-panel-fg);
+    z-index: var(--drop-down-selector-panel-z-index);
   }
 
   .menu-item-button {
@@ -83,14 +84,14 @@
   }
 
   .menu-item-button[data-active] {
-    background-color: var(--color-neutral-soft-hover);
+    background-color: var(--drop-down-selector-menu-item-active-bg);
   }
 
   .menu-item-clear {
-    color: var(--color-drop-down-selector-clear);
+    color: var(--drop-down-selector-menu-item-clear-fg);
   }
 
   .menu-item-clear:hover {
-    color: var(--color-fg);
+    --drop-down-selector-menu-item-clear-fg: var(--color-fg);
   }
 }

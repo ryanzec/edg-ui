@@ -2,7 +2,7 @@
   /* layout */
   --button-radius: var(--radius-sm);
   --button-border-width: var(--border-width);
-  --button-line-height: 1;
+  --button-line-height: var(--line-height-none);
   --button-disabled-opacity: var(--opacity-disabled);
 
   /* size slot tokens (defaults to base) */
@@ -27,10 +27,4 @@
 
   /* button-group */
   --button-group-gap: var(--spacing-1);
-
-  /* button toggle */
-  --button-toggle-background: var(--color-primary-soft);
-  --button-toggle-border: var(--color-primary-border);
-  --button-toggle-radius: var(--button-radius);
-  --button-toggle-padding: var(--spacing-1);
 }

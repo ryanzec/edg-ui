@@ -2,7 +2,7 @@
   :host {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--spacing-2);
-    margin-top: var(--spacing-2_5);
+    gap: var(--chat-suggestions-gap);
+    margin-top: var(--chat-suggestions-margin-top);
   }
 }

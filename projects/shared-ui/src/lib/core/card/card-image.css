@@ -2,32 +2,28 @@
   :host {
     display: block;
     width: 100%;
+    position: var(--card-image-position);
+    aspect-ratio: var(--card-image-aspect-ratio);
+    /*padding-inline: var(--card-image-padding-inline);*/
   }
 
   :host img {
     display: block;
     width: 100%;
-    height: auto;
+    height: var(--card-image-img-height);
     object-fit: cover;
+    border-radius: var(--card-image-img-radius);
   }
 
   /* constrained: inset by the shared card gutter, inner img gets its own rounding */
   :host([data-full-width='0']) {
-    padding: 0 var(--card-padding-x);
-  }
-
-  :host([data-full-width='0']) img {
-    border-radius: var(--card-image-inset-radius);
+    --card-image-img-radius: var(--card-image-inset-radius);
   }
 
   /* fill mode: forced aspect ratio; ngOptimizedImage's [fill] places the img absolute inside us */
   :host([data-mode='fill']) {
-    position: relative;
-    aspect-ratio: var(--card-image-fill-aspect-ratio);
-  }
-
-  :host([data-mode='fill']) img {
-    width: 100%;
-    height: 100%;
+    --card-image-position: relative;
+    --card-image-aspect-ratio: var(--card-image-fill-aspect-ratio);
+    --card-image-img-height: 100%;
   }
 }

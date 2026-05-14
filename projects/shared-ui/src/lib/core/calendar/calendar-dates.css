@@ -3,7 +3,7 @@
     display: flex;
     flex-direction: column;
     gap: var(--calendar-stack-gap);
-    padding: var(--spacing-2);
+    padding: var(--calendar-dates-padding);
   }
 
   /* visible weekday strip */
@@ -21,19 +21,6 @@
     letter-spacing: var(--calendar-weekday-letter-spacing);
     text-transform: uppercase;
     color: var(--calendar-weekday-fg);
-  }
-
-  /* a11y-only column header row mirrors the visible weekday strip with full names */
-  .visually-hidden-row {
-    position: absolute;
-    width: 0.0625rem; /* 1px */
-    height: 0.0625rem; /* 1px */
-    padding: 0;
-    margin: -0.0625rem; /* 1px */
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border-width: 0;
   }
 
   .grid {
@@ -100,12 +87,12 @@
 
   /* focus-visible: ring on chip */
   .day:focus-visible .day-chip {
-    box-shadow: 0 0 0 var(--border-width-thick) var(--color-focus-ring);
+    box-shadow: 0 0 0 var(--calendar-focus-ring-width) var(--calendar-focus-ring-color);
   }
 
   /* keyboard-focused state (driven by brain) */
   .day[data-focused] .day-chip {
-    box-shadow: 0 0 0 var(--border-width-thick) var(--color-focus-ring);
+    box-shadow: 0 0 0 var(--calendar-focus-ring-width) var(--calendar-focus-ring-color);
   }
 
   /* today: inset ring on the chip (suppressed when selected — selected fill wins) */

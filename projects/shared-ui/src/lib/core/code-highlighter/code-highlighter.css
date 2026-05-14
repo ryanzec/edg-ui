@@ -21,46 +21,46 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: var(--spacing-1);
+    padding: var(--code-highlighter-copy-padding);
     border: none;
-    border-radius: var(--radius-sm);
+    border-radius: var(--code-highlighter-copy-radius);
     background-color: transparent;
-    color: var(--color-fg);
+    color: var(--code-highlighter-fg);
     cursor: pointer;
   }
 
   .code-highlighter-body {
     position: relative;
     display: block;
-    border: var(--border-width) solid var(--color-border);
-    border-radius: var(--radius-base);
-    background-color: var(--color-neutral-soft);
+    border: var(--code-highlighter-border-width) solid var(--code-highlighter-border);
+    border-radius: var(--code-highlighter-radius);
+    background-color: var(--code-highlighter-bg);
   }
 
   :host([data-variant='block']) .code-highlighter-copy-wrapper {
-    top: -1.5rem; /* -24px */
+    top: var(--code-highlighter-copy-offset-top);
     right: 0;
   }
 
   :host([data-variant='block']) .code-highlighter-copy-btn {
-    opacity: 0.1;
+    opacity: var(--code-highlighter-copy-resting-opacity);
   }
 
   :host([data-variant='block']) .code-highlighter-copy-btn:focus-visible {
-    opacity: 0.8;
+    opacity: var(--code-highlighter-copy-active-opacity);
   }
 
   :host([data-variant='block']):hover .code-highlighter-copy-btn {
-    opacity: 0.8;
+    opacity: var(--code-highlighter-copy-active-opacity);
   }
 
   :host([data-variant='block']) .code-highlighter-pre {
     margin: 0;
     white-space: pre;
-    font-family: monospace;
-    font-size: var(--font-size-base);
-    line-height: normal;
-    color: var(--color-fg);
+    font-family: var(--code-highlighter-font-family);
+    font-size: var(--code-highlighter-font-size);
+    line-height: var(--code-highlighter-pre-line-height);
+    color: var(--code-highlighter-fg);
   }
 
   /* ellipsis styling */
@@ -70,20 +70,20 @@
     word-break: break-all;
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: var(--ellipsis-lines);
-    line-clamp: var(--ellipsis-lines);
+    -webkit-line-clamp: var(--code-highlighter-ellipsis-lines);
+    line-clamp: var(--code-highlighter-ellipsis-lines);
   }
 
   /* inline code element */
   .code-highlighter-inline {
     display: inline;
-    padding-block: var(--spacing-0_5);
-    padding-inline: var(--spacing-1_5);
-    border-radius: var(--radius-sm);
-    background-color: var(--color-neutral-soft);
-    font-family: monospace;
-    font-size: var(--font-size-base);
-    color: var(--color-fg);
+    padding-block: var(--code-highlighter-inline-padding-block);
+    padding-inline: var(--code-highlighter-inline-padding-inline);
+    border-radius: var(--code-highlighter-inline-radius);
+    background-color: var(--code-highlighter-bg);
+    font-family: var(--code-highlighter-font-family);
+    font-size: var(--code-highlighter-font-size);
+    color: var(--code-highlighter-fg);
   }
 
   /*
@@ -92,48 +92,75 @@
    * tagged with the component's _ngcontent-* attribute and therefore bypasses view encapsulation.
    */
   :host ::ng-deep .org-syntax-comment {
-    color: var(--color-fg-faint);
-    font-style: italic;
+    color: var(--code-highlighter-syntax-comment-fg);
+    font-style: var(--code-highlighter-syntax-comment-font-style);
   }
 
-  :host ::ng-deep .org-syntax-keyword,
+  :host ::ng-deep .org-syntax-keyword {
+    color: var(--code-highlighter-syntax-keyword-fg);
+  }
+
   :host ::ng-deep .org-syntax-decorator {
-    color: var(--color-info);
+    color: var(--code-highlighter-syntax-decorator-fg);
   }
 
-  :host ::ng-deep .org-syntax-string,
-  :host ::ng-deep .org-syntax-regex,
-  :host ::ng-deep .org-syntax-escape,
+  :host ::ng-deep .org-syntax-string {
+    color: var(--code-highlighter-syntax-string-fg);
+  }
+
+  :host ::ng-deep .org-syntax-regex {
+    color: var(--code-highlighter-syntax-regex-fg);
+  }
+
+  :host ::ng-deep .org-syntax-escape {
+    color: var(--code-highlighter-syntax-escape-fg);
+  }
+
   :host ::ng-deep .org-syntax-inserted {
-    color: var(--color-safe);
+    color: var(--code-highlighter-syntax-inserted-fg);
   }
 
   :host ::ng-deep .org-syntax-number {
-    color: var(--color-warning);
+    color: var(--code-highlighter-syntax-number-fg);
   }
 
-  :host ::ng-deep .org-syntax-function,
-  :host ::ng-deep .org-syntax-property,
+  :host ::ng-deep .org-syntax-function {
+    color: var(--code-highlighter-syntax-function-fg);
+  }
+
+  :host ::ng-deep .org-syntax-property {
+    color: var(--code-highlighter-syntax-property-fg);
+  }
+
   :host ::ng-deep .org-syntax-attribute {
-    color: var(--color-info);
+    color: var(--code-highlighter-syntax-attribute-fg);
   }
 
   :host ::ng-deep .org-syntax-variable {
-    color: var(--color-fg);
+    color: var(--code-highlighter-syntax-variable-fg);
   }
 
-  :host ::ng-deep .org-syntax-tag,
+  :host ::ng-deep .org-syntax-tag {
+    color: var(--code-highlighter-syntax-tag-fg);
+  }
+
   :host ::ng-deep .org-syntax-deleted {
-    color: var(--color-danger);
+    color: var(--code-highlighter-syntax-deleted-fg);
   }
 
-  :host ::ng-deep .org-syntax-operator,
+  :host ::ng-deep .org-syntax-operator {
+    color: var(--code-highlighter-syntax-operator-fg);
+  }
+
   :host ::ng-deep .org-syntax-punctuation {
-    color: var(--color-fg-muted);
+    color: var(--code-highlighter-syntax-punctuation-fg);
   }
 
-  :host ::ng-deep .org-syntax-class,
+  :host ::ng-deep .org-syntax-class {
+    color: var(--code-highlighter-syntax-class-fg);
+  }
+
   :host ::ng-deep .org-syntax-builtin {
-    color: var(--color-caution);
+    color: var(--code-highlighter-syntax-builtin-fg);
   }
 }

@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, computed, contentChild, effect, inject, input } from '@angular/core';
-import { TableHeaderBrainDirective } from '../../brain/table-header-brain/table-header-brain';
+import { TableHeaderBrainDirective } from '../../brain/table-brain/table-header-brain';
 import { SortableDirective } from '../sortable-directive/sortable-directive';
 import { Icon } from '../icon/icon';
 import { type IconName } from '../../brain/icon-brain/icon-brain';

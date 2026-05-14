@@ -5,7 +5,7 @@ import { Button } from '../button/button';
 import type { CardColor } from '../card/card';
 import { Icon } from '../icon/icon';
 import type { IconName } from '../../brain/icon-brain/icon-brain';
-import { NotificationBrainDirective } from '../../brain/notification-brain/notification-brain';
+import { NotificationItemBrainDirective } from '../../brain/notifications-brain/notification-item-brain';
 
 /** default value for the title input */
 export const NOTIFICATION_ITEM_TITLE_DEFAULT: string | undefined = undefined;
@@ -54,7 +54,7 @@ const INTENT_DEFAULT_ICON: Record<CardColor, IconName> = {
   styleUrl: './notification-item.css',
   hostDirectives: [
     {
-      directive: NotificationBrainDirective,
+      directive: NotificationItemBrainDirective,
       inputs: ['id', 'autoCloseIn', 'closeButtonAriaLabel', 'resetTimerOnHover'],
       outputs: ['closed'],
     },
@@ -74,7 +74,7 @@ const INTENT_DEFAULT_ICON: Record<CardColor, IconName> = {
   },
 })
 export class NotificationItem {
-  protected readonly brain = inject(NotificationBrainDirective, { self: true });
+  protected readonly brain = inject(NotificationItemBrainDirective, { self: true });
 
   /** the title text rendered as the top line in the notification body */
   public readonly title = input<string | undefined, string | null | undefined>(NOTIFICATION_ITEM_TITLE_DEFAULT, {
