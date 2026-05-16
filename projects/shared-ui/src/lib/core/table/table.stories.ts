@@ -11,7 +11,7 @@ import { SortingStore } from '../sorting-store/sorting-store';
 import { Pagination } from '../pagination/pagination';
 import { DataSelectionStore } from '../data-selection-store/data-selection-store';
 import { Button } from '../button/button';
-import { Tag } from '../tag/tag';
+import { Tag } from '../tags/tag';
 import { Avatar } from '../avatar/avatar';
 import { Link } from '../link/link';
 import { TypedContextDirective } from '../typed-context-directive/typed-context-directive';

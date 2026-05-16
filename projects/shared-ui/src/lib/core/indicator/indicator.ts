@@ -40,6 +40,9 @@ export const INDICATOR_PULSE_DEFAULT = false;
 /** default value for the ring input */
 export const INDICATOR_RING_DEFAULT = false;
 
+/** default value for the hasFade input */
+export const INDICATOR_HAS_FADE_DEFAULT = false;
+
 @Component({
   selector: 'org-indicator',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -59,6 +62,7 @@ export const INDICATOR_RING_DEFAULT = false;
     '[attr.data-position]': 'position() ?? null',
     '[attr.data-ring]': 'ring() ? "" : null',
     '[attr.data-pulse]': 'pulse() ? "" : null',
+    '[attr.data-fade]': 'hasFade() ? "" : null',
   },
 })
 export class Indicator {
@@ -87,6 +91,9 @@ export class Indicator {
 
   /** when true, plays a continuous pulse animation behind the indicator to convey live status */
   public readonly pulse = input<boolean>(INDICATOR_PULSE_DEFAULT);
+
+  /** when true, paints a 4px halo around the indicator using the matching soft color to give the illusion of a fade */
+  public readonly hasFade = input<boolean>(INDICATOR_HAS_FADE_DEFAULT);
 
   /** the resolved render mode: number when a value is set, icon when an org-icon is projected, dot otherwise */
   protected readonly mode = computed<IndicatorMode>(() => {

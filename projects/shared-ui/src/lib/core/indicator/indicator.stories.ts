@@ -113,6 +113,7 @@ export const Default: Story = {
     number: null,
     pulse: false,
     ring: false,
+    hasFade: false,
     position: undefined,
     ariaLabel: null,
   },
@@ -138,6 +139,11 @@ export const Default: Story = {
     ring: {
       control: 'boolean',
       description: 'When true, paints a 2px outline ring around the indicator',
+    },
+    hasFade: {
+      control: 'boolean',
+      description:
+        'When true, paints a 4px halo around the indicator using the matching soft color to give the illusion of a fade',
     },
     position: {
       control: 'select',
@@ -165,6 +171,7 @@ export const Default: Story = {
         [number]="number"
         [pulse]="pulse"
         [ring]="ring"
+        [hasFade]="hasFade"
         [position]="position"
         [ariaLabel]="ariaLabel"
       />
@@ -251,6 +258,11 @@ export const Default: Story = {
               {{ liveDemoForm.controls.ring.value ? 'on' : 'off' }}
             </org-checkbox-toggle>
           </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Fade">
+            <org-checkbox-toggle name="live-demo-has-fade" value="hasFade" formControlName="hasFade">
+              {{ liveDemoForm.controls.hasFade.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
           <org-design-system-demo-control-group label="Pin to anchor">
             <org-checkbox-toggle name="live-demo-pinned" value="pinned" formControlName="pinned">
               {{ liveDemoForm.controls.pinned.value ? 'on' : 'off' }}
@@ -270,6 +282,7 @@ export const Default: Story = {
                       [number]="liveDemoForm.controls.number.value"
                       [pulse]="liveDemoForm.controls.pulse.value"
                       [ring]="liveDemoForm.controls.ring.value"
+                      [hasFade]="liveDemoForm.controls.hasFade.value"
                       position="bottom-right"
                     />
                   }
@@ -279,6 +292,7 @@ export const Default: Story = {
                       [size]="liveDemoForm.controls.size.value"
                       [pulse]="liveDemoForm.controls.pulse.value"
                       [ring]="liveDemoForm.controls.ring.value"
+                      [hasFade]="liveDemoForm.controls.hasFade.value"
                       position="bottom-right"
                     >
                       <org-icon name="check" size="2xs" />
@@ -290,6 +304,7 @@ export const Default: Story = {
                       [size]="liveDemoForm.controls.size.value"
                       [pulse]="liveDemoForm.controls.pulse.value"
                       [ring]="liveDemoForm.controls.ring.value"
+                      [hasFade]="liveDemoForm.controls.hasFade.value"
                       position="bottom-right"
                       ariaLabel="status"
                     />
@@ -305,6 +320,7 @@ export const Default: Story = {
                     [number]="liveDemoForm.controls.number.value"
                     [pulse]="liveDemoForm.controls.pulse.value"
                     [ring]="liveDemoForm.controls.ring.value"
+                    [hasFade]="liveDemoForm.controls.hasFade.value"
                   />
                 }
                 @case ('icon') {
@@ -313,6 +329,7 @@ export const Default: Story = {
                     [size]="liveDemoForm.controls.size.value"
                     [pulse]="liveDemoForm.controls.pulse.value"
                     [ring]="liveDemoForm.controls.ring.value"
+                    [hasFade]="liveDemoForm.controls.hasFade.value"
                   >
                     <org-icon name="check" size="2xs" />
                   </org-indicator>
@@ -323,6 +340,7 @@ export const Default: Story = {
                     [size]="liveDemoForm.controls.size.value"
                     [pulse]="liveDemoForm.controls.pulse.value"
                     [ring]="liveDemoForm.controls.ring.value"
+                    [hasFade]="liveDemoForm.controls.hasFade.value"
                     ariaLabel="status"
                   />
                 }
@@ -346,6 +364,7 @@ class IndicatorLiveDemoStory {
     number: new FormControl<number>(12, { nonNullable: true }),
     pulse: new FormControl<boolean>(false, { nonNullable: true }),
     ring: new FormControl<boolean>(false, { nonNullable: true }),
+    hasFade: new FormControl<boolean>(false, { nonNullable: true }),
     pinned: new FormControl<boolean>(false, { nonNullable: true }),
   });
 }
@@ -484,6 +503,68 @@ class IndicatorColorSizeDotGridSection {
   `,
 })
 class IndicatorColorSizeNumberGridSection {
+  protected readonly colors = showcaseColors;
+  protected readonly sizes = showcaseSizes;
+}
+
+@Component({
+  selector: 'story-indicator-fade-grid',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [Icon, Indicator],
+  styles: [
+    `
+      :host {
+        display: block;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 6rem repeat(3, 1fr);
+        align-items: center;
+        row-gap: var(--spacing-3);
+        column-gap: var(--spacing-4);
+      }
+      .col-header {
+        text-transform: uppercase;
+        font-size: var(--font-size-2xs);
+        letter-spacing: 0.06em;
+        color: var(--color-fg-muted);
+      }
+      .row-label {
+        text-transform: capitalize;
+        font-size: var(--font-size-xs);
+        font-weight: var(--font-weight-medium);
+        color: var(--color-fg-muted);
+      }
+      .cell {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-4);
+      }
+    `,
+  ],
+  template: `
+    <div class="grid">
+      <span></span>
+      @for (size of sizes; track size) {
+        <span class="col-header">{{ size }}</span>
+      }
+
+      @for (color of colors; track color) {
+        <span class="row-label">{{ color }}</span>
+        @for (size of sizes; track size) {
+          <span class="cell">
+            <org-indicator [color]="color" [size]="size" [hasFade]="true" ariaLabel="status" />
+            <org-indicator [color]="color" [size]="size" [number]="3" [hasFade]="true" />
+            <org-indicator [color]="color" [size]="size" [hasFade]="true">
+              <org-icon name="check" size="2xs" />
+            </org-indicator>
+          </span>
+        }
+      }
+    </div>
+  `,
+})
+class IndicatorFadeGridSection {
   protected readonly colors = showcaseColors;
   protected readonly sizes = showcaseSizes;
 }
@@ -885,6 +966,17 @@ export const Showcase: Story = {
         <org-design-system-demo>
           <org-design-system-demo-header
             slot="header"
+            title="With fade"
+            description="Set [hasFade]='true' to paint a 4px halo around the indicator using the matching soft color — softens the edge so the dot reads as 'fading' into its surroundings. Composes with [ring], [pulse], and [position]."
+          />
+          <org-design-system-demo-canvas slot="canvas">
+            <story-indicator-fade-grid />
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header
+            slot="header"
             title="Pinned to an anchor"
             description="Wrap the anchor in org-indicator-anchor (or any element with position: relative) and set [position] on the indicator. Add [ring]='true' when the anchor's background could compete with the dot — common for avatars."
           />
@@ -915,6 +1007,7 @@ export const Showcase: Story = {
         DesignSystemDemoCanvas,
         IndicatorColorSizeDotGridSection,
         IndicatorColorSizeNumberGridSection,
+        IndicatorFadeGridSection,
         IndicatorPinnedSection,
         IndicatorInlineSection,
       ],

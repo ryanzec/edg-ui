@@ -11,7 +11,6 @@ import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-d
 import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
 import { Avatar, allAvatarShapeVariants, allAvatarSizes, AvatarShapeVariant, AvatarSize } from './avatar';
 import { AvatarStack } from './avatar-stack';
-import { AvatarStackOverflow } from './avatar-stack-overflow';
 
 type LiveDemoImageMode = 'none' | 'gravatar' | 'custom';
 
@@ -115,6 +114,14 @@ const liveDemoImageItems: ButtonToggleItem[] = (['none', 'gravatar', 'custom'] a
               {{ liveDemoForm.controls.statusPip.value ? 'on' : 'off' }}
             </org-checkbox-toggle>
           </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Overflow">
+            <org-checkbox-toggle name="live-demo-overflow" value="overflow" formControlName="isOverflow">
+              {{ liveDemoForm.controls.isOverflow.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Count">
+            <input class="text-input" type="number" min="0" formControlName="count" />
+          </org-design-system-demo-control-group>
         </org-design-system-demo-controls>
         <org-design-system-demo-canvas slot="canvas">
           <div class="canvas-stage">
@@ -130,6 +137,8 @@ const liveDemoImageItems: ButtonToggleItem[] = (['none', 'gravatar', 'custom'] a
                 [subLabel]="resolvedSubLabel()"
                 [imgSrc]="resolvedImgSrc()"
                 [imgEmail]="resolvedImgEmail()"
+                [isOverflow]="liveDemoForm.controls.isOverflow.value"
+                [count]="liveDemoForm.controls.count.value"
                 (clicked)="onClicked()"
               />
             } @else {
@@ -144,6 +153,8 @@ const liveDemoImageItems: ButtonToggleItem[] = (['none', 'gravatar', 'custom'] a
                 [subLabel]="resolvedSubLabel()"
                 [imgSrc]="resolvedImgSrc()"
                 [imgEmail]="resolvedImgEmail()"
+                [isOverflow]="liveDemoForm.controls.isOverflow.value"
+                [count]="liveDemoForm.controls.count.value"
               />
             }
           </div>
@@ -168,6 +179,8 @@ class AvatarLiveDemoStory {
     clickable: new FormControl<boolean>(false, { nonNullable: true }),
     disabled: new FormControl<boolean>(false, { nonNullable: true }),
     statusPip: new FormControl<boolean>(false, { nonNullable: true }),
+    isOverflow: new FormControl<boolean>(false, { nonNullable: true }),
+    count: new FormControl<number>(5, { nonNullable: true }),
   });
 
   protected resolvedSubLabel(): string | null {
@@ -233,9 +246,11 @@ const meta: Meta<Avatar> = {
   - Single word: First 2 letters (e.g., "John" → "JO")
   - Multiple words: First letter of first + last word (e.g., "John Doe" → "JD")
 
+  ### Overflow Mode
+  - Set **isOverflow** to true (with a numeric **count** input) to render a "+N" overflow pill in place of the normal initials / image / indicator / label render. Typically used as the last child of an org-avatar-stack to collapse the tail.
+
   ### Companion Components
   - **org-avatar-stack** — overlapping row layout container
-  - **org-avatar-stack-overflow** — post "+N" pill for collapsed stacks
 </div>
         `,
       },
@@ -555,7 +570,7 @@ export const Showcase: Story = {
                     <org-avatar label="Sarah Chen" size="sm" />
                     <org-avatar label="Noah Park" size="sm" />
                     <org-avatar label="Renée Marin" size="sm" />
-                    <org-avatar-stack-overflow [count]="7" size="sm" />
+                    <org-avatar label="7 more team members" size="sm" [isOverflow]="true" [count]="7" />
                   </org-avatar-stack>
                 </div>
                 <span class="text-xs text-muted">11 members</span>
@@ -585,7 +600,6 @@ export const Showcase: Story = {
       imports: [
         Avatar,
         AvatarStack,
-        AvatarStackOverflow,
         DesignSystemDemo,
         DesignSystemDemoHeader,
         DesignSystemDemoCanvas,
@@ -651,19 +665,19 @@ export const StackShowcase: StackStory = {
               <org-avatar label="Sarah Chen" size="sm" />
               <org-avatar label="Noah Park" size="sm" />
               <org-avatar label="Renée Marin" size="sm" />
-              <org-avatar-stack-overflow [count]="3" />
+              <org-avatar label="3 more members" size="sm" [isOverflow]="true" [count]="3" />
             </org-avatar-stack>
             <org-avatar-stack>
               <org-avatar label="Sarah Chen" />
               <org-avatar label="Noah Park" />
               <org-avatar label="Renée Marin" />
-              <org-avatar-stack-overflow [count]="4" />
+              <org-avatar label="4 more members" [isOverflow]="true" [count]="4" />
             </org-avatar-stack>
             <org-avatar-stack size="lg">
               <org-avatar label="Sarah Chen" size="lg" />
               <org-avatar label="Noah Park" size="lg" />
               <org-avatar label="Renée Marin" size="lg" />
-              <org-avatar-stack-overflow [count]="12" />
+              <org-avatar label="12 more members" size="lg" [isOverflow]="true" [count]="12" />
             </org-avatar-stack>
           </org-design-system-demo-canvas>
         </org-design-system-demo>
@@ -671,7 +685,7 @@ export const StackShowcase: StackStory = {
           <ul class="list-inside list-disc flex flex-col gap-1">
             <li><strong>sm</strong> / <strong>base</strong> / <strong>lg</strong>: stack overlap scales with circle diameter (60% of the circle)</li>
             <li>Each stacked circle gets a surface-colored ring so adjacent siblings stay visually separated</li>
-            <li>The post <code>org-avatar-stack-overflow</code> reads as a count, not a person</li>
+            <li>The post overflow avatar (<code>[isOverflow]="true"</code>) reads as a count, not a person</li>
           </ul>
         </org-design-system-demo-expected-behaviour>
 
@@ -745,7 +759,6 @@ export const StackShowcase: StackStory = {
     moduleMetadata: {
       imports: [
         AvatarStack,
-        AvatarStackOverflow,
         Avatar,
         DesignSystemDemo,
         DesignSystemDemoHeader,

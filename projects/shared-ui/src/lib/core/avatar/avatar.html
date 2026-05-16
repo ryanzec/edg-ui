@@ -1,22 +1,26 @@
 <ng-template #avatarContent>
-  <org-indicator-anchor>
-    <org-avatar-shape>
-      @if (imgSrc() || imgEmail()) {
-        <org-avatar-image [src]="imgSrc()" [email]="imgEmail()" [alt]="imgAlt()" />
+  @if (avatarBrainDirective.isOverflow()) {
+    <org-avatar-shape>+{{ count() }}</org-avatar-shape>
+  } @else {
+    <org-indicator-anchor>
+      <org-avatar-shape>
+        @if (imgSrc() || imgEmail()) {
+          <org-avatar-image [src]="imgSrc()" [email]="imgEmail()" [alt]="imgAlt()" />
+        }
+      </org-avatar-shape>
+      @if (hasIndicator()) {
+        <org-indicator
+          [color]="indicatorColor()"
+          [number]="indicatorNumber()"
+          [position]="indicatorPosition()"
+          [ring]="true"
+          size="base"
+        />
       }
-    </org-avatar-shape>
-    @if (hasIndicator()) {
-      <org-indicator
-        [color]="indicatorColor()"
-        [number]="indicatorNumber()"
-        [position]="indicatorPosition()"
-        [ring]="true"
-        size="base"
-      />
+    </org-indicator-anchor>
+    @if (showLabel()) {
+      <org-avatar-label [subLabel]="subLabel()" />
     }
-  </org-indicator-anchor>
-  @if (showLabel()) {
-    <org-avatar-label [subLabel]="subLabel()" />
   }
 </ng-template>
 

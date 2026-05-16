@@ -5,6 +5,7 @@ import { type User, type GetUsersRequest, type GetUsersResponse } from '@organiz
 import { UsersList } from './users-list';
 import { UsersDataStore } from '../users-data-store/users-data-store';
 import { UsersApi } from '../users-api/users-api';
+import { ApplicationFrame } from '../../layout/application-frame/application-frame';
 import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
 import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
 
@@ -265,14 +266,16 @@ const buildHostProviders = (initialUsers: User[]) => [
 @Component({
   selector: 'story-users-list-host',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [UsersList],
+  imports: [ApplicationFrame, UsersList],
   template: `
-    <org-users-list
-      (editUser)="onEditUser($event)"
-      (deleteUser)="onDeleteUser($event)"
-      (bulkDeleteUsers)="onBulkDeleteUsers($event)"
-      (inviteMemberClicked)="onInviteMemberClick()"
-    />
+    <org-application-frame>
+      <org-users-list
+        (editUser)="onEditUser($event)"
+        (deleteUser)="onDeleteUser($event)"
+        (bulkDeleteUsers)="onBulkDeleteUsers($event)"
+        (inviteMemberClicked)="onInviteMemberClick()"
+      />
+    </org-application-frame>
   `,
   providers: buildHostProviders(sampleUsers),
 })
@@ -297,8 +300,12 @@ class UsersListHostStory {
 @Component({
   selector: 'story-users-list-empty-host',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [UsersList],
-  template: `<org-users-list />`,
+  imports: [ApplicationFrame, UsersList],
+  template: `
+    <org-application-frame>
+      <org-users-list />
+    </org-application-frame>
+  `,
   providers: buildHostProviders([]),
 })
 class UsersListEmptyHostStory {}
@@ -306,8 +313,12 @@ class UsersListEmptyHostStory {}
 @Component({
   selector: 'story-users-list-large-host',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [UsersList],
-  template: `<org-users-list />`,
+  imports: [ApplicationFrame, UsersList],
+  template: `
+    <org-application-frame>
+      <org-users-list />
+    </org-application-frame>
+  `,
   providers: buildHostProviders(generateLargeUserSet(229)),
 })
 class UsersListLargeHostStory {}
@@ -315,30 +326,32 @@ class UsersListLargeHostStory {}
 @Component({
   selector: 'story-users-list-interactive',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [UsersList],
+  imports: [ApplicationFrame, UsersList],
   template: `
-    <div class="flex flex-col gap-2">
-      <org-users-list
-        (editUser)="onEditUser($event)"
-        (deleteUser)="onDeleteUser($event)"
-        (bulkDeleteUsers)="onBulkDeleteUsers($event)"
-        (inviteMemberClicked)="onInviteMemberClick()"
-      />
-      <div class="flex flex-col gap-0.5">
-        <h4 class="font-medium">Event Log:</h4>
-        <div class="p-1 bg-secondary-soft rounded text-sm font-mono max-h-64 overflow-y-auto">
-          @for (event of events(); track $index) {
-            <div class="mb-0.5 pb-0.5 border-b border-neutral last:border-b-0">
-              <div class="font-bold">{{ event.timestamp }} - {{ event.action }}</div>
-              <div class="whitespace-pre-wrap">{{ event.details }}</div>
-            </div>
-          }
-          @if (events().length === 0) {
-            <div>No events yet. Try editing, deleting, or inviting members.</div>
-          }
+    <org-application-frame>
+      <div class="flex flex-col gap-2">
+        <org-users-list
+          (editUser)="onEditUser($event)"
+          (deleteUser)="onDeleteUser($event)"
+          (bulkDeleteUsers)="onBulkDeleteUsers($event)"
+          (inviteMemberClicked)="onInviteMemberClick()"
+        />
+        <div class="flex flex-col gap-0.5">
+          <h4 class="font-medium">Event Log:</h4>
+          <div class="p-1 bg-secondary-soft rounded text-sm font-mono max-h-64 overflow-y-auto">
+            @for (event of events(); track $index) {
+              <div class="mb-0.5 pb-0.5 border-b border-neutral last:border-b-0">
+                <div class="font-bold">{{ event.timestamp }} - {{ event.action }}</div>
+                <div class="whitespace-pre-wrap">{{ event.details }}</div>
+              </div>
+            }
+            @if (events().length === 0) {
+              <div>No events yet. Try editing, deleting, or inviting members.</div>
+            }
+          </div>
         </div>
       </div>
-    </div>
+    </org-application-frame>
   `,
   providers: buildHostProviders(generateLargeUserSet(50)),
 })

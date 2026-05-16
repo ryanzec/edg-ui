@@ -1,0 +1,24 @@
+<org-application-navigation
+  [workspaceIconLabel]="layoutStore.workspaceIconLabel()"
+  [workspaceName]="layoutStore.workspaceName()"
+  [workspacePlan]="layoutStore.workspacePlan()"
+  [navigationItems]="layoutStore.navigationItems()"
+  [settingsMenuItems]="layoutStore.settingsMenuItems()"
+  [collapsed]="layoutStore.collapsed()"
+  (collapsedChange)="onCollapsedChange($event)"
+  [theme]="theme()"
+  (themeChange)="onThemeChange($event)"
+  [userName]="layoutStore.userName()"
+  [userEmail]="layoutStore.userEmail()"
+  [userStatusColor]="layoutStore.userStatusColor()"
+  (workspaceClicked)="onWorkspaceClicked()"
+  (navigationItemClicked)="onNavigationItemClicked($event)"
+  (subNavigationItemClicked)="onSubNavigationItemClicked($event)"
+  (settingsMenuItemClicked)="onSettingsMenuItemClicked($event)"
+  (logout)="onLogout()"
+/>
+<div class="flex-1 min-w-0">
+  <org-scroll-area spacingClass="p-5" scrollClass="">
+    <ng-content />
+  </org-scroll-area>
+</div>

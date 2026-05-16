@@ -1,0 +1,24 @@
+@layer application {
+  .row {
+    width: 100%;
+    text-align: left;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+  }
+
+  .row:hover {
+    background: var(--color-bg-hover);
+  }
+
+  .row:focus-visible {
+    background: var(--color-bg-hover);
+    outline: none;
+  }
+
+  .row[data-completed] .label,
+  .row[data-completed] .code {
+    text-decoration: line-through;
+    color: var(--color-fg-muted);
+  }
+}

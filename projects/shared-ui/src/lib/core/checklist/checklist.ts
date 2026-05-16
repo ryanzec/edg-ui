@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
 import { ChecklistBrainDirective } from '../../brain/checklist-brain/checklist-brain';
 import { ChecklistItem } from './checklist-item';
 
@@ -36,16 +36,22 @@ export const CHECKLIST_SHOW_STATUS_BACKGROUND_DEFAULT = false;
   imports: [ChecklistItem],
   templateUrl: './checklist.html',
   styleUrl: './checklist.css',
-  hostDirectives: [ChecklistBrainDirective],
+  hostDirectives: [
+    {
+      directive: ChecklistBrainDirective,
+      inputs: ['items', 'isEditable'],
+      outputs: ['itemsChange'],
+    },
+  ],
   host: {
     role: 'list',
     '[attr.data-emphasize-invalid]': 'emphasizeInvalid() ? "" : null',
     '[attr.data-status-background]': 'showStatusBackground() ? "" : null',
+    '[attr.data-editable]': 'brain.isEditable() ? "" : null',
   },
 })
 export class Checklist {
-  /** array of checklist items to display */
-  public readonly items = input.required<ChecklistItemData[]>();
+  protected readonly brain = inject(ChecklistBrainDirective, { self: true });
 
   /** when true, invalid rows paint their label in the danger color */
   public readonly emphasizeInvalid = input<boolean>(CHECKLIST_EMPHASIZE_INVALID_DEFAULT);

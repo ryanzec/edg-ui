@@ -94,7 +94,7 @@ const SLIDER_INPUT_TOKENS_CSS = path.join(
 );
 const TABLE_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/core/table/table-tokens.css');
 const TABS_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/core/tabs/tabs-tokens.css');
-const TAG_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/core/tag/tag-tokens.css');
+const TAG_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/core/tags/tags-tokens.css');
 const TEXTAREA_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/core/textarea/textarea-tokens.css');
 const TIME_INPUT_TOKENS_CSS = path.join(
   REPO_ROOT,

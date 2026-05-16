@@ -32,4 +32,4 @@ alwaysApply: true
 
 # References for **PATTERNS** to follow in structuring storybook file for components:
 - `projects/shared-ui/src/lib/core/button/button.stories.ts`
-- `projects/shared-ui/src/lib/core/tag/tag.stories.ts`
+- `projects/shared-ui/src/lib/core/tags/tags.stories.ts`

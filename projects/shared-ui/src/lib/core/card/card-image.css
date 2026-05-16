@@ -26,4 +26,9 @@
     --card-image-aspect-ratio: var(--card-image-fill-aspect-ratio);
     --card-image-img-height: 100%;
   }
+
+  /* expandable collapsed state: parent card removes us from layout entirely */
+  :host([data-hidden]) {
+    display: none;
+  }
 }

@@ -5,7 +5,6 @@
   --textarea-line-height: var(--line-height-normal);
   --textarea-letter-spacing: var(--letter-spacing-normal);
   --textarea-disabled-opacity: var(--opacity-disabled);
-  --textarea-max-width: var(--sizing-xl); /* 36rem */
 
   /* size */
   --textarea-pad-x: var(--spacing-2);

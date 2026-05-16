@@ -4,7 +4,6 @@
     grid-template-columns: 1fr;
     grid-template-rows: 1fr auto;
     width: 100%;
-    max-width: var(--textarea-max-width);
     padding: 0;
     border-radius: var(--textarea-radius);
     border: var(--textarea-border-width) solid var(--textarea-border-color);

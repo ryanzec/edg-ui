@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, computed, contentChildren, inject, input } from '@angular/core';
-import { TagBrainDirective } from '../../brain/tag-brain/tag-brain';
+import { TagBrainDirective } from '../../brain/tags-brain/tag-brain';
 import { Icon, type IconSize } from '../icon/icon';
 import { ComponentColor, ComponentSize } from '../types/component-types';
 import { TagIcon } from './tag-icon';
@@ -20,7 +20,7 @@ export const allTagVariants = ['strong', 'soft'] as const;
 export type TagVariant = (typeof allTagVariants)[number];
 
 /** the default size of the tag */
-export const TAG_SIZE_DEFAULT: TagSize = 'base';
+export const TAG_SIZE_DEFAULT: TagSize = 'sm';
 
 /** the default variant of the tag */
 export const TAG_VARIANT_DEFAULT: TagVariant = 'soft';

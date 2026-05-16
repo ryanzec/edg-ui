@@ -3,7 +3,7 @@ import { angularUtils } from '@organization/shared-utils';
 import { List, type ListSize } from '../list/list';
 import { ListItem } from '../list/list-item';
 import { ListItemIcon } from '../list/list-item-icon';
-import { Tag, type TagColor } from '../tag/tag';
+import { Tag, type TagColor } from '../tags/tag';
 import { Indicator } from '../indicator/indicator';
 import { ButtonToggle, type ButtonToggleItem } from '../button-toggle/button-toggle';
 import { Kbd } from '../kbd/kbd';

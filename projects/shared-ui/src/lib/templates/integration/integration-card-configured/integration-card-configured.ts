@@ -8,7 +8,8 @@ import { type IconName } from '../../../brain/icon-brain/icon-brain';
 import { Icon } from '../../../core/icon/icon';
 import { OverlayMenu, type OverlayMenuItem, type OverlayMenuItemEntry } from '../../../core/overlay-menu/overlay-menu';
 import { OverlayMenuTriggerDirective } from '../../../core/overlay-menu/overlay-menu-trigger';
-import { Tag, type TagColor } from '../../../core/tag/tag';
+import { Tag, type TagColor } from '../../../core/tags/tag';
+import { Tags } from '../../../core/tags/tags';
 import { type ComponentColor } from '../../../core/types/component-types';
 
 /** all available integration status values */
@@ -85,7 +86,7 @@ const statusLabelMap: Record<IntegrationStatus, string> = {
 @Component({
   selector: 'org-integration-card-configured',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Box, Button, DatePipe, Divider, Icon, OverlayMenu, OverlayMenuTriggerDirective, Tag],
+  imports: [Box, Button, DatePipe, Divider, Icon, OverlayMenu, OverlayMenuTriggerDirective, Tag, Tags],
   templateUrl: './integration-card-configured.html',
   host: {
     class: 'block',

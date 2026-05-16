@@ -1,16 +1,6 @@
-import { Component, ChangeDetectionStrategy, Injectable, signal } from '@angular/core';
-import { CdkScrollable } from '@angular/cdk/scrolling';
+import { Component, ChangeDetectionStrategy, Injectable } from '@angular/core';
 import { Observable, of, delay } from 'rxjs';
-import {
-  ApplicationNavigation,
-  UsersList,
-  UsersDataStore,
-  UsersApi,
-  type NavigationItem,
-  type NavigationSubItem,
-  type SettingsMenuItem,
-  type Theme,
-} from '@organization/shared-ui';
+import { UsersList, UsersDataStore, UsersApi } from '@organization/shared-ui';
 import { logManager } from '@organization/shared-utils';
 import {
   type User,
@@ -22,7 +12,7 @@ import {
 } from '@organization/shared-types';
 
 /** simulated network delay (in ms) used by the mock api to mimic a real fetch */
-const MOCK_FETCH_DELAY_MS = 150;
+const MOCK_FETCH_DELAY_MS = 500;
 
 /** mocked user dataset used by the demo composition view */
 const MOCK_USERS: User[] = [
@@ -148,38 +138,6 @@ const MOCK_USERS: User[] = [
   },
 ];
 
-/** navigation items rendered in the demo application-navigation sidebar */
-const NAVIGATION_ITEMS: NavigationItem[] = [
-  { id: 'overview', label: 'Overview', icon: 'house', routePath: '/overview', shortcut: 'G O' },
-  { id: 'inbox', label: 'Inbox', icon: 'inbox', routePath: '/inbox', indicator: 3, shortcut: 'G I' },
-  {
-    id: 'projects',
-    label: 'Projects',
-    icon: 'folder',
-    shortcut: 'G P',
-    children: [
-      { id: 'projects-all', label: 'All projects', routePath: '/projects' },
-      { id: 'projects-active', label: 'Active', routePath: '/projects/active', indicator: 12 },
-      { id: 'projects-archived', label: 'Archived', routePath: '/projects/archived' },
-      { id: 'projects-templates', label: 'Templates', routePath: '/projects/templates' },
-    ],
-  },
-  { id: 'analytics', label: 'Analytics', icon: 'grid-2x2', routePath: '/analytics' },
-  { id: 'team', label: 'Team', icon: 'users', routePath: '/team' },
-  { id: 'docs', label: 'Docs', icon: 'file-text', routePath: '/docs' },
-  { id: 'billing', label: 'Billing', icon: 'credit-card', routePath: '/billing' },
-];
-
-/** settings overlay menu items rendered alongside the appearance toggle */
-const SETTINGS_MENU_ITEMS: SettingsMenuItem[] = [
-  { id: 'workspace-settings', label: 'Workspace settings', icon: 'cog', shortcut: '⌘,' },
-  { id: 'account', label: 'Account', icon: 'at-sign' },
-  { id: 'shortcuts', label: 'Keyboard shortcuts', icon: 'sparkles', shortcut: '?' },
-  { id: 'help', label: 'Help & docs', icon: 'circle-help' },
-  { id: 'signout-divider', type: 'divider' },
-  { id: 'signout', label: 'Sign out', icon: 'log-out', color: 'danger' },
-];
-
 /**
  * in-memory implementation of `UsersApi` used to satisfy `UsersDataStore`'s dependency in the demo view.
  * only `getUsers` is exercised by the embedded `UsersList`; the mutation methods return a no-op response
@@ -268,58 +226,18 @@ class MockUsersApi {
 }
 
 /**
- * page-level demo view that composes `<org-application-navigation>` with `<org-users-list>`.
+ * page-level demo view that composes `<org-application-frame>` with `<org-users-list>`.
  * the users-list backing store is replaced at component scope with an in-memory mock api so the
  * view renders end-to-end without a real backend.
  */
 @Component({
   selector: 'cp-demo-users-view',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ApplicationNavigation, UsersList, CdkScrollable],
+  imports: [UsersList],
   templateUrl: './users-view.html',
   providers: [{ provide: UsersApi, useClass: MockUsersApi }, UsersDataStore],
-  host: {
-    class: 'flex h-full min-h-0',
-  },
 })
 export class UsersView {
-  /** navigation items rendered in the sidebar */
-  protected readonly navigationItems = NAVIGATION_ITEMS;
-
-  /** settings overlay menu items rendered alongside the appearance toggle */
-  protected readonly settingsMenuItems = SETTINGS_MENU_ITEMS;
-
-  /** controls the collapsed / expanded state of the sidebar */
-  protected readonly collapsed = signal<boolean>(false);
-
-  /** controls the appearance toggle inside the settings menu */
-  protected readonly theme = signal<Theme | undefined>('system');
-
-  /** logs the workspace-header click for demo observability */
-  protected onWorkspaceClicked(): void {
-    logManager.log({ type: 'demo-users-view-workspace-clicked' });
-  }
-
-  /** logs a top-level navigation item click for demo observability */
-  protected onNavigationItemClicked(item: NavigationItem): void {
-    logManager.log({ type: 'demo-users-view-navigation-clicked', item });
-  }
-
-  /** logs a nested navigation sub-item click for demo observability */
-  protected onSubNavigationItemClicked(subItem: NavigationSubItem): void {
-    logManager.log({ type: 'demo-users-view-sub-navigation-clicked', subItem });
-  }
-
-  /** logs a settings menu item click for demo observability */
-  protected onSettingsMenuItemClicked(item: SettingsMenuItem): void {
-    logManager.log({ type: 'demo-users-view-settings-clicked', item });
-  }
-
-  /** logs a logout request for demo observability */
-  protected onLogout(): void {
-    logManager.log({ type: 'demo-users-view-logout' });
-  }
-
   /** logs an edit-user request emitted by the users-list */
   protected onEditUser(user: User): void {
     logManager.log({ type: 'demo-users-view-edit-user', user });

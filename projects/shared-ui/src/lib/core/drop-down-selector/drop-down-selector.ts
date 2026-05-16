@@ -8,7 +8,7 @@ import { List } from '../list/list';
 import { ListItem } from '../list/list-item';
 import { OverlayMenuDivider } from '../overlay-menu/overlay-menu-divider';
 import { ScrollArea } from '../scroll-area/scroll-area';
-import { Tag } from '../tag/tag';
+import { Tag } from '../tags/tag';
 import { ComponentSize } from '../types/component-types';
 import {
   DROP_DOWN_SELECTOR_DISABLED_DEFAULT as BRAIN_DROP_DOWN_SELECTOR_DISABLED_DEFAULT,

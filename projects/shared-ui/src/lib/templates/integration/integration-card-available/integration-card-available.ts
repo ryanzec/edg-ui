@@ -3,7 +3,8 @@ import { Box } from '../../../core/box/box';
 import { Button } from '../../../core/button/button';
 import { type IconName } from '../../../brain/icon-brain/icon-brain';
 import { Icon } from '../../../core/icon/icon';
-import { Tag, type TagColor } from '../../../core/tag/tag';
+import { Tag, type TagColor } from '../../../core/tags/tag';
+import { Tags } from '../../../core/tags/tags';
 
 /** the maximum number of tags rendered before the remaining tags are collapsed into a +N overflow tag */
 const MAX_VISIBLE_TAGS = 3;
@@ -33,7 +34,7 @@ export type AvailableIntegration = {
 @Component({
   selector: 'org-integration-card-available',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Box, Button, Icon, Tag],
+  imports: [Box, Button, Icon, Tag, Tags],
   templateUrl: './integration-card-available.html',
   host: {
     class: 'block',

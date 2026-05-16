@@ -13,6 +13,7 @@ import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-d
 import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
 import { Tag, TagColor, TagSize, TagVariant, allTagSizes, allTagVariants } from './tag';
 import { TagIcon } from './tag-icon';
+import { Tags } from './tags';
 
 const liveDemoColorItems: ButtonToggleItem[] = allComponentColors.map((color) => ({
   label: color,
@@ -35,7 +36,7 @@ const liveDemoSizeItems: ButtonToggleItem[] = allTagSizes.map((size) => ({
 @Component({
   selector: 'story-tag-removable-section',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Tag, TagIcon, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
+  imports: [Tag, TagIcon, Tags, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
   template: `
     <org-design-system-demo>
       <org-design-system-demo-header slot="header" title="Removable" />
@@ -59,12 +60,12 @@ const liveDemoSizeItems: ButtonToggleItem[] = allTagSizes.map((size) => ({
           <org-tag-icon name="arrow-right" />
         </org-tag>
         <org-tag color="neutral" [removable]="true" removeAriaLabel="Remove the priority filter">priority:high</org-tag>
-        <div class="flex flex-wrap gap-2">
+        <org-tags>
           <org-tag color="primary" [removable]="true">React</org-tag>
           <org-tag color="info" [removable]="true">Angular</org-tag>
           <org-tag color="safe" [removable]="true">Vue</org-tag>
           <org-tag color="caution" [removable]="true">Svelte</org-tag>
-        </div>
+        </org-tags>
       </org-design-system-demo-canvas>
     </org-design-system-demo>
   `,
@@ -129,6 +130,7 @@ const meta: Meta<Tag> = {
   ### Composition Parts
   - **org-tag** — the pill container. Drives color, size, variant, and the built-in removable affordance.
   - **org-tag-icon** — slotted icon; the icon inherits the tag's color and per-size dimension. Becomes interactive when its \`clicked\` output is observed.
+  - **org-tags** — purely presentational wrapper that lays out a group of \`<org-tag>\` children in a flex container that wraps with a consistent \`spacing-1\` gap.
 
   ### Features
   - Three sizes: xs, sm, base (default)
@@ -390,22 +392,22 @@ export const Showcase: Story = {
         <org-design-system-demo>
           <org-design-system-demo-header slot="header" title="Variant Comparison" />
           <org-design-system-demo-canvas slot="canvas">
-            <div class="flex flex-wrap gap-2">
+            <org-tags>
               <org-tag color="neutral" variant="strong">Design</org-tag>
               <org-tag color="safe" variant="strong">Active</org-tag>
               <org-tag color="info" variant="strong">Beta</org-tag>
               <org-tag color="caution" variant="strong">Review</org-tag>
               <org-tag color="danger" variant="strong">Blocked</org-tag>
               <org-tag color="primary" variant="strong">Draft</org-tag>
-            </div>
-            <div class="flex flex-wrap gap-2">
+            </org-tags>
+            <org-tags>
               <org-tag color="neutral">Design</org-tag>
               <org-tag color="safe">Active</org-tag>
               <org-tag color="info">Beta</org-tag>
               <org-tag color="caution">Review</org-tag>
               <org-tag color="danger">Blocked</org-tag>
               <org-tag color="primary">Draft</org-tag>
-            </div>
+            </org-tags>
           </org-design-system-demo-canvas>
         </org-design-system-demo>
         <org-design-system-demo-expected-behaviour>
@@ -418,46 +420,46 @@ export const Showcase: Story = {
         <org-design-system-demo>
           <org-design-system-demo-header slot="header" title="Color × Size · Strong" />
           <org-design-system-demo-canvas slot="canvas">
-            <div class="flex flex-wrap items-center gap-2">
+            <org-tags>
               <org-tag color="primary" variant="strong" size="xs">Label</org-tag>
               <org-tag color="primary" variant="strong" size="sm">Label</org-tag>
               <org-tag color="primary" variant="strong" size="base">Label</org-tag>
-            </div>
-            <div class="flex flex-wrap items-center gap-2">
+            </org-tags>
+            <org-tags>
               <org-tag color="secondary" variant="strong" size="xs">Label</org-tag>
               <org-tag color="secondary" variant="strong" size="sm">Label</org-tag>
               <org-tag color="secondary" variant="strong" size="base">Label</org-tag>
-            </div>
-            <div class="flex flex-wrap items-center gap-2">
+            </org-tags>
+            <org-tags>
               <org-tag color="neutral" variant="strong" size="xs">Label</org-tag>
               <org-tag color="neutral" variant="strong" size="sm">Label</org-tag>
               <org-tag color="neutral" variant="strong" size="base">Label</org-tag>
-            </div>
-            <div class="flex flex-wrap items-center gap-2">
+            </org-tags>
+            <org-tags>
               <org-tag color="safe" variant="strong" size="xs">Label</org-tag>
               <org-tag color="safe" variant="strong" size="sm">Label</org-tag>
               <org-tag color="safe" variant="strong" size="base">Label</org-tag>
-            </div>
-            <div class="flex flex-wrap items-center gap-2">
+            </org-tags>
+            <org-tags>
               <org-tag color="info" variant="strong" size="xs">Label</org-tag>
               <org-tag color="info" variant="strong" size="sm">Label</org-tag>
               <org-tag color="info" variant="strong" size="base">Label</org-tag>
-            </div>
-            <div class="flex flex-wrap items-center gap-2">
+            </org-tags>
+            <org-tags>
               <org-tag color="caution" variant="strong" size="xs">Label</org-tag>
               <org-tag color="caution" variant="strong" size="sm">Label</org-tag>
               <org-tag color="caution" variant="strong" size="base">Label</org-tag>
-            </div>
-            <div class="flex flex-wrap items-center gap-2">
+            </org-tags>
+            <org-tags>
               <org-tag color="warning" variant="strong" size="xs">Label</org-tag>
               <org-tag color="warning" variant="strong" size="sm">Label</org-tag>
               <org-tag color="warning" variant="strong" size="base">Label</org-tag>
-            </div>
-            <div class="flex flex-wrap items-center gap-2">
+            </org-tags>
+            <org-tags>
               <org-tag color="danger" variant="strong" size="xs">Label</org-tag>
               <org-tag color="danger" variant="strong" size="sm">Label</org-tag>
               <org-tag color="danger" variant="strong" size="base">Label</org-tag>
-            </div>
+            </org-tags>
           </org-design-system-demo-canvas>
         </org-design-system-demo>
         <org-design-system-demo-expected-behaviour>
@@ -472,7 +474,7 @@ export const Showcase: Story = {
         <org-design-system-demo>
           <org-design-system-demo-header slot="header" title="Color Variants" />
           <org-design-system-demo-canvas slot="canvas">
-            <div class="flex flex-wrap gap-2">
+            <org-tags>
               <org-tag color="primary">Primary</org-tag>
               <org-tag color="secondary">Secondary</org-tag>
               <org-tag color="neutral">Neutral</org-tag>
@@ -481,8 +483,8 @@ export const Showcase: Story = {
               <org-tag color="caution">Caution</org-tag>
               <org-tag color="warning">Warning</org-tag>
               <org-tag color="danger">Danger</org-tag>
-            </div>
-            <div class="flex flex-wrap gap-2">
+            </org-tags>
+            <org-tags>
               <org-tag color="primary" variant="strong">Primary</org-tag>
               <org-tag color="secondary" variant="strong">Secondary</org-tag>
               <org-tag color="neutral" variant="strong">Neutral</org-tag>
@@ -491,7 +493,7 @@ export const Showcase: Story = {
               <org-tag color="caution" variant="strong">Caution</org-tag>
               <org-tag color="warning" variant="strong">Warning</org-tag>
               <org-tag color="danger" variant="strong">Danger</org-tag>
-            </div>
+            </org-tags>
           </org-design-system-demo-canvas>
         </org-design-system-demo>
         <org-design-system-demo-expected-behaviour>
@@ -510,12 +512,12 @@ export const Showcase: Story = {
         <org-design-system-demo>
           <org-design-system-demo-header slot="header" title="Size Variants" />
           <org-design-system-demo-canvas slot="canvas">
-            <div class="flex flex-wrap items-center gap-2">
+            <org-tags>
               <org-tag color="primary" size="xs">Extra Small</org-tag>
               <org-tag color="primary" size="sm">Small</org-tag>
               <org-tag color="primary">Base</org-tag>
-            </div>
-            <div class="flex flex-wrap items-center gap-2">
+            </org-tags>
+            <org-tags>
               <org-tag color="info" size="xs">
                 <org-tag-icon name="cog" />
                 Extra Small
@@ -531,12 +533,12 @@ export const Showcase: Story = {
                 Base
                 <org-tag-icon name="arrow-right" />
               </org-tag>
-            </div>
-            <div class="flex flex-wrap items-center gap-2">
+            </org-tags>
+            <org-tags>
               <org-tag color="safe" size="xs" [removable]="true">xs</org-tag>
               <org-tag color="safe" size="sm" [removable]="true">sm</org-tag>
               <org-tag color="safe" [removable]="true">base</org-tag>
-            </div>
+            </org-tags>
           </org-design-system-demo-canvas>
         </org-design-system-demo>
         <org-design-system-demo-expected-behaviour>
@@ -552,17 +554,17 @@ export const Showcase: Story = {
           <org-design-system-demo-header slot="header" title="Icon Composition" />
           <org-design-system-demo-canvas slot="canvas">
             <org-tag color="primary">No Icons</org-tag>
-            <div class="flex flex-wrap gap-2">
+            <org-tags>
               <org-tag color="info"><org-tag-icon name="file-text" />Saved</org-tag>
               <org-tag color="safe"><org-tag-icon name="check" />Approved</org-tag>
               <org-tag color="caution"><org-tag-icon name="circle" />Pending</org-tag>
               <org-tag color="danger"><org-tag-icon name="circle-x" />Blocked</org-tag>
-            </div>
-            <div class="flex flex-wrap gap-2">
+            </org-tags>
+            <org-tags>
               <org-tag color="neutral">Linear<org-tag-icon name="arrow-up-right" /></org-tag>
               <org-tag color="neutral">3 issues<org-tag-icon name="chevron-right" /></org-tag>
               <org-tag color="info">Docs<org-tag-icon name="arrow-up-right" /></org-tag>
-            </div>
+            </org-tags>
             <org-tag color="primary">
               <org-tag-icon name="cog" />
               Action
@@ -604,6 +606,38 @@ export const Showcase: Story = {
         </org-design-system-demo-expected-behaviour>
 
         <org-design-system-demo>
+          <org-design-system-demo-header
+            slot="header"
+            title="Tag Group Wrapper (org-tags)"
+            description="A purely presentational wrapper that lays out a group of org-tag children in a flex container that wraps with a consistent gap. No inputs, no behavior — just consistent group rhythm."
+          />
+          <org-design-system-demo-canvas slot="canvas">
+            <org-tags>
+              <org-tag color="primary">Angular</org-tag>
+              <org-tag color="info">TypeScript</org-tag>
+              <org-tag color="safe">RxJS</org-tag>
+              <org-tag color="caution">Storybook</org-tag>
+              <org-tag color="danger">CSS</org-tag>
+              <org-tag color="neutral">HTML</org-tag>
+            </org-tags>
+            <org-tags>
+              <org-tag color="primary" [removable]="true">React</org-tag>
+              <org-tag color="info" [removable]="true">Angular</org-tag>
+              <org-tag color="safe" [removable]="true">Vue</org-tag>
+              <org-tag color="caution" [removable]="true">Svelte</org-tag>
+              <org-tag color="neutral" [removable]="true">Solid</org-tag>
+            </org-tags>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>org-tags</strong> renders a <strong>flex</strong> container with <strong>flex-wrap</strong> and a fixed <strong>spacing-1</strong> gap</li>
+            <li>It has no inputs, no events, and no logic — purely a layout primitive</li>
+            <li>Use it anywhere you display a group of tags together to get consistent rhythm</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
           <org-design-system-demo-header slot="header" title="In Context" />
           <org-design-system-demo-canvas slot="canvas">
             <div class="flex flex-col gap-2">
@@ -629,11 +663,13 @@ export const Showcase: Story = {
               </div>
               <div class="flex items-center gap-2">
                 <span>Categories</span>
-                <org-tag color="neutral" size="sm">design-system</org-tag>
-                <org-tag color="info" size="sm">tokens</org-tag>
-                <org-tag color="info" size="sm">light-mode</org-tag>
-                <org-tag color="info" size="sm">a11y</org-tag>
-                <org-tag color="neutral" size="sm">+3</org-tag>
+                <org-tags>
+                  <org-tag color="neutral" size="sm">design-system</org-tag>
+                  <org-tag color="info" size="sm">tokens</org-tag>
+                  <org-tag color="info" size="sm">light-mode</org-tag>
+                  <org-tag color="info" size="sm">a11y</org-tag>
+                  <org-tag color="neutral" size="sm">+3</org-tag>
+                </org-tags>
               </div>
             </div>
           </org-design-system-demo-canvas>
@@ -651,6 +687,7 @@ export const Showcase: Story = {
       imports: [
         Tag,
         TagIcon,
+        Tags,
         TagRemovableSection,
         TagClickableIconsSection,
         DesignSystemDemo,

@@ -1,0 +1,36 @@
+<org-card>
+  <org-card-header title="Properties" />
+  <org-card-content>
+    <dl class="flex flex-col gap-3 m-0">
+      <div class="flex items-center gap-3">
+        <dt class="w-7xs text-xs text-muted">Reporter</dt>
+        <dd class="flex items-center gap-2 m-0 flex-1 min-w-0">
+          <org-avatar size="sm" [label]="properties().reporter.name" />
+          <span>{{ properties().reporter.name }}</span>
+        </dd>
+      </div>
+      <div class="flex items-center gap-3">
+        <dt class="w-7xs text-xs text-muted">Estimate</dt>
+        <dd class="m-0 flex-1 min-w-0">{{ properties().estimate }}</dd>
+      </div>
+      <div class="flex items-start gap-3">
+        <dt class="w-7xs text-xs text-muted">Branch</dt>
+        <dd class="m-0 flex-1 min-w-0 font-mono text-xs">{{ properties().branch }}</dd>
+      </div>
+      <div class="flex items-center gap-3">
+        <dt class="w-7xs text-xs text-muted">Environment</dt>
+        <dd class="m-0 flex-1 min-w-0">{{ properties().environment }}</dd>
+      </div>
+      <div class="flex items-start gap-3">
+        <dt class="w-7xs text-xs text-muted">Labels</dt>
+        <dd class="m-0 flex-1 min-w-0">
+          <org-tags>
+            @for (label of properties().labels; track label.label) {
+              <org-tag [color]="label.color ?? 'neutral'">{{ label.label }}</org-tag>
+            }
+          </org-tags>
+        </dd>
+      </div>
+    </dl>
+  </org-card-content>
+</org-card>

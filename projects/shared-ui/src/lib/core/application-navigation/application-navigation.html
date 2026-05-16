@@ -21,7 +21,7 @@
 
   <!-- nav items -->
   <nav aria-label="Main navigation" class="nav">
-    <org-list>
+    <org-list size="base">
       @for (item of navigationItems(); track item.id) {
         @if (item.children && item.children.length > 0) {
           <!-- expandable group -->
@@ -141,7 +141,7 @@
 
 <!-- settings -->
 <div class="settings-section">
-  <org-list>
+  <org-list size="base">
     @if (collapsed()) {
       <org-tooltip placement="right">
         <org-list-item

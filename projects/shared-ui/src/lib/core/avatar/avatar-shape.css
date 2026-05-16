@@ -6,8 +6,8 @@
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    width: var(--avatar-circle-size);
-    height: var(--avatar-circle-size);
+    width: var(--avatar-shape-size);
+    height: var(--avatar-shape-size);
     border-radius: var(--avatar-radius);
     background-color: var(--avatar-color);
     color: var(--avatar-shape-fg);
@@ -19,60 +19,11 @@
     user-select: none;
   }
 
-  /* shape variants */
-  :host([data-shape='square']) {
-    --avatar-radius: var(--radius-base);
-  }
-
-  /* size variants (base matches slot defaults) */
-  :host([data-size='sm']) {
-    --avatar-circle-size: var(--spacing-8);
-    --avatar-initials-font-size: var(--font-size-xs);
-  }
-
-  :host([data-size='lg']) {
-    --avatar-circle-size: var(--spacing-16);
-    --avatar-initials-font-size: var(--font-size-2xl);
-  }
-
-  /* indexed palette overrides (index 0 is the slot default) */
-  :host([data-color-index='1']) {
-    --avatar-color: var(--avatar-color-1);
-  }
-
-  :host([data-color-index='2']) {
-    --avatar-color: var(--avatar-color-2);
-  }
-
-  :host([data-color-index='3']) {
-    --avatar-color: var(--avatar-color-3);
-  }
-
-  :host([data-color-index='4']) {
-    --avatar-color: var(--avatar-color-4);
-  }
-
-  :host([data-color-index='5']) {
-    --avatar-color: var(--avatar-color-5);
-  }
-
-  :host([data-color-index='6']) {
-    --avatar-color: var(--avatar-color-6);
-  }
-
-  :host([data-color-index='7']) {
-    --avatar-color: var(--avatar-color-7);
-  }
-
-  /* stacked ring (only rendered inside an avatar stack) */
-  :host([data-stacked='true']) {
+  /* stacked ring — applied when inside an avatar stack OR when the parent avatar is in overflow mode */
+  :host-context(org-avatar-stack),
+  :host-context(org-avatar[data-overflow='true']) {
     border-style: solid;
     border-color: var(--avatar-ring-color);
     border-width: var(--avatar-ring-width);
-  }
-
-  /* sm is the only ring-width that differs from the slot default */
-  :host([data-stacked='true'][data-size='sm']) {
-    --avatar-ring-width: var(--border-width-thick);
   }
 }

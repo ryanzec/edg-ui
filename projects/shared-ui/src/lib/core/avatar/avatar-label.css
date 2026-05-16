@@ -25,14 +25,4 @@
     font-weight: var(--avatar-label-sub-font-weight);
     color: var(--avatar-label-sub-color);
   }
-
-  /* size variants override font-size slots (base matches slot defaults; sub stays xs for sm) */
-  :host([data-size='sm']) {
-    --avatar-label-name-font-size: var(--font-size-sm);
-  }
-
-  :host([data-size='lg']) {
-    --avatar-label-name-font-size: var(--font-size-lg);
-    --avatar-label-sub-font-size: var(--font-size-sm);
-  }
 }

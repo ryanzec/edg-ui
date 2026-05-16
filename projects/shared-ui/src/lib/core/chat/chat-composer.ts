@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, input, model, output } from '@angular/core';
 import { Button } from '../button/button';
-import { Tag } from '../tag/tag';
+import { Tag } from '../tags/tag';
 import { Textarea } from '../textarea/textarea';
 import { TextareaToolbar } from '../textarea/textarea-toolbar';
 import { TextareaToolbarItem } from '../textarea/textarea-toolbar-item';

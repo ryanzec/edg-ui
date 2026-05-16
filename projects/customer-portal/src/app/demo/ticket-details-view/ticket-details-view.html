@@ -1,0 +1,11 @@
+<org-ticket-details
+  [ticket]="ticket()"
+  (statusChanged)="onStatusChanged($event)"
+  (commentSubmitted)="onCommentSubmitted($event)"
+  (subtaskToggled)="onSubtaskToggled($event)"
+  (subtaskAddRequested)="onSubtaskAddRequested()"
+  (acceptanceCriterionToggled)="onAcceptanceCriterionToggled($event)"
+  (unblock)="onUnblock()"
+  (pingOwner)="onPingOwner()"
+  (descriptionEditRequested)="onDescriptionEditRequested()"
+/>

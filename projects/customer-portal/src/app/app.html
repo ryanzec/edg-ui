@@ -6,25 +6,10 @@
       })
     "
   >
-    @if (isAuthenticated()) {
-      <org-application-navigation
-        logo="https://placehold.co/225x60/4F46E5/white?text=MyApp"
-        [navigationItems]="[
-          { id: '1', label: 'Dashboard', icon: 'circle', routePath: '/dashboard' },
-          { id: '2', label: 'Users', icon: 'circle-check-big', routePath: '/users' },
-        ]"
-        [settingsMenuItems]="[
-          { id: '1', label: 'Profile Settings', icon: 'circle' },
-          { id: '2', label: 'Preferences', icon: 'cog' },
-          { id: '3', label: 'Help & Support', icon: 'mail' },
-        ]"
-        (settingsMenuItemClicked)="onSettingsMenuItemClick($event)"
-        (logout)="onLogout()"
-        class="h-full"
-      />
-    }
     <main cdkScrollable class="flex-1 overflow-y-auto min-h-0">
-      <router-outlet />
+      <org-application-frame>
+        <router-outlet />
+      </org-application-frame>
     </main>
   </div>
 }

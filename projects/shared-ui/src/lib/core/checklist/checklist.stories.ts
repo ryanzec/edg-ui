@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import type { Meta, StoryObj } from '@storybook/angular';
 import { ButtonToggle, ButtonToggleItem } from '../button-toggle/button-toggle';
@@ -57,7 +57,15 @@ const liveDemoNestedItems: ChecklistItemData[] = [
   { id: 'nested-5', label: 'Apply guardrails', status: 'not-started' },
 ];
 
-const meta: Meta<Checklist> = {
+/** explicit args shape so Storybook controls cover both component-level and brain-exposed inputs */
+type ChecklistStoryArgs = {
+  items: ChecklistItemData[];
+  emphasizeInvalid: boolean;
+  showStatusBackground: boolean;
+  isEditable: boolean;
+};
+
+const meta: Meta<ChecklistStoryArgs> = {
   title: 'Core/Components/Checklist',
   component: Checklist,
   tags: ['autodocs'],
@@ -77,6 +85,7 @@ const meta: Meta<Checklist> = {
   - Optional one level of nested sub-items with expand/collapse
   - Consumer opt-in to emphasize invalid rows in danger color
   - Consumer opt-in to paint a soft tile background behind every status glyph
+  - Consumer opt-in to make leaf rows togglable between \`not-started\` and \`valid\` on click
   - Single chevron-right glyph rotated 90° when expanded — no glyph swap, no flicker
   - Spinner glyph for \`in-progress\` shares the same status color via \`currentColor\`
   - Indent rail anchored to the children block via a single hairline pseudo-element
@@ -100,6 +109,9 @@ const meta: Meta<Checklist> = {
 
   <!-- Paint a soft tile background behind every status glyph -->
   <org-checklist [items]="items" [showStatusBackground]="true" />
+
+  <!-- Editable mode — leaf rows toggle between not-started and valid on click; use two-way binding to persist -->
+  <org-checklist [(items)]="items" [isEditable]="true" />
   \`\`\`
 
   ### TypeScript Types
@@ -126,7 +138,7 @@ const meta: Meta<Checklist> = {
 };
 
 export default meta;
-type Story = StoryObj<Checklist>;
+type Story = StoryObj<ChecklistStoryArgs>;
 
 const defaultItems: ChecklistItemData[] = [
   { id: '1', label: 'Initialize project', status: 'valid', meta: '0.4s' },
@@ -141,6 +153,7 @@ export const Default: Story = {
     items: defaultItems,
     emphasizeInvalid: false,
     showStatusBackground: false,
+    isEditable: false,
   },
   argTypes: {
     items: {
@@ -154,6 +167,11 @@ export const Default: Story = {
     showStatusBackground: {
       control: 'boolean',
       description: 'When true, every status slot paints a soft tile background matching its status',
+    },
+    isEditable: {
+      control: 'boolean',
+      description:
+        "When true, leaf rows toggle between 'not-started' and 'valid' on click; 'in-progress' and 'invalid' rows do nothing, and parent rows of nested groups derive their status from their children",
     },
   },
   parameters: {
@@ -171,6 +189,7 @@ export const Default: Story = {
         [items]="items"
         [emphasizeInvalid]="emphasizeInvalid"
         [showStatusBackground]="showStatusBackground"
+        [isEditable]="isEditable"
       />
     `,
     moduleMetadata: {
@@ -217,7 +236,7 @@ export const Default: Story = {
         <org-design-system-demo-header
           slot="header"
           title="Live demo"
-          description="Toggle between rendering modes — flat, flat-with-meta, and nested with count + meta — to see how a single Checklist composes across the documented use cases."
+          description="Toggle between rendering modes — flat, flat-with-meta, and nested with count + meta — to see how a single Checklist composes across the documented use cases. Flip Editable on to click leaf rows and watch parent rows auto-derive their status from their children."
         />
         <org-design-system-demo-controls slot="controls">
           <org-design-system-demo-control-group label="Composition">
@@ -241,29 +260,37 @@ export const Default: Story = {
               {{ liveDemoForm.controls.showStatusBackground.value ? 'on' : 'off' }}
             </org-checkbox-toggle>
           </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Editable">
+            <org-checkbox-toggle name="live-demo-editable" value="editable" formControlName="isEditable">
+              {{ liveDemoForm.controls.isEditable.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
         </org-design-system-demo-controls>
         <org-design-system-demo-canvas slot="canvas">
           <div class="canvas-stage">
             @switch (liveDemoForm.controls.composition.value) {
               @case ('flat') {
                 <org-checklist
-                  [items]="flatItems"
+                  [(items)]="flatItems"
                   [emphasizeInvalid]="liveDemoForm.controls.emphasizeInvalid.value"
                   [showStatusBackground]="liveDemoForm.controls.showStatusBackground.value"
+                  [isEditable]="liveDemoForm.controls.isEditable.value"
                 />
               }
               @case ('with-meta') {
                 <org-checklist
-                  [items]="metaItems"
+                  [(items)]="metaItems"
                   [emphasizeInvalid]="liveDemoForm.controls.emphasizeInvalid.value"
                   [showStatusBackground]="liveDemoForm.controls.showStatusBackground.value"
+                  [isEditable]="liveDemoForm.controls.isEditable.value"
                 />
               }
               @case ('nested') {
                 <org-checklist
-                  [items]="nestedItems"
+                  [(items)]="nestedItems"
                   [emphasizeInvalid]="liveDemoForm.controls.emphasizeInvalid.value"
                   [showStatusBackground]="liveDemoForm.controls.showStatusBackground.value"
+                  [isEditable]="liveDemoForm.controls.isEditable.value"
                 />
               }
             }
@@ -275,14 +302,15 @@ export const Default: Story = {
 })
 class ChecklistLiveDemoStory {
   protected readonly compositionItems = liveDemoCompositionItems;
-  protected readonly flatItems = liveDemoFlatItems;
-  protected readonly metaItems = liveDemoMetaItems;
-  protected readonly nestedItems = liveDemoNestedItems;
+  protected readonly flatItems = signal<ChecklistItemData[]>(liveDemoFlatItems);
+  protected readonly metaItems = signal<ChecklistItemData[]>(liveDemoMetaItems);
+  protected readonly nestedItems = signal<ChecklistItemData[]>(liveDemoNestedItems);
 
   protected readonly liveDemoForm = new FormGroup({
     composition: new FormControl<LiveDemoComposition>('nested', { nonNullable: true }),
     emphasizeInvalid: new FormControl<boolean>(false, { nonNullable: true }),
     showStatusBackground: new FormControl<boolean>(false, { nonNullable: true }),
+    isEditable: new FormControl<boolean>(false, { nonNullable: true }),
   });
 }
 
@@ -349,6 +377,99 @@ const showcaseInvalidItems: ChecklistItemData[] = [
     ],
   },
 ];
+
+const showcaseEditableFlatItems: ChecklistItemData[] = [
+  { id: 'edit-flat-1', label: 'Read the contract', status: 'valid' },
+  { id: 'edit-flat-2', label: 'Sign the contract', status: 'valid' },
+  { id: 'edit-flat-3', label: 'Counter-sign returned', status: 'not-started' },
+  { id: 'edit-flat-4', label: 'Initial payment received', status: 'not-started' },
+];
+
+const showcaseEditableNestedItems: ChecklistItemData[] = [
+  {
+    id: 'edit-nested-1',
+    label: 'Onboarding tasks',
+    status: 'not-started',
+    items: [
+      { id: 'edit-nested-1-1', label: 'Watch intro video', status: 'not-started' },
+      { id: 'edit-nested-1-2', label: 'Configure profile', status: 'not-started' },
+      { id: 'edit-nested-1-3', label: 'Invite a teammate', status: 'not-started' },
+    ],
+  },
+  {
+    id: 'edit-nested-2',
+    label: 'Permissions review',
+    status: 'in-progress',
+    items: [
+      { id: 'edit-nested-2-1', label: 'Owner access granted', status: 'valid' },
+      { id: 'edit-nested-2-2', label: 'Billing access pending', status: 'in-progress' },
+      { id: 'edit-nested-2-3', label: 'Audit access', status: 'not-started' },
+    ],
+  },
+];
+
+@Component({
+  selector: 'story-checklist-editable-showcase',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    Checklist,
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoCanvas,
+    DesignSystemDemoExpectedBehaviour,
+  ],
+  template: `
+    <div class="flex flex-col gap-4">
+      <org-design-system-demo>
+        <org-design-system-demo-header
+          slot="header"
+          title="Editable — flat"
+          description="Consumer opt-in: when isEditable is true, leaf rows toggle between not-started and valid on click. Try it — every row in this list starts as a togglable leaf."
+        />
+        <org-design-system-demo-canvas slot="canvas">
+          <org-checklist [(items)]="editableFlatItems" [isEditable]="true" />
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="list-inside list-disc flex flex-col gap-1">
+          <li>Clicking a <strong>not-started</strong> leaf row flips it to <strong>valid</strong></li>
+          <li>Clicking a <strong>valid</strong> leaf row flips it back to <strong>not-started</strong></li>
+          <li>
+            Rows render as native <code>&lt;button&gt;</code> elements — focus + keyboard activation work for free
+          </li>
+        </ul>
+      </org-design-system-demo-expected-behaviour>
+
+      <org-design-system-demo>
+        <org-design-system-demo-header
+          slot="header"
+          title="Editable — nested (parent auto-derives status)"
+          description="When isEditable is true and the checklist is nested, parent rows are NOT directly clickable for status — they derive their status from the resolved statuses of their children. Try toggling children to see the parent settle."
+        />
+        <org-design-system-demo-canvas slot="canvas">
+          <org-checklist [(items)]="editableNestedItems" [isEditable]="true" />
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="list-inside list-disc flex flex-col gap-1">
+          <li>Parent rows still expand / collapse on click — only their status is locked to derivation</li>
+          <li>
+            Children in <strong>in-progress</strong> or <strong>invalid</strong> status are non-interactive (no hover,
+            click is a no-op)
+          </li>
+          <li>
+            Auto-status: any child invalid → parent invalid · any child in-progress → parent in-progress · ≥1 valid (not
+            all) → parent in-progress · all valid → parent valid · all not-started → parent not-started
+          </li>
+        </ul>
+      </org-design-system-demo-expected-behaviour>
+    </div>
+  `,
+})
+class ChecklistEditableShowcaseStory {
+  protected readonly editableFlatItems = signal<ChecklistItemData[]>(showcaseEditableFlatItems);
+  protected readonly editableNestedItems = signal<ChecklistItemData[]>(showcaseEditableNestedItems);
+}
 
 export const Showcase: Story = {
   parameters: {
@@ -459,6 +580,8 @@ export const Showcase: Story = {
             <li>Useful for higher-density readouts where each row needs to read independently</li>
           </ul>
         </org-design-system-demo-expected-behaviour>
+
+        <story-checklist-editable-showcase />
       </div>
     `,
     moduleMetadata: {
@@ -468,6 +591,7 @@ export const Showcase: Story = {
         DesignSystemDemoHeader,
         DesignSystemDemoCanvas,
         DesignSystemDemoExpectedBehaviour,
+        ChecklistEditableShowcaseStory,
       ],
     },
   }),

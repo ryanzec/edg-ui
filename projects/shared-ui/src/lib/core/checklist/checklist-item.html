@@ -1,11 +1,5 @@
 @if (hasNestedItems()) {
-  <button
-    type="button"
-    class="row"
-    data-clickable="1"
-    (click)="brain.toggle()"
-    [attr.aria-expanded]="brain.isExpanded()"
-  >
+  <button type="button" class="row" (click)="brain.toggle()" [attr.aria-expanded]="brain.isExpanded()">
     <org-checklist-status-icon [status]="item().status" />
 
     <span class="label">{{ item().label }}</span>
@@ -21,6 +15,21 @@
     <span class="chevron">
       <org-icon name="chevron-right" size="sm" />
     </span>
+  </button>
+} @else if (isLeafEditable()) {
+  <button
+    type="button"
+    class="row"
+    [attr.aria-disabled]="isLeafEditableDisabled() ? 'true' : null"
+    (click)="toggleStatus()"
+  >
+    <org-checklist-status-icon [status]="item().status" />
+
+    <span class="label">{{ item().label }}</span>
+
+    @if (item().meta) {
+      <span class="meta">{{ item().meta }}</span>
+    }
   </button>
 } @else {
   <div class="row">
@@ -38,15 +47,32 @@
   <ul class="children" role="list">
     @for (nestedItem of item().items; track nestedItem.id) {
       <li class="nested-item" [attr.data-status]="nestedItem.status" role="listitem">
-        <div class="row">
-          <org-checklist-status-icon [status]="nestedItem.status" />
+        @if (brain.isEditable()) {
+          <button
+            type="button"
+            class="row"
+            [attr.aria-disabled]="isNestedChildEditableDisabled(nestedItem.status) ? 'true' : null"
+            (click)="toggleNestedStatus(nestedItem.id)"
+          >
+            <org-checklist-status-icon [status]="nestedItem.status" />
 
-          <span class="label">{{ nestedItem.label }}</span>
+            <span class="label">{{ nestedItem.label }}</span>
 
-          @if (nestedItem.meta) {
-            <span class="meta">{{ nestedItem.meta }}</span>
-          }
-        </div>
+            @if (nestedItem.meta) {
+              <span class="meta">{{ nestedItem.meta }}</span>
+            }
+          </button>
+        } @else {
+          <div class="row">
+            <org-checklist-status-icon [status]="nestedItem.status" />
+
+            <span class="label">{{ nestedItem.label }}</span>
+
+            @if (nestedItem.meta) {
+              <span class="meta">{{ nestedItem.meta }}</span>
+            }
+          </div>
+        }
       </li>
     }
   </ul>

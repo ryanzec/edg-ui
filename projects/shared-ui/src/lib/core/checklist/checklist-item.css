@@ -16,8 +16,8 @@
     text-align: left;
   }
 
-  /* parent rows are real <button>s; reset native chrome and add interaction states */
-  .row[data-clickable='1'] {
+  /* clickable rows are always real <button>s; reset native chrome and add interaction states */
+  button.row {
     appearance: none;
     border: 0;
     cursor: pointer;
@@ -25,17 +25,29 @@
     transition: background var(--checklist-row-transition-duration) var(--checklist-row-transition-easing);
   }
 
-  .row[data-clickable='1']:hover {
+  button.row:hover {
     background: var(--checklist-row-bg-hover);
   }
 
-  .row[data-clickable='1']:active {
+  button.row:active {
     background: var(--checklist-row-bg-active);
   }
 
-  .row[data-clickable='1']:focus-visible {
+  button.row:focus-visible {
     outline: 0;
     background: var(--checklist-row-bg-hover);
+  }
+
+  /* editable-mode rows whose current status blocks the toggle still render as <button> for layout
+     consistency, but should not visually invite interaction */
+  button.row[aria-disabled='true'] {
+    cursor: default;
+  }
+
+  button.row[aria-disabled='true']:hover,
+  button.row[aria-disabled='true']:active,
+  button.row[aria-disabled='true']:focus-visible {
+    background: var(--checklist-row-bg);
   }
 
   .label {
@@ -108,7 +120,7 @@
     margin-left: var(--checklist-chevron-gap);
   }
 
-  .row[data-clickable='1']:hover .chevron {
+  button.row:hover .chevron {
     color: var(--checklist-chevron-color-active);
   }
 

@@ -1,50 +1,45 @@
-$schema: 'https://moonrepo.dev/schemas/project.json'
-
-type: 'application'
-language: 'typescript'
-
+$schema: https://moonrepo.dev/schemas/project.json
 tasks:
   type-check:
-    command: '$workspaceRoot/node_modules/.bin/ngc --project tsconfig.app.json'
+    command: $workspaceRoot/node_modules/.bin/ngc --project tsconfig.app.json
     inputs:
-      - '**/*'
-      - /tsconfig.json
-      - /tsconfig.app.json
+    - '**/*'
+    - /tsconfig.json
+    - /tsconfig.app.json
     env:
-      NODE_ENV: 'development'
+      NODE_ENV: development
     options:
       runFromWorkspaceRoot: false
-
   dev:
-    command: '$workspaceRoot/node_modules/.bin/ng serve internal-portal --port 4101'
-    local: true
-    env:
-      NODE_ENV: 'development'
+    command: $workspaceRoot/node_modules/.bin/ng serve internal-portal --port 4101
     options:
       runFromWorkspaceRoot: false
-
+    env:
+      NODE_ENV: development
+    preset: server
   build:
-    command: '$workspaceRoot/node_modules/.bin/ng build customer-portal'
+    command: $workspaceRoot/node_modules/.bin/ng build customer-portal
     inputs:
-      - '**/*'
-      - /projects/shared-ui/src/**/*
-      - /projects/shared-types/src/**/*
-      - /projects/shared-utils/src/**/*
-      - /tsconfig.json
+    - '**/*'
+    - /projects/shared-ui/src/**/*
+    - /projects/shared-types/src/**/*
+    - /projects/shared-utils/src/**/*
+    - /tsconfig.json
     env:
-      NODE_ENV: 'development'
+      NODE_ENV: development
     options:
       runFromWorkspaceRoot: false
-
   build-production:
-    command: '$workspaceRoot/node_modules/.bin/ng build internal-portal --configuration production'
+    command: $workspaceRoot/node_modules/.bin/ng build internal-portal --configuration production
     inputs:
-      - '**/*'
-      - /projects/shared-ui/src/**/*
-      - /projects/shared-types/src/**/*
-      - /projects/shared-utils/src/**/*
-      - /tsconfig.json
+    - '**/*'
+    - /projects/shared-ui/src/**/*
+    - /projects/shared-types/src/**/*
+    - /projects/shared-utils/src/**/*
+    - /tsconfig.json
     env:
-      NODE_ENV: 'production'
+      NODE_ENV: production
     options:
       runFromWorkspaceRoot: false
+language: typescript
+layer: application

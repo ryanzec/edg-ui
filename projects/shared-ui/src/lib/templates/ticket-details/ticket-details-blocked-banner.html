@@ -1,0 +1,19 @@
+<org-box border="bordered" background="colorless" padding="base" class="block">
+  <div class="flex items-center gap-3">
+    <org-icon name="circle-x" size="base" />
+    <div class="flex flex-col gap-0.5 flex-1 min-w-0">
+      <div class="text-xs font-semibold text-muted">BLOCKED</div>
+      <div class="text-fg">{{ blocked().reason }}</div>
+    </div>
+    <div class="flex gap-2 flex-shrink-0">
+      <org-button variant="ghost" color="neutral" preIcon="check" label="Unblock" (clicked)="onUnblockClicked()" />
+      <org-button
+        variant="ghost"
+        color="neutral"
+        preIcon="notification"
+        label="Ping owner"
+        (clicked)="onPingOwnerClicked()"
+      />
+    </div>
+  </div>
+</org-box>

@@ -11,14 +11,14 @@
     </div>
     <p class="m-0">{{ integration().description }}</p>
     @if (integration().tags.length > 0) {
-      <div class="flex flex-wrap gap-2 mt-auto">
+      <org-tags class="mt-auto">
         @for (tag of visibleTags(); track tag.label) {
           <org-tag [color]="tag.color ?? 'neutral'">{{ tag.label }}</org-tag>
         }
         @if (overflowTagCount() > 0) {
           <org-tag color="neutral">+{{ overflowTagCount() }}</org-tag>
         }
-      </div>
+      </org-tags>
     }
   </div>
 </org-box>

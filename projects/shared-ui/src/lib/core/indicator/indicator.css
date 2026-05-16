@@ -39,6 +39,7 @@
     --indicator-height: var(--spacing-3_5);
     --indicator-pad-x: var(--spacing-1);
     --indicator-font-size: var(--font-size-2xs);
+    --indicator-fade-thickness: 0.125rem; /* 2px */
   }
 
   :host([data-size='base']) {
@@ -46,6 +47,7 @@
     --indicator-height: var(--spacing-4);
     --indicator-pad-x: var(--spacing-1);
     --indicator-font-size: var(--font-size-xs);
+    --indicator-fade-thickness: 0.1875rem; /* 3px */
   }
 
   :host([data-size='lg']) {
@@ -53,52 +55,68 @@
     --indicator-height: var(--spacing-5);
     --indicator-pad-x: var(--spacing-1_5);
     --indicator-font-size: var(--font-size-sm);
+    --indicator-fade-thickness: 0.25rem; /* 4px */
   }
 
-  /* colors: bg + on-color foreground */
+  /* colors: bg + on-color foreground + matching soft for the fade */
   :host([data-color='primary']) {
     --indicator-bg: var(--color-primary);
     --indicator-fg: var(--color-primary-on);
+    --indicator-fade-color: var(--color-primary-soft);
   }
 
   :host([data-color='secondary']) {
     --indicator-bg: var(--color-secondary);
     --indicator-fg: var(--color-secondary-on);
+    --indicator-fade-color: var(--color-secondary-soft);
   }
 
   :host([data-color='neutral']) {
     --indicator-bg: var(--color-neutral);
     --indicator-fg: var(--color-neutral-on);
+    --indicator-fade-color: var(--color-neutral-soft);
   }
 
   :host([data-color='safe']) {
     --indicator-bg: var(--color-safe);
     --indicator-fg: var(--color-safe-on);
+    --indicator-fade-color: var(--color-safe-soft);
   }
 
   :host([data-color='info']) {
     --indicator-bg: var(--color-info);
     --indicator-fg: var(--color-info-on);
+    --indicator-fade-color: var(--color-info-soft);
   }
 
   :host([data-color='caution']) {
     --indicator-bg: var(--color-caution);
     --indicator-fg: var(--color-caution-on);
+    --indicator-fade-color: var(--color-caution-soft);
   }
 
   :host([data-color='warning']) {
     --indicator-bg: var(--color-warning);
     --indicator-fg: var(--color-warning-on);
+    --indicator-fade-color: var(--color-warning-soft);
   }
 
   :host([data-color='danger']) {
     --indicator-bg: var(--color-danger);
     --indicator-fg: var(--color-danger-on);
+    --indicator-fade-color: var(--color-danger-soft);
   }
 
   /* outline ring: visible when sitting over imagery */
   :host([data-ring]) {
     --indicator-ring-width: var(--border-width-thick);
+  }
+
+  /* fade: a soft halo around the indicator that gives the illusion of a fade */
+  :host([data-fade]) {
+    box-shadow:
+      0 0 0 var(--indicator-ring-width) var(--indicator-ring-color),
+      0 0 0 calc(var(--indicator-ring-width) + var(--indicator-fade-thickness)) var(--indicator-fade-color);
   }
 
   /* corner pinning to the nearest positioned ancestor (typically org-indicator-anchor) */

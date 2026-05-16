@@ -7,7 +7,6 @@ import { logManager } from '@organization/shared-utils';
 import { ApplicationNavigation, type NavigationItem } from '../../core/application-navigation/application-navigation';
 import { Avatar } from '../../core/avatar/avatar';
 import { AvatarStack } from '../../core/avatar/avatar-stack';
-import { AvatarStackOverflow } from '../../core/avatar/avatar-stack-overflow';
 import { Box } from '../../core/box/box';
 import { Button } from '../../core/button/button';
 import { ButtonGroup } from '../../core/button/button-group';
@@ -70,7 +69,8 @@ import { TableCell } from '../../core/table/table-cell';
 import { TableHeader } from '../../core/table/table-header';
 import { Tab } from '../../core/tabs/tab';
 import { Tabs } from '../../core/tabs/tabs';
-import { Tag } from '../../core/tag/tag';
+import { Tag } from '../../core/tags/tag';
+import { Tags } from '../../core/tags/tags';
 import { TextDirective } from '../../core/text-directive/text-directive';
 import { Textarea } from '../../core/textarea/textarea';
 import { TimeInput } from '../../core/time-input/time-input';
@@ -102,7 +102,6 @@ type TableUser = {
     ApplicationNavigation,
     Avatar,
     AvatarStack,
-    AvatarStackOverflow,
     Box,
     Button,
     ButtonGroup,
@@ -163,6 +162,7 @@ type TableUser = {
     Tab,
     Tabs,
     Tag,
+    Tags,
     TextDirective,
     Textarea,
     TimeInput,

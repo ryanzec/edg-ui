@@ -1,0 +1,122 @@
+<div class="ticket-details flex flex-col gap-6">
+  <div class="flex flex-col gap-3">
+    <div class="meta-row flex items-center gap-2 text-xs text-muted">
+      <org-indicator [color]="statusColor()" />
+      <span class="font-mono">{{ ticket().code }}</span>
+      <span>&middot;</span>
+      <span>{{ typeLabel() }}</span>
+      <span>&middot;</span>
+      <span>Opened {{ openedAtFormatted() }}</span>
+    </div>
+
+    <h1 class="m-0 text-3xl">{{ ticket().title }}</h1>
+
+    <div class="chips-row flex items-center gap-3 flex-wrap">
+      <org-drop-down-selector
+        label="Status"
+        [items]="statusItems()"
+        [selectedItems]="statusSelectedItems()"
+        (selectedItemsChange)="onStatusSelectionChange($event)"
+        [position]="statusPosition"
+      />
+      <org-divider direction="vertical" />
+      <div class="flex items-center gap-2">
+        <span class="text-xs text-muted">Assignee</span>
+        <org-avatar size="sm" [label]="ticket().assignee.name" />
+        <span>{{ ticket().assignee.name }}</span>
+      </div>
+      <org-divider direction="vertical" />
+      <div class="flex items-center gap-2">
+        <org-icon name="filter" size="sm" />
+        <org-tag [color]="priorityColor()" size="sm"
+          >{{ ticket().priority.toUpperCase() }} &middot; {{ priorityLabel() }}</org-tag
+        >
+      </div>
+      <org-divider direction="vertical" />
+      <div class="flex items-center gap-2">
+        <org-icon name="calendar" size="sm" />
+        <span class="text-xs text-muted">Due</span>
+        <span>{{ dueDateFormatted() }}</span>
+      </div>
+      <org-divider direction="vertical" />
+      <div class="flex items-center gap-2">
+        <org-icon name="users" size="sm" />
+        <span class="text-xs text-muted">Collaborators</span>
+        <org-avatar-stack size="sm">
+          @for (collaborator of ticket().collaborators; track collaborator.id) {
+            <org-avatar size="sm" [label]="collaborator.name" />
+          }
+        </org-avatar-stack>
+      </div>
+    </div>
+  </div>
+
+  <div class="layout grid grid-cols-12 gap-6">
+    <div class="main flex flex-col gap-6">
+      @if (ticket().blocked; as blocked) {
+        <org-ticket-details-blocked-banner
+          [blocked]="blocked"
+          (unblock)="onUnblockClicked()"
+          (pingOwner)="onPingOwnerClicked()"
+        />
+      }
+
+      <org-card>
+        <org-card-header title="Description">
+          <org-button
+            actions
+            variant="text"
+            color="neutral"
+            preIcon="pencil"
+            [iconOnly]="true"
+            label="Edit description"
+            ariaLabel="Edit description"
+            (clicked)="onDescriptionEditClicked()"
+          />
+        </org-card-header>
+        <org-card-content>
+          <div class="flex flex-col gap-4">
+            <p class="m-0">{{ ticket().description }}</p>
+
+            @if (ticket().stepsToReproduce.length > 0) {
+              <div class="flex flex-col gap-2">
+                <div class="text-xs font-semibold text-muted">STEPS TO REPRODUCE</div>
+                <ol class="flex flex-col gap-1 list-decimal list-inside m-0">
+                  @for (step of ticket().stepsToReproduce; track $index) {
+                    <li>{{ step.content }}</li>
+                  }
+                </ol>
+              </div>
+            }
+
+            @if (ticket().acceptanceCriteria.length > 0) {
+              <div class="flex flex-col gap-2">
+                <div class="text-xs font-semibold text-muted">ACCEPTANCE CRITERIA</div>
+                <org-checklist
+                  [items]="acceptanceChecklistItems()"
+                  [isEditable]="true"
+                  (itemsChange)="onAcceptanceItemsChange($event)"
+                />
+              </div>
+            }
+          </div>
+        </org-card-content>
+      </org-card>
+
+      <org-ticket-details-activity [activity]="ticket().activity" (commentSubmitted)="onCommentSubmitted($event)" />
+    </div>
+
+    <div class="side flex flex-col gap-4">
+      <org-ticket-details-properties [properties]="ticket().properties" />
+      <org-ticket-details-subtasks
+        [subtasks]="ticket().subtasks"
+        (subtaskToggled)="onSubtaskToggled($event)"
+        (subtaskAddRequested)="onSubtaskAddRequested()"
+      />
+      <org-ticket-details-connected-work
+        [items]="ticket().connectedWork"
+        [attentionCount]="ticket().connectedWorkAttentionCount"
+      />
+    </div>
+  </div>
+</div>

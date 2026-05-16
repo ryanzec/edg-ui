@@ -8,7 +8,7 @@ import { Card } from '../card/card';
 import { CardContent } from '../card/card-content';
 import { Button } from '../button/button';
 import { Icon } from '../icon/icon';
-import { Tag } from '../tag/tag';
+import { Tag } from '../tags/tag';
 import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
 import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
 import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';

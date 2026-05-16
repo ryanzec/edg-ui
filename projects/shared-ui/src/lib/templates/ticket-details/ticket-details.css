@@ -1,0 +1,24 @@
+@layer application {
+  .ticket-details {
+    container-type: inline-size;
+  }
+
+  /* main + side panel layout: left main spans 8 columns, right panel spans 4 columns */
+  .main {
+    grid-column: span 8 / span 8;
+    min-width: 0;
+  }
+
+  .side {
+    grid-column: span 4 / span 4;
+    min-width: 0;
+  }
+
+  /* responsive: stack the side panel below the main column on narrow viewports */
+  @container (max-width: 64rem) {
+    .main,
+    .side {
+      grid-column: span 12 / span 12;
+    }
+  }
+}

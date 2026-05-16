@@ -21,7 +21,7 @@
       <org-avatar label="Ada" />
       <org-avatar label="Grace" />
       <org-avatar label="Linus" />
-      <org-avatar-stack-overflow [count]="4" />
+      <org-avatar label="4 more members" [isOverflow]="true" [count]="4" />
     </org-avatar-stack>
   </div>
 
@@ -447,22 +447,22 @@
 
   <div class="component-block">
     <h3 class="component-block-name">Tag</h3>
-    <div class="flex flex-wrap gap-1">
+    <org-tags>
       @for (color of allColors; track color) {
         <org-tag [color]="color">{{ color }}</org-tag>
       }
-    </div>
-    <div class="flex flex-wrap gap-1">
+    </org-tags>
+    <org-tags>
       @for (color of allColors; track color) {
         <org-tag [color]="color" variant="strong">{{ color }}</org-tag>
       }
-    </div>
-    <div class="flex items-center gap-1">
+    </org-tags>
+    <org-tags>
       <org-tag color="primary" size="xs">xs</org-tag>
       <org-tag color="primary" size="sm">sm</org-tag>
       <org-tag color="primary" size="base">base</org-tag>
       <org-tag color="primary" [removable]="true" (removed)="onLog('tag-removed', 'tag')">Removable</org-tag>
-    </div>
+    </org-tags>
   </div>
 
   <div class="component-block">

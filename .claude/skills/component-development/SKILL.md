@@ -1,6 +1,6 @@
 ---
 name: component-development
-description: Use this skill when being prompted to work on an Angular component in any way. This is includes rules for all type of component development with header describe which section are relavent when dealing with code in certain locations.
+description: Use this skill whenever the user asks to create, modify, refactor, review, style, or otherwise work on an Angular component, directive, brain component, or core component. Covers component architecture, brain/presentation split, content projection, output-listener detection, CSS variables, and Storybook updates.
 ---
 
 # Definitions

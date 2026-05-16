@@ -18,7 +18,7 @@ import { outputFromObservable } from '@angular/core/rxjs-interop';
 import { angularUtils } from '@organization/shared-utils';
 import { type IconName } from '../../brain/icon-brain/icon-brain';
 import { Icon } from '../icon/icon';
-import { Tag } from '../tag/tag';
+import { Tag } from '../tags/tag';
 import { Button } from '../button/button';
 import { LoadingSpinner } from '../loading-spinner/loading-spinner';
 import {

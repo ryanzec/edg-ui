@@ -21,6 +21,10 @@ Utility css classes **MUST** be used for all other styles:
 - z-index
 - etc.
 
+# IMPORTANT NOTES:
+- when setting a css variable to 0, if that is designed to be used with a unit value of `rem` or something like that, **ALWAYS** add the unit (need for `calc()`'s to work properly).
+- when there are sub-components, **ALWAYS** use `host-context()` if you need to style based on an attribute that is already needed on the parent component instead of injecting and adding the data attribute to the sub component so the parent is the single source of thruth.
+
 # Design Token / CSS Variables Patterns:
 - any component that can have variants that effect css property must **ALWAYS** use design tokens (css variables) for that as a placeholder value in a component design token file in `projects/shared-ui/src/lib/styles/animations.css`.
 - the css code **MUST** implement all variants (even whatever the default values are) as the default css variables are more placeholders than values to be used.

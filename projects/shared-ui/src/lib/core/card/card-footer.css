@@ -16,4 +16,9 @@
   :host([data-alignment='end']) {
     justify-content: flex-end;
   }
+
+  /* expandable collapsed state: parent card removes us from layout entirely */
+  :host([data-hidden]) {
+    display: none;
+  }
 }

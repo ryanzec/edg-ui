@@ -71,18 +71,18 @@
       </org-table-td>
       <org-table-td>{{ user.email }}</org-table-td>
       <org-table-td>
-        <div class="flex flex-row gap-0.5">
+        <org-tags>
           @for (role of user.roles; track role) {
             <org-tag [color]="getRoleColor(role)">{{ role }}</org-tag>
           }
-        </div>
+        </org-tags>
       </org-table-td>
       <org-table-td>
-        <div class="flex flex-row flex-wrap gap-0.5">
+        <org-tags>
           @for (permission of user.permissions; track permission) {
             <org-tag color="neutral">{{ permission }}</org-tag>
           }
-        </div>
+        </org-tags>
       </org-table-td>
       <org-table-td>
         <span orgText textSize="sm" textColor="neutral">{{ createdAtRelative(user) }}</span>

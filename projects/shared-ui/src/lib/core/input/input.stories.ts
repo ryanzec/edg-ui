@@ -9,7 +9,7 @@ import { CheckboxToggle } from '../checkbox-toggle/checkbox-toggle';
 import { FormField } from '../form-fields/form-field';
 import { FormFields } from '../form-fields/form-fields';
 import { Label } from '../label/label';
-import { Tag } from '../tag/tag';
+import { Tag } from '../tags/tag';
 import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
 import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
 import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';

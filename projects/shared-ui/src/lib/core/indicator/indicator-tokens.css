@@ -14,8 +14,12 @@
   --indicator-font-size: var(--font-size-xs);
 
   /* outline ring (default off) */
-  --indicator-ring-width: 0;
+  --indicator-ring-width: 0rem;
   --indicator-ring-color: var(--color-bg-surface);
+
+  /* fade border (default off) — applied via box-shadow when [data-fade] is set */
+  --indicator-fade-thickness: 0.1875rem; /* 3px */
+  --indicator-fade-color: transparent;
 
   /* color: primary (default) */
   --indicator-bg: var(--color-primary);

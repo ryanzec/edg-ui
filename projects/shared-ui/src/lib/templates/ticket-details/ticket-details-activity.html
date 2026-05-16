@@ -1,0 +1,89 @@
+<div class="flex flex-col gap-6">
+  <div class="flex items-start justify-between gap-3">
+    <div class="flex flex-col gap-1">
+      <h2 class="m-0 text-xl">Activity</h2>
+      <div class="text-xs text-muted">{{ commentCount() }} comments &middot; {{ changeCount() }} changes</div>
+    </div>
+    <org-tabs [value]="filter()" (valueChange)="onFilterChange($event)" variant="pills" size="sm">
+      <org-tab value="all">All {{ totalCount() }}</org-tab>
+      <org-tab value="comments">Comments {{ commentCount() }}</org-tab>
+      <org-tab value="changes">Changes {{ changeCount() }}</org-tab>
+    </org-tabs>
+  </div>
+
+  <org-timeline>
+    @for (entry of filteredActivity(); track entry.id) {
+      @if (entry.type === 'comment') {
+        <org-timeline-item color="neutral" dotIcon="message-square">
+          <org-box border="bordered" background="colorless" padding="base">
+            <div class="flex flex-col gap-2">
+              <div class="flex items-center justify-between gap-3">
+                <div class="flex items-center gap-2">
+                  <org-avatar size="sm" [label]="entry.user.name" />
+                  <span class="font-semibold">{{ entry.user.name }}</span>
+                  <span class="text-xs text-muted">commented</span>
+                </div>
+                <span class="text-xs text-muted">{{ entry.timestamp | orgDate: { relative: true } }}</span>
+              </div>
+              <p class="m-0">{{ entry.body }}</p>
+              <div class="flex gap-3">
+                <org-button variant="text" color="neutral" label="Reply" size="sm" />
+                <org-button variant="text" color="neutral" label="React" size="sm" />
+                <org-button variant="text" color="neutral" label="Copy link" size="sm" />
+              </div>
+            </div>
+          </org-box>
+        </org-timeline-item>
+      } @else {
+        <org-timeline-item [color]="getChangeColor(entry)" [dotIcon]="getChangeIcon(entry)">
+          <div class="flex items-center justify-between gap-3">
+            <div class="flex items-center gap-2">
+              <span class="font-semibold">{{ entry.user.name }}</span>
+              <span class="text-muted">{{ entry.description }}</span>
+            </div>
+            <span class="text-xs text-muted">{{ entry.timestamp | orgDate: { relative: true } }}</span>
+          </div>
+        </org-timeline-item>
+      }
+    }
+  </org-timeline>
+
+  <org-textarea
+    name="ticket-details-comment-composer"
+    placeholder="Write a comment..."
+    [(value)]="composerValue"
+    [minLines]="3"
+    [maxLines]="6"
+    (submitKeyPressed)="onSubmitComment()"
+  >
+    <org-textarea-toolbar [showSendButton]="false" [showHint]="true" hintLabel="to send" hintKey="↵">
+      <org-textarea-toolbar-item>
+        <org-button
+          variant="text"
+          color="neutral"
+          preIcon="at-sign"
+          [iconOnly]="true"
+          label="Mention"
+          ariaLabel="Mention"
+        />
+      </org-textarea-toolbar-item>
+      <org-textarea-toolbar-item>
+        <org-button
+          variant="text"
+          color="neutral"
+          preIcon="paperclip"
+          [iconOnly]="true"
+          label="Attach"
+          ariaLabel="Attach"
+        />
+      </org-textarea-toolbar-item>
+      <org-textarea-toolbar-item>
+        <org-button variant="text" color="neutral" preIcon="code" [iconOnly]="true" label="Code" ariaLabel="Code" />
+      </org-textarea-toolbar-item>
+      <org-textarea-toolbar-item>
+        <org-button variant="text" color="neutral" preIcon="bold" [iconOnly]="true" label="Bold" ariaLabel="Bold" />
+      </org-textarea-toolbar-item>
+      <org-button color="primary" label="Comment" [disabled]="isSubmitDisabled()" (clicked)="onSubmitComment()" />
+    </org-textarea-toolbar>
+  </org-textarea>
+</div>

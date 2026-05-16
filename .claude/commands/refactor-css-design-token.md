@@ -8,4 +8,4 @@ You are to **ALWAYS** verify:
 # References
 You can **ONLY** reference the following code as good implementation examples, **DO NOT** reference any other code:
 - `projects/shared-ui/src/lib/core/button` / `projects/shared-ui/src/lib/core/button/button-tokens.css`
-- `projects/shared-ui/src/lib/core/tag` / `projects/shared-ui/src/lib/core/tag/tag-tokens.css`
+- `projects/shared-ui/src/lib/core/tags` / `projects/shared-ui/src/lib/core/tags/tags-tokens.css`

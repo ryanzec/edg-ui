@@ -34,4 +34,7 @@
   --tag-icon-focus-radius: var(--radius-xs);
   --tag-icon-opacity-hover: 0.8;
   --tag-icon-focus-bg: color-mix(in srgb, currentColor 15%, transparent);
+
+  /* tags (group wrapper) */
+  --tags-gap: var(--spacing-1);
 }

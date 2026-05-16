@@ -21,7 +21,7 @@ export const allListBorderVariants = ['outer'] as const;
 export type ListBorderVariant = (typeof allListBorderVariants)[number];
 
 /** default value for the size input */
-export const LIST_SIZE_DEFAULT: ListSize = 'base';
+export const LIST_SIZE_DEFAULT: ListSize = 'sm';
 
 /** default value for the selectMode input */
 export const LIST_SELECT_MODE_DEFAULT: ListSelectMode | undefined = undefined;

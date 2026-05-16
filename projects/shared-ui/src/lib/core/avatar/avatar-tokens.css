@@ -10,7 +10,7 @@
   --avatar-color-7: var(--color-pink);
 
   /* shape slots */
-  --avatar-circle-size: var(--spacing-12);
+  --avatar-shape-size: var(--spacing-12);
   --avatar-initials-font-size: var(--font-size-lg);
   --avatar-initials-font-weight: var(--font-weight-semibold);
   --avatar-radius: var(--radius-pill);
@@ -42,8 +42,8 @@
   --avatar-overflow-fg: var(--color-fg-muted);
   --avatar-overflow-font-weight: var(--font-weight-semibold);
 
-  /* stack overlap — reactive formula off the circle size slot */
-  --avatar-stack-overlap: calc(var(--avatar-circle-size) * -0.6);
+  /* stack overlap — reactive formula off the shape size slot */
+  --avatar-stack-overlap: calc(var(--avatar-shape-size) * -0.6);
 
   /* button (clickable avatar) slots */
   --avatar-button-transition-duration: var(--motion-duration-base);

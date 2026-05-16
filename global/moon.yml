@@ -1,157 +1,128 @@
-# scripts/moon.yml
-$schema: 'https://moonrepo.dev/schemas/project.json'
-
-type: 'tool'
-
-workspace:
-  inheritedTasks:
-    # this is used for repository level tasks so we don't want to inherit any tasks from the global tasks
-    include: []
-
+$schema: https://moonrepo.dev/schemas/project.json
 tasks:
   deps:
-    command: 'pnpm install'
+    command: pnpm install
     inputs:
-      - '/pnpm-lock.yaml'
-    # this can make the initial install really slow so for now, excluding this until I can figure it out more
-    # outputs:
-    #   - '/node_modules'
+    - /pnpm-lock.yaml
     options:
       runFromWorkspaceRoot: true
-
   setup-certs:
-    command: 'sh -c "rm -f *.pem && mkcert -install -key-file ./ssl-key.pem -cert-file ./ssl-cert.pem localhost"'
-    local: true
-    env:
-      NODE_ENV: 'development'
     options:
       runFromWorkspaceRoot: true
-
+    script: sh -c "rm -f *.pem && mkcert -install -key-file ./ssl-key.pem -cert-file ./ssl-cert.pem localhost"
+    env:
+      NODE_ENV: development
+    preset: server
   storybook:
-    command: '$workspaceRoot/node_modules/.bin/ng run storybook-host:storybook'
+    command: $workspaceRoot/node_modules/.bin/ng run storybook-host:storybook
     inputs:
-      - '/projects/**/*'
+    - /projects/**/*
     env:
-      NODE_ENV: 'development'
+      NODE_ENV: development
     options:
       runFromWorkspaceRoot: true
-
   storybook-clean:
-    command: 'sh -c "rm -rf $workspaceRoot/node_modules/.cache/storybook && $workspaceRoot/node_modules/.bin/ng run storybook-host:storybook"'
-    local: true
-    env:
-      NODE_ENV: 'development'
     options:
       runFromWorkspaceRoot: true
-
+    script: sh -c "rm -rf $workspaceRoot/node_modules/.cache/storybook && $workspaceRoot/node_modules/.bin/ng run storybook-host:storybook"
+    env:
+      NODE_ENV: development
+    preset: server
   test-storybook:
-    command: 'sh -c "$workspaceRoot/node_modules/.bin/ng run storybook-host:build-storybook && $workspaceRoot/.moon/scripts/run-storybook-tests.sh"'
-    inputs:
-      - '/.storybook/**/*'
-      - '/projects/**/*'
-    env:
-      NODE_ENV: 'development'
     options:
       runFromWorkspaceRoot: true
-
+    inputs:
+    - /.storybook/**/*
+    - /projects/**/*
+    env:
+      NODE_ENV: development
+    script: sh -c "$workspaceRoot/node_modules/.bin/ng run storybook-host:build-storybook && $workspaceRoot/.moon/scripts/run-storybook-tests.sh"
   generate:
-    command: 'node $workspaceRoot/.moon/scripts/ng-generate-runner.cjs'
-    local: true
-    env:
-      NODE_ENV: 'development'
+    command: node $workspaceRoot/.moon/scripts/ng-generate-runner.cjs
     options:
       runFromWorkspaceRoot: true
-
+    env:
+      NODE_ENV: development
+    preset: server
   generate-type:
-    command: 'node $workspaceRoot/.moon/scripts/generate-shared-type.cjs type'
-    local: true
-    env:
-      NODE_ENV: 'development'
+    command: node $workspaceRoot/.moon/scripts/generate-shared-type.cjs type
     options:
       runFromWorkspaceRoot: true
-
+    env:
+      NODE_ENV: development
+    preset: server
   build-design-tokens:
-    command: 'node $workspaceRoot/.moon/scripts/build-typescript-design-token.cjs'
-    local: true
-    env:
-      NODE_ENV: 'development'
+    command: node $workspaceRoot/.moon/scripts/build-typescript-design-token.cjs
     options:
       runFromWorkspaceRoot: true
-
+    env:
+      NODE_ENV: development
+    preset: server
   sync-ai-files:
-    command: 'sh -c "node $workspaceRoot/.moon/scripts/sync-claude-rules-to-cursor.cjs && node $workspaceRoot/.moon/scripts/sync-claude-rules-to-gemini.cjs && node $workspaceRoot/.moon/scripts/sync-claude-rules-to-junie.cjs"'
-    local: true
-    env:
-      NODE_ENV: 'development'
     options:
       runFromWorkspaceRoot: true
-
-  # since angular handle the monorepo type management for the projects it control, we have these commands as
-  # part of the global tasks instead of inherited for each moon projects
+    script: sh -c "node $workspaceRoot/.moon/scripts/sync-claude-rules-to-cursor.cjs && node $workspaceRoot/.moon/scripts/sync-claude-rules-to-gemini.cjs && node $workspaceRoot/.moon/scripts/sync-claude-rules-to-junie.cjs"
+    env:
+      NODE_ENV: development
+    preset: server
   test-unit:
-    command: '$workspaceRoot/node_modules/.bin/ng test --watch=false'
+    command: $workspaceRoot/node_modules/.bin/ng test --watch=false
     inputs:
-      - '/projects/**/*'
-      - /**/*/tsconfig.spec.json
-      - /**/*/src/test-providers.ts
-      - /tsconfig.json
-      - /angular.json
+    - /projects/**/*
+    - /**/*/tsconfig.spec.json
+    - /**/*/src/test-providers.ts
+    - /tsconfig.json
+    - /angular.json
     env:
-      NODE_ENV: 'development'
+      NODE_ENV: development
     options:
       runFromWorkspaceRoot: true
-
   test-unit-watch:
-    # command: '$workspaceRoot/node_modules/.bin/ng test --watch=true'
-    command: 'sh -c "$workspaceRoot/node_modules/.bin/concurrently \"$workspaceRoot/node_modules/.bin/ng test customer-portal --watch=true\" \"$workspaceRoot/node_modules/.bin/ng test internal-portal --watch=true\" \"$workspaceRoot/node_modules/.bin/ng test shared-ui --watch=true\""'
-    local: true
-    env:
-      NODE_ENV: 'development'
+    command: sh -c "$workspaceRoot/node_modules/.bin/concurrently \"$workspaceRoot/node_modules/.bin/ng test customer-portal --watch=true\" \"$workspaceRoot/node_modules/.bin/ng test internal-portal --watch=true\" \"$workspaceRoot/node_modules/.bin/ng test shared-ui --watch=true\""
     options:
       runFromWorkspaceRoot: true
-
+    env:
+      NODE_ENV: development
+    preset: server
   lint:
-    command: '$workspaceRoot/node_modules/.bin/ng lint'
+    command: $workspaceRoot/node_modules/.bin/ng lint
     inputs:
-      - '/projects/**/*'
-      - /eslint.config.mjs
-      - /angular.json
+    - /projects/**/*
+    - /eslint.config.mjs
+    - /angular.json
     env:
-      NODE_ENV: 'development'
+      NODE_ENV: development
     options:
       runFromWorkspaceRoot: true
-
   format:
-    command: 'sh -c "$workspaceRoot/node_modules/.bin/prettier --config $workspaceRoot/.prettierrc --ignore-path $workspaceRoot/.prettierignore --write . && $workspaceRoot/node_modules/.bin/ng lint --fix"'
+    options:
+      runFromWorkspaceRoot: true
     inputs:
-      - '/projects/**/*'
-      - /.prettierignore
-      - /.prettierrc
-      - /eslint.config.mjs
+    - /projects/**/*
+    - /.prettierignore
+    - /.prettierrc
+    - /eslint.config.mjs
     env:
-      NODE_ENV: 'development'
-    options:
-      runFromWorkspaceRoot: true
-
-  # this provides a configuration free was to easily access the pnpm command that moonrepo uses for it's toolchain
+      NODE_ENV: development
+    script: sh -c "$workspaceRoot/node_modules/.bin/prettier --config $workspaceRoot/.prettierrc --ignore-path $workspaceRoot/.prettierignore --write . && $workspaceRoot/node_modules/.bin/ng lint --fix"
   pnpm:
-    command: 'pnpm -w'
-    local: true
-    env:
-      NODE_ENV: 'development'
+    command: pnpm -w
     options:
       runFromWorkspaceRoot: true
-
+    env:
+      NODE_ENV: development
+    preset: server
   clean-cache:
-    command: 'sh -c "rm -rf $workspaceRoot/.moon/cache && rm -rf $workspaceRoot/node_modules/.cache/storybook && rm -rf .angular && $workspaceRoot/node_modules/.bin/ng cache clean"'
-    local: true
-    env:
-      NODE_ENV: 'development'
     options:
       runFromWorkspaceRoot: true
-
+    script: sh -c "rm -rf $workspaceRoot/.moon/cache && rm -rf $workspaceRoot/node_modules/.cache/storybook && rm -rf .angular && $workspaceRoot/node_modules/.bin/ng cache clean"
+    env:
+      NODE_ENV: development
+    preset: server
   clean-nuke:
-    command: |
+    options:
+      runFromWorkspaceRoot: true
+    script: |
       sh -c "
         $workspaceRoot/node_modules/.bin/ng cache clean && \
         rm -rf $workspaceRoot/.angular && \
@@ -162,26 +133,26 @@ tasks:
         rm -rf $workspaceRoot/out-tsc && \
         rm -rf $workspaceRoot/storybook-static && \
         $(moon bin pnpm) store prune
-        moon :deps
+        moon run :deps
       "
-    local: true
     env:
-      NODE_ENV: 'development'
-    options:
-      runFromWorkspaceRoot: true
-
+      NODE_ENV: development
+    preset: server
   ng-version:
-    command: '$workspaceRoot/node_modules/.bin/ng version'
-    local: true
-    env:
-      NODE_ENV: 'development'
+    command: $workspaceRoot/node_modules/.bin/ng version
     options:
       runFromWorkspaceRoot: true
-
+    env:
+      NODE_ENV: development
+    preset: server
   ng-update:
-    command: '$workspaceRoot/node_modules/.bin/ng update'
-    local: true
-    env:
-      NODE_ENV: 'development'
+    command: $workspaceRoot/node_modules/.bin/ng update
     options:
       runFromWorkspaceRoot: true
+    env:
+      NODE_ENV: development
+    preset: server
+workspace:
+  inheritedTasks:
+    include: []
+layer: tool

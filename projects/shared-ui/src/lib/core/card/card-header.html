@@ -1,30 +1,57 @@
-@if (hasTitle() || hasSubtitle()) {
-  <div class="header-titles">
-    @if (hasTitle()) {
-      @switch (cardHeaderBrainDirective.headingLevel()) {
-        @case (1) {
-          <h1 class="header-title">{{ title() }}</h1>
-        }
-        @case (2) {
-          <h2 class="header-title">{{ title() }}</h2>
-        }
-        @case (3) {
-          <h3 class="header-title">{{ title() }}</h3>
-        }
-        @case (4) {
-          <h4 class="header-title">{{ title() }}</h4>
-        }
-        @case (5) {
-          <h5 class="header-title">{{ title() }}</h5>
-        }
-        @case (6) {
-          <h6 class="header-title">{{ title() }}</h6>
-        }
+<ng-template #titleContent>
+  @if (hasTitle()) {
+    @switch (cardHeaderBrainDirective.headingLevel()) {
+      @case (1) {
+        <h1 class="header-title">{{ title() }}</h1>
+      }
+      @case (2) {
+        <h2 class="header-title">{{ title() }}</h2>
+      }
+      @case (3) {
+        <h3 class="header-title">{{ title() }}</h3>
+      }
+      @case (4) {
+        <h4 class="header-title">{{ title() }}</h4>
+      }
+      @case (5) {
+        <h5 class="header-title">{{ title() }}</h5>
+      }
+      @case (6) {
+        <h6 class="header-title">{{ title() }}</h6>
       }
     }
-    @if (hasSubtitle()) {
-      <p class="header-subtitle">{{ subtitle() }}</p>
-    }
+  }
+</ng-template>
+
+<ng-template #subtitleContent>
+  @if (hasSubtitle()) {
+    <p class="header-subtitle">{{ subtitle() }}</p>
+  }
+</ng-template>
+
+@if (isExpandable()) {
+  <div class="header-toggle" (click)="onToggle()">
+    <div class="header-titles">
+      <div class="header-title-row">
+        <ng-container [ngTemplateOutlet]="titleContent" />
+        <org-button
+          class="header-toggle-icon"
+          variant="text"
+          color="neutral"
+          [label]="toggleLabel()"
+          [ariaLabel]="toggleLabel()"
+          [preIcon]="isExpanded() ? 'chevron-up' : 'chevron-down'"
+          [iconOnly]="true"
+          [ariaExpanded]="isExpanded()"
+        />
+      </div>
+      <ng-container [ngTemplateOutlet]="subtitleContent" />
+    </div>
+  </div>
+} @else if (hasTitle() || hasSubtitle()) {
+  <div class="header-titles">
+    <ng-container [ngTemplateOutlet]="titleContent" />
+    <ng-container [ngTemplateOutlet]="subtitleContent" />
   </div>
 }
 <div class="header-actions">

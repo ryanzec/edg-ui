@@ -42,4 +42,22 @@
     gap: var(--card-header-actions-gap);
     flex-shrink: 0;
   }
+
+  /* expandable: the whole title block is a click target; cursor signals the affordance */
+  .header-toggle {
+    cursor: pointer;
+  }
+
+  /* the title row pairs the heading with the chevron toggle so they share a baseline regardless of subtitle */
+  .header-title-row {
+    display: flex;
+    align-items: center;
+    gap: var(--card-header-titles-gap);
+  }
+
+  /* the chevron always sits at the trailing edge of the title row */
+  .header-toggle-icon {
+    margin-inline-start: auto;
+    flex-shrink: 0;
+  }
 }

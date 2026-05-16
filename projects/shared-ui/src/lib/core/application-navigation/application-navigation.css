@@ -150,7 +150,7 @@
     border-radius: var(--radius-pill);
     color: var(--color-fg-muted);
     cursor: pointer;
-    z-index: 1;
+    z-index: var(--z-index-raised);
   }
 
   .collapse-handle:is(:hover, :focus-visible) {

@@ -1,6 +1,5 @@
 import type { StorybookConfig } from '@storybook/angular';
 import path from 'path';
-import * as sass from 'sass';
 
 const config: StorybookConfig = {
   stories: ['../projects/**/*.stories.@(js|ts|mdx)'],
@@ -27,16 +26,6 @@ const config: StorybookConfig = {
         {
           loader: 'resolve-url-loader',
           options: { sourceMap: true },
-        },
-        {
-          loader: 'sass-loader',
-          options: {
-            sourceMap: true,
-            implementation: sass,
-            sassOptions: {
-              includePaths: [path.resolve(__dirname, '..', 'node_modules')],
-            },
-          },
         },
       ],
     };

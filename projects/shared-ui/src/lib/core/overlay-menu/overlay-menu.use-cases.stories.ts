@@ -2,8 +2,8 @@ import type { Meta, StoryObj } from '@storybook/angular';
 import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
 import { OverlayMenu, type OverlayMenuItem, type OverlayMenuItemEntry } from './overlay-menu';
 import { OverlayMenuTriggerDirective } from './overlay-menu-trigger';
-import { Tag } from '../tag/tag';
-import { TagIcon } from '../tag/tag-icon';
+import { Tag } from '../tags/tag';
+import { TagIcon } from '../tags/tag-icon';
 import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
 import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
 

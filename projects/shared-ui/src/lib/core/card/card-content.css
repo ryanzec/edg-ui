@@ -10,4 +10,9 @@
   :host(:has(+ org-card-footer)) {
     --card-content-padding-bottom: 0;
   }
+
+  /* expandable collapsed state: parent card removes us from layout entirely */
+  :host([data-hidden]) {
+    display: none;
+  }
 }

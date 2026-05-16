@@ -1,7 +1,8 @@
-import { Component, ChangeDetectionStrategy, inject, input } from '@angular/core';
+import { Component, ChangeDetectionStrategy, computed, inject, input } from '@angular/core';
 import { NgOptimizedImage } from '@angular/common';
 import { angularUtils } from '@organization/shared-utils';
 import { CardImageBrainDirective } from '../../brain/card-brain/card-image-brain';
+import { Card } from './card';
 
 /** all available card image mode values */
 export const allCardImageModes = ['default', 'fill'] as const;
@@ -49,11 +50,19 @@ export const CARD_IMAGE_PRIORITY_DEFAULT = false;
     '[attr.data-full-width]': 'fullWidth() ? "1" : "0"',
     '[attr.data-mode]': 'mode() === "fill" ? "fill" : null',
     '[attr.data-priority]': 'priority() ? "" : null',
+    '[attr.data-hidden]': 'isHidden() ? "" : null',
   },
 })
 export class CardImage {
+  private readonly _card = inject(Card);
+
   /** reference to the host card image brain directive owning src and alt inputs */
   protected readonly cardImageBrainDirective = inject(CardImageBrainDirective);
+
+  /** whether the host should be hidden because the parent card is in collapsed expandable mode */
+  protected readonly isHidden = computed<boolean>(
+    () => this._card.expandableBrain.isExpandable() && !this._card.expandableBrain.isExpanded()
+  );
 
   /** the layout mode for the image; `fill` forces a 16:9 aspect ratio, `default` uses the width/height inputs */
   public mode = input<CardImageMode>(CARD_IMAGE_MODE_DEFAULT);

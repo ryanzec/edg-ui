@@ -267,6 +267,16 @@ export const Default: Story = {
               {{ liveDemoForm.controls.clickable.value ? 'on' : 'off' }}
             </org-checkbox-toggle>
           </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Expandable">
+            <org-checkbox-toggle name="live-demo-expandable" value="expandable" formControlName="expandable">
+              {{ liveDemoForm.controls.expandable.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Expanded">
+            <org-checkbox-toggle name="live-demo-expanded" value="expanded" [(checked)]="expandedSignal">
+              {{ expandedSignal() ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
         </org-design-system-demo-controls>
         <org-design-system-demo-canvas slot="canvas">
           <div class="canvas-stage">
@@ -276,6 +286,8 @@ export const Default: Story = {
                   [color]="liveDemoForm.controls.color.value === 'none' ? null : liveDemoForm.controls.color.value"
                   [boxBorder]="liveDemoForm.controls.border.value"
                   [boxBackground]="liveDemoForm.controls.useBackgroundColor.value ? 'colored' : 'colorless'"
+                  [isExpandable]="liveDemoForm.controls.expandable.value"
+                  [(isExpanded)]="expandedSignal"
                   (clicked)="onCardClicked()"
                 >
                   @if (liveDemoForm.controls.header.value || liveDemoForm.controls.actions.value) {
@@ -321,6 +333,8 @@ export const Default: Story = {
                   [color]="liveDemoForm.controls.color.value === 'none' ? null : liveDemoForm.controls.color.value"
                   [boxBorder]="liveDemoForm.controls.border.value"
                   [boxBackground]="liveDemoForm.controls.useBackgroundColor.value ? 'colored' : 'colorless'"
+                  [isExpandable]="liveDemoForm.controls.expandable.value"
+                  [(isExpanded)]="expandedSignal"
                 >
                   @if (liveDemoForm.controls.header.value || liveDemoForm.controls.actions.value) {
                     <org-card-header
@@ -392,7 +406,10 @@ class CardLiveDemoStory {
     footer: new FormControl<boolean>(true, { nonNullable: true }),
     footerAlignment: new FormControl<CardAlignment>(CARD_FOOTER_ALIGNMENT_DEFAULT, { nonNullable: true }),
     clickable: new FormControl<boolean>(false, { nonNullable: true }),
+    expandable: new FormControl<boolean>(false, { nonNullable: true }),
   });
+
+  protected readonly expandedSignal = signal<boolean>(true);
 
   protected onCardClicked(): void {
     this.cardClickCount.update((count) => count + 1);
@@ -478,6 +495,114 @@ class CardClickableShowcaseStory {
     this.totalClicks.update((count) => count + 1);
     this.lastActivated.set(label);
   }
+}
+
+@Component({
+  selector: 'story-card-expandable-showcase',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    Card,
+    CardHeader,
+    CardContent,
+    CardFooter,
+    CardImage,
+    Button,
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoCanvas,
+    DesignSystemDemoExpectedBehaviour,
+  ],
+  template: `
+    <org-design-system-demo>
+      <org-design-system-demo-header
+        slot="header"
+        title="Expandable"
+        description="Setting [isExpandable]=true makes the header act as a toggle button. Clicking or activating it flips the [(isExpanded)] model, which the image, content, and footer regions react to. Per design, the (clicked) whole-card affordance is not wired up when the card is expandable — the header toggle owns the interaction."
+      />
+      <org-design-system-demo-canvas slot="canvas">
+        <div class="grid grid-cols-2 gap-3 items-start max-w-3xl">
+          <org-card [isExpandable]="true" [(isExpanded)]="expandedDefault">
+            <org-card-header title="Expandable · default expanded" subtitle="Click the header to collapse." />
+            <org-card-content>
+              The content, footer, and image regions all self-hide when the card collapses. Click the header again to
+              expand.
+            </org-card-content>
+            <org-card-footer>
+              <org-button color="neutral" variant="ghost" label="Cancel" />
+              <org-button color="primary" label="Save" />
+            </org-card-footer>
+          </org-card>
+
+          <org-card [isExpandable]="true" [(isExpanded)]="expandedCollapsedInitial">
+            <org-card-header title="Expandable · starts collapsed" subtitle="isExpanded was passed as false." />
+            <org-card-content>
+              Initial state honors the bound [isExpanded] value. Click the header to expand.
+            </org-card-content>
+          </org-card>
+
+          <org-card color="info" boxBorder="border-emphasize" [isExpandable]="true" [(isExpanded)]="expandedWithImage">
+            <org-card-image src="${SAMPLE_IMAGE_TOP}" alt="Workspace photo" />
+            <org-card-header title="Expandable · with image" subtitle="The image hides with the rest when collapsed." />
+            <org-card-content>The image, content, and footer all react to the collapse together.</org-card-content>
+          </org-card>
+
+          <org-card [isExpandable]="true" [(isExpanded)]="expandedNoSubtitle">
+            <org-card-header title="Title only · with actions">
+              <org-button
+                actions
+                variant="text"
+                color="neutral"
+                label="More options"
+                preIcon="ellipsis"
+                [iconOnly]="true"
+                ariaLabel="More options"
+              />
+            </org-card-header>
+            <org-card-content
+              >Actions stay outside the toggle button so they keep their own click targets.</org-card-content
+            >
+          </org-card>
+        </div>
+        <div class="text-xs text-fg-muted mt-3">
+          State — default: <strong>{{ expandedDefault() ? 'expanded' : 'collapsed' }}</strong> · starts-collapsed:
+          <strong>{{ expandedCollapsedInitial() ? 'expanded' : 'collapsed' }}</strong> · with-image:
+          <strong>{{ expandedWithImage() ? 'expanded' : 'collapsed' }}</strong> · title-only:
+          <strong>{{ expandedNoSubtitle() ? 'expanded' : 'collapsed' }}</strong>
+        </div>
+      </org-design-system-demo-canvas>
+    </org-design-system-demo>
+    <org-design-system-demo-expected-behaviour>
+      <ul class="list-inside list-disc flex flex-col gap-1">
+        <li>
+          <strong>Header toggle</strong>: the title / subtitle block becomes a real &lt;button&gt; with a trailing
+          chevron-down / chevron-up indicator
+        </li>
+        <li>
+          <strong>Actions stay clickable</strong>: the actions slot is rendered outside the toggle button so projected
+          action buttons remain independent click targets
+        </li>
+        <li>
+          <strong>Collapsed regions disappear</strong>: image, content, and footer set display: none when the card is
+          expandable AND collapsed
+        </li>
+        <li>
+          <strong>Keyboard</strong>: native &lt;button&gt; gives Enter and Space activation, focus-visible background
+          tint, and proper focus order for free
+        </li>
+        <li><strong>Aria</strong>: aria-expanded reflects the current state on the toggle button</li>
+        <li>
+          <strong>Mutually exclusive with (clicked)</strong>: when isExpandable is true, the whole-card (clicked)
+          affordance is intentionally skipped — only one click target per surface
+        </li>
+      </ul>
+    </org-design-system-demo-expected-behaviour>
+  `,
+})
+class CardExpandableShowcaseStory {
+  protected readonly expandedDefault = signal<boolean>(true);
+  protected readonly expandedCollapsedInitial = signal<boolean>(false);
+  protected readonly expandedWithImage = signal<boolean>(true);
+  protected readonly expandedNoSubtitle = signal<boolean>(true);
 }
 
 export const LiveDemo: Story = {
@@ -881,6 +1006,8 @@ export const Showcase: Story = {
         </org-design-system-demo-expected-behaviour>
 
         <story-card-clickable-showcase />
+
+        <story-card-expandable-showcase />
       </div>
     `,
     moduleMetadata: {
@@ -897,6 +1024,7 @@ export const Showcase: Story = {
         DesignSystemDemoCanvas,
         DesignSystemDemoExpectedBehaviour,
         CardClickableShowcaseStory,
+        CardExpandableShowcaseStory,
       ],
     },
   }),

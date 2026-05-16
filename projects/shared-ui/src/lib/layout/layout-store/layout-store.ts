@@ -1,0 +1,108 @@
+import { Injectable, computed, signal } from '@angular/core';
+import { type NavigationItem, type SettingsMenuItem } from '../../core/application-navigation/application-navigation';
+import { type ComponentColor } from '../../core/types/component-types';
+
+/** unified internal state shape for the layout store */
+type LayoutState = {
+  workspaceIconLabel: string | undefined;
+  workspaceName: string;
+  workspacePlan: string | undefined;
+  navigationItems: NavigationItem[];
+  settingsMenuItems: SettingsMenuItem[];
+  userName: string;
+  userEmail: string | undefined;
+  userStatusColor: ComponentColor | undefined;
+  collapsed: boolean;
+};
+
+/** hardcoded navigation items rendered in the application sidebar */
+const NAVIGATION_ITEMS: NavigationItem[] = [
+  { id: 'overview', label: 'Overview', icon: 'house', routePath: '/overview', shortcut: 'G O' },
+  { id: 'inbox', label: 'Inbox', icon: 'inbox', routePath: '/inbox', indicator: 3, shortcut: 'G I' },
+  {
+    id: 'projects',
+    label: 'Projects',
+    icon: 'folder',
+    shortcut: 'G P',
+    children: [
+      { id: 'projects-all', label: 'All projects', routePath: '/projects' },
+      { id: 'projects-active', label: 'Active', routePath: '/projects/active', indicator: 12 },
+      { id: 'projects-archived', label: 'Archived', routePath: '/projects/archived' },
+      { id: 'projects-templates', label: 'Templates', routePath: '/projects/templates' },
+    ],
+  },
+  { id: 'analytics', label: 'Analytics', icon: 'grid-2x2', routePath: '/analytics' },
+  { id: 'team', label: 'Team', icon: 'users', routePath: '/team' },
+  { id: 'docs', label: 'Docs', icon: 'file-text', routePath: '/docs' },
+  { id: 'billing', label: 'Billing', icon: 'credit-card', routePath: '/billing' },
+];
+
+/** hardcoded settings overlay menu items rendered alongside the appearance toggle */
+const SETTINGS_MENU_ITEMS: SettingsMenuItem[] = [
+  { id: 'workspace-settings', label: 'Workspace settings', icon: 'cog', shortcut: '⌘,' },
+  { id: 'account', label: 'Account', icon: 'at-sign' },
+  { id: 'shortcuts', label: 'Keyboard shortcuts', icon: 'sparkles', shortcut: '?' },
+  { id: 'help', label: 'Help & docs', icon: 'circle-help' },
+  { id: 'signout-divider', type: 'divider' },
+  { id: 'signout', label: 'Sign out', icon: 'log-out', color: 'danger' },
+];
+
+/** initial layout state seeded with hardcoded workspace / user / navigation data */
+const INITIAL_STATE: LayoutState = {
+  workspaceIconLabel: 'H',
+  workspaceName: 'Halcyon',
+  workspacePlan: 'Acme Inc · Pro',
+  navigationItems: NAVIGATION_ITEMS,
+  settingsMenuItems: SETTINGS_MENU_ITEMS,
+  userName: 'Maya Brennan',
+  userEmail: 'maya@acme.co',
+  userStatusColor: 'safe',
+  collapsed: false,
+};
+
+/**
+ * application-wide store for the data that drives `<org-application-frame>` (workspace identity, navigation
+ * structure, settings menu, signed-in user details, and the collapsed state of the sidebar).
+ */
+@Injectable({ providedIn: 'root' })
+export class LayoutStore {
+  /** unified state signal containing every piece of layout state */
+  private readonly _state = signal<LayoutState>(INITIAL_STATE);
+
+  /** the workspace icon label rendered in the navigation header (e.g. 'H') */
+  public readonly workspaceIconLabel = computed<string | undefined>(() => this._state().workspaceIconLabel);
+
+  /** the workspace name rendered in the navigation header */
+  public readonly workspaceName = computed<string>(() => this._state().workspaceName);
+
+  /** the workspace plan / subtitle rendered under the workspace name */
+  public readonly workspacePlan = computed<string | undefined>(() => this._state().workspacePlan);
+
+  /** top-level navigation items rendered in the sidebar */
+  public readonly navigationItems = computed<NavigationItem[]>(() => this._state().navigationItems);
+
+  /** settings overlay menu items rendered alongside the appearance toggle */
+  public readonly settingsMenuItems = computed<SettingsMenuItem[]>(() => this._state().settingsMenuItems);
+
+  /** display name for the currently signed-in user */
+  public readonly userName = computed<string>(() => this._state().userName);
+
+  /** email rendered as the user row's sub-label */
+  public readonly userEmail = computed<string | undefined>(() => this._state().userEmail);
+
+  /** status indicator color for the signed-in user's avatar */
+  public readonly userStatusColor = computed<ComponentColor | undefined>(() => this._state().userStatusColor);
+
+  /** whether the sidebar is in its collapsed (icon-only) state */
+  public readonly collapsed = computed<boolean>(() => this._state().collapsed);
+
+  /** sets the collapsed state of the sidebar to an explicit value */
+  public setCollapsed(collapsed: boolean): void {
+    this._state.update((state) => ({ ...state, collapsed }));
+  }
+
+  /** flips the collapsed state of the sidebar */
+  public toggleCollapsed(): void {
+    this._state.update((state) => ({ ...state, collapsed: !state.collapsed }));
+  }
+}

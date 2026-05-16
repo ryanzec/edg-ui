@@ -12,13 +12,72 @@
     gap: var(--avatar-gap);
   }
 
-  /* size variants override the gap slot (base matches the slot default) */
+  /* size variants — set every size-derived avatar variable on the avatar host so it inherits down to sub-components (base matches slot defaults) */
   :host([data-size='sm']) {
     --avatar-gap: var(--spacing-2);
+    --avatar-shape-size: var(--spacing-8);
+    --avatar-initials-font-size: var(--font-size-xs);
+    --avatar-label-name-font-size: var(--font-size-sm);
+  }
+
+  :host([data-size='base']) {
+    --avatar-shape-size: var(--spacing-12);
+    --avatar-initials-font-size: var(--font-size-lg);
   }
 
   :host([data-size='lg']) {
     --avatar-gap: var(--spacing-3);
+    --avatar-shape-size: var(--spacing-16);
+    --avatar-initials-font-size: var(--font-size-2xl);
+    --avatar-label-name-font-size: var(--font-size-lg);
+    --avatar-label-sub-font-size: var(--font-size-sm);
+  }
+
+  /* shape variants */
+  :host([data-shape='square']) {
+    --avatar-radius: var(--radius-base);
+  }
+
+  /* indexed palette overrides (index 0 is the slot default) */
+  :host([data-color-index='1']) {
+    --avatar-color: var(--avatar-color-1);
+  }
+
+  :host([data-color-index='2']) {
+    --avatar-color: var(--avatar-color-2);
+  }
+
+  :host([data-color-index='3']) {
+    --avatar-color: var(--avatar-color-3);
+  }
+
+  :host([data-color-index='4']) {
+    --avatar-color: var(--avatar-color-4);
+  }
+
+  :host([data-color-index='5']) {
+    --avatar-color: var(--avatar-color-5);
+  }
+
+  :host([data-color-index='6']) {
+    --avatar-color: var(--avatar-color-6);
+  }
+
+  :host([data-color-index='7']) {
+    --avatar-color: var(--avatar-color-7);
+  }
+
+  /* overflow ("+N" pill) — swap shape bg/fg + initials font weight to the overflow slots */
+  :host([data-overflow='true']) {
+    --avatar-color: var(--avatar-overflow-bg);
+    --avatar-shape-fg: var(--avatar-overflow-fg);
+    --avatar-initials-font-weight: var(--avatar-overflow-font-weight);
+  }
+
+  /* thicker ring at sm — applies both to in-stack avatars and to the overflow avatar */
+  :host([data-size='sm']):host-context(org-avatar-stack),
+  :host([data-overflow='true'][data-size='sm']) {
+    --avatar-ring-width: var(--border-width-thick);
   }
 
   :host > button {

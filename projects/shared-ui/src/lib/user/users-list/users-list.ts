@@ -27,7 +27,8 @@ import { Button } from '../../core/button/button';
 import { Table } from '../../core/table/table';
 import { TableHeader } from '../../core/table/table-header';
 import { TableCell } from '../../core/table/table-cell';
-import { Tag, type TagColor } from '../../core/tag/tag';
+import { Tag, type TagColor } from '../../core/tags/tag';
+import { Tags } from '../../core/tags/tags';
 import { OverlayMenu, type OverlayMenuItem } from '../../core/overlay-menu/overlay-menu';
 import { OverlayMenuTriggerDirective } from '../../core/overlay-menu/overlay-menu-trigger';
 import { Skeleton } from '../../core/skeleton/skeleton';
@@ -93,6 +94,7 @@ const ROW_ACTIONS_MENU_ITEMS: OverlayMenuItem[] = [
     TableHeader,
     TableCell,
     Tag,
+    Tags,
     Skeleton,
     Input,
     Avatar,

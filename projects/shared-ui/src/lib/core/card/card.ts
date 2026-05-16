@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, Component, effect, input, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject, input, viewChild } from '@angular/core';
 import { outputFromObservable } from '@angular/core/rxjs-interop';
 import { Subject } from 'rxjs';
 import { angularUtils } from '@organization/shared-utils';
 import { BoxBrainDirective } from '../../brain/box-brain/box-brain';
+import { ExpandableBrainDirective } from '../../brain/expandable-brain/expandable-brain';
 import { Box, BOX_BACKGROUND_DEFAULT, BOX_PADDING_DEFAULT } from '../box/box';
 import type { BoxBackground, BoxBorder, BoxPadding } from '../box/box';
 import { ComponentColor, allComponentColors } from '../types/component-types';
@@ -34,6 +35,13 @@ export const CARD_BOX_PADDING_DEFAULT = BOX_PADDING_DEFAULT;
   imports: [Box],
   templateUrl: './card.html',
   styleUrl: './card.css',
+  hostDirectives: [
+    {
+      directive: ExpandableBrainDirective,
+      inputs: ['isExpandable', 'isExpanded'],
+      outputs: ['isExpandedChange'],
+    },
+  ],
   host: {
     '[attr.data-color]': 'color()',
     '[attr.data-box-border]': 'boxBorder()',
@@ -44,6 +52,9 @@ export class Card {
   private readonly _boxBrainDirective = viewChild(BoxBrainDirective);
 
   private readonly _clicked$ = new Subject<void>();
+
+  /** reference to the host expandable brain directive; sub-components inject Card to read this */
+  public readonly expandableBrain = inject(ExpandableBrainDirective);
 
   /** the semantic color applied to the card border */
   public color = input<CardColor | undefined, CardColor | null | undefined>(CARD_COLOR_DEFAULT, {
@@ -64,18 +75,23 @@ export class Card {
 
   /**
    * emitted when the card is clicked or activated via keyboard while in clickable mode; binding this output
-   * auto-flips the underlying box into its clickable affordance
+   * auto-flips the underlying box into its clickable affordance. ignored when isExpandable is true — the
+   * expandable header drives the interaction instead.
    */
   public readonly clicked = outputFromObservable(this._clicked$);
 
   constructor() {
     // forward the inner box's clicked emissions to the card's own clicked subject, but only when the card
-    // itself has a consumer listening. this preserves the auto-detect contract so static cards do not
-    // inherit clickable affordances just because they wrap a clickable-capable box.
+    // itself has a consumer listening AND the card is not in expandable mode. expandable mode owns the
+    // clickable affordance on the header itself and cannot share a click target with the whole surface.
     effect((onCleanup) => {
       const brain = this._boxBrainDirective();
 
       if (!brain) {
+        return;
+      }
+
+      if (this.expandableBrain.isExpandable()) {
         return;
       }
 

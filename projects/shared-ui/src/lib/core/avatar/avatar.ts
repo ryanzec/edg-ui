@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, inject, input } from '@angular/core';
+import { Component, ChangeDetectionStrategy, computed, inject, input } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { angularUtils } from '@organization/shared-utils';
 import { ComponentSize } from '../types/component-types';
@@ -55,6 +55,12 @@ export const AVATAR_IMG_EMAIL_DEFAULT: string | undefined = undefined;
 /** default value for the imgAlt input. */
 export const AVATAR_IMG_ALT_DEFAULT: string | undefined = undefined;
 
+/** default value for the count input. */
+export const AVATAR_COUNT_DEFAULT = 0;
+
+/** total number of distinct background colors cycled through based on the first label character. */
+const AVATAR_COLOR_COUNT = 8;
+
 @Component({
   selector: 'org-avatar',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -64,13 +70,15 @@ export const AVATAR_IMG_ALT_DEFAULT: string | undefined = undefined;
   hostDirectives: [
     {
       directive: AvatarBrainDirective,
-      inputs: ['label', 'disabled'],
+      inputs: ['label', 'disabled', 'isOverflow'],
       outputs: ['clicked'],
     },
   ],
   host: {
     '[attr.data-size]': 'size()',
     '[attr.data-shape]': 'shape()',
+    '[attr.data-color-index]': 'colorIndex()',
+    '[attr.data-overflow]': 'avatarBrainDirective.isOverflow() ? "true" : null',
     '[attr.data-clickable]': 'avatarBrainDirective.isClickable() ? "true" : null',
     '[attr.data-disabled]': 'avatarBrainDirective.isDisabled() ? "true" : null',
   },
@@ -78,6 +86,17 @@ export const AVATAR_IMG_ALT_DEFAULT: string | undefined = undefined;
 export class Avatar {
   /** reference to the host avatar brain directive owning label, disabled, and click state. */
   protected readonly avatarBrainDirective = inject(AvatarBrainDirective);
+
+  /** background color index (0-7) derived from the first character of the brain label; falls back to 0 when empty. */
+  protected readonly colorIndex = computed<number>(() => {
+    const label = this.avatarBrainDirective.label().trim();
+
+    if (!label) {
+      return 0;
+    }
+
+    return (label.toLowerCase().codePointAt(0) ?? 0) % AVATAR_COLOR_COUNT;
+  });
 
   /** the size variant shared with internal sub-components. */
   public size = input<AvatarSize>(AVATAR_SIZE_DEFAULT);
@@ -121,4 +140,7 @@ export class Avatar {
   public imgAlt = input<string | undefined, string | null | undefined>(AVATAR_IMG_ALT_DEFAULT, {
     transform: angularUtils.transformNullToUndefined,
   });
+
+  /** the count rendered as "+N" inside the overflow pill (only used when isOverflow is true). */
+  public count = input<number>(AVATAR_COUNT_DEFAULT);
 }

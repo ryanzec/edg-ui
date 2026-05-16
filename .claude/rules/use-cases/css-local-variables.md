@@ -11,4 +11,4 @@ When a component need multiple variants of something (like size, color, etc.) we
 
 # References
 - `projects/shared-ui/src/lib/core/button` / `projects/shared-ui/src/lib/core/button/button-tokens.css`
-- `projects/shared-ui/src/lib/core/tag` / `projects/shared-ui/src/lib/core/tag/tag-tokens.css`
+- `projects/shared-ui/src/lib/core/tags` / `projects/shared-ui/src/lib/core/tags/tags-tokens.css`

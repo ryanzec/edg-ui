@@ -12,12 +12,19 @@
     margin-inline-start: var(--avatar-stack-overlap);
   }
 
-  /* size variants override --avatar-circle-size; the overlap formula auto-recalculates */
+  /* size variants override --avatar-shape-size; the overlap formula auto-recalculates */
   org-avatar-stack[data-size='sm'] {
-    --avatar-circle-size: var(--spacing-8);
+    --avatar-shape-size: var(--spacing-8);
+    --avatar-stack-overlap: calc(var(--avatar-shape-size) * -0.6);
+  }
+
+  org-avatar-stack[data-size='base'] {
+    --avatar-shape-size: var(--spacing-12);
+    --avatar-stack-overlap: calc(var(--avatar-shape-size) * -0.6);
   }
 
   org-avatar-stack[data-size='lg'] {
-    --avatar-circle-size: var(--spacing-16);
+    --avatar-shape-size: var(--spacing-16);
+    --avatar-stack-overlap: calc(var(--avatar-shape-size) * -0.6);
   }
 }

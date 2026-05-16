@@ -1,18 +1,14 @@
-# https://moonrepo.dev/docs/config/workspace
-$schema: 'https://moonrepo.dev/schemas/workspace.json'
-
+$schema: https://moonrepo.dev/schemas/workspace.json
 projects:
-  - 'projects/*'
-  - 'global'
-  - 'figma-plugin'
-
+- projects/*
+- global
+- figma-plugin
 vcs:
-  manager: 'git'
-  defaultBranch: 'main'
-  syncHooks: true
   hooks:
     pre-commit:
-      - '$(moon bin pnpm) lint-staged'
-
+    - $(moon bin pnpm) lint-staged
+  defaultBranch: main
+  client: git
+  sync: true
 constraints:
   enforceLayerRelationships: false

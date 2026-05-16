@@ -5,6 +5,9 @@ import { Subject } from 'rxjs';
 /** default value for the disabled input */
 export const AVATAR_BRAIN_DISABLED_DEFAULT = false;
 
+/** default value for the isOverflow input */
+export const AVATAR_BRAIN_IS_OVERFLOW_DEFAULT = false;
+
 /**
  * headless brain directive for the avatar. owns the display label (used to derive initials and accessible
  * surfaces), disabled state, clickable detection (whether any consumer is listening to the clicked output),
@@ -25,6 +28,9 @@ export class AvatarBrainDirective {
   /** whether the avatar is disabled and non-interactive */
   public readonly disabled = input<boolean>(AVATAR_BRAIN_DISABLED_DEFAULT);
 
+  /** whether the avatar is rendered as a "+N" overflow pill; suppresses initials derivation */
+  public readonly isOverflow = input<boolean>(AVATAR_BRAIN_IS_OVERFLOW_DEFAULT);
+
   /** emitted when the host avatar is clicked; binding this output causes the avatar to render as a button */
   public readonly clicked = outputFromObservable(this._clicked$);
 
@@ -34,8 +40,12 @@ export class AvatarBrainDirective {
   /** true when the avatar should be treated as disabled */
   public readonly isDisabled = computed<boolean>(() => this.disabled());
 
-  /** one or two uppercase initials derived from the label */
+  /** one or two uppercase initials derived from the label; empty when the avatar is in overflow mode */
   public readonly initials = computed<string>(() => {
+    if (this.isOverflow()) {
+      return '';
+    }
+
     const label = this.label().trim();
 
     if (!label) {
