@@ -1,5 +1,4 @@
 import { Component, ChangeDetectionStrategy, ViewEncapsulation, input } from '@angular/core';
-import { angularUtils } from '@organization/shared-utils';
 import { ComponentSize } from '../types/component-types';
 
 /** available size variants for the avatar stack component. */
@@ -7,9 +6,6 @@ export const allAvatarStackSizes = ['sm', 'base', 'lg'] as const satisfies reado
 
 /** size variant for the avatar stack component. */
 export type AvatarStackSize = (typeof allAvatarStackSizes)[number];
-
-/** default value for the size input. */
-export const AVATAR_STACK_SIZE_DEFAULT: AvatarStackSize = 'base';
 
 @Component({
   selector: 'org-avatar-stack',
@@ -22,8 +18,6 @@ export const AVATAR_STACK_SIZE_DEFAULT: AvatarStackSize = 'base';
   },
 })
 export class AvatarStack {
-  /** the overlap size variant; set to undefined to disable overlap styling. */
-  public size = input<AvatarStackSize | undefined, AvatarStackSize | null | undefined>(AVATAR_STACK_SIZE_DEFAULT, {
-    transform: angularUtils.transformNullToUndefined,
-  });
+  /** the overlap size variant shared with child avatars. */
+  public size = input.required<AvatarStackSize>();
 }

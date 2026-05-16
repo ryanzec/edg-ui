@@ -9,6 +9,7 @@ import { IndicatorAnchor } from '../indicator/indicator-anchor';
 import { AvatarShape } from './avatar-shape';
 import { AvatarImage } from './avatar-image';
 import { AvatarLabel } from './avatar-label';
+import { AvatarStack } from './avatar-stack';
 
 /** available size variants for the avatar component. */
 export const allAvatarSizes = ['sm', 'base', 'lg'] as const satisfies readonly ComponentSize[];
@@ -75,7 +76,7 @@ const AVATAR_COLOR_COUNT = 8;
     },
   ],
   host: {
-    '[attr.data-size]': 'size()',
+    '[attr.data-size]': 'finalSize()',
     '[attr.data-shape]': 'shape()',
     '[attr.data-color-index]': 'colorIndex()',
     '[attr.data-overflow]': 'avatarBrainDirective.isOverflow() ? "true" : null',
@@ -87,6 +88,9 @@ export class Avatar {
   /** reference to the host avatar brain directive owning label, disabled, and click state. */
   protected readonly avatarBrainDirective = inject(AvatarBrainDirective);
 
+  /** optional parent avatar stack used to drive the effective size when present. */
+  private readonly _avatarStack = inject(AvatarStack, { optional: true });
+
   /** background color index (0-7) derived from the first character of the brain label; falls back to 0 when empty. */
   protected readonly colorIndex = computed<number>(() => {
     const label = this.avatarBrainDirective.label().trim();
@@ -97,6 +101,9 @@ export class Avatar {
 
     return (label.toLowerCase().codePointAt(0) ?? 0) % AVATAR_COLOR_COUNT;
   });
+
+  /** resolved size honoring the parent avatar stack (if present) over the locally provided size. */
+  protected readonly finalSize = computed<AvatarSize>(() => this._avatarStack?.size() ?? this.size());
 
   /** the size variant shared with internal sub-components. */
   public size = input<AvatarSize>(AVATAR_SIZE_DEFAULT);

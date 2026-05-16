@@ -618,8 +618,8 @@ export const StackDefault: StackStory = {
   argTypes: {
     size: {
       control: 'select',
-      options: ['sm', 'base', 'lg', null],
-      description: 'The size of the avatar stack; set to null to disable overlap styling',
+      options: ['sm', 'base', 'lg'],
+      description: 'The size of the avatar stack',
     },
   },
   parameters: {
@@ -667,7 +667,7 @@ export const StackShowcase: StackStory = {
               <org-avatar label="Renée Marin" size="sm" />
               <org-avatar label="3 more members" size="sm" [isOverflow]="true" [count]="3" />
             </org-avatar-stack>
-            <org-avatar-stack>
+            <org-avatar-stack size="base">
               <org-avatar label="Sarah Chen" />
               <org-avatar label="Noah Park" />
               <org-avatar label="Renée Marin" />
@@ -692,19 +692,19 @@ export const StackShowcase: StackStory = {
         <org-design-system-demo>
           <org-design-system-demo-header slot="header" title="Stack avatar types" />
           <org-design-system-demo-canvas slot="canvas">
-            <org-avatar-stack>
+            <org-avatar-stack size="base">
               <org-avatar label="Sarah Chen" />
               <org-avatar label="Noah Park" />
               <org-avatar label="Renée Marin" />
               <org-avatar label="Avery Tan" />
             </org-avatar-stack>
-            <org-avatar-stack>
+            <org-avatar-stack size="base">
               <org-avatar label="User 1" imgEmail="test1@example.com" />
               <org-avatar label="User 2" imgEmail="test2@example.com" />
               <org-avatar label="User 3" imgEmail="user3@example.com" />
               <org-avatar label="User 4" imgEmail="test3@example.com" />
             </org-avatar-stack>
-            <org-avatar-stack>
+            <org-avatar-stack size="base">
               <org-avatar label="Sarah Chen" imgSrc="https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah" />
               <org-avatar label="Noah Park" imgSrc="https://api.dicebear.com/7.x/avataaars/svg?seed=Noah" />
               <org-avatar label="Renée Marin" imgSrc="https://api.dicebear.com/7.x/avataaars/svg?seed=Renee" />
@@ -723,13 +723,13 @@ export const StackShowcase: StackStory = {
         <org-design-system-demo>
           <org-design-system-demo-header slot="header" title="Stack label variations" />
           <org-design-system-demo-canvas slot="canvas">
-            <org-avatar-stack>
+            <org-avatar-stack size="base">
               <org-avatar label="John" />
               <org-avatar label="Jane" />
               <org-avatar label="Bob" />
               <org-avatar label="Alice" />
             </org-avatar-stack>
-            <org-avatar-stack>
+            <org-avatar-stack size="base">
               <org-avatar label="User 1" />
               <org-avatar label="User 2" />
               <org-avatar label="User 3" />
@@ -739,7 +739,7 @@ export const StackShowcase: StackStory = {
               <org-avatar label="User 7" />
               <org-avatar label="User 8" />
             </org-avatar-stack>
-            <org-avatar-stack>
+            <org-avatar-stack size="base">
               <org-avatar label="John Doe" />
               <org-avatar label="Jane Smith" />
               <org-avatar label="Bob Johnson" />

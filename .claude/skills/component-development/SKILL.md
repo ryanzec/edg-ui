@@ -36,15 +36,3 @@ The rules in this section must **ONLY** be applied to core components.
 
 # General Rules
 - **ALWAYS** choose inference over duplication of inputs (instead of having both a `clickable` input() and `clicked` output(), just have a clicked subject+ `outputFromObservable()` to be able to infer `clickable`)
-
-# Storybook Management
-
-When an addition or change is made to a component that effects the the visuals of the component, Storybook **MUST** be updated to account for these changes.
-
-## New Input
-- Add a new section to the Showcase story for the new input.
-- Add a control for the new input to the Live Demo story.
-
-## New Input Value
-- Update the existing section in the Showcase story with the new value.
-- Update the control for the input to include the option to select the new input value.
