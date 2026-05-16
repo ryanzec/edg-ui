@@ -21,6 +21,7 @@ tasks:
       NODE_ENV: development
     options:
       runFromWorkspaceRoot: true
+    preset: server
   storybook-clean:
     options:
       runFromWorkspaceRoot: true
