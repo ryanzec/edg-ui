@@ -1,0 +1,56 @@
+<org-card>
+  <org-card-header />
+  <org-card-content>
+    <div class="preferences-body flex flex-col gap-3" [formGroup]="formGroup()">
+      <div class="pref-row flex items-center gap-4">
+        <div class="pref-text flex flex-col gap-1 flex-grow">
+          <span>Email digest</span>
+          <span class="text-xs text-muted">Weekly summary of activity in your workspaces.</span>
+        </div>
+        <org-checkbox-toggle name="user-details-email-digest" value="email-digest" formControlName="emailDigest" />
+      </div>
+
+      <org-divider />
+
+      <div class="pref-row flex items-center gap-4">
+        <div class="pref-text flex flex-col gap-1 flex-grow">
+          <span>&#64;-mention notifications</span>
+          <span class="text-xs text-muted">Get a push when you're &#64;-mentioned, even when not online.</span>
+        </div>
+        <org-checkbox-toggle
+          name="user-details-mention-notifications"
+          value="mention-notifications"
+          formControlName="mentionNotifications"
+        />
+      </div>
+
+      <org-divider />
+
+      <div class="pref-row flex items-center gap-4">
+        <div class="pref-text flex flex-col gap-1 flex-grow">
+          <span>Show typing indicator</span>
+          <span class="text-xs text-muted">Let others see when you're composing a reply.</span>
+        </div>
+        <org-checkbox-toggle
+          name="user-details-typing-indicator"
+          value="typing-indicator"
+          formControlName="typingIndicator"
+        />
+      </div>
+
+      <org-divider />
+
+      <div class="pref-row flex items-center gap-4">
+        <div class="pref-text flex flex-col gap-1 flex-grow">
+          <span>Compact density</span>
+          <span class="text-xs text-muted">Tighter row heights across lists, tables, and threads.</span>
+        </div>
+        <org-checkbox-toggle
+          name="user-details-compact-density"
+          value="compact-density"
+          formControlName="compactDensity"
+        />
+      </div>
+    </div>
+  </org-card-content>
+</org-card>

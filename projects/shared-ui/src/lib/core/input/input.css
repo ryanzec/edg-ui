@@ -3,7 +3,6 @@
     display: inline-flex;
     align-items: stretch;
     width: var(--input-width);
-    max-width: var(--input-max-width);
     min-height: var(--input-min-height);
     padding: 0;
     border-radius: var(--input-radius);
@@ -329,7 +328,6 @@
   :host([data-variant='inline']) {
     --input-min-height: auto;
     --input-width: auto;
-    --input-max-width: none;
     --input-radius: 0;
     --input-pad-x: 0;
     --input-pad-x-tight: 0;

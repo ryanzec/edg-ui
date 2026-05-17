@@ -1,0 +1,33 @@
+<org-card>
+  <org-card-header title="Work" subtitle="Role, team, and reporting line." />
+  <org-card-content>
+    <div [formGroup]="formGroup()">
+      <org-form-fields>
+        <org-form-field [validationMessage]="errors().title">
+          <org-label text="Title" htmlFor="user-details-title" />
+          <org-input name="user-details-title" formControlName="title" />
+        </org-form-field>
+
+        <org-form-field [validationMessage]="errors().department">
+          <org-label text="Department" htmlFor="user-details-department" />
+          <org-input name="user-details-department" formControlName="department" />
+        </org-form-field>
+
+        <org-form-field [validationMessage]="errors().manager">
+          <org-label text="Manager" htmlFor="user-details-manager" />
+          <org-input name="user-details-manager" formControlName="manager" preIcon="users" />
+        </org-form-field>
+
+        <org-form-field>
+          <org-label text="Employee ID" htmlFor="user-details-employee-id" />
+          <org-input name="user-details-employee-id" [value]="work().employeeId" [readonly]="true" />
+        </org-form-field>
+
+        <org-form-field>
+          <org-label text="Started" htmlFor="user-details-started" />
+          <org-input name="user-details-started" [value]="startedAtFormatted()" [readonly]="true" preIcon="calendar" />
+        </org-form-field>
+      </org-form-fields>
+    </div>
+  </org-card-content>
+</org-card>

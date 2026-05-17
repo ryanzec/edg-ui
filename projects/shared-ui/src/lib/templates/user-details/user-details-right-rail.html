@@ -1,0 +1,70 @@
+<div class="right-rail flex flex-col gap-5">
+  <div class="save-row flex justify-end">
+    <org-button label="Save" color="safe" (clicked)="onSaveClicked()" class="w-full" />
+  </div>
+
+  <div class="rail-section">
+    <div class="rail-heading text-xs text-muted">ON THIS PAGE</div>
+    <ul class="nav-list flex flex-col">
+      @for (item of navItems(); track item.id) {
+        <li>
+          <button
+            type="button"
+            class="nav-item"
+            [attr.data-active]="item.id === activeSectionId() ? '' : null"
+            (click)="onNavItemClicked(item.id)"
+          >
+            <span class="nav-index">{{ item.index }}</span>
+            <span class="nav-label">{{ item.label }}</span>
+          </button>
+        </li>
+      }
+    </ul>
+  </div>
+
+  <org-divider />
+
+  <div class="rail-section">
+    <div class="rail-heading text-xs text-muted">ACCOUNT AT A GLANCE</div>
+    <ul class="glance-list flex flex-col gap-2">
+      <li class="glance-row flex items-center justify-between gap-2">
+        <span>2FA</span>
+        @if (glance().twoFactorEnabled) {
+          <org-tag color="safe">
+            <org-icon name="check" size="xs" />
+            <span class="ml-1">Enabled</span>
+          </org-tag>
+        } @else {
+          <org-tag color="warning">Off</org-tag>
+        }
+      </li>
+      <li class="glance-row flex items-center justify-between gap-2">
+        <span>Sessions</span>
+        <span class="text-fg">{{ glance().sessionCount }}</span>
+      </li>
+      <li class="glance-row flex items-center justify-between gap-2">
+        <span>API tokens</span>
+        <span class="text-fg">{{ glance().apiTokenCount }}</span>
+      </li>
+      <li class="glance-row flex items-center justify-between gap-2">
+        <span>Workspaces</span>
+        <span class="text-fg">{{ glance().workspaceCount }}</span>
+      </li>
+    </ul>
+  </div>
+
+  <org-divider />
+
+  <div class="rail-section">
+    <div class="rail-heading text-xs text-muted">STATUS</div>
+    <div class="status-row flex items-center gap-1 text-sm">
+      @if (isDirty()) {
+        <org-icon name="circle" size="xs" color="warning" />
+        <span>Unsaved changes</span>
+      } @else {
+        <org-icon name="check" size="xs" color="safe" />
+        <span>All changes saved</span>
+      }
+    </div>
+  </div>
+</div>

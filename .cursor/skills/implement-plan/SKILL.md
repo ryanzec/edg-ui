@@ -1,5 +1,5 @@
 ---
-name: production-review
+name: implement-plan
 description: Use this skill whenever the user asks to create, modify, refactor, review, style, or otherwise work on an Angular component, directive, brain component, or core component. Covers component architecture, brain/presentation split, content projection, output-listener detection, CSS variables, and Storybook updates.
 ---
 

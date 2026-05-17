@@ -1,0 +1,47 @@
+<org-card>
+  <org-card-header title="API tokens" subtitle="Personal access tokens for CLI, CI, and scripts. Scoped and revocable.">
+    <org-button
+      actions
+      variant="ghost"
+      color="neutral"
+      preIcon="plus"
+      label="New token"
+      (clicked)="onNewTokenClicked()"
+    />
+  </org-card-header>
+  <org-card-content>
+    <div class="tokens-body flex flex-col gap-3">
+      @for (token of tokens(); track token.id; let last = $last) {
+        <div class="token-row flex items-center gap-4">
+          <org-icon name="lock-keyhole" size="lg" />
+          <div class="token-text flex flex-col gap-1 flex-grow min-w-0">
+            <div class="token-title flex items-center gap-2">
+              <span>{{ token.name }}</span>
+              <span class="font-mono text-xs text-muted">{{ token.publicPrefix }}</span>
+            </div>
+            <div class="token-meta flex items-center gap-2 flex-wrap text-xs text-muted">
+              <span>Created {{ token.createdAt.toFormat('MMM dd, yyyy') }}</span>
+              <span>&middot;</span>
+              <span>{{ token.lastUsed }}</span>
+              <span>&middot;</span>
+              @for (scope of token.scopes; track scope) {
+                <org-tag color="neutral" size="xs">{{ scope }}</org-tag>
+              }
+            </div>
+          </div>
+          <div class="token-actions flex items-center gap-3">
+            @if (token.expiring) {
+              <org-tag color="warning">Expiring</org-tag>
+            }
+            <org-link (clicked)="onRevokeClicked(token)">
+              <span class="text-danger">Revoke</span>
+            </org-link>
+          </div>
+        </div>
+        @if (!last) {
+          <org-divider />
+        }
+      }
+    </div>
+  </org-card-content>
+</org-card>

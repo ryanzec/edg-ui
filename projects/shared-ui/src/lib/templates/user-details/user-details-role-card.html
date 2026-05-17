@@ -1,0 +1,14 @@
+<div class="role-card">
+  <org-radio [value]="option().value">
+    <div class="role-content flex flex-col gap-1">
+      <div class="role-title flex items-center gap-2">
+        <span class="role-name">{{ option().label }}</span>
+        @if (option().badge) {
+          <org-tag [color]="option().badge!.color">{{ option().badge!.label }}</org-tag>
+        }
+      </div>
+      <span class="role-description text-xs text-muted">{{ option().description }}</span>
+      <code class="role-scope text-xs">{{ option().scope }}</code>
+    </div>
+  </org-radio>
+</div>

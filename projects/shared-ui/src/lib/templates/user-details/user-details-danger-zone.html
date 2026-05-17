@@ -1,0 +1,30 @@
+<org-card>
+  <org-card-header title="Danger zone" />
+  <org-card-content>
+    <div class="danger-body flex flex-col gap-3">
+      <div class="danger-row flex items-center gap-4">
+        <div class="danger-text flex flex-col gap-1 flex-grow">
+          <span>Suspend account</span>
+          <span class="text-xs text-muted">Temporarily revoke all sessions and prevent sign-in. Reversible.</span>
+        </div>
+        <org-button variant="ghost" color="warning" preIcon="lock" label="Suspend" (clicked)="onSuspendClicked()" />
+      </div>
+
+      <org-divider />
+
+      <div class="danger-row flex items-center gap-4">
+        <div class="danger-text flex flex-col gap-1 flex-grow">
+          <span>Delete account</span>
+          <span class="text-xs text-muted">Permanently delete. Audit history is preserved for compliance.</span>
+        </div>
+        <org-button
+          variant="text"
+          color="danger"
+          preIcon="trash"
+          label="Delete account..."
+          (clicked)="onDeleteClicked()"
+        />
+      </div>
+    </div>
+  </org-card-content>
+</org-card>

@@ -1,0 +1,35 @@
+<org-card>
+  <org-card-header title="Single sign-on" subtitle="Workspace enforces SSO. Local password is fallback only." />
+  <org-card-content>
+    <div class="sso-body flex flex-col gap-3">
+      <div class="provider-row flex items-center gap-3">
+        <org-icon [name]="sso().provider.iconName" size="lg" />
+        <div class="provider-text flex flex-col gap-1 flex-grow min-w-0">
+          <span>{{ sso().provider.name }} &middot; {{ sso().provider.domain }}</span>
+          <span class="text-xs text-muted"> Connected as {{ sso().connectedEmail }} &middot; {{ sso().notes }} </span>
+        </div>
+        <div class="provider-actions flex items-center gap-3">
+          <org-tag [color]="statusColor()">{{ statusLabel() }}</org-tag>
+          <org-link (clicked)="onDisconnectClicked()">
+            <span class="text-danger">Disconnect</span>
+          </org-link>
+        </div>
+      </div>
+
+      <org-divider />
+
+      <div class="enforce-row flex items-center gap-4">
+        <div class="enforce-text flex flex-col gap-1 flex-grow">
+          <span>Enforce SSO</span>
+          <span class="text-xs text-muted">Block password-only sign-in. Recovery codes still work.</span>
+        </div>
+        <org-checkbox-toggle
+          name="user-details-sso-enforced"
+          value="enforced"
+          [checked]="enforcedToggle()"
+          (checkedChange)="onEnforcedChange($event)"
+        />
+      </div>
+    </div>
+  </org-card-content>
+</org-card>

@@ -1,0 +1,33 @@
+@layer application {
+  .user-details {
+    container-type: inline-size;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 18rem;
+    gap: var(--spacing-6);
+  }
+
+  .content-column {
+    min-width: 0;
+  }
+
+  .right-column {
+    position: sticky;
+    top: var(--spacing-main-content);
+    align-self: start;
+  }
+
+  .section {
+    scroll-margin-top: var(--spacing-4);
+  }
+
+  /* stack the rail below content on narrow viewports */
+  @container (max-width: 64rem) {
+    .user-details {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .right-column {
+      position: static;
+    }
+  }
+}

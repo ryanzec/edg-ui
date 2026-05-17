@@ -46,14 +46,6 @@ tasks:
       cache: false
     env:
       NODE_ENV: development
-  generate-type:
-    command: node $workspaceRoot/.moon/scripts/generate-shared-type.cjs type
-    options:
-      runFromWorkspaceRoot: true
-      interactive: true
-      cache: false
-    env:
-      NODE_ENV: development
   build-design-tokens:
     command: node $workspaceRoot/.moon/scripts/build-typescript-design-token.cjs
     options:
@@ -64,7 +56,7 @@ tasks:
   sync-ai-files:
     options:
       runFromWorkspaceRoot: true
-    script: sh -c "node $workspaceRoot/.moon/scripts/sync-claude-rules-to-cursor.cjs && node $workspaceRoot/.moon/scripts/sync-claude-rules-to-gemini.cjs && node $workspaceRoot/.moon/scripts/sync-claude-rules-to-junie.cjs"
+    script: sh -c "node $workspaceRoot/.moon/scripts/sync-claude-rules-to-cursor.cjs"
     env:
       NODE_ENV: development
     preset: server

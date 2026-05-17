@@ -1,0 +1,23 @@
+<org-card>
+  <org-card-header title="Linked accounts" subtitle="Show on your profile and used to associate activity." />
+  <org-card-content>
+    <div [formGroup]="formGroup()">
+      <org-form-fields>
+        <org-form-field [validationMessage]="errors().website">
+          <org-label text="Website" htmlFor="user-details-website" />
+          <org-input name="user-details-website" formControlName="website" preIcon="globe" />
+        </org-form-field>
+
+        <org-form-field [validationMessage]="errors().github">
+          <org-label text="GitHub" htmlFor="user-details-github" />
+          <org-input name="user-details-github" formControlName="github" preIcon="code" />
+        </org-form-field>
+
+        <org-form-field [validationMessage]="errors().linkedIn">
+          <org-label text="LinkedIn" htmlFor="user-details-linkedin" />
+          <org-input name="user-details-linkedin" formControlName="linkedIn" preIcon="briefcase" />
+        </org-form-field>
+      </org-form-fields>
+    </div>
+  </org-card-content>
+</org-card>

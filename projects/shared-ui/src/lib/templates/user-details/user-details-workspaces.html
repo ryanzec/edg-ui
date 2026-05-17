@@ -1,0 +1,41 @@
+<org-card>
+  <org-card-header title="Workspace memberships" [subtitle]="countLabel()">
+    <org-button
+      actions
+      variant="ghost"
+      color="neutral"
+      preIcon="plus"
+      label="Add workspace"
+      (clicked)="onAddWorkspaceClicked()"
+    />
+  </org-card-header>
+  <org-card-content>
+    <div class="workspaces-body flex flex-col gap-3">
+      @for (workspace of workspaces(); track workspace.id; let last = $last) {
+        <div class="workspace-row flex items-center gap-4">
+          <org-avatar size="base" shape="square" [label]="workspace.avatarLabel" />
+          <div class="workspace-text flex flex-col gap-1 flex-grow min-w-0">
+            <span>{{ workspace.name }}</span>
+            <span class="text-xs text-muted">
+              {{ workspace.slug }} &middot; joined {{ workspace.joinedAt.toFormat('MMM yyyy') }}
+            </span>
+          </div>
+          <div class="workspace-actions flex items-center gap-3">
+            <org-drop-down-selector
+              label="Role"
+              [items]="roleItems"
+              [selectedItems]="selectedRoleItemsFor(workspace.role)"
+              (selectedItemsChange)="onRoleChanged(workspace, $event)"
+            />
+            <org-link (clicked)="onRemoveClicked(workspace)">
+              <span class="text-danger">Remove</span>
+            </org-link>
+          </div>
+        </div>
+        @if (!last) {
+          <org-divider />
+        }
+      }
+    </div>
+  </org-card-content>
+</org-card>

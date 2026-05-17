@@ -1,6 +1,9 @@
 @layer components {
   :host {
     display: contents;
+
+    /* overrides ngx-scrollbar's 1s default for how long the scrollbar lingers after hover is lost (only active when visibility=hover) */
+    --scrollbar-hover-opacity-transition-leave-delay: 0ms;
   }
 
   /* hides the ngx-scrollbar track and thumb when enabled=false */

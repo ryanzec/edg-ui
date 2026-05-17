@@ -1,0 +1,39 @@
+<org-card>
+  <org-card-header title="Two-factor authentication" subtitle="Required for sign-in to this workspace.">
+    <org-button
+      actions
+      variant="ghost"
+      color="neutral"
+      preIcon="settings"
+      label="Manage"
+      (clicked)="onManageClicked()"
+    />
+  </org-card-header>
+  <org-card-content>
+    <div class="two-factor-body flex flex-col gap-3">
+      @for (method of methods(); track method.id; let last = $last) {
+        <div class="method-row flex items-center gap-4">
+          <div class="method-text flex flex-col gap-1 flex-grow min-w-0">
+            <span>{{ method.title }}</span>
+            <span class="text-xs text-muted">{{ method.description }}</span>
+          </div>
+          <div class="method-actions flex items-center gap-3">
+            @if (method.badge) {
+              <org-tag [color]="method.badge.color">{{ method.badge.label }}</org-tag>
+            }
+            <org-button
+              variant="ghost"
+              [color]="method.actionIsDestructive ? 'danger' : 'neutral'"
+              [preIcon]="method.actionIcon"
+              [label]="method.actionLabel"
+              (clicked)="onMethodActionClicked(method)"
+            />
+          </div>
+        </div>
+        @if (!last) {
+          <org-divider />
+        }
+      }
+    </div>
+  </org-card-content>
+</org-card>

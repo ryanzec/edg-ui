@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Injectable } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Injectable, inject } from '@angular/core';
 import { Observable, of, delay } from 'rxjs';
 import { UsersList, UsersDataStore, UsersApi } from '@organization/shared-ui';
 import { logManager } from '@organization/shared-utils';
@@ -10,6 +10,7 @@ import {
   type UpdateUserResponse,
   type DeleteUserResponse,
 } from '@organization/shared-types';
+import { Router } from '@angular/router';
 
 /** simulated network delay (in ms) used by the mock api to mimic a real fetch */
 const MOCK_FETCH_DELAY_MS = 500;
@@ -238,9 +239,12 @@ class MockUsersApi {
   providers: [{ provide: UsersApi, useClass: MockUsersApi }, UsersDataStore],
 })
 export class UsersView {
+  private _router = inject(Router);
+
   /** logs an edit-user request emitted by the users-list */
   protected onEditUser(user: User): void {
     logManager.log({ type: 'demo-users-view-edit-user', user });
+    this._router.navigate(['/users', 'details']);
   }
 
   /** logs a single delete-user request emitted by the users-list */

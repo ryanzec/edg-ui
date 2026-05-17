@@ -1,0 +1,21 @@
+@layer application {
+  .role-card {
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-base);
+    padding: var(--spacing-3);
+    background-color: var(--color-bg-surface);
+  }
+
+  .role-card:has(org-radio[data-checked]) {
+    border-color: var(--color-primary);
+  }
+
+  .role-scope {
+    background-color: var(--color-bg-surface-secondary);
+    padding: var(--spacing-1) var(--spacing-2);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-mono);
+    color: var(--color-fg-muted);
+    align-self: flex-start;
+  }
+}

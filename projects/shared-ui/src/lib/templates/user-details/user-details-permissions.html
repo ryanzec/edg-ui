@@ -1,0 +1,48 @@
+<org-card>
+  <org-card-header title="Permissions" subtitle="Defaults for Admin role. Check or uncheck to override." />
+  <org-card-content>
+    <div class="permissions-body">
+      <org-table [data]="permissions()" [bordered]="false" [stickyHeader]="false">
+        <ng-template #header>
+          <org-table-th>RESOURCE</org-table-th>
+          <org-table-th>READ</org-table-th>
+          <org-table-th>WRITE</org-table-th>
+          <org-table-th>DELETE</org-table-th>
+        </ng-template>
+        <ng-template [orgTypedContext]="permissions()" #body let-permission>
+          <org-table-td>
+            <div class="resource-cell flex flex-col gap-1">
+              <span>{{ permission.label }}</span>
+              <span class="text-xs text-muted">{{ permission.description }}</span>
+            </div>
+          </org-table-td>
+          @if (controlFor(permission.id); as control) {
+            <org-table-td>
+              <ng-container [formGroup]="control">
+                <org-checkbox name="user-details-perm-read-{{ permission.id }}" value="read" formControlName="read" />
+              </ng-container>
+            </org-table-td>
+            <org-table-td>
+              <ng-container [formGroup]="control">
+                <org-checkbox
+                  name="user-details-perm-write-{{ permission.id }}"
+                  value="write"
+                  formControlName="write"
+                />
+              </ng-container>
+            </org-table-td>
+            <org-table-td>
+              <ng-container [formGroup]="control">
+                <org-checkbox
+                  name="user-details-perm-delete-{{ permission.id }}"
+                  value="delete"
+                  formControlName="delete"
+                />
+              </ng-container>
+            </org-table-td>
+          }
+        </ng-template>
+      </org-table>
+    </div>
+  </org-card-content>
+</org-card>

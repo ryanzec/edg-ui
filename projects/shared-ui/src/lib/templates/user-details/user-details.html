@@ -1,0 +1,116 @@
+<div class="user-details">
+  <div class="content-column flex flex-col gap-4">
+    <org-user-details-header
+      [header]="user().header"
+      (messageClicked)="onMessageRequested()"
+      (overflowMenuClicked)="onOverflowMenuRequested()"
+    />
+
+    <section class="section flex flex-col gap-4">
+      <org-user-details-section-anchor
+        #sectionAnchorRef
+        sectionId="profile"
+        [index]="sections()[0].index"
+        [title]="sections()[0].title"
+        [subtitle]="sections()[0].subtitle"
+      />
+      <org-user-details-identity
+        [formGroup]="identityGroup()"
+        [identity]="user().profile.identity"
+        [errors]="identityErrors()"
+        (uploadPhotoRequested)="onUploadPhotoRequested()"
+        (removePhotoRequested)="onRemovePhotoRequested()"
+        (useGravatarRequested)="onUseGravatarRequested()"
+      />
+      <org-user-details-contact
+        [formGroup]="contactGroup()"
+        [contact]="user().profile.contact"
+        [errors]="contactErrors()"
+      />
+      <org-user-details-work [formGroup]="workGroup()" [work]="user().profile.work" [errors]="workErrors()" />
+      <org-user-details-bio [formGroup]="bioGroup()" [bio]="user().profile.bio" [errors]="bioErrors()" />
+      <org-user-details-linked-accounts
+        [formGroup]="linkedAccountsGroup()"
+        [linkedAccounts]="user().profile.linkedAccounts"
+        [errors]="linkedAccountsErrors()"
+      />
+      <org-user-details-localization
+        [formGroup]="localizationGroup()"
+        [timezoneOptions]="user().localizationOptions.timezones"
+        [languageOptions]="user().localizationOptions.languages"
+      />
+      <org-user-details-preferences [formGroup]="preferencesGroup()" />
+    </section>
+
+    <section class="section flex flex-col gap-4">
+      <org-user-details-section-anchor
+        #sectionAnchorRef
+        sectionId="security"
+        [index]="sections()[1].index"
+        [title]="sections()[1].title"
+        [subtitle]="sections()[1].subtitle"
+      />
+      <org-user-details-password
+        [password]="user().security.password"
+        (changePasswordClicked)="onChangePasswordRequested()"
+      />
+      <org-user-details-two-factor
+        [methods]="user().security.twoFactorMethods"
+        (manageClicked)="onTwoFactorManageRequested()"
+        (methodActionClicked)="onTwoFactorMethodAction($event)"
+      />
+      <org-user-details-sso
+        [sso]="user().security.sso"
+        (disconnectClicked)="onSsoDisconnectRequested()"
+        (enforcedChanged)="onSsoEnforcedChanged($event)"
+      />
+      <org-user-details-sessions
+        [sessions]="user().security.sessions"
+        (signOutAllClicked)="onSignedOutAllOthers()"
+        (sessionRevoked)="onSessionRevoked($event)"
+      />
+      <org-user-details-api-tokens
+        [tokens]="user().security.apiTokens"
+        (newTokenClicked)="onApiTokenCreated()"
+        (tokenRevoked)="onApiTokenRevoked($event)"
+      />
+      <org-user-details-signin-history [entries]="user().security.signinHistory" />
+      <org-user-details-danger-zone (suspendClicked)="onSuspendRequested()" (deleteClicked)="onDeleteRequested()" />
+    </section>
+
+    <section class="section flex flex-col gap-4">
+      <org-user-details-section-anchor
+        #sectionAnchorRef
+        sectionId="roles-access"
+        [index]="sections()[2].index"
+        [title]="sections()[2].title"
+        [subtitle]="sections()[2].subtitle"
+      />
+      <org-user-details-roles [formGroup]="rolesGroup()" [roleOptions]="user().roles.roleOptions" />
+      <org-user-details-permissions [formArray]="permissionsArray()" [permissions]="user().roles.permissions" />
+      <org-user-details-custom-scopes
+        [scopes]="user().roles.customScopes"
+        [suggestedScopes]="user().roles.suggestedScopes"
+        (scopeAdded)="onScopeAdded($event)"
+        (scopeRemoved)="onScopeRemoved($event)"
+      />
+      <org-user-details-workspaces
+        [workspaces]="user().roles.workspaces"
+        (addWorkspaceClicked)="onWorkspaceAdded()"
+        (workspaceRemoved)="onWorkspaceRemoved($event)"
+        (workspaceRoleChanged)="onWorkspaceRoleChanged($event)"
+      />
+      <org-user-details-role-audit-log [entries]="user().roles.auditLog" (seeAllClicked)="onAuditSeeAllRequested()" />
+    </section>
+  </div>
+
+  <aside class="right-column">
+    <org-user-details-right-rail
+      [glance]="user().glance"
+      [activeSectionId]="activeSection()"
+      [isDirty]="isDirty()"
+      (saveClicked)="onSaveClicked()"
+      (navItemClicked)="onNavItemClicked($event)"
+    />
+  </aside>
+</div>

@@ -1,0 +1,28 @@
+<org-card>
+  <org-card-header title="Localization" subtitle="Timezone and language for dates, numbers, and the UI." />
+  <org-card-content>
+    <div [formGroup]="formGroup()">
+      <org-form-fields>
+        <org-form-field>
+          <org-label text="Timezone" />
+          <org-drop-down-selector
+            label="Select timezone"
+            [items]="timezoneItems()"
+            [selectedItems]="timezoneSelectedItems()"
+            (selectedItemsChange)="onTimezoneSelectionChange($event)"
+          />
+        </org-form-field>
+
+        <org-form-field>
+          <org-label text="Language" />
+          <org-drop-down-selector
+            label="Select language"
+            [items]="languageItems()"
+            [selectedItems]="languageSelectedItems()"
+            (selectedItemsChange)="onLanguageSelectionChange($event)"
+          />
+        </org-form-field>
+      </org-form-fields>
+    </div>
+  </org-card-content>
+</org-card>

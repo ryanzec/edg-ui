@@ -1,0 +1,16 @@
+@layer application {
+  .suggested-chip-button {
+    background: transparent;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    font: inherit;
+    color: inherit;
+  }
+
+  .suggested-chip-button:focus-visible {
+    outline: var(--border-width-thick) solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: var(--radius-pill);
+  }
+}

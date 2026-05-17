@@ -81,7 +81,10 @@
   }
 
   /* hover (non-disabled, non-range): chip lift */
-  .day:not([aria-disabled='true']):not([data-range-pos='middle']):not([data-range-pos='preview']):hover .day-chip {
+  .day:not([aria-disabled='true']):not([data-selected]):not([data-range-pos='middle']):not(
+      [data-range-pos='preview']
+    ):hover
+    .day-chip {
     background-color: var(--calendar-chip-hover-bg);
   }
 
@@ -103,16 +106,15 @@
   /* selected: chip fill + bold + on-accent text */
   .day[data-selected] {
     color: var(--calendar-chip-selected-fg);
-    font-weight: var(--calendar-chip-selected-font-weight);
   }
 
   .day[data-selected] .day-chip {
     background-color: var(--calendar-chip-selected-bg);
   }
 
-  .day[data-selected]:hover .day-chip {
+  /*.day[data-selected]:hover .day-chip {
     background-color: var(--calendar-chip-selected-hover-bg);
-  }
+  }*/
 
   /* disabled */
   .day[aria-disabled='true'] {

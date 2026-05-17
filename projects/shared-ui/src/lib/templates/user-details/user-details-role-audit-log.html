@@ -1,0 +1,27 @@
+<org-card>
+  <org-card-header title="Role audit log" subtitle="Permission-related changes for this user.">
+    <org-link actions (clicked)="onSeeAllClicked()">See all &rarr;</org-link>
+  </org-card-header>
+  <org-card-content>
+    <div class="audit-body flex flex-col gap-2">
+      @for (entry of entries(); track entry.id; let last = $last) {
+        <div class="audit-row flex items-start gap-2">
+          <div class="audit-indicator pt-2">
+            <org-indicator [color]="categoryColorMap[entry.category]" size="sm" />
+          </div>
+          <div class="audit-text flex flex-col flex-grow min-w-0">
+            <div>
+              <strong>{{ entry.actor.name }}</strong>
+              <span class="text-muted"> {{ entry.description }}</span>
+            </div>
+            <span class="text-xs text-muted">{{ entry.occurredAt }}</span>
+          </div>
+          <org-tag [color]="categoryColorMap[entry.category]">{{ entry.category }}</org-tag>
+        </div>
+        @if (!last) {
+          <org-divider />
+        }
+      }
+    </div>
+  </org-card-content>
+</org-card>

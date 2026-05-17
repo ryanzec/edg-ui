@@ -89,6 +89,10 @@ import {
   LucidePackage,
   LucideCreditCard,
   LucideCircleHelp,
+  LucideGlobe,
+  LucideBriefcase,
+  LucideSmartphone,
+  LucideLaptop,
 } from '@lucide/angular';
 
 /**
@@ -188,6 +192,10 @@ export const allIconNames = [
   'sun',
   'triangle-alert',
   'underline',
+  'globe',
+  'briefcase',
+  'smartphone',
+  'laptop',
 ] as const;
 
 /** the icon name type derived from all registered icon names */
@@ -284,6 +292,10 @@ const iconMap: Record<IconName, LucideIcon> = {
   sun: LucideSun,
   'triangle-alert': LucideTriangleAlert,
   underline: LucideUnderline,
+  globe: LucideGlobe,
+  briefcase: LucideBriefcase,
+  smartphone: LucideSmartphone,
+  laptop: LucideLaptop,
 };
 
 /**

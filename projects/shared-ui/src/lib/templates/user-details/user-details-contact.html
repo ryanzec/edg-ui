@@ -1,0 +1,36 @@
+<org-card>
+  <org-card-header
+    title="Contact"
+    subtitle="Used for sign-in, recovery, and notifications. Editing email requires re-verification."
+  />
+  <org-card-content>
+    <div [formGroup]="formGroup()">
+      <org-form-fields>
+        <org-form-field [validationMessage]="errors().workEmail">
+          <org-label text="Work email" htmlFor="user-details-work-email" />
+          <org-input
+            name="user-details-work-email"
+            type="email"
+            formControlName="workEmail"
+            [postIcon]="contact().workEmailVerified ? 'check' : undefined"
+          />
+        </org-form-field>
+
+        <org-form-field [validationMessage]="errors().personalEmail">
+          <org-label text="Personal email" htmlFor="user-details-personal-email" />
+          <org-input name="user-details-personal-email" type="email" formControlName="personalEmail" />
+        </org-form-field>
+
+        <org-form-field [validationMessage]="errors().phone">
+          <org-label text="Phone" htmlFor="user-details-phone" />
+          <org-input name="user-details-phone" type="tel" formControlName="phone" />
+        </org-form-field>
+
+        <org-form-field [validationMessage]="errors().location">
+          <org-label text="Location" htmlFor="user-details-location" />
+          <org-input name="user-details-location" formControlName="location" preIcon="house" />
+        </org-form-field>
+      </org-form-fields>
+    </div>
+  </org-card-content>
+</org-card>

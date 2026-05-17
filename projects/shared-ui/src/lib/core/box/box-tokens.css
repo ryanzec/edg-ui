@@ -3,7 +3,7 @@
   --box-radius: var(--radius-base);
 
   /* padding slot */
-  --box-padding: var(--spacing-2);
+  --box-padding: var(--spacing-3);
 
   /* unified border width / color slots */
   --box-border-width: var(--border-width);

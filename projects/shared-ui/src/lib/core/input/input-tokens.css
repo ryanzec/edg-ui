@@ -11,7 +11,6 @@
   --input-disabled-opacity: var(--opacity-disabled);
   --input-min-height: var(--input-height);
   --input-width: 100%;
-  --input-max-width: 22rem;
   --input-native-min-width: 8ch;
   --input-slot-line-height: 1;
 

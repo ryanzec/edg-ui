@@ -1,0 +1,39 @@
+<org-card>
+  <org-card-header title="Active sessions" [subtitle]="deviceCountLabel()">
+    <org-button
+      actions
+      variant="text"
+      color="danger"
+      preIcon="log-out"
+      label="Sign out all others"
+      (clicked)="onSignOutAllClicked()"
+    />
+  </org-card-header>
+  <org-card-content>
+    <div class="sessions-body flex flex-col gap-3">
+      @for (session of sessions(); track session.id; let last = $last) {
+        <div class="session-row flex items-center gap-4">
+          <org-icon [name]="session.deviceIcon" size="lg" />
+          <div class="session-text flex flex-col gap-1 flex-grow min-w-0">
+            <span>{{ session.device }} &middot; {{ session.client }}</span>
+            <span class="text-xs text-muted">
+              {{ session.location }} &middot;
+              <span class="font-mono">{{ session.ip }}</span>
+              &middot; {{ session.lastActive }}
+            </span>
+          </div>
+          @if (session.isCurrentDevice) {
+            <org-tag color="info">This device</org-tag>
+          } @else {
+            <org-link (clicked)="onRevokeClicked(session)">
+              <span class="text-danger">Revoke</span>
+            </org-link>
+          }
+        </div>
+        @if (!last) {
+          <org-divider />
+        }
+      }
+    </div>
+  </org-card-content>
+</org-card>

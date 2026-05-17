@@ -161,6 +161,7 @@
   --spacing-12: 3rem; /* 48px */
   --spacing-14: 3.5rem; /* 56px */
   --spacing-16: 4rem; /* 64px */
+  --spacing-main-content: var(--spacing-5);
 
   --sizing-14xs: 0.5rem; /* 8px    */
   --sizing-13xs: 0.75rem; /* 12px   */

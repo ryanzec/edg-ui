@@ -1,0 +1,31 @@
+<org-card>
+  <org-card-header title="Sign-in history" subtitle="Last 5 attempts. Older history available in the audit log." />
+  <org-card-content>
+    <div class="history-body">
+      <org-table [data]="entries()" [bordered]="false" [stickyHeader]="false">
+        <ng-template #header>
+          <org-table-th>WHEN</org-table-th>
+          <org-table-th>METHOD</org-table-th>
+          <org-table-th>LOCATION</org-table-th>
+          <org-table-th>IP</org-table-th>
+          <org-table-th>RESULT</org-table-th>
+        </ng-template>
+        <ng-template [orgTypedContext]="entries()" #body let-entry>
+          <org-table-td>{{ entry.when.toFormat('MMM dd, yyyy · HH:mm') }}</org-table-td>
+          <org-table-td>{{ entry.method }}</org-table-td>
+          <org-table-td>{{ entry.location }}</org-table-td>
+          <org-table-td>
+            <span class="font-mono">{{ entry.ip }}</span>
+          </org-table-td>
+          <org-table-td>
+            @if (entry.result.kind === 'success') {
+              <org-tag color="safe">{{ entry.result.label }}</org-tag>
+            } @else {
+              <org-tag color="danger">{{ entry.result.label }}</org-tag>
+            }
+          </org-table-td>
+        </ng-template>
+      </org-table>
+    </div>
+  </org-card-content>
+</org-card>

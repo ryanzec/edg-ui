@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { DateTime } from 'luxon';
+import { describe, expect, it, beforeEach } from 'vitest';
 
 import { IntegrationCardConfigured, type Integration } from './integration-card-configured';
 
@@ -17,6 +18,7 @@ describe('IntegrationCardConfigured', () => {
     status: 'active',
     tags: [{ label: 'Messaging' }, { label: 'Notifications' }, { label: 'Team' }],
     createdAt: DateTime.fromISO('2026-04-12T00:00:00Z'),
+    lastActivityAt: DateTime.fromISO('2026-04-12T00:00:00Z'),
   };
 
   beforeEach(async () => {

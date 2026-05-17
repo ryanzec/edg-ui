@@ -1,0 +1,52 @@
+<org-card>
+  <org-card-header title="Identity" subtitle="How you appear to teammates across the workspace.">
+    <org-button
+      actions
+      variant="ghost"
+      color="neutral"
+      preIcon="upload"
+      label="Upload photo"
+      (clicked)="onUploadPhoto()"
+    />
+  </org-card-header>
+  <org-card-content>
+    <div [formGroup]="formGroup()">
+      <div class="flex gap-2">
+        <org-avatar
+          size="lg"
+          [label]="identity().avatarLabel"
+          [imgSrc]="identity().avatarImgSrc"
+          [imgEmail]="identity().avatarImgEmail"
+        />
+        <div class="flex flex-col">
+          <p>A square PNG or JPG works best. We crop to a circle automatically.</p>
+          <org-link (clicked)="onRemovePhoto()">Remove</org-link>
+          <org-link (clicked)="onUseGravatar()">Use Gravatar</org-link>
+        </div>
+      </div>
+      <org-divider />
+
+      <org-form-fields>
+        <org-form-field [validationMessage]="errors().firstName">
+          <org-label text="First name" htmlFor="user-details-first-name" [isRequired]="true" />
+          <org-input name="user-details-first-name" formControlName="firstName" />
+        </org-form-field>
+
+        <org-form-field [validationMessage]="errors().lastName">
+          <org-label text="Last name" htmlFor="user-details-last-name" />
+          <org-input name="user-details-last-name" formControlName="lastName" />
+        </org-form-field>
+
+        <org-form-field [validationMessage]="errors().displayName">
+          <org-label text="Display name" htmlFor="user-details-display-name" />
+          <org-input name="user-details-display-name" formControlName="displayName" />
+        </org-form-field>
+
+        <org-form-field [validationMessage]="errors().pronouns">
+          <org-label text="Pronouns" htmlFor="user-details-pronouns" />
+          <org-input name="user-details-pronouns" formControlName="pronouns" />
+        </org-form-field>
+      </org-form-fields>
+    </div>
+  </org-card-content>
+</org-card>

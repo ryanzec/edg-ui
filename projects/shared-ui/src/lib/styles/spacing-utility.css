@@ -54,6 +54,9 @@
   .p-16 {
     padding: var(--spacing-16);
   }
+  .p-main-content {
+    padding: var(--spacing-main-content);
+  }
 
   /* padding - top */
   .pt-0 {

@@ -1,0 +1,5 @@
+@layer application {
+  .section-anchor {
+    scroll-margin-top: var(--spacing-4);
+  }
+}

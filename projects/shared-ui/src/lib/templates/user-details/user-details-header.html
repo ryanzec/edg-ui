@@ -1,0 +1,43 @@
+<div class="user-details-header flex items-center gap-4">
+  <org-avatar
+    size="lg"
+    [label]="header().avatarLabel"
+    [imgSrc]="header().avatarImgSrc"
+    [imgEmail]="header().avatarImgEmail"
+  />
+  <div class="header-body flex flex-col gap-1 flex-grow min-w-0">
+    <div class="title-row flex items-center gap-2 flex-wrap">
+      <h1 class="m-0 text-3xl">{{ header().avatarLabel }}</h1>
+      @if (header().pronouns) {
+        <span class="text-sm text-muted">{{ header().pronouns }}</span>
+      }
+      <org-tag color="warning">{{ roleLabel() }}</org-tag>
+      <org-tag [color]="statusColor()">&middot; {{ statusLabel() }}</org-tag>
+    </div>
+    <div class="meta-row flex items-center gap-2 text-sm text-muted">
+      <span>{{ header().jobTitle }}</span>
+      <span>&middot;</span>
+      <span>{{ header().primaryEmail }}</span>
+      <span>&middot;</span>
+      <span>Joined {{ joinedAtFormatted() }}</span>
+    </div>
+  </div>
+  <div class="header-actions flex items-center gap-2">
+    <org-button
+      variant="ghost"
+      color="neutral"
+      preIcon="message-square"
+      label="Message"
+      (clicked)="onMessageClicked()"
+    />
+    <org-button
+      variant="ghost"
+      color="neutral"
+      preIcon="ellipsis"
+      [iconOnly]="true"
+      label="More actions"
+      ariaLabel="More actions"
+      (clicked)="onOverflowMenuClicked()"
+    />
+  </div>
+</div>

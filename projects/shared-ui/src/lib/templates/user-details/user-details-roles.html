@@ -1,0 +1,17 @@
+<org-card>
+  <org-card-header
+    title="Primary role"
+    subtitle="Determines the default permission set. Customizing below overrides individual permissions."
+  />
+  <org-card-content>
+    <div class="roles-body" [formGroup]="formGroup()">
+      <org-radio-group name="user-details-primary-role" formControlName="primaryRole">
+        <div class="roles-grid grid grid-cols-2 gap-3">
+          @for (option of roleOptions(); track option.value) {
+            <org-user-details-role-card [option]="option" />
+          }
+        </div>
+      </org-radio-group>
+    </div>
+  </org-card-content>
+</org-card>
