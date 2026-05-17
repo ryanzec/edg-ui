@@ -1,6 +1,6 @@
 <div class="form-field-container">
   <ng-content />
-  @if (finalReserveValidationSpace() || brain.hasValidationMessage()) {
+  @if (effectiveReserveValidationSpace() || brain.hasValidationMessage()) {
     <div
       class="form-field-validation"
       [id]="brain.validationMessageId"

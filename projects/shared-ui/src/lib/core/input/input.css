@@ -296,9 +296,19 @@
     pointer-events: none;
   }
 
-  :host([data-readonly]:not([data-variant='inline'])) {
+  :host([data-readonly]:not([data-variant='inline']):not([data-as-trigger])) {
     --input-bg: var(--color-bg-surface-secondary);
     --input-bg-hover: var(--color-bg-surface-secondary);
+  }
+
+  /* trigger mode — input wraps a popover/picker so the whole field reads as a clickable trigger.
+     `not([data-disabled])` keeps disabled as the strongest state (not-allowed always wins). */
+  :host([data-as-trigger]:not([data-disabled])) {
+    cursor: pointer;
+  }
+
+  :host([data-as-trigger]:not([data-disabled])) .native {
+    cursor: pointer;
   }
 
   /* === VARIANTS === */

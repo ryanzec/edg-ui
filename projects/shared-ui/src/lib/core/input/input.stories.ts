@@ -442,6 +442,51 @@ export const LiveDemo: Story = {
       </org-design-system-demo-expected-behaviour>
 
       <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Trigger Mode" />
+        <org-design-system-demo-canvas slot="canvas">
+          <org-input
+            name="showcase-as-trigger-empty"
+            [asTrigger]="true"
+            placeholder="Select date..."
+            preIcon="calendar"
+            postIcon="chevron-down"
+          />
+          <org-input
+            name="showcase-as-trigger-value"
+            [asTrigger]="true"
+            value="5/19/26"
+            preIcon="calendar"
+            postIcon="chevron-down"
+          />
+          <org-input
+            name="showcase-as-trigger-disabled"
+            [asTrigger]="true"
+            [disabled]="true"
+            value="5/19/26"
+            preIcon="calendar"
+            postIcon="chevron-down"
+          />
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="list-inside list-disc flex flex-col gap-1">
+          <li>
+            <strong>asTrigger</strong>: Native typing is suppressed (the input behaves like <code>readonly</code>) but
+            the field renders as an interactive trigger — pointer cursor, standard bg, normal hover / focus border
+            feedback
+          </li>
+          <li>
+            Intended for shell inputs that wrap a popover / picker (date picker, select, combobox) where the value is
+            owned by the overlay
+          </li>
+          <li>
+            <strong>Disabled wins</strong>: a disabled trigger still shows the not-allowed cursor and dimmed opacity —
+            trigger mode never overrides disabled state
+          </li>
+        </ul>
+      </org-design-system-demo-expected-behaviour>
+
+      <org-design-system-demo>
         <org-design-system-demo-header slot="header" title="Adornments" />
         <org-design-system-demo-canvas slot="canvas">
           <org-input name="showcase-pre-icon" preIcon="mail" placeholder="Email address" />

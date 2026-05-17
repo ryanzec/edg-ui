@@ -253,4 +253,8 @@ export class TicketDetailsView {
   protected onDescriptionEditRequested(): void {
     logManager.log({ type: 'demo-ticket-details-view-description-edit-requested' });
   }
+
+  protected onDueDateChanged(value: DateTime): void {
+    logManager.log({ type: 'demo-ticket-details-view-due-date-selected', value });
+  }
 }

@@ -76,7 +76,7 @@ const AVATAR_COLOR_COUNT = 8;
     },
   ],
   host: {
-    '[attr.data-size]': 'finalSize()',
+    '[attr.data-size]': 'effectiveSize()',
     '[attr.data-shape]': 'shape()',
     '[attr.data-color-index]': 'colorIndex()',
     '[attr.data-overflow]': 'avatarBrainDirective.isOverflow() ? "true" : null',
@@ -103,7 +103,7 @@ export class Avatar {
   });
 
   /** resolved size honoring the parent avatar stack (if present) over the locally provided size. */
-  protected readonly finalSize = computed<AvatarSize>(() => this._avatarStack?.size() ?? this.size());
+  protected readonly effectiveSize = computed<AvatarSize>(() => this._avatarStack?.size() ?? this.size());
 
   /** the size variant shared with internal sub-components. */
   public size = input<AvatarSize>(AVATAR_SIZE_DEFAULT);

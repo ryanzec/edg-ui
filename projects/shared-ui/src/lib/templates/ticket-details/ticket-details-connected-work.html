@@ -1,13 +1,31 @@
 <org-card [isExpandable]="true" [(isExpanded)]="isExpanded">
   <org-card-header title="Connected work">
-    <div actions class="flex items-center gap-2">
+    <div post class="flex items-center gap-2">
+      <span class="text-xs text-muted">{{ totalCount() }}</span>
       @if (showAttentionBadge()) {
         <org-indicator color="danger" [number]="attentionCount()" size="sm" />
       }
-      <span class="text-xs text-muted">{{ totalCount() }}</span>
     </div>
   </org-card-header>
   <org-card-content>
+    @if (blockedByItems().length > 0) {
+      <div class="flex flex-col gap-2">
+        <div class="text-xs font-semibold text-danger">BLOCKED BY</div>
+        @for (item of blockedByItems(); track item.id) {
+          <div class="flex items-center gap-3">
+            <div class="flex items-center justify-center text-muted">
+              <org-icon name="circle-x" size="sm" color="danger" class="self-start" />
+            </div>
+            <div class="flex flex-col gap-0.5 flex-1 min-w-0">
+              <div class="text-xs">{{ item.code }}</div>
+              <div class="truncate">{{ item.title }}</div>
+            </div>
+            <org-tag [color]="getBlockedByStatusColor(item)">{{ getBlockedByStatusLabel(item) }}</org-tag>
+            <org-avatar size="sm" [label]="item.assignee.name" />
+          </div>
+        }
+      </div>
+    }
     <div class="flex flex-col gap-4">
       @if (parentItems().length > 0) {
         <div class="flex flex-col gap-2">
@@ -18,27 +36,9 @@
                 <org-icon name="package" size="sm" class="self-start" />
               </div>
               <div class="flex flex-col gap-0.5 flex-1 min-w-0">
-                <div class="text-xs text-muted">{{ item.code }}</div>
+                <div class="text-xs">{{ item.code }}</div>
                 <div class="truncate">{{ item.title }}</div>
               </div>
-            </div>
-          }
-        </div>
-      }
-      @if (blockedByItems().length > 0) {
-        <div class="flex flex-col gap-2">
-          <div class="text-xs font-semibold text-muted">BLOCKED BY</div>
-          @for (item of blockedByItems(); track item.id) {
-            <div class="flex items-center gap-3">
-              <div class="flex items-center justify-center text-muted">
-                <org-icon name="circle-x" size="sm" class="self-start" />
-              </div>
-              <div class="flex flex-col gap-0.5 flex-1 min-w-0">
-                <div class="text-xs text-muted">{{ item.code }}</div>
-                <div class="truncate">{{ item.title }}</div>
-              </div>
-              <org-tag [color]="getBlockedByStatusColor(item)">{{ getBlockedByStatusLabel(item) }}</org-tag>
-              <org-avatar size="sm" [label]="item.assignee.name" />
             </div>
           }
         </div>
@@ -52,7 +52,7 @@
                 <org-icon name="square" size="sm" class="self-start" />
               </div>
               <div class="flex flex-col gap-0.5 flex-1 min-w-0">
-                <div class="text-xs text-muted">{{ item.code }}</div>
+                <div class="text-xs">{{ item.code }}</div>
                 <div class="truncate">{{ item.title }}</div>
               </div>
               <org-tag [color]="getLinkedPrStateColor(item)">{{ item.state }}</org-tag>

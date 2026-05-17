@@ -1,0 +1,19 @@
+---
+alwaysApply: true
+---
+# Angular Component Effective Input Value
+
+If a component has an `input()` that is passed but also has logic to determine the effective value, the `input()` must be as clean as possible and then the component has a protected member that prefixes the `inout()` name with `effective`.
+
+# Reference
+```ts
+class Component {
+  // ...
+  /** the size variant shared with internal sub-components. */
+  public size = input<AvatarSize>(AVATAR_SIZE_DEFAULT);
+    
+  /** resolved size honoring the parent avatar stack (if present) over the locally provided size. */
+  protected readonly effectiveSize = computed<AvatarSize>(() => this._avatarStack?.size() ?? this.size());
+  // ...
+}
+```

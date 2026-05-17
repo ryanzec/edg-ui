@@ -29,31 +29,53 @@
   }
 </ng-template>
 
+<ng-template #actions>
+  <!--
+    actions for a card should never propagate (since the card might be collapable) so jsut force stopping propagation
+
+    TODO: make this a more structured approach forcing overlay menu?
+  -->
+  <button type="button" (click)="$event.stopPropagation()">
+    <div class="header-actions">
+      <ng-content select="[actions]" />
+    </div>
+  </button>
+</ng-template>
+
 @if (isExpandable()) {
-  <div class="header-toggle" (click)="onToggle()">
+  <button type="button" class="header-toggle" (click)="onToggle()">
     <div class="header-titles">
       <div class="header-title-row">
-        <ng-container [ngTemplateOutlet]="titleContent" />
-        <org-button
-          class="header-toggle-icon"
-          variant="text"
-          color="neutral"
-          [label]="toggleLabel()"
-          [ariaLabel]="toggleLabel()"
-          [preIcon]="isExpanded() ? 'chevron-up' : 'chevron-down'"
-          [iconOnly]="true"
-          [ariaExpanded]="isExpanded()"
-        />
+        <div class="flex items-center gap-2">
+          <ng-container [ngTemplateOutlet]="titleContent" />
+          <ng-content select="[post]" />
+        </div>
+        <div class="flex gap-2 ml-auto">
+          <ng-container [ngTemplateOutlet]="actions" />
+          <org-button
+            class="header-toggle-icon"
+            variant="text"
+            color="neutral"
+            [label]="toggleLabel()"
+            [ariaLabel]="toggleLabel()"
+            [preIcon]="isExpanded() ? 'chevron-up' : 'chevron-down'"
+            [iconOnly]="true"
+            [ariaExpanded]="isExpanded()"
+          />
+        </div>
       </div>
       <ng-container [ngTemplateOutlet]="subtitleContent" />
     </div>
-  </div>
+  </button>
 } @else if (hasTitle() || hasSubtitle()) {
   <div class="header-titles">
-    <ng-container [ngTemplateOutlet]="titleContent" />
+    <div class="flex items-center gap-2">
+      <ng-container [ngTemplateOutlet]="titleContent" />
+      <ng-content select="[post]" />
+      <div class="ml-auto">
+        <ng-container [ngTemplateOutlet]="actions" />
+      </div>
+    </div>
     <ng-container [ngTemplateOutlet]="subtitleContent" />
   </div>
 }
-<div class="header-actions">
-  <ng-content select="[actions]" />
-</div>

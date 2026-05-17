@@ -218,6 +218,7 @@ const unblockedTicket: Ticket = {
       <org-ticket-details
         [ticket]="currentTicket()"
         (statusChanged)="onStatusChanged($event)"
+        (dueDateChanged)="onDueDateChanged($event)"
         (commentSubmitted)="onCommentSubmitted($event)"
         (subtaskToggled)="onSubtaskToggled($event)"
         (subtaskAddRequested)="onSubtaskAddRequested()"
@@ -242,6 +243,11 @@ class TicketDetailsLiveDemoStory {
   protected onStatusChanged(value: TicketStatus): void {
     this.lastEvent.set(`statusChanged → ${value}`);
     this.currentTicket.update((ticket) => ({ ...ticket, status: value }));
+  }
+
+  protected onDueDateChanged(value: DateTime): void {
+    this.lastEvent.set(`dueDateChanged → ${value.toISO()}`);
+    this.currentTicket.update((ticket) => ({ ...ticket, dueDate: value }));
   }
 
   protected onCommentSubmitted(comment: string): void {
@@ -300,6 +306,7 @@ const meta: Meta<TicketDetails> = {
   ### Features
   - Single \`ticket\` input accepting the full \`Ticket\` record (with nested user, label, subtask, connected-work, and activity types)
   - Status drop-down emits \`statusChanged\` on selection
+  - Due date is editable inline via \`org-date-picker-input\`; selections emit \`dueDateChanged\`
   - Activity feed renders mixed comment / change entries via \`org-timeline\` and a boxed comment cell, with an All / Comments / Changes tab filter
   - Composer powered by \`org-textarea\` + \`org-textarea-toolbar\` emits \`commentSubmitted\`
   - Subtasks and Connected work are independently expandable cards

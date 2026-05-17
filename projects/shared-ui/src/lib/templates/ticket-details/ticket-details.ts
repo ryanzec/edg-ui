@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { outputFromObservable } from '@angular/core/rxjs-interop';
 import { Subject } from 'rxjs';
+import { DateTime } from 'luxon';
+import { DateFormat } from '@organization/shared-utils';
 import { Avatar } from '../../core/avatar/avatar';
 import { AvatarStack } from '../../core/avatar/avatar-stack';
 import { Button } from '../../core/button/button';
@@ -8,6 +10,7 @@ import { Card } from '../../core/card/card';
 import { CardContent } from '../../core/card/card-content';
 import { CardHeader } from '../../core/card/card-header';
 import { Checklist, type ChecklistItemData } from '../../core/checklist/checklist';
+import { DatePickerInput } from '../../core/date-picker-input/date-picker-input';
 import { Divider } from '../../core/divider/divider';
 import { DropDownSelector, type DropDownSelectorPosition } from '../../core/drop-down-selector/drop-down-selector';
 import { type SelectionValue } from '../../brain/drop-down-selector-brain/drop-down-selector-brain';
@@ -62,6 +65,7 @@ export type TicketDetailsAcceptanceCriterionToggledEvent = {
     CardContent,
     CardHeader,
     Checklist,
+    DatePickerInput,
     Divider,
     DropDownSelector,
     Icon,
@@ -82,6 +86,8 @@ export type TicketDetailsAcceptanceCriterionToggledEvent = {
 export class TicketDetails {
   private readonly _statusChanged$ = new Subject<TicketStatus>();
 
+  private readonly _dueDateChanged$ = new Subject<DateTime>();
+
   private readonly _commentSubmitted$ = new Subject<string>();
 
   private readonly _subtaskToggled$ = new Subject<TicketDetailsSubtaskToggledEvent>();
@@ -101,6 +107,9 @@ export class TicketDetails {
 
   /** emitted when the user changes the status via the drop-down */
   public readonly statusChanged = outputFromObservable(this._statusChanged$);
+
+  /** emitted when the user picks a new due date via the date picker */
+  public readonly dueDateChanged = outputFromObservable(this._dueDateChanged$);
 
   /** emitted when the user submits a new comment via the composer */
   public readonly commentSubmitted = outputFromObservable(this._commentSubmitted$);
@@ -125,6 +134,9 @@ export class TicketDetails {
 
   /** static drop-down position used by the status drop-down (exposed for the template) */
   protected readonly statusPosition: DropDownSelectorPosition = STATUS_POSITION;
+
+  /** date format used by the due-date picker (exposed for the template) */
+  protected readonly dueDateFormat: DateFormat = DateFormat.STANDARD;
 
   /** the resolved type label for the meta row */
   protected readonly typeLabel = computed<string>(() => ticketTypeLabelMap[this.ticket().type]);
@@ -173,9 +185,6 @@ export class TicketDetails {
   /** formatted long-form date used in the meta line (e.g. "Apr 24, 2026") */
   protected readonly openedAtFormatted = computed<string>(() => this.ticket().openedAt.toFormat('MMM d, yyyy'));
 
-  /** formatted short due-date label (e.g. "May 19") */
-  protected readonly dueDateFormatted = computed<string>(() => this.ticket().dueDate.toFormat('MMM d'));
-
   /** handles a status drop-down selection change */
   protected onStatusSelectionChange(selected: SelectionValue<TicketStatus>[]): void {
     const first = selected[0];
@@ -189,6 +198,21 @@ export class TicketDetails {
     }
 
     this._statusChanged$.next(first.value);
+  }
+
+  /** handles a due-date selection from the date picker */
+  protected onDueDateSelected(selection: { startDate: DateTime | null; endDate: DateTime | null }): void {
+    const next = selection.startDate;
+
+    if (!next) {
+      return;
+    }
+
+    if (next.equals(this.ticket().dueDate)) {
+      return;
+    }
+
+    this._dueDateChanged$.next(next);
   }
 
   /** handles a comment submission from the activity composer */

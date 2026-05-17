@@ -58,7 +58,7 @@ const EXTERNAL_HREF_ICON_NAME: IconName = 'arrow-up-right';
   ],
   host: {
     role: 'listitem',
-    ['[attr.data-size]']: 'finalSize()',
+    ['[attr.data-size]']: 'effectiveSize()',
     ['[attr.data-selected]']: 'isActuallySelected() ? "" : null',
     ['[attr.aria-disabled]']: 'disabled() ? "true" : null',
     ['[attr.data-clickable]']: 'isClickable() ? "" : null',
@@ -139,7 +139,7 @@ export class ListItem {
   });
 
   /** the resolved size, using overrideSize when provided or falling back to the parent list size */
-  public readonly finalSize = computed<ListSize>(() => {
+  public readonly effectiveSize = computed<ListSize>(() => {
     if (this.overrideSize() !== undefined) {
       return this.overrideSize()!;
     }

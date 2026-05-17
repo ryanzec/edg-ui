@@ -522,7 +522,9 @@ class CardClickableShowcaseStory {
       <org-design-system-demo-canvas slot="canvas">
         <div class="grid grid-cols-2 gap-3 items-start max-w-3xl">
           <org-card [isExpandable]="true" [(isExpanded)]="expandedDefault">
-            <org-card-header title="Expandable · default expanded" subtitle="Click the header to collapse." />
+            <org-card-header title="Expandable · default expanded" subtitle="Click the header to collapse.">
+              <div post>test</div>
+            </org-card-header>
             <org-card-content>
               The content, footer, and image regions all self-hide when the card collapses. Click the header again to
               expand.

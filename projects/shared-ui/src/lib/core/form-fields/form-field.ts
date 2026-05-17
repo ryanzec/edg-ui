@@ -36,7 +36,7 @@ export class FormField {
   );
 
   /** whether to render the validation message area, falling back to the parent form-fields setting */
-  protected readonly finalReserveValidationSpace = computed<boolean>(() => {
+  protected readonly effectiveReserveValidationSpace = computed<boolean>(() => {
     return this.reserveValidationSpace() ?? !!this._formFields?.reserveValidationSpace();
   });
 }

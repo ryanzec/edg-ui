@@ -85,6 +85,9 @@ export const INPUT_POST_ICON_ARIA_LABEL_DEFAULT: string | undefined = undefined;
 /** default value for the inlineItems input */
 export const INPUT_INLINE_ITEMS_DEFAULT: InputInlineItem[] = [];
 
+/** default value for the asTrigger input */
+export const INPUT_AS_TRIGGER_DEFAULT = false;
+
 // re-export the brain's input type union for consumer convenience
 export { allInputTypes, type InputType };
 
@@ -107,6 +110,7 @@ export type InputInlineItem = {
     '[attr.data-state]': 'isError() ? "error" : null',
     '[attr.data-disabled]': 'isDisabled() ? "" : null',
     '[attr.data-readonly]': 'isReadonly() ? "" : null',
+    '[attr.data-as-trigger]': 'asTrigger() ? "" : null',
     '[attr.data-loading]': 'loading() ? "" : null',
     '[attr.data-show-clear]': 'showClear()',
     '[attr.data-has-pre]': 'hasPreSlot() ? "" : null',
@@ -242,6 +246,15 @@ export class Input implements ControlValueAccessor {
   /** array of inline tag items displayed inside the input */
   public readonly inlineItems = input<InputInlineItem[]>(INPUT_INLINE_ITEMS_DEFAULT);
 
+  /**
+   * when true, the input behaves as a popover/picker trigger — native typing is suppressed
+   * (same as readonly) but the field renders with normal interactive visuals (pointer cursor,
+   * standard bg, hover/focus feedback). intended for shell inputs whose value is wholly owned
+   * by an external overlay (date picker, select, combobox, etc.). disabled always overrides
+   * this — a disabled trigger still shows the not-allowed cursor.
+   */
+  public readonly asTrigger = input<boolean>(INPUT_AS_TRIGGER_DEFAULT);
+
   /** emitted when the input receives focus (forwarded from the brain) */
   public readonly focused = output<void>();
 
@@ -266,8 +279,11 @@ export class Input implements ControlValueAccessor {
   /** whether the host should expose the readonly data attribute (consumer readonly only — loading uses its own visual treatment) */
   protected readonly isReadonly = computed<boolean>(() => this.readonly());
 
-  /** the readonly value forwarded to the brain — combines consumer readonly with the loading state */
-  protected readonly effectiveReadonly = computed<boolean>(() => this.readonly() || this.loading());
+  /**
+   * the readonly value forwarded to the brain — combines consumer readonly, loading state,
+   * and trigger mode (all three suppress native typing).
+   */
+  protected readonly effectiveReadonly = computed<boolean>(() => this.readonly() || this.loading() || this.asTrigger());
 
   /** whether the host should expose the error data-state — driven by the form-field validation message */
   protected readonly isError = computed<boolean>(() => this._brain().hasValidationMessage());

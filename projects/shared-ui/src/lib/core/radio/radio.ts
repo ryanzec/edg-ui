@@ -84,7 +84,7 @@ export class Radio implements OnInit {
   public readonly description = input<string>(RADIO_DESCRIPTION_DEFAULT);
 
   /** the resolved name — prefers group name over local name input */
-  public readonly finalName = computed<string>(() => this._radioGroup?.name() ?? this.name());
+  public readonly effectiveName = computed<string>(() => this._radioGroup?.name() ?? this.name());
 
   /** the text size derived from the radio size */
   public readonly textSize = computed<TextSize>(() => {

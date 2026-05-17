@@ -1,9 +1,7 @@
 @layer components {
   :host {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: start;
-    gap: var(--card-header-grid-gap);
+    display: flex;
+    gap: var(--card-header-gap);
   }
 
   /* actions-only mode: single column, actions hugged right */
@@ -17,6 +15,7 @@
     flex-direction: column;
     gap: var(--card-header-titles-gap);
     min-width: 0;
+    flex: 1;
   }
 
   .header-title {
@@ -43,8 +42,14 @@
     flex-shrink: 0;
   }
 
+  /* drop the slot out of flex when nothing is projected so the host gap doesn't paint trailing empty space */
+  .header-actions:not(:has(*)) {
+    display: none;
+  }
+
   /* expandable: the whole title block is a click target; cursor signals the affordance */
   .header-toggle {
+    flex: 1;
     cursor: pointer;
   }
 

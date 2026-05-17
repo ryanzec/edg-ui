@@ -34,9 +34,14 @@
       </div>
       <org-divider direction="vertical" />
       <div class="flex items-center gap-2">
-        <org-icon name="calendar" size="sm" />
         <span class="text-xs text-muted">Due</span>
-        <span>{{ dueDateFormatted() }}</span>
+        <org-date-picker-input
+          name="due-date"
+          [dateFormat]="dueDateFormat"
+          [selectedStartDate]="ticket().dueDate"
+          [allowClear]="false"
+          (dateSelected)="onDueDateSelected($event)"
+        />
       </div>
       <org-divider direction="vertical" />
       <div class="flex items-center gap-2">
