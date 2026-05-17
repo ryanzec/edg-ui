@@ -1,0 +1,61 @@
+:root {
+  /* board container */
+  --kanban-board-bg: transparent;
+  --kanban-board-lane-gap: var(--spacing-3);
+
+  /* lane container */
+  --kanban-board-lane-min-width: var(--sizing-2xs);
+  --kanban-board-lane-max-width: var(--sizing-2xs);
+  --kanban-board-lane-bg: var(--color-bg-surface-secondary);
+  --kanban-board-lane-bg-drag-over: var(--color-bg-surface-tertiary);
+  --kanban-board-lane-border-color: var(--color-border-soft);
+  --kanban-board-lane-border-width: 0rem;
+  --kanban-board-lane-border-radius: var(--radius-base);
+
+  /* lane header */
+  --kanban-board-lane-header-padding-block: var(--spacing-2);
+  --kanban-board-lane-header-padding-inline: var(--spacing-3);
+  --kanban-board-lane-header-gap: var(--spacing-2);
+  --kanban-board-lane-header-border-color: var(--color-border-soft);
+  --kanban-board-lane-header-border-width: 0rem;
+  --kanban-board-lane-heading-font-size: var(--font-size-sm);
+  --kanban-board-lane-heading-font-weight: var(--font-weight-semibold);
+  --kanban-board-lane-heading-line-height: var(--line-height-tight);
+  --kanban-board-lane-heading-fg: var(--color-fg);
+
+  /* lane actions slot */
+  --kanban-board-lane-actions-gap: var(--spacing-1);
+
+  /* lane body (items list) */
+  --kanban-board-lane-items-padding: var(--spacing-2);
+  --kanban-board-lane-items-gap: var(--spacing-2);
+
+  /* lane empty hint (only shown while a drag is in progress) */
+  --kanban-board-lane-empty-hint-padding-block: var(--spacing-4);
+  --kanban-board-lane-empty-hint-padding-inline: var(--spacing-3);
+  --kanban-board-lane-empty-hint-fg: var(--color-fg-muted);
+  --kanban-board-lane-empty-hint-font-size: var(--font-size-sm);
+
+  /* card focus outline (a11y) — chrome (bg, border, radius, padding) is provided by the consumer's <org-card> */
+  --kanban-board-card-focus-outline-color: var(--color-focus-ring);
+  --kanban-board-card-focus-outline-width: 0.125rem; /* 2px */
+  --kanban-board-card-focus-outline-offset: 0.125rem; /* 2px */
+
+  /* card selection outline (a11y reinforcement of aria-selected) */
+  --kanban-board-card-selected-outline-color: var(--color-primary);
+  --kanban-board-card-selected-outline-width: 0.125rem; /* 2px */
+  --kanban-board-card-selected-outline-offset: 0.125rem; /* 2px */
+
+  /* card being-dragged fade */
+  --kanban-board-card-being-dragged-opacity: 0.4;
+
+  /* drop indicator line (drawn at the closest edge of the over-card) */
+  --kanban-board-drop-indicator-color: var(--color-primary);
+  --kanban-board-drop-indicator-thickness: 0.125rem; /* 2px */
+  --kanban-board-drop-indicator-z-index: var(--z-index-raised);
+}
+
+.dark {
+  --kanban-board-lane-bg: var(--color-bg-surface);
+  --kanban-board-lane-bg-drag-over: var(--color-bg-surface-secondary);
+}

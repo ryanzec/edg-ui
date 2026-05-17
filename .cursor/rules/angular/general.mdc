@@ -9,7 +9,7 @@ alwaysApply: true
 - **ALWAYS** use `projects/shared-ui/src/lib/core/local-storage-manager` for persistent local storage data
 - **ALWAYS** prefer organizing writable state into as few unified signal objects (ideally 1 called `_state`) instead of a signal per piece of data.
 - **NEVER** use the following decorators: `@HostListener` / `@HostBinding`.
-- **ALWAYS** use the `logManager` singleton from `projects/shared-utils/src/utils/log-manager` to log and use and object format with a minimim of a `type` like (**EXCEPT** form storkbook files which can use `console.log()` as needed):
+- **ALWAYS** use the `logManager` singleton from `projects/shared-utils/src/utils/log-manager.ts` to log and use and object format with a minimim of a `type` like (**EXCEPT** form storkbook files which can use `console.log()` as needed):
 ```ts
 logManager.warn({
   type: 'some-error-type',

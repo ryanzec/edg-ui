@@ -7,6 +7,10 @@ const claudeMdFile = path.join(repoRoot, '.claude/CLAUDE.md');
 const targetDir = path.join(repoRoot, '.cursor/rules');
 const commandsSourceDir = path.join(repoRoot, '.claude/commands');
 const commandsTargetDir = path.join(repoRoot, '.cursor/commands');
+const skillsSourceDir = path.join(repoRoot, '.claude/skills');
+const skillsTargetDir = path.join(repoRoot, '.cursor/skills');
+
+const replaceClaudePaths = (content) => content.replace(/\.claude\//g, '.cursor/');
 
 const frontmatterRegex = /^---\n([\s\S]*?)\n---\n?/;
 
@@ -40,7 +44,7 @@ const transformFrontmatter = (frontmatter) => {
 };
 
 const transformBody = (body) => {
-  return body.replace(/\.claude\/rules/g, '.cursor/rules');
+  return replaceClaudePaths(body);
 };
 
 const syncFile = (sourceFile) => {
@@ -124,4 +128,28 @@ if (fs.existsSync(commandsSourceDir)) {
   }
 
   console.log(`\ndone: synced ${commandFiles.length} file(s) from .claude/commands to .cursor/commands`);
+}
+
+if (fs.existsSync(skillsSourceDir)) {
+  clearDirectory(skillsTargetDir, '.cursor/skills');
+
+  const skillFiles = getAllFiles(skillsSourceDir);
+
+  for (const skillFile of skillFiles) {
+    const relativePath = path.relative(skillsSourceDir, skillFile);
+    const targetFile = path.join(skillsTargetDir, relativePath);
+    const targetFileDir = path.dirname(targetFile);
+
+    if (!fs.existsSync(targetFileDir)) {
+      fs.mkdirSync(targetFileDir, { recursive: true });
+    }
+
+    const content = fs.readFileSync(skillFile, 'utf8');
+    const output = replaceClaudePaths(content);
+
+    fs.writeFileSync(targetFile, output, 'utf8');
+    console.log(`synced: skills/${relativePath}`);
+  }
+
+  console.log(`\ndone: synced ${skillFiles.length} file(s) from .claude/skills to .cursor/skills`);
 }

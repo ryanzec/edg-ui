@@ -1,0 +1,11 @@
+@layer components {
+  .card-click-target {
+    display: block;
+    width: 100%;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    text-align: inherit;
+    cursor: pointer;
+  }
+}

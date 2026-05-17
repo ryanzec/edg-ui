@@ -3,39 +3,39 @@ tasks:
   build-tokens:
     command: node $workspaceRoot/.moon/scripts/build-figma-plugin-tokens.cjs
     inputs:
-    - /projects/shared-ui/src/lib/styles/base-tokens.css
-    - /projects/shared-ui/src/lib/core/button/button-tokens.css
-    - /projects/shared-ui/src/lib/core/tags/tags-tokens.css
-    - /projects/shared-ui/src/lib/core/input/input-tokens.css
-    - /projects/shared-ui/src/lib/core/checkbox/checkbox-tokens.css
-    - /projects/shared-ui/src/lib/core/radio/radio-tokens.css
-    - /projects/shared-ui/src/lib/core/icon/icon-tokens.css
-    - /projects/shared-ui/src/lib/core/label/label-tokens.css
-    - /projects/shared-ui/src/lib/core/loading-spinner/loading-spinner-tokens.css
-    - /.moon/scripts/build-figma-plugin-tokens.cjs
+      - /projects/shared-ui/src/lib/styles/base-tokens.css
+      - /projects/shared-ui/src/lib/core/button/button-tokens.css
+      - /projects/shared-ui/src/lib/core/tags/tags-tokens.css
+      - /projects/shared-ui/src/lib/core/input/input-tokens.css
+      - /projects/shared-ui/src/lib/core/checkbox/checkbox-tokens.css
+      - /projects/shared-ui/src/lib/core/radio/radio-tokens.css
+      - /projects/shared-ui/src/lib/core/icon/icon-tokens.css
+      - /projects/shared-ui/src/lib/core/label/label-tokens.css
+      - /projects/shared-ui/src/lib/core/loading-spinner/loading-spinner-tokens.css
+      - /.moon/scripts/build-figma-plugin-tokens.cjs
     outputs:
-    - src/generated/tokens.json
+      - src/generated/tokens.json
     options:
       runFromWorkspaceRoot: false
   build:
     command: node esbuild.config.cjs
     inputs:
-    - src/**/*
-    - esbuild.config.cjs
-    - tsconfig.json
-    - manifest.json
+      - src/**/*
+      - esbuild.config.cjs
+      - tsconfig.json
+      - manifest.json
     outputs:
-    - dist/code.js
-    - dist/ui.html
+      - dist/code.js
+      - dist/ui.html
     deps:
-    - build-tokens
+      - build-tokens
   typecheck:
     command: $workspaceRoot/node_modules/.bin/tsc --noEmit -p .
     inputs:
-    - src/**/*
-    - tsconfig.json
+      - src/**/*
+      - tsconfig.json
     deps:
-    - build-tokens
+      - build-tokens
 workspace:
   inheritedTasks:
     include: []

@@ -8,11 +8,11 @@ import {
   NgZone,
   DestroyRef,
   ElementRef,
-  AfterViewInit,
 } from '@angular/core';
 import { CdkScrollable, ScrollDispatcher } from '@angular/cdk/scrolling';
+import { NgTemplateOutlet } from '@angular/common';
 import { Subject, type Observable } from 'rxjs';
-import { NgScrollbar } from 'ngx-scrollbar';
+import { NgScrollbar, NgScrollbarExt } from 'ngx-scrollbar';
 import type { ScrollbarOrientation, ScrollbarVisibility } from 'ngx-scrollbar';
 import { angularUtils, cssUtils } from '@organization/shared-utils';
 
@@ -42,6 +42,15 @@ export const SCROLL_AREA_ROLE_DEFAULT: string | undefined = undefined;
 
 /** default value for the ariaLabel input */
 export const SCROLL_AREA_ARIA_LABEL_DEFAULT: string | undefined = undefined;
+
+/** default value for the externalViewport input */
+export const SCROLL_AREA_EXTERNAL_VIEWPORT_DEFAULT: string | undefined = undefined;
+
+/** default value for the externalContentWrapper input */
+export const SCROLL_AREA_EXTERNAL_CONTENT_WRAPPER_DEFAULT: string | undefined = undefined;
+
+/** default value for the externalSpacer input */
+export const SCROLL_AREA_EXTERNAL_SPACER_DEFAULT: string | undefined = undefined;
 
 /**
  * minimal CdkScrollable-shaped adapter so CDK's ScrollDispatcher can be told about an `ngx-scrollbar`
@@ -83,7 +92,7 @@ class _NgScrollbarCdkScrollable {
 @Component({
   selector: 'org-scroll-area',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [NgScrollbar],
+  imports: [NgScrollbar, NgScrollbarExt, NgTemplateOutlet],
   templateUrl: './scroll-area.html',
   styleUrl: './scroll-area.css',
   host: {
@@ -92,11 +101,14 @@ class _NgScrollbarCdkScrollable {
     '[attr.data-enabled]': 'enabled() ? "" : null',
   },
 })
-export class ScrollArea implements AfterViewInit {
+export class ScrollArea {
   private readonly _scrollDispatcher = inject(ScrollDispatcher);
   private readonly _ngZone = inject(NgZone);
   private readonly _destroyRef = inject(DestroyRef);
-  private readonly _ngScrollbarComponent = viewChild.required<NgScrollbar>('ngScrollbarComponent');
+  private readonly _ngScrollbarComponent = viewChild.required<NgScrollbar | NgScrollbarExt>('ngScrollbarComponent');
+
+  /** the active cdk-shaped scrollable adapter; tracked so it can be deregistered on destroy */
+  private _cdkScrollable: _NgScrollbarCdkScrollable | null = null;
 
   /** scroll direction controlling which axes are scrollable */
   public direction = input<ScrollAreaDirection>(SCROLL_AREA_DIRECTION_DEFAULT);
@@ -126,6 +138,32 @@ export class ScrollArea implements AfterViewInit {
     transform: angularUtils.transformNullToUndefined,
   });
 
+  /**
+   * css selector identifying a consumer-provided viewport element inside the projected content. when set, ngx-scrollbar
+   * attaches to that element instead of using its internal viewport, allowing the consumer's layout to control viewport
+   * sizing. needed when ngx-scrollbar's content-derived internal viewport height would break a nested layout (e.g. a
+   * horizontal scroll wrapping vertically-scrollable children that need a definite container height).
+   */
+  public externalViewport = input<string | undefined, string | null | undefined>(
+    SCROLL_AREA_EXTERNAL_VIEWPORT_DEFAULT,
+    {
+      transform: angularUtils.transformNullToUndefined,
+    }
+  );
+
+  /** optional css selector for the content-wrapper element inside the external viewport */
+  public externalContentWrapper = input<string | undefined, string | null | undefined>(
+    SCROLL_AREA_EXTERNAL_CONTENT_WRAPPER_DEFAULT,
+    {
+      transform: angularUtils.transformNullToUndefined,
+    }
+  );
+
+  /** optional css selector for the spacer element inside the external viewport (virtual-scroll integration) */
+  public externalSpacer = input<string | undefined, string | null | undefined>(SCROLL_AREA_EXTERNAL_SPACER_DEFAULT, {
+    transform: angularUtils.transformNullToUndefined,
+  });
+
   /** reference to the cssUtils merge function for combining class strings in the template */
   protected mergeClasses = cssUtils.merge;
 
@@ -150,17 +188,38 @@ export class ScrollArea implements AfterViewInit {
     return this._ngScrollbarComponent().adapter.viewportElement;
   });
 
-  public ngAfterViewInit(): void {
-    // register the ngx-scrollbar viewport with cdk's scrolldispatcher so cdk overlays anchored to a
-    // trigger inside this scroll area receive scroll events and reposition (or close) accordingly —
-    // without this, overlays stay fixed in viewport coordinates while the trigger moves underneath
-    const viewportElement = this.containerElement();
-    const scrollable = new _NgScrollbarCdkScrollable(viewportElement, this._ngZone);
-    this._scrollDispatcher.register(scrollable as unknown as CdkScrollable);
-
+  constructor() {
     this._destroyRef.onDestroy(() => {
-      this._scrollDispatcher.deregister(scrollable as unknown as CdkScrollable);
-      scrollable.destroy();
+      if (!this._cdkScrollable) {
+        return;
+      }
+
+      this._scrollDispatcher.deregister(this._cdkScrollable as unknown as CdkScrollable);
+      this._cdkScrollable.destroy();
     });
+  }
+
+  /**
+   * registers the ngx-scrollbar viewport with cdk's scrolldispatcher so cdk overlays anchored to a
+   * trigger inside this scroll area receive scroll events and reposition (or close) accordingly —
+   * without this, overlays stay fixed in viewport coordinates while the trigger moves underneath.
+   *
+   * invoked from ng-scrollbar's `(afterInit)` event so the viewport element is guaranteed to be
+   * available in both standard and externalViewport modes (in externalViewport mode the adapter is
+   * initialized via afterNextRender, which fires after the parent's ngAfterViewInit).
+   */
+  protected onScrollbarInitialized(): void {
+    if (this._cdkScrollable) {
+      return;
+    }
+
+    const viewportElement = this.containerElement();
+
+    if (!viewportElement) {
+      return;
+    }
+
+    this._cdkScrollable = new _NgScrollbarCdkScrollable(viewportElement, this._ngZone);
+    this._scrollDispatcher.register(this._cdkScrollable as unknown as CdkScrollable);
   }
 }

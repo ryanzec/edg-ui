@@ -57,6 +57,7 @@ const FORM_FIELDS_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/
 const ICON_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/core/icon/icon-tokens.css');
 const INDICATOR_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/core/indicator/indicator-tokens.css');
 const INPUT_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/core/input/input-tokens.css');
+const KANBAN_BOARD_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/core/kanban-board/kanban-board-tokens.css');
 const KBD_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/core/kbd/kbd-tokens.css');
 const LABEL_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/core/label/label-tokens.css');
 const LAST_UPDATED_TOKENS_CSS = path.join(
@@ -317,6 +318,7 @@ async function main() {
   const fileUploadContent = cleanCss(fs.readFileSync(FILE_UPLOAD_TOKENS_CSS, 'utf-8'));
   const formFieldsContent = cleanCss(fs.readFileSync(FORM_FIELDS_TOKENS_CSS, 'utf-8'));
   const inputContent = cleanCss(fs.readFileSync(INPUT_TOKENS_CSS, 'utf-8'));
+  const kanbanBoardContent = cleanCss(fs.readFileSync(KANBAN_BOARD_TOKENS_CSS, 'utf-8'));
   const kbdContent = cleanCss(fs.readFileSync(KBD_TOKENS_CSS, 'utf-8'));
   const overlayMenuContent = cleanCss(fs.readFileSync(OVERLAY_MENU_TOKENS_CSS, 'utf-8'));
   const paginationContent = cleanCss(fs.readFileSync(PAGINATION_TOKENS_CSS, 'utf-8'));
@@ -372,6 +374,7 @@ async function main() {
     ...findBlocks(fileUploadContent, ':root').map(extractVariables),
     ...findBlocks(formFieldsContent, ':root').map(extractVariables),
     ...findBlocks(inputContent, ':root').map(extractVariables),
+    ...findBlocks(kanbanBoardContent, ':root').map(extractVariables),
     ...findBlocks(kbdContent, ':root').map(extractVariables),
     ...findBlocks(overlayMenuContent, ':root').map(extractVariables),
     ...findBlocks(paginationContent, ':root').map(extractVariables),
@@ -424,6 +427,7 @@ async function main() {
     ...findBlocks(fileUploadContent, '.dark').map(extractVariables),
     ...findBlocks(formFieldsContent, '.dark').map(extractVariables),
     ...findBlocks(inputContent, '.dark').map(extractVariables),
+    ...findBlocks(kanbanBoardContent, '.dark').map(extractVariables),
     ...findBlocks(kbdContent, '.dark').map(extractVariables),
     ...findBlocks(overlayMenuContent, '.dark').map(extractVariables),
     ...findBlocks(paginationContent, '.dark').map(extractVariables),

@@ -4,6 +4,7 @@ import { LoginView } from './authentication/login-view/login-view';
 import { UsersView } from './user/users-view/users-view';
 import { UsersView as DemoUsersView } from './demo/users-view/users-view';
 import { TicketDetailsView as DemoTicketDetailsView } from './demo/ticket-details-view/ticket-details-view';
+import { KanbanView as DemoKanbanView } from './demo/kanban-view/kanban-view';
 import { ApplicationRoute } from '@organization/shared-ui';
 
 export const routes: ApplicationRoute[] = [
@@ -25,6 +26,11 @@ export const routes: ApplicationRoute[] = [
   {
     path: 'demo/ticket-details',
     component: DemoTicketDetailsView,
+    data: { unauthenticatedRedirect: '/login' },
+  },
+  {
+    path: 'demo/kanban',
+    component: DemoKanbanView,
     data: { unauthenticatedRedirect: '/login' },
   },
   // default

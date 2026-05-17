@@ -23,6 +23,7 @@
 @import './icon/icon-tokens.css';
 @import './indicator/indicator-tokens.css';
 @import './input/input-tokens.css';
+@import './kanban-board/kanban-board-tokens.css';
 @import './kbd/kbd-tokens.css';
 @import './label/label-tokens.css';
 @import './last-updated/last-updated-tokens.css';

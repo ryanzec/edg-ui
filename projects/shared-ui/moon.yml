@@ -3,9 +3,9 @@ tasks:
   type-check:
     command: $workspaceRoot/node_modules/.bin/ngc --project tsconfig.lib.prod.json
     inputs:
-    - '**/*'
-    - /tsconfig.json
-    - /tsconfig.lib.json
+      - '**/*'
+      - /tsconfig.json
+      - /tsconfig.lib.json
     env:
       NODE_ENV: development
     options:
@@ -13,9 +13,9 @@ tasks:
   test-unit:
     command: $workspaceRoot/node_modules/.bin/ng test shared-ui
     inputs:
-    - '**/*'
-    - /tsconfig.json
-    - /tsconfig.spec.json
+      - '**/*'
+      - /tsconfig.json
+      - /tsconfig.spec.json
     env:
       NODE_ENV: development
     options:

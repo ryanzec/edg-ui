@@ -1,0 +1,23 @@
+<div class="kanban-lane-header">
+  @if (heading()) {
+    <span class="kanban-lane-heading">{{ heading() }}</span>
+  }
+  @if (showCount()) {
+    <org-tag color="neutral" size="sm">{{ itemCount() }}</org-tag>
+  }
+  <span class="kanban-lane-actions"><ng-content select="[actions]" /></span>
+</div>
+<org-scroll-area class="kanban-lane-body" direction="vertical" scrollClass="h-full w-full" [onlyShowOnHover]="true">
+  <div class="kanban-lane-items" data-testid="kanban-lane-items">
+    @if (cardTemplate()) {
+      @for (item of items(); track item.id) {
+        <org-kanban-card [cardId]="item.id" [laneId]="laneId()">
+          <ng-container [ngTemplateOutlet]="cardTemplate()!" [ngTemplateOutletContext]="{ $implicit: item }" />
+        </org-kanban-card>
+      }
+    }
+    @if (showEmptyHint()) {
+      <div class="kanban-lane-empty-hint" data-testid="kanban-lane-empty-hint">Drop here</div>
+    }
+  </div>
+</org-scroll-area>

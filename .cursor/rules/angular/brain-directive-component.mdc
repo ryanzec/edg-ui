@@ -30,3 +30,4 @@ The following is a list of logic / state that must **NEVER** go into the brain d
   - types / interfaces
   - constants
 - **NEVER** prefix inputs / outputs / models on brain directives with the directive name; brain directives use bare names (e.g. `direction`, `size`, `dragStarted`). This overrides the generic directive prefix rule in `.cursor/rules/angular/directives.md`.
+- **ALWAYS** group related brains in the same directory to match the structure of the referenced core component.

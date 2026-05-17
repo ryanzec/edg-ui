@@ -13,6 +13,10 @@ description: Use this skill whenever the user asks to create, modify, refactor, 
 - `.claude/rules/use-cases/detected-output-has-listener.md`
 - `.claude/rules/use-cases/needing-multiple-ng-content-element.md`
 
+# Reuse Protocol
+- You are to **ALWAYS** use the `@angular/cdk` package over native or customer solution when possible.
+- You are to **ALWAYS** re-use functionality from `projects/shared-ui/src/lib/core` over using bespoken / inline components when possible.
+
 # Core Component
 
 The rules in this section must **ONLY** be applied to core components.
@@ -36,3 +40,7 @@ The rules in this section must **ONLY** be applied to core components.
 
 # General Rules
 - **ALWAYS** choose inference over duplication of inputs (instead of having both a `clickable` input() and `clicked` output(), just have a clicked subject+ `outputFromObservable()` to be able to infer `clickable`)
+
+# REVIEW AT THE END
+- **ALWAYS** make sure if a token file has been add or modified in `projects/shared-ui/src/lib/core`, it is properly imported in `projects/shared-ui/src/lib/core/tokens.css`
+- **ALWAYS** update the components `llm.md` file (or add one in the components main directory, eg. `projects/shared-ui/src/lib/core/card/llm/md`) the details the rule in how to use the component highly optomized for LLMs.

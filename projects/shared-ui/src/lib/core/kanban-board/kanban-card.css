@@ -1,0 +1,43 @@
+@layer components {
+  :host {
+    display: block;
+    position: relative;
+    cursor: grab;
+  }
+
+  /* selection outline — sits outside the consumer's card content; defensible as a11y reinforcement of aria-selected */
+  :host([aria-selected='true']) {
+    outline: var(--kanban-board-card-selected-outline-width) solid var(--kanban-board-card-selected-outline-color);
+    outline-offset: var(--kanban-board-card-selected-outline-offset);
+  }
+
+  /* focus outline overrides selection outline when both apply (only one outline can render per element) */
+  :host(:focus-visible) {
+    outline: var(--kanban-board-card-focus-outline-width) solid var(--kanban-board-card-focus-outline-color);
+    outline-offset: var(--kanban-board-card-focus-outline-offset);
+  }
+
+  :host([data-being-dragged]) {
+    opacity: var(--kanban-board-card-being-dragged-opacity);
+    cursor: grabbing;
+  }
+
+  .kanban-card-drop-indicator {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: var(--kanban-board-drop-indicator-thickness);
+    background: var(--kanban-board-drop-indicator-color);
+    border-radius: var(--kanban-board-drop-indicator-thickness);
+    pointer-events: none;
+    z-index: var(--kanban-board-drop-indicator-z-index);
+  }
+
+  .kanban-card-drop-indicator-top {
+    top: calc(-1 * (var(--kanban-board-drop-indicator-thickness) / 2 + var(--kanban-board-lane-items-gap) / 2));
+  }
+
+  .kanban-card-drop-indicator-bottom {
+    bottom: calc(-1 * (var(--kanban-board-drop-indicator-thickness) / 2 + var(--kanban-board-lane-items-gap) / 2));
+  }
+}

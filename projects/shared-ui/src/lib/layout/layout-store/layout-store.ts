@@ -32,9 +32,9 @@ const NAVIGATION_ITEMS: NavigationItem[] = [
     ],
   },
   { id: 'analytics', label: 'Analytics', icon: 'grid-2x2', routePath: '/analytics' },
-  { id: 'team', label: 'Team', icon: 'users', routePath: '/team' },
-  { id: 'docs', label: 'Docs', icon: 'file-text', routePath: '/docs' },
-  { id: 'billing', label: 'Billing', icon: 'credit-card', routePath: '/billing' },
+  { id: 'team', label: 'Team', icon: 'users', routePath: '/demo/users' },
+  { id: 'kanban', label: 'Kanban', icon: 'file-text', routePath: '/demo/kanban' },
+  { id: 'ticket-details', label: 'Ticket Details', icon: 'credit-card', routePath: '/demo/ticket-details' },
 ];
 
 /** hardcoded settings overlay menu items rendered alongside the appearance toggle */

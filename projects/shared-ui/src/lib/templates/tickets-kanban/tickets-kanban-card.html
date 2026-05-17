@@ -1,0 +1,28 @@
+<org-card>
+  <org-card-header [title]="ticket().title" />
+  <org-card-content>
+    <div class="flex flex-col gap-2">
+      <p class="line-clamp-2 text-sm text-muted">{{ ticket().description }}</p>
+      @if (ticket().tags.length > 0) {
+        <div class="flex flex-wrap gap-1">
+          @for (tag of ticket().tags; track tag) {
+            <org-tag color="neutral" size="sm">{{ tag }}</org-tag>
+          }
+        </div>
+      }
+    </div>
+  </org-card-content>
+  <org-card-footer alignment="start">
+    <div class="flex flex-row items-center justify-between gap-2 w-full">
+      <org-avatar
+        size="sm"
+        [label]="creatorInitials()"
+        [imgEmail]="ticket().createdBy.email"
+        [imgAlt]="ticket().createdBy.name"
+        [showLabel]="true"
+        [subLabel]="ticket().createdBy.name"
+      />
+      <span class="text-xs text-muted">{{ updatedRelative() }}</span>
+    </div>
+  </org-card-footer>
+</org-card>

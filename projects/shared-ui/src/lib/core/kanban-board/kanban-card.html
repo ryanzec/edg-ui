@@ -1,0 +1,13 @@
+@if (brain.closestEdge() === 'top') {
+  <div
+    class="kanban-card-drop-indicator kanban-card-drop-indicator-top"
+    data-testid="kanban-card-drop-indicator-top"
+  ></div>
+}
+<ng-content />
+@if (brain.closestEdge() === 'bottom') {
+  <div
+    class="kanban-card-drop-indicator kanban-card-drop-indicator-bottom"
+    data-testid="kanban-card-drop-indicator-bottom"
+  ></div>
+}

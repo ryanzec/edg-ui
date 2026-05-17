@@ -12,19 +12,51 @@
 
   when enabled=false, hiddenScrollbarClass hides the track and thumb elements so no scrollbar ui
   is rendered, preserving the original "no scrollbar when scroll is not needed" behavior.
+
+  externalViewport mode: when externalViewport is provided, ngx-scrollbar attaches to the consumer-
+  provided viewport element inside the projected content (matched by the selector). this lets the
+  consumer's layout control viewport sizing — required when nested scrolling contexts need a
+  definite-height viewport that ngx-scrollbar's internal content-derived viewport cannot provide.
+  in this mode there is no spacing-div wrapper; the consumer's own viewport element owns its
+  padding/layout.
 -->
-<ng-scrollbar
-  #ngScrollbarComponent
-  [orientation]="orientation()"
-  [visibility]="visibility()"
-  appearance="compact"
-  [class]="mergeClasses(containerClass(), scrollClass())"
-  [trackClass]="hiddenScrollbarClass()"
-  [thumbClass]="hiddenScrollbarClass()"
-  [attr.role]="role()"
-  [attr.aria-label]="ariaLabel()"
->
-  <div [class]="spacingClass()">
-    <ng-content />
-  </div>
-</ng-scrollbar>
+@if (externalViewport(); as externalViewportSelector) {
+  <ng-scrollbar
+    #ngScrollbarComponent
+    [externalViewport]="externalViewportSelector"
+    [externalContentWrapper]="externalContentWrapper() ?? ''"
+    [externalSpacer]="externalSpacer() ?? ''"
+    [orientation]="orientation()"
+    [visibility]="visibility()"
+    appearance="compact"
+    [class]="mergeClasses(containerClass(), scrollClass())"
+    [trackClass]="hiddenScrollbarClass()"
+    [thumbClass]="hiddenScrollbarClass()"
+    [attr.role]="role()"
+    [attr.aria-label]="ariaLabel()"
+    (afterInit)="onScrollbarInitialized()"
+  >
+    <ng-container [ngTemplateOutlet]="projectedContent" />
+  </ng-scrollbar>
+} @else {
+  <ng-scrollbar
+    #ngScrollbarComponent
+    [orientation]="orientation()"
+    [visibility]="visibility()"
+    appearance="compact"
+    [class]="mergeClasses(containerClass(), scrollClass())"
+    [trackClass]="hiddenScrollbarClass()"
+    [thumbClass]="hiddenScrollbarClass()"
+    [attr.role]="role()"
+    [attr.aria-label]="ariaLabel()"
+    (afterInit)="onScrollbarInitialized()"
+  >
+    <div [class]="spacingClass()">
+      <ng-container [ngTemplateOutlet]="projectedContent" />
+    </div>
+  </ng-scrollbar>
+}
+
+<ng-template #projectedContent>
+  <ng-content />
+</ng-template>

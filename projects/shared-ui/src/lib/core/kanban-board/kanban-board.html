@@ -1,0 +1,14 @@
+<org-scroll-area
+  direction="horizontal"
+  scrollClass="h-full w-full"
+  externalViewport=".kanban-board-scroll"
+  externalContentWrapper=".kanban-board-content"
+>
+  <div class="kanban-board-scroll">
+    <div class="kanban-board-content">
+      <div class="kanban-board-lanes">
+        <ng-content />
+      </div>
+    </div>
+  </div>
+</org-scroll-area>

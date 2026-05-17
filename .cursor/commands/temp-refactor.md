@@ -25,6 +25,21 @@ Architecture Rules
 3. Reference Images
 - If references images are provided, there are **ONLY** to be used as a **REFERENCE**. If we have core component for related functionality, use those component **AS IS**.
 
+4. Refactor Stories
+- Implement the story refactor work as defined in `.claude/commands/refactor-story-design-system.md`.
+
+# MUST Follow Notes
+These must **ALWAYS** be followed and override anything in the implementation notes referenced markdown file
+- All scrolling functionality **MUST** use the `projects/shared-ui/src/lib/core/scroll-area` component.
+- If a component can be used has a form input, you must create a Non Form Usage and Reactive Form Integration stories (like we do in `projects/shared-ui/src/lib/core/button-toggle/button-toggle.stories.ts`).
+- All references to `md` for size / design tokens must **ALWAYS** use `base` instead.
+- All values from the reference images and markdown notes are close, not exact, always use the existing base design token that closest match.
+- If you add a new component `*-tokens.css` file (co-located with the component in `projects/shared-ui/src/lib/core/{component-name}/`), you **MUST** add an import for it to `projects/shared-ui/src/lib/core/tokens.css`.
+- The rules in `.claude/rules/use-cases/css-local-variables.md` **ALWAYS** override the implementation plan referenced markdown file.
+- **ALWAYS** use the custom component over a native one if available regardless of what the referenced implementation markdown file says.
+
+For any feature that is currently not supported. let each one as a question on we want to implement the new feature.
+
 You **MUST** follow all the rules.
 
 You **MUST** present your plan as to what new sub-component you recommend before make **ANY** code changes.

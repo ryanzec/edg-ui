@@ -3,7 +3,7 @@ tasks:
   deps:
     command: pnpm install
     inputs:
-    - /pnpm-lock.yaml
+      - /pnpm-lock.yaml
     options:
       runFromWorkspaceRoot: true
   setup-certs:
@@ -16,7 +16,7 @@ tasks:
   storybook:
     command: $workspaceRoot/node_modules/.bin/ng run storybook-host:storybook
     inputs:
-    - /projects/**/*
+      - /projects/**/*
     env:
       NODE_ENV: development
     options:
@@ -33,8 +33,8 @@ tasks:
     options:
       runFromWorkspaceRoot: true
     inputs:
-    - /.storybook/**/*
-    - /projects/**/*
+      - /.storybook/**/*
+      - /projects/**/*
     env:
       NODE_ENV: development
     script: sh -c "$workspaceRoot/node_modules/.bin/ng run storybook-host:build-storybook && $workspaceRoot/.moon/scripts/run-storybook-tests.sh"
@@ -42,16 +42,18 @@ tasks:
     command: node $workspaceRoot/.moon/scripts/ng-generate-runner.cjs
     options:
       runFromWorkspaceRoot: true
+      interactive: true
+      cache: false
     env:
       NODE_ENV: development
-    preset: server
   generate-type:
     command: node $workspaceRoot/.moon/scripts/generate-shared-type.cjs type
     options:
       runFromWorkspaceRoot: true
+      interactive: true
+      cache: false
     env:
       NODE_ENV: development
-    preset: server
   build-design-tokens:
     command: node $workspaceRoot/.moon/scripts/build-typescript-design-token.cjs
     options:
@@ -69,11 +71,11 @@ tasks:
   test-unit:
     command: $workspaceRoot/node_modules/.bin/ng test --watch=false
     inputs:
-    - /projects/**/*
-    - /**/*/tsconfig.spec.json
-    - /**/*/src/test-providers.ts
-    - /tsconfig.json
-    - /angular.json
+      - /projects/**/*
+      - /**/*/tsconfig.spec.json
+      - /**/*/src/test-providers.ts
+      - /tsconfig.json
+      - /angular.json
     env:
       NODE_ENV: development
     options:
@@ -88,9 +90,9 @@ tasks:
   lint:
     command: $workspaceRoot/node_modules/.bin/ng lint
     inputs:
-    - /projects/**/*
-    - /eslint.config.mjs
-    - /angular.json
+      - /projects/**/*
+      - /eslint.config.mjs
+      - /angular.json
     env:
       NODE_ENV: development
     options:
@@ -99,10 +101,10 @@ tasks:
     options:
       runFromWorkspaceRoot: true
     inputs:
-    - /projects/**/*
-    - /.prettierignore
-    - /.prettierrc
-    - /eslint.config.mjs
+      - /projects/**/*
+      - /.prettierignore
+      - /.prettierrc
+      - /eslint.config.mjs
     env:
       NODE_ENV: development
     script: sh -c "$workspaceRoot/node_modules/.bin/prettier --config $workspaceRoot/.prettierrc --ignore-path $workspaceRoot/.prettierignore --write . && $workspaceRoot/node_modules/.bin/ng lint --fix"

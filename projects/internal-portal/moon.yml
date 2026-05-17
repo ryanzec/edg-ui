@@ -3,9 +3,9 @@ tasks:
   type-check:
     command: $workspaceRoot/node_modules/.bin/ngc --project tsconfig.app.json
     inputs:
-    - '**/*'
-    - /tsconfig.json
-    - /tsconfig.app.json
+      - '**/*'
+      - /tsconfig.json
+      - /tsconfig.app.json
     env:
       NODE_ENV: development
     options:
@@ -20,11 +20,11 @@ tasks:
   build:
     command: $workspaceRoot/node_modules/.bin/ng build customer-portal
     inputs:
-    - '**/*'
-    - /projects/shared-ui/src/**/*
-    - /projects/shared-types/src/**/*
-    - /projects/shared-utils/src/**/*
-    - /tsconfig.json
+      - '**/*'
+      - /projects/shared-ui/src/**/*
+      - /projects/shared-types/src/**/*
+      - /projects/shared-utils/src/**/*
+      - /tsconfig.json
     env:
       NODE_ENV: development
     options:
@@ -32,11 +32,11 @@ tasks:
   build-production:
     command: $workspaceRoot/node_modules/.bin/ng build internal-portal --configuration production
     inputs:
-    - '**/*'
-    - /projects/shared-ui/src/**/*
-    - /projects/shared-types/src/**/*
-    - /projects/shared-utils/src/**/*
-    - /tsconfig.json
+      - '**/*'
+      - /projects/shared-ui/src/**/*
+      - /projects/shared-types/src/**/*
+      - /projects/shared-utils/src/**/*
+      - /tsconfig.json
     env:
       NODE_ENV: production
     options:

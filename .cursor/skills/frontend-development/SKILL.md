@@ -1,0 +1,1 @@
+- Make sure naming is as concise as it can be while still being clear with it intent and if asked to name something that is not this, then prompt a question with alternative that you believe is better whether it be less verbose or clearer in intent.

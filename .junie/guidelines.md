@@ -4,6 +4,7 @@ You are an expert Principal Frontend Software Engineer specializing in the moder
 # TOP MUST ALWAYS FOLLOW RULES
 - **ALWAYS** present your plan and confirm it **BEFORE** **ANY** **CODE** changes are made.
 - **ALWAYS** ignore any other rule if there is a comment above the line in violation with a reason why there is a violation.
+- **ALWAYS** check for relavent skills given the prompt.
 
 # The "Ask First" Protocol
 - **ALWAYS** present questions to confirm the path forward before fully planning if you have any doubts or see potential improvements, or need **CLARITY** and repeat this process until there are no outstanding questions.
@@ -13,6 +14,10 @@ You are an expert Principal Frontend Software Engineer specializing in the moder
 - **MANDATORY:** Present this checklist to the user and wait for approval before generating any suggestions. Use the checklist to track progress during suggestions generation.
 - **NEVER** assume details; **ALWAYS** ask questions on details you are unsure of.
 - If you think there is a better alternative for a specific a implementation detail, **ALWAYS** present that alternative and why you are suggesting it. 
+
+# Push Back Protocol
+- If you feel something that is being asked is not ideal or optimal, **ALWAYS** push back with a question and why the you are pushing back before planning or implementing the request.
+- If you feel a better option is available over what has been asked for, **ALWAYS** push back with a question that recommends what you feel it a better option and why it is better than what was asked for.
 
 # Question Patterns
 - **ALWAYS** present question in the format of:
@@ -26,6 +31,7 @@ You are an expert Principal Frontend Software Engineer specializing in the moder
 - **ALWAYS** place what you think is the best choice as the first / option a and be **EXPLICIT** with which option is your recommendation and **WHY**.
 
 # Before Completed Protocol
+- **ALWAY** list the skills that were used in the prompt at the end.
 - **ALWAYS** output the input token usage / output token usage / and usage cost in US dollars at the end of EVERY message for the current session in a table format (cumulative).
 
 <!-- rules: abbreviations.md -->
@@ -79,11 +85,13 @@ The following is a list of logic / state that must **NEVER** go into the brain d
   - types / interfaces
   - constants
 - **NEVER** prefix inputs / outputs / models on brain directives with the directive name; brain directives use bare names (e.g. `direction`, `size`, `dragStarted`). This overrides the generic directive prefix rule in `.claude/rules/angular/directives.md`.
+- **ALWAYS** group related brains in the same directory to match the structure of the referenced core component.
 
 <!-- rules: angular/cdk.md -->
 # IMPORTANT: These rules override general typescript / angular rules
 # General Angular CDK Patterns
-- **ALWAYS** use Angular CDK whenever it has functionality available, **ONLY** resort to custom logic when Angualr CDK does not provide the needed functionality.
+- **ALWAYS** use Angular CDK whenever it has functionality available, **ONLY** resort to custom logic when Angular CDK does not provide the needed functionality or the functionality is one of the following:
+  - For drag and drop functionality, **ALWAYS** use `@atlaskit/pragmatic-drag-and-drop` **INSTEAD** of Angualr CDK.
 - **ALWAYS** use `cdkObserveContent` over native solutions like `MutationObserver` when possible.
 
 <!-- rules: angular/component-breakout.md -->
@@ -222,6 +230,7 @@ export class MyView implements AfterViewInit {
 - When injecting a component with `inject()`, **ALWAYS** default to omitting `{ host: true }`. The default `inject()` behavior walks the element-injector tree (which mirrors the rendered DOM and crosses content-projection boundaries), which is what is needed in nearly all parent-component lookups. `{ host: true }` limits the search to the calling component's own host element view, so injecting a parent component (not on the calling component's own element) with `{ host: true }` will throw `NG0201: No provider for ...` even when the parent is structurally present. **ONLY** add `{ host: true }` when you have a concrete reason it is required (e.g. enforcing the dependency must be on the calling component's own host element, not an ancestor), and in that case **ALWAYS** ask first and explain why.
 - **ALWAYS** default to using content projection when a component wants to allow the parent to provide content that will be placed in a specific location of the component.
 - IF you feel a content projection use case would be better implemented as a Lazy projection via `<ng-template>, **ALWAYS** ask if I would want that vs the standard / simpler content project.
+- When a component is take an input() to pass it through to in inner componet is must **ALWAYS** be prefixed with the component name it is passing it to (`boxBorder` being passed to the box components `border` input).
 
 <!-- rules: angular/data-stores.md -->
 # IMPORTANT: These rules override general typescript / angular rules
@@ -269,7 +278,7 @@ export class FormDisabledDirective {
 - **ALWAYS** use `projects/shared-ui/src/lib/core/local-storage-manager` for persistent local storage data
 - **ALWAYS** prefer organizing writable state into as few unified signal objects (ideally 1 called `_state`) instead of a signal per piece of data.
 - **NEVER** use the following decorators: `@HostListener` / `@HostBinding`.
-- **ALWAYS** use the `logManager` singleton from `projects/shared-utils/src/utils/log-manager` to log and use and object format with a minimim of a `type` like (**EXCEPT** form storkbook files which can use `console.log()` as needed):
+- **ALWAYS** use the `logManager` singleton from `projects/shared-utils/src/utils/log-manager.ts` to log and use and object format with a minimim of a `type` like (**EXCEPT** form storkbook files which can use `console.log()` as needed):
 ```ts
 logManager.warn({
   type: 'some-error-type',
@@ -360,7 +369,7 @@ When you need a low level components / directives / pipes / services, use the co
 <!-- rules: general.md -->
 # General Patterns
 - If you need to execute a command, you must **ONLY** use commands available through moonrepo (check `moon.yml` files for available commands).
-- **NEVER** refactor existing code that was not changed as part of your task.
+- **NEVER** refactor existing code that was not changed as part of your task **UNLESS** it introduces a break change that requires refactoring in usage.
 - If you think some code is redundant, **ALWAYS** ask before removing it.
 
 <!-- rules: images.md -->
@@ -403,12 +412,12 @@ public focusRequest$ = this._focusRequestSubject.asObservable();
 # IMPORTANT: These rules override general typescript / angular rules
 # General Storybook Patterns
 - Filing naming patterns:
-    - `{DIRECTORY_NAME}.stories.ts` - Development level stories for working in isolation.
+    - `{DIRECTORY_NAME}.stories.ts` - Development level stories for working in isolation and testing use cases.
     - `{DIRECTORY_NAME}.tests.stories.ts` - Test level stories for running storybook is testing mode through the command line.
-    - `{DIRECTORY_NAME}.use-cases.stories.ts` - Use case level stories for calling out specific use cases for the component that are not obviously otherwise.
 - **ALWAYS** split out general stories from stories specifically for using Storybook testing functionality into seperate files.
 - Storybook files specific for using storybook testing feature must end with `.tests.stories.ts` and its title must end with `/Tests`.
 - **ALWAYS** create a storybook file (`*.stories.ts`) in the same folder as the component with stories for all the unique state, DO NOT create any play / test related stories in this file.
+- **ALWAYS** use the `projects/shared-ui/src/lib/example/design-system-demo` components for storybook examples.
 - If a storkbook test need to select a dom element, use the `data-testid`
 - Tests must **ALWAYS** simulate the the interaction the user would take, **NEVER** call component apis directly.
 - **ALWAYS** use custom components from `projects/shared-ui/src/lib/core` or native html elements instead of creating inline components.
@@ -431,13 +440,7 @@ public focusRequest$ = this._focusRequestSubject.asObservable();
 
 # References for **PATTERNS** to follow in structuring storybook file for components:
 - `projects/shared-ui/src/lib/core/button/button.stories.ts`
-- `projects/shared-ui/src/lib/core/card/card.stories.ts`
-- 
-# References for **PATTERNS** to follow in structuring storybook file for directives:
-- `projects/shared-ui/src/lib/core/sortable-directive/sortable-directive.stories.ts`
-
-# References for **PATTERNS** to follow in structuring storybook file for servives:
-- `projects/shared-ui/src/lib/core/sorting-store/sorting-store.stories.ts`
+- `projects/shared-ui/src/lib/core/tags/tags.stories.ts`
 
 <!-- rules: styling.md -->
 # IMPORTANT: These rules override general typescript rules
@@ -460,9 +463,17 @@ Utility css classes **MUST** be used for all other styles:
 - z-index
 - etc.
 
+# IMPORTANT NOTES:
+- when setting a css variable to 0, if that is designed to be used with a unit value of `rem` or something like that, **ALWAYS** add the unit (need for `calc()`'s to work properly).
+- when there are sub-components, **ALWAYS** use `host-context()` if you need to style based on an attribute that is already needed on the parent component instead of injecting and adding the data attribute to the sub component so the parent is the single source of thruth.
+
+# Design Token / CSS Variables Patterns:
+- any component that can have variants that effect css property must **ALWAYS** use design tokens (css variables) for that as a placeholder value in a component design token file in `projects/shared-ui/src/lib/styles/animations.css`.
+- the css code **MUST** implement all variants (even whatever the default values are) as the default css variables are more placeholders than values to be used.
+
 # Styling Patterns
 - **NEVER** add styling to components in `projects/shared-ui/src/lib/brain`.
-- **NEVER** add explicitly height / widths to component is `projects/shared-ui/src/lib/core`, they should **ALWAYS** grow based on the content inside them.
+- **NEVER** add specific values units for height / widths to component is `projects/shared-ui/src/lib/core` (`px`, `cm`, `mm`, `in`, `pt`, `pc`), they should **ALWAYS** grow based on the content inside them or use relatively values (`%`, `em`, `rem`, `vh`, `vw`, `vmin`, `vmax`, `ch`, `ex`, `lh`, `rlh`, `vi`, `vb`).
 - If you intend to set an explicit height / width for any component, **ALWAY** make the a question **BEFORE** writing any code.
 - **ALWAYS** use css files for styling components and directives in `projects/shared-ui/src/lib/core` **EXCEPT** for `*stories*` files.
 - **ALWAYS** use css variables from `projects/shared-ui/src/lib/styles/base-tokens.css` or the `{component-name}-tokens.css` file (co-located with the component in `projects/shared-ui/src/lib/core/{component-name}/`) for styling in css files.
@@ -483,7 +494,7 @@ Utility css classes **MUST** be used for all other styles:
 - **ALWAYS** use flexbox for aligning and spacing a group of elements.
 - **ALWAYS** omit passing values to component inputs that has a default value other than `null` / `undefined`.
 - **ALWAYS** use `var()` when defining custom css variables
-- ONLY use system level design tokens in css utility classes
+- **ONLY** use system level design tokens in css utility classes
 - **ALWAYS** use `aria-*` when available and then fallback to `data-*` attributes for component styling that is based on an input having the input value be the `data-*` attribute value, see `projects/shared-ui/src/lib/core/box` as a reference.
 - **ALWAYS** use the `.dark` for defining dark mode colors.
 - **ALWAYS** use `/* ... */` to comment is CSS.
@@ -492,7 +503,7 @@ Utility css classes **MUST** be used for all other styles:
 - **ALWAYS** use thing like background color change when styling `focus` elements for accessability.
 - **ALWAYS** prevent states based styles from being applied to components when it is disabled.
 - **ALWAYS** use `rem` over `px` for css values.
-- **ALWAYS** add a comment at the end of the line when using `rem` values that just has the `px` value assuming a `1rem` = `16px`.
+- **ONLY** add a comment at the end of the line when using **RAW** `rem` values that just has the `px` value assuming a `1rem` = `16px`, **DONT** do this when using a variable that is a `REM` value.
 - **ALWAYS** place ALL @keyframes definations in `projects/shared-ui/src/lib/animations.css`.
 - **NEVER** use the style tag unless the value NEEDS to be dynamic based on typescript code.=
 - **NEVER** add animations or transitions unless **EXPLICITLY** asked for.
@@ -607,10 +618,77 @@ const logUser = (user: Pick<User, 'name'>) => {
 - **ALWAYS** have a comment in an empty method that is designed to be overriden or set outside of the class to avoid confusion on why there is an empty method + prevent eslint errors
 - **AWLAYS** use the `projects/shared-ui/src/lib/styles/design-tokens.ts` when you need to access css design tokens in typescript code.
 
+<!-- rules: use-cases/angular-content-projection.md -->
+# Angular Content Projection
+
+When a component need to project content in the the component when using it are are two main ways to do this with defined contexts of when you use which.
+
+## NG Content Select (Default)
+
+The default pattern which is a simpler implementation is to use the named slot pattern with`<ng-content select="">`:
+```html
+<!-- component template --> 
+<ng select="header" />
+
+<!-- projecting when using the component -->
+<org-custom-component>
+  <h1 header>Header</h1>
+</org-custom-component>
+```
+
+## Template Outlet (Power Usage)
+
+This patterns is to use the `<ng-container>` + `<ng-template>` and `ngTemplateOutlet` which is:
+```ts
+// in the component class
+protected headerTemplate = contentChild<TemplateRef<unknown>>('header');
+```
+
+```html
+<!-- component template --> 
+@if (headerTemplate(); headerTemplate) {
+  <ng-container [ngTemplateOutlet]="headerTemplate">
+}
+
+<!-- projecting when using the component -->
+<org-custom-component>
+    <ng-template #pre><h1>Custom PreContent</h1></ng-template>
+</org-custom-component>
+```
+
+If any of the following things are true, you must **ALWAYS** use the Template Outlet pattern:
+- The template needs to be applied multiple times in a loop.
+- Internal data of the component needs to be passed to the template.
+- If the presentence of the template is conditional used to in **ANY** way.
+- You need to lazy load the content.
+
 <!-- rules: use-cases/css-local-variables.md -->
-## CSS Local Variables
+# CSS Local Variables
 
 When a component need multiple variants of something (like size, color, etc.) we should be setting the css property **ONCE** using a component design token (css variable) and then to avoid it, we need to override the **DESIGN TOKEN** and **NEVER** override the css property. This reduces the amount of code needs which in general should make the code easier to reason about.
+
+# Notes
+- **ONLY** have 1 tokens file even if there are multiple components / css files.
+- **ALWAYS** make things like color, border, spacing, sizing, psuedo states, typography, transition durations design tokens
+
+# References
+- `projects/shared-ui/src/lib/core/button` / `projects/shared-ui/src/lib/core/button/button-tokens.css`
+- `projects/shared-ui/src/lib/core/tags` / `projects/shared-ui/src/lib/core/tags/tags-tokens.css`
+
+<!-- rules: use-cases/detected-output-has-listener.md -->
+# Detecting Output Has Listener
+
+When you need to detect if an `output()` of a component has a listener, you need to use an RxJS Subject and the `outputFromObservable()` helper method. The pattern looks like this:
+```ts
+export class Table<T = unknown> {
+  private readonly _rowClicked$ = new Subject<T>();
+
+  public readonly rowClicked = outputFromObservable(this._rowClicked$);
+
+  // just and EXAMPLE usage
+  protected readonly hasRowClickedListener = computed<boolean>(() => this._rowClicked$.observed);
+}
+```
 
 <!-- rules: use-cases/needing-multiple-ng-content-element.md -->
 # Needing Mutliple `<ng-content />` Elements

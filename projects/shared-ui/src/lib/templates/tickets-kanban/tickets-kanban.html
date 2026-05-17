@@ -1,0 +1,11 @@
+<org-kanban-board ariaLabel="Tickets kanban" (itemsMoved)="onItemsMoved($event)">
+  @for (status of statuses; track status) {
+    <org-kanban-lane [laneId]="status" [heading]="statusLabels[status]" [items]="ticketsByStatus()[status]">
+      <ng-template #card let-item>
+        <button class="card-click-target" type="button" (click)="onCardClicked(item.id)">
+          <org-tickets-kanban-card [ticket]="item" />
+        </button>
+      </ng-template>
+    </org-kanban-lane>
+  }
+</org-kanban-board>
