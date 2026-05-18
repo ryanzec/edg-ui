@@ -2,6 +2,7 @@
   :host {
     display: inline-flex;
     max-width: var(--drop-down-selector-max-width);
+    height: var(--height-input);
   }
 
   /* armed state — open trigger reads as a soft neutral surface while keeping the standard border */

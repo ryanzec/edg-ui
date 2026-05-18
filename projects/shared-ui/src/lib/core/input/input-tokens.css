@@ -9,7 +9,6 @@
   --input-line-height: var(--line-height-tight);
   --input-letter-spacing: var(--letter-spacing-normal);
   --input-disabled-opacity: var(--opacity-disabled);
-  --input-min-height: var(--input-height);
   --input-width: 100%;
   --input-native-min-width: 8ch;
   --input-slot-line-height: 1;

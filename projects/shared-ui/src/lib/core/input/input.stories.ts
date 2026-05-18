@@ -311,6 +311,11 @@ export const Default: Story = {
               {{ liveDemoForm.controls.loading.value ? 'on' : 'off' }}
             </org-checkbox-toggle>
           </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="AsTrigger">
+            <org-checkbox-toggle name="live-demo-as-trigger" value="asTrigger" formControlName="asTrigger">
+              {{ liveDemoForm.controls.asTrigger.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
         </org-design-system-demo-controls>
         <org-design-system-demo-canvas slot="canvas">
           <div class="canvas-stage">
@@ -326,6 +331,7 @@ export const Default: Story = {
                   [disabled]="liveDemoForm.controls.disabled.value"
                   [readonly]="liveDemoForm.controls.readonly.value"
                   [loading]="liveDemoForm.controls.loading.value"
+                  [asTrigger]="liveDemoForm.controls.asTrigger.value"
                   [preIcon]="liveDemoForm.controls.pre.value ? 'mail' : null"
                   [postIcon]="liveDemoForm.controls.post.value ? 'check' : null"
                 />
@@ -341,6 +347,7 @@ export const Default: Story = {
                 [disabled]="liveDemoForm.controls.disabled.value"
                 [readonly]="liveDemoForm.controls.readonly.value"
                 [loading]="liveDemoForm.controls.loading.value"
+                [asTrigger]="liveDemoForm.controls.asTrigger.value"
                 [preIcon]="liveDemoForm.controls.pre.value ? 'mail' : null"
                 [postIcon]="liveDemoForm.controls.post.value ? 'check' : null"
               />
@@ -367,6 +374,7 @@ class InputLiveDemoStory {
     disabled: new FormControl<boolean>(false, { nonNullable: true }),
     readonly: new FormControl<boolean>(false, { nonNullable: true }),
     loading: new FormControl<boolean>(false, { nonNullable: true }),
+    asTrigger: new FormControl<boolean>(false, { nonNullable: true }),
   });
 }
 

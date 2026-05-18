@@ -187,6 +187,7 @@
   --sizing-5xl: 64rem; /* 1024px */
   --sizing-6xl: 72rem; /* 1152px */
   --sizing-7xl: 80rem; /* 1280px */
+  --height-input: var(--sizing-10xs);
 
   --breakpoint-sm: 40rem; /* 640px  */
   --breakpoint-base: 48rem; /* 768px  */

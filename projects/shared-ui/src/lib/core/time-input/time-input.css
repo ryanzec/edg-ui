@@ -5,7 +5,7 @@
     display: inline-flex;
     align-items: stretch;
     width: var(--input-width);
-    min-height: var(--input-min-height);
+    height: var(--height-input);
     padding: 0;
     border-radius: var(--input-radius);
     border-style: solid;
@@ -165,7 +165,6 @@
   }
 
   .org-input[data-time-input='1'][data-variant='inline'] {
-    --input-min-height: auto;
     --input-width: auto;
     --input-radius: 0;
     --input-pad-x: 0;
@@ -184,5 +183,6 @@
     --input-fg-hover: var(--color-fg);
     --input-fg-focus: var(--color-fg);
     --input-fg-error: var(--color-fg);
+    --height-input: auto;
   }
 }

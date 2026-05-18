@@ -3,7 +3,6 @@
     display: inline-flex;
     align-items: stretch;
     width: var(--input-width);
-    min-height: var(--input-min-height);
     padding: 0;
     border-radius: var(--input-radius);
     border-style: solid;
@@ -28,6 +27,8 @@
   .native {
     flex: 1 1 var(--input-native-min-width);
     min-width: var(--input-native-min-width);
+    /* removing 2px to account for the border as the height variable should include the border */
+    height: calc(var(--height-input) - 0.125rem); /* 2px */
     width: auto;
     margin: 0;
     border: 0;
@@ -336,7 +337,6 @@
 
   /* inline: hugs its text, focused = single underline. Looks like editable inline copy */
   :host([data-variant='inline']) {
-    --input-min-height: auto;
     --input-width: auto;
     --input-radius: 0;
     --input-pad-x: 0;
