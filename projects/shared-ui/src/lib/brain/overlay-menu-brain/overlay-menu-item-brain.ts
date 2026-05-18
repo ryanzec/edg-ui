@@ -1,4 +1,5 @@
 import { Directive, effect, inject, input, output } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CdkMenuItem } from '@angular/cdk/menu';
 import { type OverlayMenuItemEntry } from './overlay-menu-brain';
 
@@ -16,9 +17,6 @@ export const OVERLAY_MENU_ITEM_DISABLED_DEFAULT = false;
   selector: '[orgOverlayMenuItemBrain]',
   exportAs: 'orgOverlayMenuItemBrain',
   hostDirectives: [CdkMenuItem],
-  host: {
-    '(cdkMenuItemTriggered)': 'handleTriggered()',
-  },
 })
 export class OverlayMenuItemBrainDirective<
   // this is generic so we need to allow any type
@@ -40,6 +38,12 @@ export class OverlayMenuItemBrainDirective<
     // syncs the brain's disabled signal into CdkMenuItem's non-signal disabled property each change
     effect(() => {
       this._cdkMenuItem.disabled = this.disabled();
+    });
+
+    // host bindings cannot subscribe to outputs of a hostDirectives entry, so we wire CdkMenuItem's
+    // `triggered` event emitter to the brain handler directly via rxjs with explicit teardown
+    this._cdkMenuItem.triggered.pipe(takeUntilDestroyed()).subscribe(() => {
+      this.handleTriggered();
     });
   }
 

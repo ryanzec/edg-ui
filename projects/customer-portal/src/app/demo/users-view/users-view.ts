@@ -244,7 +244,7 @@ export class UsersView {
   /** logs an edit-user request emitted by the users-list */
   protected onEditUser(user: User): void {
     logManager.log({ type: 'demo-users-view-edit-user', user });
-    this._router.navigate(['/users', 'details']);
+    this._router.navigate(['/demo', 'user-details']);
   }
 
   /** logs a single delete-user request emitted by the users-list */

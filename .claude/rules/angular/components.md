@@ -122,3 +122,4 @@ export class MyView implements AfterViewInit {
 - **ALWAYS** default to using content projection when a component wants to allow the parent to provide content that will be placed in a specific location of the component.
 - If you feel a content projection use case would be better implemented as a Lazy projection via `<ng-template>, **ALWAYS** ask if I would want that vs the standard / simpler content project.
 - When a component is take an input() to pass it through to in inner componet is must **ALWAYS** be prefixed with the component name it is passing it to (`boxBorder` being passed to the box components `border` input).
+- Host event bindings must **ONLY** be used with native dom events or `output()` declare on the component / directive itself, events on directives that are being added via `hostDirectives` **MUST** directly attach to the output via RxJS in the constructor.
