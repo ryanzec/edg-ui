@@ -1,4 +1,4 @@
-import { type UiEnvironment } from '@organization/shared-types';
+import { type UiEnvironment } from '@organization/shared-utils';
 
 export const environment: UiEnvironment = {
   mode: 'local',

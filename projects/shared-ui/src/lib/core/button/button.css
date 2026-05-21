@@ -18,7 +18,6 @@
     line-height: var(--button-line-height);
     letter-spacing: var(--button-letter-spacing);
     cursor: pointer;
-    outline: none;
     width: 100%;
   }
 
@@ -32,6 +31,8 @@
     background-color: var(--button-bg-focus);
     color: var(--button-fg-focus);
     border-color: var(--button-border-focus);
+    outline: var(--border-width-thick) solid transparent;
+    box-shadow: var(--shadow-focus-ring);
   }
 
   :host button:not(:disabled):active {
@@ -73,6 +74,15 @@
   /* exclude-spacing overrides all padding */
   :host([data-exclude-spacing]) {
     --button-padding: 0;
+  }
+
+  /* filled / soft / ghost focus mirrors hover; text and plain define their own focus slots */
+  :host([data-variant='filled']),
+  :host([data-variant='soft']),
+  :host([data-variant='ghost']) {
+    --button-bg-focus: var(--button-bg-hover);
+    --button-fg-focus: var(--button-fg-hover);
+    --button-border-focus: var(--button-border-hover);
   }
 
   /* ===== FILLED VARIANT ===== */

@@ -167,8 +167,8 @@
   }
 
   .tag-remove:focus-visible {
-    outline: none;
-    box-shadow: 0 0 0 var(--tag-remove-focus-ring-width) var(--tag-remove-focus-ring-color);
+    outline: var(--border-width-thick) solid transparent;
+    box-shadow: var(--shadow-focus-ring);
     opacity: var(--tag-remove-opacity-hover);
   }
 }

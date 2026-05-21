@@ -45,9 +45,8 @@
   }
 
   .tab-btn:focus-visible {
-    outline: var(--tabs-tab-focus-outline-width) solid var(--tabs-tab-focus-outline-color);
-    outline-offset: var(--tabs-tab-focus-outline-offset);
-    border-radius: var(--tabs-tab-focus-radius);
+    outline: var(--border-width-thick) solid transparent;
+    box-shadow: var(--shadow-focus-ring);
   }
 
   .tab-btn[aria-selected='true'] {

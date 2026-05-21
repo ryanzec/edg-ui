@@ -35,8 +35,4 @@
   /* description copy */
   --checkbox-toggle-label-color: var(--color-fg);
   --checkbox-toggle-description-color: var(--color-fg-muted);
-
-  /* focus ring (a11y) */
-  --checkbox-toggle-focus-ring-color: var(--color-focus-ring);
-  --checkbox-toggle-focus-ring-width: 0.1875rem; /* 3px */
 }

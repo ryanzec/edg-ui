@@ -37,6 +37,8 @@ export * from './code-block/code-block';
 export * from './code-highlighter/code-highlighter';
 export * from './combobox/combobox';
 export * from './combobox-store/combobox-store';
+export * from './data-filters/data-filters';
+export * from './data-filters/data-filters-types';
 export * from './date-pipe/date-pipe';
 export * from './date-picker-input/date-picker-input';
 export * from './dialog/dialog';

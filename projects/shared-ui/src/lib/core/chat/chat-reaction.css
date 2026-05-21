@@ -29,8 +29,8 @@
   }
 
   .reaction-button:focus-visible {
-    outline: var(--chat-reaction-focus-ring-width) solid var(--chat-reaction-focus-ring-color);
-    outline-offset: var(--chat-reaction-focus-ring-offset);
+    outline: var(--border-width-thick) solid transparent;
+    box-shadow: var(--shadow-focus-ring);
   }
 
   /* selected: override base reaction tokens so the button picks up the info accent */

@@ -1,10 +1,5 @@
 <div class="combobox-panel">
-  <org-scroll-area
-    #optionsScrollAreaComponent
-    [enabled]="brain.isScrollNeeded()"
-    direction="vertical"
-    scrollClass="h-full w-full"
-  >
+  <org-scroll-area #optionsScrollAreaComponent scrollClass="h-full w-full">
     <div [attr.id]="brain.listboxId()" [attr.role]="brain.listboxRole" [attr.aria-label]="brain.listboxAriaLabel">
       @if (hasFilteredOptions()) {
         @if (!isGroupingEnabled()) {

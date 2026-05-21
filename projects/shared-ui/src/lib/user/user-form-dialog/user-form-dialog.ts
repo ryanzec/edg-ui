@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, computed, inject, output, signal } from '@angular/core';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
-import { type User } from '@organization/shared-types';
+import { type User } from '@organization/shared-utils';
 import { Dialog } from '../../core/dialog/dialog';
 import { DialogHeader } from '../../core/dialog/dialog-header';
 import { DialogContent } from '../../core/dialog/dialog-content';

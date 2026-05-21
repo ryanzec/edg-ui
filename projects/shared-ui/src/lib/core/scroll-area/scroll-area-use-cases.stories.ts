@@ -12,7 +12,6 @@ export default meta;
 type Story = StoryObj;
 
 export const ExternalWrapperSizing: Story = {
-  name: 'External Wrapper Sizing',
   parameters: {
     docs: {
       description: {

@@ -68,7 +68,6 @@ type Story = StoryObj<EXAMPLEColors>;
  * and the CSS variable name for easy reference.
  */
 export const AllColors: Story = {
-  name: 'All Colors',
   parameters: {
     docs: {
       description: {

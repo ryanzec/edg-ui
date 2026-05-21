@@ -22,7 +22,7 @@ import {
   type GetUsersRequest,
   assignableUserRoles,
   assignableUserPermissions,
-} from '@organization/shared-types';
+} from '@organization/shared-utils';
 import { Button } from '../../core/button/button';
 import { Table } from '../../core/table/table';
 import { TableHeader } from '../../core/table/table-header';

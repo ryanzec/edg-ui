@@ -103,8 +103,8 @@
   }
 
   :host > button:focus-visible {
-    outline: var(--avatar-button-focus-outline-width) solid var(--avatar-button-focus-outline-color);
-    outline-offset: var(--avatar-button-focus-outline-offset);
+    outline: var(--border-width-thick) solid transparent;
+    box-shadow: var(--shadow-focus-ring);
   }
 
   :host([data-disabled='true']) > button {

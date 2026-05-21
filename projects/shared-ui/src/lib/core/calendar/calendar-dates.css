@@ -41,7 +41,6 @@
     height: var(--calendar-cell-size);
     cursor: pointer;
     user-select: none;
-    outline: none;
     color: var(--calendar-fg);
     font-size: var(--calendar-cell-font-size);
     font-weight: var(--calendar-cell-font-weight);
@@ -88,14 +87,15 @@
     background-color: var(--calendar-chip-hover-bg);
   }
 
-  /* focus-visible: ring on chip */
-  .day:focus-visible .day-chip {
-    box-shadow: 0 0 0 var(--calendar-focus-ring-width) var(--calendar-focus-ring-color);
+  /* focus-visible: ring on chip; transparent outline on day for forced-colors mode */
+  .day:focus-visible,
+  .day[data-focused] {
+    outline: var(--border-width-thick) solid transparent;
   }
 
-  /* keyboard-focused state (driven by brain) */
+  .day:focus-visible .day-chip,
   .day[data-focused] .day-chip {
-    box-shadow: 0 0 0 var(--calendar-focus-ring-width) var(--calendar-focus-ring-color);
+    box-shadow: var(--shadow-focus-ring);
   }
 
   /* today: inset ring on the chip (suppressed when selected — selected fill wins) */

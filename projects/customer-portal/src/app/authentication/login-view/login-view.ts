@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, inject, effect, computed } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoginForm, AuthenticationManager } from '@organization/shared-ui';
-import { AuthenticationAuthenticateRequest } from '@organization/shared-types';
+import { AuthenticationAuthenticateRequest } from '@organization/shared-utils';
 
 @Component({
   selector: 'cp-login-view',

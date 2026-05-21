@@ -1,7 +1,7 @@
 import { type Meta, type StoryObj } from '@storybook/angular';
 import { AfterViewInit, Component, signal } from '@angular/core';
 import { LoginForm } from './login-form';
-import { AuthenticationAuthenticateRequest } from '@organization/shared-types';
+import { AuthenticationAuthenticateRequest } from '@organization/shared-utils';
 import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
 import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
 

@@ -36,11 +36,6 @@
   --kanban-board-lane-empty-hint-fg: var(--color-fg-muted);
   --kanban-board-lane-empty-hint-font-size: var(--font-size-sm);
 
-  /* card focus outline (a11y) — chrome (bg, border, radius, padding) is provided by the consumer's <org-card> */
-  --kanban-board-card-focus-outline-color: var(--color-focus-ring);
-  --kanban-board-card-focus-outline-width: 0.125rem; /* 2px */
-  --kanban-board-card-focus-outline-offset: 0.125rem; /* 2px */
-
   /* card selection outline (a11y reinforcement of aria-selected) */
   --kanban-board-card-selected-outline-color: var(--color-primary);
   --kanban-board-card-selected-outline-width: 0.125rem; /* 2px */

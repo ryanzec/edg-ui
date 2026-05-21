@@ -3,6 +3,7 @@
     display: inline-flex;
     align-items: stretch;
     width: var(--input-width);
+    min-height: var(--height-input);
     padding: 0;
     border-radius: var(--input-radius);
     border-style: solid;
@@ -134,9 +135,12 @@
 
   /* when chips are present the track owns vertical padding so click-empty-space-to-focus still works */
   :host([data-has-chips]) .track {
-    padding-block: calc((var(--input-height) - var(--input-chip-height)) / 2 - var(--input-border-width));
-    padding-inline-start: var(--input-pad-x);
-    row-gap: var(--input-chip-row-gap);
+    padding: var(--input-native-pad-block) var(--input-pad-x);
+  }
+
+  :host([data-has-chips]) .native {
+    padding: 0;
+    height: auto;
   }
 
   :host([data-has-chips]) .native {
@@ -186,6 +190,8 @@
   .icon-btn:focus-visible {
     background-color: var(--input-icon-btn-focus-bg);
     border-radius: var(--input-icon-btn-radius);
+    outline: var(--border-width-thick) solid transparent;
+    box-shadow: var(--shadow-focus-ring);
   }
 
   .icon-btn:not(:disabled):hover {
@@ -255,6 +261,13 @@
     background-color: var(--input-stepper-bg-active);
   }
 
+  .stepper-up:not(:disabled):focus-visible,
+  .stepper-down:not(:disabled):focus-visible {
+    outline: var(--border-width-thick) solid transparent;
+    outline-offset: calc(-1 * var(--border-width-thick));
+    box-shadow: inset 0 0 0 0.1875rem var(--color-focus-ring); /* 3px */
+  }
+
   .stepper-up:disabled,
   .stepper-down:disabled {
     cursor: not-allowed;
@@ -284,6 +297,12 @@
     background-color: var(--input-bg-focus);
     border-color: var(--input-border-color-focus);
     color: var(--input-fg-focus);
+  }
+
+  :host(:focus-within:not([data-disabled])),
+  :host(.is-focus:not([data-disabled])) {
+    outline: var(--border-width-thick) solid transparent;
+    box-shadow: var(--shadow-focus-ring);
   }
 
   :host([data-state='error']) {

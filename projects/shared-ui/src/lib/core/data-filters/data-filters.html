@@ -1,0 +1,58 @@
+<form [formGroup]="form">
+  <org-form-fields orientation="horizontal" labelOrientation="horizontal" [reserveValidationSpace]="false">
+    @for (filter of effectiveFilters(); track filter.name) {
+      <div class="filter-row">
+        <org-form-field class="max-w-5xs">
+          @switch (filter.type) {
+            @case ('text') {
+              <org-label [text]="filter.label" [htmlFor]="filter.name" />
+              <org-input
+                [name]="filter.name"
+                [formControlName]="filter.name"
+                [disabled]="filter.disabled ?? false"
+                [readonly]="filter.readonly ?? false"
+              />
+            }
+            @case ('toggle') {
+              <org-checkbox-toggle
+                [name]="filter.name"
+                [value]="filter.name"
+                [formControlName]="filter.name"
+                [disabled]="filter.disabled ?? false"
+              >
+                {{ filter.label }}
+              </org-checkbox-toggle>
+            }
+            @case ('array') {
+              <org-label [text]="filter.label" [htmlFor]="filter.name" />
+              <org-combobox
+                [name]="filter.name"
+                [options]="filter.options"
+                [isMultiSelect]="true"
+                [formControlName]="filter.name"
+                [disabled]="filter.disabled ?? false"
+              />
+            }
+          }
+        </org-form-field>
+        <org-button
+          variant="text"
+          color="neutral"
+          size="sm"
+          [iconOnly]="true"
+          preIcon="x"
+          label="Remove filter"
+          [ariaLabel]="'Remove ' + filter.label + ' filter'"
+          (clicked)="removeFilter(filter.name)"
+        />
+      </div>
+    }
+    @if (addFilterMenuItems().length > 0) {
+      <org-button color="secondary" preIcon="plus" label="Add Filter" [orgOverlayMenuTrigger]="addFilterMenuTemplate" />
+    }
+  </org-form-fields>
+</form>
+
+<ng-template #addFilterMenuTemplate>
+  <org-overlay-menu [items]="addFilterMenuItems()" (itemClicked)="onAddFilterMenuItemClick($event)" />
+</ng-template>

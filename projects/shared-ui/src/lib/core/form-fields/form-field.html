@@ -1,16 +1,16 @@
-<div class="form-field-container">
+<div class="form-field-content">
   <ng-content />
-  @if (effectiveReserveValidationSpace() || brain.hasValidationMessage()) {
-    <div
-      class="form-field-validation"
-      [id]="brain.validationMessageId"
-      [attr.data-has-message]="brain.hasValidationMessage() ? '' : null"
-      [attr.aria-live]="brain.ariaLive"
-      [attr.aria-atomic]="brain.ariaAtomic"
-    >
-      @if (brain.hasValidationMessage()) {
-        {{ brain.validationMessage() }}
-      }
-    </div>
-  }
 </div>
+@if (effectiveReserveValidationSpace() || brain.hasValidationMessage()) {
+  <div
+    class="form-field-validation"
+    [id]="brain.validationMessageId"
+    [attr.data-has-message]="brain.hasValidationMessage() ? '' : null"
+    [attr.aria-live]="brain.ariaLive"
+    [attr.aria-atomic]="brain.ariaAtomic"
+  >
+    @if (brain.hasValidationMessage()) {
+      {{ brain.validationMessage() }}
+    }
+  </div>
+}

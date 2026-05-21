@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { ErrorMessage } from '../../../shared-types/src/enums/error-message';
+import { ErrorMessage } from '../types/error-message';
 
 /** the current logging mode of the application */
 export type LogMode = 'production' | 'development';

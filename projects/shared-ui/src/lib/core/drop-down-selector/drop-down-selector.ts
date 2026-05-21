@@ -1,6 +1,17 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Injector,
+  ViewChild,
+  afterNextRender,
+  computed,
+  effect,
+  inject,
+  input,
+  untracked,
+} from '@angular/core';
 import { CdkConnectedOverlay, CdkOverlayOrigin, type ConnectedPosition } from '@angular/cdk/overlay';
-import { angularUtils } from '@organization/shared-utils';
+import { angularUtils, domUtils } from '@organization/shared-utils';
 import { type IconName } from '../../brain/icon-brain/icon-brain';
 import { Button } from '../button/button';
 import { Icon, type IconSize } from '../icon/icon';
@@ -121,6 +132,11 @@ export class DropDownSelector<TValue = unknown> {
     self: true,
   }) as DropDownSelectorBrainDirective<TValue>;
 
+  private readonly _injector = inject(Injector);
+
+  @ViewChild('optionsScrollAreaComponent')
+  protected readonly optionsScrollAreaComponent?: ScrollArea;
+
   /** the size variant of the trigger element */
   public readonly size = input<DropDownSelectorSize>(DROP_DOWN_SELECTOR_SIZE_DEFAULT);
 
@@ -164,6 +180,34 @@ export class DropDownSelector<TValue = unknown> {
   /** the display text rendered inside the multi-mode count chip */
   protected readonly countChipText = computed<string>(() => `${this.brain.selectionCount()} selected`);
 
+  public constructor() {
+    // scroll the active item into view when it changes while the menu is open
+    effect(() => {
+      const activeIndex = this.brain.activeIndex();
+      const isOpen = this.brain.isOpen();
+
+      if (!isOpen || activeIndex < 0) {
+        return;
+      }
+
+      const activeDescendantId = this.brain.activeDescendantId();
+
+      if (!activeDescendantId) {
+        return;
+      }
+
+      untracked(() => {
+        afterNextRender(
+          () => {
+            const container = this.optionsScrollAreaComponent?.containerElement() ?? null;
+            this._scrollActiveItemIntoViewIfNeeded(container, activeDescendantId);
+          },
+          { injector: this._injector }
+        );
+      });
+    });
+  }
+
   /** resolves the menu item pre-icon based on selection mode and selected state */
   protected getItemPreIcon(isSelected: boolean): IconName | undefined {
     if (this.brain.selectionMode() === 'multiple') {
@@ -171,5 +215,29 @@ export class DropDownSelector<TValue = unknown> {
     }
 
     return isSelected ? 'check' : undefined;
+  }
+
+  /** scrolls the menu item matching `id="<activeDescendantId>"` into view if it is completely out of view */
+  private _scrollActiveItemIntoViewIfNeeded(container: HTMLElement | null, activeDescendantId: string): void {
+    if (!container) {
+      return;
+    }
+
+    const activeElement = container.querySelector(`#${activeDescendantId}`);
+
+    if (!activeElement) {
+      return;
+    }
+
+    const isCompletelyOutOfView = domUtils.isElementOutOfView(container, activeElement as HTMLElement);
+
+    if (!isCompletelyOutOfView) {
+      return;
+    }
+
+    activeElement.scrollIntoView({
+      block: 'nearest',
+      inline: 'nearest',
+    });
   }
 }

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { ResponseStructure, RequestStructure } from '../utils';
+import { ResponseStructure, RequestStructure } from '../types/utils';
 import { userSchema } from './user';
 
 export const authenticationAuthenticateResponseSchema = z.object({

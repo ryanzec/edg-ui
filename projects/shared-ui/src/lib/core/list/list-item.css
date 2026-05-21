@@ -12,7 +12,6 @@
     align-items: center;
     gap: var(--list-item-gap);
     width: 100%;
-    outline: none;
     padding: var(--list-item-padding-block) var(--list-item-padding-inline);
     font-size: var(--list-item-font-size);
     min-height: var(--list-item-min-height);
@@ -40,6 +39,12 @@
 
   :host([data-clickable]) .list-item-content:is(:hover, :focus-visible) {
     background-color: var(--list-item-hover-bg);
+  }
+
+  :host([data-clickable]) .list-item-content:focus-visible {
+    outline: var(--border-width-thick) solid transparent;
+    outline-offset: calc(-1 * var(--border-width-thick));
+    box-shadow: inset 0 0 0 0.1875rem var(--color-focus-ring); /* 3px */
   }
 
   :host([aria-disabled='true']) .list-item-content {

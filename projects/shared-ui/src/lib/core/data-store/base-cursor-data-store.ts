@@ -1,6 +1,6 @@
 import { computed, signal } from '@angular/core';
 import { BaseDataStore } from './base-data-store';
-import { ResponseMeta } from '@organization/shared-types';
+import { ResponseMeta } from '@organization/shared-utils';
 
 type CursorState = {
   currentCursor: string | null;

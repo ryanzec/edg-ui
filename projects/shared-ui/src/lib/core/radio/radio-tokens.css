@@ -33,8 +33,4 @@
   --radio-transition-duration: var(--motion-duration-base);
   --radio-transition-easing: var(--motion-ease-standard);
   --radio-mark-transition-easing: var(--motion-ease-entrance);
-
-  /* focus ring (a11y) */
-  --radio-focus-ring-color: var(--color-focus-ring);
-  --radio-focus-ring-width: 0.1875rem; /* 3px */
 }

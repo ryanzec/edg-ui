@@ -1,4 +1,4 @@
-import { Directive, computed, inject, signal } from '@angular/core';
+import { Directive, computed, inject } from '@angular/core';
 import { domUtils } from '@organization/shared-utils';
 import { ComboboxBrainDirective } from './combobox-brain';
 
@@ -10,11 +10,6 @@ export const COMBOBOX_OPTIONS_LISTBOX_ARIA_LABEL = 'Options';
 
 /** static a11y role applied to a group wrapper */
 export const COMBOBOX_OPTIONS_GROUP_ROLE = 'group';
-
-/** the internal state shape for the combobox-options brain directive */
-type ComboboxOptionsState = {
-  isScrollNeeded: boolean;
-};
 
 /**
  * headless brain directive for the combobox-options component. owns the scroll-needed state, the focused-option
@@ -29,10 +24,6 @@ type ComboboxOptionsState = {
 export class ComboboxOptionsBrainDirective {
   private readonly _comboboxBrain = inject(ComboboxBrainDirective);
 
-  private readonly _state = signal<ComboboxOptionsState>({
-    isScrollNeeded: false,
-  });
-
   /** static a11y role applied to the listbox container */
   public readonly listboxRole = COMBOBOX_OPTIONS_LISTBOX_ROLE;
 
@@ -44,22 +35,6 @@ export class ComboboxOptionsBrainDirective {
 
   /** dom id for the listbox element, proxied from the parent combobox brain */
   public readonly listboxId = computed<string>(() => this._comboboxBrain.listboxId());
-
-  /** whether the options container currently needs scrolling */
-  public readonly isScrollNeeded = computed<boolean>(() => this._state().isScrollNeeded);
-
-  /** recomputes whether the provided container needs vertical scrolling */
-  public recalcScrollNeeded(container: HTMLElement | null): void {
-    if (!container) {
-      this._state.update((state) => ({ ...state, isScrollNeeded: false }));
-
-      return;
-    }
-
-    const isScrollNeeded = domUtils.hasScrollableContent(container, 'vertical');
-
-    this._state.update((state) => ({ ...state, isScrollNeeded }));
-  }
 
   /** scrolls the option matching `data-option-value="<value>"` into view if it is completely out of view */
   public scrollOptionIntoViewIfNeeded(container: HTMLElement | null, optionValue: string | number): void {

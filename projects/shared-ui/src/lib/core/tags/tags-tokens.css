@@ -22,8 +22,6 @@
   --tag-remove-opacity-default: 0.75;
   --tag-remove-opacity-hover: 1;
   --tag-remove-bg-hover: rgb(0 0 0 / 0.08);
-  --tag-remove-focus-ring-width: 0.1875rem; /* 3px */
-  --tag-remove-focus-ring-color: var(--color-focus-ring);
   --tag-remove-transition-duration: var(--motion-duration-base);
   --tag-remove-transition-easing: var(--motion-ease-standard);
 

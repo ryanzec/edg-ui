@@ -89,9 +89,6 @@
   --chat-block-header-font-size: var(--font-size-sm);
   --chat-block-header-font-weight: var(--font-weight-medium);
   --chat-block-header-bg-hover: var(--color-bg-hover);
-  --chat-block-focus-ring-width: var(--border-width-thick);
-  --chat-block-focus-ring-offset: calc(var(--border-width-thick) * -1);
-  --chat-block-focus-ring-color: var(--color-focus-ring);
 
   /* block — kind (overridden by [data-kind]) */
   --chat-block-kind-color: inherit;
@@ -172,9 +169,6 @@
   --chat-suggestion-transition-duration: var(--motion-duration-fast);
   --chat-suggestion-transition-easing: var(--motion-ease-standard);
   --chat-suggestion-bg-hover: var(--color-bg-hover);
-  --chat-suggestion-focus-ring-width: var(--border-width-thick);
-  --chat-suggestion-focus-ring-offset: var(--border-width);
-  --chat-suggestion-focus-ring-color: var(--color-focus-ring);
   --chat-suggestion-disabled-opacity: var(--opacity-disabled);
 
   /* reactions */
@@ -196,9 +190,6 @@
   --chat-reaction-transition-duration: var(--motion-duration-fast);
   --chat-reaction-transition-easing: var(--motion-ease-standard);
   --chat-reaction-bg-hover: var(--color-bg-hover);
-  --chat-reaction-focus-ring-width: var(--border-width-thick);
-  --chat-reaction-focus-ring-offset: var(--border-width);
-  --chat-reaction-focus-ring-color: var(--color-focus-ring);
   --chat-reaction-disabled-opacity: var(--opacity-disabled);
 
   /* quote */
@@ -216,9 +207,6 @@
   --chat-quote-transition-duration: var(--motion-duration-fast);
   --chat-quote-transition-easing: var(--motion-ease-standard);
   --chat-quote-bg-hover: var(--color-bg-hover);
-  --chat-quote-focus-ring-width: var(--border-width-thick);
-  --chat-quote-focus-ring-offset: var(--border-width);
-  --chat-quote-focus-ring-color: var(--color-focus-ring);
   --chat-quote-author-fg: var(--color-fg);
   --chat-quote-author-font-size: var(--font-size-xs);
   --chat-quote-author-font-weight: var(--font-weight-semibold);

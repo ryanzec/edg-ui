@@ -80,7 +80,6 @@
     background-color: var(--slider-input-thumb-bg);
     cursor: grab;
     padding: 0;
-    outline: none;
     box-sizing: border-box;
   }
 
@@ -106,7 +105,8 @@
   :host .thumb:not(:disabled):focus-visible {
     background-color: var(--slider-input-thumb-bg-hover);
     border-color: var(--slider-input-thumb-border-color-hover);
-    box-shadow: 0 0 0 var(--slider-input-focus-ring-width) var(--slider-input-focus-ring-color);
+    outline: var(--border-width-thick) solid transparent;
+    box-shadow: var(--shadow-focus-ring);
     /* raise the focused thumb so keyboard interaction is always on the visible thumb */
     z-index: var(--slider-input-thumb-z-index-raised);
   }

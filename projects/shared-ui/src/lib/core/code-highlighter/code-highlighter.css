@@ -48,6 +48,8 @@
 
   :host([data-variant='block']) .code-highlighter-copy-btn:focus-visible {
     opacity: var(--code-highlighter-copy-active-opacity);
+    outline: var(--border-width-thick) solid transparent;
+    box-shadow: var(--shadow-focus-ring);
   }
 
   :host([data-variant='block']):hover .code-highlighter-copy-btn {

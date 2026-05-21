@@ -7,7 +7,7 @@ import {
   UpdateUser,
   UpdateUserResponse,
   User,
-} from '@organization/shared-types';
+} from '@organization/shared-utils';
 import { UsersApi } from '../users-api/users-api';
 import { Observable, tap, map, catchError, of, EMPTY } from 'rxjs';
 import { BaseCursorDataStore } from '../../core/data-store/base-cursor-data-store';

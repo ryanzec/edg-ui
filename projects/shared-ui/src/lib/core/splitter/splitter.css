@@ -65,7 +65,6 @@
     position: relative;
     flex-grow: 0;
     flex-shrink: 0;
-    outline: none;
     background-color: var(--color-border);
   }
 
@@ -114,6 +113,8 @@
 
   :host([data-enabled]) .splitter-divider:focus-visible {
     background-color: var(--color-primary);
+    outline: var(--border-width-thick) solid transparent;
+    box-shadow: var(--shadow-focus-ring);
   }
 
   /* collapsed or disabled: non-interactive cursor on divider */

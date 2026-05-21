@@ -51,9 +51,6 @@
   --avatar-button-hover-brightness: 0.96;
   --avatar-button-active-brightness: 0.92;
   --avatar-button-disabled-opacity: var(--opacity-disabled);
-  --avatar-button-focus-outline-width: var(--spacing-0_5);
-  --avatar-button-focus-outline-offset: var(--spacing-0_5);
-  --avatar-button-focus-outline-color: var(--color-focus-ring);
 }
 
 .dark {

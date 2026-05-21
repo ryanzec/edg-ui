@@ -6,7 +6,6 @@
   .tag-icon-btn {
     display: inline-flex;
     flex-shrink: 0;
-    outline: none;
   }
 
   .tag-icon-btn[data-clickable]:hover {
@@ -17,6 +16,8 @@
     background-color: var(--tag-icon-focus-bg);
     border-radius: var(--tag-icon-focus-radius);
     opacity: var(--tag-icon-opacity-hover);
+    outline: var(--border-width-thick) solid transparent;
+    box-shadow: var(--shadow-focus-ring);
   }
 
   .tag-icon-btn:disabled {

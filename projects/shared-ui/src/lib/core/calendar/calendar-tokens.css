@@ -13,10 +13,6 @@
   --calendar-section-border-width: var(--border-width);
   --calendar-divider: var(--color-border-soft);
 
-  /* focus ring */
-  --calendar-focus-ring-width: var(--border-width-thick);
-  --calendar-focus-ring-color: var(--color-focus-ring);
-
   /* dates grid */
   --calendar-dates-padding: var(--spacing-2);
 

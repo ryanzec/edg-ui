@@ -675,7 +675,8 @@ export const Showcase: Story = {
           <ul class="list-inside list-disc flex flex-col gap-1">
             <li>The overlay menu caps at 32rem tall and scrolls when content exceeds that height via <code>org-scroll-area</code></li>
             <li>The compact overlay scrollbar only renders when overflow is present</li>
-            <li>In <strong>multiple</strong> mode, the <strong>Clear selection</strong> action sits at the end of the scroll list</li>
+            <li>In <strong>multiple</strong> mode, the <strong>Clear selection</strong> action is pinned as a fixed footer below the scrollable list, so it stays visible regardless of scroll position</li>
+            <li><strong>Keyboard navigation</strong>: <kbd>ArrowDown</kbd> and <kbd>ArrowUp</kbd> wrap at the list bounds — pressing <kbd>ArrowDown</kbd> on the last item jumps to the first, and <kbd>ArrowUp</kbd> on the first jumps to the last</li>
           </ul>
         </org-design-system-demo-expected-behaviour>
 

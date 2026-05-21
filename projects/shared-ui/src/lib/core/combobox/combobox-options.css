@@ -1,4 +1,8 @@
 @layer components {
+  :host {
+    display: contents;
+  }
+
   .combobox-panel {
     background-color: var(--combobox-panel-bg);
     border: var(--combobox-panel-border-width) solid var(--combobox-panel-border-color);
@@ -9,6 +13,7 @@
     max-height: var(--combobox-panel-max-height);
     color: var(--combobox-panel-fg);
     overflow: hidden;
+    overscroll-behavior: contain;
   }
 
   .combobox-group-label {

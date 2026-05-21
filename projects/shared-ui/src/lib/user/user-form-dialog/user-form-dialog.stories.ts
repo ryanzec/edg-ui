@@ -1,7 +1,7 @@
 import { type Meta, type StoryObj } from '@storybook/angular';
 import { Component, ViewChild, signal } from '@angular/core';
 import { UserFormDialog } from './user-form-dialog';
-import { type User } from '@organization/shared-types';
+import { type User } from '@organization/shared-utils';
 import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
 import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
 import { Button } from '../../core/button/button';

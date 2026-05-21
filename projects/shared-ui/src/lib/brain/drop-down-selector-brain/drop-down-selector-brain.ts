@@ -352,7 +352,7 @@ export class DropDownSelectorBrainDirective<TValue = unknown> {
     return firstSelectedIndex;
   }
 
-  /** moves the active descendant by the provided delta, clamping at the bounds */
+  /** moves the active descendant by the provided delta, wrapping at the bounds */
   private _moveActiveIndex(delta: number): void {
     const items = this.items();
 
@@ -368,7 +368,8 @@ export class DropDownSelectorBrainDirective<TValue = unknown> {
       return;
     }
 
-    const next = Math.min(Math.max(current + delta, 0), items.length - 1);
+    const length = items.length;
+    const next = (((current + delta) % length) + length) % length;
     this._activeIndex.set(next);
   }
 

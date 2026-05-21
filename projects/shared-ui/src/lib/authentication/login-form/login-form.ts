@@ -3,7 +3,7 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import {
   authenticationAuthenticateRequestSchema,
   type AuthenticationAuthenticateRequest,
-} from '@organization/shared-types';
+} from '@organization/shared-utils';
 import { Card } from '../../core/card/card';
 import { CardContent } from '../../core/card/card-content';
 import { CardHeader } from '../../core/card/card-header';

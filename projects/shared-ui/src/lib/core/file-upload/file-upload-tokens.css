@@ -28,9 +28,6 @@
   --file-upload-cta-color: var(--color-link);
   --file-upload-cta-underline-offset: 0.15em;
 
-  /* focus */
-  --file-upload-focus-ring: var(--shadow-focus-ring);
-
   /* hover (drag-over) state ramp */
   --file-upload-bg-hover: var(--color-info-soft);
   --file-upload-border-color-hover: var(--color-info-border);

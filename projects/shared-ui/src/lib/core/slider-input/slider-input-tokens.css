@@ -21,10 +21,6 @@
   --slider-input-thumb-bg-active: var(--color-primary-active);
   --slider-input-thumb-border-color-active: var(--color-primary-active);
 
-  /* focus ring */
-  --slider-input-focus-ring-width: 0.1875rem; /* 3px */
-  --slider-input-focus-ring-color: var(--color-focus-ring);
-
   /* thumb z-index slot token (raised when hovered / focused / active so overlapping thumbs stay grabbable) */
   --slider-input-thumb-z-index-raised: var(--z-index-raised);
 

@@ -72,10 +72,6 @@
   --table-border: var(--color-border);
   --table-border-soft: var(--color-border-soft);
 
-  /* clickable focus ring */
-  --table-clickable-focus-ring: var(--color-focus-ring);
-  --table-clickable-focus-ring-width: var(--border-width-thick);
-
   /* empty state */
   --table-empty-fg: var(--color-fg-muted);
   --table-empty-padding-y: var(--spacing-8);

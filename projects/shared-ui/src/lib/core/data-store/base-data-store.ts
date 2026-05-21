@@ -1,6 +1,6 @@
 import { signal, computed } from '@angular/core';
 import { logManager } from '@organization/shared-utils';
-import { ResponseMeta } from '@organization/shared-types';
+import { ResponseMeta } from '@organization/shared-utils';
 import { HttpErrorResponse } from '@angular/common/http';
 import { DataStoreLoadingState, DataStoreRemoteType, DataStoreRemoteState } from './types';
 

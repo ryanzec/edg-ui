@@ -76,26 +76,5 @@ export class ComboboxOptions {
         );
       });
     });
-
-    // recompute whether the options container needs scrolling whenever it is open and the options change
-    effect(() => {
-      const isOpened = this._comboboxComponent.isOpened();
-      const filteredOptions = this.filteredOptions();
-
-      if (!isOpened || !filteredOptions) {
-        return;
-      }
-
-      untracked(() => {
-        afterNextRender(
-          () => {
-            const container = this.optionsScrollAreaComponent?.containerElement() ?? null;
-
-            this.brain.recalcScrollNeeded(container);
-          },
-          { injector: this._injector }
-        );
-      });
-    });
   }
 }

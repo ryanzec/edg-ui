@@ -8,7 +8,7 @@ import { signal } from '@angular/core';
 
 import { LoginView } from './login-view';
 import { AuthenticationManager } from '@organization/shared-ui';
-import { AuthenticationAuthenticateRequest } from '@organization/shared-types';
+import { AuthenticationAuthenticateRequest } from '@organization/shared-utils';
 
 describe('LoginView', () => {
   let component: LoginView;

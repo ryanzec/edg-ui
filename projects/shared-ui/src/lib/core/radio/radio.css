@@ -86,7 +86,8 @@
   /* focus-visible (a11y) — focus ring on the indicator, driven from the native input */
   :host(:not([data-disabled='1'])) .native:focus-visible + .indicator {
     border-color: var(--radio-fill);
-    box-shadow: 0 0 0 var(--radio-focus-ring-width) var(--radio-focus-ring-color);
+    outline: var(--border-width-thick) solid transparent;
+    box-shadow: var(--shadow-focus-ring);
   }
 
   /* checked — ring becomes the fill color, dot scales in */

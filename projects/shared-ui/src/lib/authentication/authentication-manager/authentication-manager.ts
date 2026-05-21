@@ -1,6 +1,6 @@
 import { Injectable, signal, computed, inject, InjectionToken } from '@angular/core';
 import { AuthenticationApi } from '../authentication-api/authentication-api';
-import { AuthenticationAuthenticateRequest, ErrorMessage, User } from '@organization/shared-types';
+import { AuthenticationAuthenticateRequest, ErrorMessage, User } from '@organization/shared-utils';
 import { catchError, of, tap, map, Observable, delay } from 'rxjs';
 import { FeatureFlagStore } from '../../core/feature-flag-store/feature-flag-store';
 import { LocalStorageManager } from '../../core/local-storage-manager/local-storage-manager';

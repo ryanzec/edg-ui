@@ -29,7 +29,6 @@ export default meta;
 type Story = StoryObj<DetectIfOutputEventIsListenedTo>;
 
 export const NoListeners: Story = {
-  name: 'No Listeners',
   parameters: {
     docs: {
       description: {
@@ -46,7 +45,6 @@ export const NoListeners: Story = {
 };
 
 export const WithEventListener: Story = {
-  name: 'With Event Listener',
   argTypes: {
     buttonClicked: { action: 'buttonClicked' },
   },

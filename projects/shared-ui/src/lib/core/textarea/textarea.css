@@ -84,6 +84,12 @@
     border-color: var(--textarea-border-color-focus);
   }
 
+  :host(:focus-within:not([data-disabled])),
+  :host(.is-focus:not([data-disabled])) {
+    outline: var(--border-width-thick) solid transparent;
+    box-shadow: var(--shadow-focus-ring);
+  }
+
   :host([data-state='error']) {
     border-color: var(--textarea-border-color-error);
   }

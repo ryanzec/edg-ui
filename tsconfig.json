@@ -14,7 +14,6 @@
     "experimentalDecorators": true,
     "paths": {
       "@organization/shared-ui": ["./projects/shared-ui/src/public-api.ts"],
-      "@organization/shared-types": ["./projects/shared-types/src/index.ts"],
       "@organization/shared-utils": ["projects/shared-utils/src/index.ts"]
     },
     "importHelpers": true,

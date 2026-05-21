@@ -55,33 +55,39 @@
     [attr.aria-multiselectable]="brain.selectionMode() === 'multiple'"
     class="menu-panel"
   >
-    <org-scroll-area scrollClass="h-full w-full">
-      <org-list listRole="none">
-        @for (item of brain.items(); track $index) {
-          @let isItemSelected = brain.isSelected(item);
-          <button
-            type="button"
-            role="option"
-            [id]="brain.getItemId($index)"
-            [attr.aria-selected]="isItemSelected"
-            [attr.data-active]="brain.activeIndex() === $index ? '' : null"
-            (click)="brain.selectItem(item)"
-            class="menu-item-button"
-          >
-            <org-list-item [forceClickable]="true" [isSelected]="isItemSelected" [label]="item.display">
-              <!--@if (getItemPreIcon(isItemSelected); as preIconName) {
-                <org-list-item-icon pre [name]="preIconName" />
-              }-->
-            </org-list-item>
-          </button>
-        }
-        @if (brain.hasSelection() && brain.selectionMode() === 'multiple') {
-          <org-overlay-menu-divider />
+    <div class="menu-options">
+      <org-scroll-area #optionsScrollAreaComponent scrollClass="h-full w-full">
+        <org-list listRole="none">
+          @for (item of brain.items(); track $index) {
+            @let isItemSelected = brain.isSelected(item);
+            <button
+              type="button"
+              role="option"
+              [id]="brain.getItemId($index)"
+              [attr.aria-selected]="isItemSelected"
+              [attr.data-active]="brain.activeIndex() === $index ? '' : null"
+              (click)="brain.selectItem(item)"
+              class="menu-item-button"
+            >
+              <org-list-item [forceClickable]="true" [isSelected]="isItemSelected" [label]="item.display">
+                <!--@if (getItemPreIcon(isItemSelected); as preIconName) {
+                  <org-list-item-icon pre [name]="preIconName" />
+                }-->
+              </org-list-item>
+            </button>
+          }
+        </org-list>
+      </org-scroll-area>
+    </div>
+    @if (brain.hasSelection() && brain.selectionMode() === 'multiple') {
+      <div class="menu-footer">
+        <org-overlay-menu-divider />
+        <org-list listRole="none">
           <button type="button" (click)="brain.clearAndClose()" class="menu-item-button menu-item-clear">
             <org-list-item [forceClickable]="true" label="Clear selection" />
           </button>
-        }
-      </org-list>
-    </org-scroll-area>
+        </org-list>
+      </div>
+    }
   </div>
 </ng-template>

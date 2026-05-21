@@ -40,8 +40,9 @@
   }
 
   .block-header:focus-visible {
-    outline: var(--chat-block-focus-ring-width) solid var(--chat-block-focus-ring-color);
-    outline-offset: var(--chat-block-focus-ring-offset);
+    outline: var(--border-width-thick) solid transparent;
+    outline-offset: calc(-1 * var(--border-width-thick));
+    box-shadow: inset 0 0 0 0.1875rem var(--color-focus-ring); /* 3px */
   }
 
   .block-kind {

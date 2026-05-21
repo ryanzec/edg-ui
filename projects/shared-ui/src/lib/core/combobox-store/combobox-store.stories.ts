@@ -85,7 +85,10 @@ const fruitOptions: ComboboxOptionInput[] = [
 
       <org-storybook-example-container-section label="State">
         <div class="text-sm flex flex-col gap-1">
-          <div><strong>Selected Value:</strong> {{ store.selectedValues()[0] ?? 'None' }}</div>
+          <div>
+            <strong>Selected Value:</strong>
+            {{ store.selectedValues().length > 0 ? store.selectedValues()[0] : 'None' }}
+          </div>
           <div><strong>Input Value:</strong> "{{ store.inputValue() }}"</div>
           <div><strong>Focused Option:</strong> {{ store.focusedOption()?.label ?? 'None' }}</div>
           <div><strong>Filtered Options Count:</strong> {{ store.filteredOptions().length }}</div>
@@ -438,7 +441,7 @@ class ComboboxStoreGroupedDemo {
 @Component({
   selector: 'story-combobox-store-dynamic-options-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Button, Input, StorybookExampleContainer, StorybookExampleContainerSection],
+  imports: [Button, StorybookExampleContainer, StorybookExampleContainerSection],
   providers: [ComboboxStore],
   template: `
     <org-storybook-example-container
@@ -625,7 +628,10 @@ class ComboboxStoreDynamicOptionsDemo {
       <org-storybook-example-container-section label="State">
         <div class="text-sm flex flex-col gap-1">
           <div><strong>Is Opened:</strong> {{ store.isOpened() }}</div>
-          <div><strong>Selected Value:</strong> {{ store.selectedValues()[0] ?? 'None' }}</div>
+          <div>
+            <strong>Selected Value:</strong>
+            {{ store.selectedValues().length > 0 ? store.selectedValues()[0] : 'None' }}
+          </div>
           <div><strong>Input Value:</strong> "{{ store.inputValue() }}"</div>
           <div><strong>Event Log:</strong></div>
           <div class="text-xs bg-neutral-soft p-2 rounded border max-h-8xs overflow-y-auto">

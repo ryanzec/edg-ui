@@ -18,7 +18,7 @@
   /* base layout — properties applied once using slot tokens */
   :host .checkbox-toggle-label {
     display: inline-flex;
-    align-items: flex-start;
+    align-items: center;
     gap: var(--checkbox-toggle-row-gap);
     color: var(--checkbox-toggle-label-color);
     cursor: pointer;
@@ -133,12 +133,12 @@
   /* focus-visible (a11y) */
   :host:not([data-disabled]) .checkbox-toggle-label:focus-visible,
   :host:not([data-disabled]) .checkbox-toggle-label.is-focus {
-    outline: none;
+    outline: var(--border-width-thick) solid transparent;
   }
 
   :host:not([data-disabled]) .checkbox-toggle-label:focus-visible .track,
   :host:not([data-disabled]) .checkbox-toggle-label.is-focus .track {
-    box-shadow: 0 0 0 var(--checkbox-toggle-focus-ring-width) var(--checkbox-toggle-focus-ring-color);
+    box-shadow: var(--shadow-focus-ring);
   }
 
   /* disabled */
@@ -154,7 +154,7 @@
     --checkbox-toggle-track-height: var(--spacing-4);
     --checkbox-toggle-knob-size: var(--spacing-3);
     --checkbox-toggle-icon-size: var(--spacing-2_5);
-    --checkbox-toggle-row-gap: var(--spacing-2);
+    --checkbox-toggle-row-gap: var(--spacing-1);
     --checkbox-toggle-label-font-size: var(--font-size-sm);
   }
 
@@ -163,7 +163,7 @@
     --checkbox-toggle-track-height: var(--spacing-5);
     --checkbox-toggle-knob-size: var(--spacing-4);
     --checkbox-toggle-icon-size: var(--spacing-3);
-    --checkbox-toggle-row-gap: var(--spacing-2_5);
+    --checkbox-toggle-row-gap: var(--spacing-1_5);
     --checkbox-toggle-label-font-size: var(--font-size-base);
   }
 
@@ -172,7 +172,7 @@
     --checkbox-toggle-track-height: var(--spacing-6);
     --checkbox-toggle-knob-size: var(--spacing-5);
     --checkbox-toggle-icon-size: var(--spacing-3_5);
-    --checkbox-toggle-row-gap: var(--spacing-3);
+    --checkbox-toggle-row-gap: var(--spacing-2);
     --checkbox-toggle-label-font-size: var(--font-size-lg);
   }
 

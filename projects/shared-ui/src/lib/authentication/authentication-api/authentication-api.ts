@@ -5,7 +5,7 @@ import {
   AuthenticationAuthenticateRequest,
   AuthenticationAuthenticateResponse,
   AuthenticationCheckResponse,
-} from '@organization/shared-types';
+} from '@organization/shared-utils';
 
 export const AUTHENTICATION_API_URL = new InjectionToken<string>('Authentication API URL');
 

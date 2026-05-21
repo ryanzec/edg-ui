@@ -72,8 +72,8 @@
 
   /* focus-visible (a11y) */
   :host:not([aria-disabled='true']) .checkbox-label:focus-visible {
-    outline: none;
-    box-shadow: 0 0 0 var(--checkbox-focus-ring-width) var(--checkbox-focus-ring-color);
+    outline: var(--border-width-thick) solid transparent;
+    box-shadow: var(--shadow-focus-ring);
   }
 
   :host:not([aria-disabled='true']) .checkbox-label:focus-visible .checkbox-icon {

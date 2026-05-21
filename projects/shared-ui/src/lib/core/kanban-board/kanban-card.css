@@ -13,8 +13,8 @@
 
   /* focus outline overrides selection outline when both apply (only one outline can render per element) */
   :host(:focus-visible) {
-    outline: var(--kanban-board-card-focus-outline-width) solid var(--kanban-board-card-focus-outline-color);
-    outline-offset: var(--kanban-board-card-focus-outline-offset);
+    outline: var(--border-width-thick) solid transparent;
+    box-shadow: var(--shadow-focus-ring);
   }
 
   :host([data-being-dragged]) {

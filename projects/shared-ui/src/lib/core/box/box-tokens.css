@@ -22,9 +22,6 @@
   --box-bg-clickable-hover: var(--color-bg-hover);
   --box-bg-clickable-pressed: var(--color-bg-active);
 
-  /* clickable focus ring */
-  --box-focus-ring: var(--shadow-focus-ring);
-
   /* one-off design value */
   --box-border-emphasize-left-width: 0.4375rem; /* 7px */
 }

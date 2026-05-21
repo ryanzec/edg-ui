@@ -127,7 +127,7 @@
   }
 
   :host([data-clickable]:focus-visible) {
-    outline: none;
-    box-shadow: var(--box-focus-ring);
+    outline: var(--border-width-thick) solid transparent;
+    box-shadow: var(--shadow-focus-ring);
   }
 }

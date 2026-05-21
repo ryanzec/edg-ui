@@ -22,6 +22,7 @@ import { FormFields } from './form-fields';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     ReactiveFormsModule,
+    FormFields,
     FormField,
     Input,
     Label,
@@ -43,9 +44,9 @@ import { FormFields } from './form-fields';
         justify-content: center;
         min-height: 6rem; /* 96px */
       }
-      .canvas-stage > org-form-field {
+      .canvas-stage > org-form-fields {
         width: 100%;
-        max-width: 24rem; /* 384px */
+        max-width: 36rem; /* 576px */
       }
     `,
   ],
@@ -75,16 +76,43 @@ import { FormFields } from './form-fields';
               {{ liveDemoForm.controls.reserveValidationSpace.value ? 'on' : 'off' }}
             </org-checkbox-toggle>
           </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Label orientation">
+            <org-checkbox-toggle
+              name="live-demo-label-orientation"
+              value="labelOrientation"
+              formControlName="labelOrientation"
+            >
+              {{ liveDemoForm.controls.labelOrientation.value ? 'horizontal' : 'vertical' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Container orientation">
+            <org-checkbox-toggle
+              name="live-demo-container-orientation"
+              value="containerOrientation"
+              formControlName="containerOrientation"
+            >
+              {{ liveDemoForm.controls.containerOrientation.value ? 'horizontal' : 'vertical' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
         </org-design-system-demo-controls>
         <org-design-system-demo-canvas slot="canvas">
           <div class="canvas-stage">
-            <org-form-field
-              [validationMessage]="liveDemoForm.controls.validationMessage.value"
-              [reserveValidationSpace]="liveDemoForm.controls.reserveValidationSpace.value"
+            <org-form-fields
+              [labelOrientation]="liveDemoForm.controls.labelOrientation.value ? 'horizontal' : 'vertical'"
+              [orientation]="liveDemoForm.controls.containerOrientation.value ? 'horizontal' : 'vertical'"
             >
-              <org-label text="Email" htmlFor="live-demo-form-field-email" />
-              <org-input name="live-demo-form-field-email" type="email" placeholder="you@example.com" />
-            </org-form-field>
+              <org-form-field
+                [validationMessage]="liveDemoForm.controls.validationMessage.value"
+                [reserveValidationSpace]="liveDemoForm.controls.reserveValidationSpace.value"
+              >
+                <org-label text="Email" htmlFor="live-demo-form-field-email" />
+                <org-input name="live-demo-form-field-email" type="email" placeholder="you@example.com" />
+              </org-form-field>
+              <org-form-field [reserveValidationSpace]="liveDemoForm.controls.reserveValidationSpace.value">
+                <org-label text="Password" htmlFor="live-demo-form-field-password" />
+                <org-input name="live-demo-form-field-password" type="password" placeholder="Enter your password" />
+              </org-form-field>
+            </org-form-fields>
           </div>
         </org-design-system-demo-canvas>
       </org-design-system-demo>
@@ -95,6 +123,8 @@ class StoryFormFieldLiveDemo {
   protected readonly liveDemoForm = new FormGroup({
     validationMessage: new FormControl<string>('', { nonNullable: true }),
     reserveValidationSpace: new FormControl<boolean>(false, { nonNullable: true }),
+    labelOrientation: new FormControl<boolean>(false, { nonNullable: true }),
+    containerOrientation: new FormControl<boolean>(false, { nonNullable: true }),
   });
 }
 
@@ -449,6 +479,111 @@ export const Showcase: Story = {
             <li>With reserveValidationSpace=false on org-form-fields, fields without a validation message collapse the validation area, causing layout shift</li>
             <li>Per-field [reserveValidationSpace]="false" overrides the parent org-form-fields setting</li>
             <li>Standalone org-form-field with explicit [reserveValidationSpace]="true" reserves space without a parent org-form-fields</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Horizontal Orientation" />
+          <org-design-system-demo-canvas slot="canvas">
+            <org-form-fields labelOrientation="horizontal">
+              <org-form-field>
+                <org-label text="First Name" htmlFor="showcase-orientation-parent-first-name" />
+                <org-input name="showcase-orientation-parent-first-name" placeholder="Enter first name" />
+              </org-form-field>
+
+              <org-form-field>
+                <org-label text="Last Name" htmlFor="showcase-orientation-parent-last-name" />
+                <org-input name="showcase-orientation-parent-last-name" placeholder="Enter last name" />
+              </org-form-field>
+
+              <org-form-field>
+                <org-label text="Email" htmlFor="showcase-orientation-parent-email" />
+                <org-input name="showcase-orientation-parent-email" type="email" placeholder="Enter email" />
+              </org-form-field>
+            </org-form-fields>
+
+            <org-form-fields>
+              <org-form-field>
+                <org-label text="First Name (default vertical)" htmlFor="showcase-orientation-override-first-name" />
+                <org-input name="showcase-orientation-override-first-name" placeholder="Enter first name" />
+              </org-form-field>
+
+              <org-form-field labelOrientation="horizontal">
+                <org-label text="Last Name (per-field horizontal)" htmlFor="showcase-orientation-override-last-name" />
+                <org-input name="showcase-orientation-override-last-name" placeholder="Enter last name" />
+              </org-form-field>
+            </org-form-fields>
+
+            <org-form-fields labelOrientation="horizontal">
+              <org-form-field>
+                <org-label text="Username" htmlFor="showcase-orientation-validation-username" />
+                <org-input name="showcase-orientation-validation-username" placeholder="Enter username" />
+              </org-form-field>
+
+              <org-form-field validationMessage="Password must be at least 8 characters">
+                <org-label text="Password" htmlFor="showcase-orientation-validation-password" />
+                <org-input
+                  name="showcase-orientation-validation-password"
+                  type="password"
+                  placeholder="Enter password"
+                  value="123"
+                />
+              </org-form-field>
+            </org-form-fields>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li>labelOrientation="horizontal" on org-form-fields cascades to all child fields, rendering label and control side-by-side</li>
+            <li>Per-field [labelOrientation]="'horizontal'" overrides the parent org-form-fields setting</li>
+            <li>Validation messages still render on their own line below the row in horizontal orientation</li>
+            <li>Label and control are vertically centered in horizontal orientation</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Container Orientation" />
+          <org-design-system-demo-canvas slot="canvas">
+            <org-form-fields>
+              <org-form-field>
+                <org-label text="First Name" htmlFor="showcase-container-vertical-first-name" />
+                <org-input name="showcase-container-vertical-first-name" placeholder="Enter first name" />
+              </org-form-field>
+
+              <org-form-field>
+                <org-label text="Last Name" htmlFor="showcase-container-vertical-last-name" />
+                <org-input name="showcase-container-vertical-last-name" placeholder="Enter last name" />
+              </org-form-field>
+
+              <org-form-field>
+                <org-label text="Email" htmlFor="showcase-container-vertical-email" />
+                <org-input name="showcase-container-vertical-email" type="email" placeholder="Enter email" />
+              </org-form-field>
+            </org-form-fields>
+
+            <org-form-fields orientation="horizontal">
+              <org-form-field>
+                <org-label text="First Name" htmlFor="showcase-container-horizontal-first-name" />
+                <org-input name="showcase-container-horizontal-first-name" placeholder="Enter first name" />
+              </org-form-field>
+
+              <org-form-field>
+                <org-label text="Last Name" htmlFor="showcase-container-horizontal-last-name" />
+                <org-input name="showcase-container-horizontal-last-name" placeholder="Enter last name" />
+              </org-form-field>
+
+              <org-form-field>
+                <org-label text="Email" htmlFor="showcase-container-horizontal-email" />
+                <org-input name="showcase-container-horizontal-email" type="email" placeholder="Enter email" />
+              </org-form-field>
+            </org-form-fields>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li>orientation controls how the org-form-fields container stacks its child fields — default "vertical" stacks them in a column, "horizontal" arranges them in a row</li>
+            <li>orientation is the container-level layout axis and is distinct from labelOrientation, which controls the label-vs-control direction inside each individual form field</li>
+            <li>In horizontal orientation, child form fields are vertically center-aligned along the row</li>
           </ul>
         </org-design-system-demo-expected-behaviour>
 

@@ -22,7 +22,6 @@ tasks:
     inputs:
       - '**/*'
       - /projects/shared-ui/src/**/*
-      - /projects/shared-types/src/**/*
       - /projects/shared-utils/src/**/*
       - /tsconfig.json
     env:
@@ -34,7 +33,6 @@ tasks:
     inputs:
       - '**/*'
       - /projects/shared-ui/src/**/*
-      - /projects/shared-types/src/**/*
       - /projects/shared-utils/src/**/*
       - /tsconfig.json
     env:

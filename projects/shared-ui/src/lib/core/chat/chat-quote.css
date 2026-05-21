@@ -21,8 +21,8 @@
   }
 
   :host:focus-visible {
-    outline: var(--chat-quote-focus-ring-width) solid var(--chat-quote-focus-ring-color);
-    outline-offset: var(--chat-quote-focus-ring-offset);
+    outline: var(--border-width-thick) solid transparent;
+    box-shadow: var(--shadow-focus-ring);
   }
 
   .quote-author {

@@ -5,6 +5,9 @@
   /* per-field container — spacing between control and validation slot */
   --form-fields-field-gap: 0.125rem; /* 2px */
 
+  /* per-field content row — spacing between label and control in horizontal orientation */
+  --form-fields-horizontal-gap: var(--spacing-2);
+
   /* validation message slot */
   --form-fields-validation-padding-block: 0;
   --form-fields-validation-padding-inline: var(--spacing-1);

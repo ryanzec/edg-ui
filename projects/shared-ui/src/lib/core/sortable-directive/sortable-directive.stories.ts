@@ -2,7 +2,6 @@ import type { Meta, StoryObj } from '@storybook/angular';
 import { Component, ChangeDetectionStrategy, inject, signal } from '@angular/core';
 import { SortableDirective } from './sortable-directive';
 import { SortingStore } from '../sorting-store/sorting-store';
-import { Button } from '../button/button';
 import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
 import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
 
@@ -39,7 +38,7 @@ class SortableDemo {
 @Component({
   selector: 'story-sortable-enabled-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [SortableDirective, Button, StorybookExampleContainer, StorybookExampleContainerSection],
+  imports: [SortableDirective, StorybookExampleContainer, StorybookExampleContainerSection],
   providers: [SortingStore],
   template: `
     <org-storybook-example-container title="Dynamic Enable/Disable">

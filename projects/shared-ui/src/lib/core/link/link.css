@@ -27,7 +27,8 @@
 
   .link:not([data-disabled='1']):focus-visible {
     text-decoration-color: var(--link-text-decoration-color-hover);
-    outline: none;
+    outline: var(--border-width-thick) solid transparent;
+    box-shadow: var(--shadow-focus-ring);
   }
 
   .link:not([data-disabled='1']):active {

@@ -43,7 +43,8 @@
   }
 
   .org-file-upload:focus-within {
-    box-shadow: var(--file-upload-focus-ring);
+    outline: var(--border-width-thick) solid transparent;
+    box-shadow: var(--shadow-focus-ring);
   }
 
   /* empty state — shown for idle / hover / error */
@@ -146,8 +147,8 @@
   }
 
   .org-file-upload-remove:focus-visible {
-    outline: none;
-    box-shadow: var(--file-upload-focus-ring);
+    outline: var(--border-width-thick) solid transparent;
+    box-shadow: var(--shadow-focus-ring);
   }
 
   /* visibility toggling driven by data-state on the host */

@@ -9,7 +9,7 @@ import {
   UpdateUser,
   UpdateUserResponse,
   User,
-} from '@organization/shared-types';
+} from '@organization/shared-utils';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';

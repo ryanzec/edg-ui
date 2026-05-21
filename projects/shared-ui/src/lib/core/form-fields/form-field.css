@@ -1,0 +1,37 @@
+@layer components {
+  :host {
+    display: flex;
+    flex-direction: column;
+    gap: var(--form-fields-field-gap);
+  }
+
+  .form-field-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--form-fields-field-gap);
+  }
+
+  :host([data-label-orientation='horizontal']) .form-field-content {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--form-fields-horizontal-gap);
+  }
+
+  :host([data-label-orientation='horizontal']) .form-field-content ::ng-deep > * {
+    min-width: 0;
+  }
+
+  .form-field-validation {
+    padding: var(--form-fields-validation-padding-block) var(--form-fields-validation-padding-inline);
+    min-height: var(--form-fields-validation-min-height);
+    color: var(--form-fields-validation-color);
+    font-size: var(--form-fields-validation-font-size);
+    line-height: var(--form-fields-validation-line-height);
+    letter-spacing: var(--form-fields-validation-letter-spacing);
+    visibility: hidden;
+  }
+
+  .form-field-validation[data-has-message] {
+    visibility: visible;
+  }
+}

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/angular';
 import { Component, Injectable, signal, ChangeDetectionStrategy } from '@angular/core';
 import { Observable, of, delay } from 'rxjs';
-import { type User, type GetUsersRequest, type GetUsersResponse } from '@organization/shared-types';
+import { type User, type GetUsersRequest, type GetUsersResponse } from '@organization/shared-utils';
 import { UsersList } from './users-list';
 import { UsersDataStore } from '../users-data-store/users-data-store';
 import { UsersApi } from '../users-api/users-api';

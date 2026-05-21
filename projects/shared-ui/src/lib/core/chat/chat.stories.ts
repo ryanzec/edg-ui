@@ -16,7 +16,6 @@ import { ChatSuggestions } from './chat-suggestions';
 import { ChatTyping } from './chat-typing';
 import { Button } from '../button/button';
 import { ButtonGroup } from '../button/button-group';
-import { Checkbox } from '../checkbox/checkbox';
 import { CheckboxToggle } from '../checkbox-toggle/checkbox-toggle';
 import { ButtonToggle, ButtonToggleItem } from '../button-toggle/button-toggle';
 import {
@@ -59,7 +58,6 @@ const liveDemoStateItems: ButtonToggleItem[] = allChatMessageStates.map((state) 
     Chat,
     ChatMessage,
     ButtonToggle,
-    Checkbox,
     CheckboxToggle,
     DesignSystemDemo,
     DesignSystemDemoHeader,

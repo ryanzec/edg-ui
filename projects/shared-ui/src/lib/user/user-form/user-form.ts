@@ -7,7 +7,7 @@ import {
   assignableUserPermissions,
   type UserRoleName,
   type UserPermission,
-} from '@organization/shared-types';
+} from '@organization/shared-utils';
 import { Input } from '../../core/input/input';
 import { Button } from '../../core/button/button';
 import { Checkbox } from '../../core/checkbox/checkbox';

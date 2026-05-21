@@ -9,7 +9,7 @@ import {
   type CreateUserResponse,
   type UpdateUserResponse,
   type DeleteUserResponse,
-} from '@organization/shared-types';
+} from '@organization/shared-utils';
 import { Router } from '@angular/router';
 
 /** simulated network delay (in ms) used by the mock api to mimic a real fetch */

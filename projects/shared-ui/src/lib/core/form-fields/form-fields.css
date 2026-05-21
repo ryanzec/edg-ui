@@ -1,31 +1,12 @@
 @layer components {
   :host {
-    display: contents;
-  }
-
-  .form-fields-container {
     display: flex;
     flex-direction: column;
     gap: var(--form-fields-gap);
   }
 
-  .form-field-container {
-    display: flex;
-    flex-direction: column;
-    gap: var(--form-fields-field-gap);
-  }
-
-  .form-field-validation {
-    padding: var(--form-fields-validation-padding-block) var(--form-fields-validation-padding-inline);
-    min-height: var(--form-fields-validation-min-height);
-    color: var(--form-fields-validation-color);
-    font-size: var(--form-fields-validation-font-size);
-    line-height: var(--form-fields-validation-line-height);
-    letter-spacing: var(--form-fields-validation-letter-spacing);
-    visibility: hidden;
-  }
-
-  .form-field-validation[data-has-message] {
-    visibility: visible;
+  :host([data-orientation='horizontal']) {
+    flex-direction: row;
+    align-items: center;
   }
 }

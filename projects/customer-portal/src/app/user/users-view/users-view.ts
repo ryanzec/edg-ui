@@ -12,7 +12,7 @@ import {
   CardContent,
 } from '@organization/shared-ui';
 import { logManager } from '@organization/shared-utils';
-import { type User } from '@organization/shared-types';
+import { type User } from '@organization/shared-utils';
 import { firstValueFrom } from 'rxjs';
 import { DialogRef } from '@angular/cdk/dialog';
 

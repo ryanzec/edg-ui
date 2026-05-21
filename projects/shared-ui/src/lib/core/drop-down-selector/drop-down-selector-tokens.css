@@ -33,7 +33,7 @@
   --drop-down-selector-panel-padding: var(--overlay-menu-padding);
   --drop-down-selector-panel-min-width: var(--overlay-menu-min-width);
   --drop-down-selector-panel-max-width: var(--overlay-menu-max-width);
-  --drop-down-selector-panel-max-height: var(--sizing-lg);
+  --drop-down-selector-panel-max-height: var(--sizing-xs);
   --drop-down-selector-panel-z-index: var(--z-index-popover);
 
   /* menu item */

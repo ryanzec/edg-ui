@@ -43,12 +43,6 @@
   --tabs-tab-flex: 0 0 auto;
   --tabs-tab-justify: flex-start;
 
-  /* tab focus styling */
-  --tabs-tab-focus-outline-width: var(--border-width-thick);
-  --tabs-tab-focus-outline-color: var(--color-focus-ring);
-  --tabs-tab-focus-outline-offset: var(--spacing-0_5);
-  --tabs-tab-focus-radius: var(--radius-sm);
-
   /* tab close affordance */
   --tabs-tab-close-margin-start: var(--spacing-0_5);
   --tabs-tab-close-margin-end: calc(-1 * var(--spacing-1));
