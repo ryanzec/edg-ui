@@ -1,0 +1,52 @@
+:root {
+  /* panel container */
+  --view-options-bg: var(--color-bg-surface);
+  --view-options-border-color: var(--color-border-soft);
+  --view-options-border-width: var(--border-width);
+  --view-options-radius: var(--radius-base);
+
+  /* panel header */
+  --view-options-header-padding-block: var(--spacing-3);
+  --view-options-header-padding-inline: var(--spacing-3);
+  --view-options-header-gap: var(--spacing-2);
+  --view-options-header-border-color: var(--color-border-soft);
+  --view-options-header-border-width: var(--border-width);
+  --view-options-header-title-fg: var(--color-fg);
+
+  /* panel body */
+  --view-options-body-padding-block: var(--spacing-3);
+  --view-options-body-padding-inline: var(--spacing-3);
+  --view-options-body-section-gap: var(--spacing-4);
+
+  /* section header */
+  --view-options-section-header-gap: var(--spacing-2);
+  --view-options-section-heading-fg: var(--color-fg-muted);
+  --view-options-section-heading-letter-spacing: 0.04em;
+
+  /* field row */
+  --view-options-field-row-padding-block: var(--spacing-1);
+  --view-options-field-row-gap: var(--spacing-2);
+  --view-options-field-row-radius: var(--radius-base);
+  --view-options-field-row-bg-hover: var(--list-item-hover-bg);
+  --view-options-field-row-fg: var(--color-fg);
+  --view-options-field-row-fg-locked: var(--color-fg-muted);
+  --view-options-field-row-being-dragged-opacity: 0.4;
+
+  /* drag handle */
+  --view-options-drag-handle-fg: var(--color-fg-muted);
+  --view-options-drag-handle-fg-hover: var(--color-fg);
+  --view-options-drag-handle-padding: var(--spacing-1);
+  --view-options-drag-handle-radius: var(--radius-base);
+
+  /* lock icon */
+  --view-options-lock-icon-fg: var(--color-fg-faint);
+
+  /* drop indicator line (drawn at the closest edge of the over-row) */
+  --view-options-drop-indicator-color: var(--color-primary);
+  --view-options-drop-indicator-thickness: 0.125rem; /* 2px */
+  --view-options-drop-indicator-z-index: var(--z-index-raised);
+}
+
+.dark {
+  --view-options-bg: var(--color-bg-surface-secondary);
+}

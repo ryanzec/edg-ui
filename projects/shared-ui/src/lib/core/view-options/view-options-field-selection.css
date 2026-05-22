@@ -1,0 +1,18 @@
+@layer components {
+  :host {
+    display: block;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: var(--view-options-section-header-gap);
+  }
+
+  .section-heading {
+    color: var(--view-options-section-heading-fg);
+    letter-spacing: var(--view-options-section-heading-letter-spacing);
+    text-transform: uppercase;
+    font-weight: var(--font-weight-semibold);
+  }
+}

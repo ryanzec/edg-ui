@@ -71,3 +71,5 @@ export * from './timeline-brain/timeline-brain';
 export * from './timeline-brain/timeline-header-brain';
 export * from './timeline-brain/timeline-item-brain';
 export * from './tooltip-brain/tooltip-brain';
+export * from './view-options-brain/view-options-brain';
+export * from './view-options-brain/view-options-field-row-brain';

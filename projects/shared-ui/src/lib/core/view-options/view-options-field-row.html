@@ -1,0 +1,50 @@
+@if (brain.closestEdge() === 'top') {
+  <div class="drop-indicator drop-indicator-top" data-testid="view-options-field-row-drop-indicator-top"></div>
+}
+<div class="row-content">
+  @if (resolvedLocked()) {
+    <span class="drag-handle-placeholder" aria-hidden="true">
+      <org-icon [name]="dragHandleIconName" size="sm" color="inherit" />
+    </span>
+  } @else {
+    <button
+      #dragHandleRef
+      type="button"
+      class="drag-handle"
+      [attr.aria-label]="dragHandleAriaLabel()"
+      (keydown)="onDragHandleKeyDown($event)"
+      data-testid="view-options-field-row-drag-handle"
+    >
+      <org-icon [name]="dragHandleIconName" size="sm" color="inherit" />
+    </button>
+  }
+  <!--
+  the row body is a mouse-only click affordance — keyboard users interact via the adjacent toggle (a native
+  switch) so adding a redundant focusable button here would announce twice for the same control
+  -->
+  <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events,@angular-eslint/template/interactive-supports-focus -->
+  <div class="row-body" (click)="onBodyClick()" data-testid="view-options-field-row-body">
+    <span class="field-icon" aria-hidden="true">
+      <org-icon [name]="resolvedIconName()" size="sm" color="inherit" />
+    </span>
+    <span class="field-label" orgText textSize="sm">{{ field().label }}</span>
+  </div>
+  @if (resolvedLocked()) {
+    <span class="lock-icon" data-testid="view-options-field-row-lock-icon">
+      <org-icon [name]="lockIconName" size="sm" color="inherit" label="Locked" />
+    </span>
+  } @else {
+    <org-checkbox-toggle
+      class="toggle"
+      size="sm"
+      [name]="field().name"
+      [value]="field().name"
+      [checked]="field().enabled"
+      (checkedChange)="onToggle($event)"
+      data-testid="view-options-field-row-toggle"
+    />
+  }
+</div>
+@if (brain.closestEdge() === 'bottom') {
+  <div class="drop-indicator drop-indicator-bottom" data-testid="view-options-field-row-drop-indicator-bottom"></div>
+}

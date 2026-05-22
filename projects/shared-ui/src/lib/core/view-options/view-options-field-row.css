@@ -1,0 +1,106 @@
+@layer components {
+  :host {
+    display: block;
+    position: relative;
+    padding-block: var(--view-options-field-row-padding-block);
+    border-radius: var(--view-options-field-row-radius);
+    color: var(--view-options-field-row-fg);
+  }
+
+  :host([data-locked]) {
+    color: var(--view-options-field-row-fg-locked);
+  }
+
+  :host([data-being-dragged]) {
+    opacity: var(--view-options-field-row-being-dragged-opacity);
+  }
+
+  :host(:hover:not([data-locked])) {
+    background: var(--view-options-field-row-bg-hover);
+  }
+
+  .row-content {
+    display: flex;
+    align-items: center;
+    gap: var(--view-options-field-row-gap);
+  }
+
+  .row-body {
+    display: flex;
+    align-items: center;
+    gap: var(--view-options-field-row-gap);
+    flex: 1;
+    min-width: 0;
+  }
+
+  :host(:not([data-locked])) .row-body {
+    cursor: pointer;
+  }
+
+  .drag-handle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--view-options-drag-handle-padding);
+    border: none;
+    background: transparent;
+    color: var(--view-options-drag-handle-fg);
+    cursor: grab;
+    border-radius: var(--view-options-drag-handle-radius);
+  }
+
+  .drag-handle:hover {
+    color: var(--view-options-drag-handle-fg-hover);
+  }
+
+  .drag-handle:focus-visible {
+    outline: var(--border-width-thick) solid transparent;
+    box-shadow: var(--shadow-focus-ring);
+  }
+
+  .drag-handle-placeholder {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--view-options-drag-handle-padding);
+    color: transparent;
+  }
+
+  .field-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-fg-muted);
+  }
+
+  .field-label {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .lock-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--view-options-lock-icon-fg);
+  }
+
+  .drop-indicator {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: var(--view-options-drop-indicator-thickness);
+    background: var(--view-options-drop-indicator-color);
+    border-radius: var(--view-options-drop-indicator-thickness);
+    pointer-events: none;
+    z-index: var(--view-options-drop-indicator-z-index);
+  }
+
+  .drop-indicator-top {
+    top: calc(-1 * var(--view-options-drop-indicator-thickness) / 2);
+  }
+
+  .drop-indicator-bottom {
+    bottom: calc(-1 * var(--view-options-drop-indicator-thickness) / 2);
+  }
+}

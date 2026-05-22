@@ -93,6 +93,9 @@ import {
   LucideBriefcase,
   LucideSmartphone,
   LucideLaptop,
+  LucideSlidersHorizontal,
+  LucidePanelRightClose,
+  LucideGripVertical,
 } from '@lucide/angular';
 
 /**
@@ -196,6 +199,9 @@ export const allIconNames = [
   'briefcase',
   'smartphone',
   'laptop',
+  'sliders-horizontal',
+  'panel-right-close',
+  'grip-vertical',
 ] as const;
 
 /** the icon name type derived from all registered icon names */
@@ -296,6 +302,9 @@ const iconMap: Record<IconName, LucideIcon> = {
   briefcase: LucideBriefcase,
   smartphone: LucideSmartphone,
   laptop: LucideLaptop,
+  'sliders-horizontal': LucideSlidersHorizontal,
+  'panel-right-close': LucidePanelRightClose,
+  'grip-vertical': LucideGripVertical,
 };
 
 /**

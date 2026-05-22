@@ -1,0 +1,12 @@
+<div class="section-header">
+  <span class="section-heading" orgText textSize="xs">{{ sectionLabel() }}</span>
+  <org-tag color="neutral" size="xs" variant="soft" data-testid="view-options-field-selection-count">
+    {{ countSummary() }}
+  </org-tag>
+  <span class="sr-only" aria-live="polite">{{ countAnnouncement() }}</span>
+</div>
+<org-list size="sm" data-testid="view-options-field-selection-list">
+  @for (field of fields(); track field.name) {
+    <org-view-options-field-row [name]="field.name" [locked]="field.locked ?? false" [field]="field" />
+  }
+</org-list>

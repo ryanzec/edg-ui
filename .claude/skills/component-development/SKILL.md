@@ -38,7 +38,7 @@ The rules in this section must **ONLY** be applied to core components.
 - Styling: Retains all the CSS/SCSS and structural HTML.
 - Integration: Must import and internally utilize the new Brain component to function.
 
-# General Rules
+# CRITICAL Rules
 - **ALWAYS** choose inference over duplication of inputs (instead of having both a `clickable` input() and `clicked` output(), just have a clicked subject+ `outputFromObservable()` to be able to infer `clickable`)
 - **ALWAYS** list out bespoken components that are going to be made a verity those bespoken component are good to be made.
 

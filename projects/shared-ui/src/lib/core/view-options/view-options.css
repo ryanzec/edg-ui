@@ -1,0 +1,61 @@
+@layer components {
+  :host {
+    display: flex;
+    flex-direction: column;
+    background: var(--view-options-bg);
+    border: var(--view-options-border-width) solid var(--view-options-border-color);
+    border-radius: var(--view-options-radius);
+    overflow: hidden;
+  }
+
+  .panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--view-options-header-gap);
+    padding-block: var(--view-options-header-padding-block);
+    padding-inline: var(--view-options-header-padding-inline);
+    border-bottom: var(--view-options-header-border-width) solid var(--view-options-header-border-color);
+    color: var(--view-options-header-title-fg);
+  }
+
+  .header-title {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--view-options-header-gap);
+  }
+
+  .header-title-text {
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .close-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-1);
+    border: none;
+    background: transparent;
+    color: var(--color-fg-muted);
+    border-radius: var(--radius-base);
+    cursor: pointer;
+  }
+
+  .close-button:hover {
+    color: var(--color-fg);
+    background: var(--color-neutral-soft-hover);
+  }
+
+  .close-button:focus-visible {
+    outline: var(--border-width-thick) solid transparent;
+    box-shadow: var(--shadow-focus-ring);
+  }
+
+  .panel-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--view-options-body-section-gap);
+    padding-block: var(--view-options-body-padding-block);
+    padding-inline: var(--view-options-body-padding-inline);
+  }
+}

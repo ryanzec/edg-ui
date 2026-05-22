@@ -107,6 +107,10 @@ const TIME_INPUT_TOKENS_CSS = path.join(
 );
 const TIMELINE_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/core/timeline/timeline-tokens.css');
 const TOOLTIP_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/core/tooltip/tooltip-tokens.css');
+const VIEW_OPTIONS_TOKENS_CSS = path.join(
+  REPO_ROOT,
+  'projects/shared-ui/src/lib/core/view-options/view-options-tokens.css',
+);
 const OUTPUT_TS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/styles/design-tokens.ts');
 
 /**
@@ -334,6 +338,7 @@ async function main() {
   const tableContent = cleanCss(fs.readFileSync(TABLE_TOKENS_CSS, 'utf-8'));
   const textareaContent = cleanCss(fs.readFileSync(TEXTAREA_TOKENS_CSS, 'utf-8'));
   const timeInputContent = cleanCss(fs.readFileSync(TIME_INPUT_TOKENS_CSS, 'utf-8'));
+  const viewOptionsContent = cleanCss(fs.readFileSync(VIEW_OPTIONS_TOKENS_CSS, 'utf-8'));
 
   // Base tokens: all :root vars; color vars are used only for resolution, non-color vars are also output
   const baseVars = Object.assign({}, ...findBlocks(baseContent, ':root').map(extractVariables));
@@ -391,6 +396,7 @@ async function main() {
     ...findBlocks(tableContent, ':root').map(extractVariables),
     ...findBlocks(textareaContent, ':root').map(extractVariables),
     ...findBlocks(timeInputContent, ':root').map(extractVariables),
+    ...findBlocks(viewOptionsContent, ':root').map(extractVariables),
   );
   const darkVars = Object.assign(
     {},
@@ -445,6 +451,7 @@ async function main() {
     ...findBlocks(tableContent, '.dark').map(extractVariables),
     ...findBlocks(textareaContent, '.dark').map(extractVariables),
     ...findBlocks(timeInputContent, '.dark').map(extractVariables),
+    ...findBlocks(viewOptionsContent, '.dark').map(extractVariables),
   );
 
   // Resolution maps: base vars are always the foundation

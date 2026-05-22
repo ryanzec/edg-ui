@@ -1,0 +1,20 @@
+<div class="panel-header">
+  <span class="header-title">
+    <org-icon [name]="panelHeaderIconName" size="sm" color="inherit" />
+    <span orgText textSize="base" class="header-title-text">{{ resolvedPanelLabel() }}</span>
+  </span>
+  @if (hasClosedListener()) {
+    <button
+      type="button"
+      class="close-button"
+      aria-label="Close view options"
+      (click)="onCloseClick()"
+      data-testid="view-options-close-button"
+    >
+      <org-icon [name]="panelCloseIconName" size="sm" color="inherit" />
+    </button>
+  }
+</div>
+<div class="panel-body">
+  <org-view-options-field-selection [sectionLabel]="sectionLabel()" />
+</div>

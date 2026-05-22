@@ -113,3 +113,4 @@ export * from './form-fields/form-fields';
 export * from './textarea/textarea';
 export * from './textarea/textarea-toolbar';
 export * from './textarea/textarea-toolbar-item';
+export * from './view-options/view-options';
