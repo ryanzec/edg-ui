@@ -330,7 +330,7 @@ class SplitterCollapsedSideStory {
         <li>starts with first section at 20% and second section at 80%</li>
         <li>clicking <strong>Flip Sizes</strong> reverses the current values regardless of what they are</li>
         <li>both horizontal and vertical splitters update together since they share the same input</li>
-        <li>the swap animates smoothly over 200ms; dragging the divider remains instant</li>
+        <li>the swap animates smoothly over --motion-duration-base; dragging the divider remains instant</li>
         <li>
           dragging either divider updates the shared <code>size</code> via <code>sizeChanged</code>, so the button keeps
           working after a drag
@@ -395,7 +395,7 @@ const meta: Meta<Splitter> = {
   - **size**: percentage size as a tuple; single value sets first with remainder for second; updated by drag and keyboard interactions
   - **isEnabled**: when false, divider is a static 1px border; when true, 2px with hover effect
   - **collapsedSide**: \`null\`, \`"first"\`, or \`"second"\`; collapses one section and disables resizing
-  - **animateResize**: when true (default), section size changes (programmatic resize and collapse / expand) animate over 200ms; dragging stays instant; respects \`prefers-reduced-motion\`
+  - **animateResize**: when true (default), section size changes (programmatic resize and collapse / expand) animate over --motion-duration-base; dragging stays instant; respects \`prefers-reduced-motion\`
 
   ### Outputs
   - **sizeChanged**: emitted whenever the size changes (drag, keyboard, or programmatic) with the new \`[first, second]\` tuple

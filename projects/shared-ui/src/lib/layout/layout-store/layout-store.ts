@@ -1,5 +1,5 @@
 import { Injectable, computed, signal } from '@angular/core';
-import { type NavigationItem, type SettingsMenuItem } from '../../core/application-navigation/application-navigation';
+import { type NavigationItem, type SettingsMenuItem } from '../application-navigation/application-navigation';
 import { type ComponentColor } from '../../core/types/component-types';
 
 /** unified internal state shape for the layout store */

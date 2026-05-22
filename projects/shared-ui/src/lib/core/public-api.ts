@@ -1,4 +1,3 @@
-export * from './application-navigation/application-navigation';
 export * from './auto-scroll/auto-scroll';
 export * from './avatar/avatar';
 export * from './avatar/avatar-stack';

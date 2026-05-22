@@ -42,7 +42,7 @@
 
   /* animate section size changes; second-section follows automatically via flex: 1 */
   :host([data-animate-resize]) .first-section {
-    transition: flex-basis 200ms ease-in-out;
+    transition: flex-basis var(--motion-duration-base) ease-in-out;
   }
 
   /* dragging must remain instant for responsive feedback; source order beats specificity tie */

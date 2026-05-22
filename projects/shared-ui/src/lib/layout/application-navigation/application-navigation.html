@@ -65,9 +65,13 @@
                 @if (item.indicator !== undefined) {
                   <org-indicator post color="neutral" size="sm" [number]="item.indicator" />
                 }
-                <org-icon post class="nav-group-chevron" [name]="groupChevron(item.id)" />
+                <org-icon post class="nav-group-chevron" name="chevron-right" />
               </org-list-item>
-              @if (isGroupExpanded(item.id)) {
+              <div
+                class="nav-sub-list-wrapper"
+                [attr.inert]="isGroupExpanded(item.id) ? null : ''"
+                [attr.aria-hidden]="isGroupExpanded(item.id) ? null : 'true'"
+              >
                 <div class="nav-sub-list" role="presentation">
                   <org-list>
                     @for (subItem of item.children; track subItem.id) {
@@ -84,7 +88,7 @@
                     }
                   </org-list>
                 </div>
-              }
+              </div>
             </div>
           }
         } @else if (item.routePath) {

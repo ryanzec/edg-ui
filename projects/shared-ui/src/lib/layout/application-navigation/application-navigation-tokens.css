@@ -1,0 +1,5 @@
+:root {
+  /* nested nav-group expand/collapse motion */
+  --application-navigation-nav-sub-list-transition-duration: var(--motion-duration-base);
+  --application-navigation-nav-sub-list-transition-easing: var(--motion-ease-standard);
+}

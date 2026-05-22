@@ -10,7 +10,7 @@ import { StorybookExampleContainer } from '../../private/storybook-example-conta
 import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
 
 const meta: Meta<ApplicationNavigation> = {
-  title: 'Core/Components/Application Navigation',
+  title: 'Layout/Components/Application Navigation',
   component: ApplicationNavigation,
   tags: ['autodocs'],
   parameters: {

@@ -5,6 +5,7 @@
 @import './base-tokens.css';
 @import './scrollbar-tokens.css';
 @import '../core/tokens.css';
+@import '../layout/tokens.css';
 @import '../example/design-system-demo/design-system-demo-tokens.css';
 @import './animations.css';
 @import './background-utility.css';

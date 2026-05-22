@@ -6,7 +6,7 @@ import {
   type NavigationSubItem,
   type SettingsMenuItem,
   type Theme,
-} from '../../core/application-navigation/application-navigation';
+} from '../application-navigation/application-navigation';
 import { UiThemeManager } from '../../ui-theme/ui-theme-manager/ui-theme-manager';
 import { LayoutStore } from '../layout-store/layout-store';
 import { ScrollArea } from '@organization/shared-ui';

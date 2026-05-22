@@ -4,7 +4,7 @@ import { Dialog as CdkDialog } from '@angular/cdk/dialog';
 import { DateTime } from 'luxon';
 import type { ChartConfiguration } from 'chart.js';
 import { logManager } from '@organization/shared-utils';
-import { ApplicationNavigation, type NavigationItem } from '../../core/application-navigation/application-navigation';
+import { ApplicationNavigation, type NavigationItem } from '../../layout/application-navigation/application-navigation';
 import { Avatar } from '../../core/avatar/avatar';
 import { AvatarStack } from '../../core/avatar/avatar-stack';
 import { Box } from '../../core/box/box';

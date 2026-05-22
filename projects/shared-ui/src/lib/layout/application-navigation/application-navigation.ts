@@ -1,22 +1,22 @@
 import { Component, ChangeDetectionStrategy, computed, input, model, output, signal } from '@angular/core';
 import { type IconName } from '../../brain/icon-brain/icon-brain';
-import { type ComponentColor } from '../types/component-types';
-import { Avatar } from '../avatar/avatar';
-import { Icon } from '../icon/icon';
-import { Indicator } from '../indicator/indicator';
-import { Kbd } from '../kbd/kbd';
-import { List } from '../list/list';
-import { ListItem } from '../list/list-item';
-import { ListItemIcon } from '../list/list-item-icon';
+import { type ComponentColor } from '../../core/types/component-types';
+import { Avatar } from '../../core/avatar/avatar';
+import { Icon } from '../../core/icon/icon';
+import { Indicator } from '../../core/indicator/indicator';
+import { Kbd } from '../../core/kbd/kbd';
+import { List } from '../../core/list/list';
+import { ListItem } from '../../core/list/list-item';
+import { ListItemIcon } from '../../core/list/list-item-icon';
 import {
   OverlayMenu,
   type OverlayMenuItem,
   type OverlayMenuItemEntry,
   type OverlayMenuEntryValueChange,
-} from '../overlay-menu/overlay-menu';
-import { OverlayMenuTriggerDirective } from '../overlay-menu/overlay-menu-trigger';
-import { Tooltip } from '../tooltip/tooltip';
-import { TooltipContent } from '../tooltip/tooltip-content';
+} from '../../core/overlay-menu/overlay-menu';
+import { OverlayMenuTriggerDirective } from '../../core/overlay-menu/overlay-menu-trigger';
+import { Tooltip } from '../../core/tooltip/tooltip';
+import { TooltipContent } from '../../core/tooltip/tooltip-content';
 import { RouterLink } from '@angular/router';
 
 /** all available theme values */
@@ -227,11 +227,6 @@ export class ApplicationNavigation {
   /** returns whether the group with the given id is expanded */
   protected isGroupExpanded(id: string): boolean {
     return this._expandedGroupIds().has(id);
-  }
-
-  /** the icon name rendered as the group-expand chevron — points down when expanded, right when collapsed */
-  protected groupChevron(id: string): IconName {
-    return this.isGroupExpanded(id) ? 'chevron-down' : 'chevron-right';
   }
 
   protected onWorkspaceClick(): void {

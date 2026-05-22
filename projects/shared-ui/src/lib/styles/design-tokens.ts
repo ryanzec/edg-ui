@@ -28,11 +28,11 @@ const colorLight: Record<string, string> = {
 
 const colorDark: Record<string, string> = {
   'bg.active': 'oklch(0.305 0.008 260)',
-  'bg.app': 'oklch(0.1 0.01 260)',
+  'bg.app': 'oklch(0.17 0.01 260)',
   'bg.hover': 'oklch(0.275 0.007 260)',
   'bg.inverse': 'oklch(0.96 0.005 95)',
   'bg.inverse.soft': 'oklch(0.86 0.005 95)',
-  'bg.sidebar': 'oklch(0.17 0.01 260)',
+  'bg.sidebar': 'oklch(0.16 0.01 260)',
   'bg.surface': 'oklch(0.2 0.01 260)',
   'bg.surface.secondary': 'oklch(0.225 0.01 260)',
   'bg.surface.tertiary': 'oklch(0.25 0.01 260)',
@@ -149,6 +149,8 @@ const colorDark: Record<string, string> = {
 };
 
 const nonColorTokens: Record<string, string> = {
+  'application.navigation.nav.sub.list.transition.duration': '150ms',
+  'application.navigation.nav.sub.list.transition.easing': 'cubic-bezier(0.3, 0.7, 0.4, 1)',
   'aspect.square': '1 / 1',
   'aspect.video': '16 / 9',
   'avatar.button.active.brightness': '0.92',

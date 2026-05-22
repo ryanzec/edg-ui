@@ -11,6 +11,10 @@ const DESIGN_SYSTEM_DEMO_TOKENS_CSS = path.join(
   REPO_ROOT,
   'projects/shared-ui/src/lib/example/design-system-demo/design-system-demo-tokens.css',
 );
+const APPLICATION_NAVIGATION_TOKENS_CSS = path.join(
+  REPO_ROOT,
+  'projects/shared-ui/src/lib/layout/application-navigation/application-navigation-tokens.css',
+);
 const AVATAR_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/core/avatar/avatar-tokens.css');
 const BOX_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/core/box/box-tokens.css');
 const BUTTON_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/core/button/button-tokens.css');
@@ -282,6 +286,7 @@ async function main() {
   const baseContent = cleanCss(fs.readFileSync(BASE_TOKENS_CSS, 'utf-8'));
   const chartContent = cleanCss(fs.readFileSync(CHART_TOKENS_CSS, 'utf-8'));
   const scrollbarContent = cleanCss(fs.readFileSync(SCROLLBAR_TOKENS_CSS, 'utf-8'));
+  const applicationNavigationContent = cleanCss(fs.readFileSync(APPLICATION_NAVIGATION_TOKENS_CSS, 'utf-8'));
   const avatarContent = cleanCss(fs.readFileSync(AVATAR_TOKENS_CSS, 'utf-8'));
   const iconContent = cleanCss(fs.readFileSync(ICON_TOKENS_CSS, 'utf-8'));
   const indicatorContent = cleanCss(fs.readFileSync(INDICATOR_TOKENS_CSS, 'utf-8'));
@@ -338,6 +343,7 @@ async function main() {
     {},
     ...findBlocks(chartContent, ':root').map(extractVariables),
     ...findBlocks(scrollbarContent, ':root').map(extractVariables),
+    ...findBlocks(applicationNavigationContent, ':root').map(extractVariables),
     ...findBlocks(avatarContent, ':root').map(extractVariables),
     ...findBlocks(iconContent, ':root').map(extractVariables),
     ...findBlocks(indicatorContent, ':root').map(extractVariables),
@@ -391,6 +397,7 @@ async function main() {
     ...findBlocks(baseContent, '.dark').map(extractVariables),
     ...findBlocks(chartContent, '.dark').map(extractVariables),
     ...findBlocks(scrollbarContent, '.dark').map(extractVariables),
+    ...findBlocks(applicationNavigationContent, '.dark').map(extractVariables),
     ...findBlocks(avatarContent, '.dark').map(extractVariables),
     ...findBlocks(iconContent, '.dark').map(extractVariables),
     ...findBlocks(indicatorContent, '.dark').map(extractVariables),
