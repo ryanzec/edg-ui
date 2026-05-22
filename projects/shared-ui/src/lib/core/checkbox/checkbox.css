@@ -20,7 +20,7 @@
   /* base layout — properties applied once using slot tokens */
   :host .checkbox-label {
     display: inline-flex;
-    align-items: flex-start;
+    align-items: center;
     gap: var(--checkbox-gap);
     border-radius: var(--checkbox-radius);
     cursor: pointer;
@@ -31,8 +31,6 @@
     align-items: center;
     justify-content: center;
     color: var(--checkbox-indicator-color);
-    position: relative;
-    top: var(--checkbox-icon-top);
   }
 
   :host .checkbox-body {
@@ -40,6 +38,10 @@
     flex-direction: column;
     gap: var(--checkbox-body-gap);
     min-width: 0;
+  }
+
+  .checkbox-body:has(.checkbox-label-text:empty):not(:has(.checkbox-description)) {
+    display: none;
   }
 
   :host .checkbox-description {
