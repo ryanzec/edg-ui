@@ -9,7 +9,7 @@
               <org-input
                 [name]="filter.name"
                 [formControlName]="filter.name"
-                [disabled]="filter.disabled ?? false"
+                [orgFormDisabled]="filter.disabled ?? false"
                 [readonly]="filter.readonly ?? false"
               />
             }
@@ -18,7 +18,7 @@
                 [name]="filter.name"
                 [value]="filter.name"
                 [formControlName]="filter.name"
-                [disabled]="filter.disabled ?? false"
+                [orgFormDisabled]="filter.disabled ?? false"
               >
                 {{ filter.label }}
               </org-checkbox-toggle>
@@ -30,7 +30,7 @@
                 [options]="filter.options"
                 [isMultiSelect]="true"
                 [formControlName]="filter.name"
-                [disabled]="filter.disabled ?? false"
+                [orgFormDisabled]="filter.disabled ?? false"
               />
             }
           }

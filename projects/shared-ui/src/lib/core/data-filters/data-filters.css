@@ -3,11 +3,6 @@
     display: block;
   }
 
-  /* allow the form-fields container to wrap when the host constrains height */
-  :host ::ng-deep .form-fields-container {
-    flex-wrap: wrap;
-  }
-
   .filter-row {
     display: flex;
     align-items: center;

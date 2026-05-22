@@ -17,6 +17,7 @@ import { isEqual } from 'es-toolkit';
 import { Button } from '../button/button';
 import { CheckboxToggle } from '../checkbox-toggle/checkbox-toggle';
 import { Combobox } from '../combobox/combobox';
+import { FormDisabledDirective } from '../form-disabled-directive/form-disabled-directive';
 import { FormField } from '../form-fields/form-field';
 import { FormFields } from '../form-fields/form-fields';
 import { Input } from '../input/input';
@@ -48,6 +49,7 @@ export const DATA_FILTERS_TEXT_DEBOUNCE_MS = 250;
     Button,
     FormField,
     FormFields,
+    FormDisabledDirective,
     Label,
     Input,
     CheckboxToggle,
@@ -144,7 +146,6 @@ export class DataFilters {
 
     for (const filter of filters) {
       if (this.form.contains(filter.name)) {
-        this.form.controls[filter.name].setValue(filter.defaultValue, { emitEvent: false });
         continue;
       }
 
@@ -175,6 +176,9 @@ export class DataFilters {
     this._valueChangesSubscription = merge(...textChanges, ...otherChanges)
       .pipe(
         map(() => this.form.getRawValue() as DataFiltersValue),
+        // @performance deep-equal across the full form record runs on every post-debounce emission.
+        // fine for typical filter counts; if filter counts grow large this should be replaced with a
+        // per-control diff that only compares the changed key.
         distinctUntilChanged((previous, current) => isEqual(previous, current)),
         takeUntilDestroyed(this._destroyRef)
       )

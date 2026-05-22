@@ -393,5 +393,21 @@ describe('DataFilters', () => {
 
       expect(getFormHandle(fixture).getRawValue()['search']).toBe('');
     });
+
+    it('preserves existing filter values when a sibling filter is added', async () => {
+      const form = getFormHandle(fixture);
+
+      form.controls['search'].setValue('alice', { emitEvent: false });
+
+      fixture.componentInstance.activeFilters.set(['search', 'isActive']);
+      fixture.detectChanges();
+      await fixture.whenStable();
+
+      fixture.componentInstance.activeFilters.set(['search', 'isActive', 'role']);
+      fixture.detectChanges();
+      await fixture.whenStable();
+
+      expect(getFormHandle(fixture).getRawValue()['search']).toBe('alice');
+    });
   });
 });

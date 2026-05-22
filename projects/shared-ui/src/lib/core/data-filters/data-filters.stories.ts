@@ -523,7 +523,10 @@ class DataFiltersAddRemoveStory {
               </li>
               <li>Clicking the X next to a filter removes the input and the name re-appears in the menu.</li>
               <li>When every available filter is active the Add Filter button disappears.</li>
-              <li>Adding or removing a filter resets all rendered filters to their default values.</li>
+              <li>
+                Adding a filter renders its input at the default value; other active filters preserve their current
+                values.
+              </li>
             </ul>
           </org-design-system-demo-expected-behaviour>
         </org-design-system-demo>
