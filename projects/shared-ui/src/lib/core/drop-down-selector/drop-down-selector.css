@@ -77,9 +77,22 @@
     overscroll-behavior: contain;
   }
 
+  .menu-search {
+    flex: 0 0 auto;
+    padding-block: var(--drop-down-selector-search-padding-block);
+    padding-inline: var(--drop-down-selector-search-padding-inline);
+  }
+
   .menu-options {
     flex: 1 1 auto;
     min-height: 0;
+  }
+
+  .menu-empty {
+    color: var(--drop-down-selector-empty-fg);
+    padding-block: var(--drop-down-selector-empty-padding-block);
+    padding-inline: var(--drop-down-selector-empty-padding-inline);
+    text-align: center;
   }
 
   .menu-footer {

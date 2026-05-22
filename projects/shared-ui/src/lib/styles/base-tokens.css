@@ -247,7 +247,7 @@
   --shadow-sm: 0 0.0625rem 0.125rem rgba(0, 0, 0, 0.04), 0 0.0625rem 0.0625rem rgba(0, 0, 0, 0.02);
   --shadow-base: 0 0.5rem 1.5rem -0.5rem rgba(0, 0, 0, 0.12), 0 0.125rem 0.25rem rgba(0, 0, 0, 0.04);
   --shadow-lg: 0 1rem 2.5rem -0.75rem rgba(0, 0, 0, 0.18), 0 0.125rem 0.375rem rgba(0, 0, 0, 0.06);
-  --shadow-focus-ring: 0 0 0 0.1875rem var(--color-focus-ring);
+  --shadow-focus-ring: 0 0 0 0.125rem var(--color-focus-ring);
 
   --motion-duration-fast: 100ms;
   --motion-duration-base: 150ms;

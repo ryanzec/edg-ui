@@ -15,6 +15,7 @@ import { angularUtils, domUtils } from '@organization/shared-utils';
 import { type IconName } from '../../brain/icon-brain/icon-brain';
 import { Button } from '../button/button';
 import { Icon, type IconSize } from '../icon/icon';
+import { Input } from '../input/input';
 import { List } from '../list/list';
 import { ListItem } from '../list/list-item';
 import { OverlayMenuDivider } from '../overlay-menu/overlay-menu-divider';
@@ -58,6 +59,9 @@ export const DROP_DOWN_SELECTOR_ICON_NAME_DEFAULT: IconName | undefined = undefi
 
 /** default value for the showLabelWithValue input */
 export const DROP_DOWN_SELECTOR_SHOW_LABEL_WITH_VALUE_DEFAULT = false;
+
+/** default value for the hasSearch input */
+export const DROP_DOWN_SELECTOR_HAS_SEARCH_DEFAULT = false;
 
 /** the icon size used for each supported drop-down selector trigger size */
 const TRIGGER_ICON_SIZE_BY_TRIGGER_SIZE: Record<DropDownSelectorSize, IconSize> = {
@@ -109,7 +113,18 @@ const POSITION_CONFIGURATIONS: Record<DropDownSelectorPosition, ConnectedPositio
 @Component({
   selector: 'org-drop-down-selector',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Button, CdkOverlayOrigin, CdkConnectedOverlay, Icon, List, ListItem, OverlayMenuDivider, ScrollArea, Tag],
+  imports: [
+    Button,
+    CdkOverlayOrigin,
+    CdkConnectedOverlay,
+    Icon,
+    Input,
+    List,
+    ListItem,
+    OverlayMenuDivider,
+    ScrollArea,
+    Tag,
+  ],
   templateUrl: './drop-down-selector.html',
   styleUrl: './drop-down-selector.css',
   hostDirectives: [
@@ -124,6 +139,7 @@ const POSITION_CONFIGURATIONS: Record<DropDownSelectorPosition, ConnectedPositio
     '[attr.data-has-value]': 'brain.hasSelection() ? "" : null',
     '[attr.data-size]': 'size()',
     '[attr.data-state]': 'brain.isOpen() ? "open" : "closed"',
+    '[attr.data-has-search]': 'hasSearch() ? "" : null',
     '[attr.aria-disabled]': 'brain.disabled() ? "true" : null',
   },
 })
@@ -136,6 +152,9 @@ export class DropDownSelector<TValue = unknown> {
 
   @ViewChild('optionsScrollAreaComponent')
   protected readonly optionsScrollAreaComponent?: ScrollArea;
+
+  @ViewChild('searchInputComponent')
+  protected readonly searchInputComponent?: Input;
 
   /** the size variant of the trigger element */
   public readonly size = input<DropDownSelectorSize>(DROP_DOWN_SELECTOR_SIZE_DEFAULT);
@@ -155,6 +174,12 @@ export class DropDownSelector<TValue = unknown> {
    * the value or count chip is shown
    */
   public readonly showLabelWithValue = input<boolean>(DROP_DOWN_SELECTOR_SHOW_LABEL_WITH_VALUE_DEFAULT);
+
+  /**
+   * when true, an inline search input renders at the top of the overlay menu (outside of the scroll
+   * area) and filters the visible items in real time by case-insensitive substring match on `display`
+   */
+  public readonly hasSearch = input<boolean>(DROP_DOWN_SELECTOR_HAS_SEARCH_DEFAULT);
 
   /** the icon size to use for icons rendered inside the trigger, derived from the trigger size variant */
   protected readonly triggerIconSize = computed<IconSize>(() => TRIGGER_ICON_SIZE_BY_TRIGGER_SIZE[this.size()]);
@@ -180,6 +205,14 @@ export class DropDownSelector<TValue = unknown> {
   /** the display text rendered inside the multi-mode count chip */
   protected readonly countChipText = computed<string>(() => `${this.brain.selectionCount()} selected`);
 
+  /** stable html name attribute used by the inline-search `<org-input>` */
+  protected readonly searchInputName = computed<string>(() => `${this.brain.panelId()}-search`);
+
+  /** whether the filtered list is empty while a search query is active — drives the empty-state markup */
+  protected readonly showEmptyState = computed<boolean>(
+    () => this.hasSearch() && this.brain.hasSearchQuery() && this.brain.filteredItems().length === 0
+  );
+
   public constructor() {
     // scroll the active item into view when it changes while the menu is open
     effect(() => {
@@ -201,6 +234,25 @@ export class DropDownSelector<TValue = unknown> {
           () => {
             const container = this.optionsScrollAreaComponent?.containerElement() ?? null;
             this._scrollActiveItemIntoViewIfNeeded(container, activeDescendantId);
+          },
+          { injector: this._injector }
+        );
+      });
+    });
+
+    // auto-focus the inline-search input whenever the menu opens with hasSearch enabled
+    effect(() => {
+      const isOpen = this.brain.isOpen();
+      const hasSearch = this.hasSearch();
+
+      if (!isOpen || !hasSearch) {
+        return;
+      }
+
+      untracked(() => {
+        afterNextRender(
+          () => {
+            this.searchInputComponent?.focusInput();
           },
           { injector: this._injector }
         );

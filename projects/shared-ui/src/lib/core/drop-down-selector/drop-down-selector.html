@@ -55,10 +55,26 @@
     [attr.aria-multiselectable]="brain.selectionMode() === 'multiple'"
     class="menu-panel"
   >
+    @if (hasSearch()) {
+      <div class="menu-search">
+        <org-input
+          #searchInputComponent
+          [name]="searchInputName()"
+          placeholder="Search"
+          ariaLabel="Search options"
+          preIcon="search"
+          showClear="active"
+          [value]="brain.searchQuery()"
+          (valueChange)="brain.setSearchQuery($event)"
+          (keydown)="brain.handleSearchKeyDown($event)"
+        />
+      </div>
+      <org-overlay-menu-divider />
+    }
     <div class="menu-options">
       <org-scroll-area #optionsScrollAreaComponent scrollClass="h-full w-full">
         <org-list listRole="none">
-          @for (item of brain.items(); track $index) {
+          @for (item of brain.filteredItems(); track $index) {
             @let isItemSelected = brain.isSelected(item);
             <button
               type="button"
@@ -77,6 +93,9 @@
             </button>
           }
         </org-list>
+        @if (showEmptyState()) {
+          <div class="menu-empty" role="status">No results</div>
+        }
       </org-scroll-area>
     </div>
     @if (brain.hasSelection() && brain.selectionMode() === 'multiple') {

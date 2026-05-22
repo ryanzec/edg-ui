@@ -62,6 +62,30 @@ export class DropDownSelectorBrainDirective<TValue = unknown> {
   /** whether any items are currently selected */
   public readonly hasSelection = computed<boolean>(() => this.selectionCount() > 0);
 
+  /** writable inline-search query; navigation, type-ahead, and rendering all consume `filteredItems` */
+  private readonly _searchQuery = signal<string>('');
+
+  /** the current inline-search query */
+  public readonly searchQuery = computed<string>(() => this._searchQuery());
+
+  /** whether the inline-search query is currently filtering the visible items */
+  public readonly hasSearchQuery = computed<boolean>(() => this._searchQuery().length > 0);
+
+  /**
+   * the items currently visible after applying the inline-search query (case-insensitive substring
+   * match on `display`); returns the full list when no query is set. all keyboard navigation, active
+   * descendant resolution, and presentation rendering operate against this list.
+   */
+  public readonly filteredItems = computed<SelectionValue<TValue>[]>(() => {
+    const query = this._searchQuery().toLowerCase();
+
+    if (query.length === 0) {
+      return this.items();
+    }
+
+    return this.items().filter((item) => item.display.toLowerCase().includes(query));
+  });
+
   /**
    * the display text shown next to the label on the trigger; returns `null` when nothing is selected,
    * the single selected item's `display` value when exactly one is selected, and `"{count} selected"` when
@@ -99,7 +123,7 @@ export class DropDownSelectorBrainDirective<TValue = unknown> {
   /** the active descendant item, or null when nothing is active or out of range */
   public readonly activeItem = computed<SelectionValue<TValue> | null>(() => {
     const index = this._activeIndex();
-    const items = this.items();
+    const items = this.filteredItems();
 
     if (index < 0 || index >= items.length) {
       return null;
@@ -195,7 +219,7 @@ export class DropDownSelectorBrainDirective<TValue = unknown> {
     this._activeIndex.set(this._resolveInitialActiveIndex());
   }
 
-  /** closes the overlay menu and resets the active descendant */
+  /** closes the overlay menu, resets the active descendant, and clears any inline-search query */
   public close(): void {
     if (!this._isOpen()) {
       return;
@@ -203,6 +227,60 @@ export class DropDownSelectorBrainDirective<TValue = unknown> {
 
     this._isOpen.set(false);
     this._activeIndex.set(-1);
+    this._searchQuery.set('');
+  }
+
+  /** updates the inline-search query and resets the active descendant to the first filtered item */
+  public setSearchQuery(query: string): void {
+    if (this.disabled()) {
+      return;
+    }
+
+    this._searchQuery.set(query);
+    this._activeIndex.set(this.filteredItems().length > 0 ? 0 : -1);
+  }
+
+  /**
+   * handles keyboard interactions while focus lives inside the inline-search input. handles
+   * navigation, selection, and close while letting typing flow through to the input naturally.
+   */
+  public handleSearchKeyDown(event: KeyboardEvent): void {
+    if (this.disabled()) {
+      return;
+    }
+
+    switch (event.key) {
+      case 'Escape':
+        event.preventDefault();
+        this.close();
+
+        return;
+      case 'ArrowDown':
+        event.preventDefault();
+        this._moveActiveIndex(1);
+
+        return;
+      case 'ArrowUp':
+        event.preventDefault();
+        this._moveActiveIndex(-1);
+
+        return;
+      case 'Home':
+        event.preventDefault();
+        this._moveActiveToFirst();
+
+        return;
+      case 'End':
+        event.preventDefault();
+        this._moveActiveToLast();
+
+        return;
+      case 'Enter':
+        event.preventDefault();
+        this.selectActiveItem();
+
+        return;
+    }
   }
 
   /** toggles the overlay menu's open state */
@@ -306,6 +384,12 @@ export class DropDownSelectorBrainDirective<TValue = unknown> {
     }
 
     if (this._isPrintableCharacter(event)) {
+      // skip the trigger-driven type-ahead while the inline-search query is active — the search input
+      // owns typing in that mode and we do not want a competing prefix match
+      if (this.hasSearchQuery()) {
+        return;
+      }
+
       event.preventDefault();
       this._appendTypeAheadCharacter(event.key);
     }
@@ -330,7 +414,7 @@ export class DropDownSelectorBrainDirective<TValue = unknown> {
 
   /** computes the index used as the seed active descendant when opening */
   private _resolveInitialActiveIndex(): number {
-    const items = this.items();
+    const items = this.filteredItems();
 
     if (items.length === 0) {
       return -1;
@@ -354,7 +438,7 @@ export class DropDownSelectorBrainDirective<TValue = unknown> {
 
   /** moves the active descendant by the provided delta, wrapping at the bounds */
   private _moveActiveIndex(delta: number): void {
-    const items = this.items();
+    const items = this.filteredItems();
 
     if (items.length === 0) {
       return;
@@ -375,7 +459,7 @@ export class DropDownSelectorBrainDirective<TValue = unknown> {
 
   /** moves the active descendant to the first item */
   private _moveActiveToFirst(): void {
-    const items = this.items();
+    const items = this.filteredItems();
 
     if (items.length === 0) {
       return;
@@ -386,7 +470,7 @@ export class DropDownSelectorBrainDirective<TValue = unknown> {
 
   /** moves the active descendant to the last item */
   private _moveActiveToLast(): void {
-    const items = this.items();
+    const items = this.filteredItems();
 
     if (items.length === 0) {
       return;
@@ -410,7 +494,7 @@ export class DropDownSelectorBrainDirective<TValue = unknown> {
       return;
     }
 
-    const items = this.items();
+    const items = this.filteredItems();
 
     if (items.length === 0) {
       return;

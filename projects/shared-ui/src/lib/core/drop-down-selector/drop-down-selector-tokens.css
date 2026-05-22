@@ -41,4 +41,13 @@
 
   /* menu item clear — defaults; overridden on :hover */
   --drop-down-selector-menu-item-clear-fg: var(--color-fg-muted);
+
+  /* inline search */
+  --drop-down-selector-search-padding-block: var(--spacing-1);
+  --drop-down-selector-search-padding-inline: var(--spacing-1);
+
+  /* empty state */
+  --drop-down-selector-empty-fg: var(--color-fg-muted);
+  --drop-down-selector-empty-padding-block: var(--spacing-3);
+  --drop-down-selector-empty-padding-inline: var(--spacing-3);
 }

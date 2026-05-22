@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component, computed, input } from '@angular/co
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import {
   DROP_DOWN_SELECTOR_DISABLED_DEFAULT,
+  DROP_DOWN_SELECTOR_HAS_SEARCH_DEFAULT,
   DROP_DOWN_SELECTOR_ICON_NAME_DEFAULT,
   DROP_DOWN_SELECTOR_POSITION_DEFAULT,
   DROP_DOWN_SELECTOR_SELECTION_MODE_DEFAULT,
@@ -74,6 +75,7 @@ const MANY_ITEMS: SelectionValue<string>[] = Array.from({ length: 40 }, (_, inde
       [position]="position()"
       [iconName]="iconName()"
       [showLabelWithValue]="showLabelWithValue()"
+      [hasSearch]="hasSearch()"
       [selectedItems]="selectedItems()"
       (selectedItemsChange)="onSelectedItemsChange($event)"
     />
@@ -90,6 +92,7 @@ class DropDownSelectorHost {
   public readonly position = input<DropDownSelectorPosition>(DROP_DOWN_SELECTOR_POSITION_DEFAULT);
   public readonly iconName = input<IconName | undefined>(DROP_DOWN_SELECTOR_ICON_NAME_DEFAULT);
   public readonly showLabelWithValue = input<boolean>(DROP_DOWN_SELECTOR_SHOW_LABEL_WITH_VALUE_DEFAULT);
+  public readonly hasSearch = input<boolean>(DROP_DOWN_SELECTOR_HAS_SEARCH_DEFAULT);
   public readonly initialSelection = input<SelectionValue<string>[]>([]);
 
   protected readonly selectedItems = computed<SelectionValue<string>[]>(() => this.selectionStore.selectedItemsArray());
@@ -173,6 +176,7 @@ export const Default: Story = {
     size: DROP_DOWN_SELECTOR_SIZE_DEFAULT,
     position: DROP_DOWN_SELECTOR_POSITION_DEFAULT,
     showLabelWithValue: DROP_DOWN_SELECTOR_SHOW_LABEL_WITH_VALUE_DEFAULT,
+    hasSearch: DROP_DOWN_SELECTOR_HAS_SEARCH_DEFAULT,
   },
   argTypes: {
     label: {
@@ -202,6 +206,10 @@ export const Default: Story = {
       control: 'boolean',
       description: 'Whether the label remains visible alongside the value once a selection is made',
     },
+    hasSearch: {
+      control: 'boolean',
+      description: 'Whether an inline search input is rendered at the top of the overlay menu',
+    },
   },
   parameters: {
     docs: {
@@ -221,6 +229,7 @@ export const Default: Story = {
         [size]="size"
         [position]="position"
         [showLabelWithValue]="showLabelWithValue"
+        [hasSearch]="hasSearch"
       />
     `,
     moduleMetadata: {
@@ -310,6 +319,11 @@ const liveDemoIconItems: ButtonToggleItem[] = allLiveDemoIconChoices.map((choice
               {{ liveDemoForm.controls.showLabelWithValue.value ? 'on' : 'off' }}
             </org-checkbox-toggle>
           </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Has Search">
+            <org-checkbox-toggle name="live-demo-has-search" value="has-search" formControlName="hasSearch">
+              {{ liveDemoForm.controls.hasSearch.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
           <org-design-system-demo-control-group label="Disabled">
             <org-checkbox-toggle name="live-demo-disabled" value="disabled" formControlName="disabled">
               {{ liveDemoForm.controls.disabled.value ? 'on' : 'off' }}
@@ -326,6 +340,7 @@ const liveDemoIconItems: ButtonToggleItem[] = allLiveDemoIconChoices.map((choice
               [position]="liveDemoForm.controls.position.value"
               [iconName]="resolvedIconName()"
               [showLabelWithValue]="liveDemoForm.controls.showLabelWithValue.value"
+              [hasSearch]="liveDemoForm.controls.hasSearch.value"
               [disabled]="liveDemoForm.controls.disabled.value"
             />
           </div>
@@ -347,6 +362,7 @@ class DropDownSelectorLiveDemoStory {
     position: new FormControl<DropDownSelectorPosition>('below', { nonNullable: true }),
     icon: new FormControl<LiveDemoIconChoice>('none', { nonNullable: true }),
     showLabelWithValue: new FormControl<boolean>(false, { nonNullable: true }),
+    hasSearch: new FormControl<boolean>(false, { nonNullable: true }),
     disabled: new FormControl<boolean>(false, { nonNullable: true }),
   });
 
@@ -677,6 +693,33 @@ export const Showcase: Story = {
             <li>The compact overlay scrollbar only renders when overflow is present</li>
             <li>In <strong>multiple</strong> mode, the <strong>Clear selection</strong> action is pinned as a fixed footer below the scrollable list, so it stays visible regardless of scroll position</li>
             <li><strong>Keyboard navigation</strong>: <kbd>ArrowDown</kbd> and <kbd>ArrowUp</kbd> wrap at the list bounds — pressing <kbd>ArrowDown</kbd> on the last item jumps to the first, and <kbd>ArrowUp</kbd> on the first jumps to the last</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Inline Search" />
+          <org-design-system-demo-canvas slot="canvas">
+            <story-drop-down-selector-host
+              [items]="manyItems"
+              label="Item"
+              selectionMode="single"
+              [hasSearch]="true"
+            />
+            <story-drop-down-selector-host
+              [items]="manyItems"
+              label="Item"
+              selectionMode="multiple"
+              [hasSearch]="true"
+            />
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li>When <code>hasSearch</code> is enabled, an inline <code>org-input</code> renders at the top of the overlay menu (outside the scroll area) and filters the list in real time by case-insensitive substring match on <code>display</code></li>
+            <li>The search input auto-focuses each time the menu opens, so typing starts filtering immediately</li>
+            <li><kbd>ArrowUp</kbd> / <kbd>ArrowDown</kbd> / <kbd>Home</kbd> / <kbd>End</kbd> / <kbd>Enter</kbd> / <kbd>Escape</kbd> drive navigation, selection, and close while the search input owns typing</li>
+            <li>When the filter matches zero items, a <strong>No results</strong> message replaces the list</li>
+            <li>The query resets every time the menu closes, so reopening always shows the full list</li>
           </ul>
         </org-design-system-demo-expected-behaviour>
 
