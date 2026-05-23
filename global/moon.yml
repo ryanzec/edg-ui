@@ -74,7 +74,7 @@ tasks:
       - ~:sync-ai-files
     options:
       runFromWorkspaceRoot: true
-    script: "true"
+    script: 'true'
     env:
       NODE_ENV: development
     preset: server

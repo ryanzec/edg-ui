@@ -9,10 +9,9 @@ import {
   createComponent,
   effect,
   inject,
-  input,
 } from '@angular/core';
 import { IconName } from '../icon/icon-brain';
-import { SORTABLE_ENABLED_DEFAULT, SortableBrainDirective } from '../sortable-directive/sortable-brain';
+import { SortableBrainDirective } from '../sortable-directive/sortable-brain';
 import { Icon } from '../icon/icon';
 
 @Directive({
@@ -32,12 +31,6 @@ export class SortableDirective implements OnDestroy {
   public readonly brain = inject(SortableBrainDirective);
 
   private _iconComponentRef: ComponentRef<Icon> | null = null;
-
-  /** the sort key this directive manages; forwarded to the brain via host directive input mapping */
-  public readonly orgSortableKey = input.required<string>();
-
-  /** controls whether sorting interaction is enabled; forwarded to the brain via host directive input mapping */
-  public readonly sortableEnabled = input<boolean>(SORTABLE_ENABLED_DEFAULT);
 
   /** maps the brain's sort direction to the icon name shown by the host element */
   private readonly _iconName = computed<IconName>(() => {
