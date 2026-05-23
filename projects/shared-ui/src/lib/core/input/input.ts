@@ -16,7 +16,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { outputFromObservable } from '@angular/core/rxjs-interop';
 import { angularUtils } from '@organization/shared-utils';
-import { type IconName } from '../../brain/icon-brain/icon-brain';
+import { type IconName } from '../icon/icon-brain';
 import { Icon } from '../icon/icon';
 import { Tag } from '../tags/tag';
 import { Button } from '../button/button';
@@ -41,7 +41,7 @@ import {
   INPUT_SELECT_ALL_ON_FOCUS_DEFAULT,
   INPUT_SHOW_PASSWORD_TOGGLE_DEFAULT,
   INPUT_TYPE_DEFAULT,
-} from '../../brain/input-brain/input-brain';
+} from '../input/input-brain';
 
 /** all available visual variants for the input component */
 export const allInputVariants = ['bordered', 'borderless', 'inline'] as const;

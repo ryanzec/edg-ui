@@ -12,7 +12,7 @@ import {
 } from '@angular/core';
 import { CdkConnectedOverlay, CdkOverlayOrigin, type ConnectedPosition } from '@angular/cdk/overlay';
 import { angularUtils, domUtils } from '@organization/shared-utils';
-import { type IconName } from '../../brain/icon-brain/icon-brain';
+import { type IconName } from '../icon/icon-brain';
 import { Button } from '../button/button';
 import { Icon, type IconSize } from '../icon/icon';
 import { Input } from '../input/input';
@@ -27,7 +27,7 @@ import {
   DROP_DOWN_SELECTOR_SELECTION_MODE_DEFAULT as BRAIN_DROP_DOWN_SELECTOR_SELECTION_MODE_DEFAULT,
   DropDownSelectorBrainDirective,
   type DropDownSelectorSelectionMode,
-} from '../../brain/drop-down-selector-brain/drop-down-selector-brain';
+} from '../drop-down-selector/drop-down-selector-brain';
 
 /** all available drop-down-selector size values */
 export const allDropDownSelectorSizes = ['sm', 'base', 'lg'] as const satisfies readonly ComponentSize[];

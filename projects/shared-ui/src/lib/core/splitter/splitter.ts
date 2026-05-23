@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { angularUtils, logManager } from '@organization/shared-utils';
-import { DividerBrainDirective } from '../../brain/divider-brain/divider-brain';
+import { DividerBrainDirective } from '../divider/divider-brain';
 import {
   SPLITTER_COLLAPSED_SIDE_DEFAULT,
   SPLITTER_IS_ENABLED_DEFAULT,
@@ -19,7 +19,7 @@ import {
   SplitterBrainDirective,
   type SplitterCollapsedSide,
   type SplitterDirection,
-} from '../../brain/splitter-brain/splitter-brain';
+} from '../splitter/splitter-brain';
 
 export {
   type SplitterDirection,
@@ -30,7 +30,7 @@ export {
   SPLITTER_SIZE_DEFAULT,
   SPLITTER_IS_ENABLED_DEFAULT,
   SPLITTER_COLLAPSED_SIDE_DEFAULT,
-} from '../../brain/splitter-brain/splitter-brain';
+} from '../splitter/splitter-brain';
 
 /** the default animate-resize state of the splitter */
 export const SPLITTER_ANIMATE_RESIZE_DEFAULT = true;

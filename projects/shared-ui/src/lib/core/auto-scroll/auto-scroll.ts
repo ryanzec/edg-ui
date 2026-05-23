@@ -19,17 +19,14 @@ import {
   AutoScrollBrainDirective,
   type AutoScrollScrollToBottomOptions,
   type AutoScrollState,
-} from '../../brain/auto-scroll-brain/auto-scroll-brain';
+} from '../auto-scroll/auto-scroll-brain';
 
 export type {
   AutoScrollState,
   AutoScrollAriaLive,
   AutoScrollScrollToBottomOptions,
-} from '../../brain/auto-scroll-brain/auto-scroll-brain';
-export {
-  allAutoScrollStates as autoScrollStates,
-  allAutoScrollAriaLives,
-} from '../../brain/auto-scroll-brain/auto-scroll-brain';
+} from '../auto-scroll/auto-scroll-brain';
+export { allAutoScrollStates as autoScrollStates, allAutoScrollAriaLives } from '../auto-scroll/auto-scroll-brain';
 
 /** the default enabled value for the auto scroll component */
 export const AUTO_SCROLL_ENABLED_DEFAULT = true;

@@ -12,7 +12,7 @@ import {
 import { ScrollArea } from '../scroll-area/scroll-area';
 import { Combobox } from './combobox';
 import { ComboboxOption } from './combobox-option';
-import { ComboboxOptionsBrainDirective } from '../../brain/combobox-brain/combobox-options-brain';
+import { ComboboxOptionsBrainDirective } from '../combobox/combobox-options-brain';
 import type { ComboboxGroupedOptions, ComboboxOption as ComboboxOptionData } from '../combobox-store/combobox-store';
 
 /**

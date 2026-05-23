@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, inject, input } from '@angular/core';
 import { LucideDynamicIcon } from '@lucide/angular';
-import { IconBrainDirective } from '../../brain/icon-brain/icon-brain';
+import { IconBrainDirective } from '../icon/icon-brain';
 import { allComponentColors, ComponentSize } from '../types/component-types';
 
 /** all valid icon size values */

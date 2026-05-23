@@ -13,7 +13,7 @@ import { NgTemplateOutlet } from '@angular/common';
 import { angularUtils, logManager } from '@organization/shared-utils';
 import { LoadingSpinner } from '../loading-spinner/loading-spinner';
 import { Icon, type IconSize } from '../icon/icon';
-import { type IconName } from '../../brain/icon-brain/icon-brain';
+import { type IconName } from '../icon/icon-brain';
 import { ComponentColor, ComponentSize } from '../types/component-types';
 import {
   ButtonBrainDirective,
@@ -27,7 +27,7 @@ import {
   BUTTON_DISABLED_DEFAULT,
   BUTTON_ICON_ONLY_DEFAULT,
   BUTTON_LOADING_DEFAULT,
-} from '../../brain/button-brain/button-brain';
+} from '../button/button-brain';
 
 /** the color variant of the button */
 export type ButtonColor = ComponentColor;

@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { angularUtils } from '@organization/shared-utils';
 import { Icon } from '../icon/icon';
-import { type IconName } from '../../brain/icon-brain/icon-brain';
+import { type IconName } from '../icon/icon-brain';
 
 /** default value for the label input */
 export const CHAT_SUGGESTION_LABEL_DEFAULT = '';

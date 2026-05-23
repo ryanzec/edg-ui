@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
-import { ViewOptionsBrainDirective, type ViewField } from '../../brain/view-options-brain/view-options-brain';
+import { ViewOptionsBrainDirective, type ViewField } from '../view-options/view-options-brain';
 import { List } from '../list/list';
 import { Tag } from '../tags/tag';
 import { TextDirective } from '../text-directive/text-directive';

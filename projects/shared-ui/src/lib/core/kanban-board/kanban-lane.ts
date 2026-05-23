@@ -1,12 +1,12 @@
 import { Component, ChangeDetectionStrategy, TemplateRef, computed, contentChild, inject, input } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
-import { KanbanLaneBrainDirective, type KanbanItem } from '../../brain/kanban-board-brain/kanban-lane-brain';
-import { KanbanBoardBrainDirective } from '../../brain/kanban-board-brain/kanban-board-brain';
+import { KanbanLaneBrainDirective, type KanbanItem } from '../kanban-board/kanban-lane-brain';
+import { KanbanBoardBrainDirective } from '../kanban-board/kanban-board-brain';
 import { ScrollArea } from '../scroll-area/scroll-area';
 import { Tag } from '../tags/tag';
 import { KanbanCard } from './kanban-card';
 
-export type { KanbanItem } from '../../brain/kanban-board-brain/kanban-lane-brain';
+export type { KanbanItem } from '../kanban-board/kanban-lane-brain';
 
 /** default value for the showCount input */
 export const KANBAN_LANE_SHOW_COUNT_DEFAULT = true;

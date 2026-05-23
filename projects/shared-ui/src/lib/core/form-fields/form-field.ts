@@ -1,6 +1,6 @@
 import { Component, computed, inject, InjectionToken, input } from '@angular/core';
 import { angularUtils } from '@organization/shared-utils';
-import { FormFieldBrainDirective } from '../../brain/form-field-brain/form-field-brain';
+import { FormFieldBrainDirective } from '../form-fields/form-field-brain';
 import { FORM_FIELDS_COMPONENT, FORM_FIELDS_LABEL_ORIENTATION_DEFAULT } from './form-fields';
 
 /** all available form-field label orientation values */

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { AvatarBrainDirective } from '../../brain/avatar-brain/avatar-brain';
+import { AvatarBrainDirective } from '../avatar/avatar-brain';
 
 @Component({
   selector: 'org-avatar-shape',

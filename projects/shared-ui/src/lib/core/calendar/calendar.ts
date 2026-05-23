@@ -18,7 +18,7 @@ import {
   CalendarBrainDirective,
   type CalendarDateData,
   type CalendarPartialRangeSelectionType,
-} from '../../brain/calendar-brain/calendar-brain';
+} from '../calendar/calendar-brain';
 
 // input defaults
 export const CALENDAR_DEFAULT_DISPLAY_DATE_DEFAULT = DateTime.now();

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { angularUtils } from '@organization/shared-utils';
-import { ComboboxOptionBrainDirective } from '../../brain/combobox-brain/combobox-option-brain';
+import { ComboboxOptionBrainDirective } from '../combobox/combobox-option-brain';
 import type { ComboboxOption as ComboboxOptionData } from '../combobox-store/combobox-store';
 
 /** default value for the displayLabelPrefix input */

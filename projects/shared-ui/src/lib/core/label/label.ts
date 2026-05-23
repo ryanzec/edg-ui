@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { LoadingSpinner } from '../loading-spinner/loading-spinner';
-import { LabelBrainDirective } from '../../brain/label-brain/label-brain';
+import { LabelBrainDirective } from '../label/label-brain';
 
 @Component({
   selector: 'org-label',

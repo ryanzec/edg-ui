@@ -4,12 +4,12 @@ import { angularUtils } from '@organization/shared-utils';
 import { Avatar, AVATAR_SHAPE_VARIANT_DEFAULT, type AvatarShapeVariant } from '../avatar/avatar';
 import { Box, type BoxBorder, type BoxColor } from '../box/box';
 import { Icon } from '../icon/icon';
-import { type IconName } from '../../brain/icon-brain/icon-brain';
+import { type IconName } from '../icon/icon-brain';
 import {
   ChatMessageBrainDirective,
   CHAT_MESSAGE_ROLE_DEFAULT,
   CHAT_MESSAGE_STATE_DEFAULT,
-} from '../../brain/chat-brain/chat-message-brain';
+} from '../chat/chat-message-brain';
 
 /** all available chat message run-position values */
 export const allChatMessageRunPositions = ['only', 'first', 'middle', 'last'] as const;

@@ -19,7 +19,7 @@ import {
   type TicketActivityEntry,
   type TicketActivityFilter,
 } from './ticket-details-types';
-import { type IconName } from '../../brain/icon-brain/icon-brain';
+import { type IconName } from '../../core/icon/icon-brain';
 
 @Component({
   selector: 'org-ticket-details-activity',

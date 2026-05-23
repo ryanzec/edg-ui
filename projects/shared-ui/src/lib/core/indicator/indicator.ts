@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, computed, contentChildren, inject, 
 import { angularUtils } from '@organization/shared-utils';
 import { ComponentColor, ComponentSize } from '../types/component-types';
 import { Icon } from '../icon/icon';
-import { IndicatorBrainDirective } from '../../brain/indicator-brain/indicator-brain';
+import { IndicatorBrainDirective } from '../indicator/indicator-brain';
 
 /** color options for the indicator component */
 export type IndicatorColor = ComponentColor;

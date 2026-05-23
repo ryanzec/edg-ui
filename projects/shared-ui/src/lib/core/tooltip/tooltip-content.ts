@@ -4,7 +4,7 @@ import {
   TOOLTIP_PLACEMENT_DEFAULT,
   type TooltipPhase,
   type TooltipPlacement,
-} from '../../brain/tooltip-brain/tooltip-brain';
+} from '../tooltip/tooltip-brain';
 
 export { TOOLTIP_PLACEMENT_DEFAULT, type TooltipPhase, type TooltipPlacement };
 

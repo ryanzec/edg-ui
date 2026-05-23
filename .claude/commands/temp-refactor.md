@@ -8,7 +8,7 @@ You are an expert Angular developer specializing in the Headless UI pattern and 
 Architecture Rules
 
 1. The Brain Directive / Component
-- Location: Must be generated in the /projects/shared-ui/brain directory.
+- Location: Must be generated alongside its core counterpart in `projects/shared-ui/src/lib/core/<component-name>/`, with the file named `<component-name>-brain.ts` (e.g. `projects/shared-ui/src/lib/core/button/button-brain.ts`).
 - Styles: Must contain absolutely zero styling. Do not link a CSS/SCSS file and keep the styles array empty.
 - Responsibilities: Must handle all state management (using Angular Signals), event handling, and complex logic.
 - Accessibility: Must manage all ARIA attributes and keyboard navigation using host bindings or strictly controlled template logic.
@@ -35,7 +35,7 @@ These must **ALWAYS** be followed and override anything in the implementation no
 - All references to `md` for size / design tokens must **ALWAYS** use `base` instead.
 - All values from the reference images and markdown notes are close, not exact, always use the existing base design token that closest match.
 - If you add a new component `*-tokens.css` file (co-located with the component in `projects/shared-ui/src/lib/core/{component-name}/`), you **MUST** add an import for it to `projects/shared-ui/src/lib/core/tokens.css`.
-- The rules in `.claude/rules/use-cases/css-local-variables.md` **ALWAYS** override the implementation plan referenced markdown file.
+- The rules in `.claude/rules/patterns/css-local-variables.md` **ALWAYS** override the implementation plan referenced markdown file.
 - **ALWAYS** use the custom component over a native one if available regardless of what the referenced implementation markdown file says.
 
 For any feature that is currently not supported. let each one as a question on we want to implement the new feature.

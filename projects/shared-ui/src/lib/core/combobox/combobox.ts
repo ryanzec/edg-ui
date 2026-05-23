@@ -25,7 +25,7 @@ import {
 } from '../combobox-store/combobox-store';
 import { outputFromObservable } from '@angular/core/rxjs-interop';
 import { ComboboxOptions } from './combobox-options';
-import { ComboboxBrainDirective } from '../../brain/combobox-brain/combobox-brain';
+import { ComboboxBrainDirective } from '../combobox/combobox-brain';
 
 /** default value for the autoShowOption input */
 export const COMBOBOX_AUTO_SHOW_OPTION_DEFAULT = true;

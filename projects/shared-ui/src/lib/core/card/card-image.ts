@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, computed, inject, input } from '@angular/core';
 import { NgOptimizedImage } from '@angular/common';
 import { angularUtils } from '@organization/shared-utils';
-import { CardImageBrainDirective } from '../../brain/card-brain/card-image-brain';
+import { CardImageBrainDirective } from '../card/card-image-brain';
 import { Card } from './card';
 
 /** all available card image mode values */

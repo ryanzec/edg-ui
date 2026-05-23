@@ -11,7 +11,7 @@ import {
 import { LoadingSpinner } from '../loading-spinner/loading-spinner';
 import { EmptyIndicator } from '../empty-indicator/empty-indicator';
 import { cssUtils } from '@organization/shared-utils';
-import { ChartBrainDirective } from '../../brain/chart-brain/chart-brain';
+import { ChartBrainDirective } from '../chart/chart-brain';
 
 /** default value for the containerClass input */
 export const CHART_CONTAINER_CLASS_DEFAULT = '';

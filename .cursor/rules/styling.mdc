@@ -30,7 +30,7 @@ Utility css classes **MUST** be used for all other styles:
 - the css code **MUST** implement all variants (even whatever the default values are) as the default css variables are more placeholders than values to be used.
 
 # Styling Patterns
-- **NEVER** add styling to components in `projects/shared-ui/src/lib/brain`.
+- **NEVER** add styling to brain directives (files named `*-brain.ts` colocated inside `projects/shared-ui/src/lib/core/<component-name>/`).
 - **NEVER** add specific values units for height / widths to component is `projects/shared-ui/src/lib/core` (`px`, `cm`, `mm`, `in`, `pt`, `pc`), they should **ALWAYS** grow based on the content inside them or use relatively values (`%`, `em`, `rem`, `vh`, `vw`, `vmin`, `vmax`, `ch`, `ex`, `lh`, `rlh`, `vi`, `vb`).
 - If you intend to set an explicit height / width for any component, **ALWAY** make the a question **BEFORE** writing any code.
 - **ALWAYS** use css files for styling components and directives in `projects/shared-ui/src/lib/core` **EXCEPT** for `*stories*` files.

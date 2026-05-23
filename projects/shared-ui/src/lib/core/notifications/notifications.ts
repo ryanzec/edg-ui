@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, input, inject } from '@angular/core';
 import { NotificationManager } from '../notification-manager/notification-manager';
-import { NotificationsBrainDirective } from '../../brain/notifications-brain/notifications-brain';
+import { NotificationsBrainDirective } from '../notifications/notifications-brain';
 import { NotificationItem } from './notification-item';
 
 /** all valid stack position values */

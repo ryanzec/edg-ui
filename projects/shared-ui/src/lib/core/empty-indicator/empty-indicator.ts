@@ -3,7 +3,7 @@ import { angularUtils } from '@organization/shared-utils';
 import {
   EMPTY_INDICATOR_BRAIN_STATUS_ROLE_DEFAULT,
   EmptyIndicatorBrainDirective,
-} from '../../brain/empty-indicator-brain/empty-indicator-brain';
+} from '../empty-indicator/empty-indicator-brain';
 import { Button } from '../button/button';
 import {
   Box,

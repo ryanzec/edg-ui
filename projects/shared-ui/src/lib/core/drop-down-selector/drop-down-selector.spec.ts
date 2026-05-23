@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { describe, beforeEach, it, expect } from 'vitest';
 
 import { DropDownSelector } from './drop-down-selector';
-import { type SelectionValue } from '../../brain/drop-down-selector-brain/drop-down-selector-brain';
+import { type SelectionValue } from '../drop-down-selector/drop-down-selector-brain';
 
 describe('DropDownSelector', () => {
   let component: DropDownSelector;

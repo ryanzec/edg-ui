@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { angularUtils } from '@organization/shared-utils';
-import { ICON_BRAIN_LABEL_DEFAULT, type IconName } from '../../brain/icon-brain/icon-brain';
+import { ICON_BRAIN_LABEL_DEFAULT, type IconName } from '../icon/icon-brain';
 import { Icon, type IconColor } from '../icon/icon';
 
 /** all available empty-indicator-icon color values */

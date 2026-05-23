@@ -1,6 +1,6 @@
 import { type DateTime } from 'luxon';
 import { type ComponentColor } from '../../core/types/component-types';
-import { type IconName } from '../../brain/icon-brain/icon-brain';
+import { type IconName } from '../../core/icon/icon-brain';
 
 /** all available ticket status values, in workflow order */
 export const allTicketStatuses = ['backlog', 'to-do', 'in-progress', 'blocked', 'in-review', 'done'] as const;

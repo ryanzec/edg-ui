@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
-import { TagIconBrainDirective } from '../../brain/tags-brain/tag-icon-brain';
+import { TagIconBrainDirective } from '../tags/tag-icon-brain';
 import { Icon } from '../icon/icon';
 import { Tag } from './tag';
 

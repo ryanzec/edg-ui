@@ -4,14 +4,14 @@ description: Use this skill whenever the user asks to create, modify, refactor, 
 ---
 
 # Definitions
-- Brain Component - A foundation loe level component devoid of styling located in `projects/shared-ui/src/lib/brain`. 
-- Core Component - A foundation low level component located in `projects/shared-ui/src/lib/core` that sometimes is paired with brain component.
+- Brain Component - A foundation low level component devoid of styling, colocated with its core counterpart in `projects/shared-ui/src/lib/core/<component-name>/` and named `<component-name>-brain.ts` (e.g. `projects/shared-ui/src/lib/core/button/button-brain.ts`).
+- Core Component - A foundation low level component located in `projects/shared-ui/src/lib/core` that sometimes is paired with a brain component (which now lives in the same folder).
 
-# IMPORTANT Component Use Case Patterns
-- `.cursor/rules/use-cases/angular-content-projection.md`
-- `.cursor/rules/use-cases/css-local-variables.md`
-- `.cursor/rules/use-cases/detected-output-has-listener.md`
-- `.cursor/rules/use-cases/needing-multiple-ng-content-element.md`
+# IMPORTANT Component Coding Patterns
+- `.cursor/rules/patterns/angular-content-projection.md`
+- `.cursor/rules/patterns/css-local-variables.md`
+- `.cursor/rules/patterns/detected-output-has-listener.md`
+- `.cursor/rules/patterns/needing-multiple-ng-content-element.md`
 
 # Reuse Protocol
 - You are to **ALWAYS** use the `@angular/cdk` package over native or customer solution when possible.
@@ -24,7 +24,7 @@ The rules in this section must **ONLY** be applied to core components.
 ## Architecture Rules
 
 ### The Brain Directive / Component
-- Location: Must be generated in the `projects/shared-ui/src/lib/brain` directory.
+- Location: Must be generated alongside its core counterpart in `projects/shared-ui/src/lib/core/<component-name>/`, with the file named `<component-name>-brain.ts` (e.g. `projects/shared-ui/src/lib/core/button/button-brain.ts`).
 - Styles: Must contain absolutely zero styling. Do not link a CSS/SCSS file and keep the styles array empty.
 - Responsibilities: Must handle all state management (using Angular Signals), event handling, and complex logic.
 - Accessibility: Must manage all ARIA attributes and keyboard navigation using host bindings or strictly controlled template logic.

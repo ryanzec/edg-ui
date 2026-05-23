@@ -6,7 +6,7 @@ import { Icon } from '../icon/icon';
 import { Input } from '../input/input';
 import { ButtonToggle, ButtonToggleItem } from '../button-toggle/button-toggle';
 import { CheckboxToggle } from '../checkbox-toggle/checkbox-toggle';
-import { allLinkTargets, type LinkTarget } from '../../brain/link-brain/link-brain';
+import { allLinkTargets, type LinkTarget } from '../link/link-brain';
 import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
 import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
 import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';

@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, input } from '@angular/core';
-import { DialogHeaderBrainDirective } from '../../brain/dialog-brain/dialog-header-brain';
+import { DialogHeaderBrainDirective } from '../dialog/dialog-header-brain';
 
 /** default value for the title input */
 export const DIALOG_HEADER_TITLE_DEFAULT = '';

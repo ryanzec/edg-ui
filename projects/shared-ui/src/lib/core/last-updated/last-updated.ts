@@ -5,7 +5,7 @@ import { LoadingSpinner } from '../loading-spinner/loading-spinner';
 import { Button } from '../button/button';
 import { Tooltip } from '../tooltip/tooltip';
 import { TooltipContent } from '../tooltip/tooltip-content';
-import { LastUpdatedBrainDirective } from '../../brain/last-updated-brain/last-updated-brain';
+import { LastUpdatedBrainDirective } from '../last-updated/last-updated-brain';
 
 @Component({
   selector: 'org-last-updated',

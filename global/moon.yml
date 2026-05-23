@@ -53,10 +53,28 @@ tasks:
     env:
       NODE_ENV: development
     preset: server
+  context-cost:
+    command: node $workspaceRoot/.moon/scripts/token-calculator.cjs
+    options:
+      runFromWorkspaceRoot: true
+      cache: false
+    env:
+      NODE_ENV: development
+    preset: server
   sync-ai-files:
     options:
       runFromWorkspaceRoot: true
     script: sh -c "node $workspaceRoot/.moon/scripts/sync-claude-rules-to-cursor.cjs"
+    env:
+      NODE_ENV: development
+    preset: server
+  build-artifacts:
+    deps:
+      - ~:build-design-tokens
+      - ~:sync-ai-files
+    options:
+      runFromWorkspaceRoot: true
+    script: "true"
     env:
       NODE_ENV: development
     preset: server

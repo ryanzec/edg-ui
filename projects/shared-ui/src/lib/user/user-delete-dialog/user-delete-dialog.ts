@@ -6,7 +6,7 @@ import { DialogHeader } from '../../core/dialog/dialog-header';
 import { DialogContent } from '../../core/dialog/dialog-content';
 import { DialogFooter } from '../../core/dialog/dialog-footer';
 import { Button } from '../../core/button/button';
-import { DIALOG_TRIGGER, DialogBrainDirective } from '../../brain/dialog-brain/dialog-brain';
+import { DIALOG_TRIGGER, DialogBrainDirective } from '../../core/dialog/dialog-brain';
 
 export type UserDeleteData = Pick<User, 'id'> & { name: string };
 

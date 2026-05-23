@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, inject, input } from '@angular/core';
 import { angularUtils } from '@organization/shared-utils';
-import { ListBrainDirective } from '../../brain/list-brain/list-brain';
+import { ListBrainDirective } from '../list/list-brain';
 
 /** all available list size values */
 export const allListSizes = ['sm', 'base'] as const;

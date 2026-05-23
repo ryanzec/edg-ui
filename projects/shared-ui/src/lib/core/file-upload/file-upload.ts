@@ -11,8 +11,8 @@ import {
   FILE_UPLOAD_FILE_TYPES_DEFAULT,
   allFileUploadExternalStates,
   allFileUploadStates,
-} from '../../brain/file-upload-brain/file-upload-brain';
-import type { FileUploadExternalState, FileUploadState } from '../../brain/file-upload-brain/file-upload-brain';
+} from '../file-upload/file-upload-brain';
+import type { FileUploadExternalState, FileUploadState } from '../file-upload/file-upload-brain';
 
 export {
   FILE_UPLOAD_ARIA_LABEL_DEFAULT,

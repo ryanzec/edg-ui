@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { Subject } from 'rxjs';
 import { outputFromObservable } from '@angular/core/rxjs-interop';
-import { ViewOptionsBrainDirective } from '../../brain/view-options-brain/view-options-brain';
+import { ViewOptionsBrainDirective } from '../view-options/view-options-brain';
 import { Icon } from '../icon/icon';
 import { TextDirective } from '../text-directive/text-directive';
-import type { IconName } from '../../brain/icon-brain/icon-brain';
+import type { IconName } from '../icon/icon-brain';
 import {
   VIEW_OPTIONS_FIELD_SELECTION_SECTION_LABEL_DEFAULT,
   ViewOptionsFieldSelection,
@@ -13,12 +13,8 @@ import {
 export {
   VIEW_OPTIONS_BRAIN_ARIA_LABEL_DEFAULT,
   VIEW_OPTIONS_BRAIN_FIELDS_DEFAULT,
-} from '../../brain/view-options-brain/view-options-brain';
-export type {
-  ViewField,
-  ViewOptionsFieldEdge,
-  ViewOptionsFieldsChangeEvent,
-} from '../../brain/view-options-brain/view-options-brain';
+} from '../view-options/view-options-brain';
+export type { ViewField, ViewOptionsFieldEdge, ViewOptionsFieldsChangeEvent } from '../view-options/view-options-brain';
 export { VIEW_OPTIONS_FIELD_SELECTION_SECTION_LABEL_DEFAULT } from './view-options-field-selection';
 
 /** default value for the panelLabel input */

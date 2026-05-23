@@ -11,8 +11,8 @@ import {
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { angularUtils } from '@organization/shared-utils';
-import { CheckboxToggleBrainDirective } from '../../brain/checkbox-toggle-brain/checkbox-toggle-brain';
-import { IconName } from '../../brain/icon-brain/icon-brain';
+import { CheckboxToggleBrainDirective } from '../checkbox-toggle/checkbox-toggle-brain';
+import { IconName } from '../icon/icon-brain';
 import { FORM_FIELD_COMPONENT } from '../form-fields/form-field';
 import { Icon, IconSize } from '../icon/icon';
 import { TextDirective, TextSize } from '../text-directive/text-directive';

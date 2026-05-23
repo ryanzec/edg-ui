@@ -10,7 +10,7 @@ import {
   SLIDER_INPUT_VALUES_DEFAULT,
   SliderInputBrainDirective,
   type SliderInputDirection,
-} from '../../brain/slider-input-brain/slider-input-brain';
+} from '../slider-input/slider-input-brain';
 
 export {
   type SliderInputDirection,
@@ -21,7 +21,7 @@ export {
   SLIDER_INPUT_VALUES_DEFAULT,
   SLIDER_INPUT_DISABLED_DEFAULT,
   SLIDER_INPUT_ALLOW_CROSSING_DEFAULT,
-} from '../../brain/slider-input-brain/slider-input-brain';
+} from '../slider-input/slider-input-brain';
 
 /** the color variant of the slider input */
 export type SliderInputColor = ComponentColor;

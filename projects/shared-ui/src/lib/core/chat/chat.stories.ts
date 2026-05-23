@@ -23,7 +23,7 @@ import {
   type ChatMessageState,
   allChatMessageRoles,
   allChatMessageStates,
-} from '../../brain/chat-brain/chat-message-brain';
+} from '../chat/chat-message-brain';
 import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
 import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
 import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';

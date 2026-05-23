@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
-import { TableRowBrainDirective } from '../../brain/table-brain/table-row-brain';
+import { TableRowBrainDirective } from '../table/table-row-brain';
 
 @Component({
   selector: 'org-table-tr',

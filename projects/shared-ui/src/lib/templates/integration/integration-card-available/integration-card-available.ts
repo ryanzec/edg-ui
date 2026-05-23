@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { Box } from '../../../core/box/box';
 import { Button } from '../../../core/button/button';
-import { type IconName } from '../../../brain/icon-brain/icon-brain';
+import { type IconName } from '../../../core/icon/icon-brain';
 import { Icon } from '../../../core/icon/icon';
 import { Tag, type TagColor } from '../../../core/tags/tag';
 import { Tags } from '../../../core/tags/tags';

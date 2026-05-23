@@ -4,7 +4,7 @@ import { Box } from '../../../core/box/box';
 import { Button } from '../../../core/button/button';
 import { DatePipe } from '../../../core/date-pipe/date-pipe';
 import { Divider } from '../../../core/divider/divider';
-import { type IconName } from '../../../brain/icon-brain/icon-brain';
+import { type IconName } from '../../../core/icon/icon-brain';
 import { Icon } from '../../../core/icon/icon';
 import { OverlayMenu, type OverlayMenuItem, type OverlayMenuItemEntry } from '../../../core/overlay-menu/overlay-menu';
 import { OverlayMenuTriggerDirective } from '../../../core/overlay-menu/overlay-menu-trigger';

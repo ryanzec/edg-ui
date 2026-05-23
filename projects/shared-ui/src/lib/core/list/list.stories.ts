@@ -1,6 +1,9 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, signal } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { NavigationEnd, Router } from '@angular/router';
+import { filter } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import type { Meta, StoryObj } from '@storybook/angular';
 import { List, type ListSize, type ListSelectMode, allListSizes, allListSelectModes } from './list';
 import { ListItem } from './list-item';
@@ -63,11 +66,13 @@ const liveDemoSelectModeItems: ButtonToggleItem[] = allListSelectModes.map((mode
 }));
 
 const liveDemoListItems = [
-  { label: 'Inbox', imageSrc: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Inbox' },
-  { label: 'Drafts', imageSrc: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Drafts' },
-  { label: 'Archive', imageSrc: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Archive' },
-  { label: 'Spam', imageSrc: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Spam' },
+  { label: 'Inbox', imageSrc: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Inbox', routerLink: '/inbox' },
+  { label: 'Today', imageSrc: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Today', routerLink: '/inbox/today' },
+  { label: 'Archive', imageSrc: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Archive', routerLink: '/archive' },
+  { label: 'Spam', imageSrc: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Spam', routerLink: '/spam' },
 ];
+
+const liveDemoNavigatePaths = ['/', '/inbox', '/inbox/today', '/archive'] as const;
 
 @Component({
   selector: 'story-list-live-demo',
@@ -167,6 +172,22 @@ const liveDemoListItems = [
               {{ liveDemoForm.controls.wrapInBox.value ? 'on' : 'off' }}
             </org-checkbox-toggle>
           </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="routerMatchExact">
+            <org-checkbox-toggle
+              name="live-demo-router-match-exact"
+              value="routerMatchExact"
+              formControlName="routerMatchExact"
+            >
+              {{ liveDemoForm.controls.routerMatchExact.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Navigate to (current: {{ currentUrl() }})">
+            <div class="flex flex-row gap-2 flex-wrap">
+              @for (path of navigatePaths; track path) {
+                <button type="button" class="text-xs" (click)="onNavigate(path)">{{ path }}</button>
+              }
+            </div>
+          </org-design-system-demo-control-group>
         </org-design-system-demo-controls>
         <org-design-system-demo-canvas slot="canvas">
           <div class="canvas-stage">
@@ -189,7 +210,8 @@ const liveDemoListItems = [
         @for (item of items; track item.label; let first = $first) {
           <org-list-item
             [asTag]="liveDemoForm.controls.asTag.value === 'static' ? null : liveDemoForm.controls.asTag.value"
-            [href]="liveDemoForm.controls.asTag.value === 'a' ? '#' : null"
+            [routerLink]="liveDemoForm.controls.asTag.value === 'a' ? item.routerLink : null"
+            [routerMatchExact]="liveDemoForm.controls.routerMatchExact.value"
             [isSelected]="first && liveDemoForm.controls.isSelected.value"
             [disabled]="liveDemoForm.controls.disabled.value"
             [isExternalHref]="liveDemoForm.controls.isExternalHref.value"
@@ -214,12 +236,17 @@ const liveDemoListItems = [
   `,
 })
 class ListLiveDemoStory {
+  private readonly _router = inject(Router);
+
   protected readonly sizeItems = liveDemoSizeItems;
   protected readonly asTagItems = liveDemoAsTagItems;
   protected readonly preItems = liveDemoPreItems;
   protected readonly postItems = liveDemoPostItems;
   protected readonly selectModeItems = liveDemoSelectModeItems;
   protected readonly items = liveDemoListItems;
+  protected readonly navigatePaths = liveDemoNavigatePaths;
+
+  protected readonly currentUrl = signal<string>(this._router.url);
 
   protected readonly liveDemoForm = new FormGroup({
     size: new FormControl<ListSize>('base', { nonNullable: true }),
@@ -233,7 +260,110 @@ class ListLiveDemoStory {
     forceClickable: new FormControl<boolean>(false, { nonNullable: true }),
     hideLabel: new FormControl<boolean>(false, { nonNullable: true }),
     wrapInBox: new FormControl<boolean>(false, { nonNullable: true }),
+    routerMatchExact: new FormControl<boolean>(false, { nonNullable: true }),
   });
+
+  public constructor() {
+    this._router.events
+      .pipe(
+        filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+        takeUntilDestroyed()
+      )
+      .subscribe((event) => {
+        this.currentUrl.set(event.urlAfterRedirects);
+      });
+  }
+
+  protected onNavigate(path: string): void {
+    this._router.navigateByUrl(path);
+  }
+}
+
+const showcaseRouterPaths = ['/', '/products', '/products/123', '/settings'] as const;
+
+@Component({
+  selector: 'story-list-showcase-router-active',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [List, ListItem, ListItemIcon],
+  styles: [
+    `
+      :host {
+        display: block;
+      }
+      .current-url-strip {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+    `,
+  ],
+  template: `
+    <div class="flex flex-col gap-4">
+      <div class="current-url-strip">
+        <span class="text-2xs uppercase letter-spacing-wide text-muted">Navigate:</span>
+        @for (path of paths; track path) {
+          <button type="button" class="text-xs" (click)="onNavigate(path)">{{ path }}</button>
+        }
+        <span class="text-2xs text-muted"
+          >Current: <strong>{{ currentUrl() }}</strong></span
+        >
+      </div>
+
+      <div class="grid grid-cols-2 gap-6 w-full">
+        <div class="flex flex-col gap-2">
+          <p class="text-2xs uppercase letter-spacing-wide text-muted">routerMatchExact = false (subset)</p>
+          <org-list selectMode="single">
+            <org-list-item asTag="a" routerLink="/products" label="Products">
+              <org-list-item-icon pre name="package" />
+            </org-list-item>
+            <org-list-item asTag="a" routerLink="/products/123" label="Product 123">
+              <org-list-item-icon pre name="package" />
+            </org-list-item>
+            <org-list-item asTag="a" routerLink="/settings" label="Settings">
+              <org-list-item-icon pre name="settings" />
+            </org-list-item>
+          </org-list>
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <p class="text-2xs uppercase letter-spacing-wide text-muted">routerMatchExact = true (exact)</p>
+          <org-list selectMode="single">
+            <org-list-item asTag="a" routerLink="/products" [routerMatchExact]="true" label="Products">
+              <org-list-item-icon pre name="package" />
+            </org-list-item>
+            <org-list-item asTag="a" routerLink="/products/123" [routerMatchExact]="true" label="Product 123">
+              <org-list-item-icon pre name="package" />
+            </org-list-item>
+            <org-list-item asTag="a" routerLink="/settings" [routerMatchExact]="true" label="Settings">
+              <org-list-item-icon pre name="settings" />
+            </org-list-item>
+          </org-list>
+        </div>
+      </div>
+    </div>
+  `,
+})
+class ListShowcaseRouterActiveSection {
+  private readonly _router = inject(Router);
+
+  protected readonly paths = showcaseRouterPaths;
+  protected readonly currentUrl = signal<string>(this._router.url);
+
+  public constructor() {
+    this._router.events
+      .pipe(
+        filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+        takeUntilDestroyed()
+      )
+      .subscribe((event) => {
+        this.currentUrl.set(event.urlAfterRedirects);
+      });
+  }
+
+  protected onNavigate(path: string): void {
+    this._router.navigateByUrl(path);
+  }
 }
 
 const meta: Meta<List> = {
@@ -422,6 +552,18 @@ export const Showcase: Story = {
                 </org-list>
               </div>
             </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+
+        <!-- ROUTER-ACTIVE MATCHING -->
+        <org-design-system-demo>
+          <org-design-system-demo-header
+            slot="header"
+            title="Router-active matching"
+            description="When asTag=a and routerLink is set, the brain reads the Angular router state and reflects active styling. routerMatchExact toggles between subset (default — any url that starts with the routerLink) and exact (only when the url equals the routerLink) matching. Click a navigate button to see the difference live."
+          />
+          <org-design-system-demo-canvas slot="canvas">
+            <story-list-showcase-router-active />
           </org-design-system-demo-canvas>
         </org-design-system-demo>
 
@@ -752,6 +894,7 @@ export const Showcase: Story = {
         DesignSystemDemoHeader,
         DesignSystemDemoCanvas,
         DesignSystemDemoExpectedBehaviour,
+        ListShowcaseRouterActiveSection,
       ],
     },
   }),

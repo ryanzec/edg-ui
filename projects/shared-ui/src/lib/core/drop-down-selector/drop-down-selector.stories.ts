@@ -17,13 +17,13 @@ import {
 } from './drop-down-selector';
 import { ButtonToggle, type ButtonToggleItem } from '../button-toggle/button-toggle';
 import { CheckboxToggle } from '../checkbox-toggle/checkbox-toggle';
-import { type IconName } from '../../brain/icon-brain/icon-brain';
+import { type IconName } from '../icon/icon-brain';
 import { DataSelectionStore } from '../data-selection-store/data-selection-store';
 import {
   allDropDownSelectorSelectionModes,
   type DropDownSelectorSelectionMode,
   type SelectionValue,
-} from '../../brain/drop-down-selector-brain/drop-down-selector-brain';
+} from '../drop-down-selector/drop-down-selector-brain';
 import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
 import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
 import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';

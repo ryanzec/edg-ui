@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, computed } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import type { Meta, StoryObj } from '@storybook/angular';
-import { allIconNames, type IconName } from '../../brain/icon-brain/icon-brain';
+import { allIconNames, type IconName } from '../icon/icon-brain';
 import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
 import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
 import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';

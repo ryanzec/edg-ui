@@ -2,10 +2,7 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import type { Meta, StoryObj } from '@storybook/angular';
 import { LoadingSpinner, LOADING_SPINNER_SIZE_DEFAULT, LOADING_SPINNER_ICON_COLOR_DEFAULT } from './loading-spinner';
-import {
-  LoadingSpinnerBrainDirective,
-  LOADING_SPINNER_LABEL_DEFAULT,
-} from '../../brain/loading-spinner-brain/loading-spinner-brain';
+import { LoadingSpinnerBrainDirective, LOADING_SPINNER_LABEL_DEFAULT } from '../loading-spinner/loading-spinner-brain';
 import { allIconSizes, allIconColors, IconColor, IconSize } from '../icon/icon';
 import { Button } from '../button/button';
 import { ButtonToggle, ButtonToggleItem } from '../button-toggle/button-toggle';

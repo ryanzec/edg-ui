@@ -35,7 +35,7 @@ import { Skeleton } from '../../core/skeleton/skeleton';
 import { Input } from '../../core/input/input';
 import { Avatar } from '../../core/avatar/avatar';
 import { DropDownSelector } from '../../core/drop-down-selector/drop-down-selector';
-import { type SelectionValue } from '../../brain/drop-down-selector-brain/drop-down-selector-brain';
+import { type SelectionValue } from '../../core/drop-down-selector/drop-down-selector-brain';
 import { SortingStore } from '../../core/sorting-store/sorting-store';
 import { SortableDirective } from '../../core/sortable-directive/sortable-directive';
 import { TableActionsDirective } from '../../core/table-actions-directive/table-actions-directive';

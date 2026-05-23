@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, input } from '@angular/core';
 import { Icon, IconColor, IconSize } from '../icon/icon';
-import { LoadingSpinnerBrainDirective } from '../../brain/loading-spinner-brain/loading-spinner-brain';
+import { LoadingSpinnerBrainDirective } from '../loading-spinner/loading-spinner-brain';
 
 /** default value for the size input */
 export const LOADING_SPINNER_SIZE_DEFAULT: IconSize = 'base';

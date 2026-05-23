@@ -14,7 +14,7 @@ import { angularUtils } from '@organization/shared-utils';
 import { Button } from '../button/button';
 import { Icon } from '../icon/icon';
 import { ScrollArea } from '../scroll-area/scroll-area';
-import { type IconName } from '../../brain/icon-brain/icon-brain';
+import { type IconName } from '../icon/icon-brain';
 import {
   CodeBlockBrainDirective,
   CODE_BLOCK_ALLOW_COPY_DEFAULT,
@@ -22,9 +22,9 @@ import {
   CODE_BLOCK_ELLIPSIS_AT_DEFAULT,
   CODE_BLOCK_VARIANT_DEFAULT,
   type CodeBlockVariant,
-} from '../../brain/code-block-brain/code-block-brain';
+} from '../code-block/code-block-brain';
 
-export type { CodeBlockVariant } from '../../brain/code-block-brain/code-block-brain';
+export type { CodeBlockVariant } from '../code-block/code-block-brain';
 export {
   allCodeBlockVariants,
   CODE_BLOCK_ALLOW_COPY_DEFAULT,
@@ -32,7 +32,7 @@ export {
   CODE_BLOCK_ELLIPSIS_AT_DEFAULT,
   CODE_BLOCK_EXPANDED_DEFAULT,
   CODE_BLOCK_VARIANT_DEFAULT,
-} from '../../brain/code-block-brain/code-block-brain';
+} from '../code-block/code-block-brain';
 
 /** all valid inline tone values */
 export const allCodeBlockTones = ['none', 'token', 'danger', 'safe'] as const;

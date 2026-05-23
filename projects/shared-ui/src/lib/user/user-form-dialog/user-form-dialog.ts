@@ -5,7 +5,7 @@ import { Dialog } from '../../core/dialog/dialog';
 import { DialogHeader } from '../../core/dialog/dialog-header';
 import { DialogContent } from '../../core/dialog/dialog-content';
 import { UserForm, type UserFormData } from '../user-form/user-form';
-import { DIALOG_TRIGGER, DialogBrainDirective } from '../../brain/dialog-brain/dialog-brain';
+import { DIALOG_TRIGGER, DialogBrainDirective } from '../../core/dialog/dialog-brain';
 
 export type UserFormDialogData = {
   existingUser?: User | null;

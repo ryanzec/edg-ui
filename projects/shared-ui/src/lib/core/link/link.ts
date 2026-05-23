@@ -11,7 +11,7 @@ import {
 import { NgTemplateOutlet } from '@angular/common';
 import { angularUtils } from '@organization/shared-utils';
 import { Icon } from '../icon/icon';
-import { type IconName } from '../../brain/icon-brain/icon-brain';
+import { type IconName } from '../icon/icon-brain';
 import {
   LinkBrainDirective,
   LinkReferrerPolicy,
@@ -25,7 +25,7 @@ import {
   LINK_REFERRER_POLICY_DEFAULT,
   LINK_REL_DEFAULT,
   LINK_TARGET_DEFAULT,
-} from '../../brain/link-brain/link-brain';
+} from '../link/link-brain';
 
 @Component({
   selector: 'org-link',

@@ -19,7 +19,7 @@ import {
   TEXTAREA_INVERSE_ENTER_DEFAULT,
   TEXTAREA_READONLY_DEFAULT,
   TEXTAREA_SELECT_ALL_ON_FOCUS_DEFAULT,
-} from '../../brain/textarea-brain/textarea-brain';
+} from '../textarea/textarea-brain';
 import { TextareaToolbar } from './textarea-toolbar';
 
 /** all available visual variants for the textarea component */

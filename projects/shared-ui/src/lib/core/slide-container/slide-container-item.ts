@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, ElementRef, computed, forwardRef, inject } from '@angular/core';
-import { SlideContainerItemBrainDirective } from '../../brain/slide-container-brain/slide-container-item-brain';
+import { SlideContainerItemBrainDirective } from '../slide-container/slide-container-item-brain';
 import { SlideContainer } from './slide-container';
 
 @Component({

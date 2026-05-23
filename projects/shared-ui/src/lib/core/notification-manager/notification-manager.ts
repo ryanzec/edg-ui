@@ -1,7 +1,7 @@
 import { Injectable, signal, computed, type TemplateRef } from '@angular/core';
 import { v4 as uuidv4 } from 'uuid';
 import type { CardColor } from '../card/card';
-import type { IconName } from '../../brain/icon-brain/icon-brain';
+import type { IconName } from '../icon/icon-brain';
 
 /** default auto-close delay in milliseconds */
 export const NOTIFICATION_MANAGER_AUTO_CLOSE_IN_DEFAULT = 3000;

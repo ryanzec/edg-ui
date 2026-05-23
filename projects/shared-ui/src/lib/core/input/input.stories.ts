@@ -3,7 +3,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import type { Meta, StoryObj } from '@storybook/angular';
 import { map } from 'rxjs';
-import { allIconNames } from '../../brain/icon-brain/icon-brain';
+import { allIconNames } from '../icon/icon-brain';
 import { ButtonToggle, ButtonToggleItem } from '../button-toggle/button-toggle';
 import { CheckboxToggle } from '../checkbox-toggle/checkbox-toggle';
 import { FormField } from '../form-fields/form-field';

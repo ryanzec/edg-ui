@@ -20,7 +20,7 @@ import {
   allSlideContainerOrientations,
   type SlideContainerDirection,
   type SlideContainerOrientation,
-} from '../../brain/slide-container-brain/slide-container-brain';
+} from '../slide-container/slide-container-brain';
 import { SlideContainerItem } from './slide-container-item';
 
 export {

@@ -11,13 +11,11 @@
   @switch (asTag()) {
     @case ('a') {
       <a
-        [routerLink]="routerLink()"
-        [attr.href]="routerLink() ? null : href()"
+        [routerLink]="brain.routerLink()"
+        [attr.href]="brain.routerLink() ? null : href()"
         [target]="isExternalHref() ? '_blank' : '_self'"
         [attr.rel]="isExternalHref() ? 'noopener noreferrer' : null"
-        routerLinkActive
-        ariaCurrentWhenActive="page"
-        (isActiveChange)="onRouterLinkActiveChange($event)"
+        [attr.aria-current]="brain.isRouterLinkActive() ? 'page' : null"
         class="list-item-content"
         (click)="onClick($event)"
       >

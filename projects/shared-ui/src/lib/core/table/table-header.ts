@@ -1,8 +1,8 @@
 import { Component, ChangeDetectionStrategy, computed, contentChild, effect, inject, input } from '@angular/core';
-import { TableHeaderBrainDirective } from '../../brain/table-brain/table-header-brain';
+import { TableHeaderBrainDirective } from '../table/table-header-brain';
 import { SortableDirective } from '../sortable-directive/sortable-directive';
 import { Icon } from '../icon/icon';
-import { type IconName } from '../../brain/icon-brain/icon-brain';
+import { type IconName } from '../icon/icon-brain';
 
 /** default value for the numeric input */
 export const TABLE_HEADER_NUMERIC_DEFAULT = false;

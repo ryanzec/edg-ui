@@ -10,8 +10,8 @@ import {
   viewChild,
 } from '@angular/core';
 import { Button } from '../button/button';
-import { TabsBrainDirective } from '../../brain/tabs-brain/tabs-brain';
-import { TabBrainDirective } from '../../brain/tabs-brain/tab-brain';
+import { TabsBrainDirective } from '../tabs/tabs-brain';
+import { TabBrainDirective } from '../tabs/tab-brain';
 
 /** all available tabs visual variant values */
 export const allTabsVariants = ['underline', 'pills', 'enclosed'] as const;

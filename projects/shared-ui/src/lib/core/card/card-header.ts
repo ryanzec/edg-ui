@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, computed, inject, input } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { angularUtils } from '@organization/shared-utils';
-import { CardHeaderBrainDirective } from '../../brain/card-brain/card-header-brain';
+import { CardHeaderBrainDirective } from '../card/card-header-brain';
 import { Button } from '../button/button';
 import { Card } from './card';
 

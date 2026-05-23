@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { angularUtils } from '@organization/shared-utils';
 import { Icon } from '../icon/icon';
-import { type IconName } from '../../brain/icon-brain/icon-brain';
+import { type IconName } from '../icon/icon-brain';
 
 /** default value for the icon input */
 export const CHAT_EMPTY_STATE_ICON_DEFAULT: IconName | undefined = 'sparkles';

@@ -13,7 +13,7 @@ import { Checklist, type ChecklistItemData } from '../../core/checklist/checklis
 import { DatePickerInput } from '../../core/date-picker-input/date-picker-input';
 import { Divider } from '../../core/divider/divider';
 import { DropDownSelector, type DropDownSelectorPosition } from '../../core/drop-down-selector/drop-down-selector';
-import { type SelectionValue } from '../../brain/drop-down-selector-brain/drop-down-selector-brain';
+import { type SelectionValue } from '../../core/drop-down-selector/drop-down-selector-brain';
 import { Icon } from '../../core/icon/icon';
 import { Indicator } from '../../core/indicator/indicator';
 import { Tag } from '../../core/tags/tag';

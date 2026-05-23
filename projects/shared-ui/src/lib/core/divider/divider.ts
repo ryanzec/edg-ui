@@ -1,17 +1,9 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { angularUtils } from '@organization/shared-utils';
-import {
-  DIVIDER_DIRECTION_DEFAULT,
-  DividerBrainDirective,
-  type DividerDirection,
-} from '../../brain/divider-brain/divider-brain';
+import { DIVIDER_DIRECTION_DEFAULT, DividerBrainDirective, type DividerDirection } from '../divider/divider-brain';
 import type { ComponentColor } from '../types/component-types';
 
-export {
-  type DividerDirection,
-  allDividerDirections,
-  DIVIDER_DIRECTION_DEFAULT,
-} from '../../brain/divider-brain/divider-brain';
+export { type DividerDirection, allDividerDirections, DIVIDER_DIRECTION_DEFAULT } from '../divider/divider-brain';
 
 /** all available divider line styles */
 export const allDividerStyles = ['solid', 'dashed', 'dotted'] as const;

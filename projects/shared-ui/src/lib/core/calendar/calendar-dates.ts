@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Calendar } from './calendar';
-import { type CalendarDateData } from '../../brain/calendar-brain/calendar-brain';
+import { type CalendarDateData } from '../calendar/calendar-brain';
 
 /**
  * calendar dates grid component — renders the weekday strip and the day cells with the band / chip / num

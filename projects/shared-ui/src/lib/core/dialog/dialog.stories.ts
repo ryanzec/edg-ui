@@ -11,23 +11,23 @@ import {
 } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
-import { DIALOG_TRIGGER, DialogBrainDirective } from '../../brain/dialog-brain/dialog-brain';
-import { Button } from '../../core/button/button';
-import { ButtonToggle, ButtonToggleItem } from '../../core/button-toggle/button-toggle';
-import { CheckboxToggle } from '../../core/checkbox-toggle/checkbox-toggle';
-import { Icon } from '../../core/icon/icon';
-import { TypedContextDirective } from '../../core/typed-context-directive/typed-context-directive';
+import { DIALOG_TRIGGER, DialogBrainDirective } from '../dialog/dialog-brain';
+import { Button } from '../button/button';
+import { ButtonToggle, ButtonToggleItem } from '../button-toggle/button-toggle';
+import { CheckboxToggle } from '../checkbox-toggle/checkbox-toggle';
+import { Icon } from '../icon/icon';
+import { TypedContextDirective } from '../typed-context-directive/typed-context-directive';
 import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
 import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
 import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
 import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
 import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
 import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
-import { Dialog, DialogPosition, allDialogPositions } from '../../core/dialog/dialog';
-import { DialogContent } from '../../core/dialog/dialog-content';
-import { DialogFooter, DialogFooterAlignment, allDialogFooterAlignments } from '../../core/dialog/dialog-footer';
-import { DialogHeader } from '../../core/dialog/dialog-header';
-import { DialogIcon, DialogIconColor } from '../../core/dialog/dialog-icon';
+import { Dialog, DialogPosition, allDialogPositions } from '../dialog/dialog';
+import { DialogContent } from '../dialog/dialog-content';
+import { DialogFooter, DialogFooterAlignment, allDialogFooterAlignments } from '../dialog/dialog-footer';
+import { DialogHeader } from '../dialog/dialog-header';
+import { DialogIcon, DialogIconColor } from '../dialog/dialog-icon';
 
 type EXAMPLEDialogData = {
   title: string;

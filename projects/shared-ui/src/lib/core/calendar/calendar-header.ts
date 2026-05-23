@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { Button } from '../button/button';
 import { DropDownSelector } from '../drop-down-selector/drop-down-selector';
-import { type SelectionValue } from '../../brain/drop-down-selector-brain/drop-down-selector-brain';
+import { type SelectionValue } from '../drop-down-selector/drop-down-selector-brain';
 import { Calendar } from './calendar';
 
 /**

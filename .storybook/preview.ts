@@ -64,7 +64,9 @@ const preview: Preview = {
         provideZonelessChangeDetection(),
         provideBrowserGlobalErrorListeners(),
         provideHttpClient(withFetch(), withInterceptorsFromDi()),
-        provideRouter([]),
+        // wildcard route lets stories use router.navigateByUrl() to demo router-driven behaviors without
+        // needing to register real routes per story
+        provideRouter([{ path: '**', children: [] }]),
         provideAppInitializer(() => {
           uiThemeManager = inject(UiThemeManager);
           uiThemeManager.setDarkMode(storybookTheme === 'dark');

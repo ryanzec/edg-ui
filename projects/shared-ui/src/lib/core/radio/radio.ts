@@ -13,7 +13,7 @@ import { logManager } from '@organization/shared-utils';
 import { TextDirective, TextSize } from '../text-directive/text-directive';
 import { ComponentSize } from '../types/component-types';
 import { FORM_FIELD_COMPONENT } from '../form-fields/form-field';
-import { RadioBrainDirective } from '../../brain/radio-brain/radio-brain';
+import { RadioBrainDirective } from '../radio/radio-brain';
 import { RADIO_GROUP_COMPONENT } from './radio-group';
 
 /** all available radio size values */

@@ -4,8 +4,8 @@ import { angularUtils } from '@organization/shared-utils';
 import { Button } from '../button/button';
 import type { CardColor } from '../card/card';
 import { Icon } from '../icon/icon';
-import type { IconName } from '../../brain/icon-brain/icon-brain';
-import { NotificationItemBrainDirective } from '../../brain/notifications-brain/notification-item-brain';
+import type { IconName } from '../icon/icon-brain';
+import { NotificationItemBrainDirective } from '../notifications/notification-item-brain';
 
 /** default value for the title input */
 export const NOTIFICATION_ITEM_TITLE_DEFAULT: string | undefined = undefined;

@@ -24,7 +24,7 @@ import { FormField } from '../form-fields/form-field';
 import { TableRow } from './table-row';
 import { TableHeader } from './table-header';
 import { TableCell } from './table-cell';
-import { TableBrainDirective } from '../../brain/table-brain/table-brain';
+import { TableBrainDirective } from '../table/table-brain';
 
 /** all available table size values */
 export const allTableSizes = ['sm', 'base', 'lg'] as const;

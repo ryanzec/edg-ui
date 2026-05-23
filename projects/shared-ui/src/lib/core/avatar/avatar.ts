@@ -2,8 +2,8 @@ import { Component, ChangeDetectionStrategy, computed, inject, input } from '@an
 import { NgTemplateOutlet } from '@angular/common';
 import { angularUtils } from '@organization/shared-utils';
 import { ComponentSize } from '../types/component-types';
-import { AvatarBrainDirective } from '../../brain/avatar-brain/avatar-brain';
-import { ButtonBrainDirective } from '../../brain/button-brain/button-brain';
+import { AvatarBrainDirective } from '../avatar/avatar-brain';
+import { ButtonBrainDirective } from '../button/button-brain';
 import { Indicator, INDICATOR_COLOR_DEFAULT, IndicatorColor, IndicatorPosition } from '../indicator/indicator';
 import { IndicatorAnchor } from '../indicator/indicator-anchor';
 import { AvatarShape } from './avatar-shape';

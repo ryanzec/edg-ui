@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { TimelineBrainDirective } from '../../brain/timeline-brain/timeline-brain';
+import { TimelineBrainDirective } from '../timeline/timeline-brain';
 
 /** container component for a vertical timeline list */
 @Component({

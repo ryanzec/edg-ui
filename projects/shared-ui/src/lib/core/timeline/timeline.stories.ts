@@ -6,7 +6,7 @@ import { allComponentColors } from '../types/component-types';
 import { Avatar } from '../avatar/avatar';
 import { ButtonToggle, ButtonToggleItem } from '../button-toggle/button-toggle';
 import { Icon } from '../icon/icon';
-import { IconName, allIconNames } from '../../brain/icon-brain/icon-brain';
+import { IconName, allIconNames } from '../icon/icon-brain';
 import { Tag } from '../tags/tag';
 import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
 import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';

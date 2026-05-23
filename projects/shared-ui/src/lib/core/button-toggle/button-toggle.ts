@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, forwardRef, inject, input } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { ButtonToggleBrainDirective } from '../../brain/button-toggle-brain/button-toggle-brain';
+import { ButtonToggleBrainDirective } from '../button-toggle/button-toggle-brain';
 import { Button, ButtonColor, ButtonSize } from '../button/button';
 import { ButtonGroup } from '../button/button-group';
 

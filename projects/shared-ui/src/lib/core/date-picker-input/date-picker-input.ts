@@ -26,9 +26,9 @@ import {
   type DatePickerInputCommitMode,
   DATE_PICKER_INPUT_COMMIT_MODE_DEFAULT,
   DATE_PICKER_INPUT_RESET_ON_MODE_CHANGE_DEFAULT,
-} from '../../brain/date-picker-input-brain/date-picker-input-brain';
-import { DatePickerInputDialogBrainDirective } from '../../brain/date-picker-input-brain/date-picker-input-dialog-brain';
-import { type CalendarPartialRangeSelectionType } from '../../brain/calendar-brain/calendar-brain';
+} from '../date-picker-input/date-picker-input-brain';
+import { DatePickerInputDialogBrainDirective } from '../date-picker-input/date-picker-input-dialog-brain';
+import { type CalendarPartialRangeSelectionType } from '../calendar/calendar-brain';
 import { Icon } from '../icon/icon';
 
 export const DATE_PICKER_INPUT_DATE_FORMAT_DEFAULT: DateFormat = DateFormat.STANDARD;

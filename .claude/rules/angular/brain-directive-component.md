@@ -9,7 +9,7 @@ The following is a list of logic / state that must **ALWAYS** go into the brain 
 - event handlers (e.g., `keydown`, `click`).
 - focus management (roving tabindex, trapping focus).
 - accessibility attributes (ARIA roles, states, properties, accessibility labels).
-- stylistic attributes that have accessibility or interaction routing concerns, like `orientation` or `direction` (but **NOT** limited to those).
+- stylistic attributes that have accessibility or interaction concerns, like `orientation` or `direction` (but **NOT** limited to those).
 
 # What Must **NEVER** Go In An Angular Brain Directive / Component
 The following is a list of logic / state that must **NEVER** go into the brain directive / component:

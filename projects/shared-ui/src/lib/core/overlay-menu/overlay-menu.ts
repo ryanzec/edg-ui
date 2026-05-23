@@ -12,8 +12,8 @@ import {
   type OverlayMenuItemEntry,
   type OverlayMenuButtonToggleEntry,
   type OverlayMenuButtonToggleOption,
-} from '../../brain/overlay-menu-brain/overlay-menu-brain';
-import { OverlayMenuItemBrainDirective } from '../../brain/overlay-menu-brain/overlay-menu-item-brain';
+} from '../overlay-menu/overlay-menu-brain';
+import { OverlayMenuItemBrainDirective } from '../overlay-menu/overlay-menu-item-brain';
 import { OverlayMenuDivider } from './overlay-menu-divider';
 import { OverlayMenuItemMeta } from './overlay-menu-item-meta';
 
@@ -30,7 +30,7 @@ export {
   OVERLAY_MENU_ITEMS_DEFAULT,
   OVERLAY_MENU_LABEL_DEFAULT,
   OVERLAY_MENU_HEADER_DEFAULT,
-} from '../../brain/overlay-menu-brain/overlay-menu-brain';
+} from '../overlay-menu/overlay-menu-brain';
 
 /** all available overlay menu state values driving the optional reveal motion */
 export const allOverlayMenuStates = ['open', 'closed'] as const;

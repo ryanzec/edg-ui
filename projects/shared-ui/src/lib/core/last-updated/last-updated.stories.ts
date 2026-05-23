@@ -10,7 +10,7 @@ import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/d
 import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
 import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
 import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
-import { allLastUpdatedStates, type LastUpdatedState } from '../../brain/last-updated-brain/last-updated-brain';
+import { allLastUpdatedStates, type LastUpdatedState } from '../last-updated/last-updated-brain';
 import { LastUpdated } from './last-updated';
 
 const liveDemoStateItems: ButtonToggleItem[] = allLastUpdatedStates.map((state) => ({

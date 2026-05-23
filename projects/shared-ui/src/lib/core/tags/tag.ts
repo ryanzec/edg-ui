@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, computed, contentChildren, inject, input } from '@angular/core';
-import { TagBrainDirective } from '../../brain/tags-brain/tag-brain';
+import { TagBrainDirective } from '../tags/tag-brain';
 import { Icon, type IconSize } from '../icon/icon';
 import { ComponentColor, ComponentSize } from '../types/component-types';
 import { TagIcon } from './tag-icon';

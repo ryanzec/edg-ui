@@ -1,4 +1,4 @@
-You are tasked to review the reference component along with their design tokens that may or my not exist as a `{component-name}-tokens.css` file co-located with the component in `projects/shared-ui/src/lib/core/{component-name}/` and make sure the component to utilitizing the `.claude/rules/use-cases/css-local-variables.md` use case properly.
+You are tasked to review the reference component along with their design tokens that may or my not exist as a `{component-name}-tokens.css` file co-located with the component in `projects/shared-ui/src/lib/core/{component-name}/` and make sure the component to utilitizing the `.claude/rules/patterns/css-local-variables.md` use case properly.
 
 You are to **ALWAYS** verify:
 - If there is a css variable, the css code should only set the css properties **ONCE** for that css variables.

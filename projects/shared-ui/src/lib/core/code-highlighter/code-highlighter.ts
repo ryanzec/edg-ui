@@ -8,9 +8,9 @@ import {
   CODE_HIGHLIGHTER_LANGUAGE_DEFAULT,
   CODE_HIGHLIGHTER_VARIANT_DEFAULT,
   type CodeHighlighterVariant,
-} from '../../brain/code-highlighter-brain/code-highlighter-brain';
+} from '../code-highlighter/code-highlighter-brain';
 
-export type { CodeHighlighterVariant, SyntaxKind } from '../../brain/code-highlighter-brain/code-highlighter-brain';
+export type { CodeHighlighterVariant, SyntaxKind } from '../code-highlighter/code-highlighter-brain';
 export {
   allCodeHighlighterVariants,
   allSyntaxKinds,
@@ -18,7 +18,7 @@ export {
   CODE_HIGHLIGHTER_COPY_ARIA_LABEL_DEFAULT,
   CODE_HIGHLIGHTER_LANGUAGE_DEFAULT,
   CODE_HIGHLIGHTER_VARIANT_DEFAULT,
-} from '../../brain/code-highlighter-brain/code-highlighter-brain';
+} from '../code-highlighter/code-highlighter-brain';
 
 /** default value for the ellipsisAt input */
 export const CODE_HIGHLIGHTER_ELLIPSIS_AT_DEFAULT = 0;

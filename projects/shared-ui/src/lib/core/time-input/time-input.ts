@@ -25,9 +25,9 @@ import {
   TIME_INPUT_READONLY_DEFAULT,
   type TimeInputFormat,
   type TimeInputSegment,
-} from '../../brain/time-input-brain/time-input-brain';
+} from '../time-input/time-input-brain';
 
-export { allTimeInputFormats, type TimeInputFormat } from '../../brain/time-input-brain/time-input-brain';
+export { allTimeInputFormats, type TimeInputFormat } from '../time-input/time-input-brain';
 export { allInputVariants, type InputVariant };
 
 /** default value for the variant input */

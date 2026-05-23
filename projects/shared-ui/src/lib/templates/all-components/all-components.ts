@@ -35,7 +35,7 @@ import { DialogFooter } from '../../core/dialog/dialog-footer';
 import { DialogHeader } from '../../core/dialog/dialog-header';
 import { Divider } from '../../core/divider/divider';
 import { DropDownSelector } from '../../core/drop-down-selector/drop-down-selector';
-import { type SelectionValue } from '../../brain/drop-down-selector-brain/drop-down-selector-brain';
+import { type SelectionValue } from '../../core/drop-down-selector/drop-down-selector-brain';
 import { EmptyIndicator } from '../../core/empty-indicator/empty-indicator';
 import { FileUploadComponent } from '../../core/file-upload/file-upload';
 import { FormField } from '../../core/form-fields/form-field';
@@ -83,7 +83,7 @@ import { Tooltip } from '../../core/tooltip/tooltip';
 import { TooltipContent } from '../../core/tooltip/tooltip-content';
 import { TypedContextDirective } from '../../core/typed-context-directive/typed-context-directive';
 import { UnsavedChangesDialog } from '../../core/unsaved-changes-dialog/unsaved-changes-dialog';
-import { type IconName } from '../../brain/icon-brain/icon-brain';
+import { type IconName } from '../../core/icon/icon-brain';
 
 /** a row in the table demo */
 type TableUser = {

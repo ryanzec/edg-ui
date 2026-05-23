@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, ElementRef, effect, inject, viewChild } from '@angular/core';
-import { TabBrainDirective } from '../../brain/tabs-brain/tab-brain';
+import { TabBrainDirective } from '../tabs/tab-brain';
 import { Button } from '../button/button';
 
 @Component({

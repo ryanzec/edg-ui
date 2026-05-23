@@ -10,7 +10,7 @@ You are tasked to create a new component in the specified directory.
 Architecture Rules
 
 1. The Brain Directive / Component
-- Location: Must be generated in the `projects/shared-ui/src/lib/brain` directory.
+- Location: Must be generated alongside its core counterpart in `projects/shared-ui/src/lib/core/<component-name>/`, with the file named `<component-name>-brain.ts` (e.g. `projects/shared-ui/src/lib/core/button/button-brain.ts`).
 - Styles: Must contain absolutely zero styling. Do not link a CSS/SCSS file and keep the styles array empty.
 - Responsibilities: Must handle all state management (using Angular Signals), event handling, and complex logic.
 - Accessibility: Must manage all ARIA attributes and keyboard navigation using host bindings or strictly controlled template logic.
@@ -24,10 +24,10 @@ Architecture Rules
 - Styling: Retains all the CSS/SCSS and structural HTML.
 - Integration: Must import and internally utilize the new Brain component to function.
 
-# Important Use Case Patterns
-- `.claude/rules/use-cases/angular-content-projection.md`
-- `.claude/rules/use-cases/css-local-variables.md`
-- `.claude/rules/use-cases/needing-multiple-ng-content-element.md`
+# Important Coding Patterns
+- `.claude/rules/patterns/angular-content-projection.md`
+- `.claude/rules/patterns/css-local-variables.md`
+- `.claude/rules/patterns/needing-multiple-ng-content-element.md`
 
 Before finishing the plan to be presented, **MAKE SURE** to account for the following:
 - Follow **ALL* rules

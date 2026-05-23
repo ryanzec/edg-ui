@@ -1,12 +1,9 @@
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
-import { KanbanBoardBrainDirective } from '../../brain/kanban-board-brain/kanban-board-brain';
+import { KanbanBoardBrainDirective } from '../kanban-board/kanban-board-brain';
 import { ScrollArea } from '../scroll-area/scroll-area';
 
-export {
-  KANBAN_BOARD_ARIA_LABEL_DEFAULT,
-  KANBAN_BOARD_SELECTED_IDS_DEFAULT,
-} from '../../brain/kanban-board-brain/kanban-board-brain';
-export type { KanbanItemsMovedEvent } from '../../brain/kanban-board-brain/kanban-board-brain';
+export { KANBAN_BOARD_ARIA_LABEL_DEFAULT, KANBAN_BOARD_SELECTED_IDS_DEFAULT } from '../kanban-board/kanban-board-brain';
+export type { KanbanItemsMovedEvent } from '../kanban-board/kanban-board-brain';
 
 @Component({
   selector: 'org-kanban-board',

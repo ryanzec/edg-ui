@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
-import { SkeletonBrainDirective } from '../../brain/skeleton-brain/skeleton-brain';
+import { SkeletonBrainDirective } from '../skeleton/skeleton-brain';
 
 /** all available skeleton variants */
 export const allSkeletonVariants = ['card', 'card-headless', 'table', 'table-varied'] as const;

@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { ChatBrainDirective } from '../../brain/chat-brain/chat-brain';
+import { ChatBrainDirective } from '../chat/chat-brain';
 
 /**
  * the chat thread shell. composes `ChatBrainDirective` for the live-region aria semantics (role + aria-live).

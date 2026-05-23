@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import type { Meta, StoryObj } from '@storybook/angular';
 import { ButtonToggle, ButtonToggleItem } from '../button-toggle/button-toggle';
-import { IconName } from '../../brain/icon-brain/icon-brain';
+import { IconName } from '../icon/icon-brain';
 import { CheckboxToggle } from '../checkbox-toggle/checkbox-toggle';
 import { Card } from '../card/card';
 import { CardContent } from '../card/card-content';

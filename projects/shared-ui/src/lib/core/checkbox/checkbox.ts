@@ -10,12 +10,12 @@ import {
   inject,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { IconName } from '../../brain/icon-brain/icon-brain';
+import { IconName } from '../icon/icon-brain';
 import { Icon } from '../icon/icon';
 import { TextDirective, TextSize } from '../text-directive/text-directive';
 import { ComponentSize } from '../types/component-types';
 import { FORM_FIELD_COMPONENT } from '../form-fields/form-field';
-import { CheckboxBrainDirective } from '../../brain/checkbox-brain/checkbox-brain';
+import { CheckboxBrainDirective } from '../checkbox/checkbox-brain';
 
 /** all available checkbox size values */
 export const allCheckboxSizes = ['sm', 'base', 'lg'] as const satisfies readonly ComponentSize[];

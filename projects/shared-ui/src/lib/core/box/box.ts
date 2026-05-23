@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { angularUtils } from '@organization/shared-utils';
-import { BoxBrainDirective } from '../../brain/box-brain/box-brain';
+import { BoxBrainDirective } from '../box/box-brain';
 import { ComponentColor, allComponentColors } from '../types/component-types';
 
 /** the color variant type for the box component */

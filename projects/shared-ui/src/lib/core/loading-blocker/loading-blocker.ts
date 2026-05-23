@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
 import { angularUtils } from '@organization/shared-utils';
-import { LoadingBlockerBrainDirective } from '../../brain/loading-blocker-brain/loading-blocker-brain';
+import { LoadingBlockerBrainDirective } from '../loading-blocker/loading-blocker-brain';
 import { LoadingSpinner } from '../loading-spinner/loading-spinner';
 import { type IconSize } from '../icon/icon';
 import { ComponentColor, allComponentColors } from '../types/component-types';

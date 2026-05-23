@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
-import { KanbanCardBrainDirective } from '../../brain/kanban-board-brain/kanban-card-brain';
+import { KanbanCardBrainDirective } from '../kanban-board/kanban-card-brain';
 
 @Component({
   selector: 'org-kanban-card',

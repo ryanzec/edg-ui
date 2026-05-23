@@ -21,7 +21,7 @@ import {
   type TooltipPhase,
   type TooltipPlacement,
   type TooltipTriggerType,
-} from '../../brain/tooltip-brain/tooltip-brain';
+} from '../tooltip/tooltip-brain';
 
 export {
   TOOLTIP_CLOSE_DELAY_DEFAULT,

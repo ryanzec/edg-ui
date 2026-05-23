@@ -1,11 +1,11 @@
 import { Component, ChangeDetectionStrategy, computed, effect, inject, input } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { angularUtils, logManager } from '@organization/shared-utils';
-import { ListItemBrainDirective } from '../../brain/list-brain/list-item-brain';
+import { ListItemBrainDirective } from '../list/list-item-brain';
 import { List, type ListSize } from './list';
 import { ListItemIcon } from './list-item-icon';
-import type { IconName } from '../../brain/icon-brain/icon-brain';
+import type { IconName } from '../icon/icon-brain';
 
 /** all available list item tag values */
 export const allListItemTags = ['a', 'button'] as const;
@@ -25,9 +25,6 @@ export const LIST_ITEM_DISABLED_DEFAULT = false;
 /** the default href of the list item */
 export const LIST_ITEM_HREF_DEFAULT: string | undefined = undefined;
 
-/** the default router link path of the list item */
-export const LIST_ITEM_ROUTER_LINK_DEFAULT: string | undefined = undefined;
-
 /** the default external href flag of the list item */
 export const LIST_ITEM_IS_EXTERNAL_HREF_DEFAULT = false;
 
@@ -46,13 +43,13 @@ const EXTERNAL_HREF_ICON_NAME: IconName = 'arrow-up-right';
 @Component({
   selector: 'org-list-item',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [NgTemplateOutlet, RouterLink, RouterLinkActive, ListItemIcon],
+  imports: [NgTemplateOutlet, RouterLink, ListItemIcon],
   templateUrl: './list-item.html',
   styleUrl: './list-item.css',
   hostDirectives: [
     {
       directive: ListItemBrainDirective,
-      inputs: ['disabled'],
+      inputs: ['disabled', 'routerLink', 'routerMatchExact'],
       outputs: ['clicked'],
     },
   ],
@@ -92,11 +89,6 @@ export class ListItem {
     transform: angularUtils.transformNullToUndefined,
   });
 
-  /** the angular router link path used when asTag is set to a */
-  public readonly routerLink = input<string | undefined, string | null | undefined>(LIST_ITEM_ROUTER_LINK_DEFAULT, {
-    transform: angularUtils.transformNullToUndefined,
-  });
-
   /** whether the href is an external url that should open in a new tab; auto-renders a post external-link icon */
   public readonly isExternalHref = input<boolean>(LIST_ITEM_IS_EXTERNAL_HREF_DEFAULT);
 
@@ -130,7 +122,7 @@ export class ListItem {
       return true;
     }
 
-    return this.asTag() === 'a' && (!!this.href() || !!this.routerLink());
+    return this.asTag() === 'a' && (!!this.href() || !!this.brain.routerLink());
   });
 
   /** whether the list item should display clickable styles and respond to interaction */
@@ -160,11 +152,6 @@ export class ListItem {
         });
       }
     });
-  }
-
-  /** updates the router link active signal when the route active state changes */
-  protected onRouterLinkActiveChange(isActive: boolean): void {
-    this.brain.setRouterLinkActive(isActive);
   }
 
   /** handles click events, delegating disabled-gating and observer-checked emission to the brain */

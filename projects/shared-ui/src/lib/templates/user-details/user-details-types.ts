@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon';
-import type { IconName } from '../../brain/icon-brain/icon-brain';
+import type { IconName } from '../../core/icon/icon-brain';
 import type { ComponentColor } from '../../core/types/component-types';
 
 /** the section ids surfaced in the right-rail on-this-page nav */

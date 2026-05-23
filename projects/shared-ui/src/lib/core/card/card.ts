@@ -2,8 +2,8 @@ import { ChangeDetectionStrategy, Component, effect, inject, input, viewChild } 
 import { outputFromObservable } from '@angular/core/rxjs-interop';
 import { Subject } from 'rxjs';
 import { angularUtils } from '@organization/shared-utils';
-import { BoxBrainDirective } from '../../brain/box-brain/box-brain';
-import { ExpandableBrainDirective } from '../../brain/expandable-brain/expandable-brain';
+import { BoxBrainDirective } from '../box/box-brain';
+import { ExpandableBrainDirective } from '../expandable-brain/expandable-brain';
 import { Box, BOX_BACKGROUND_DEFAULT, BOX_PADDING_DEFAULT } from '../box/box';
 import type { BoxBackground, BoxBorder, BoxPadding } from '../box/box';
 import { ComponentColor, allComponentColors } from '../types/component-types';

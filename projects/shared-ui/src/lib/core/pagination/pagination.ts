@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, computed, inject } from '@angular/core';
-import { PaginationBrainDirective } from '../../brain/pagination-brain/pagination-brain';
+import { PaginationBrainDirective } from '../pagination/pagination-brain';
 import { Button } from '../button/button';
 import { DropDownSelector } from '../drop-down-selector/drop-down-selector';
 

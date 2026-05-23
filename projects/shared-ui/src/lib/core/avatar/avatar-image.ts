@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
-import { AvatarImageBrainDirective } from '../../brain/avatar-brain/avatar-image-brain';
-import { AvatarBrainDirective } from '../../brain/avatar-brain/avatar-brain';
+import { AvatarImageBrainDirective } from '../avatar/avatar-image-brain';
+import { AvatarBrainDirective } from '../avatar/avatar-brain';
 
 @Component({
   selector: 'org-avatar-image',

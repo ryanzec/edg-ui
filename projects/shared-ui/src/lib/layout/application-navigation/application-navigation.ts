@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, computed, input, model, output, signal } from '@angular/core';
-import { type IconName } from '../../brain/icon-brain/icon-brain';
+import { type IconName } from '../../core/icon/icon-brain';
 import { type ComponentColor } from '../../core/types/component-types';
 import { Avatar } from '../../core/avatar/avatar';
 import { Icon } from '../../core/icon/icon';

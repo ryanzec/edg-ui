@@ -6,7 +6,7 @@ import { Card } from '../../core/card/card';
 import { CardContent } from '../../core/card/card-content';
 import { CardHeader } from '../../core/card/card-header';
 import { DropDownSelector } from '../../core/drop-down-selector/drop-down-selector';
-import { type SelectionValue } from '../../brain/drop-down-selector-brain/drop-down-selector-brain';
+import { type SelectionValue } from '../../core/drop-down-selector/drop-down-selector-brain';
 import { FormField } from '../../core/form-fields/form-field';
 import { FormFields } from '../../core/form-fields/form-fields';
 import { Label } from '../../core/label/label';

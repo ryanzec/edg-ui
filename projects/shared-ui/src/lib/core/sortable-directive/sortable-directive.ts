@@ -11,8 +11,8 @@ import {
   inject,
   input,
 } from '@angular/core';
-import { IconName } from '../../brain/icon-brain/icon-brain';
-import { SORTABLE_ENABLED_DEFAULT, SortableBrainDirective } from '../../brain/sortable-brain/sortable-brain';
+import { IconName } from '../icon/icon-brain';
+import { SORTABLE_ENABLED_DEFAULT, SortableBrainDirective } from '../sortable-directive/sortable-brain';
 import { Icon } from '../icon/icon';
 
 @Directive({

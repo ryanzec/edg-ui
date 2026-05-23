@@ -18,7 +18,7 @@ import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/d
 import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
 import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
 import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
-import type { CalendarPartialRangeSelectionType } from '../../brain/calendar-brain/calendar-brain';
+import type { CalendarPartialRangeSelectionType } from '../calendar/calendar-brain';
 
 type LiveDemoMode = 'single' | 'range' | 'partial-range';
 type LiveDemoTimeFormat = TimeFormat | 'none';

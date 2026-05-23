@@ -10,14 +10,14 @@ import {
   input,
   viewChild,
 } from '@angular/core';
-import { ViewOptionsBrainDirective, type ViewField } from '../../brain/view-options-brain/view-options-brain';
+import { ViewOptionsBrainDirective, type ViewField } from '../view-options/view-options-brain';
 import {
   VIEW_OPTIONS_FIELD_ROW_BRAIN_LOCKED_DEFAULT,
   ViewOptionsFieldRowBrainDirective,
-} from '../../brain/view-options-brain/view-options-field-row-brain';
+} from '../view-options/view-options-field-row-brain';
 import { CheckboxToggle } from '../checkbox-toggle/checkbox-toggle';
 import { Icon } from '../icon/icon';
-import type { IconName } from '../../brain/icon-brain/icon-brain';
+import type { IconName } from '../icon/icon-brain';
 import { TextDirective } from '../text-directive/text-directive';
 
 /** default icon used by the row when the field has no iconName */
