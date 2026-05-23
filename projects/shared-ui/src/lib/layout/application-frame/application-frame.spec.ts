@@ -9,6 +9,17 @@ describe('ApplicationFrame', () => {
   let fixture: ComponentFixture<ApplicationFrame>;
 
   beforeEach(async () => {
+    window.matchMedia = ((): MediaQueryList => ({
+      matches: false,
+      media: '',
+      onchange: null,
+      addEventListener: () => {},
+      removeEventListener: () => {},
+      addListener: () => {},
+      removeListener: () => {},
+      dispatchEvent: () => false,
+    })) as Window['matchMedia'];
+
     await TestBed.configureTestingModule({
       imports: [ApplicationFrame],
       providers: [provideRouter([])],

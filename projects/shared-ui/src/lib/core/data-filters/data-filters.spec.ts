@@ -68,19 +68,19 @@ describe('DataFilters', () => {
     });
 
     it('renders an input element for each text filter', () => {
-      const inputs = fixture.nativeElement.querySelectorAll('org-input');
+      const inputs = fixture.nativeElement.querySelectorAll('[data-testid="data-filter-text"]');
 
       expect(inputs.length).toBe(1);
     });
 
     it('renders a checkbox-toggle for each toggle filter', () => {
-      const toggles = fixture.nativeElement.querySelectorAll('org-checkbox-toggle');
+      const toggles = fixture.nativeElement.querySelectorAll('[data-testid="data-filter-toggle"]');
 
       expect(toggles.length).toBe(1);
     });
 
     it('renders a combobox for each array filter', () => {
-      const comboboxes = fixture.nativeElement.querySelectorAll('org-combobox');
+      const comboboxes = fixture.nativeElement.querySelectorAll('[data-testid="data-filter-array"]');
 
       expect(comboboxes.length).toBe(1);
     });
@@ -100,9 +100,9 @@ describe('DataFilters', () => {
       fixture.detectChanges();
       await fixture.whenStable();
 
-      expect(fixture.nativeElement.querySelectorAll('org-input').length).toBe(1);
-      expect(fixture.nativeElement.querySelectorAll('org-checkbox-toggle').length).toBe(0);
-      expect(fixture.nativeElement.querySelectorAll('org-combobox').length).toBe(0);
+      expect(fixture.nativeElement.querySelectorAll('[data-testid="data-filter-text"]').length).toBe(1);
+      expect(fixture.nativeElement.querySelectorAll('[data-testid="data-filter-toggle"]').length).toBe(0);
+      expect(fixture.nativeElement.querySelectorAll('[data-testid="data-filter-array"]').length).toBe(0);
     });
 
     it('renders nothing when activeFilters is empty', async () => {
@@ -119,9 +119,9 @@ describe('DataFilters', () => {
       await fixture.whenStable();
 
       const rows = fixture.nativeElement.querySelectorAll('.filter-row');
-      const firstRowHasInput = rows[0].querySelector('org-input') !== null;
-      const secondRowHasToggle = rows[1].querySelector('org-checkbox-toggle') !== null;
-      const thirdRowHasCombobox = rows[2].querySelector('org-combobox') !== null;
+      const firstRowHasInput = rows[0].querySelector('[data-testid="data-filter-text"]') !== null;
+      const secondRowHasToggle = rows[1].querySelector('[data-testid="data-filter-toggle"]') !== null;
+      const thirdRowHasCombobox = rows[2].querySelector('[data-testid="data-filter-array"]') !== null;
 
       expect(firstRowHasInput).toBe(true);
       expect(secondRowHasToggle).toBe(true);

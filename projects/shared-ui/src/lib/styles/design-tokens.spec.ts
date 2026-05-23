@@ -5,34 +5,41 @@ import { designTokenUtils } from './design-tokens';
 describe('designTokenUtils', () => {
   describe('getColorToken', () => {
     describe('light theme (default)', () => {
-      it('returns a resolved foreground color', () => {
-        expect(designTokenUtils.getColorToken('fg')).toBe('oklch(0.22 0.008 260)');
+      it('returns a chart color override defined for the light theme', () => {
+        expect(designTokenUtils.getColorToken('chart.blue.1')).toBe('oklch(0.58 0.14 240)');
       });
 
-      it('returns a resolved muted foreground color', () => {
-        expect(designTokenUtils.getColorToken('fg.muted')).toBe('oklch(0.46 0.008 260)');
+      it('returns the resting chevron color for the date picker trigger', () => {
+        expect(designTokenUtils.getColorToken('date.picker.input.trigger.chevron.fg')).toBe('oklch(0.46 0.008 260)');
       });
 
-      it('returns a resolved primary semantic color', () => {
-        expect(designTokenUtils.getColorToken('primary')).toBe('oklch(0.22 0.008 260)');
+      it('returns the hover chevron color for the date picker trigger', () => {
+        expect(designTokenUtils.getColorToken('date.picker.input.trigger.chevron.fg.hover')).toBe(
+          'oklch(0.22 0.008 260)'
+        );
       });
 
-      it('returns the light value when theme is explicitly "light"', () => {
-        expect(designTokenUtils.getColorToken('bg.app', 'light')).toBe('oklch(0.985 0.003 95)');
+      it('returns the same value when theme is explicitly "light"', () => {
+        expect(designTokenUtils.getColorToken('chart.green.1', 'light')).toBe('oklch(0.6 0.14 145)');
+      });
+
+      it('returns undefined for a token that is only defined in the dark override map', () => {
+        expect(designTokenUtils.getColorToken('fg')).toBeUndefined();
       });
 
       it('returns undefined for an unknown token', () => {
+        // @ts-expect-error - guards the compile-time token-name typing; if this stops erroring the type-safety feature has regressed
         expect(designTokenUtils.getColorToken('this.does.not.exist')).toBeUndefined();
       });
     });
 
     describe('dark theme', () => {
       it('returns the dark override value for the foreground color', () => {
-        expect(designTokenUtils.getColorToken('fg', 'dark')).toBe('oklch(0.96 0.005 95)');
+        expect(designTokenUtils.getColorToken('fg', 'dark')).toBe('oklch(0.89 0.005 95)');
       });
 
       it('returns a different value than light for bg.app', () => {
-        expect(designTokenUtils.getColorToken('bg.app', 'dark')).toBe('oklch(0.16 0.005 260)');
+        expect(designTokenUtils.getColorToken('bg.app', 'dark')).toBe('oklch(0.17 0.01 260)');
       });
 
       it('returns a dark-specific border color', () => {
@@ -44,6 +51,7 @@ describe('designTokenUtils', () => {
       });
 
       it('returns undefined for an unknown token', () => {
+        // @ts-expect-error - guards the compile-time token-name typing; if this stops erroring the type-safety feature has regressed
         expect(designTokenUtils.getColorToken('this.does.not.exist', 'dark')).toBeUndefined();
       });
     });
@@ -116,6 +124,7 @@ describe('designTokenUtils', () => {
 
     describe('unknown tokens', () => {
       it('returns undefined for an unknown token', () => {
+        // @ts-expect-error - guards the compile-time token-name typing; if this stops erroring the type-safety feature has regressed
         expect(designTokenUtils.getToken('this.does.not.exist')).toBeUndefined();
       });
     });

@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { DateTime } from 'luxon';
+import { describe, beforeEach, it, expect } from 'vitest';
 import { TicketDetails } from './ticket-details';
 import { type Ticket } from './ticket-details-types';
 

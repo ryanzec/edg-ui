@@ -39,5 +39,15 @@ tasks:
       NODE_ENV: production
     options:
       runFromWorkspaceRoot: false
+  test-unit:
+    command: $workspaceRoot/node_modules/.bin/ng test customer-portal
+    inputs:
+      - '**/*'
+      - /tsconfig.json
+      - /tsconfig.spec.json
+    env:
+      NODE_ENV: development
+    options:
+      runFromWorkspaceRoot: false
 language: typescript
 layer: application

@@ -186,8 +186,10 @@ export default tseslint.config(
     },
   }, // test overrides
   {
-    files: ['**/*.spec.ts'],
+    files: ['**/*.spec.ts', './test-setup.ts', './test-providers.ts'],
     rules: {
+      'no-empty-function': 'off',
+      '@typescript-eslint/no-empty-function': 'off',
       '@angular-eslint/directive-selector': [
         'error',
         {

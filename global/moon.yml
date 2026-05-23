@@ -78,25 +78,6 @@ tasks:
     env:
       NODE_ENV: development
     preset: server
-  test-unit:
-    command: $workspaceRoot/node_modules/.bin/ng test --watch=false
-    inputs:
-      - /projects/**/*
-      - /**/*/tsconfig.spec.json
-      - /**/*/src/test-providers.ts
-      - /tsconfig.json
-      - /angular.json
-    env:
-      NODE_ENV: development
-    options:
-      runFromWorkspaceRoot: true
-  test-unit-watch:
-    command: sh -c "$workspaceRoot/node_modules/.bin/concurrently \"$workspaceRoot/node_modules/.bin/ng test customer-portal --watch=true\" \"$workspaceRoot/node_modules/.bin/ng test internal-portal --watch=true\" \"$workspaceRoot/node_modules/.bin/ng test shared-ui --watch=true\""
-    options:
-      runFromWorkspaceRoot: true
-    env:
-      NODE_ENV: development
-    preset: server
   lint:
     command: $workspaceRoot/node_modules/.bin/ng lint
     inputs:

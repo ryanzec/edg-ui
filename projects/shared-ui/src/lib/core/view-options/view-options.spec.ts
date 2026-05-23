@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { describe, beforeEach, it, expect } from 'vitest';
 import { ViewOptions } from './view-options';
 
 describe('ViewOptions', () => {

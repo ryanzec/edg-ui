@@ -23,8 +23,6 @@ export class UiThemeManager {
   }
 
   public setDarkMode(isDark: boolean): void {
-    console.log('setDarkMode', isDark);
-    console.trace();
     this.isDarkMode.set(isDark);
   }
 

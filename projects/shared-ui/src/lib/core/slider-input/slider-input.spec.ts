@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { describe, beforeEach, it, expect } from 'vitest';
 
 import { SliderInput } from './slider-input';
 
@@ -12,6 +13,7 @@ describe('SliderInput', () => {
     }).compileComponents();
 
     fixture = TestBed.createComponent(SliderInput);
+    fixture.componentRef.setInput('direction', 'horizontal');
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

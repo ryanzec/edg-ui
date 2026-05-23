@@ -3,7 +3,7 @@
 
 type DesignTokenTheme = 'light' | 'dark';
 
-const colorLight: Record<string, string> = {
+const colorLight = {
   'chart.blue.1': 'oklch(0.58 0.14 240)',
   'chart.blue.2': 'oklch(0.95 0.04 240)',
   'chart.green.1': 'oklch(0.6 0.14 145)',
@@ -24,9 +24,9 @@ const colorLight: Record<string, string> = {
   'chart.yellow.2': 'oklch(0.96 0.05 90)',
   'date.picker.input.trigger.chevron.fg': 'oklch(0.46 0.008 260)',
   'date.picker.input.trigger.chevron.fg.hover': 'oklch(0.22 0.008 260)',
-};
+} as const;
 
-const colorDark: Record<string, string> = {
+const colorDark = {
   'bg.active': 'oklch(0.305 0.008 260)',
   'bg.app': 'oklch(0.17 0.01 260)',
   'bg.hover': 'oklch(0.275 0.007 260)',
@@ -146,9 +146,9 @@ const colorDark: Record<string, string> = {
   'warning.soft.hover': 'oklch(0.37 0.09 55)',
   yellow: 'oklch(0.8 0.14 90)',
   'yellow.soft': 'oklch(0.3 0.06 90)',
-};
+} as const;
 
-const nonColorTokens: Record<string, string> = {
+const nonColorTokens = {
   'application.navigation.nav.sub.list.transition.duration': '150ms',
   'application.navigation.nav.sub.list.transition.easing': 'cubic-bezier(0.3, 0.7, 0.4, 1)',
   'aspect.square': '1 / 1',
@@ -1664,18 +1664,24 @@ const nonColorTokens: Record<string, string> = {
   'z.index.sticky': '1100',
   'z.index.toast': '1500',
   'z.index.tooltip': '1600',
-};
+} as const;
 
-function getNestedToken(map: Record<string, string>, dotPath: string): string | undefined {
+export type ColorTokenName = keyof typeof colorLight | keyof typeof colorDark;
+
+export type TokenName = keyof typeof nonColorTokens;
+
+function getNestedToken(map: Readonly<Record<string, string>>, dotPath: string): string | undefined {
   return map[dotPath];
 }
 
 export const designTokenUtils = {
-  getColorToken(designTokenName: string, theme: DesignTokenTheme = 'light'): string | undefined {
-    return getNestedToken(theme === 'light' ? colorLight : colorDark, designTokenName);
+  getColorToken(designTokenName: ColorTokenName, theme: DesignTokenTheme = 'light'): string | undefined {
+    const map = (theme === 'light' ? colorLight : colorDark) as Readonly<Record<string, string>>;
+
+    return getNestedToken(map, designTokenName);
   },
 
-  getToken(designTokenName: string): string | undefined {
-    return getNestedToken(nonColorTokens, designTokenName);
+  getToken(designTokenName: TokenName): string | undefined {
+    return getNestedToken(nonColorTokens as Readonly<Record<string, string>>, designTokenName);
   },
 };

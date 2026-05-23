@@ -13,6 +13,7 @@ describe('CodeHighlighter', () => {
     }).compileComponents();
 
     fixture = TestBed.createComponent(CodeHighlighter);
+    fixture.componentRef.setInput('text', 'const value = 1;');
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

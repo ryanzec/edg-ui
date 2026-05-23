@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { describe, beforeEach, it, expect } from 'vitest';
 
@@ -17,7 +17,7 @@ import { DropDownSelectorBrainDirective, type SelectionValue } from './drop-down
   template: '',
 })
 class DropDownSelectorBrainHost {
-  public readonly brain = viewChild.required(DropDownSelectorBrainDirective);
+  public readonly brain = inject(DropDownSelectorBrainDirective);
 }
 
 describe('DropDownSelectorBrainDirective', () => {
@@ -41,7 +41,7 @@ describe('DropDownSelectorBrainDirective', () => {
     fixture.componentRef.setInput('label', 'Status');
     fixture.componentRef.setInput('selectedItems', []);
     await fixture.whenStable();
-    brain = fixture.componentInstance.brain() as unknown as DropDownSelectorBrainDirective<string>;
+    brain = fixture.componentInstance.brain as unknown as DropDownSelectorBrainDirective<string>;
   });
 
   describe('filteredItems', () => {

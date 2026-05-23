@@ -4,7 +4,7 @@
     <div [formGroup]="formGroup()">
       <org-form-fields>
         <org-form-field>
-          <org-label text="Timezone" />
+          <org-label text="Timezone" [asLabel]="false" />
           <org-drop-down-selector
             label="Select timezone"
             [items]="timezoneItems()"
@@ -14,7 +14,7 @@
         </org-form-field>
 
         <org-form-field>
-          <org-label text="Language" />
+          <org-label text="Language" [asLabel]="false" />
           <org-drop-down-selector
             label="Select language"
             [items]="languageItems()"

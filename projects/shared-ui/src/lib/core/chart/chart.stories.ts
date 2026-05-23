@@ -1,8 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/angular';
 import { Chart } from './chart';
 import { Button } from '../button/button';
-import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
-import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
+import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
+import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
+import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
 import { signal } from '@angular/core';
 import { designTokenUtils } from '../../styles/design-tokens';
 import {
@@ -129,8 +130,8 @@ const buildStackedBarConfig = (dataPointCount: number): ChartConfiguration => {
         {
           label: 'Dataset 3',
           data: generateRandomData(dataPointCount, 10, 50),
-          backgroundColor: designTokenUtils.getColorToken('chart.amber.1') ?? '',
-          borderColor: designTokenUtils.getColorToken('chart.amber.2') ?? '',
+          backgroundColor: designTokenUtils.getColorToken('chart.yellow.1') ?? '',
+          borderColor: designTokenUtils.getColorToken('chart.yellow.2') ?? '',
           borderWidth: 1,
         },
       ],
@@ -167,7 +168,7 @@ const buildLineConfig = (dataPointCount: number): ChartConfiguration => {
           tension: 0.4,
           borderWidth: 2,
           pointBackgroundColor: lineColor,
-          pointBorderColor: designTokenUtils.getColorToken('background') ?? '#fff',
+          pointBorderColor: designTokenUtils.getColorToken('bg.surface') ?? '#fff',
           pointBorderWidth: 2,
           pointRadius: 4,
           pointHoverRadius: 6,
@@ -202,8 +203,8 @@ const buildBubbleConfig = (dataPointCount: number): ChartConfiguration => {
         {
           label: 'Bubble Dataset 1',
           data: generateBubbleData(dataPointCount),
-          backgroundColor: designTokenUtils.getColorToken('chart.cyan.1') ?? '',
-          borderColor: designTokenUtils.getColorToken('chart.cyan.2') ?? '',
+          backgroundColor: designTokenUtils.getColorToken('chart.teal.1') ?? '',
+          borderColor: designTokenUtils.getColorToken('chart.teal.2') ?? '',
           borderWidth: 1,
         },
         {
@@ -236,18 +237,18 @@ const pieColors = [
   designTokenUtils.getColorToken('chart.yellow.1') ?? '',
   designTokenUtils.getColorToken('chart.green.1') ?? '',
   designTokenUtils.getColorToken('chart.blue.1') ?? '',
-  designTokenUtils.getColorToken('chart.indigo.1') ?? '',
+  designTokenUtils.getColorToken('chart.purple.1') ?? '',
   designTokenUtils.getColorToken('chart.purple.1') ?? '',
   designTokenUtils.getColorToken('chart.pink.1') ?? '',
-  designTokenUtils.getColorToken('chart.rose.1') ?? '',
+  designTokenUtils.getColorToken('chart.pink.1') ?? '',
   designTokenUtils.getColorToken('chart.teal.1') ?? '',
-  designTokenUtils.getColorToken('chart.cyan.1') ?? '',
-  designTokenUtils.getColorToken('chart.sky.1') ?? '',
-  designTokenUtils.getColorToken('chart.violet.1') ?? '',
-  designTokenUtils.getColorToken('chart.fuchsia.1') ?? '',
-  designTokenUtils.getColorToken('chart.lime.1') ?? '',
-  designTokenUtils.getColorToken('chart.emerald.1') ?? '',
-  designTokenUtils.getColorToken('chart.amber.1') ?? '',
+  designTokenUtils.getColorToken('chart.teal.1') ?? '',
+  designTokenUtils.getColorToken('chart.blue.1') ?? '',
+  designTokenUtils.getColorToken('chart.purple.1') ?? '',
+  designTokenUtils.getColorToken('chart.pink.1') ?? '',
+  designTokenUtils.getColorToken('chart.green.1') ?? '',
+  designTokenUtils.getColorToken('chart.green.1') ?? '',
+  designTokenUtils.getColorToken('chart.yellow.1') ?? '',
 ];
 
 const buildPieConfig = (dataPointCount: number): ChartConfiguration => {
@@ -261,7 +262,7 @@ const buildPieConfig = (dataPointCount: number): ChartConfiguration => {
           data: generateRandomData(dataPointCount, 10, 100),
           backgroundColor: Array.from({ length: dataPointCount }, (_, i) => pieColors[i % pieColors.length]),
           borderWidth: 1,
-          borderColor: designTokenUtils.getColorToken('background') ?? '#fff',
+          borderColor: designTokenUtils.getColorToken('bg.surface') ?? '#fff',
         },
       ],
     },
@@ -277,21 +278,21 @@ const buildPieConfig = (dataPointCount: number): ChartConfiguration => {
 };
 
 const polarColors = [
-  designTokenUtils.getColorToken('chart.rose.1') ?? '',
   designTokenUtils.getColorToken('chart.pink.1') ?? '',
-  designTokenUtils.getColorToken('chart.fuchsia.1') ?? '',
+  designTokenUtils.getColorToken('chart.pink.1') ?? '',
+  designTokenUtils.getColorToken('chart.pink.1') ?? '',
   designTokenUtils.getColorToken('chart.purple.1') ?? '',
-  designTokenUtils.getColorToken('chart.violet.1') ?? '',
-  designTokenUtils.getColorToken('chart.indigo.1') ?? '',
+  designTokenUtils.getColorToken('chart.purple.1') ?? '',
+  designTokenUtils.getColorToken('chart.purple.1') ?? '',
   designTokenUtils.getColorToken('chart.blue.1') ?? '',
-  designTokenUtils.getColorToken('chart.sky.1') ?? '',
-  designTokenUtils.getColorToken('chart.cyan.1') ?? '',
+  designTokenUtils.getColorToken('chart.blue.1') ?? '',
   designTokenUtils.getColorToken('chart.teal.1') ?? '',
-  designTokenUtils.getColorToken('chart.emerald.1') ?? '',
+  designTokenUtils.getColorToken('chart.teal.1') ?? '',
   designTokenUtils.getColorToken('chart.green.1') ?? '',
-  designTokenUtils.getColorToken('chart.lime.1') ?? '',
+  designTokenUtils.getColorToken('chart.green.1') ?? '',
+  designTokenUtils.getColorToken('chart.green.1') ?? '',
   designTokenUtils.getColorToken('chart.yellow.1') ?? '',
-  designTokenUtils.getColorToken('chart.amber.1') ?? '',
+  designTokenUtils.getColorToken('chart.yellow.1') ?? '',
   designTokenUtils.getColorToken('chart.orange.1') ?? '',
   designTokenUtils.getColorToken('chart.red.1') ?? '',
 ];
@@ -307,7 +308,7 @@ const buildPolarConfig = (dataPointCount: number): ChartConfiguration => {
           data: generateRandomData(dataPointCount, 10, 100),
           backgroundColor: Array.from({ length: dataPointCount }, (_, i) => polarColors[i % polarColors.length]),
           borderWidth: 1,
-          borderColor: designTokenUtils.getColorToken('background') ?? '#fff',
+          borderColor: designTokenUtils.getColorToken('bg.surface') ?? '#fff',
         },
       ],
     },
@@ -323,9 +324,9 @@ const buildPolarConfig = (dataPointCount: number): ChartConfiguration => {
 };
 
 const buildRadarConfig = (dataPointCount: number): ChartConfiguration => {
-  const indigoColor = designTokenUtils.getColorToken('chart.indigo.1') ?? '';
-  const indigoColor2 = designTokenUtils.getColorToken('chart.indigo.2') ?? '';
-  const background = designTokenUtils.getColorToken('background') ?? '#fff';
+  const indigoColor = designTokenUtils.getColorToken('chart.purple.1') ?? '';
+  const indigoColor2 = designTokenUtils.getColorToken('chart.purple.2') ?? '';
+  const background = designTokenUtils.getColorToken('bg.surface') ?? '#fff';
 
   return {
     type: 'radar',
@@ -438,17 +439,18 @@ export const VerticalBarChart: Story = {
     return {
       props: { chartConfig, onRefresh },
       template: `
-        <org-storybook-example-container title="Vertical Bar Chart">
-          <org-storybook-example-container-section label="Example">
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Vertical Bar Chart" />
+          <org-design-system-demo-canvas slot="canvas">
             <div>
               <org-button label="Refresh Data" (clicked)="onRefresh()" />
             </div>
             <org-chart containerClass="self-stretch w-full" [config]="chartConfig()" />
-          </org-storybook-example-container-section>
-        </org-storybook-example-container>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
       `,
       moduleMetadata: {
-        imports: [Chart, Button, StorybookExampleContainer, StorybookExampleContainerSection],
+        imports: [Chart, Button, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
       },
     };
   },
@@ -465,17 +467,18 @@ export const HorizontalBarChart: Story = {
     return {
       props: { chartConfig, onRefresh },
       template: `
-        <org-storybook-example-container title="Horizontal Bar Chart">
-          <org-storybook-example-container-section label="Example">
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Horizontal Bar Chart" />
+          <org-design-system-demo-canvas slot="canvas">
             <div>
               <org-button label="Refresh Data" (clicked)="onRefresh()" />
             </div>
             <org-chart [config]="chartConfig()" class="w-full" />
-          </org-storybook-example-container-section>
-        </org-storybook-example-container>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
       `,
       moduleMetadata: {
-        imports: [Chart, Button, StorybookExampleContainer, StorybookExampleContainerSection],
+        imports: [Chart, Button, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
       },
     };
   },
@@ -492,17 +495,18 @@ export const StackedBarChart: Story = {
     return {
       props: { chartConfig, onRefresh },
       template: `
-        <org-storybook-example-container title="Stacked Bar Chart">
-          <org-storybook-example-container-section label="Example">
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Stacked Bar Chart" />
+          <org-design-system-demo-canvas slot="canvas">
             <div>
               <org-button label="Refresh Data" (clicked)="onRefresh()" />
             </div>
             <org-chart [config]="chartConfig()" class="w-full" />
-          </org-storybook-example-container-section>
-        </org-storybook-example-container>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
       `,
       moduleMetadata: {
-        imports: [Chart, Button, StorybookExampleContainer, StorybookExampleContainerSection],
+        imports: [Chart, Button, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
       },
     };
   },
@@ -519,17 +523,18 @@ export const LineChart: Story = {
     return {
       props: { chartConfig, onRefresh },
       template: `
-        <org-storybook-example-container title="Line Chart with Fill">
-          <org-storybook-example-container-section label="Example">
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Line Chart with Fill" />
+          <org-design-system-demo-canvas slot="canvas">
             <div>
               <org-button label="Refresh Data" (clicked)="onRefresh()" />
             </div>
             <org-chart [config]="chartConfig()" class="w-full" />
-          </org-storybook-example-container-section>
-        </org-storybook-example-container>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
       `,
       moduleMetadata: {
-        imports: [Chart, Button, StorybookExampleContainer, StorybookExampleContainerSection],
+        imports: [Chart, Button, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
       },
     };
   },
@@ -546,17 +551,18 @@ export const BubbleChart: Story = {
     return {
       props: { chartConfig, onRefresh },
       template: `
-        <org-storybook-example-container title="Bubble Chart">
-          <org-storybook-example-container-section label="Example">
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Bubble Chart" />
+          <org-design-system-demo-canvas slot="canvas">
             <div>
               <org-button label="Refresh Data" (clicked)="onRefresh()" />
             </div>
             <org-chart [config]="chartConfig()" class="w-full" />
-          </org-storybook-example-container-section>
-        </org-storybook-example-container>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
       `,
       moduleMetadata: {
-        imports: [Chart, Button, StorybookExampleContainer, StorybookExampleContainerSection],
+        imports: [Chart, Button, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
       },
     };
   },
@@ -573,17 +579,18 @@ export const PieChart: Story = {
     return {
       props: { chartConfig, onRefresh },
       template: `
-        <org-storybook-example-container title="Pie Chart">
-          <org-storybook-example-container-section label="Example">
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Pie Chart" />
+          <org-design-system-demo-canvas slot="canvas">
             <div>
               <org-button label="Refresh Data" (clicked)="onRefresh()" />
             </div>
             <org-chart [config]="chartConfig()" class="w-full" />
-          </org-storybook-example-container-section>
-        </org-storybook-example-container>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
       `,
       moduleMetadata: {
-        imports: [Chart, Button, StorybookExampleContainer, StorybookExampleContainerSection],
+        imports: [Chart, Button, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
       },
     };
   },
@@ -600,17 +607,18 @@ export const PolarChart: Story = {
     return {
       props: { chartConfig, onRefresh },
       template: `
-        <org-storybook-example-container title="Polar Area Chart">
-          <org-storybook-example-container-section label="Example">
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Polar Area Chart" />
+          <org-design-system-demo-canvas slot="canvas">
             <div>
               <org-button label="Refresh Data" (clicked)="onRefresh()" />
             </div>
             <org-chart [config]="chartConfig()" class="w-full" />
-          </org-storybook-example-container-section>
-        </org-storybook-example-container>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
       `,
       moduleMetadata: {
-        imports: [Chart, Button, StorybookExampleContainer, StorybookExampleContainerSection],
+        imports: [Chart, Button, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
       },
     };
   },
@@ -627,17 +635,18 @@ export const RadarChart: Story = {
     return {
       props: { chartConfig, onRefresh },
       template: `
-        <org-storybook-example-container title="Radar Chart">
-          <org-storybook-example-container-section label="Example">
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Radar Chart" />
+          <org-design-system-demo-canvas slot="canvas">
             <div>
               <org-button label="Refresh Data" (clicked)="onRefresh()" />
             </div>
             <org-chart [config]="chartConfig()" class="w-full" />
-          </org-storybook-example-container-section>
-        </org-storybook-example-container>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
       `,
       moduleMetadata: {
-        imports: [Chart, Button, StorybookExampleContainer, StorybookExampleContainerSection],
+        imports: [Chart, Button, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
       },
     };
   },
@@ -662,19 +671,20 @@ export const ChartTypeSwitch: Story = {
     return {
       props: { chartConfig, switchToBar, switchToLine, switchToRadar },
       template: `
-        <org-storybook-example-container title="Chart Type Switch" currentState="Switching between chart types destroys and recreates the chart instance">
-          <org-storybook-example-container-section label="Example">
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Chart Type Switch" description="Switching between chart types destroys and recreates the chart instance" />
+          <org-design-system-demo-canvas slot="canvas">
             <div class="flex gap-2">
               <org-button label="Bar" (clicked)="switchToBar()" />
               <org-button label="Line" (clicked)="switchToLine()" />
               <org-button label="Radar" (clicked)="switchToRadar()" />
             </div>
             <org-chart [config]="chartConfig()" class="w-full" />
-          </org-storybook-example-container-section>
-        </org-storybook-example-container>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
       `,
       moduleMetadata: {
-        imports: [Chart, Button, StorybookExampleContainer, StorybookExampleContainerSection],
+        imports: [Chart, Button, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
       },
     };
   },
@@ -684,14 +694,15 @@ export const LoadingState: Story = {
   render: () => {
     return {
       template: `
-        <org-storybook-example-container title="Loading State">
-          <org-storybook-example-container-section label="Example">
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Loading State" />
+          <org-design-system-demo-canvas slot="canvas">
             <org-chart [config]="null" [isLoading]="true" class="w-full" />
-          </org-storybook-example-container-section>
-        </org-storybook-example-container>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
       `,
       moduleMetadata: {
-        imports: [Chart, StorybookExampleContainer, StorybookExampleContainerSection],
+        imports: [Chart, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
       },
     };
   },
@@ -701,14 +712,15 @@ export const EmptyState: Story = {
   render: () => {
     return {
       template: `
-        <org-storybook-example-container title="Empty State">
-          <org-storybook-example-container-section label="Example">
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Empty State" />
+          <org-design-system-demo-canvas slot="canvas">
             <org-chart [config]="null" class="w-full" />
-          </org-storybook-example-container-section>
-        </org-storybook-example-container>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
       `,
       moduleMetadata: {
-        imports: [Chart, StorybookExampleContainer, StorybookExampleContainerSection],
+        imports: [Chart, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
       },
     };
   },
@@ -725,15 +737,16 @@ export const ErrorState: Story = {
 
     return {
       template: `
-        <org-storybook-example-container title="Error State" currentState="An invalid chart type triggers the error display">
-          <org-storybook-example-container-section label="Example">
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Error State" description="An invalid chart type triggers the error display" />
+          <org-design-system-demo-canvas slot="canvas">
             <org-chart [config]="invalidConfig" class="w-full" />
-          </org-storybook-example-container-section>
-        </org-storybook-example-container>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
       `,
       props: { invalidConfig },
       moduleMetadata: {
-        imports: [Chart, StorybookExampleContainer, StorybookExampleContainerSection],
+        imports: [Chart, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
       },
     };
   },

@@ -143,7 +143,9 @@
             "tsConfig": "projects/customer-portal/tsconfig.spec.json",
             "buildTarget": "customer-portal:build:development",
             "runner": "vitest",
-            "providersFile": "projects/customer-portal/src/test-providers.ts"
+            "runnerConfig": "vitest.config.ts",
+            "providersFile": "test-providers.ts",
+            "setupFiles": ["test-setup.ts"]
           }
         },
         "lint": {
@@ -290,7 +292,9 @@
             "tsConfig": "projects/internal-portal/tsconfig.spec.json",
             "buildTarget": "internal-portal:build:development",
             "runner": "vitest",
-            "providersFile": "projects/internal-portal/src/test-providers.ts"
+            "runnerConfig": "vitest.config.ts",
+            "providersFile": "test-providers.ts",
+            "setupFiles": ["test-setup.ts"]
           }
         },
         "lint": {
@@ -331,7 +335,9 @@
             "tsConfig": "projects/shared-ui/tsconfig.spec.json",
             "buildTarget": "shared-ui:build:development",
             "runner": "vitest",
-            "providersFile": "projects/shared-ui/src/test-providers.ts"
+            "runnerConfig": "vitest.config.ts",
+            "providersFile": "test-providers.ts",
+            "setupFiles": ["test-setup.ts"]
           }
         },
         "lint": {

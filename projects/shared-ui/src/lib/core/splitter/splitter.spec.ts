@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { describe, beforeEach, it, expect } from 'vitest';
 
 import { Splitter } from './splitter';
 
@@ -12,6 +13,7 @@ describe('Splitter', () => {
     }).compileComponents();
 
     fixture = TestBed.createComponent(Splitter);
+    fixture.componentRef.setInput('direction', 'horizontal');
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

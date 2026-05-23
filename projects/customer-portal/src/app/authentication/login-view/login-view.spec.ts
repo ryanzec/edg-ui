@@ -1,32 +1,31 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Router } from '@angular/router';
-import { provideRouter } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { describe, beforeEach, afterEach, it, expect, vi } from 'vitest';
 import { signal } from '@angular/core';
+import { By } from '@angular/platform-browser';
 
 import { LoginView } from './login-view';
-import { AuthenticationManager } from '@organization/shared-ui';
+import { AuthenticationManager, LoginForm } from '@organization/shared-ui';
 import { AuthenticationAuthenticateRequest } from '@organization/shared-utils';
 
 describe('LoginView', () => {
   let component: LoginView;
   let fixture: ComponentFixture<LoginView>;
-  let router: Router;
   let authenticationManager: AuthenticationManager;
 
   const mockAuthenticationManager = {
     isAuthenticated: signal(false),
+    isLoading: signal(false),
     error: signal<string | null>(null),
     authenticate: vi.fn(),
+    redirectAfterAuthentication: vi.fn(),
   };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [LoginView],
       providers: [
-        provideRouter([{ path: 'home', component: class {} }]),
         provideHttpClient(),
         provideHttpClientTesting(),
         { provide: AuthenticationManager, useValue: mockAuthenticationManager },
@@ -35,15 +34,13 @@ describe('LoginView', () => {
 
     fixture = TestBed.createComponent(LoginView);
     component = fixture.componentInstance;
-    router = TestBed.inject(Router);
     authenticationManager = TestBed.inject(AuthenticationManager);
-
-    vi.spyOn(router, 'navigate').mockResolvedValue(true);
   });
 
   afterEach(() => {
     vi.clearAllMocks();
     mockAuthenticationManager.isAuthenticated.set(false);
+    mockAuthenticationManager.isLoading.set(false);
     mockAuthenticationManager.error.set(null);
   });
 
@@ -60,22 +57,22 @@ describe('LoginView', () => {
   });
 
   describe('Authentication Effects', () => {
-    it('should navigate to home when user becomes authenticated', () => {
+    it('should redirect when user becomes authenticated', () => {
       fixture.detectChanges();
 
       mockAuthenticationManager.isAuthenticated.set(true);
       fixture.detectChanges();
 
-      expect(router.navigate).toHaveBeenCalledWith(['/home']);
+      expect(authenticationManager.redirectAfterAuthentication).toHaveBeenCalled();
     });
 
-    it('should not navigate when user is not authenticated', () => {
+    it('should not redirect when user is not authenticated', () => {
       fixture.detectChanges();
 
       mockAuthenticationManager.isAuthenticated.set(false);
       fixture.detectChanges();
 
-      expect(router.navigate).not.toHaveBeenCalled();
+      expect(authenticationManager.redirectAfterAuthentication).not.toHaveBeenCalled();
     });
   });
 
@@ -125,8 +122,8 @@ describe('LoginView', () => {
       vi.spyOn(component, 'onLoginSubmit');
       fixture.detectChanges();
 
-      const loginForm = fixture.nativeElement.querySelector('org-login-form');
-      loginForm.dispatchEvent(new CustomEvent('loginSubmitted', { detail: loginRequest }));
+      const loginForm = fixture.debugElement.query(By.directive(LoginForm)).componentInstance as LoginForm;
+      loginForm.loginSubmitted.emit(loginRequest);
 
       expect(component.onLoginSubmit).toHaveBeenCalledWith(loginRequest);
     });

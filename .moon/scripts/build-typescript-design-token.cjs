@@ -261,23 +261,29 @@ function generateTypeScript(colorLight, colorDark, nonColorTokens) {
 
 type DesignTokenTheme = 'light' | 'dark';
 
-const colorLight: Record<string, string> = ${serializeMap(colorLight)};
+const colorLight = ${serializeMap(colorLight)} as const;
 
-const colorDark: Record<string, string> = ${serializeMap(colorDark)};
+const colorDark = ${serializeMap(colorDark)} as const;
 
-const nonColorTokens: Record<string, string> = ${serializeMap(nonColorTokens)};
+const nonColorTokens = ${serializeMap(nonColorTokens)} as const;
 
-function getNestedToken(map: Record<string, string>, dotPath: string): string | undefined {
+export type ColorTokenName = keyof typeof colorLight | keyof typeof colorDark;
+
+export type TokenName = keyof typeof nonColorTokens;
+
+function getNestedToken(map: Readonly<Record<string, string>>, dotPath: string): string | undefined {
   return map[dotPath];
 }
 
 export const designTokenUtils = {
-  getColorToken(designTokenName: string, theme: DesignTokenTheme = 'light'): string | undefined {
-    return getNestedToken(theme === 'light' ? colorLight : colorDark, designTokenName);
+  getColorToken(designTokenName: ColorTokenName, theme: DesignTokenTheme = 'light'): string | undefined {
+    const map = (theme === 'light' ? colorLight : colorDark) as Readonly<Record<string, string>>;
+
+    return getNestedToken(map, designTokenName);
   },
 
-  getToken(designTokenName: string): string | undefined {
-    return getNestedToken(nonColorTokens, designTokenName);
+  getToken(designTokenName: TokenName): string | undefined {
+    return getNestedToken(nonColorTokens as Readonly<Record<string, string>>, designTokenName);
   },
 };
 `;

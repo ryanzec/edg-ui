@@ -7,6 +7,7 @@
             @case ('text') {
               <org-label [text]="filter.label" [htmlFor]="filter.name" />
               <org-input
+                data-testid="data-filter-text"
                 [name]="filter.name"
                 [formControlName]="filter.name"
                 [orgFormDisabled]="filter.disabled ?? false"
@@ -15,6 +16,7 @@
             }
             @case ('toggle') {
               <org-checkbox-toggle
+                data-testid="data-filter-toggle"
                 [name]="filter.name"
                 [value]="filter.name"
                 [formControlName]="filter.name"
@@ -26,6 +28,7 @@
             @case ('array') {
               <org-label [text]="filter.label" [htmlFor]="filter.name" />
               <org-combobox
+                data-testid="data-filter-array"
                 [name]="filter.name"
                 [options]="filter.options"
                 [isMultiSelect]="true"
