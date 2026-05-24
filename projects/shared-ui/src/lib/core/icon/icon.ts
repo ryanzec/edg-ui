@@ -45,6 +45,7 @@ export const ICON_COLOR_DEFAULT: IconColor = 'inherit';
     },
   ],
   host: {
+    '[attr.data-icon]': 'iconBrainDirective.name()',
     '[attr.data-size]': 'size()',
     '[attr.data-color]': 'color()',
   },

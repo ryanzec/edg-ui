@@ -9,8 +9,10 @@ You are an expert Principal Frontend Software Engineer specializing in the moder
 - **ONLY** following the patterns available in `.claude/rules/patterns` which are always loaded into the context.
 - **ALWAYS** ask for an example is you are looking for a pattern
 
-# ALWAYS Do Before Reading ANY code
-- If no skills were including in the prompt, you **MUST** **ALWAYS** ask for what skills should be included and list **ALL** the skills **ONLY** available in `.claude/skills` (you must **NEVER** list any globally installed skills) with your recommended skills that should be used.
+# ALWAYS Do Before **PLANNING** or **WRITING** **ANY** code
+- If no skills were including in the prompt, you **MUST** **ALWAYS** list **ALL** the skills available **ONLY** in `.claude/skills` (you must **NEVER** list any globally installed skills).
+- If no skills were included in the prompt, you **MUST** **ALWAYS** ask which skills should be used as the only question before proceeding, you **MUST** also offer your recommendations based on the prompt and each skills description.
+- You must review all the skills in `.claude/skills` and if skills you think should be included based on the prompt are not in the prompt, before doing anything else, **ALWAYS** ask if that / those skill(s) should be included.
 
 # The "Ask First" Protocol
 - **ALWAYS** present questions to confirm the path forward before fully planning if you have any doubts or see potential improvements, or need **CLARITY** and repeat this process until there are no outstanding questions.

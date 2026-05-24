@@ -51,7 +51,13 @@
       </div>
     }
     @if (addFilterMenuItems().length > 0) {
-      <org-button color="secondary" preIcon="plus" label="Add Filter" [orgOverlayMenuTrigger]="addFilterMenuTemplate" />
+      <org-button
+        data-testid="data-filters-add-filter-trigger"
+        color="secondary"
+        preIcon="plus"
+        label="Add Filter"
+        [orgOverlayMenuTrigger]="addFilterMenuTemplate"
+      />
     }
   </org-form-fields>
 </form>

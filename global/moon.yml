@@ -4,6 +4,16 @@ tasks:
     command: pnpm install
     inputs:
       - /pnpm-lock.yaml
+      - /package.json
+    options:
+      runFromWorkspaceRoot: true
+  setup-playwright:
+    command: npx playwright install
+    inputs:
+      - /pnpm-lock.json
+      - /package.json
+    env:
+      NODE_ENV: development
     options:
       runFromWorkspaceRoot: true
   setup-certs:
@@ -30,6 +40,8 @@ tasks:
       NODE_ENV: development
     preset: server
   test-storybook:
+    deps:
+      - ~:setup-playwright
     options:
       runFromWorkspaceRoot: true
     inputs:

@@ -15,4 +15,4 @@ When an addition or change is made to a component that effects the the visuals o
 - Update the control for the input to include the option to select the new input value.
 
 # Live Demo Story
-- The controls for the Live Demo story must **ALWAYS** use customer input components, NEVER native ones
+- The controls for the Live Demo story must **ALWAYS** use custom input components, NEVER native ones

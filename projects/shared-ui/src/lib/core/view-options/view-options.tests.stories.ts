@@ -61,9 +61,11 @@ export const TogglesFieldVisibility: Story = {
     // flip the "status" row toggle — the third unlocked toggle, fourth row overall
     const toggles = await canvas.findAllByTestId('view-options-field-row-toggle');
 
-    // toggles render only on unlocked rows; the locked "name" row has none. order: email, role, status
-    const statusToggle = toggles[2];
-    await userEvent.click(statusToggle);
+    // toggles render only on unlocked rows; the locked "name" row has none. order: email, role, status.
+    // the click handler lives on the inner <label role="switch"> — userEvent dispatches events on the passed
+    // element rather than hit-testing, so clicking the toggle host would never reach the handler.
+    const statusSwitch = within(toggles[2]).getByRole('switch');
+    await userEvent.click(statusSwitch);
 
     await expect(readout.textContent).toBe('name:1!,email:1,role:1,status:1');
   },

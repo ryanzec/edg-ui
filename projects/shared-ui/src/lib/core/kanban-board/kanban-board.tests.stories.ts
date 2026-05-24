@@ -68,9 +68,12 @@ export const ClickSelectsSingleCard: Story = {
     moduleMetadata: { imports: [StoryKanbanTestsShell] },
   }),
   play: async ({ canvasElement }) => {
+    // userEvent.setup() returns an instance that preserves held-modifier state across calls; direct
+    // userEvent.* helpers spin up a fresh instance per call and silently drop the modifier on the next click
+    const user = userEvent.setup();
     const canvas = within(canvasElement);
     const card = await canvas.findByTestId('card-a-2');
-    await userEvent.click(card);
+    await user.click(card);
     const readout = await canvas.findByTestId('selection-readout');
     await expect(readout.textContent).toBe('a-2');
   },
@@ -82,23 +85,24 @@ export const CmdClickTogglesSelection: Story = {
     moduleMetadata: { imports: [StoryKanbanTestsShell] },
   }),
   play: async ({ canvasElement }) => {
+    const user = userEvent.setup();
     const canvas = within(canvasElement);
     const cardA1 = await canvas.findByTestId('card-a-1');
     const cardA3 = await canvas.findByTestId('card-a-3');
     const readout = await canvas.findByTestId('selection-readout');
 
-    await userEvent.click(cardA1);
+    await user.click(cardA1);
     await expect(readout.textContent).toBe('a-1');
 
-    await userEvent.keyboard('{Control>}');
-    await userEvent.click(cardA3);
-    await userEvent.keyboard('{/Control}');
+    await user.keyboard('{Control>}');
+    await user.click(cardA3);
+    await user.keyboard('{/Control}');
     await expect(readout.textContent).toBe('a-1,a-3');
 
     // toggling a-1 off
-    await userEvent.keyboard('{Control>}');
-    await userEvent.click(cardA1);
-    await userEvent.keyboard('{/Control}');
+    await user.keyboard('{Control>}');
+    await user.click(cardA1);
+    await user.keyboard('{/Control}');
     await expect(readout.textContent).toBe('a-3');
   },
 };
@@ -109,15 +113,16 @@ export const ShiftClickSelectsRange: Story = {
     moduleMetadata: { imports: [StoryKanbanTestsShell] },
   }),
   play: async ({ canvasElement }) => {
+    const user = userEvent.setup();
     const canvas = within(canvasElement);
     const cardA1 = await canvas.findByTestId('card-a-1');
     const cardA4 = await canvas.findByTestId('card-a-4');
     const readout = await canvas.findByTestId('selection-readout');
 
-    await userEvent.click(cardA1);
-    await userEvent.keyboard('{Shift>}');
-    await userEvent.click(cardA4);
-    await userEvent.keyboard('{/Shift}');
+    await user.click(cardA1);
+    await user.keyboard('{Shift>}');
+    await user.click(cardA4);
+    await user.keyboard('{/Shift}');
     await expect(readout.textContent).toBe('a-1,a-2,a-3,a-4');
   },
 };
@@ -128,15 +133,16 @@ export const ShiftClickCrossLaneFallsBackToSingle: Story = {
     moduleMetadata: { imports: [StoryKanbanTestsShell] },
   }),
   play: async ({ canvasElement }) => {
+    const user = userEvent.setup();
     const canvas = within(canvasElement);
     const cardA1 = await canvas.findByTestId('card-a-1');
     const cardB2 = await canvas.findByTestId('card-b-2');
     const readout = await canvas.findByTestId('selection-readout');
 
-    await userEvent.click(cardA1);
-    await userEvent.keyboard('{Shift>}');
-    await userEvent.click(cardB2);
-    await userEvent.keyboard('{/Shift}');
+    await user.click(cardA1);
+    await user.keyboard('{Shift>}');
+    await user.click(cardB2);
+    await user.keyboard('{/Shift}');
     // anchor in lane-a, shift-click in lane-b → falls back to single-select on the clicked card
     await expect(readout.textContent).toBe('b-2');
   },

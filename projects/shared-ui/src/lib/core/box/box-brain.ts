@@ -48,7 +48,15 @@ export class BoxBrainDirective implements OnInit, OnDestroy {
   public readonly clicked = outputFromObservable(this._clicked$);
 
   /** whether the host should render as an interactive button (auto-detected, or forced by a wrapper) */
-  public readonly isClickable = computed<boolean>(() => this._clicked$.observed || this._externallyClickable());
+  public readonly isClickable = computed<boolean>(() => {
+    // read both eagerly so `_externallyClickable` is always registered as a signal dependency — short-circuit
+    // evaluation on `||` would otherwise skip the signal read when `_clicked$.observed` is true, leaving the
+    // computed unable to invalidate when a wrapper (e.g. card) later flips externally-clickable back off.
+    const observed = this._clicked$.observed;
+    const externallyClickable = this._externallyClickable();
+
+    return observed || externallyClickable;
+  });
 
   /** whether the host is currently being pressed by mouse or keyboard activation */
   public readonly isPressed = computed<boolean>(() => this._state().isPressed);
