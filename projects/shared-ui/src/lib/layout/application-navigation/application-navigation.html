@@ -1,5 +1,5 @@
 <div class="organization-section">
-  <org-list>
+  <org-list selectMode="single">
     @if (collapsed()) {
       <org-tooltip placement="right">
         @if (hasSelectableOrganizations()) {
@@ -54,7 +54,7 @@
 <div class="main-section">
   <!-- nav items -->
   <nav aria-label="Main navigation" class="nav">
-    <org-list class="whitespace-nowrap">
+    <org-list selectMode="single" class="whitespace-nowrap">
       <!-- ungrouped items always render first -->
       @for (item of navigationItems(); track item.id) {
         <org-application-navigation-item [item]="item" />
@@ -84,7 +84,7 @@
               [attr.aria-hidden]="isGroupExpanded(group.id) ? null : 'true'"
             >
               <div class="nav-group-list" role="presentation">
-                <org-list>
+                <org-list selectMode="single">
                   @for (item of group.items; track item.id) {
                     <org-application-navigation-item [item]="item" />
                   }
@@ -111,7 +111,7 @@
 
 <!-- settings -->
 <div class="settings-section">
-  <org-list>
+  <org-list selectMode="single">
     @if (collapsed()) {
       <org-tooltip placement="right">
         <org-list-item

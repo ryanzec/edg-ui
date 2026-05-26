@@ -9,7 +9,7 @@
   --list-item-padding-block: var(--spacing-2);
   --list-item-padding-inline: var(--spacing-2_5);
   --list-item-font-size: var(--font-size-lg);
-  --list-item-radius: var(--radius-base);
+  --list-item-radius: var(--radius-sm);
   --list-item-min-height: 40px;
 
   /* list-item: state colors */

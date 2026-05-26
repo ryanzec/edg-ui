@@ -42,7 +42,7 @@
         [attr.aria-hidden]="isExpanded() ? null : 'true'"
       >
         <div class="nav-sub-list" role="presentation">
-          <org-list>
+          <org-list selectMode="single">
             @for (subItem of item().children; track subItem.id) {
               <org-list-item
                 asTag="a"
