@@ -1,6 +1,6 @@
 ---
 name: designer
-description: Use this skill whenever a prompt involves changing the visual appearance, styling, or user experience of a component — including but not limited to colors, spacing, sizing, typography, layout, design tokens, CSS variables, dark mode, animations, transitions, hover/focus/active states, accessibility-driven visual cues, and overall UX behavior (interaction patterns, affordances, feedback, perceived responsiveness, information hierarchy). Trigger phrasings include "style", "restyle", "match this design", "design reference", "screenshot/image reference", "Figma", "tweak the look", "adjust spacing/color/sizing/typography", "update the visual design", "make it look like…", "improve the UX", "this feels off", "the interaction is awkward", "redesign", and similar. Does NOT cover component API/input changes (see component-development) or Storybook story authoring (see storybook) — even though a visual change may incidentally require updates in those areas, those skills handle their own triggers.
+description: Use this skill whenever you are tasked to work on a component or directive that might effect the design of a component or directive.
 ---
 # Designer Skill
 

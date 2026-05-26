@@ -1,0 +1,92 @@
+@if (hasChildren()) {
+  @if (isCollapsed()) {
+    <org-tooltip placement="right">
+      <org-list-item
+        [orgOverlayMenuTrigger]="subMenu"
+        overlayMenuTriggerPosition="after"
+        asTag="button"
+        [label]="item().label"
+        [hideLabel]="true"
+        [forceClickable]="true"
+      >
+        <org-list-item-icon pre [name]="item().icon" />
+      </org-list-item>
+      <ng-template #tooltipContent>
+        <org-tooltip-content>
+          {{ item().label }}
+          @if (item().shortcut; as shortcut) {
+            <org-kbd>{{ shortcut }}</org-kbd>
+          }
+        </org-tooltip-content>
+      </ng-template>
+    </org-tooltip>
+    <ng-template #subMenu>
+      <org-overlay-menu
+        [header]="item().label"
+        [items]="subMenuItems()"
+        (itemClicked)="onSubMenuItemTriggered($event)"
+      />
+    </ng-template>
+  } @else {
+    <div class="nav-group" role="presentation" [attr.data-open]="isExpanded() ? '' : null">
+      <org-list-item asTag="button" [label]="item().label" [forceClickable]="true" (clicked)="onToggleExpanded()">
+        <org-list-item-icon pre [name]="item().icon" />
+        @if (item().indicator !== undefined) {
+          <org-indicator post color="neutral" size="sm" [number]="item().indicator!" />
+        }
+        <org-icon post class="nav-group-chevron" name="chevron-right" />
+      </org-list-item>
+      <div
+        class="nav-sub-list-wrapper"
+        [attr.inert]="isExpanded() ? null : ''"
+        [attr.aria-hidden]="isExpanded() ? null : 'true'"
+      >
+        <div class="nav-sub-list" role="presentation">
+          <org-list>
+            @for (subItem of item().children; track subItem.id) {
+              <org-list-item
+                asTag="a"
+                [routerLink]="subItem.routePath"
+                [label]="subItem.label"
+                (clicked)="onSubItemClick(subItem)"
+              >
+                @if (subItem.indicator !== undefined) {
+                  <org-indicator post color="neutral" size="sm" [number]="subItem.indicator" />
+                }
+              </org-list-item>
+            }
+          </org-list>
+        </div>
+      </div>
+    </div>
+  }
+} @else if (item().routePath) {
+  @if (isCollapsed()) {
+    <org-tooltip placement="right">
+      <org-list-item
+        asTag="a"
+        [routerLink]="item().routePath"
+        [label]="item().label"
+        [hideLabel]="true"
+        (clicked)="onItemClick()"
+      >
+        <org-list-item-icon pre [name]="item().icon" />
+      </org-list-item>
+      <ng-template #tooltipContent>
+        <org-tooltip-content>
+          {{ item().label }}
+          @if (item().shortcut; as shortcut) {
+            <org-kbd>{{ shortcut }}</org-kbd>
+          }
+        </org-tooltip-content>
+      </ng-template>
+    </org-tooltip>
+  } @else {
+    <org-list-item asTag="a" [routerLink]="item().routePath" [label]="item().label" (clicked)="onItemClick()">
+      <org-list-item-icon pre [name]="item().icon" />
+      @if (item().indicator !== undefined) {
+        <org-indicator post color="neutral" size="sm" [number]="item().indicator!" />
+      }
+    </org-list-item>
+  }
+}

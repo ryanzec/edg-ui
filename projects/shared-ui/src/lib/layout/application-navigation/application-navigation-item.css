@@ -1,0 +1,53 @@
+@layer components {
+  /* expandable item-with-children */
+  .nav-group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .nav-group-chevron {
+    color: var(--color-fg-muted);
+    transition: transform var(--application-navigation-nav-sub-list-transition-duration)
+      var(--application-navigation-nav-sub-list-transition-easing);
+  }
+
+  .nav-group[data-open] .nav-group-chevron {
+    transform: rotate(90deg);
+  }
+
+  .nav-sub-list-wrapper {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows var(--application-navigation-nav-sub-list-transition-duration)
+      var(--application-navigation-nav-sub-list-transition-easing);
+  }
+
+  .nav-group[data-open] .nav-sub-list-wrapper {
+    grid-template-rows: 1fr;
+  }
+
+  .nav-sub-list {
+    position: relative;
+    min-height: 0;
+    overflow: hidden;
+    padding-left: var(--spacing-5);
+  }
+
+  /* vertical guide rail to the left of nested sub-items */
+  .nav-sub-list::before {
+    content: '';
+    position: absolute;
+    top: var(--spacing-1);
+    bottom: var(--spacing-1);
+    left: var(--spacing-3);
+    width: var(--border-width);
+    background-color: var(--color-border);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nav-sub-list-wrapper,
+    .nav-group-chevron {
+      transition: none;
+    }
+  }
+}

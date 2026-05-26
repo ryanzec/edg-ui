@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/angular';
 import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
 import {
   ApplicationNavigation,
+  type NavigationGroup,
   type NavigationItem,
   type SettingsMenuItem,
   type Theme,
@@ -85,6 +86,74 @@ const defaultNavigationItems: NavigationItem[] = [
   { id: 'billing', label: 'Billing', icon: 'credit-card', routePath: '/billing' },
 ];
 
+const referenceUngroupedItems: NavigationItem[] = [
+  { id: 'overview', label: 'Overview', icon: 'house', routePath: '/overview' },
+  { id: 'inbox', label: 'Inbox', icon: 'inbox', routePath: '/inbox', indicator: 3 },
+];
+
+const referenceGroupedNavigationItems: NavigationGroup[] = [
+  {
+    id: 'workspace',
+    header: 'Workspace',
+    items: [
+      {
+        id: 'projects',
+        label: 'Projects',
+        icon: 'folder',
+        children: [
+          { id: 'projects-all', label: 'All projects', routePath: '/projects' },
+          { id: 'projects-active', label: 'Active', routePath: '/projects/active' },
+        ],
+      },
+      { id: 'analytics', label: 'Analytics', icon: 'grid-2x2', routePath: '/analytics' },
+      { id: 'team', label: 'Team', icon: 'users', routePath: '/team' },
+      { id: 'kanban', label: 'Kanban', icon: 'rows-3', routePath: '/kanban' },
+    ],
+  },
+  {
+    id: 'customer-pipeline',
+    header: 'Customer Pipeline',
+    defaultExpanded: false,
+    items: [
+      { id: 'pipeline-leads', label: 'Leads', icon: 'users', routePath: '/pipeline/leads' },
+      { id: 'pipeline-deals', label: 'Deals', icon: 'briefcase', routePath: '/pipeline/deals' },
+    ],
+  },
+  {
+    id: 'reports',
+    header: 'Reports',
+    items: [
+      { id: 'reports-daily', label: 'Daily metrics', icon: 'clock', routePath: '/reports/daily' },
+      { id: 'reports-weekly', label: 'Weekly digest', icon: 'calendar', routePath: '/reports/weekly' },
+      {
+        id: 'reports-quarterly',
+        label: 'Quarterly business review',
+        icon: 'briefcase',
+        routePath: '/reports/quarterly',
+      },
+    ],
+  },
+  {
+    id: 'integrations',
+    header: 'Integrations',
+    items: [
+      { id: 'integrations-github', label: 'GitHub', icon: 'code', routePath: '/integrations/github' },
+      { id: 'integrations-slack', label: 'Slack', icon: 'message-square', routePath: '/integrations/slack' },
+      { id: 'integrations-linear', label: 'Linear', icon: 'square', routePath: '/integrations/linear' },
+      { id: 'integrations-figma', label: 'Figma', icon: 'palette', routePath: '/integrations/figma' },
+    ],
+  },
+  {
+    id: 'admin',
+    header: 'Admin',
+    items: [
+      { id: 'admin-billing', label: 'Billing', icon: 'credit-card', routePath: '/admin/billing' },
+      { id: 'admin-permissions', label: 'Permissions', icon: 'shield', routePath: '/admin/permissions' },
+      { id: 'admin-audit', label: 'Audit log', icon: 'file-text', routePath: '/admin/audit' },
+    ],
+  },
+];
+
 const defaultSettingsItems: SettingsMenuItem[] = [
   { id: 'workspace-settings', label: 'Workspace settings', icon: 'cog', shortcut: '⌘,' },
   { id: 'account', label: 'Account', icon: 'at-sign' },
@@ -129,6 +198,7 @@ const settingsItemsWithDivider: SettingsMenuItem[] = [
         workspaceName="Halcyon"
         workspacePlan="Acme Inc · Pro"
         [navigationItems]="navigationItems"
+        [groupedNavigationItems]="groupedNavigationItems"
         [settingsMenuItems]="settingsItems"
         [collapsed]="collapsed()"
         (collapsedChange)="collapsed.set($event)"
@@ -148,7 +218,8 @@ const settingsItemsWithDivider: SettingsMenuItem[] = [
   `,
 })
 class ApplicationNavigationHostStory {
-  protected readonly navigationItems = defaultNavigationItems;
+  protected readonly navigationItems = referenceUngroupedItems;
+  protected readonly groupedNavigationItems = referenceGroupedNavigationItems;
   protected readonly settingsItems = defaultSettingsItems;
   protected readonly collapsed = signal<boolean>(false);
   protected readonly theme = signal<Theme | undefined>('dark');
@@ -285,6 +356,73 @@ export const CollapseExpandComparison: Story = {
     `,
     props: {
       navigationItems: defaultNavigationItems,
+      settingsItems: defaultSettingsItems,
+    },
+    moduleMetadata: {
+      imports: [ApplicationNavigation, StorybookExampleContainer, StorybookExampleContainerSection],
+    },
+  }),
+};
+
+export const GroupedNavigation: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Demonstrates `groupedNavigationItems`. Ungrouped items render first; each group renders below with a clickable uppercase section header and a chevron that toggles inline expansion. Groups default to expanded unless `defaultExpanded: false` is set.',
+      },
+    },
+  },
+  render: () => ({
+    template: `
+      <org-storybook-example-container
+        title="Grouped Navigation Items"
+        currentState="Ungrouped items + multiple expandable section groups"
+      >
+        <org-storybook-example-container-section label="All groups expanded by default">
+          <div style="height: 40rem; display: flex;">
+            <org-application-navigation
+              workspaceIconLabel="H"
+              workspaceName="Halcyon"
+              [navigationItems]="ungroupedItems"
+              [groupedNavigationItems]="groupedItems"
+              [settingsMenuItems]="settingsItems"
+              userName="Maya Brennan"
+              userEmail="maya@acme.co"
+              userStatusColor="safe"
+              theme="dark"
+            />
+          </div>
+        </org-storybook-example-container-section>
+
+        <org-storybook-example-container-section label="Collapsed sidebar (group headers hidden, items render flat)">
+          <div style="height: 40rem; display: flex;">
+            <org-application-navigation
+              workspaceIconLabel="H"
+              workspaceName="Halcyon"
+              [navigationItems]="ungroupedItems"
+              [groupedNavigationItems]="groupedItems"
+              [settingsMenuItems]="settingsItems"
+              userName="Maya Brennan"
+              userStatusColor="safe"
+              theme="dark"
+              [collapsed]="true"
+            />
+          </div>
+        </org-storybook-example-container-section>
+
+        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+          <li>Ungrouped items (Overview, Inbox) render before any group</li>
+          <li>Each group header is clickable and toggles its items via an animated grid-row reveal</li>
+          <li>Customer Pipeline starts collapsed because the group declares <code>defaultExpanded: false</code></li>
+          <li>Items inside a group with nested children (e.g. Projects) keep their own expand/collapse chevron</li>
+          <li>When the sidebar collapses, group headers hide and grouped items render flat alongside ungrouped icons with tooltips</li>
+        </ul>
+      </org-storybook-example-container>
+    `,
+    props: {
+      ungroupedItems: referenceUngroupedItems,
+      groupedItems: referenceGroupedNavigationItems,
       settingsItems: defaultSettingsItems,
     },
     moduleMetadata: {

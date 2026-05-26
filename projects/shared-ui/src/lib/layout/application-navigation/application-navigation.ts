@@ -1,10 +1,20 @@
-import { Component, ChangeDetectionStrategy, computed, input, model, output, signal } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  computed,
+  effect,
+  input,
+  model,
+  output,
+  signal,
+  untracked,
+} from '@angular/core';
+import { logManager } from '@organization/shared-utils';
 import { type IconName } from '../../core/icon/icon-brain';
 import { type ComponentColor } from '../../core/types/component-types';
 import { Avatar } from '../../core/avatar/avatar';
+import { ApplicationNavigationItem } from './application-navigation-item';
 import { Icon } from '../../core/icon/icon';
-import { Indicator } from '../../core/indicator/indicator';
-import { Kbd } from '../../core/kbd/kbd';
 import { List } from '../../core/list/list';
 import { ListItem } from '../../core/list/list-item';
 import { ListItemIcon } from '../../core/list/list-item-icon';
@@ -17,7 +27,6 @@ import {
 import { OverlayMenuTriggerDirective } from '../../core/overlay-menu/overlay-menu-trigger';
 import { Tooltip } from '../../core/tooltip/tooltip';
 import { TooltipContent } from '../../core/tooltip/tooltip-content';
-import { RouterLink } from '@angular/router';
 
 /** all available theme values */
 export const allThemes = ['light', 'dark', 'system'] as const;
@@ -55,6 +64,18 @@ export type NavigationItem = {
   children?: NavigationSubItem[];
 };
 
+/** a named group of navigation items rendered below the ungrouped items with a collapsible header */
+export type NavigationGroup = {
+  /** unique id used for tracking the group's expanded state (must not collide with item ids) */
+  id: string;
+  /** the visible header label rendered above the group's items (styled as an uppercase section label) */
+  header: string;
+  /** the navigation items rendered inside the group when expanded */
+  items: NavigationItem[];
+  /** whether the group starts expanded; defaults to `true` when omitted */
+  defaultExpanded?: boolean;
+};
+
 /** an item or divider passed to the settings overlay menu; `itemClicked` only emits clickable item entries */
 export type SettingsMenuItem = OverlayMenuItem;
 
@@ -72,6 +93,9 @@ export const APPLICATION_NAVIGATION_WORKSPACE_PLAN_DEFAULT: string | undefined =
 
 /** default value for the navigationItems input */
 export const APPLICATION_NAVIGATION_NAVIGATION_ITEMS_DEFAULT: NavigationItem[] = [];
+
+/** default value for the groupedNavigationItems input */
+export const APPLICATION_NAVIGATION_GROUPED_NAVIGATION_ITEMS_DEFAULT: NavigationGroup[] = [];
 
 /** default value for the settingsMenuItems input */
 export const APPLICATION_NAVIGATION_SETTINGS_MENU_ITEMS_DEFAULT: SettingsMenuItem[] = [];
@@ -101,16 +125,14 @@ const APPEARANCE_ENTRY_ID = 'appearance';
   selector: 'org-application-navigation',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
+    ApplicationNavigationItem,
     Avatar,
     Icon,
-    Indicator,
-    Kbd,
     List,
     ListItem,
     ListItemIcon,
     OverlayMenu,
     OverlayMenuTriggerDirective,
-    RouterLink,
     Tooltip,
     TooltipContent,
   ],
@@ -133,8 +155,11 @@ export class ApplicationNavigation {
   /** optional plan / subtitle rendered under the workspace name (e.g. "Acme Inc · Pro") */
   public workspacePlan = input<string | undefined>(APPLICATION_NAVIGATION_WORKSPACE_PLAN_DEFAULT);
 
-  /** list of navigation items to display in the sidebar */
+  /** list of navigation items to display in the sidebar; always rendered before grouped items */
   public navigationItems = input<NavigationItem[]>(APPLICATION_NAVIGATION_NAVIGATION_ITEMS_DEFAULT);
+
+  /** list of grouped navigation items; each group renders a collapsible header followed by its items, after the ungrouped items */
+  public groupedNavigationItems = input<NavigationGroup[]>(APPLICATION_NAVIGATION_GROUPED_NAVIGATION_ITEMS_DEFAULT);
 
   /** list of items to display in the settings overlay menu (in addition to the appearance toggle) */
   public settingsMenuItems = input<SettingsMenuItem[]>(APPLICATION_NAVIGATION_SETTINGS_MENU_ITEMS_DEFAULT);
@@ -172,8 +197,16 @@ export class ApplicationNavigation {
   /** emits when the logout button is clicked */
   public logout = output<void>();
 
-  /** tracks which expandable navigation groups are currently expanded by id */
+  /** tracks which expandable navigation groups (item-with-children and section groups) are currently expanded by id */
   private readonly _expandedGroupIds = signal<ReadonlySet<string>>(new Set<string>());
+
+  /** ids of section groups that have already been seeded into _expandedGroupIds — prevents user toggles from being overwritten on subsequent input changes */
+  private readonly _seenSectionGroupIds = new Set<string>();
+
+  /** the section groups that should be rendered — filters out groups whose `items` are empty (these emit a logManager warning via the seeding effect) */
+  protected readonly visibleGroups = computed<NavigationGroup[]>(() =>
+    this.groupedNavigationItems().filter((group) => group.items.length > 0)
+  );
 
   /** the icon name used for the collapse / expand toggle button */
   protected readonly toggleIconName = computed<IconName>(() => (this.collapsed() ? 'chevron-right' : 'chevron-left'));
@@ -213,8 +246,62 @@ export class ApplicationNavigation {
   /** whether the appearance section is shown in the settings overlay menu */
   protected readonly hasAppearance = computed<boolean>(() => this.theme() !== undefined);
 
+  constructor() {
+    /**
+     * seeds the expanded set for newly-seen section groups based on their `defaultExpanded` value
+     * (treating omitted as `true`) and warns about any group with no items. only seeds once per group id
+     * so a subsequent input change does not overwrite a user's toggle. writes are wrapped in `untracked`
+     * so the effect does not re-fire on its own signal update.
+     */
+    effect(() => {
+      const groups = this.groupedNavigationItems();
+
+      untracked(() => {
+        const newlyExpandedIds: string[] = [];
+
+        for (const group of groups) {
+          if (group.items.length === 0) {
+            logManager.warn({
+              type: 'application-navigation-empty-group',
+              message: `navigation group "${group.id}" has no items and will not be rendered`,
+              groupId: group.id,
+            });
+
+            continue;
+          }
+
+          if (this._seenSectionGroupIds.has(group.id)) {
+            continue;
+          }
+
+          this._seenSectionGroupIds.add(group.id);
+
+          if (group.defaultExpanded === false) {
+            continue;
+          }
+
+          newlyExpandedIds.push(group.id);
+        }
+
+        if (newlyExpandedIds.length === 0) {
+          return;
+        }
+
+        this._expandedGroupIds.update((current) => {
+          const next = new Set(current);
+
+          for (const id of newlyExpandedIds) {
+            next.add(id);
+          }
+
+          return next;
+        });
+      });
+    });
+  }
+
   /** maps a sub-item list into the overlay menu item entry shape used for collapsed-state nested menus */
-  protected toSubMenuItems(subItems: NavigationSubItem[]): OverlayMenuItem[] {
+  public toSubMenuItems(subItems: NavigationSubItem[]): OverlayMenuItem[] {
     return subItems.map((subItem) => ({
       id: subItem.id,
       label: subItem.label,
@@ -224,8 +311,8 @@ export class ApplicationNavigation {
     }));
   }
 
-  /** returns whether the group with the given id is expanded */
-  protected isGroupExpanded(id: string): boolean {
+  /** returns whether the group / item-with-children with the given id is expanded */
+  public isGroupExpanded(id: string): boolean {
     return this._expandedGroupIds().has(id);
   }
 
@@ -233,15 +320,18 @@ export class ApplicationNavigation {
     this.workspaceClicked.emit();
   }
 
-  protected onNavigationItemClick(item: NavigationItem): void {
+  /** invoked by the navigation item sub-component when a plain item is clicked */
+  public onNavigationItemClick(item: NavigationItem): void {
     this.navigationItemClicked.emit(item);
   }
 
-  protected onSubNavigationItemClick(subItem: NavigationSubItem): void {
+  /** invoked by the navigation item sub-component when a nested sub-item is clicked */
+  public onSubNavigationItemClick(subItem: NavigationSubItem): void {
     this.subNavigationItemClicked.emit(subItem);
   }
 
-  protected onGroupToggle(id: string): void {
+  /** toggles the expanded state for the given group / item-with-children id */
+  public onGroupToggle(id: string): void {
     this._expandedGroupIds.update((current) => {
       const next = new Set(current);
 
@@ -257,7 +347,8 @@ export class ApplicationNavigation {
     });
   }
 
-  protected onSubMenuItemTriggered(item: OverlayMenuItemEntry): void {
+  /** invoked by the navigation item sub-component when the collapsed-state overlay menu emits a sub-item click */
+  public onSubMenuItemTriggered(item: OverlayMenuItemEntry): void {
     const subItem = item.meta as NavigationSubItem | undefined;
 
     if (!subItem) {

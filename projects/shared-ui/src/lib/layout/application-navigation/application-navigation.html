@@ -21,111 +21,44 @@
 
   <!-- nav items -->
   <nav aria-label="Main navigation" class="nav">
-    <org-list size="base" class="whitespace-nowrap">
+    <org-list class="whitespace-nowrap">
+      <!-- ungrouped items always render first -->
       @for (item of navigationItems(); track item.id) {
-        @if (item.children && item.children.length > 0) {
-          <!-- expandable group -->
-          @if (collapsed()) {
-            <org-tooltip placement="right">
-              <org-list-item
-                [orgOverlayMenuTrigger]="subMenu"
-                overlayMenuTriggerPosition="after"
-                asTag="button"
-                [label]="item.label"
-                [hideLabel]="true"
-                [forceClickable]="true"
-              >
-                <org-list-item-icon pre [name]="item.icon" />
-              </org-list-item>
-              <ng-template #tooltipContent>
-                <org-tooltip-content>
-                  {{ item.label }}
-                  @if (item.shortcut; as shortcut) {
-                    <org-kbd>{{ shortcut }}</org-kbd>
+        <org-application-navigation-item [item]="item" />
+      }
+
+      <!-- section groups render after the ungrouped items -->
+      @for (group of visibleGroups(); track group.id) {
+        @if (collapsed()) {
+          <!-- collapsed sidebar hides group headers; render items flat in original order -->
+          @for (item of group.items; track item.id) {
+            <org-application-navigation-item [item]="item" />
+          }
+        } @else {
+          <div class="nav-group-section" [attr.data-open]="isGroupExpanded(group.id) ? '' : null">
+            <button
+              type="button"
+              class="nav-group-header"
+              [attr.aria-expanded]="isGroupExpanded(group.id)"
+              (click)="onGroupToggle(group.id)"
+            >
+              <span class="nav-group-header-label">{{ group.header }}</span>
+              <org-icon class="nav-group-chevron" name="chevron-right" />
+            </button>
+            <div
+              class="nav-group-list-wrapper"
+              [attr.inert]="isGroupExpanded(group.id) ? null : ''"
+              [attr.aria-hidden]="isGroupExpanded(group.id) ? null : 'true'"
+            >
+              <div class="nav-group-list" role="presentation">
+                <org-list>
+                  @for (item of group.items; track item.id) {
+                    <org-application-navigation-item [item]="item" />
                   }
-                </org-tooltip-content>
-              </ng-template>
-            </org-tooltip>
-            <ng-template #subMenu>
-              <org-overlay-menu
-                [header]="item.label"
-                [items]="toSubMenuItems(item.children)"
-                (itemClicked)="onSubMenuItemTriggered($event)"
-              />
-            </ng-template>
-          } @else {
-            <div class="nav-group" role="presentation" [attr.data-open]="isGroupExpanded(item.id) ? '' : null">
-              <org-list-item
-                asTag="button"
-                [label]="item.label"
-                [forceClickable]="true"
-                (clicked)="onGroupToggle(item.id)"
-              >
-                <org-list-item-icon pre [name]="item.icon" />
-                @if (item.indicator !== undefined) {
-                  <org-indicator post color="neutral" size="sm" [number]="item.indicator" />
-                }
-                <org-icon post class="nav-group-chevron" name="chevron-right" />
-              </org-list-item>
-              <div
-                class="nav-sub-list-wrapper"
-                [attr.inert]="isGroupExpanded(item.id) ? null : ''"
-                [attr.aria-hidden]="isGroupExpanded(item.id) ? null : 'true'"
-              >
-                <div class="nav-sub-list" role="presentation">
-                  <org-list>
-                    @for (subItem of item.children; track subItem.id) {
-                      <org-list-item
-                        asTag="a"
-                        [routerLink]="subItem.routePath"
-                        [label]="subItem.label"
-                        (clicked)="onSubNavigationItemClick(subItem)"
-                      >
-                        @if (subItem.indicator !== undefined) {
-                          <org-indicator post color="neutral" size="sm" [number]="subItem.indicator" />
-                        }
-                      </org-list-item>
-                    }
-                  </org-list>
-                </div>
+                </org-list>
               </div>
             </div>
-          }
-        } @else if (item.routePath) {
-          <!-- plain item -->
-          @if (collapsed()) {
-            <org-tooltip placement="right">
-              <org-list-item
-                asTag="a"
-                [routerLink]="item.routePath"
-                [label]="item.label"
-                [hideLabel]="true"
-                (clicked)="onNavigationItemClick(item)"
-              >
-                <org-list-item-icon pre [name]="item.icon" />
-              </org-list-item>
-              <ng-template #tooltipContent>
-                <org-tooltip-content>
-                  {{ item.label }}
-                  @if (item.shortcut; as shortcut) {
-                    <org-kbd>{{ shortcut }}</org-kbd>
-                  }
-                </org-tooltip-content>
-              </ng-template>
-            </org-tooltip>
-          } @else {
-            <org-list-item
-              asTag="a"
-              [routerLink]="item.routePath"
-              [label]="item.label"
-              (clicked)="onNavigationItemClick(item)"
-            >
-              <org-list-item-icon pre [name]="item.icon" />
-              @if (item.indicator !== undefined) {
-                <org-indicator post color="neutral" size="sm" [number]="item.indicator" />
-              }
-            </org-list-item>
-          }
+          </div>
         }
       }
     </org-list>

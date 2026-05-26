@@ -1,5 +1,9 @@
 import { Injectable, computed, signal } from '@angular/core';
-import { type NavigationItem, type SettingsMenuItem } from '../application-navigation/application-navigation';
+import {
+  type NavigationGroup,
+  type NavigationItem,
+  type SettingsMenuItem,
+} from '../application-navigation/application-navigation';
 import { type ComponentColor } from '../../core/types/component-types';
 
 /** unified internal state shape for the layout store */
@@ -8,6 +12,7 @@ type LayoutState = {
   workspaceName: string;
   workspacePlan: string | undefined;
   navigationItems: NavigationItem[];
+  groupedNavigationItems: NavigationGroup[];
   settingsMenuItems: SettingsMenuItem[];
   userName: string;
   userEmail: string | undefined;
@@ -15,26 +20,42 @@ type LayoutState = {
   collapsed: boolean;
 };
 
-/** hardcoded navigation items rendered in the application sidebar */
+/** ungrouped navigation items rendered above any section groups */
 const NAVIGATION_ITEMS: NavigationItem[] = [
   { id: 'overview', label: 'Overview', icon: 'house', routePath: '/overview', shortcut: 'G O' },
   { id: 'inbox', label: 'Inbox', icon: 'inbox', routePath: '/inbox', indicator: 3, shortcut: 'G I' },
+];
+
+/** grouped navigation items rendered below the ungrouped items, each with a collapsible header */
+const GROUPED_NAVIGATION_ITEMS: NavigationGroup[] = [
   {
-    id: 'projects',
-    label: 'Projects',
-    icon: 'folder',
-    shortcut: 'G P',
-    children: [
-      { id: 'projects-all', label: 'All projects', routePath: '/projects' },
-      { id: 'projects-active', label: 'Active', routePath: '/projects/active', indicator: 12 },
-      { id: 'projects-archived', label: 'Archived', routePath: '/projects/archived' },
-      { id: 'projects-templates', label: 'Templates', routePath: '/projects/templates' },
+    id: 'test-1',
+    header: 'Test 1',
+    items: [
+      {
+        id: 'projects',
+        label: 'Projects',
+        icon: 'folder',
+        shortcut: 'G P',
+        children: [
+          { id: 'projects-all', label: 'All projects', routePath: '/projects' },
+          { id: 'projects-active', label: 'Active', routePath: '/projects/active', indicator: 12 },
+          { id: 'projects-archived', label: 'Archived', routePath: '/projects/archived' },
+          { id: 'projects-templates', label: 'Templates', routePath: '/projects/templates' },
+        ],
+      },
+      { id: 'analytics', label: 'Analytics', icon: 'grid-2x2', routePath: '/analytics' },
     ],
   },
-  { id: 'analytics', label: 'Analytics', icon: 'grid-2x2', routePath: '/analytics' },
-  { id: 'team', label: 'Team', icon: 'users', routePath: '/demo/users' },
-  { id: 'kanban', label: 'Kanban', icon: 'file-text', routePath: '/demo/kanban' },
-  { id: 'ticket-details', label: 'Ticket Details', icon: 'credit-card', routePath: '/demo/ticket-details' },
+  {
+    id: 'test-2',
+    header: 'Test 2',
+    items: [
+      { id: 'team', label: 'Team', icon: 'users', routePath: '/demo/users' },
+      { id: 'kanban', label: 'Kanban', icon: 'file-text', routePath: '/demo/kanban' },
+      { id: 'ticket-details', label: 'Ticket Details', icon: 'credit-card', routePath: '/demo/ticket-details' },
+    ],
+  },
 ];
 
 /** hardcoded settings overlay menu items rendered alongside the appearance toggle */
@@ -53,6 +74,7 @@ const INITIAL_STATE: LayoutState = {
   workspaceName: 'Halcyon',
   workspacePlan: 'Acme Inc · Pro',
   navigationItems: NAVIGATION_ITEMS,
+  groupedNavigationItems: GROUPED_NAVIGATION_ITEMS,
   settingsMenuItems: SETTINGS_MENU_ITEMS,
   userName: 'Maya Brennan',
   userEmail: 'maya@acme.co',
@@ -78,8 +100,11 @@ export class LayoutStore {
   /** the workspace plan / subtitle rendered under the workspace name */
   public readonly workspacePlan = computed<string | undefined>(() => this._state().workspacePlan);
 
-  /** top-level navigation items rendered in the sidebar */
+  /** ungrouped top-level navigation items rendered in the sidebar above any section groups */
   public readonly navigationItems = computed<NavigationItem[]>(() => this._state().navigationItems);
+
+  /** grouped navigation items rendered below the ungrouped items, each as a collapsible section */
+  public readonly groupedNavigationItems = computed<NavigationGroup[]>(() => this._state().groupedNavigationItems);
 
   /** settings overlay menu items rendered alongside the appearance toggle */
   public readonly settingsMenuItems = computed<SettingsMenuItem[]>(() => this._state().settingsMenuItems);
