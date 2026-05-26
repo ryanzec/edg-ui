@@ -32,9 +32,15 @@
       </button>
     }
     @default {
-      <div class="list-item-content">
-        <ng-container [ngTemplateOutlet]="contentTemplate" />
-      </div>
+      @if (brain.hasClickObserver()) {
+        <button type="button" class="list-item-content" (click)="onClick($event)">
+          <ng-container [ngTemplateOutlet]="contentTemplate" />
+        </button>
+      } @else {
+        <div class="list-item-content">
+          <ng-container [ngTemplateOutlet]="contentTemplate" />
+        </div>
+      }
     }
   }
 </li>

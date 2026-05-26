@@ -61,26 +61,13 @@ export const LINK_AFFORDANCE_DEFAULT = true;
  * headless brain directive for the link. owns href / target / rel / download / hreflang / referrerpolicy
  * navigation behavior, action-link mode (no href emits clicked), keyboard activation via enter / space, the
  * full accessibility surface (role, tabindex, data-disabled, aria-label), and the auto-injected post
- * affordance icon decision for external / download links. carries no styling — apply it to a native anchor
- * (or span when disabled) inside a presentation component.
+ * affordance icon decision for external / download links. carries no host bindings or styling — apply via
+ * hostDirectives on a presentation component and bind the effective* values to the appropriate inner
+ * element in that component's template.
  */
 @Directive({
-  selector: 'a[orgLinkBrain], span[orgLinkBrain]',
+  selector: '[orgLinkBrain]',
   exportAs: 'orgLinkBrain',
-  host: {
-    '[attr.href]': 'effectiveHref()',
-    '[attr.target]': 'effectiveTarget()',
-    '[attr.rel]': 'effectiveRel()',
-    '[attr.download]': 'effectiveDownload()',
-    '[attr.hreflang]': 'effectiveHreflang()',
-    '[attr.referrerpolicy]': 'effectiveReferrerPolicy()',
-    '[attr.aria-label]': 'ariaLabel() ?? null',
-    '[attr.data-disabled]': 'disabled() ? "1" : null',
-    '[attr.role]': 'effectiveRole()',
-    '[attr.tabindex]': 'effectiveTabindex()',
-    '(click)': 'click($event)',
-    '(keydown)': 'keydown($event)',
-  },
 })
 export class LinkBrainDirective {
   private readonly _clicked$ = new Subject<MouseEvent | KeyboardEvent>();
@@ -235,12 +222,10 @@ export class LinkBrainDirective {
     return undefined;
   });
 
-  /** handles anchor click; emits clicked when the host is acting as an action link and not disabled */
-  protected click(event: Event): void {
-    const mouseEvent = event as MouseEvent;
-
+  /** handles anchor click from the helm template; emits clicked when acting as an action link and not disabled */
+  public handleClick(event: MouseEvent): void {
     if (this.disabled()) {
-      mouseEvent.preventDefault();
+      event.preventDefault();
 
       return;
     }
@@ -249,13 +234,11 @@ export class LinkBrainDirective {
       return;
     }
 
-    this._clicked$.next(mouseEvent);
+    this._clicked$.next(event);
   }
 
-  /** handles keyboard activation of the action link via enter or space */
-  protected keydown(event: Event): void {
-    const keyboardEvent = event as KeyboardEvent;
-
+  /** handles keyboard activation of the action link via enter or space, invoked from the helm template */
+  public handleKeydown(event: KeyboardEvent): void {
     if (this.disabled()) {
       return;
     }
@@ -264,11 +247,11 @@ export class LinkBrainDirective {
       return;
     }
 
-    if (keyboardEvent.key !== 'Enter' && keyboardEvent.key !== ' ') {
+    if (event.key !== 'Enter' && event.key !== ' ') {
       return;
     }
 
-    keyboardEvent.preventDefault();
-    this._clicked$.next(keyboardEvent);
+    event.preventDefault();
+    this._clicked$.next(event);
   }
 }

@@ -1,4 +1,4 @@
-import { Directive, input, output } from '@angular/core';
+import { Directive, ElementRef, inject, input, output } from '@angular/core';
 import { CdkMenu } from '@angular/cdk/menu';
 import { type IconName } from '../icon/icon-brain';
 import { type ComponentColor } from '../types/component-types';
@@ -116,6 +116,7 @@ export const OVERLAY_MENU_HEADER_DEFAULT: string | undefined = undefined;
   hostDirectives: [CdkMenu],
   host: {
     '[attr.aria-label]': 'label()',
+    '(keydown)': '_handleKeydown($event)',
   },
 })
 export class OverlayMenuBrainDirective<
@@ -123,6 +124,8 @@ export class OverlayMenuBrainDirective<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TMeta = Record<string, any>,
 > {
+  private readonly _elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
+
   /** the accessible label announced by screen readers for the menu container */
   public readonly label = input<string>(OVERLAY_MENU_LABEL_DEFAULT);
 
@@ -146,5 +149,45 @@ export class OverlayMenuBrainDirective<
   /** emits a value-changed event for a `button-toggle` entry; called by the presentation on toggle change */
   public handleEntryValueChanged(entryId: string, value: string): void {
     this.entryValueChanged.emit({ entryId, value });
+  }
+
+  /**
+   * handles vertical keyboard navigation across the rendered menu items. cdk menu's own key manager
+   * cannot see items rendered in this component's view (its query is `@ContentChildren`), so the brain
+   * owns nav directly. `[role="menuitem"]:not([disabled])` excludes disabled items via the native
+   * `disabled` attribute the per-item brain forwards to the host button.
+   */
+  protected _handleKeydown(event: KeyboardEvent): void {
+    if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp' && event.key !== 'Home' && event.key !== 'End') {
+      return;
+    }
+
+    const items = Array.from(
+      this._elementRef.nativeElement.querySelectorAll<HTMLElement>('[role="menuitem"]:not([disabled])')
+    );
+
+    if (items.length === 0) {
+      return;
+    }
+
+    event.preventDefault();
+
+    const currentIndex = items.indexOf(document.activeElement as HTMLElement);
+    let nextIndex: number;
+
+    if (event.key === 'Home') {
+      nextIndex = 0;
+    } else if (event.key === 'End') {
+      nextIndex = items.length - 1;
+    } else if (currentIndex === -1) {
+      // no menu item currently focused — land on first for ArrowDown, last for ArrowUp
+      nextIndex = event.key === 'ArrowDown' ? 0 : items.length - 1;
+    } else if (event.key === 'ArrowDown') {
+      nextIndex = (currentIndex + 1) % items.length;
+    } else {
+      nextIndex = (currentIndex - 1 + items.length) % items.length;
+    }
+
+    items[nextIndex].focus();
   }
 }

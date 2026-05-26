@@ -1,33 +1,27 @@
-@if (disabled()) {
+@if (brain.disabled()) {
   <span
-    orgLinkBrain
     class="link"
-    [href]="href()"
-    [target]="target()"
-    [rel]="rel()"
-    [download]="download()"
-    [hreflang]="hreflang()"
-    [referrerPolicy]="referrerPolicy()"
-    [ariaLabel]="ariaLabel()"
-    [disabled]="disabled()"
-    [affordance]="affordance()"
+    [attr.aria-label]="brain.ariaLabel() ?? null"
+    [attr.data-disabled]="'1'"
+    [attr.role]="brain.effectiveRole()"
+    [attr.tabindex]="brain.effectiveTabindex()"
   >
     <ng-container [ngTemplateOutlet]="content" />
   </span>
 } @else {
   <a
-    orgLinkBrain
     class="link"
-    [href]="href()"
-    [target]="target()"
-    [rel]="rel()"
-    [download]="download()"
-    [hreflang]="hreflang()"
-    [referrerPolicy]="referrerPolicy()"
-    [ariaLabel]="ariaLabel()"
-    [disabled]="disabled()"
-    [affordance]="affordance()"
-    (clicked)="onBrainClicked($event)"
+    [attr.href]="brain.effectiveHref()"
+    [attr.target]="brain.effectiveTarget()"
+    [attr.rel]="brain.effectiveRel()"
+    [attr.download]="brain.effectiveDownload()"
+    [attr.hreflang]="brain.effectiveHreflang()"
+    [attr.referrerpolicy]="brain.effectiveReferrerPolicy()"
+    [attr.aria-label]="brain.ariaLabel() ?? null"
+    [attr.role]="brain.effectiveRole()"
+    [attr.tabindex]="brain.effectiveTabindex()"
+    (click)="brain.handleClick($event)"
+    (keydown)="brain.handleKeydown($event)"
   >
     <ng-container [ngTemplateOutlet]="content" />
   </a>

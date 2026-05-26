@@ -6,7 +6,7 @@ alwaysApply: true
 - **ALWAYS** following Angular 21 standards and best practices.
 - **ALWAYS** confirm when you intend to use a non-standard / discouraged pattern before implementing such a pattern
 - **ALWAYS** use a signal based approach over "popular" but old angular patterns.
-- **ALWAYS** use `projects/shared-ui/src/lib/core/local-storage-manager` for persistent local storage data
+- **ALWAYS** use the `localStorageManager` singleton from `projects/shared-utils/src/utils/local-storage-manager.ts` for persistent local storage data
 - **ALWAYS** prefer organizing writable state into as few unified signal objects (ideally 1 called `_state`) instead of a signal per piece of data.
 - **NEVER** use the following decorators: `@HostListener` / `@HostBinding`.
 - **ALWAYS** use the `logManager` singleton from `projects/shared-utils/src/utils/log-manager.ts` to log and use and object format with a minimim of a `type` like (**EXCEPT** form storkbook files which can use `console.log()` as needed):

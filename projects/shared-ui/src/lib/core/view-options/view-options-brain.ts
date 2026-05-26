@@ -28,7 +28,7 @@ export type ViewField = {
   enabled: boolean;
   /** optional icon shown to the left of the label; the row template renders a default icon when omitted */
   iconName?: IconName;
-  /** when true, the row shows a lock icon instead of a toggle, cannot be toggled, and cannot be picked up to drag */
+  /** when true, the row shows a lock icon instead of a toggle and its visibility cannot be changed; reorder is still allowed */
   locked?: boolean;
 };
 
@@ -132,27 +132,23 @@ export class ViewOptionsBrainDirective {
     this._commit(next);
   }
 
-  /** moves the field one position earlier in the order; no-op when the field is locked, missing, or already first */
+  /** moves the field one position earlier in the order; no-op when the field is missing or already first */
   public moveUp(name: string): void {
     this._moveByDelta(name, -1);
   }
 
-  /** moves the field one position later in the order; no-op when the field is locked, missing, or already last */
+  /** moves the field one position later in the order; no-op when the field is missing or already last */
   public moveDown(name: string): void {
     this._moveByDelta(name, 1);
   }
 
-  /** moves the field with `name` to a position computed from the target row + edge; no-op for locked sources */
+  /** moves the field with `name` to a position computed from the target row + edge; no-op when source or target is missing */
   public moveRelativeTo(name: string, targetName: string, edge: ViewOptionsFieldEdge): void {
     const current = this.fields();
     const sourceIndex = current.findIndex((field) => field.name === name);
     const targetIndex = current.findIndex((field) => field.name === targetName);
 
     if (sourceIndex === -1 || targetIndex === -1 || sourceIndex === targetIndex) {
-      return;
-    }
-
-    if (current[sourceIndex].locked) {
       return;
     }
 
@@ -181,10 +177,6 @@ export class ViewOptionsBrainDirective {
     const index = current.findIndex((field) => field.name === name);
 
     if (index === -1) {
-      return;
-    }
-
-    if (current[index].locked) {
       return;
     }
 

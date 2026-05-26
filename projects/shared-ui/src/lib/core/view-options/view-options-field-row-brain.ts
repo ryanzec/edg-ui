@@ -31,7 +31,6 @@ type ViewOptionsFieldRowBrainState = {
     '[attr.data-locked]': 'locked() ? "" : null',
     '[attr.data-being-dragged]': 'isBeingDragged() ? "" : null',
     '[attr.data-closest-edge]': 'closestEdge()',
-    '[attr.aria-disabled]': 'locked() ? "true" : null',
   },
 })
 export class ViewOptionsFieldRowBrainDirective {
@@ -47,7 +46,7 @@ export class ViewOptionsFieldRowBrainDirective {
   /** stable name of the row's field; must be unique within the panel */
   public readonly name = input.required<string>();
 
-  /** when true, this row cannot be picked up to drag (but remains a drop target) */
+  /** when true, the row's visibility toggle is replaced with a lock icon; the row remains reorderable */
   public readonly locked = input<boolean>(VIEW_OPTIONS_FIELD_ROW_BRAIN_LOCKED_DEFAULT);
 
   /** whether this row is the active drag source */
@@ -80,8 +79,8 @@ export class ViewOptionsFieldRowBrainDirective {
 
   /**
    * registers the element that should serve as the drag handle. drag will only initiate from this element while
-   * the rest of the row is unaffected. pass null to unregister (e.g. when the handle is removed because the
-   * row became locked). the presentation calls this from a viewChild-driven effect.
+   * the rest of the row is unaffected. pass null to unregister. the presentation calls this from a
+   * viewChild-driven effect.
    */
   public setDragHandle(element: HTMLElement | null): void {
     this._dragHandle.set(element);
@@ -89,8 +88,7 @@ export class ViewOptionsFieldRowBrainDirective {
 
   /**
    * sets up the row as a draggable but constrained to start only from the handle element. re-runs whenever the
-   * handle or the locked state changes — when there is no handle or the row is locked, no draggable is registered
-   * for this row (defensive: the presentation also removes the handle from the dom when locked).
+   * handle changes — when there is no handle, no draggable is registered for this row.
    */
   private _initializeDraggable(): void {
     let cleanup: (() => void) | null = null;
@@ -101,7 +99,7 @@ export class ViewOptionsFieldRowBrainDirective {
 
       const handle = this._dragHandle();
 
-      if (!handle || this.locked()) {
+      if (!handle) {
         return;
       }
 

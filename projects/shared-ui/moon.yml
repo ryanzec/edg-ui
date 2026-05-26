@@ -11,7 +11,7 @@ tasks:
     options:
       runFromWorkspaceRoot: false
   test-unit:
-    command: $workspaceRoot/node_modules/.bin/ng test shared-ui
+    command: $workspaceRoot/node_modules/.bin/ng test --no-progress shared-ui
     inputs:
       - '**/*'
       - /tsconfig.json

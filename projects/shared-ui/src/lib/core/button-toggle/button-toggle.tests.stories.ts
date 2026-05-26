@@ -79,7 +79,12 @@ class StoryButtonToggleTestsShell {
   imports: [ButtonToggle, ReactiveFormsModule],
   host: { class: 'block' },
   template: `
-    <org-button-toggle data-testid="toggle" [items]="items" [formControl]="formControl" />
+    <org-button-toggle
+      data-testid="toggle"
+      [items]="items"
+      [formControl]="formControl"
+      (changed)="handleChanged($event)"
+    />
     <pre data-testid="readout">{{ readout() }}</pre>
     <div class="flex flex-wrap gap-1">
       <button type="button" data-testid="ctl-form-set-left" (click)="formControl.setValue('left')">
@@ -101,6 +106,8 @@ class StoryButtonToggleReactiveFormShell {
   protected readonly items = defaultItems;
   protected readonly formControl = new FormControl<string | null>('center');
 
+  protected readonly changedCount = signal<number>(0);
+
   /**
    * subscribes to every form-control event so OnPush change detection re-runs the readout after the cva chain
    * finishes pushing into the formControl. without this, the readout can race the cva _onChange callback and
@@ -115,7 +122,12 @@ class StoryButtonToggleReactiveFormShell {
       `value=${this.formControl.value}`,
       `disabled=${this.formControl.disabled}`,
       `touched=${this.formControl.touched}`,
+      `changedCount=${this.changedCount()}`,
     ].join(' ');
+  }
+
+  protected handleChanged(_value: string): void {
+    this.changedCount.update((count) => count + 1);
   }
 }
 
@@ -370,6 +382,22 @@ export const UpdatesFormControlValueWhenButtonClicked: Story = {
     await userEvent.click(getInnerButtons(host)[2]);
 
     await waitFor(() => expect(readout.textContent).toContain('value=right'));
+  },
+};
+
+export const DoesNotEmitChangedWhenActiveButtonClickedInFormMode: Story = {
+  render: renderReactiveShell,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const host = await canvas.findByTestId('toggle');
+    const readout = await canvas.findByTestId('readout');
+
+    await expect(readout.textContent).toContain('changedCount=0');
+
+    await userEvent.click(getInnerButtons(host)[1]);
+
+    await expect(readout.textContent).toContain('changedCount=0');
+    await expect(readout.textContent).toContain('value=center');
   },
 };
 

@@ -58,14 +58,6 @@
     box-shadow: var(--shadow-focus-ring);
   }
 
-  .drag-handle-placeholder {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: var(--view-options-drag-handle-padding);
-    color: transparent;
-  }
-
   .field-icon {
     display: inline-flex;
     align-items: center;

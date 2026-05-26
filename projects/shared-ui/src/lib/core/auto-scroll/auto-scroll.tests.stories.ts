@@ -391,3 +391,69 @@ export const DoesNotEmitReadyWhenNoScrollableParent: Story = {
     expect(readout.textContent).toContain('readyCount=0');
   },
 };
+
+export const NotifyContentChangedDoesNotScrollWhenDisabled: Story = {
+  render: renderShell,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const scrollable = await canvas.findByTestId('scrollable-parent');
+    const readout = await canvas.findByTestId('readout');
+
+    // wait for the initial smooth-scroll to fully settle at the bottom so subsequent scrollTop=0 cancels nothing
+    // in flight and the baseline is stable for the assertion that follows the content mutation
+    await waitFor(
+      () => {
+        const expected = scrollable.scrollHeight - scrollable.clientHeight;
+
+        expect(scrollable.scrollTop).toBeGreaterThan(0);
+        expect(scrollable.scrollTop).toBeCloseTo(expected, -1);
+      },
+      { timeout: 2000 }
+    );
+
+    await userEvent.click(canvas.getByTestId('ctl-state-disabled'));
+    await waitFor(() => expect(readout.textContent).toContain('state=disabled'));
+
+    scrollable.scrollTop = 0;
+    await waitFor(() => expect(scrollable.scrollTop).toBe(0));
+
+    // adding an item mutates projected content which triggers cdkObserveContent -> notifyContentChanged
+    await userEvent.click(canvas.getByTestId('ctl-add-item'));
+
+    // allow enough time for any unwanted smooth-scroll to begin if the brain ignored the disabled state
+    await new Promise((resolve) => setTimeout(resolve, 300));
+
+    await expect(scrollable.scrollTop).toBeLessThanOrEqual(10);
+  },
+};
+
+export const NotifyContentChangedDoesNotScrollWhenForcedDisabled: Story = {
+  render: renderShell,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const scrollable = await canvas.findByTestId('scrollable-parent');
+    const readout = await canvas.findByTestId('readout');
+
+    await waitFor(
+      () => {
+        const expected = scrollable.scrollHeight - scrollable.clientHeight;
+
+        expect(scrollable.scrollTop).toBeGreaterThan(0);
+        expect(scrollable.scrollTop).toBeCloseTo(expected, -1);
+      },
+      { timeout: 2000 }
+    );
+
+    await userEvent.click(canvas.getByTestId('ctl-enable-off'));
+    await waitFor(() => expect(readout.textContent).toContain('state=forced-disabled'));
+
+    scrollable.scrollTop = 0;
+    await waitFor(() => expect(scrollable.scrollTop).toBe(0));
+
+    await userEvent.click(canvas.getByTestId('ctl-add-item'));
+
+    await new Promise((resolve) => setTimeout(resolve, 300));
+
+    await expect(scrollable.scrollTop).toBeLessThanOrEqual(10);
+  },
+};

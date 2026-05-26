@@ -38,7 +38,7 @@ import { DropDownSelector } from '../../core/drop-down-selector/drop-down-select
 import { type SelectionValue } from '../../core/drop-down-selector/drop-down-selector-brain';
 import { SortingStore } from '../../core/sorting-store/sorting-store';
 import { SortableDirective } from '../../core/sortable-directive/sortable-directive';
-import { TableActionsDirective } from '../../core/table-actions-directive/table-actions-directive';
+import { TableActionsDirective } from '../../core/table/table-actions-directive';
 import { TextDirective } from '../../core/text-directive/text-directive';
 import { TypedContextDirective } from '../../core/typed-context-directive/typed-context-directive';
 import { Pagination } from '../../core/pagination/pagination';

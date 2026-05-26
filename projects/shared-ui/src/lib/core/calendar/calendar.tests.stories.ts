@@ -273,6 +273,49 @@ const findDayCell = (host: HTMLElement, day: number): HTMLButtonElement => {
   return cell as HTMLButtonElement;
 };
 
+const getDropdownTrigger = (host: HTMLElement, label: 'Month' | 'Year'): HTMLButtonElement => {
+  const selector = host.querySelector(`org-calendar-header org-drop-down-selector[label="${label}"]`);
+
+  if (!selector) {
+    throw new Error(`could not find ${label} drop-down selector`);
+  }
+
+  return selector.querySelector('button') as HTMLButtonElement;
+};
+
+const waitForOverlayPanel = async (): Promise<HTMLElement> => {
+  await waitFor(() => expect(document.body.querySelector('.org-drop-down-selector-overlay')).not.toBeNull());
+
+  return document.body.querySelector('.org-drop-down-selector-overlay') as HTMLElement;
+};
+
+const findOverlayOptionByText = (panel: HTMLElement, text: string): HTMLButtonElement => {
+  const options = Array.from(panel.querySelectorAll<HTMLButtonElement>('button[role="option"]'));
+  const option = options.find((opt) => opt.textContent?.trim() === text);
+
+  if (!option) {
+    throw new Error(`could not find drop-down option with text "${text}"`);
+  }
+
+  return option;
+};
+
+const findPartialRangeButton = (
+  host: HTMLElement,
+  label: 'Range' | 'On or Before' | 'On or After'
+): HTMLButtonElement => {
+  const buttons = Array.from(
+    host.querySelectorAll<HTMLButtonElement>('org-calendar-partial-range-selector org-button-toggle button')
+  );
+  const button = buttons.find((b) => b.textContent?.trim() === label);
+
+  if (!button) {
+    throw new Error(`could not find partial-range button "${label}"`);
+  }
+
+  return button;
+};
+
 export const RendersDefaultPartialRangeSelectionTypeAttribute: Story = {
   render: renderShell,
   play: async ({ canvasElement }) => {
@@ -1371,5 +1414,277 @@ export const FooterRightActionsProjectsContent: Story = {
     const host = await canvas.findByTestId('right-actions');
 
     await expect(host.querySelector('[data-testid="projected"]')).not.toBeNull();
+  },
+};
+
+export const MonthDropdownEmitsDisplayMonthChanged: Story = {
+  render: renderShell,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const host = await canvas.findByTestId('calendar');
+    const readout = await canvas.findByTestId('readout');
+    const today = DateTime.now();
+    const targetMonth = today.month === 1 ? 12 : today.month - 1;
+    const targetMonthLabel = DateTime.local(2000, targetMonth, 1).toFormat('MMMM');
+
+    await userEvent.click(getDropdownTrigger(host, 'Month'));
+
+    const panel = await waitForOverlayPanel();
+
+    await userEvent.click(findOverlayOptionByText(panel, targetMonthLabel));
+
+    await waitFor(() => {
+      expect(readout.textContent).toContain(`lastCurrent=${targetMonth}/${today.year}`);
+      expect(readout.textContent).toContain(`lastPrevious=${today.month}/${today.year}`);
+    });
+  },
+};
+
+export const YearDropdownEmitsDisplayMonthChanged: Story = {
+  render: renderShell,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const host = await canvas.findByTestId('calendar');
+    const readout = await canvas.findByTestId('readout');
+    const today = DateTime.now();
+    const targetYear = today.year - 1;
+
+    await userEvent.click(getDropdownTrigger(host, 'Year'));
+
+    const panel = await waitForOverlayPanel();
+
+    await userEvent.click(findOverlayOptionByText(panel, targetYear.toString()));
+
+    await waitFor(() => {
+      expect(readout.textContent).toContain(`lastCurrent=${today.month}/${targetYear}`);
+      expect(readout.textContent).toContain(`lastPrevious=${today.month}/${today.year}`);
+    });
+  },
+};
+
+export const MonthDropdownDoesNotEmitWhenDisabled: Story = {
+  render: renderShell,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const host = await canvas.findByTestId('calendar');
+    const readout = await canvas.findByTestId('readout');
+
+    await userEvent.click(canvas.getByTestId('ctl-disabled-on'));
+    await waitFor(() => expect(host.getAttribute('data-disabled')).toBe(''));
+
+    getDropdownTrigger(host, 'Month').click();
+
+    await expect(readout.textContent).toContain('displayMonthChanged=0');
+  },
+};
+
+export const YearDropdownDoesNotEmitWhenDisabled: Story = {
+  render: renderShell,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const host = await canvas.findByTestId('calendar');
+    const readout = await canvas.findByTestId('readout');
+
+    await userEvent.click(canvas.getByTestId('ctl-disabled-on'));
+    await waitFor(() => expect(host.getAttribute('data-disabled')).toBe(''));
+
+    getDropdownTrigger(host, 'Year').click();
+
+    await expect(readout.textContent).toContain('displayMonthChanged=0');
+  },
+};
+
+export const PreviousMonthCrossesYearBoundaryFromJanuary: Story = {
+  render: renderShell,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const host = await canvas.findByTestId('calendar');
+    const readout = await canvas.findByTestId('readout');
+    const today = DateTime.now();
+
+    await userEvent.click(getDropdownTrigger(host, 'Month'));
+    const panel = await waitForOverlayPanel();
+    await userEvent.click(findOverlayOptionByText(panel, 'January'));
+
+    await waitFor(() => expect(readout.textContent).toContain(`lastCurrent=1/${today.year}`));
+
+    const previousButton = host.querySelector(
+      'org-calendar-header org-button[ariaLabel="Previous month"] button'
+    ) as HTMLButtonElement;
+
+    await userEvent.click(previousButton);
+
+    await waitFor(() => {
+      expect(readout.textContent).toContain(`lastCurrent=12/${today.year - 1}`);
+      expect(readout.textContent).toContain(`lastPrevious=1/${today.year}`);
+    });
+  },
+};
+
+export const NextMonthCrossesYearBoundaryFromDecember: Story = {
+  render: renderShell,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const host = await canvas.findByTestId('calendar');
+    const readout = await canvas.findByTestId('readout');
+    const today = DateTime.now();
+
+    await userEvent.click(getDropdownTrigger(host, 'Month'));
+    const panel = await waitForOverlayPanel();
+    await userEvent.click(findOverlayOptionByText(panel, 'December'));
+
+    await waitFor(() => expect(readout.textContent).toContain(`lastCurrent=12/${today.year}`));
+
+    const nextButton = host.querySelector(
+      'org-calendar-header org-button[ariaLabel="Next month"] button'
+    ) as HTMLButtonElement;
+
+    await userEvent.click(nextButton);
+
+    await waitFor(() => {
+      expect(readout.textContent).toContain(`lastCurrent=1/${today.year + 1}`);
+      expect(readout.textContent).toContain(`lastPrevious=12/${today.year}`);
+    });
+  },
+};
+
+export const ReflectsAriaSelectedOnSelectedEndCell: Story = {
+  render: renderShell,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const host = await canvas.findByTestId('calendar');
+
+    await userEvent.click(canvas.getByTestId('ctl-allow-range-on'));
+    await userEvent.click(canvas.getByTestId('ctl-selected-start-day-5'));
+    await userEvent.click(canvas.getByTestId('ctl-selected-end-day-20'));
+
+    await waitFor(() => {
+      const endCell = findDayCell(host, 20);
+
+      expect(endCell.getAttribute('aria-selected')).toBe('true');
+      expect(endCell.getAttribute('data-selected')).toBe('');
+    });
+  },
+};
+
+export const ClickingSelectedEndDeselectsEndOnly: Story = {
+  render: renderShell,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const host = await canvas.findByTestId('calendar');
+    const readout = await canvas.findByTestId('readout');
+
+    await userEvent.click(canvas.getByTestId('ctl-allow-range-on'));
+    await userEvent.click(canvas.getByTestId('ctl-selected-start-day-5'));
+    await userEvent.click(canvas.getByTestId('ctl-selected-end-day-20'));
+    await waitFor(() => expect(findDayCell(host, 20).getAttribute('aria-selected')).toBe('true'));
+
+    await userEvent.click(findDayCell(host, 20));
+
+    await waitFor(() => {
+      expect(readout.textContent).toContain(`lastStart=${DAY(5).toISODate()}`);
+      expect(readout.textContent).toContain('lastEnd=null');
+    });
+  },
+};
+
+export const AllowedDateRangeLimitsClicksWithEndOnly: Story = {
+  render: renderShell,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const host = await canvas.findByTestId('calendar');
+
+    await userEvent.click(canvas.getByTestId('ctl-selected-end-day-20'));
+    await userEvent.click(canvas.getByTestId('ctl-allowed-range-3'));
+
+    await waitFor(() => {
+      expect(findDayCell(host, 18).getAttribute('aria-disabled')).toBeNull();
+      expect(findDayCell(host, 17).getAttribute('aria-disabled')).toBe('true');
+      expect(findDayCell(host, 22).getAttribute('aria-disabled')).toBeNull();
+      expect(findDayCell(host, 23).getAttribute('aria-disabled')).toBe('true');
+    });
+  },
+};
+
+export const AllowedDateRangeLimitsClicksWithBothEnds: Story = {
+  render: renderShell,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const host = await canvas.findByTestId('calendar');
+
+    await userEvent.click(canvas.getByTestId('ctl-allow-range-on'));
+    await userEvent.click(canvas.getByTestId('ctl-selected-start-day-10'));
+    await userEvent.click(canvas.getByTestId('ctl-selected-end-day-20'));
+    await userEvent.click(canvas.getByTestId('ctl-allowed-range-3'));
+
+    await waitFor(() => {
+      expect(findDayCell(host, 10).getAttribute('aria-disabled')).toBeNull();
+      expect(findDayCell(host, 11).getAttribute('aria-disabled')).toBeNull();
+      expect(findDayCell(host, 15).getAttribute('aria-disabled')).toBe('true');
+      expect(findDayCell(host, 19).getAttribute('aria-disabled')).toBeNull();
+      expect(findDayCell(host, 20).getAttribute('aria-disabled')).toBeNull();
+    });
+  },
+};
+
+export const ClickingPartialRangeOnOrAfterToggleSwitchesType: Story = {
+  render: renderShell,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const host = await canvas.findByTestId('calendar');
+    const readout = await canvas.findByTestId('readout');
+
+    await userEvent.click(canvas.getByTestId('ctl-allow-range-on'));
+    await userEvent.click(canvas.getByTestId('ctl-allow-partial-on'));
+    await waitFor(() =>
+      expect(host.querySelector('org-calendar-partial-range-selector org-button-toggle')).not.toBeNull()
+    );
+
+    await userEvent.click(findPartialRangeButton(host, 'On or After'));
+
+    await waitFor(() => {
+      expect(host.getAttribute('data-partial-range-selection-type')).toBe('onOrAfter');
+      expect(readout.textContent).toContain('lastPartialType=onOrAfter');
+    });
+  },
+};
+
+export const PartialRangeToggleDoesNotEmitWhenDisabled: Story = {
+  render: renderShell,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const host = await canvas.findByTestId('calendar');
+    const readout = await canvas.findByTestId('readout');
+
+    await userEvent.click(canvas.getByTestId('ctl-allow-range-on'));
+    await userEvent.click(canvas.getByTestId('ctl-allow-partial-on'));
+    await waitFor(() =>
+      expect(host.querySelector('org-calendar-partial-range-selector org-button-toggle')).not.toBeNull()
+    );
+
+    await userEvent.click(canvas.getByTestId('ctl-disabled-on'));
+    await waitFor(() => expect(host.getAttribute('data-disabled')).toBe(''));
+
+    findPartialRangeButton(host, 'On or After').click();
+
+    await expect(readout.textContent).toContain('partialRangeChanged=0');
+  },
+};
+
+export const ContainerRegainsFocusAfterBoundaryCrossing: Story = {
+  render: renderShell,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const host = await canvas.findByTestId('calendar');
+    const container = host.querySelector('.container') as HTMLDivElement;
+    const today = DateTime.now();
+    const firstOfMonthDay = today.startOf('month').day;
+
+    fireEvent.mouseEnter(findDayCell(host, firstOfMonthDay));
+    await waitFor(() => expect(findDayCell(host, firstOfMonthDay).getAttribute('data-focused')).toBe(''));
+
+    fireEvent.keyDown(container, { key: 'ArrowLeft' });
+
+    await waitFor(() => expect(document.activeElement).toBe(container));
   },
 };

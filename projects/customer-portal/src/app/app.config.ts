@@ -41,7 +41,8 @@ export const appConfig: ApplicationConfig = {
 
       return Promise.resolve();
       //   const globalService = inject(FeatureFlagStore);
-      //   return globalService.initialize(LAUNCH_DARKLY_CLIENT_ID, LAUNCH_DARKLY_CONTEXT, LAUNCH_DARKLY_HASH);
+      //   const client = LDClient.initialize(LAUNCH_DARKLY_CLIENT_ID, LAUNCH_DARKLY_CONTEXT, { hash: LAUNCH_DARKLY_HASH });
+      //   return globalService.initialize(client);
     }),
   ],
 };

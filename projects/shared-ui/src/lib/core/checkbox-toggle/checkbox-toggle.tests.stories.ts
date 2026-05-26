@@ -100,7 +100,13 @@ class StoryCheckboxToggleProjectionShell {}
   imports: [CheckboxToggle, ReactiveFormsModule],
   host: { class: 'block' },
   template: `
-    <org-checkbox-toggle data-testid="toggle" name="setting" value="on" [formControl]="control">
+    <org-checkbox-toggle
+      data-testid="toggle"
+      name="setting"
+      value="on"
+      [formControl]="control"
+      [disabled]="consumerDisabled()"
+    >
       Label
     </org-checkbox-toggle>
     <pre data-testid="readout">{{ readout() }}</pre>
@@ -110,11 +116,18 @@ class StoryCheckboxToggleProjectionShell {}
       <button type="button" data-testid="ctl-form-set-null" (click)="setNullValue()">form-set-null</button>
       <button type="button" data-testid="ctl-form-disable" (click)="control.disable()">form-disable</button>
       <button type="button" data-testid="ctl-form-enable" (click)="control.enable()">form-enable</button>
+      <button type="button" data-testid="ctl-consumer-disabled-on" (click)="consumerDisabled.set(true)">
+        consumer-disabled-on
+      </button>
+      <button type="button" data-testid="ctl-consumer-disabled-off" (click)="consumerDisabled.set(false)">
+        consumer-disabled-off
+      </button>
     </div>
   `,
 })
 class StoryCheckboxToggleFormShell {
   public readonly control = new FormControl<boolean>(false, { nonNullable: true });
+  protected readonly consumerDisabled = signal<boolean>(false);
 
   protected readout(): string {
     return `value=${this.control.value} touched=${this.control.touched} disabled=${this.control.disabled}`;
@@ -785,5 +798,60 @@ export const ClearsErrorAttributesWhenValidationMessageIsCleared: Story = {
     await expect(host.getAttribute('data-state')).toBeNull();
     await expect(label.getAttribute('aria-invalid')).toBeNull();
     await expect(label.getAttribute('aria-describedby')).toBeNull();
+  },
+};
+
+export const HostAriaDisabledReflectsDisabledState: Story = {
+  render: renderShell,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const host = await canvas.findByTestId('toggle');
+
+    await expect(host.getAttribute('aria-disabled')).toBeNull();
+
+    await userEvent.click(canvas.getByTestId('ctl-disabled-on'));
+
+    await expect(host.getAttribute('aria-disabled')).toBe('true');
+
+    await userEvent.click(canvas.getByTestId('ctl-disabled-off'));
+
+    await expect(host.getAttribute('aria-disabled')).toBeNull();
+  },
+};
+
+export const AriaCheckedOnLabelTracksCheckedState: Story = {
+  render: renderShell,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const host = await canvas.findByTestId('toggle');
+    const label = host.querySelector('label') as HTMLLabelElement;
+
+    await expect(label.getAttribute('aria-checked')).toBe('false');
+
+    await userEvent.click(canvas.getByTestId('ctl-checked-on'));
+
+    await expect(label.getAttribute('aria-checked')).toBe('true');
+
+    await userEvent.click(canvas.getByTestId('ctl-checked-off'));
+
+    await expect(label.getAttribute('aria-checked')).toBe('false');
+  },
+};
+
+export const ClearsDisabledStateWhenBothSourcesAreCleared: Story = {
+  render: renderFormShell,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const host = await canvas.findByTestId('toggle');
+
+    await userEvent.click(canvas.getByTestId('ctl-consumer-disabled-on'));
+    await userEvent.click(canvas.getByTestId('ctl-form-disable'));
+
+    await expect(host.getAttribute('data-disabled')).toBe('');
+
+    await userEvent.click(canvas.getByTestId('ctl-consumer-disabled-off'));
+    await userEvent.click(canvas.getByTestId('ctl-form-enable'));
+
+    await expect(host.getAttribute('data-disabled')).toBeNull();
   },
 };

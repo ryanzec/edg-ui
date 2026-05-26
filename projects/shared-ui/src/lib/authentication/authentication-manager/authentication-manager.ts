@@ -2,9 +2,9 @@ import { Injectable, signal, computed, inject, InjectionToken } from '@angular/c
 import { AuthenticationApi } from '../authentication-api/authentication-api';
 import { AuthenticationAuthenticateRequest, ErrorMessage, User } from '@organization/shared-utils';
 import { catchError, of, tap, map, Observable, delay } from 'rxjs';
+import * as LDClient from 'launchdarkly-js-client-sdk';
 import { FeatureFlagStore } from '../../core/feature-flag-store/feature-flag-store';
-import { LocalStorageManager } from '../../core/local-storage-manager/local-storage-manager';
-import { emailUtils, logManager } from '@organization/shared-utils';
+import { emailUtils, localStorageManager, logManager } from '@organization/shared-utils';
 import { Router } from '@angular/router';
 
 type AuthenticationState = {
@@ -22,7 +22,6 @@ export const LOCAL_STORAGE_SESSION_USER_KEY = new InjectionToken<string>('Local 
   providedIn: 'root',
 })
 export class AuthenticationManager {
-  private readonly _localStorageManager = inject(LocalStorageManager);
   private readonly _authenticationApi = inject(AuthenticationApi);
   private readonly _featureFlagStore = inject(FeatureFlagStore);
   private readonly _router = inject(Router);
@@ -58,7 +57,7 @@ export class AuthenticationManager {
   }
 
   public checkAsync(): Observable<boolean> {
-    const user = this._localStorageManager.get<User>(this._sessionUserKey);
+    const user = localStorageManager.get<User>(this._sessionUserKey);
 
     if (!user) {
       // if the user is not locally stored we assume this is not previous logged in session so no error messaged nedded
@@ -145,8 +144,13 @@ export class AuthenticationManager {
       emailDomain: emailUtils.getDomain(user.email),
     };
 
-    this._localStorageManager.set<User>(this._sessionUserKey, user);
-    this._featureFlagStore.initialize(this._launchDarklyClientId, launchDarklyContext, launchDarklyHash);
+    localStorageManager.set<User>(this._sessionUserKey, user);
+
+    const launchDarklyClient = LDClient.initialize(this._launchDarklyClientId, launchDarklyContext, {
+      hash: launchDarklyHash,
+    });
+
+    this._featureFlagStore.initialize(launchDarklyClient);
     this._state.update((state) => ({ ...state, user, isLoading: false, hasInitialized: true, error: null }));
   }
 
@@ -158,6 +162,6 @@ export class AuthenticationManager {
       user: null,
       error: error || null,
     }));
-    this._localStorageManager.remove(this._sessionUserKey);
+    localStorageManager.remove(this._sessionUserKey);
   }
 }

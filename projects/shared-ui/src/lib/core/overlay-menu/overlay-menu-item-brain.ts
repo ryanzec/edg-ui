@@ -14,9 +14,12 @@ export const OVERLAY_MENU_ITEM_DISABLED_DEFAULT = false;
  * carries no styling, template, or markup — apply on the clickable element rendered by the presentation.
  */
 @Directive({
-  selector: '[orgOverlayMenuItemBrain]',
+  selector: 'button[orgOverlayMenuItemBrain]',
   exportAs: 'orgOverlayMenuItemBrain',
   hostDirectives: [CdkMenuItem],
+  host: {
+    '[disabled]': 'disabled()',
+  },
 })
 export class OverlayMenuItemBrainDirective<
   // this is generic so we need to allow any type

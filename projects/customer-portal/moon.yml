@@ -40,7 +40,7 @@ tasks:
     options:
       runFromWorkspaceRoot: false
   test-unit:
-    command: $workspaceRoot/node_modules/.bin/ng test customer-portal
+    command: $workspaceRoot/node_modules/.bin/ng test --no-progress customer-portal
     inputs:
       - '**/*'
       - /tsconfig.json

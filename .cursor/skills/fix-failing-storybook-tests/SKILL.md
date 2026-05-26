@@ -1,5 +1,5 @@
 ---
-name: fix-failing-tests
+name: fix-failing-storybook-tests
 description: Use this skill you are tasked to fix storybook tests. 
 ---
 # Fix Failing Storybook Tests

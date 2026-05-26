@@ -145,6 +145,44 @@ const renderStackShell: Story['render'] = () => ({
   moduleMetadata: { imports: [StoryAvatarStackShell] },
 });
 
+const waitForImgUnhidden = (host: HTMLElement): Promise<void> => {
+  const isUnhidden = (): boolean => {
+    const img = host.querySelector('img');
+
+    return !!img && !img.hidden;
+  };
+
+  const observePromise = new Promise<void>((resolve) => {
+    if (isUnhidden()) {
+      resolve();
+
+      return;
+    }
+
+    const observer = new MutationObserver(() => {
+      if (!isUnhidden()) {
+        return;
+      }
+
+      observer.disconnect();
+      resolve();
+    });
+
+    observer.observe(host, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['hidden'],
+    });
+  });
+
+  const timeoutPromise = new Promise<void>((_, reject) => {
+    setTimeout(() => reject(new Error('img did not become unhidden within timeout')), 2000);
+  });
+
+  return Promise.race([observePromise, timeoutPromise]);
+};
+
 export const RendersDefaultSizeShapeAndColorIndex: Story = {
   render: renderShell,
   play: async ({ canvasElement }) => {
@@ -672,9 +710,12 @@ export const ImgHiddenResetsWhenSrcChanges: Story = {
 
     await waitFor(() => expect((host.querySelector('img') as HTMLImageElement).hidden).toBe(true));
 
-    await userEvent.click(canvas.getByTestId('ctl-img-src-other'));
+    // observe before triggering the src change so we capture the transient hidden=false moment before
+    // the new src's network 404 fires and flips hidden back to true
+    const unhiddenPromise = waitForImgUnhidden(host);
 
-    await waitFor(() => expect((host.querySelector('img') as HTMLImageElement).hidden).toBe(false));
+    await userEvent.click(canvas.getByTestId('ctl-img-src-other'));
+    await unhiddenPromise;
   },
 };
 
@@ -692,12 +733,13 @@ export const ImgHiddenResetsWhenEmailChanges: Story = {
 
     await waitFor(() => expect((host.querySelector('img') as HTMLImageElement).hidden).toBe(true));
 
-    // clear email first so the img unmounts; setting bob then remounts a fresh img with
-    // loadError=false from the brain's reset effect, without racing a second network 404
+    // observe before triggering the email change so we capture the transient hidden=false moment
+    // on remount before the new gravatar url's 404 fires and flips hidden back to true
+    const unhiddenPromise = waitForImgUnhidden(host);
+
     await userEvent.click(canvas.getByTestId('ctl-img-email-clear'));
     await userEvent.click(canvas.getByTestId('ctl-img-email-bob'));
-
-    await waitFor(() => expect((host.querySelector('img') as HTMLImageElement).hidden).toBe(false));
+    await unhiddenPromise;
   },
 };
 
@@ -788,6 +830,18 @@ export const NoInitialsSpanWhenLabelEmpty: Story = {
     const host = await canvas.findByTestId('avatar');
 
     await userEvent.click(canvas.getByTestId('ctl-label-empty'));
+
+    await waitFor(() => expect(host.querySelector('org-avatar-shape span')).toBeNull());
+  },
+};
+
+export const NoInitialsSpanWhenLabelWhitespace: Story = {
+  render: renderShell,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const host = await canvas.findByTestId('avatar');
+
+    await userEvent.click(canvas.getByTestId('ctl-label-blank'));
 
     await waitFor(() => expect(host.querySelector('org-avatar-shape span')).toBeNull());
   },

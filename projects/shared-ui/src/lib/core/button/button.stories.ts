@@ -626,51 +626,51 @@ export const Showcase: Story = {
           <org-design-system-demo-canvas slot="canvas">
             <div class="flex gap-2">
               <org-button color="primary" variant="filled" label="Filled" />
+              <org-button color="primary" variant="soft" label="Soft" />
               <org-button color="primary" variant="ghost" label="Ghost" />
               <org-button color="primary" variant="text" label="Text" />
-              <org-button color="primary" variant="soft" label="Soft" />
             </div>
             <div class="flex gap-2">
               <org-button color="secondary" variant="filled" label="Filled" />
+              <org-button color="secondary" variant="soft" label="Soft" />
               <org-button color="secondary" variant="ghost" label="Ghost" />
               <org-button color="secondary" variant="text" label="Text" />
-              <org-button color="secondary" variant="soft" label="Soft" />
             </div>
             <div class="flex gap-2">
               <org-button color="neutral" variant="filled" label="Filled" />
+              <org-button color="neutral" variant="soft" label="Soft" />
               <org-button color="neutral" variant="ghost" label="Ghost" />
               <org-button color="neutral" variant="text" label="Text" />
-              <org-button color="neutral" variant="soft" label="Soft" />
             </div>
             <div class="flex gap-2">
               <org-button color="safe" variant="filled" label="Filled" />
+              <org-button color="safe" variant="soft" label="Soft" />
               <org-button color="safe" variant="ghost" label="Ghost" />
               <org-button color="safe" variant="text" label="Text" />
-              <org-button color="safe" variant="soft" label="Soft" />
             </div>
             <div class="flex gap-2">
               <org-button color="info" variant="filled" label="Filled" />
+              <org-button color="info" variant="soft" label="Soft" />
               <org-button color="info" variant="ghost" label="Ghost" />
               <org-button color="info" variant="text" label="Text" />
-              <org-button color="info" variant="soft" label="Soft" />
             </div>
             <div class="flex gap-2">
               <org-button color="caution" variant="filled" label="Filled" />
+              <org-button color="caution" variant="soft" label="Soft" />
               <org-button color="caution" variant="ghost" label="Ghost" />
               <org-button color="caution" variant="text" label="Text" />
-              <org-button color="caution" variant="soft" label="Soft" />
             </div>
             <div class="flex gap-2">
               <org-button color="warning" variant="filled" label="Filled" />
+              <org-button color="warning" variant="soft" label="Soft" />
               <org-button color="warning" variant="ghost" label="Ghost" />
               <org-button color="warning" variant="text" label="Text" />
-              <org-button color="warning" variant="soft" label="Soft" />
             </div>
             <div class="flex gap-2">
               <org-button color="danger" variant="filled" label="Filled" />
+              <org-button color="danger" variant="soft" label="Soft" />
               <org-button color="danger" variant="ghost" label="Ghost" />
               <org-button color="danger" variant="text" label="Text" />
-              <org-button color="danger" variant="soft" label="Soft" />
             </div>
           </org-design-system-demo-canvas>
         </org-design-system-demo>

@@ -40,7 +40,7 @@ tasks:
     options:
       runFromWorkspaceRoot: false
   test-unit:
-    command: $workspaceRoot/node_modules/.bin/ng test internal-portal
+    command: $workspaceRoot/node_modules/.bin/ng test --no-progress internal-portal
     inputs:
       - '**/*'
       - /tsconfig.json

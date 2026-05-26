@@ -2,22 +2,16 @@
   <div class="drop-indicator drop-indicator-top" data-testid="view-options-field-row-drop-indicator-top"></div>
 }
 <div class="row-content">
-  @if (resolvedLocked()) {
-    <span class="drag-handle-placeholder" aria-hidden="true">
-      <org-icon [name]="dragHandleIconName" size="sm" color="inherit" />
-    </span>
-  } @else {
-    <button
-      #dragHandleRef
-      type="button"
-      class="drag-handle"
-      [attr.aria-label]="dragHandleAriaLabel()"
-      (keydown)="onDragHandleKeyDown($event)"
-      data-testid="view-options-field-row-drag-handle"
-    >
-      <org-icon [name]="dragHandleIconName" size="sm" color="inherit" />
-    </button>
-  }
+  <button
+    #dragHandleRef
+    type="button"
+    class="drag-handle"
+    [attr.aria-label]="dragHandleAriaLabel()"
+    (keydown)="onDragHandleKeyDown($event)"
+    data-testid="view-options-field-row-drag-handle"
+  >
+    <org-icon [name]="dragHandleIconName" size="sm" color="inherit" />
+  </button>
   <!--
   the row body is a mouse-only click affordance — keyboard users interact via the adjacent toggle (a native
   switch) so adding a redundant focusable button here would announce twice for the same control
@@ -31,7 +25,7 @@
   </div>
   @if (resolvedLocked()) {
     <span class="lock-icon" data-testid="view-options-field-row-lock-icon">
-      <org-icon [name]="lockIconName" size="sm" color="inherit" label="Locked" />
+      <org-icon [name]="lockIconName" size="sm" color="inherit" label="Visibility locked" />
     </span>
   } @else {
     <org-checkbox-toggle

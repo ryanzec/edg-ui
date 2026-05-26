@@ -292,6 +292,36 @@ export const ResolvesToSyntaxHighlightedSpansAfterShikiTokenizes: Story = {
   },
 };
 
+export const EmitsZeroCopiedWhenAllowCopyOff: Story = {
+  render: renderShell,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const host = await canvas.findByTestId('highlighter');
+    const readout = await canvas.findByTestId('readout');
+
+    await expect(host.querySelector('button.code-highlighter-copy-btn')).toBeNull();
+    await expect(readout.textContent).toContain('copyCount=0');
+  },
+};
+
+export const EmitsZeroCopiedWhenVariantInlineEvenIfAllowCopyOn: Story = {
+  render: renderShell,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const host = await canvas.findByTestId('highlighter');
+    const readout = await canvas.findByTestId('readout');
+
+    await userEvent.click(canvas.getByTestId('ctl-allow-copy-on'));
+    await userEvent.click(canvas.getByTestId('ctl-variant-inline'));
+
+    await waitFor(() => {
+      expect(host.querySelector('button.code-highlighter-copy-btn')).toBeNull();
+    });
+
+    await expect(readout.textContent).toContain('copyCount=0');
+  },
+};
+
 export const EmitsCopiedWithTextWhenCopyButtonClicked: Story = {
   render: renderShell,
   play: async ({ canvasElement }) => {

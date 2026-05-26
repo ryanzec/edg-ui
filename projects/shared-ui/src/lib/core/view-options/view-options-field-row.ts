@@ -58,8 +58,7 @@ export class ViewOptionsFieldRow {
   protected readonly dragHandleRef = viewChild<ElementRef<HTMLElement>>('dragHandleRef');
 
   constructor() {
-    // forwards the current drag handle element to the brain so it can constrain drag initiation to that element;
-    // re-fires when the @if branch flips (locked ↔ unlocked) so the brain re-registers cleanly
+    // forwards the current drag handle element to the brain so it can constrain drag initiation to that element
     effect(() => {
       this.brain.setDragHandle(this.dragHandleRef()?.nativeElement ?? null);
     });

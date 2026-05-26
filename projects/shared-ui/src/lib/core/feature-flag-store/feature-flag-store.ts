@@ -34,9 +34,9 @@ export class FeatureFlagStore implements OnDestroy {
   /** whether the store has been initialized */
   public readonly isInitialized = computed<boolean>(() => this._state().isInitialized);
 
-  /** initializes the launchdarkly client and sets up feature flag event listeners */
-  public initialize(launchDarklyClientId: string, context: LDClient.LDContext, hash: string): void {
-    this._client = LDClient.initialize(launchDarklyClientId, context, { hash });
+  /** stores the provided launchdarkly client and wires up feature flag event listeners */
+  public initialize(client: LDClient.LDClient): void {
+    this._client = client;
 
     this._client.on('ready', () => {
       if (!this._client) {

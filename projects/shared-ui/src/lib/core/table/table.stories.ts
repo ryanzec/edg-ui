@@ -4,6 +4,7 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Table, allTableSizes, TableSize } from './table';
 import { TableHeader } from './table-header';
 import { TableCell } from './table-cell';
+import { TableActionsDirective } from './table-actions-directive';
 import { ButtonToggle, ButtonToggleItem } from '../button-toggle/button-toggle';
 import { CheckboxToggle } from '../checkbox-toggle/checkbox-toggle';
 import { SortableDirective } from '../sortable-directive/sortable-directive';
@@ -93,7 +94,9 @@ const liveDemoStateItems: ButtonToggleItem[] = allLiveDemoStates.map((state) => 
     TableHeader,
     TableCell,
     SortableDirective,
+    TableActionsDirective,
     TypedContextDirective,
+    Button,
     ButtonToggle,
     CheckboxToggle,
     DesignSystemDemo,
@@ -121,7 +124,7 @@ const liveDemoStateItems: ButtonToggleItem[] = allLiveDemoStates.map((state) => 
         <org-design-system-demo-header
           slot="header"
           title="Live demo"
-          description="Toggle the modifiers. Density swaps the row min-height and cell padding scale; striping, hover, selectable rows, sortable headers, the sticky first column and the sticky header are independent flags that compose freely."
+          description="Toggle the modifiers. Density swaps the row min-height and cell padding scale; striping, hover, selectable rows, sortable headers, the sticky first column, the sticky header, and a trailing row-actions cell guarded by [orgTableActions] are independent flags that compose freely."
         />
         <org-design-system-demo-controls slot="controls">
           <org-design-system-demo-control-group label="Size">
@@ -163,6 +166,11 @@ const liveDemoStateItems: ButtonToggleItem[] = allLiveDemoStates.map((state) => 
           <org-design-system-demo-control-group label="Sticky header">
             <org-checkbox-toggle name="live-demo-sticky-header" value="sticky-header" formControlName="stickyHeader">
               {{ liveDemoForm.controls.stickyHeader.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Row actions">
+            <org-checkbox-toggle name="live-demo-row-actions" value="row-actions" formControlName="rowActions">
+              {{ liveDemoForm.controls.rowActions.value ? 'on' : 'off' }}
             </org-checkbox-toggle>
           </org-design-system-demo-control-group>
         </org-design-system-demo-controls>
@@ -210,6 +218,9 @@ const liveDemoStateItems: ButtonToggleItem[] = allLiveDemoStates.map((state) => 
                     Records
                   }
                 </org-table-th>
+                @if (liveDemoForm.controls.rowActions.value) {
+                  <org-table-th>Actions</org-table-th>
+                }
               </ng-template>
               <ng-template #empty>
                 No projects match the current filter. Try a different status, or reset filters.
@@ -219,6 +230,19 @@ const liveDemoStateItems: ButtonToggleItem[] = allLiveDemoStates.map((state) => 
                 <org-table-td [muted]="true">{{ user.owner }}</org-table-td>
                 <org-table-td [faint]="true">{{ user.updated }}</org-table-td>
                 <org-table-td [numeric]="true">{{ user.records }}</org-table-td>
+                @if (liveDemoForm.controls.rowActions.value) {
+                  <org-table-td>
+                    <org-button
+                      orgTableActions
+                      color="neutral"
+                      variant="ghost"
+                      size="sm"
+                      [iconOnly]="true"
+                      preIcon="ellipsis"
+                      label="Row actions"
+                    />
+                  </org-table-td>
+                }
               </ng-template>
               <ng-template [orgTypedContext]="data()" #expanded let-user>
                 <div class="p-3 flex flex-col gap-1 text-sm">
@@ -251,6 +275,7 @@ class TableLiveDemo {
     sortable: new FormControl<boolean>(false, { nonNullable: true }),
     stickyFirstColumn: new FormControl<boolean>(false, { nonNullable: true }),
     stickyHeader: new FormControl<boolean>(false, { nonNullable: true }),
+    rowActions: new FormControl<boolean>(false, { nonNullable: true }),
   });
 
   protected readonly selectionStore = new DataSelectionStore<User>();
@@ -831,6 +856,89 @@ class TableInContextDemo {
   }
 }
 
+@Component({
+  selector: 'story-table-row-actions-guard-demo',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [Table, TableHeader, TableCell, TableActionsDirective, Button, TypedContextDirective],
+  styles: [
+    `
+      :host {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+      .readout {
+        display: flex;
+        gap: 1rem;
+        font-size: 0.875rem;
+      }
+      .readout-label {
+        font-weight: 600;
+        margin-right: 0.25rem;
+      }
+    `,
+  ],
+  template: `
+    <org-table [data]="users" [hover]="true" (rowClicked)="handleRowClicked($event)">
+      <ng-template #header>
+        <org-table-th>Project</org-table-th>
+        <org-table-th>Owner</org-table-th>
+        <org-table-th>Unguarded action</org-table-th>
+        <org-table-th>Guarded action</org-table-th>
+      </ng-template>
+      <ng-template [orgTypedContext]="users" #body let-user>
+        <org-table-td>{{ user.name }}</org-table-td>
+        <org-table-td>{{ user.owner }}</org-table-td>
+        <org-table-td>
+          <org-button
+            color="neutral"
+            variant="ghost"
+            size="sm"
+            label="Edit"
+            preIcon="pencil"
+            (clicked)="handleUnguardedAction()"
+          />
+        </org-table-td>
+        <org-table-td>
+          <org-button
+            orgTableActions
+            color="neutral"
+            variant="ghost"
+            size="sm"
+            label="Edit"
+            preIcon="pencil"
+            (clicked)="handleGuardedAction()"
+          />
+        </org-table-td>
+      </ng-template>
+    </org-table>
+    <div class="readout">
+      <div><span class="readout-label">Row clicks:</span>{{ rowClickedCount() }}</div>
+      <div><span class="readout-label">Unguarded action clicks:</span>{{ unguardedActionCount() }}</div>
+      <div><span class="readout-label">Guarded action clicks:</span>{{ guardedActionCount() }}</div>
+    </div>
+  `,
+})
+class TableRowActionsGuardDemo {
+  protected readonly users = SAMPLE_USERS.slice(0, 3);
+
+  protected readonly rowClickedCount = signal<number>(0);
+  protected readonly unguardedActionCount = signal<number>(0);
+  protected readonly guardedActionCount = signal<number>(0);
+
+  protected handleRowClicked(_user: User): void {
+    this.rowClickedCount.update((value) => value + 1);
+  }
+
+  protected handleUnguardedAction(): void {
+    this.unguardedActionCount.update((value) => value + 1);
+  }
+
+  protected handleGuardedAction(): void {
+    this.guardedActionCount.update((value) => value + 1);
+  }
+}
+
 const meta: Meta<Table> = {
   title: 'Core/Components/Table',
   component: Table,
@@ -1149,6 +1257,25 @@ export const Showcase: Story = {
             <li>Cell content composes existing core components directly — no table-specific wrappers</li>
           </ul>
         </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header
+            slot="header"
+            title="Row action guards"
+            description="Apply [orgTableActions] to interactive controls inside a clickable row (or any clickable container) so the control's own click + Enter / Space activation do not also fire the surrounding container's click handler. Clicking the unguarded button increments BOTH the row click counter and the unguarded action counter; clicking the guarded button increments ONLY the guarded action counter."
+          />
+          <org-design-system-demo-canvas slot="canvas">
+            <story-table-row-actions-guard-demo />
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li>Clicking the unguarded button also fires (rowClicked) for that row</li>
+            <li>Clicking the guarded button only fires the button's own (clicked) handler — (rowClicked) does NOT fire</li>
+            <li>Keyboard Enter / Space on the guarded button activates only the button — the surrounding row is not also activated</li>
+            <li>The directive is reusable on any clickable container (cards, list items) — it is not table-specific in implementation</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
       </div>
     `,
     moduleMetadata: {
@@ -1161,6 +1288,7 @@ export const Showcase: Story = {
         TableLoadingEmptyDemo,
         TableExpandableDemo,
         TableInContextDemo,
+        TableRowActionsGuardDemo,
         DesignSystemDemo,
         DesignSystemDemoHeader,
         DesignSystemDemoCanvas,

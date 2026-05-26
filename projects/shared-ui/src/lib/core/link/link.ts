@@ -1,13 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  TemplateRef,
-  computed,
-  contentChild,
-  input,
-  output,
-  viewChild,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, TemplateRef, computed, contentChild, inject, input } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { angularUtils } from '@organization/shared-utils';
 import { Icon } from '../icon/icon';
@@ -30,12 +21,30 @@ import {
 @Component({
   selector: 'org-link',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [LinkBrainDirective, NgTemplateOutlet, Icon],
+  imports: [NgTemplateOutlet, Icon],
   templateUrl: './link.html',
   styleUrl: './link.css',
+  hostDirectives: [
+    {
+      directive: LinkBrainDirective,
+      inputs: [
+        'href',
+        'target',
+        'rel',
+        'download',
+        'hreflang',
+        'referrerPolicy',
+        'ariaLabel',
+        'disabled',
+        'affordance',
+      ],
+      outputs: ['clicked'],
+    },
+  ],
 })
 export class Link {
-  private readonly _linkBrainDirective = viewChild.required(LinkBrainDirective);
+  /** brain instance providing all navigation logic, accessibility, and effective attribute values */
+  protected readonly brain = inject(LinkBrainDirective);
 
   /** projected template for the pre slot — content rendered before the default content */
   protected readonly preTemplate = contentChild<TemplateRef<unknown>>('pre');
@@ -87,26 +96,14 @@ export class Link {
   /** when true, an external-link or download icon is auto-injected as a post affordance when applicable */
   public readonly affordance = input<boolean>(LINK_AFFORDANCE_DEFAULT);
 
-  /** emitted when the link is activated by mouse or keyboard, only when href is not provided so consumers can handle action-style clicks */
-  public readonly clicked = output<MouseEvent | KeyboardEvent>();
-
   /** whether the link is rendering as an action-link (no href provided) */
-  public readonly isActionLink = computed<boolean>(() => this._linkBrainDirective().isActionLink());
+  public readonly isActionLink = computed<boolean>(() => this.brain.isActionLink());
 
   /** the icon name for the auto-injected post affordance icon, or undefined when none should render */
-  protected readonly affordanceIcon = computed<IconName | undefined>(() => {
-    const icon = this._linkBrainDirective().affordanceIcon();
-
-    return icon;
-  });
+  protected readonly affordanceIcon = computed<IconName | undefined>(() => this.brain.affordanceIcon());
 
   /** whether the auto-injected affordance icon should render — suppressed when a manual #post template wins */
   protected readonly showAffordanceIcon = computed<boolean>(() => {
     return this.affordanceIcon() !== undefined && !this.postTemplate();
   });
-
-  /** re-emits the brain's clicked event as the component's public clicked output */
-  protected onBrainClicked(event: MouseEvent | KeyboardEvent): void {
-    this.clicked.emit(event);
-  }
 }

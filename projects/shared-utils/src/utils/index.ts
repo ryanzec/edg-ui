@@ -6,4 +6,5 @@ export * from './css';
 export * from './file';
 export * from './dom';
 export * from './http';
+export * from './local-storage-manager';
 export * from './log-manager';

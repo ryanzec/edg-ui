@@ -9,7 +9,7 @@ import { ROUTES, Router, RouterOutlet, Routes } from '@angular/router';
 
 import { unsavedChangesGuard } from './unsaved-changes-guard';
 import { UnsavedChangesAware } from './unsaved-changes-aware';
-import { UnsavedChangesDirective } from '../unsaved-changes-directive/unsaved-changes-directive';
+import { UnsavedChangesDirective } from '../unsaved-changes-dialog/unsaved-changes-directive';
 import { Button } from '../button/button';
 import { Input } from '../input/input';
 import { Dialog } from '../dialog/dialog';

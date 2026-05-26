@@ -13,7 +13,7 @@
 @if (labelBrainDirective.asLabel()) {
   <label
     class="org-label"
-    [for]="labelBrainDirective.htmlFor()"
+    [attr.for]="labelBrainDirective.htmlFor()"
     [attr.data-required]="labelBrainDirective.isRequired() ? '1' : null"
     [attr.data-loading]="labelBrainDirective.isLoading() ? '1' : null"
   >

@@ -4,6 +4,7 @@ import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { Table, type TableSize } from './table';
 import { TableHeader } from './table-header';
 import { TableCell } from './table-cell';
+import { TableActionsDirective } from './table-actions-directive';
 import { DataSelectionStore } from '../data-selection-store/data-selection-store';
 import { SortableDirective } from '../sortable-directive/sortable-directive';
 import { SortingStore } from '../sorting-store/sorting-store';
@@ -24,7 +25,7 @@ const SAMPLE_USERS: TestUser[] = [
 @Component({
   selector: 'story-table-tests-shell',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Table, TableHeader, TableCell, TypedContextDirective],
+  imports: [Table, TableHeader, TableCell, TableActionsDirective, TypedContextDirective],
   host: { class: 'block' },
   template: `
     <org-table
@@ -46,10 +47,28 @@ const SAMPLE_USERS: TestUser[] = [
       <ng-template #header>
         <org-table-th data-testid="header-name">Name</org-table-th>
         <org-table-th data-testid="header-records" [numeric]="true">Records</org-table-th>
+        <org-table-th data-testid="header-actions">Actions</org-table-th>
       </ng-template>
       <ng-template [orgTypedContext]="data()" #body let-user>
         <org-table-td [attr.data-testid]="'body-name-' + user.id">{{ user.name }}</org-table-td>
         <org-table-td [numeric]="true" [attr.data-testid]="'body-records-' + user.id">{{ user.records }}</org-table-td>
+        <org-table-td>
+          <button
+            type="button"
+            [attr.data-testid]="'row-action-unguarded-' + user.id"
+            (click)="handleUnguardedAction()"
+          >
+            unguarded
+          </button>
+          <button
+            type="button"
+            orgTableActions
+            [attr.data-testid]="'row-action-guarded-' + user.id"
+            (click)="handleGuardedAction()"
+          >
+            guarded
+          </button>
+        </org-table-td>
       </ng-template>
       <ng-template [orgTypedContext]="data()" #expanded let-user>
         <div [attr.data-testid]="'expanded-' + user.id">expanded {{ user.name }}</div>
@@ -111,6 +130,8 @@ class StoryTableTestsShell {
   protected readonly expansionStore = new DataSelectionStore<TestUser>();
 
   protected readonly rowClickedIds = signal<string[]>([]);
+  protected readonly guardedActionCount = signal<number>(0);
+  protected readonly unguardedActionCount = signal<number>(0);
 
   protected readonly selectionStoreValue = computed<DataSelectionStore<TestUser> | undefined>(() =>
     this.selectionEnabled() ? this.selectionStore : undefined
@@ -128,11 +149,19 @@ class StoryTableTestsShell {
       .map((user) => user.id)
       .join(',');
 
-    return `rowClicked=[${this.rowClickedIds().join(',')}] selected=[${selectedIds}] expanded=[${expandedIds}]`;
+    return `rowClicked=[${this.rowClickedIds().join(',')}] selected=[${selectedIds}] expanded=[${expandedIds}] guardedAction=${this.guardedActionCount()} unguardedAction=${this.unguardedActionCount()}`;
   }
 
   protected handleRowClicked(user: TestUser): void {
     this.rowClickedIds.update((ids) => [...ids, user.id]);
+  }
+
+  protected handleGuardedAction(): void {
+    this.guardedActionCount.update((value) => value + 1);
+  }
+
+  protected handleUnguardedAction(): void {
+    this.unguardedActionCount.update((value) => value + 1);
   }
 }
 
@@ -961,5 +990,97 @@ export const TableHeaderCyclesSortDirectionOnClick: Story = {
 
     await waitFor(() => expect(sortableTh.getAttribute('aria-sort')).toBe('none'));
     await expect(sortableTh.getAttribute('data-actively-sorting')).toBeNull();
+  },
+};
+
+export const ClickingGuardedActionButtonDoesNotEmitRowClicked: Story = {
+  render: renderShell,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const readout = await canvas.findByTestId('readout');
+    const guardedButton = await canvas.findByTestId('row-action-guarded-user-1');
+
+    await userEvent.click(guardedButton);
+
+    await waitFor(() => expect(readout.textContent).toContain('guardedAction=1'));
+    await expect(readout.textContent).toContain('rowClicked=[]');
+  },
+};
+
+export const ClickingUnguardedActionButtonAlsoEmitsRowClicked: Story = {
+  render: renderShell,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const readout = await canvas.findByTestId('readout');
+    const unguardedButton = await canvas.findByTestId('row-action-unguarded-user-1');
+
+    await userEvent.click(unguardedButton);
+
+    await waitFor(() => expect(readout.textContent).toContain('unguardedAction=1'));
+    await expect(readout.textContent).toContain('rowClicked=[user-1]');
+  },
+};
+
+export const KeyboardEnterOnGuardedActionButtonDoesNotActivateRow: Story = {
+  render: renderShell,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const readout = await canvas.findByTestId('readout');
+    const guardedButton = (await canvas.findByTestId('row-action-guarded-user-1')) as HTMLButtonElement;
+
+    guardedButton.focus();
+    await userEvent.keyboard('{Enter}');
+
+    await waitFor(() => expect(readout.textContent).toContain('rowClicked=[]'));
+    await expect(readout.textContent).toContain('guardedAction=0');
+  },
+};
+
+export const KeyboardSpaceOnGuardedActionButtonDoesNotActivateRow: Story = {
+  render: renderShell,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const readout = await canvas.findByTestId('readout');
+    const guardedButton = (await canvas.findByTestId('row-action-guarded-user-1')) as HTMLButtonElement;
+
+    guardedButton.focus();
+    await userEvent.keyboard(' ');
+
+    await waitFor(() => expect(readout.textContent).toContain('rowClicked=[]'));
+    await expect(readout.textContent).toContain('guardedAction=0');
+  },
+};
+
+export const ClickingGuardedActionButtonDoesNotToggleSelection: Story = {
+  render: renderShell,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const readout = await canvas.findByTestId('readout');
+
+    await userEvent.click(canvas.getByTestId('ctl-selection-on'));
+
+    const guardedButton = await canvas.findByTestId('row-action-guarded-user-1');
+
+    await userEvent.click(guardedButton);
+
+    await waitFor(() => expect(readout.textContent).toContain('guardedAction=1'));
+    await expect(readout.textContent).toContain('selected=[]');
+  },
+};
+
+export const ClickingGuardedActionButtonDoesNotToggleExpansion: Story = {
+  render: renderShell,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const readout = await canvas.findByTestId('readout');
+
+    await userEvent.click(canvas.getByTestId('ctl-expansion-on'));
+
+    const guardedButton = await canvas.findByTestId('row-action-guarded-user-1');
+
+    await userEvent.click(guardedButton);
+
+    await waitFor(() => expect(readout.textContent).toContain('guardedAction=1'));
+    await expect(readout.textContent).toContain('expanded=[]');
   },
 };
