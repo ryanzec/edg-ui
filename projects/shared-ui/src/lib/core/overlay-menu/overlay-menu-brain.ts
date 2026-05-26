@@ -43,6 +43,8 @@ export type OverlayMenuItemEntry<
   label: string;
   /** optional pre icon displayed before the menu item label */
   icon: IconName | null;
+  /** optional pre image url displayed before the menu item label — used when the row represents an entity with an image-based icon (e.g. an organization avatar). takes precedence over `icon` when both are provided. */
+  iconUrl?: string;
   /** when true, the row paints muted, is non-interactive, and is skipped by cdk keyboard nav */
   disabled?: boolean;
   /** optional post keyboard shortcut text rendered as a kbd pill (e.g. "⌘ Z") */

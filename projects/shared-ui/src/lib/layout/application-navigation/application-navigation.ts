@@ -18,6 +18,7 @@ import { Icon } from '../../core/icon/icon';
 import { List } from '../../core/list/list';
 import { ListItem } from '../../core/list/list-item';
 import { ListItemIcon } from '../../core/list/list-item-icon';
+import { ListItemImage } from '../../core/list/list-item-image';
 import {
   OverlayMenu,
   type OverlayMenuItem,
@@ -79,17 +80,18 @@ export type NavigationGroup = {
 /** an item or divider passed to the settings overlay menu; `itemClicked` only emits clickable item entries */
 export type SettingsMenuItem = OverlayMenuItem;
 
-/** default value for the workspaceIconUrl input */
-export const APPLICATION_NAVIGATION_WORKSPACE_ICON_URL_DEFAULT: string | undefined = undefined;
+/** the shape used to describe an organization in both the header and the switcher overlay menu */
+export type OrganizationDisplay = {
+  /** unique id used to identify the organization (also used to filter the current org out of the switcher) */
+  id: string;
+  /** optional image url rendered as the organization's icon — when omitted, no icon is rendered */
+  iconUrl?: string;
+  /** the visible organization name */
+  name: string;
+};
 
-/** default value for the workspaceIconLabel input */
-export const APPLICATION_NAVIGATION_WORKSPACE_ICON_LABEL_DEFAULT: string | undefined = undefined;
-
-/** default value for the workspaceName input */
-export const APPLICATION_NAVIGATION_WORKSPACE_NAME_DEFAULT = '';
-
-/** default value for the workspacePlan input */
-export const APPLICATION_NAVIGATION_WORKSPACE_PLAN_DEFAULT: string | undefined = undefined;
+/** default value for the availableOrganizations input */
+export const APPLICATION_NAVIGATION_AVAILABLE_ORGANIZATIONS_DEFAULT: OrganizationDisplay[] = [];
 
 /** default value for the navigationItems input */
 export const APPLICATION_NAVIGATION_NAVIGATION_ITEMS_DEFAULT: NavigationItem[] = [];
@@ -131,6 +133,7 @@ const APPEARANCE_ENTRY_ID = 'appearance';
     List,
     ListItem,
     ListItemIcon,
+    ListItemImage,
     OverlayMenu,
     OverlayMenuTriggerDirective,
     Tooltip,
@@ -143,17 +146,11 @@ const APPEARANCE_ENTRY_ID = 'appearance';
   },
 })
 export class ApplicationNavigation {
-  /** explicit image url rendered as the workspace icon in the header */
-  public workspaceIconUrl = input<string | undefined>(APPLICATION_NAVIGATION_WORKSPACE_ICON_URL_DEFAULT);
+  /** the currently active organization rendered at the top of the navigation; its icon (if any) and name are shown in the header */
+  public currentOrganization = input.required<OrganizationDisplay>();
 
-  /** optional one-or-two letter label rendered inside a colored shape when no icon url is provided */
-  public workspaceIconLabel = input<string | undefined>(APPLICATION_NAVIGATION_WORKSPACE_ICON_LABEL_DEFAULT);
-
-  /** the workspace name rendered at the top of the navigation */
-  public workspaceName = input<string>(APPLICATION_NAVIGATION_WORKSPACE_NAME_DEFAULT);
-
-  /** optional plan / subtitle rendered under the workspace name (e.g. "Acme Inc · Pro") */
-  public workspacePlan = input<string | undefined>(APPLICATION_NAVIGATION_WORKSPACE_PLAN_DEFAULT);
+  /** the full list of organizations the user can switch to; the current organization is filtered out for the switcher overlay menu, so the menu only renders when at least one other organization is present */
+  public availableOrganizations = input<OrganizationDisplay[]>(APPLICATION_NAVIGATION_AVAILABLE_ORGANIZATIONS_DEFAULT);
 
   /** list of navigation items to display in the sidebar; always rendered before grouped items */
   public navigationItems = input<NavigationItem[]>(APPLICATION_NAVIGATION_NAVIGATION_ITEMS_DEFAULT);
@@ -191,8 +188,8 @@ export class ApplicationNavigation {
   /** emits when a settings menu item is clicked */
   public settingsMenuItemClicked = output<SettingsMenuItem>();
 
-  /** emits when the workspace header is clicked (parent decides whether to open a workspace switcher) */
-  public workspaceClicked = output<void>();
+  /** emits when the user selects an organization from the switcher overlay menu */
+  public availableOrganizationSelected = output<OrganizationDisplay>();
 
   /** emits when the logout button is clicked */
   public logout = output<void>();
@@ -206,6 +203,25 @@ export class ApplicationNavigation {
   /** the section groups that should be rendered — filters out groups whose `items` are empty (these emit a logManager warning via the seeding effect) */
   protected readonly visibleGroups = computed<NavigationGroup[]>(() =>
     this.groupedNavigationItems().filter((group) => group.items.length > 0)
+  );
+
+  /** the organizations rendered in the switcher overlay menu — the current organization is filtered out so selection always represents a real switch */
+  protected readonly selectableOrganizations = computed<OrganizationDisplay[]>(() =>
+    this.availableOrganizations().filter((organization) => organization.id !== this.currentOrganization().id)
+  );
+
+  /** whether the switcher overlay menu has any organizations to show — drives the interactive vs static rendering of the organization header */
+  protected readonly hasSelectableOrganizations = computed<boolean>(() => this.selectableOrganizations().length > 0);
+
+  /** the resolved overlay menu items for the organization switcher — each row carries the source organization in `meta` so the click handler can emit it back to the parent */
+  protected readonly organizationMenuItems = computed<OverlayMenuItem[]>(() =>
+    this.selectableOrganizations().map((organization) => ({
+      id: organization.id,
+      label: organization.name,
+      icon: null,
+      iconUrl: organization.iconUrl,
+      meta: organization,
+    }))
   );
 
   /** the icon name used for the collapse / expand toggle button */
@@ -316,8 +332,14 @@ export class ApplicationNavigation {
     return this._expandedGroupIds().has(id);
   }
 
-  protected onWorkspaceClick(): void {
-    this.workspaceClicked.emit();
+  protected onOrganizationMenuItemTriggered(item: OverlayMenuItemEntry): void {
+    const organization = item.meta as OrganizationDisplay | undefined;
+
+    if (!organization) {
+      return;
+    }
+
+    this.availableOrganizationSelected.emit(organization);
   }
 
   /** invoked by the navigation item sub-component when a plain item is clicked */

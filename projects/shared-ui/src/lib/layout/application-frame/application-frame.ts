@@ -4,6 +4,7 @@ import {
   ApplicationNavigation,
   type NavigationItem,
   type NavigationSubItem,
+  type OrganizationDisplay,
   type SettingsMenuItem,
   type Theme,
 } from '../application-navigation/application-navigation';
@@ -65,9 +66,11 @@ export class ApplicationFrame {
     }
   }
 
-  /** logs a workspace-header click for observability */
-  protected onWorkspaceClicked(): void {
-    logManager.log({ type: 'application-frame-workspace-clicked' });
+  /** routes an organization switch through the layout store and logs it for observability */
+  protected onAvailableOrganizationSelected(organization: OrganizationDisplay): void {
+    this.layoutStore.setCurrentOrganization(organization);
+
+    logManager.log({ type: 'application-frame-organization-selected', organization });
   }
 
   /** logs a top-level navigation item click for observability */

@@ -4,7 +4,11 @@ import { Dialog as CdkDialog } from '@angular/cdk/dialog';
 import { DateTime } from 'luxon';
 import type { ChartConfiguration } from 'chart.js';
 import { logManager } from '@organization/shared-utils';
-import { ApplicationNavigation, type NavigationItem } from '../../layout/application-navigation/application-navigation';
+import {
+  ApplicationNavigation,
+  type NavigationItem,
+  type OrganizationDisplay,
+} from '../../layout/application-navigation/application-navigation';
 import { Avatar } from '../../core/avatar/avatar';
 import { AvatarStack } from '../../core/avatar/avatar-stack';
 import { Box } from '../../core/box/box';
@@ -298,6 +302,9 @@ greet('world');`;
     radio: new FormControl('email'),
     checkboxToggle: new FormControl<string[]>(['notify']),
   });
+
+  /** current organization rendered in the application-navigation demo header */
+  protected readonly currentOrganization: OrganizationDisplay = { id: 'demo', name: 'Demo Org' };
 
   /** navigation items rendered in the application-navigation demo */
   protected readonly navigationItems: NavigationItem[] = [

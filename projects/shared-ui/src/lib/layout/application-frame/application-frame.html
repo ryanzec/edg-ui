@@ -1,7 +1,6 @@
 <org-application-navigation
-  [workspaceIconLabel]="layoutStore.workspaceIconLabel()"
-  [workspaceName]="layoutStore.workspaceName()"
-  [workspacePlan]="layoutStore.workspacePlan()"
+  [currentOrganization]="layoutStore.currentOrganization()"
+  [availableOrganizations]="layoutStore.availableOrganizations()"
   [navigationItems]="layoutStore.navigationItems()"
   [groupedNavigationItems]="layoutStore.groupedNavigationItems()"
   [settingsMenuItems]="layoutStore.settingsMenuItems()"
@@ -12,7 +11,7 @@
   [userName]="layoutStore.userName()"
   [userEmail]="layoutStore.userEmail()"
   [userStatusColor]="layoutStore.userStatusColor()"
-  (workspaceClicked)="onWorkspaceClicked()"
+  (availableOrganizationSelected)="onAvailableOrganizationSelected($event)"
   (navigationItemClicked)="onNavigationItemClicked($event)"
   (subNavigationItemClicked)="onSubNavigationItemClicked($event)"
   (settingsMenuItemClicked)="onSettingsMenuItemClicked($event)"

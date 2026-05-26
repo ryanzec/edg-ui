@@ -1,24 +1,57 @@
-<div class="main-section">
-  <!-- workspace header -->
-  <button type="button" class="workspace-header" [attr.aria-label]="workspaceName()" (click)="onWorkspaceClick()">
-    <div class="workspace-icon">
-      @if (workspaceIconUrl(); as iconUrl) {
-        <img [src]="iconUrl" alt="" class="workspace-icon-image" />
-      } @else if (workspaceIconLabel(); as iconLabel) {
-        <span class="workspace-icon-label">{{ iconLabel }}</span>
-      }
-    </div>
-    @if (!collapsed()) {
-      <div class="workspace-text">
-        <span class="workspace-name">{{ workspaceName() }}</span>
-        @if (workspacePlan(); as plan) {
-          <span class="workspace-plan">{{ plan }}</span>
+<div class="organization-section">
+  <org-list>
+    @if (collapsed()) {
+      <org-tooltip placement="right">
+        @if (hasSelectableOrganizations()) {
+          <org-list-item
+            [orgOverlayMenuTrigger]="organizationMenu"
+            overlayMenuTriggerPosition="after"
+            asTag="button"
+            [label]="currentOrganization().name"
+            [hideLabel]="true"
+            [forceClickable]="true"
+          >
+            @if (currentOrganization().iconUrl; as iconUrl) {
+              <org-list-item-image pre [src]="iconUrl" [alt]="currentOrganization().name" />
+            }
+          </org-list-item>
+        } @else {
+          <org-list-item [label]="currentOrganization().name" [hideLabel]="true">
+            @if (currentOrganization().iconUrl; as iconUrl) {
+              <org-list-item-image pre [src]="iconUrl" [alt]="currentOrganization().name" />
+            }
+          </org-list-item>
         }
-      </div>
-      <org-icon class="workspace-chevron" name="chevron-up-down" />
+        <ng-template #tooltipContent>
+          <org-tooltip-content>{{ currentOrganization().name }}</org-tooltip-content>
+        </ng-template>
+      </org-tooltip>
+    } @else {
+      @if (hasSelectableOrganizations()) {
+        <org-list-item
+          [orgOverlayMenuTrigger]="organizationMenu"
+          overlayMenuTriggerPosition="after"
+          asTag="button"
+          [label]="currentOrganization().name"
+          [forceClickable]="true"
+        >
+          @if (currentOrganization().iconUrl; as iconUrl) {
+            <org-list-item-image pre [src]="iconUrl" [alt]="currentOrganization().name" />
+          }
+          <org-icon post class="organization-chevron" name="chevron-right" />
+        </org-list-item>
+      } @else {
+        <org-list-item [label]="currentOrganization().name">
+          @if (currentOrganization().iconUrl; as iconUrl) {
+            <org-list-item-image pre [src]="iconUrl" [alt]="currentOrganization().name" />
+          }
+        </org-list-item>
+      }
     }
-  </button>
+  </org-list>
+</div>
 
+<div class="main-section">
   <!-- nav items -->
   <nav aria-label="Main navigation" class="nav">
     <org-list class="whitespace-nowrap">
@@ -78,7 +111,7 @@
 
 <!-- settings -->
 <div class="settings-section">
-  <org-list size="base">
+  <org-list>
     @if (collapsed()) {
       <org-tooltip placement="right">
         <org-list-item
@@ -117,6 +150,10 @@
     />
   </ng-template>
 </div>
+
+<ng-template #organizationMenu>
+  <org-overlay-menu [items]="organizationMenuItems()" (itemClicked)="onOrganizationMenuItemTriggered($event)" />
+</ng-template>
 
 <!-- user section -->
 @if (userName()) {

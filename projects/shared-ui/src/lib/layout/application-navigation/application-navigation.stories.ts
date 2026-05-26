@@ -4,6 +4,7 @@ import {
   ApplicationNavigation,
   type NavigationGroup,
   type NavigationItem,
+  type OrganizationDisplay,
   type SettingsMenuItem,
   type Theme,
 } from './application-navigation';
@@ -21,11 +22,13 @@ const meta: Meta<ApplicationNavigation> = {
 <div class="docs-top-level-overview">
   ## Application Navigation Component
 
-  A vertical navigation sidebar component with a workspace header, top-level and nested navigation items, indicator
-  badges, a right-edge collapse handle, a settings overlay menu (appearance toggle + items), and a user profile row.
+  A vertical navigation sidebar component with an organization header, top-level and nested navigation items,
+  indicator badges, a right-edge collapse handle, a settings overlay menu (appearance toggle + items), and a user
+  profile row.
 
   ### Features
-  - Workspace header with icon, name, plan, and switcher chevron
+  - Organization header showing the current organization's icon (when provided) and name; opens a switcher overlay menu
+    listing the other available organizations
   - Plain navigation items with optional numeric indicators
   - Single-level expandable groups; nested sub-items render inline when expanded, or as an overlay menu when collapsed
   - Right-edge collapse handle that flips between expand/collapse chevron
@@ -38,9 +41,8 @@ const meta: Meta<ApplicationNavigation> = {
   ### Usage Examples
   \`\`\`html
   <org-application-navigation
-    workspaceIconLabel="H"
-    workspaceName="Halcyon"
-    workspacePlan="Acme Inc · Pro"
+    [currentOrganization]="currentOrganization"
+    [availableOrganizations]="availableOrganizations"
     [navigationItems]="navItems"
     [settingsMenuItems]="settingsItems"
     userName="Maya Brennan"
@@ -51,7 +53,7 @@ const meta: Meta<ApplicationNavigation> = {
     (navigationItemClicked)="onNavClick($event)"
     (subNavigationItemClicked)="onSubNavClick($event)"
     (settingsMenuItemClicked)="onSettingsClick($event)"
-    (workspaceClicked)="onWorkspaceClick()"
+    (availableOrganizationSelected)="onOrganizationSelected($event)"
     (logout)="onLogout()"
   />
   \`\`\`
@@ -64,6 +66,21 @@ const meta: Meta<ApplicationNavigation> = {
 
 export default meta;
 type Story = StoryObj<ApplicationNavigation>;
+
+const defaultCurrentOrganization: OrganizationDisplay = {
+  id: 'halcyon',
+  name: 'Halcyon',
+  iconUrl: 'https://i.pravatar.cc/64?img=12',
+};
+
+const defaultAvailableOrganizations: OrganizationDisplay[] = [
+  defaultCurrentOrganization,
+  { id: 'northwind', name: 'Northwind Traders', iconUrl: 'https://i.pravatar.cc/64?img=22' },
+  { id: 'acme', name: 'Acme Co.', iconUrl: 'https://i.pravatar.cc/64?img=32' },
+  { id: 'initech', name: 'Initech' },
+];
+
+const onlyCurrentAvailableOrganizations: OrganizationDisplay[] = [defaultCurrentOrganization];
 
 const defaultNavigationItems: NavigationItem[] = [
   { id: 'overview', label: 'Overview', icon: 'house', routePath: '/overview', shortcut: 'G O' },
@@ -194,9 +211,8 @@ const settingsItemsWithDivider: SettingsMenuItem[] = [
   template: `
     <div class="layout">
       <org-application-navigation
-        workspaceIconLabel="H"
-        workspaceName="Halcyon"
-        workspacePlan="Acme Inc · Pro"
+        [currentOrganization]="currentOrganization"
+        [availableOrganizations]="availableOrganizations"
         [navigationItems]="navigationItems"
         [groupedNavigationItems]="groupedNavigationItems"
         [settingsMenuItems]="settingsItems"
@@ -207,7 +223,7 @@ const settingsItemsWithDivider: SettingsMenuItem[] = [
         userName="Maya Brennan"
         userEmail="maya@acme.co"
         userStatusColor="safe"
-        (workspaceClicked)="onWorkspaceClicked()"
+        (availableOrganizationSelected)="onAvailableOrganizationSelected($event)"
         (navigationItemClicked)="onNavigationItemClicked($event)"
         (subNavigationItemClicked)="onSubNavigationItemClicked($event)"
         (settingsMenuItemClicked)="onSettingsMenuItemClicked($event)"
@@ -218,14 +234,16 @@ const settingsItemsWithDivider: SettingsMenuItem[] = [
   `,
 })
 class ApplicationNavigationHostStory {
+  protected readonly currentOrganization = defaultCurrentOrganization;
+  protected readonly availableOrganizations = defaultAvailableOrganizations;
   protected readonly navigationItems = referenceUngroupedItems;
   protected readonly groupedNavigationItems = referenceGroupedNavigationItems;
   protected readonly settingsItems = defaultSettingsItems;
   protected readonly collapsed = signal<boolean>(false);
   protected readonly theme = signal<Theme | undefined>('dark');
 
-  protected onWorkspaceClicked(): void {
-    console.log('workspace clicked');
+  protected onAvailableOrganizationSelected(organization: OrganizationDisplay): void {
+    console.log('organization selected', organization);
   }
 
   protected onNavigationItemClicked(item: NavigationItem): void {
@@ -275,9 +293,8 @@ export const CollapsedState: Story = {
     template: `
       <div style="height: 100vh; display: flex;">
         <org-application-navigation
-          workspaceIconLabel="H"
-          workspaceName="Halcyon"
-          workspacePlan="Acme Inc · Pro"
+          [currentOrganization]="currentOrganization"
+          [availableOrganizations]="availableOrganizations"
           [navigationItems]="navigationItems"
           [settingsMenuItems]="settingsItems"
           userName="Maya Brennan"
@@ -289,6 +306,8 @@ export const CollapsedState: Story = {
       </div>
     `,
     props: {
+      currentOrganization: defaultCurrentOrganization,
+      availableOrganizations: defaultAvailableOrganizations,
       navigationItems: defaultNavigationItems,
       settingsItems: defaultSettingsItems,
     },
@@ -316,9 +335,8 @@ export const CollapseExpandComparison: Story = {
         <org-storybook-example-container-section label="Expanded (default)">
           <div style="height: 32rem; display: flex;">
             <org-application-navigation
-              workspaceIconLabel="H"
-              workspaceName="Halcyon"
-              workspacePlan="Acme Inc · Pro"
+              [currentOrganization]="currentOrganization"
+              [availableOrganizations]="availableOrganizations"
               [navigationItems]="navigationItems"
               [settingsMenuItems]="settingsItems"
               userName="Maya Brennan"
@@ -332,9 +350,8 @@ export const CollapseExpandComparison: Story = {
         <org-storybook-example-container-section label="Collapsed">
           <div style="height: 32rem; display: flex;">
             <org-application-navigation
-              workspaceIconLabel="H"
-              workspaceName="Halcyon"
-              workspacePlan="Acme Inc · Pro"
+              [currentOrganization]="currentOrganization"
+              [availableOrganizations]="availableOrganizations"
               [navigationItems]="navigationItems"
               [settingsMenuItems]="settingsItems"
               userName="Maya Brennan"
@@ -348,13 +365,15 @@ export const CollapseExpandComparison: Story = {
 
         <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
           <li>Width transitions smoothly between expanded and collapsed states via the right-edge handle</li>
-          <li>Workspace header collapses to just the icon when in collapsed state</li>
+          <li>Organization header collapses to just the icon when in collapsed state</li>
           <li>Plain items show tooltips on hover when collapsed; expandable groups open an overlay menu instead</li>
           <li>The user avatar status dot remains visible in both states</li>
         </ul>
       </org-storybook-example-container>
     `,
     props: {
+      currentOrganization: defaultCurrentOrganization,
+      availableOrganizations: defaultAvailableOrganizations,
       navigationItems: defaultNavigationItems,
       settingsItems: defaultSettingsItems,
     },
@@ -382,8 +401,8 @@ export const GroupedNavigation: Story = {
         <org-storybook-example-container-section label="All groups expanded by default">
           <div style="height: 40rem; display: flex;">
             <org-application-navigation
-              workspaceIconLabel="H"
-              workspaceName="Halcyon"
+              [currentOrganization]="currentOrganization"
+              [availableOrganizations]="availableOrganizations"
               [navigationItems]="ungroupedItems"
               [groupedNavigationItems]="groupedItems"
               [settingsMenuItems]="settingsItems"
@@ -398,8 +417,8 @@ export const GroupedNavigation: Story = {
         <org-storybook-example-container-section label="Collapsed sidebar (group headers hidden, items render flat)">
           <div style="height: 40rem; display: flex;">
             <org-application-navigation
-              workspaceIconLabel="H"
-              workspaceName="Halcyon"
+              [currentOrganization]="currentOrganization"
+              [availableOrganizations]="availableOrganizations"
               [navigationItems]="ungroupedItems"
               [groupedNavigationItems]="groupedItems"
               [settingsMenuItems]="settingsItems"
@@ -421,6 +440,8 @@ export const GroupedNavigation: Story = {
       </org-storybook-example-container>
     `,
     props: {
+      currentOrganization: defaultCurrentOrganization,
+      availableOrganizations: defaultAvailableOrganizations,
       ungroupedItems: referenceUngroupedItems,
       groupedItems: referenceGroupedNavigationItems,
       settingsItems: defaultSettingsItems,
@@ -444,8 +465,8 @@ export const NestedNavigation: Story = {
     template: `
       <div style="height: 32rem; display: flex;">
         <org-application-navigation
-          workspaceIconLabel="H"
-          workspaceName="Halcyon"
+          [currentOrganization]="currentOrganization"
+          [availableOrganizations]="availableOrganizations"
           [navigationItems]="navigationItems"
           [settingsMenuItems]="settingsItems"
           userName="Maya Brennan"
@@ -456,6 +477,8 @@ export const NestedNavigation: Story = {
       </div>
     `,
     props: {
+      currentOrganization: defaultCurrentOrganization,
+      availableOrganizations: defaultAvailableOrganizations,
       navigationItems: defaultNavigationItems,
       settingsItems: defaultSettingsItems,
     },
@@ -483,8 +506,8 @@ export const AppearanceToggle: Story = {
         <org-storybook-example-container-section label="With theme (appearance section visible)">
           <div style="height: 24rem; display: flex;">
             <org-application-navigation
-              workspaceIconLabel="H"
-              workspaceName="Halcyon"
+              [currentOrganization]="currentOrganization"
+              [availableOrganizations]="availableOrganizations"
               [navigationItems]="navigationItems"
               [settingsMenuItems]="settingsItems"
               userName="Maya Brennan"
@@ -496,8 +519,8 @@ export const AppearanceToggle: Story = {
         <org-storybook-example-container-section label="Without theme (appearance section hidden)">
           <div style="height: 24rem; display: flex;">
             <org-application-navigation
-              workspaceIconLabel="H"
-              workspaceName="Halcyon"
+              [currentOrganization]="currentOrganization"
+              [availableOrganizations]="availableOrganizations"
               [navigationItems]="navigationItems"
               [settingsMenuItems]="settingsItems"
               userName="Maya Brennan"
@@ -512,6 +535,8 @@ export const AppearanceToggle: Story = {
       </org-storybook-example-container>
     `,
     props: {
+      currentOrganization: defaultCurrentOrganization,
+      availableOrganizations: defaultAvailableOrganizations,
       navigationItems: defaultNavigationItems,
       settingsItems: settingsItemsWithDivider,
     },
@@ -538,8 +563,8 @@ export const UserDisplayVariants: Story = {
         <org-storybook-example-container-section label="Name + email + status">
           <div style="height: 24rem; display: flex;">
             <org-application-navigation
-              workspaceIconLabel="H"
-              workspaceName="Halcyon"
+              [currentOrganization]="currentOrganization"
+              [availableOrganizations]="availableOrganizations"
               [navigationItems]="navigationItems"
               [settingsMenuItems]="settingsItems"
               userName="Maya Brennan"
@@ -552,8 +577,8 @@ export const UserDisplayVariants: Story = {
         <org-storybook-example-container-section label="Name only">
           <div style="height: 24rem; display: flex;">
             <org-application-navigation
-              workspaceIconLabel="H"
-              workspaceName="Halcyon"
+              [currentOrganization]="currentOrganization"
+              [availableOrganizations]="availableOrganizations"
               [navigationItems]="navigationItems"
               [settingsMenuItems]="settingsItems"
               userName="Maya Brennan"
@@ -564,8 +589,8 @@ export const UserDisplayVariants: Story = {
         <org-storybook-example-container-section label="With avatar image">
           <div style="height: 24rem; display: flex;">
             <org-application-navigation
-              workspaceIconLabel="H"
-              workspaceName="Halcyon"
+              [currentOrganization]="currentOrganization"
+              [availableOrganizations]="availableOrganizations"
               [navigationItems]="navigationItems"
               [settingsMenuItems]="settingsItems"
               userName="Maya Brennan"
@@ -584,6 +609,8 @@ export const UserDisplayVariants: Story = {
       </org-storybook-example-container>
     `,
     props: {
+      currentOrganization: defaultCurrentOrganization,
+      availableOrganizations: defaultAvailableOrganizations,
       navigationItems: defaultNavigationItems,
       settingsItems: defaultSettingsItems,
     },
@@ -610,8 +637,8 @@ export const EmptyStates: Story = {
         <org-storybook-example-container-section label="No Navigation Items">
           <div style="height: 24rem; display: flex;">
             <org-application-navigation
-              workspaceIconLabel="H"
-              workspaceName="Halcyon"
+              [currentOrganization]="currentOrganization"
+              [availableOrganizations]="availableOrganizations"
               userName="Maya Brennan"
               [navigationItems]="[]"
               [settingsMenuItems]="settingsItems"
@@ -622,8 +649,8 @@ export const EmptyStates: Story = {
         <org-storybook-example-container-section label="No Settings Items">
           <div style="height: 24rem; display: flex;">
             <org-application-navigation
-              workspaceIconLabel="H"
-              workspaceName="Halcyon"
+              [currentOrganization]="currentOrganization"
+              [availableOrganizations]="availableOrganizations"
               userName="Maya Brennan"
               [navigationItems]="navigationItems"
               [settingsMenuItems]="[]"
@@ -634,8 +661,8 @@ export const EmptyStates: Story = {
         <org-storybook-example-container-section label="No User">
           <div style="height: 24rem; display: flex;">
             <org-application-navigation
-              workspaceIconLabel="H"
-              workspaceName="Halcyon"
+              [currentOrganization]="currentOrganization"
+              [availableOrganizations]="availableOrganizations"
               [navigationItems]="navigationItems"
               [settingsMenuItems]="settingsItems"
             />
@@ -650,6 +677,85 @@ export const EmptyStates: Story = {
       </org-storybook-example-container>
     `,
     props: {
+      currentOrganization: defaultCurrentOrganization,
+      availableOrganizations: defaultAvailableOrganizations,
+      navigationItems: defaultNavigationItems,
+      settingsItems: defaultSettingsItems,
+    },
+    moduleMetadata: {
+      imports: [ApplicationNavigation, StorybookExampleContainer, StorybookExampleContainerSection],
+    },
+  }),
+};
+
+export const OrganizationSwitcher: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The organization header opens a switcher overlay menu listing every other available organization. When `availableOrganizations` contains only the current organization (or is empty), the header is rendered as a static label with no chevron and no click affordance. Each menu row renders the organization icon via `iconUrl` when provided, falling back to a name-only row otherwise.',
+      },
+    },
+  },
+  render: () => ({
+    template: `
+      <org-storybook-example-container
+        title="Organization Switcher"
+        currentState="Interactive vs static organization header"
+      >
+        <org-storybook-example-container-section label="Multiple selectable organizations (interactive header with chevron)">
+          <div style="height: 28rem; display: flex;">
+            <org-application-navigation
+              [currentOrganization]="currentOrganization"
+              [availableOrganizations]="availableOrganizations"
+              [navigationItems]="navigationItems"
+              [settingsMenuItems]="settingsItems"
+              userName="Maya Brennan"
+              theme="dark"
+            />
+          </div>
+        </org-storybook-example-container-section>
+
+        <org-storybook-example-container-section label="Only the current organization (static header, no chevron)">
+          <div style="height: 28rem; display: flex;">
+            <org-application-navigation
+              [currentOrganization]="currentOrganization"
+              [availableOrganizations]="onlyCurrentOrganizations"
+              [navigationItems]="navigationItems"
+              [settingsMenuItems]="settingsItems"
+              userName="Maya Brennan"
+              theme="dark"
+            />
+          </div>
+        </org-storybook-example-container-section>
+
+        <org-storybook-example-container-section label="Current organization without an iconUrl (header shows name only)">
+          <div style="height: 28rem; display: flex;">
+            <org-application-navigation
+              [currentOrganization]="currentOrganizationNoIcon"
+              [availableOrganizations]="availableOrganizations"
+              [navigationItems]="navigationItems"
+              [settingsMenuItems]="settingsItems"
+              userName="Maya Brennan"
+              theme="dark"
+            />
+          </div>
+        </org-storybook-example-container-section>
+
+        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+          <li>The header is a button (with a right-side chevron) when other organizations are available</li>
+          <li>Clicking the header opens an overlay menu listing every organization except the current one</li>
+          <li>Menu rows render the organization icon when <code>iconUrl</code> is set; otherwise the row shows just the name</li>
+          <li>The header degrades to a non-interactive label when no other organizations are available</li>
+          <li>When <code>currentOrganization.iconUrl</code> is empty, the header shows only the name</li>
+        </ul>
+      </org-storybook-example-container>
+    `,
+    props: {
+      currentOrganization: defaultCurrentOrganization,
+      currentOrganizationNoIcon: { id: 'plain', name: 'Plain Org' } satisfies OrganizationDisplay,
+      availableOrganizations: defaultAvailableOrganizations,
+      onlyCurrentOrganizations: onlyCurrentAvailableOrganizations,
       navigationItems: defaultNavigationItems,
       settingsItems: defaultSettingsItems,
     },

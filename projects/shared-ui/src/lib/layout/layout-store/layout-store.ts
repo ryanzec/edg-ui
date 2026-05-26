@@ -2,15 +2,15 @@ import { Injectable, computed, signal } from '@angular/core';
 import {
   type NavigationGroup,
   type NavigationItem,
+  type OrganizationDisplay,
   type SettingsMenuItem,
 } from '../application-navigation/application-navigation';
 import { type ComponentColor } from '../../core/types/component-types';
 
 /** unified internal state shape for the layout store */
 type LayoutState = {
-  workspaceIconLabel: string | undefined;
-  workspaceName: string;
-  workspacePlan: string | undefined;
+  currentOrganization: OrganizationDisplay;
+  availableOrganizations: OrganizationDisplay[];
   navigationItems: NavigationItem[];
   groupedNavigationItems: NavigationGroup[];
   settingsMenuItems: SettingsMenuItem[];
@@ -68,11 +68,19 @@ const SETTINGS_MENU_ITEMS: SettingsMenuItem[] = [
   { id: 'signout', label: 'Sign out', icon: 'log-out', color: 'danger' },
 ];
 
-/** initial layout state seeded with hardcoded workspace / user / navigation data */
+/** hardcoded organization options for the navigation header switcher */
+const HALCYON_ORGANIZATION: OrganizationDisplay = { id: 'halcyon', name: 'Halcyon' };
+
+const AVAILABLE_ORGANIZATIONS: OrganizationDisplay[] = [
+  HALCYON_ORGANIZATION,
+  { id: 'northwind', name: 'Northwind Traders' },
+  { id: 'acme', name: 'Acme Co.' },
+];
+
+/** initial layout state seeded with hardcoded organization / user / navigation data */
 const INITIAL_STATE: LayoutState = {
-  workspaceIconLabel: 'H',
-  workspaceName: 'Halcyon',
-  workspacePlan: 'Acme Inc · Pro',
+  currentOrganization: HALCYON_ORGANIZATION,
+  availableOrganizations: AVAILABLE_ORGANIZATIONS,
   navigationItems: NAVIGATION_ITEMS,
   groupedNavigationItems: GROUPED_NAVIGATION_ITEMS,
   settingsMenuItems: SETTINGS_MENU_ITEMS,
@@ -83,7 +91,7 @@ const INITIAL_STATE: LayoutState = {
 };
 
 /**
- * application-wide store for the data that drives `<org-application-frame>` (workspace identity, navigation
+ * application-wide store for the data that drives `<org-application-frame>` (organization identity, navigation
  * structure, settings menu, signed-in user details, and the collapsed state of the sidebar).
  */
 @Injectable({ providedIn: 'root' })
@@ -91,14 +99,11 @@ export class LayoutStore {
   /** unified state signal containing every piece of layout state */
   private readonly _state = signal<LayoutState>(INITIAL_STATE);
 
-  /** the workspace icon label rendered in the navigation header (e.g. 'H') */
-  public readonly workspaceIconLabel = computed<string | undefined>(() => this._state().workspaceIconLabel);
+  /** the currently active organization rendered in the navigation header */
+  public readonly currentOrganization = computed<OrganizationDisplay>(() => this._state().currentOrganization);
 
-  /** the workspace name rendered in the navigation header */
-  public readonly workspaceName = computed<string>(() => this._state().workspaceName);
-
-  /** the workspace plan / subtitle rendered under the workspace name */
-  public readonly workspacePlan = computed<string | undefined>(() => this._state().workspacePlan);
+  /** the full list of organizations the user can switch to via the navigation header */
+  public readonly availableOrganizations = computed<OrganizationDisplay[]>(() => this._state().availableOrganizations);
 
   /** ungrouped top-level navigation items rendered in the sidebar above any section groups */
   public readonly navigationItems = computed<NavigationItem[]>(() => this._state().navigationItems);
@@ -120,6 +125,11 @@ export class LayoutStore {
 
   /** whether the sidebar is in its collapsed (icon-only) state */
   public readonly collapsed = computed<boolean>(() => this._state().collapsed);
+
+  /** sets the currently active organization rendered in the navigation header */
+  public setCurrentOrganization(currentOrganization: OrganizationDisplay): void {
+    this._state.update((state) => ({ ...state, currentOrganization }));
+  }
 
   /** sets the collapsed state of the sidebar to an explicit value */
   public setCollapsed(collapsed: boolean): void {

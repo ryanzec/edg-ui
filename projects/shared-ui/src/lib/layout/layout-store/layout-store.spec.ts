@@ -16,10 +16,11 @@ describe('LayoutStore', () => {
   });
 
   describe('initial state', () => {
-    it('exposes hardcoded workspace, user, navigation, and settings defaults', () => {
-      expect(store.workspaceIconLabel()).toBe('H');
-      expect(store.workspaceName()).toBe('Halcyon');
-      expect(store.workspacePlan()).toBe('Acme Inc · Pro');
+    it('exposes hardcoded organization, user, navigation, and settings defaults', () => {
+      expect(store.currentOrganization().id).toBe('halcyon');
+      expect(store.currentOrganization().name).toBe('Halcyon');
+      expect(store.availableOrganizations().length).toBeGreaterThan(1);
+      expect(store.availableOrganizations()[0].id).toBe('halcyon');
       expect(store.userName()).toBe('Maya Brennan');
       expect(store.userEmail()).toBe('maya@acme.co');
       expect(store.userStatusColor()).toBe('safe');
@@ -29,6 +30,16 @@ describe('LayoutStore', () => {
 
     it('starts with the sidebar expanded', () => {
       expect(store.collapsed()).toBe(false);
+    });
+  });
+
+  describe('setCurrentOrganization', () => {
+    it('updates the current organization to the provided value', () => {
+      const next = { id: 'acme', name: 'Acme Co.' };
+
+      store.setCurrentOrganization(next);
+
+      expect(store.currentOrganization()).toEqual(next);
     });
   });
 

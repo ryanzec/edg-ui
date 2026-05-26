@@ -6,6 +6,7 @@ import {
   type NavigationGroup,
   type NavigationItem,
   type NavigationSubItem,
+  type OrganizationDisplay,
   type SettingsMenuItem,
   type Theme,
 } from './application-navigation';
@@ -50,6 +51,18 @@ const TEST_SETTINGS_ITEMS: SettingsMenuItem[] = [
   { id: 'account', label: 'Account', icon: 'at-sign' },
 ];
 
+const TEST_CURRENT_ORGANIZATION: OrganizationDisplay = {
+  id: 'current-org',
+  name: 'Test Organization',
+  iconUrl: 'https://example.com/current-org.png',
+};
+
+const TEST_AVAILABLE_ORGANIZATIONS_MULTI: OrganizationDisplay[] = [
+  TEST_CURRENT_ORGANIZATION,
+  { id: 'other-a', name: 'Other Org A', iconUrl: 'https://example.com/other-a.png' },
+  { id: 'other-b', name: 'Other Org B' },
+];
+
 @Component({
   selector: 'story-application-navigation-tests-shell',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -59,8 +72,8 @@ const TEST_SETTINGS_ITEMS: SettingsMenuItem[] = [
     <div data-testid="layout" style="height: 40rem; display: flex;">
       <org-application-navigation
         data-testid="nav"
-        workspaceIconLabel="H"
-        [workspaceName]="workspaceName()"
+        [currentOrganization]="currentOrganization()"
+        [availableOrganizations]="availableOrganizations()"
         [navigationItems]="navigationItems()"
         [groupedNavigationItems]="groupedNavigationItems()"
         [settingsMenuItems]="settingsItems()"
@@ -70,7 +83,7 @@ const TEST_SETTINGS_ITEMS: SettingsMenuItem[] = [
         (themeChange)="theme.set($event)"
         [userName]="userName()"
         [userEmail]="userEmail()"
-        (workspaceClicked)="onWorkspaceClicked()"
+        (availableOrganizationSelected)="onAvailableOrganizationSelected($event)"
         (navigationItemClicked)="onNavigationItemClicked($event)"
         (subNavigationItemClicked)="onSubNavigationItemClicked($event)"
         (settingsMenuItemClicked)="onSettingsMenuItemClicked($event)"
@@ -90,11 +103,20 @@ const TEST_SETTINGS_ITEMS: SettingsMenuItem[] = [
       <button type="button" data-testid="ctl-set-only-ungrouped" (click)="groupedNavigationItems.set([])">
         set-only-ungrouped
       </button>
+      <button
+        type="button"
+        data-testid="ctl-orgs-set-multi"
+        (click)="availableOrganizations.set(TEST_AVAILABLE_ORGANIZATIONS_MULTI)"
+      >
+        orgs-set-multi
+      </button>
+      <button type="button" data-testid="ctl-orgs-clear" (click)="availableOrganizations.set([])">orgs-clear</button>
     </div>
   `,
 })
 class StoryApplicationNavigationTestsShell {
-  protected readonly workspaceName = signal<string>('Test Workspace');
+  protected readonly currentOrganization = signal<OrganizationDisplay>(TEST_CURRENT_ORGANIZATION);
+  protected readonly availableOrganizations = signal<OrganizationDisplay[]>([]);
   protected readonly navigationItems = signal<NavigationItem[]>(TEST_UNGROUPED_ITEMS);
   protected readonly groupedNavigationItems = signal<NavigationGroup[]>(TEST_GROUPED_ITEMS);
   protected readonly settingsItems = signal<SettingsMenuItem[]>(TEST_SETTINGS_ITEMS);
@@ -103,14 +125,16 @@ class StoryApplicationNavigationTestsShell {
   protected readonly userName = signal<string>('Test User');
   protected readonly userEmail = signal<string | undefined>('test@example.com');
 
-  protected readonly workspaceClickCount = signal<number>(0);
+  protected readonly TEST_AVAILABLE_ORGANIZATIONS_MULTI = TEST_AVAILABLE_ORGANIZATIONS_MULTI;
+
+  protected readonly lastSelectedOrganizationId = signal<string>('');
   protected readonly lastNavigationItemId = signal<string>('');
   protected readonly lastSubNavigationItemId = signal<string>('');
   protected readonly lastSettingsItemId = signal<string>('');
 
   protected readout(): string {
     return [
-      `workspaceClicks=${this.workspaceClickCount()}`,
+      `lastSelectedOrg=${this.lastSelectedOrganizationId()}`,
       `lastNavItem=${this.lastNavigationItemId()}`,
       `lastSubNavItem=${this.lastSubNavigationItemId()}`,
       `lastSettingsItem=${this.lastSettingsItemId()}`,
@@ -119,8 +143,8 @@ class StoryApplicationNavigationTestsShell {
     ].join(' ');
   }
 
-  protected onWorkspaceClicked(): void {
-    this.workspaceClickCount.update((value) => value + 1);
+  protected onAvailableOrganizationSelected(organization: OrganizationDisplay): void {
+    this.lastSelectedOrganizationId.set(organization.id);
   }
 
   protected onNavigationItemClicked(item: NavigationItem): void {
@@ -172,6 +196,14 @@ const queryOverlayMenuInDocument = (): HTMLElement | null => document.body.query
  */
 const findSettingsTriggerButton = (canvasElement: HTMLElement): HTMLButtonElement | null =>
   canvasElement.querySelector('.settings-section .list-item-content') as HTMLButtonElement | null;
+
+/**
+ * resolves the inner native button that triggers the organization switcher overlay menu.
+ * scopes to `button.list-item-content` so the helper returns null when the row is rendered
+ * as the non-interactive `<div>` variant (no selectable orgs).
+ */
+const findOrganizationTriggerButton = (canvasElement: HTMLElement): HTMLButtonElement | null =>
+  canvasElement.querySelector('.organization-section button.list-item-content');
 
 /** finds a `.nav-group-section` element by its header text, scoped to the canvas */
 const findGroupSection = (canvasElement: HTMLElement, headerText: string): HTMLElement | null => {
@@ -538,30 +570,179 @@ export const CollapseHandleAriaLabelReflectsState: Story = {
   },
 };
 
-export const WorkspaceHeaderClickEmitsWorkspaceClicked: Story = {
+export const OrganizationRowExposesOrganizationNameWhenInteractive: Story = {
   render: renderShell,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const workspaceButton = await canvas.findByRole('button', { name: 'Test Workspace' });
-    const readout = await canvas.findByTestId('readout');
 
-    await userEvent.click(workspaceButton);
+    await userEvent.click(canvas.getByTestId('ctl-orgs-set-multi'));
 
-    await waitFor(() => expect(readout.textContent).toContain('workspaceClicks=1'));
+    await waitFor(() => {
+      const button = findOrganizationTriggerButton(canvasElement);
 
-    await userEvent.click(workspaceButton);
+      if (!button) {
+        throw new Error('organization trigger button not found');
+      }
 
-    await waitFor(() => expect(readout.textContent).toContain('workspaceClicks=2'));
+      return button;
+    });
+
+    const organizationButton = findOrganizationTriggerButton(canvasElement);
+
+    await expect(organizationButton).not.toBeNull();
+    await expect(organizationButton?.textContent).toContain(TEST_CURRENT_ORGANIZATION.name);
   },
 };
 
-export const WorkspaceHeaderHasAriaLabel: Story = {
+export const OrganizationRowIsNonInteractiveWhenNoSelectableOrgs: Story = {
   render: renderShell,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const workspaceButton = await canvas.findByRole('button', { name: 'Test Workspace' });
 
-    await expect(workspaceButton.getAttribute('aria-label')).toBe('Test Workspace');
+    await canvas.findByRole('navigation');
+
+    const section = canvasElement.querySelector('.organization-section');
+
+    await expect(section).not.toBeNull();
+    await expect(findOrganizationTriggerButton(canvasElement)).toBeNull();
+    await expect(canvasElement.querySelector('.organization-chevron')).toBeNull();
+  },
+};
+
+export const ClickingOrganizationRowOpensOverlayMenuWhenSelectableOrgsExist: Story = {
+  render: renderShell,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await userEvent.click(canvas.getByTestId('ctl-orgs-set-multi'));
+
+    await expect(queryOverlayMenuInDocument()).toBeNull();
+
+    const organizationButton = await waitFor(() => {
+      const button = findOrganizationTriggerButton(canvasElement);
+
+      if (!button) {
+        throw new Error('organization trigger button not found');
+      }
+
+      return button;
+    });
+
+    await userEvent.click(organizationButton);
+
+    await waitFor(() => expect(queryOverlayMenuInDocument()).not.toBeNull());
+  },
+};
+
+export const OrganizationOverlayMenuOmitsCurrentOrganization: Story = {
+  render: renderShell,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await userEvent.click(canvas.getByTestId('ctl-orgs-set-multi'));
+
+    const organizationButton = await waitFor(() => {
+      const button = findOrganizationTriggerButton(canvasElement);
+
+      if (!button) {
+        throw new Error('organization trigger button not found');
+      }
+
+      return button;
+    });
+
+    await userEvent.click(organizationButton);
+
+    const overlay = await waitFor(() => {
+      const menu = queryOverlayMenuInDocument();
+
+      if (!menu) {
+        throw new Error('overlay menu not open');
+      }
+
+      return menu;
+    });
+
+    const menuText = overlay.textContent ?? '';
+
+    await expect(menuText).not.toContain(TEST_CURRENT_ORGANIZATION.name);
+    await expect(menuText).toContain('Other Org A');
+    await expect(menuText).toContain('Other Org B');
+  },
+};
+
+export const SelectingOrganizationFromMenuEmitsAvailableOrganizationSelected: Story = {
+  render: renderShell,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await userEvent.click(canvas.getByTestId('ctl-orgs-set-multi'));
+
+    const organizationButton = await waitFor(() => {
+      const button = findOrganizationTriggerButton(canvasElement);
+
+      if (!button) {
+        throw new Error('organization trigger button not found');
+      }
+
+      return button;
+    });
+
+    await userEvent.click(organizationButton);
+
+    const overlay = await waitFor(() => {
+      const menu = queryOverlayMenuInDocument();
+
+      if (!menu) {
+        throw new Error('overlay menu not open');
+      }
+
+      return menu;
+    });
+
+    const otherOrgRow = await within(overlay).findByText('Other Org A');
+
+    await userEvent.click(otherOrgRow);
+
+    const readout = await canvas.findByTestId('readout');
+
+    await waitFor(() => expect(readout.textContent).toContain('lastSelectedOrg=other-a'));
+  },
+};
+
+export const OrganizationOverlayMenuRendersIconUrlWhenProvided: Story = {
+  render: renderShell,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await userEvent.click(canvas.getByTestId('ctl-orgs-set-multi'));
+
+    const organizationButton = await waitFor(() => {
+      const button = findOrganizationTriggerButton(canvasElement);
+
+      if (!button) {
+        throw new Error('organization trigger button not found');
+      }
+
+      return button;
+    });
+
+    await userEvent.click(organizationButton);
+
+    const overlay = await waitFor(() => {
+      const menu = queryOverlayMenuInDocument();
+
+      if (!menu) {
+        throw new Error('overlay menu not open');
+      }
+
+      return menu;
+    });
+
+    const imageElement = overlay.querySelector('org-list-item-image img');
+
+    await expect(imageElement).not.toBeNull();
+    await expect(imageElement?.getAttribute('src')).toContain('other-a.png');
   },
 };
 

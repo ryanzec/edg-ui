@@ -3,6 +3,7 @@ import { angularUtils } from '@organization/shared-utils';
 import { List, type ListSize } from '../list/list';
 import { ListItem } from '../list/list-item';
 import { ListItemIcon } from '../list/list-item-icon';
+import { ListItemImage } from '../list/list-item-image';
 import { Tag, type TagColor } from '../tags/tag';
 import { Indicator } from '../indicator/indicator';
 import { ButtonToggle, type ButtonToggleItem } from '../button-toggle/button-toggle';
@@ -58,6 +59,7 @@ export const OVERLAY_MENU_STATE_DEFAULT: OverlayMenuState | undefined = undefine
     List,
     ListItem,
     ListItemIcon,
+    ListItemImage,
     Tag,
     Indicator,
     ButtonToggle,
