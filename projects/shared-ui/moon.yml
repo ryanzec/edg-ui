@@ -20,5 +20,17 @@ tasks:
       NODE_ENV: development
     options:
       runFromWorkspaceRoot: false
+      cache: false
+  test-unit-browser:
+    command: $workspaceRoot/node_modules/.bin/ng run shared-ui:test-browser --no-progress
+    inputs:
+      - '**/*'
+      - /tsconfig.json
+      - /tsconfig.spec.json
+    env:
+      NODE_ENV: development
+    options:
+      runFromWorkspaceRoot: false
+      cache: false
 language: typescript
 layer: library

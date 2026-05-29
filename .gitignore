@@ -46,6 +46,10 @@ Thumbs.db
 .moon/hooks
 *.pem
 
+# testing
+**/__screenshots__
+.vitest-attachments
+
 # ai
 .claude/settings.local.json
 ai-plans/

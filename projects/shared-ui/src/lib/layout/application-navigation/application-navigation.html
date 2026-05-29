@@ -11,14 +11,14 @@
             [hideLabel]="true"
             [forceClickable]="true"
           >
-            @if (currentOrganization().iconUrl; as iconUrl) {
-              <org-list-item-image pre [src]="iconUrl" [alt]="currentOrganization().name" />
+            @if (currentOrganization().imageUrl; as imageUrl) {
+              <org-list-item-image pre [src]="imageUrl" [alt]="currentOrganization().name" />
             }
           </org-list-item>
         } @else {
           <org-list-item [label]="currentOrganization().name" [hideLabel]="true">
-            @if (currentOrganization().iconUrl; as iconUrl) {
-              <org-list-item-image pre [src]="iconUrl" [alt]="currentOrganization().name" />
+            @if (currentOrganization().imageUrl; as imageUrl) {
+              <org-list-item-image pre [src]="imageUrl" [alt]="currentOrganization().name" />
             }
           </org-list-item>
         }
@@ -35,15 +35,15 @@
           [label]="currentOrganization().name"
           [forceClickable]="true"
         >
-          @if (currentOrganization().iconUrl; as iconUrl) {
-            <org-list-item-image pre [src]="iconUrl" [alt]="currentOrganization().name" />
+          @if (currentOrganization().imageUrl; as imageUrl) {
+            <org-list-item-image pre [src]="imageUrl" [alt]="currentOrganization().name" />
           }
           <org-icon post class="organization-chevron" name="chevron-right" />
         </org-list-item>
       } @else {
         <org-list-item [label]="currentOrganization().name">
-          @if (currentOrganization().iconUrl; as iconUrl) {
-            <org-list-item-image pre [src]="iconUrl" [alt]="currentOrganization().name" />
+          @if (currentOrganization().imageUrl; as imageUrl) {
+            <org-list-item-image pre [src]="imageUrl" [alt]="currentOrganization().name" />
           }
         </org-list-item>
       }

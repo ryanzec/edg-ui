@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url';
 import type { Plugin } from 'vite';
 import { defineConfig } from 'vitest/config';
 
@@ -33,4 +34,14 @@ const suppressSourcemapMissingSourcesWarnings = (): Plugin => ({
 
 export default defineConfig({
   plugins: [suppressSourcemapMissingSourcesWarnings()],
+  resolve: {
+    alias: [
+      // uuid@13 only exports `node` (node:crypto) and `default` (web crypto) conditions; the browser
+      // test runner resolves the node build, which throws on node:crypto. force the browser build.
+      {
+        find: /^uuid$/,
+        replacement: fileURLToPath(new URL('node_modules/uuid/dist/index.js', import.meta.url)),
+      },
+    ],
+  },
 });

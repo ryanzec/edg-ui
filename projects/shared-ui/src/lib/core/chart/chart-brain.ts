@@ -90,6 +90,14 @@ export class ChartBrainDirective implements OnDestroy {
           error: null,
         }));
       } catch (error) {
+        // since the constructor can throw after chart js registers the instance, this code will clean that up if it
+        // happens
+        const partialChart = ChartJS.getChart(canvasElement);
+
+        if (partialChart) {
+          partialChart.destroy();
+        }
+
         this._state.update((state) => ({
           ...state,
           error: error instanceof Error ? error.message : 'failed to render chart',

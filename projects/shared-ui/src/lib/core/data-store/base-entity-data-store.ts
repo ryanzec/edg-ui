@@ -105,6 +105,9 @@ export abstract class BaseEntityDataStore<T, TMeta = unknown> {
     return state === 'pending' || state === 'initializing';
   });
 
+  /** whether the store is currently in an initial loading state */
+  public readonly isInitialLoading = computed(() => this.loadingState() === 'initializing');
+
   /** resets the store to its default state */
   public reset(): void {
     this._state.set(generateDefaultDataStoreState());
@@ -199,8 +202,14 @@ export abstract class BaseEntityDataStore<T, TMeta = unknown> {
   }
 
   /** replaces the local entity data without a remote call */
-  public updateLocalData(updateItem: T): void {
-    this._state.update((currentState) => ({ ...currentState, data: updateItem }));
+  public updateLocalData(updateItem: Partial<T>): void {
+    this._state.update((currentState) => {
+      if (!currentState.data) {
+        return currentState;
+      }
+
+      return { ...currentState, data: { ...currentState.data, ...updateItem } };
+    });
   }
 
   /** sets the local entity data without a remote call */

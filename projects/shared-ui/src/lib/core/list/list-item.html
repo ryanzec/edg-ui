@@ -10,17 +10,30 @@
 <li role="presentation">
   @switch (asTag()) {
     @case ('a') {
-      <a
-        [routerLink]="brain.routerLink()"
-        [attr.href]="brain.routerLink() ? null : href()"
-        [target]="isExternalHref() ? '_blank' : '_self'"
-        [attr.rel]="isExternalHref() ? 'noopener noreferrer' : null"
-        [attr.aria-current]="brain.isRouterLinkActive() ? 'page' : null"
-        class="list-item-content"
-        (click)="onClick($event)"
-      >
-        <ng-container [ngTemplateOutlet]="contentTemplate" />
-      </a>
+      <!-- --
+      this breakout is needed as even if the routerLink is undefined, it it still hi-jacks the href attribute so even
+      it it is passed, it won't se set
+      -->
+      @if (brain.routerLink()) {
+        <a
+          [routerLink]="brain.routerLink()"
+          [attr.aria-current]="brain.isRouterLinkActive() ? 'page' : null"
+          class="list-item-content"
+          (click)="onClick($event)"
+        >
+          <ng-container [ngTemplateOutlet]="contentTemplate" />
+        </a>
+      } @else {
+        <a
+          [attr.href]="href()"
+          [target]="isExternalHref() ? '_blank' : '_self'"
+          [attr.rel]="isExternalHref() ? 'noopener noreferrer' : null"
+          class="list-item-content"
+          (click)="onClick($event)"
+        >
+          <ng-container [ngTemplateOutlet]="contentTemplate" />
+        </a>
+      }
     }
     @case ('button') {
       <!--

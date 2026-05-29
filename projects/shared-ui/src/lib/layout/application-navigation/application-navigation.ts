@@ -84,8 +84,10 @@ export type SettingsMenuItem = OverlayMenuItem;
 export type OrganizationDisplay = {
   /** unique id used to identify the organization (also used to filter the current org out of the switcher) */
   id: string;
-  /** optional image url rendered as the organization's icon — when omitted, no icon is rendered */
-  iconUrl?: string;
+  /** optional image url rendered as the organization's icon — when omitted, no image is rendered */
+  imageUrl?: string;
+  /** optional icon name rendered as the organization's icon — when omitted, building is rendered */
+  iconName?: IconName;
   /** the visible organization name */
   name: string;
 };
@@ -219,7 +221,7 @@ export class ApplicationNavigation {
       id: organization.id,
       label: organization.name,
       icon: null,
-      iconUrl: organization.iconUrl,
+      imageUrl: organization.imageUrl,
       meta: organization,
     }))
   );

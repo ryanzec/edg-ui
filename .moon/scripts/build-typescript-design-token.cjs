@@ -37,10 +37,6 @@ const CHECKBOX_TOGGLE_TOKENS_CSS = path.join(
 );
 const CHECKLIST_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/core/checklist/checklist-tokens.css');
 const CODE_BLOCK_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/core/code-block/code-block-tokens.css');
-const CODE_HIGHLIGHTER_TOKENS_CSS = path.join(
-  REPO_ROOT,
-  'projects/shared-ui/src/lib/core/code-highlighter/code-highlighter-tokens.css',
-);
 const COMBOBOX_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/core/combobox/combobox-tokens.css');
 const DATE_PICKER_INPUT_TOKENS_CSS = path.join(
   REPO_ROOT,
@@ -322,7 +318,6 @@ async function main() {
   const checkboxToggleContent = cleanCss(fs.readFileSync(CHECKBOX_TOGGLE_TOKENS_CSS, 'utf-8'));
   const checklistContent = cleanCss(fs.readFileSync(CHECKLIST_TOKENS_CSS, 'utf-8'));
   const codeBlockContent = cleanCss(fs.readFileSync(CODE_BLOCK_TOKENS_CSS, 'utf-8'));
-  const codeHighlighterContent = cleanCss(fs.readFileSync(CODE_HIGHLIGHTER_TOKENS_CSS, 'utf-8'));
   const comboboxContent = cleanCss(fs.readFileSync(COMBOBOX_TOKENS_CSS, 'utf-8'));
   const datePickerInputContent = cleanCss(fs.readFileSync(DATE_PICKER_INPUT_TOKENS_CSS, 'utf-8'));
   const dialogContent = cleanCss(fs.readFileSync(DIALOG_TOKENS_CSS, 'utf-8'));
@@ -380,7 +375,6 @@ async function main() {
     ...findBlocks(checkboxToggleContent, ':root').map(extractVariables),
     ...findBlocks(checklistContent, ':root').map(extractVariables),
     ...findBlocks(codeBlockContent, ':root').map(extractVariables),
-    ...findBlocks(codeHighlighterContent, ':root').map(extractVariables),
     ...findBlocks(comboboxContent, ':root').map(extractVariables),
     ...findBlocks(datePickerInputContent, ':root').map(extractVariables),
     ...findBlocks(dialogContent, ':root').map(extractVariables),
@@ -435,7 +429,6 @@ async function main() {
     ...findBlocks(checkboxToggleContent, '.dark').map(extractVariables),
     ...findBlocks(checklistContent, '.dark').map(extractVariables),
     ...findBlocks(codeBlockContent, '.dark').map(extractVariables),
-    ...findBlocks(codeHighlighterContent, '.dark').map(extractVariables),
     ...findBlocks(comboboxContent, '.dark').map(extractVariables),
     ...findBlocks(datePickerInputContent, '.dark').map(extractVariables),
     ...findBlocks(dialogContent, '.dark').map(extractVariables),

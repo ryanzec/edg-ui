@@ -10,7 +10,7 @@ import {
   input,
   viewChild,
 } from '@angular/core';
-import { angularUtils } from '@organization/shared-utils';
+import { angularUtils, logManager } from '@organization/shared-utils';
 import { Button } from '../button/button';
 import { Icon } from '../icon/icon';
 import { ScrollArea } from '../scroll-area/scroll-area';
@@ -20,17 +20,23 @@ import {
   CODE_BLOCK_ALLOW_COPY_DEFAULT,
   CODE_BLOCK_COPY_ARIA_LABEL_DEFAULT,
   CODE_BLOCK_ELLIPSIS_AT_DEFAULT,
+  CODE_BLOCK_HIGHLIGHT_LANGUAGE_DEFAULT,
   CODE_BLOCK_VARIANT_DEFAULT,
   type CodeBlockVariant,
 } from '../code-block/code-block-brain';
 
-export type { CodeBlockVariant } from '../code-block/code-block-brain';
+export type { CodeBlockVariant, SyntaxKind } from '../code-block/code-block-brain';
 export {
   allCodeBlockVariants,
+  allCodeBlockHighlightLanguages,
+  allSyntaxKinds,
   CODE_BLOCK_ALLOW_COPY_DEFAULT,
+  CODE_BLOCK_COLLAPSABLE_DEFAULT,
+  CODE_BLOCK_COLLAPSED_DEFAULT,
   CODE_BLOCK_COPY_ARIA_LABEL_DEFAULT,
   CODE_BLOCK_ELLIPSIS_AT_DEFAULT,
   CODE_BLOCK_EXPANDED_DEFAULT,
+  CODE_BLOCK_HIGHLIGHT_LANGUAGE_DEFAULT,
   CODE_BLOCK_VARIANT_DEFAULT,
 } from '../code-block/code-block-brain';
 
@@ -58,6 +64,9 @@ export const CODE_BLOCK_SCROLL_CLASS_DEFAULT = '';
 /** default value for the showMoreLabel input */
 export const CODE_BLOCK_SHOW_MORE_LABEL_DEFAULT = 'Show more';
 
+/** default value for the showLessLabel input */
+export const CODE_BLOCK_SHOW_LESS_LABEL_DEFAULT = 'Show less';
+
 @Component({
   selector: 'org-code-block',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -74,12 +83,24 @@ export const CODE_BLOCK_SHOW_MORE_LABEL_DEFAULT = 'Show more';
     '[attr.data-copied]': 'brain.isCopied() ? "" : null',
     '[attr.data-allow-copy]': 'brain.allowCopy() ? "" : null',
     '[attr.data-has-header]': 'hasHeader() ? "" : null',
+    '[attr.data-collapsable]': 'brain.canCollapse() ? "" : null',
+    '[attr.data-collapsed]': 'brain.collapsed() ? "" : null',
   },
   hostDirectives: [
     {
       directive: CodeBlockBrainDirective,
-      inputs: ['text', 'variant', 'allowCopy', 'copyAriaLabel', 'ellipsisAt', 'expanded'],
-      outputs: ['copied', 'expandedChange'],
+      inputs: [
+        'text',
+        'variant',
+        'allowCopy',
+        'copyAriaLabel',
+        'ellipsisAt',
+        'highlightLanguage',
+        'expanded',
+        'collapsable: isCollapsable',
+        'collapsed: isCollapsed',
+      ],
+      outputs: ['copied', 'expandedChange', 'collapsedChange: isCollapsedChange'],
     },
   ],
 })
@@ -108,6 +129,14 @@ export class CodeBlock implements AfterViewInit {
   /** number of lines after which to apply ellipsis line clamping; 0 disables ellipsis; forwarded to the host brain directive */
   public readonly ellipsisAt = input<number>(CODE_BLOCK_ELLIPSIS_AT_DEFAULT);
 
+  /** the language used to syntax-highlight the block body; undefined renders plain text; forwarded to the host brain directive */
+  public readonly highlightLanguage = input<string | undefined, string | null | undefined>(
+    CODE_BLOCK_HIGHLIGHT_LANGUAGE_DEFAULT,
+    {
+      transform: angularUtils.transformNullToUndefined,
+    }
+  );
+
   /** the inline tone variant; ignored for the block variant */
   public readonly tone = input<CodeBlockTone>(CODE_BLOCK_TONE_DEFAULT);
 
@@ -130,8 +159,11 @@ export class CodeBlock implements AfterViewInit {
   /** additional css class applied to the inner scroll-area element */
   public readonly scrollClass = input<string>(CODE_BLOCK_SCROLL_CLASS_DEFAULT);
 
-  /** the visible label rendered on the show-more affordance */
+  /** the visible label rendered on the expand toggle while the body is collapsed */
   public readonly showMoreLabel = input<string>(CODE_BLOCK_SHOW_MORE_LABEL_DEFAULT);
+
+  /** the visible label rendered on the expand toggle while the body is expanded */
+  public readonly showLessLabel = input<string>(CODE_BLOCK_SHOW_LESS_LABEL_DEFAULT);
 
   /** whether the block header should be rendered */
   protected readonly hasHeader = computed<boolean>(() => this.headerLabel() !== undefined);
@@ -147,6 +179,18 @@ export class CodeBlock implements AfterViewInit {
 
       queueMicrotask(() => {
         this._measureOverflow();
+      });
+    });
+
+    // the collapse toggle lives in the header, so collapsable is meaningless without a header to host it
+    effect(() => {
+      if (!this.brain.collapsable() || this.hasHeader()) {
+        return;
+      }
+
+      logManager.warn({
+        type: 'code-block-collapsable-without-header',
+        message: 'isCollapsable is set but no headerLabel was provided; the collapse toggle requires a header',
       });
     });
   }
@@ -169,6 +213,17 @@ export class CodeBlock implements AfterViewInit {
     });
 
     this._measureOverflow();
+  }
+
+  /** toggles the collapsed state when the collapsible header is clicked */
+  protected onHeaderClick(): void {
+    this.brain.toggleCollapsed();
+  }
+
+  /** toggles the collapsed state from keyboard activation of the collapsible header (enter / space) */
+  protected onHeaderKeydown(event: Event): void {
+    event.preventDefault();
+    this.brain.toggleCollapsed();
   }
 
   private _measureOverflow(): void {

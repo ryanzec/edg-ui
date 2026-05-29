@@ -33,6 +33,8 @@
     color: var(--code-block-header-fg);
     font-size: var(--code-block-header-font-size);
     font-weight: var(--code-block-header-font-weight);
+    transition: border-bottom-color var(--code-block-collapse-transition-duration)
+      var(--code-block-collapse-transition-easing);
   }
 
   .header-label {
@@ -57,14 +59,61 @@
     flex: 1 1 auto;
   }
 
+  /* collapsible header — interactive affordance */
+
+  :host([data-collapsable]) .header {
+    cursor: pointer;
+  }
+
+  :host([data-collapsable]) .header:hover,
+  :host([data-collapsable]) .header:focus-visible {
+    background-color: var(--code-block-header-hover-bg);
+  }
+
+  .collapse-icon {
+    flex: 0 0 auto;
+    color: var(--code-block-header-icon-color);
+    transition: transform var(--code-block-collapse-transition-duration) var(--code-block-collapse-transition-easing);
+  }
+
+  :host([data-collapsed]) .collapse-icon {
+    transform: rotate(-90deg);
+  }
+
+  /* collapse animation — grid-template-rows trick keeps width stable and needs no fixed height */
+
+  .collapse-region {
+    display: grid;
+    grid-template-rows: 1fr;
+    transition: grid-template-rows var(--code-block-collapse-transition-duration)
+      var(--code-block-collapse-transition-easing);
+  }
+
+  :host([data-collapsed]) .collapse-region {
+    grid-template-rows: 0fr;
+  }
+
+  /* collapse the body and header divider fully so nothing remains below the header */
+
+  :host([data-collapsed]) .body {
+    padding-block: 0;
+  }
+
+  :host([data-collapsed]) .header {
+    border-bottom-color: transparent;
+  }
+
   /* body + pre */
 
   .body {
     position: relative;
     flex: 1 1 auto;
     min-width: 0;
+    min-height: 0;
     padding: var(--code-block-body-padding);
     overflow: hidden;
+    transition: padding-block var(--code-block-collapse-transition-duration)
+      var(--code-block-collapse-transition-easing);
   }
 
   .pre {
@@ -81,6 +130,84 @@
     font: inherit;
     color: inherit;
     background: transparent;
+  }
+
+  /*
+   * syntax token palette — color-only rules; light/dark via base tokens. ::ng-deep is required so
+   * the rules apply to <span class="org-syntax-*"> markup injected via [innerHTML], which is not
+   * tagged with the component's _ngcontent-* attribute and therefore bypasses view encapsulation.
+   */
+  :host ::ng-deep .org-syntax-comment {
+    color: var(--code-block-syntax-comment-fg);
+    font-style: var(--code-block-syntax-comment-font-style);
+  }
+
+  :host ::ng-deep .org-syntax-keyword {
+    color: var(--code-block-syntax-keyword-fg);
+  }
+
+  :host ::ng-deep .org-syntax-decorator {
+    color: var(--code-block-syntax-decorator-fg);
+  }
+
+  :host ::ng-deep .org-syntax-string {
+    color: var(--code-block-syntax-string-fg);
+  }
+
+  :host ::ng-deep .org-syntax-regex {
+    color: var(--code-block-syntax-regex-fg);
+  }
+
+  :host ::ng-deep .org-syntax-escape {
+    color: var(--code-block-syntax-escape-fg);
+  }
+
+  :host ::ng-deep .org-syntax-inserted {
+    color: var(--code-block-syntax-inserted-fg);
+  }
+
+  :host ::ng-deep .org-syntax-number {
+    color: var(--code-block-syntax-number-fg);
+  }
+
+  :host ::ng-deep .org-syntax-function {
+    color: var(--code-block-syntax-function-fg);
+  }
+
+  :host ::ng-deep .org-syntax-property {
+    color: var(--code-block-syntax-property-fg);
+  }
+
+  :host ::ng-deep .org-syntax-attribute {
+    color: var(--code-block-syntax-attribute-fg);
+  }
+
+  :host ::ng-deep .org-syntax-variable {
+    color: var(--code-block-syntax-variable-fg);
+  }
+
+  :host ::ng-deep .org-syntax-tag {
+    color: var(--code-block-syntax-tag-fg);
+  }
+
+  :host ::ng-deep .org-syntax-deleted {
+    color: var(--code-block-syntax-deleted-fg);
+  }
+
+  :host ::ng-deep .org-syntax-operator {
+    color: var(--code-block-syntax-operator-fg);
+  }
+
+  :host ::ng-deep .org-syntax-punctuation {
+    color: var(--code-block-syntax-punctuation-fg);
+  }
+
+  :host ::ng-deep .org-syntax-class {
+    color: var(--code-block-syntax-class-fg);
+  }
+
+  :host ::ng-deep .org-syntax-builtin {
+    color: var(--code-block-syntax-builtin-fg);
   }
 
   /* wrap mode — long lines wrap instead of horizontally scrolling */

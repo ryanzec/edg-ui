@@ -6,6 +6,7 @@ import {
   computed,
   ViewChild,
   ElementRef,
+  forwardRef,
   inject,
   Injector,
 } from '@angular/core';
@@ -42,7 +43,7 @@ export const CALENDAR_CONTAINER_CLASS_DEFAULT = '';
 @Component({
   selector: 'org-calendar',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CalendarHeader, CalendarDates, CalendarPartialRangeSelector],
+  imports: [forwardRef(() => CalendarHeader), CalendarDates, CalendarPartialRangeSelector],
   templateUrl: './calendar.html',
   hostDirectives: [
     {

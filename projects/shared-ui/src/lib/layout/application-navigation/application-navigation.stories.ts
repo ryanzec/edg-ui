@@ -70,13 +70,13 @@ type Story = StoryObj<ApplicationNavigation>;
 const defaultCurrentOrganization: OrganizationDisplay = {
   id: 'halcyon',
   name: 'Halcyon',
-  iconUrl: 'https://i.pravatar.cc/64?img=12',
+  imageUrl: 'https://i.pravatar.cc/64?img=12',
 };
 
 const defaultAvailableOrganizations: OrganizationDisplay[] = [
   defaultCurrentOrganization,
-  { id: 'northwind', name: 'Northwind Traders', iconUrl: 'https://i.pravatar.cc/64?img=22' },
-  { id: 'acme', name: 'Acme Co.', iconUrl: 'https://i.pravatar.cc/64?img=32' },
+  { id: 'northwind', name: 'Northwind Traders', imageUrl: 'https://i.pravatar.cc/64?img=22' },
+  { id: 'acme', name: 'Acme Co.', imageUrl: 'https://i.pravatar.cc/64?img=32' },
   { id: 'initech', name: 'Initech' },
 ];
 
@@ -693,7 +693,7 @@ export const OrganizationSwitcher: Story = {
     docs: {
       description: {
         story:
-          'The organization header opens a switcher overlay menu listing every other available organization. When `availableOrganizations` contains only the current organization (or is empty), the header is rendered as a static label with no chevron and no click affordance. Each menu row renders the organization icon via `iconUrl` when provided, falling back to a name-only row otherwise.',
+          'The organization header opens a switcher overlay menu listing every other available organization. When `availableOrganizations` contains only the current organization (or is empty), the header is rendered as a static label with no chevron and no click affordance. Each menu row renders the organization icon via `imageUrl` when provided, falling back to a name-only row otherwise.',
       },
     },
   },
@@ -729,7 +729,7 @@ export const OrganizationSwitcher: Story = {
           </div>
         </org-storybook-example-container-section>
 
-        <org-storybook-example-container-section label="Current organization without an iconUrl (header shows name only)">
+        <org-storybook-example-container-section label="Current organization without an imageUrl (header shows name only)">
           <div style="height: 28rem; display: flex;">
             <org-application-navigation
               [currentOrganization]="currentOrganizationNoIcon"
@@ -745,9 +745,9 @@ export const OrganizationSwitcher: Story = {
         <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
           <li>The header is a button (with a right-side chevron) when other organizations are available</li>
           <li>Clicking the header opens an overlay menu listing every organization except the current one</li>
-          <li>Menu rows render the organization icon when <code>iconUrl</code> is set; otherwise the row shows just the name</li>
+          <li>Menu rows render the organization icon when <code>imageUrl</code> is set; otherwise the row shows just the name</li>
           <li>The header degrades to a non-interactive label when no other organizations are available</li>
-          <li>When <code>currentOrganization.iconUrl</code> is empty, the header shows only the name</li>
+          <li>When <code>currentOrganization.imageUrl</code> is empty, the header shows only the name</li>
         </ul>
       </org-storybook-example-container>
     `,

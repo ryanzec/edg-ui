@@ -7,6 +7,7 @@
     border-right: var(--border-width) solid var(--color-border);
     min-width: var(--sizing-3xs);
     max-width: var(--sizing-3xs);
+    z-index: var(--z-index-raised);
     transition:
       min-width var(--motion-duration-base) ease,
       max-width var(--motion-duration-base) ease;

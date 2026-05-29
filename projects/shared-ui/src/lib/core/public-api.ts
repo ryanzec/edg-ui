@@ -33,7 +33,6 @@ export * from './checklist/checklist';
 export * from './checklist/checklist-item';
 export * from './checklist/checklist-status-icon';
 export * from './code-block/code-block';
-export * from './code-highlighter/code-highlighter';
 export * from './combobox/combobox';
 export * from './combobox-store/combobox-store';
 export * from './data-filters/data-filters';

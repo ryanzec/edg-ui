@@ -37,6 +37,11 @@
   --code-block-header-font-size: var(--font-size-xs);
   --code-block-header-font-weight: var(--font-weight-medium);
 
+  /* collapse affordance */
+  --code-block-header-hover-bg: var(--color-bg-hover);
+  --code-block-collapse-transition-duration: var(--motion-duration-base);
+  --code-block-collapse-transition-easing: var(--motion-ease-standard);
+
   /* copy affordance */
   --code-block-copy-resting-opacity: 0.35;
   --code-block-copy-active-opacity: 1;
@@ -69,4 +74,25 @@
   --code-block-tone-safe-bg: var(--color-safe-soft);
   --code-block-tone-safe-fg: var(--color-safe);
   --code-block-tone-safe-border: transparent;
+
+  /* syntax token palette (block highlighting) */
+  --code-block-syntax-comment-fg: var(--color-fg-faint);
+  --code-block-syntax-comment-font-style: italic;
+  --code-block-syntax-keyword-fg: var(--color-info);
+  --code-block-syntax-decorator-fg: var(--color-info);
+  --code-block-syntax-string-fg: var(--color-safe);
+  --code-block-syntax-regex-fg: var(--color-safe);
+  --code-block-syntax-escape-fg: var(--color-safe);
+  --code-block-syntax-inserted-fg: var(--color-safe);
+  --code-block-syntax-number-fg: var(--color-warning);
+  --code-block-syntax-function-fg: var(--color-info);
+  --code-block-syntax-property-fg: var(--color-info);
+  --code-block-syntax-attribute-fg: var(--color-info);
+  --code-block-syntax-variable-fg: var(--color-fg);
+  --code-block-syntax-tag-fg: var(--color-danger);
+  --code-block-syntax-deleted-fg: var(--color-danger);
+  --code-block-syntax-operator-fg: var(--color-fg-muted);
+  --code-block-syntax-punctuation-fg: var(--color-fg-muted);
+  --code-block-syntax-class-fg: var(--color-caution);
+  --code-block-syntax-builtin-fg: var(--color-caution);
 }

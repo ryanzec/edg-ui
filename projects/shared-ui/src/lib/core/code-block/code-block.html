@@ -1,6 +1,17 @@
 @if (brain.variant() === 'block') {
   @if (hasHeader()) {
-    <div class="header">
+    <div
+      class="header"
+      [attr.role]="brain.canCollapse() ? 'button' : null"
+      [attr.tabindex]="brain.canCollapse() ? 0 : null"
+      [attr.aria-expanded]="brain.canCollapse() ? brain.collapseToggleAriaExpanded() : null"
+      (click)="onHeaderClick()"
+      (keydown.enter)="onHeaderKeydown($event)"
+      (keydown.space)="onHeaderKeydown($event)"
+    >
+      @if (brain.canCollapse()) {
+        <org-icon class="collapse-icon" name="chevron-down" size="xs" />
+      }
       <span class="header-label">
         @if (headerIcon()) {
           <org-icon class="header-icon" [name]="headerIcon()!" size="xs" />
@@ -18,6 +29,7 @@
           [preIcon]="brain.isCopied() ? 'check' : 'copy'"
           [ariaLabel]="brain.copyAriaLabel()"
           [label]="brain.copyAriaLabel()"
+          (click)="$event.stopPropagation()"
           (clicked)="brain.copy()"
         />
       }
@@ -35,19 +47,23 @@
       (clicked)="brain.copy()"
     />
   }
-  <div #bodyRef class="body" [style.--ellipsis-lines]="brain.hasEllipsis() ? brain.ellipsisAt() : null">
-    <org-scroll-area direction="both" [onlyShowOnHover]="true" [scrollClass]="scrollClass()">
-      <pre class="pre"><code>{{ brain.text() }}</code></pre>
-    </org-scroll-area>
+  <div class="collapse-region">
+    <div #bodyRef class="body" [style.--ellipsis-lines]="brain.hasEllipsis() ? brain.ellipsisAt() : null">
+      <org-scroll-area direction="both" [onlyShowOnHover]="true" [scrollClass]="scrollClass()">
+        <pre
+          class="pre"
+        >@if (brain.highlightedHtml(); as html) {<code [attr.data-language]="brain.highlightLanguage()" [innerHTML]="html"></code>} @else {<code>{{ brain.text() }}</code>}</pre>
+      </org-scroll-area>
+    </div>
   </div>
-  @if (brain.showShowMore()) {
+  @if (brain.showExpandToggle()) {
     <org-button
       class="show-more"
       variant="soft"
       color="neutral"
       size="sm"
-      label="{{ showMoreLabel() }}"
-      [ariaExpanded]="brain.showMoreAriaExpanded()"
+      [label]="brain.expanded() ? showLessLabel() : showMoreLabel()"
+      [ariaExpanded]="brain.expandToggleAriaExpanded()"
       (clicked)="brain.toggleExpanded()"
     />
   }

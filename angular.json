@@ -337,7 +337,22 @@
             "runner": "vitest",
             "runnerConfig": "vitest.config.ts",
             "providersFile": "test-providers.ts",
-            "setupFiles": ["test-setup.ts"]
+            "setupFiles": ["test-setup.ts"],
+            "exclude": ["**/*.browser.spec.ts"]
+          }
+        },
+        "test-browser": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "tsConfig": "projects/shared-ui/tsconfig.spec.json",
+            "buildTarget": "shared-ui:build:development",
+            "runner": "vitest",
+            "runnerConfig": "vitest.config.ts",
+            "providersFile": "test-providers.ts",
+            "setupFiles": ["test-setup.ts"],
+            "browsers": ["chromium"],
+            "include": ["**/*.browser.spec.ts"],
+            "headless": true
           }
         },
         "lint": {

@@ -28,7 +28,6 @@ import { CheckboxGroup } from '../../core/checkbox/checkbox-group';
 import { CheckboxToggle } from '../../core/checkbox-toggle/checkbox-toggle';
 import { Checklist, type ChecklistItemData } from '../../core/checklist/checklist';
 import { CodeBlock } from '../../core/code-block/code-block';
-import { CodeHighlighter } from '../../core/code-highlighter/code-highlighter';
 import { Combobox } from '../../core/combobox/combobox';
 import { type ComboboxOptionInput } from '../../core/combobox-store/combobox-store';
 import { DatePickerInput } from '../../core/date-picker-input/date-picker-input';
@@ -123,7 +122,6 @@ type TableUser = {
     CheckboxToggle,
     Checklist,
     CodeBlock,
-    CodeHighlighter,
     Combobox,
     DatePickerInput,
     DatePipe,
@@ -288,7 +286,7 @@ export class AllComponents {
     '- Second bullet',
   ].join('\n');
 
-  /** a sample code snippet used by the code-block / code-highlighter demos */
+  /** a sample code snippet used by the code-block demo */
   protected readonly codeSample = `function greet(name: string): string {
   return \`Hello, \${name}!\`;
 }

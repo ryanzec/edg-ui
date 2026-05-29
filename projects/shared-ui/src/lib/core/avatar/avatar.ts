@@ -82,6 +82,7 @@ const AVATAR_COLOR_COUNT = 8;
     '[attr.data-overflow]': 'avatarBrainDirective.isOverflow() ? "true" : null',
     '[attr.data-clickable]': 'avatarBrainDirective.isClickable() ? "true" : null',
     '[attr.data-disabled]': 'avatarBrainDirective.isDisabled() ? "true" : null',
+    '[attr.data-has-image]': 'imgSrc !== null || imgEmail !== null ? "" : null',
   },
 })
 export class Avatar {

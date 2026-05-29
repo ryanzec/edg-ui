@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, computed, effect, inject, input } from '@angular/core';
+import { Component, ChangeDetectionStrategy, computed, effect, forwardRef, inject, input } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { angularUtils, logManager } from '@organization/shared-utils';
@@ -43,7 +43,7 @@ const EXTERNAL_HREF_ICON_NAME: IconName = 'arrow-up-right';
 @Component({
   selector: 'org-list-item',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [NgTemplateOutlet, RouterLink, ListItemIcon],
+  imports: [NgTemplateOutlet, RouterLink, forwardRef(() => ListItemIcon)],
   templateUrl: './list-item.html',
   styleUrl: './list-item.css',
   hostDirectives: [

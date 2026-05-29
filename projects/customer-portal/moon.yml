@@ -49,5 +49,6 @@ tasks:
       NODE_ENV: development
     options:
       runFromWorkspaceRoot: false
+      cache: false
 language: typescript
 layer: application

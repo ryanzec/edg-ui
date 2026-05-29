@@ -10,7 +10,7 @@ import {
 } from '../application-navigation/application-navigation';
 import { UiThemeManager } from '../../ui-theme/ui-theme-manager/ui-theme-manager';
 import { LayoutStore } from '../layout-store/layout-store';
-import { ScrollArea } from '@organization/shared-ui';
+import { ScrollArea } from '../../core/scroll-area/scroll-area';
 
 /**
  * top-level layout shell that renders `<org-application-navigation>` against the data exposed by
@@ -22,7 +22,6 @@ import { ScrollArea } from '@organization/shared-ui';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [ApplicationNavigation, ScrollArea],
   templateUrl: './application-frame.html',
-  styleUrl: './application-frame.css',
   host: {
     class: 'flex h-full min-h-0',
   },

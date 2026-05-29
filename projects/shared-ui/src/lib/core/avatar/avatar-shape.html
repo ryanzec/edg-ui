@@ -1,4 +1,6 @@
-@if (avatarBrainDirective.initials()) {
-  <span class="absolute inset-0 flex items-center justify-center">{{ avatarBrainDirective.initials() }}</span>
-}
-<ng-content />
+<div class="background">
+  @if (avatarBrainDirective.initials()) {
+    <span class="absolute inset-0 flex items-center justify-center">{{ avatarBrainDirective.initials() }}</span>
+  }
+  <ng-content />
+</div>

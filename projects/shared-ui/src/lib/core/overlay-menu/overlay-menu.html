@@ -29,8 +29,8 @@
           [attr.data-color]="item.color ?? null"
         >
           <org-list-item [forceClickable]="true" [disabled]="item.disabled ?? false" [label]="item.label">
-            @if (item.iconUrl; as iconUrl) {
-              <org-list-item-image pre [src]="iconUrl" [alt]="item.label" />
+            @if (item.imageUrl; as imageUrl) {
+              <org-list-item-image pre [src]="imageUrl" [alt]="item.label" />
             } @else if (item.icon; as iconName) {
               <org-list-item-icon pre [name]="iconName" />
             }

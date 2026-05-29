@@ -39,31 +39,6 @@ tasks:
     env:
       NODE_ENV: development
     preset: server
-  build-storybook-test:
-    options:
-      runFromWorkspaceRoot: true
-    inputs:
-      - /.storybook/**/*
-      - /projects/**/*
-    env:
-      NODE_ENV: development
-      STORYBOOK_DISABLE_TELEMETRY: '1'
-    # --test make the build of storybook faster but the test slightly slower, this probably is worth it in this
-    # case for the time being but with enough test, at some point it might be worth it to switch to a slower
-    # build of storybook for faster test execution
-    script: sh -c "$workspaceRoot/node_modules/.bin/ng run storybook-host:build-storybook --test --quiet --output-dir=$workspaceRoot/node_modules/.cache/storybook-test"
-  test-storybook:
-    deps:
-      - ~:setup-playwright
-      - ~:build-storybook-test
-    options:
-      runFromWorkspaceRoot: true
-    inputs:
-      - /.storybook/**/*
-      - /projects/**/*
-    env:
-      NODE_ENV: development
-    script: sh -c "$workspaceRoot/.moon/scripts/run-storybook-tests.sh $workspaceRoot/node_modules/.cache/storybook-test"
   generate:
     command: node $workspaceRoot/.moon/scripts/ng-generate-runner.cjs
     options:
@@ -132,6 +107,14 @@ tasks:
     env:
       NODE_ENV: development
     preset: server
+  clean-test-artifacts:
+    command: node $workspaceRoot/.moon/scripts/clean-testing-artifacts.cjs
+    options:
+      runFromWorkspaceRoot: true
+      cache: false
+    env:
+      NODE_ENV: development
+    preset: server
   clean-cache:
     options:
       runFromWorkspaceRoot: true
@@ -144,6 +127,7 @@ tasks:
       runFromWorkspaceRoot: true
     script: |
       sh -c "
+        moon run :clean-test-artifacts && \
         $workspaceRoot/node_modules/.bin/ng cache clean && \
         rm -rf $workspaceRoot/.angular && \
         rm -rf $workspaceRoot/.moon/cache && \

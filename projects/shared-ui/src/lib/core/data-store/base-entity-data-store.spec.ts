@@ -92,10 +92,10 @@ describe('BaseEntityDataStore', () => {
       expect(store.data()).toEqual({ id: 'a', name: 'alpha-updated' });
     });
 
-    it('works as the first write when no data exists yet', () => {
+    it('is noop if there is no data', () => {
       store.updateLocalData({ id: 'a', name: 'alpha' });
 
-      expect(store.data()).toEqual({ id: 'a', name: 'alpha' });
+      expect(store.data()).toBeUndefined();
     });
   });
 

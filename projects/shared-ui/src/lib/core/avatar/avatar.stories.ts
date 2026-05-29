@@ -408,6 +408,14 @@ export const Showcase: Story = {
                 <span class="text-xs text-muted">Image loaded</span>
               </div>
               <div class="flex flex-col items-center gap-1">
+                <org-avatar label="Noah Park" size="lg" imgSrc="https://fastly.picsum.photos/id/1041/200/200.jpg?hmac=1CDPtzGhHDqltV1i3b5YV4hY9UYY_6ubvXbxJO9QchQ" />
+                <span class="text-xs text-muted">Image loaded</span>
+              </div>
+              <div class="flex flex-col items-center gap-1">
+                <org-avatar label="Noah Park" size="lg" shape="square" imgSrc="https://fastly.picsum.photos/id/1041/200/200.jpg?hmac=1CDPtzGhHDqltV1i3b5YV4hY9UYY_6ubvXbxJO9QchQ" />
+                <span class="text-xs text-muted">Image loaded</span>
+              </div>
+              <div class="flex flex-col items-center gap-1">
                 <org-avatar label="Renée Marin" size="lg" imgSrc="https://invalid-url.com/missing.jpg" />
                 <span class="text-xs text-muted">Image error → initials</span>
               </div>

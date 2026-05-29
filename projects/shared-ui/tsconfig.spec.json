@@ -9,6 +9,7 @@
   "include": [
     "../../test-providers.ts",
     "../../test-setup.ts",
+    "../../vitest-browser-utils.ts",
     "src/**/*.spec.ts",
     "src/**/*.d.ts",
     "src/lib/examples/get-element-text-content/get-element-text-content.stories.ts"

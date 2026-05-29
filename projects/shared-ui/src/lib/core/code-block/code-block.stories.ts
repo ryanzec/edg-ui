@@ -10,7 +10,14 @@ import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/d
 import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
 import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
 import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
-import { CodeBlock, CodeBlockTone, CodeBlockVariant, allCodeBlockTones, allCodeBlockVariants } from './code-block';
+import {
+  CodeBlock,
+  CodeBlockTone,
+  CodeBlockVariant,
+  allCodeBlockHighlightLanguages,
+  allCodeBlockTones,
+  allCodeBlockVariants,
+} from './code-block';
 
 const liveDemoVariantItems: ButtonToggleItem[] = allCodeBlockVariants.map((variant) => ({
   label: variant,
@@ -34,6 +41,57 @@ git push origin HEAD --tags`;
 
 const liveDemoInlineSample = '--color-primary';
 
+const liveDemoHighlightItems: ButtonToggleItem[] = ['off', 'bash', 'typescript', 'css', 'json', 'sql'].map(
+  (language) => ({
+    label: language,
+    value: language,
+    buttonColor: 'primary',
+  })
+);
+
+const liveDemoTypescriptSample = `import { signal } from '@angular/core';
+
+// counter that doubles on every read
+export const counter = signal(0);
+const next = () => counter.update((value) => value + 1);`;
+
+const liveDemoCssSample = `:root {
+  --color-primary: oklch(0.55 0.18 260);
+  --radius-base: 0.5rem;
+}`;
+
+const liveDemoJsonSample = `{
+  "name": "@org/components",
+  "version": "1.4.0",
+  "private": true
+}`;
+
+const liveDemoSqlSample = `select id, slug, name, plan, created_at
+from workspace
+where plan = 'pro' and created_at > now() - interval '30 days'
+order by created_at desc;`;
+
+const liveDemoHighlightSamples: Record<string, string | undefined> = {
+  typescript: liveDemoTypescriptSample,
+  css: liveDemoCssSample,
+  json: liveDemoJsonSample,
+  sql: liveDemoSqlSample,
+};
+
+const liveDemoScrollSample = `export async function syncWorkspaceMembers(workspaceId: string, members: ReadonlyArray<MemberRecord>): Promise<SyncResult> {
+  const existing = await db.member.findMany({ where: { workspaceId }, orderBy: { createdAt: 'asc' } });
+  const incomingById = new Map(members.map((member) => [member.id, member] as const));
+  const toCreate = members.filter((member) => !existing.some((candidate) => candidate.id === member.id));
+  const toRemove = existing.filter((candidate) => !incomingById.has(candidate.id));
+  const toUpdate = existing.filter((candidate) => incomingById.get(candidate.id)?.role !== candidate.role);
+  await db.$transaction([
+    ...toCreate.map((member) => db.member.create({ data: { ...member, workspaceId } })),
+    ...toUpdate.map((member) => db.member.update({ where: { id: member.id }, data: { role: incomingById.get(member.id)!.role } })),
+    ...toRemove.map((member) => db.member.delete({ where: { id: member.id } })),
+  ]);
+  return { created: toCreate.length, updated: toUpdate.length, removed: toRemove.length };
+}`;
+
 const meta: Meta<CodeBlock> = {
   title: 'Core/Components/Code Block',
   component: CodeBlock,
@@ -53,6 +111,7 @@ const meta: Meta<CodeBlock> = {
   - **Tones (inline only)**: \`token\`, \`danger\`, \`safe\` for visually distinct chips.
   - **Copy affordance**: composes \`org-button\` with a 1.2s confirm flash on success.
   - **Line clamp**: \`ellipsisAt\` clamps the body to N lines with a fade mask; a "Show more" affordance only renders when the body actually overflows.
+  - **Collapsible**: \`isCollapsable\` turns the header into a toggle (clickable + rotating chevron) that animates the body fully open/closed; \`isCollapsed\` can drive the state externally.
   - **Wrap mode**: opt-in pre-wrap rendering for prose-y snippets.
 
   ### Usage Examples
@@ -96,6 +155,7 @@ export const Default: Story = {
     wrap: false,
     headerLabel: undefined,
     headerIcon: undefined,
+    highlightLanguage: undefined,
   },
   argTypes: {
     text: {
@@ -128,6 +188,11 @@ export const Default: Story = {
       control: 'text',
       description: 'When set, renders a header bar in the block variant with this label.',
     },
+    highlightLanguage: {
+      control: 'select',
+      options: [undefined, ...allCodeBlockHighlightLanguages],
+      description: 'Syntax-highlights the block body in this language; undefined renders plain text (block only).',
+    },
   },
   parameters: {
     docs: {
@@ -148,6 +213,7 @@ export const Default: Story = {
         [wrap]="wrap"
         [headerLabel]="headerLabel"
         [headerIcon]="headerIcon"
+        [highlightLanguage]="highlightLanguage"
       />
     `,
     moduleMetadata: {
@@ -193,7 +259,7 @@ export const Default: Story = {
         <org-design-system-demo-header
           slot="header"
           title="Live demo"
-          description="Toggle the variant, header, copy affordance, ellipsis, wrap, and inline tone to see every combination."
+          description="Toggle the variant, header, copy affordance, ellipsis, collapsible, wrap, scroll, syntax highlight, and inline tone to see every combination."
         />
         <org-design-system-demo-controls slot="controls">
           <org-design-system-demo-control-group label="Variant">
@@ -220,10 +286,23 @@ export const Default: Story = {
                 {{ liveDemoForm.controls.clamp.value ? '4 lines' : 'off' }}
               </org-checkbox-toggle>
             </org-design-system-demo-control-group>
+            <org-design-system-demo-control-group label="Collapsible">
+              <org-checkbox-toggle name="live-demo-collapsable" value="collapsable" formControlName="collapsable">
+                {{ liveDemoForm.controls.collapsable.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-group>
             <org-design-system-demo-control-group label="Wrap">
               <org-checkbox-toggle name="live-demo-wrap" value="wrap" formControlName="wrap">
                 {{ liveDemoForm.controls.wrap.value ? 'on' : 'off' }}
               </org-checkbox-toggle>
+            </org-design-system-demo-control-group>
+            <org-design-system-demo-control-group label="Scroll">
+              <org-checkbox-toggle name="live-demo-scroll" value="scroll" formControlName="scroll">
+                {{ liveDemoForm.controls.scroll.value ? 'overflowing' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-group>
+            <org-design-system-demo-control-group label="Highlight">
+              <org-button-toggle [items]="highlightItems" formControlName="highlight" buttonSize="sm" />
             </org-design-system-demo-control-group>
           }
           @if (liveDemoForm.controls.variant.value === 'inline') {
@@ -238,12 +317,21 @@ export const Default: Story = {
               <div class="stage-block">
                 <org-code-block
                   variant="block"
-                  [text]="blockSample"
+                  [text]="
+                    liveDemoForm.controls.scroll.value
+                      ? scrollSample
+                      : (highlightSamples[liveDemoForm.controls.highlight.value] ?? blockSample)
+                  "
                   [allowCopy]="liveDemoForm.controls.allowCopy.value"
                   [ellipsisAt]="liveDemoForm.controls.clamp.value ? 4 : 0"
                   [wrap]="liveDemoForm.controls.wrap.value"
+                  [scrollClass]="liveDemoForm.controls.scroll.value ? 'h-3xs' : ''"
                   [headerLabel]="liveDemoForm.controls.header.value ? liveDemoForm.controls.headerLabel.value : null"
                   headerIcon="file-text"
+                  [isCollapsable]="liveDemoForm.controls.collapsable.value"
+                  [highlightLanguage]="
+                    liveDemoForm.controls.highlight.value === 'off' ? null : liveDemoForm.controls.highlight.value
+                  "
                 />
               </div>
             } @else {
@@ -262,8 +350,11 @@ export const Default: Story = {
 class CodeBlockLiveDemoStory {
   protected readonly variantItems = liveDemoVariantItems;
   protected readonly toneItems = liveDemoToneItems;
+  protected readonly highlightItems = liveDemoHighlightItems;
   protected readonly blockSample = liveDemoBlockSample;
   protected readonly inlineSample = liveDemoInlineSample;
+  protected readonly highlightSamples = liveDemoHighlightSamples;
+  protected readonly scrollSample = liveDemoScrollSample;
 
   protected readonly liveDemoForm = new FormGroup({
     variant: new FormControl<CodeBlockVariant>('block', { nonNullable: true }),
@@ -271,8 +362,11 @@ class CodeBlockLiveDemoStory {
     headerLabel: new FormControl<string>('release.sh', { nonNullable: true }),
     allowCopy: new FormControl<boolean>(true, { nonNullable: true }),
     clamp: new FormControl<boolean>(false, { nonNullable: true }),
+    collapsable: new FormControl<boolean>(false, { nonNullable: true }),
     wrap: new FormControl<boolean>(false, { nonNullable: true }),
+    scroll: new FormControl<boolean>(false, { nonNullable: true }),
     tone: new FormControl<CodeBlockTone>('none', { nonNullable: true }),
+    highlight: new FormControl<string>('off', { nonNullable: true }),
   });
 }
 
@@ -475,7 +569,68 @@ export const Showcase: Story = {
           <ul class="list-inside list-disc flex flex-col gap-1">
             <li>The clamp uses the line-height as its unit so the cut always lands on a line boundary</li>
             <li>The "Show more" button only renders when the content actually overflows the clamp</li>
-            <li>Clicking "Show more" lifts the clamp; the affordance is hidden once expanded</li>
+            <li>Clicking "Show more" lifts the clamp; the button stays as "Show less" to collapse back to the clamped height</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header
+            slot="header"
+            title="Collapsible"
+            description="Set isCollapsable on a block with a header to turn the entire header into a toggle. A chevron on the left reflects the state and the body animates its height open/closed. isCollapsed can also be driven externally to start collapsed."
+          />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="flex flex-col gap-2">
+              <org-code-block
+                [text]="longTsSample"
+                headerLabel="useFeatureFlag.ts"
+                headerIcon="file-text"
+                highlightLanguage="typescript"
+                [allowCopy]="true"
+                [isCollapsable]="true"
+              />
+              <org-code-block
+                [text]="schemaSample"
+                headerLabel="schema.sql"
+                highlightLanguage="sql"
+                [allowCopy]="true"
+                [isCollapsable]="true"
+                [isCollapsed]="true"
+              />
+            </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li>The entire header is clickable (pointer cursor + hover background) and toggles the body</li>
+            <li>The left chevron rotates to match the collapsed state, animating in step with the body height</li>
+            <li>The body collapses fully while the block width stays the same</li>
+            <li>Clicking the copy button never toggles the collapse</li>
+            <li>The second block starts collapsed via <strong>isCollapsed</strong></li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header
+            slot="header"
+            title="Syntax highlighting"
+            description="Set highlightLanguage on a block to syntax-highlight the body. Token colors are driven by design tokens, so they adapt to light/dark. Undefined (the default) renders plain text. The inline variant ignores highlightLanguage."
+          />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="flex flex-col gap-2">
+              <org-code-block [text]="longTsSample" headerLabel="useFeatureFlag.ts" headerIcon="file-text" highlightLanguage="typescript" [allowCopy]="true" />
+              <org-code-block [text]="tokensSample" headerLabel="tokens.css" highlightLanguage="css" [allowCopy]="true" />
+              <org-code-block [text]="schemaSample" headerLabel="schema.sql" highlightLanguage="sql" [allowCopy]="true" />
+              <org-code-block [text]="shellSample" headerLabel="deploy.sh" highlightLanguage="bash" [allowCopy]="true" />
+            </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li>Each block tokenizes its body with the supplied language and colors keywords, strings, comments, etc.</li>
+            <li>Highlighting composes with every block feature — header, copy, clamp, and wrap</li>
+            <li>Token colors come from design tokens, so they retheme automatically in dark mode</li>
+            <li>While the highlighter initializes (or if it errors), the body falls back to plain text</li>
           </ul>
         </org-design-system-demo-expected-behaviour>
 

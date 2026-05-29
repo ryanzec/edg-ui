@@ -9,7 +9,6 @@
     width: var(--avatar-shape-size);
     height: var(--avatar-shape-size);
     border-radius: var(--avatar-radius);
-    background-color: var(--avatar-color);
     color: var(--avatar-shape-fg);
     font-size: var(--avatar-initials-font-size);
     font-weight: var(--avatar-initials-font-weight);
@@ -17,6 +16,22 @@
     letter-spacing: var(--avatar-letter-spacing);
     text-transform: uppercase;
     user-select: none;
+  }
+
+  .background {
+    border-radius: var(--avatar-radius);
+    background-color: var(--avatar-color);
+    height: 100%;
+    width: 100%;
+  }
+
+  /*
+   * this prevent the background color from slightly bleeding for image that don't have a
+   * transparent background but all some level of consistency when they do
+   */
+  :host-content(org-avatar[data-has-image]) .background {
+    height: calc(100% - 0.125rem);
+    width: calc(100% - 0.125rem);
   }
 
   /* stacked ring — applied when inside an avatar stack OR when the parent avatar is in overflow mode */

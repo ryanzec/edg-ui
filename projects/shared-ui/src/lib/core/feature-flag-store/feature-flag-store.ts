@@ -55,7 +55,7 @@ export class FeatureFlagStore implements OnDestroy {
 
       const featureFlags = allFeatureFlags.reduce<Record<FeatureFlag, boolean>>(
         (collector, flag) => {
-          collector[flag] = this._client!.variation(flag, false) as boolean;
+          collector[flag] = this._client!.variation(flag, false);
 
           return collector;
         },
@@ -78,7 +78,7 @@ export class FeatureFlagStore implements OnDestroy {
       const keys = Object.keys(changes);
 
       for (const key of keys) {
-        if (!allFeatureFlags.includes(key as FeatureFlag)) {
+        if (allFeatureFlags.includes(key as FeatureFlag) === false) {
           continue;
         }
 
