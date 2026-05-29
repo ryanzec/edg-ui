@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import * as LDClient from 'launchdarkly-js-client-sdk';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { logManager } from '@organization/shared-utils';
 import { allFeatureFlags, FeatureFlag, FeatureFlagStore } from './feature-flag-store';
 
 type ReadyHandler = () => void;
@@ -96,6 +97,17 @@ describe('FeatureFlagStore', () => {
   });
 
   describe('initialize', () => {
+    beforeEach(() => {
+      // suppress expected diagnostic output from the ready/change/error handlers these tests intentionally trigger
+      vi.spyOn(logManager, 'log').mockImplementation(() => {});
+      vi.spyOn(logManager, 'warn').mockImplementation(() => {});
+      vi.spyOn(logManager, 'error').mockImplementation(() => {});
+    });
+
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
     it('registers ready, change, and error handlers on the provided client', () => {
       const fake = createFakeLDClient();
       const onSpy = vi.spyOn(fake.client, 'on');
@@ -217,6 +229,15 @@ describe('FeatureFlagStore', () => {
   });
 
   describe('reset', () => {
+    beforeEach(() => {
+      // suppress expected diagnostic output from the ready handler this test intentionally triggers
+      vi.spyOn(logManager, 'log').mockImplementation(() => {});
+    });
+
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
     it('restores defaults and marks the store as uninitialized', () => {
       const fake = createFakeLDClient({
         'internal-tools': true,

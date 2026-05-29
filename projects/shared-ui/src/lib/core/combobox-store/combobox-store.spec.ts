@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { logManager } from '@organization/shared-utils';
 import { ComboboxStore, type ComboboxOption, type ComboboxOptionInput } from './combobox-store';
 
 const simpleOptions: ComboboxOptionInput[] = [
@@ -65,6 +66,15 @@ describe('ComboboxStore', () => {
   });
 
   describe('initialization guard', () => {
+    beforeEach(() => {
+      // suppress expected diagnostic output from the not-initialized guard these tests intentionally trigger
+      vi.spyOn(logManager, 'error').mockImplementation(() => {});
+    });
+
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
     it('blocks setOptions before initialize', () => {
       store.setOptions(simpleOptions);
 
@@ -364,6 +374,15 @@ describe('ComboboxStore', () => {
   });
 
   describe('setSelectedValues', () => {
+    beforeEach(() => {
+      // suppress expected diagnostic output from the invalid-selection/values branches these tests intentionally trigger
+      vi.spyOn(logManager, 'error').mockImplementation(() => {});
+    });
+
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
     describe('single-select mode', () => {
       beforeEach(() => {
         store.initialize(simpleOptions);

@@ -1,5 +1,5 @@
-import { beforeEach, describe, expect, it } from 'vitest';
-import { ResponseMeta } from '@organization/shared-utils';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { logManager, ResponseMeta } from '@organization/shared-utils';
 import { BaseDataStore } from './base-data-store';
 
 type TestItem = {
@@ -161,6 +161,15 @@ describe('BaseDataStore', () => {
   });
 
   describe('updateLocalData', () => {
+    beforeEach(() => {
+      // suppress expected diagnostic output for the no-idField branch this block intentionally triggers
+      vi.spyOn(logManager, 'log').mockImplementation(() => {});
+    });
+
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
     it('merges fields into the matching item by id', () => {
       store.pushLocalData([
         { id: 'a', name: 'alpha' },
@@ -194,6 +203,15 @@ describe('BaseDataStore', () => {
   });
 
   describe('deleteLocalData', () => {
+    beforeEach(() => {
+      // suppress expected diagnostic output for the no-idField branch this block intentionally triggers
+      vi.spyOn(logManager, 'log').mockImplementation(() => {});
+    });
+
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
     it('removes the matching item by id', () => {
       store.pushLocalData([
         { id: 'a', name: 'alpha' },
