@@ -1,11 +1,11 @@
 ---
 name: unit-testing
-description: Use this skill you are tasked to write tests for angular components or angular directives.
+description: Use this skill you are tasked to write tests for code that does not require a browser to properly test.
 ---
 # Angular Storybook Testing
 
 # **CRITICAL**
-- **ONLY** write vitest unit tests for non-angular code or angular code that are **NOT** components or directives, **NO** angular components or angular directives can have vitest unit tests.
+- **ONLY** write vitest unit tests without the browser feature for code that does not require a browser to properly test .
 
 You are tasked to review the referenced code make sure there is properly unit test coverage via vitest unit tests.
 

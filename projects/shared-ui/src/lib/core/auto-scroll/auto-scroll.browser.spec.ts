@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, signal, viewChild } from '@angular/core';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { vitestBrowserUtils } from '../../../../../../vitest-browser-utils';
+import { vitestBrowserUtils, type SilencedLogManager } from '../../../../../../vitest-browser-utils';
 import { AutoScroll, type AutoScrollAriaLive, type AutoScrollState } from './auto-scroll';
 
 @Component({
@@ -224,6 +224,16 @@ describe('Auto Scroll (browser)', () => {
   });
 
   describe('ready / state-change outputs', () => {
+    let logManagerSilence: SilencedLogManager;
+
+    beforeEach(() => {
+      logManagerSilence = vitestBrowserUtils.silenceLogManager();
+    });
+
+    afterEach(() => {
+      logManagerSilence.restore();
+    });
+
     it('emits ready once for a scrollable parent', async () => {
       const fixture = createFixture(AutoScrollInteractiveHost);
       const readout = queryByTestId(fixture, 'readout');

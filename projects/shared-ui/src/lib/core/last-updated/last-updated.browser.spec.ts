@@ -3,7 +3,7 @@ import { type ComponentFixture } from '@angular/core/testing';
 import { userEvent } from 'vitest/browser';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { DateTime } from 'luxon';
-import { vitestBrowserUtils } from '../../../../../../vitest-browser-utils';
+import { vitestBrowserUtils, type SilencedLogManager } from '../../../../../../vitest-browser-utils';
 import { LastUpdated } from './last-updated';
 import { type LastUpdatedFormat, type LastUpdatedState } from './last-updated-brain';
 
@@ -305,6 +305,16 @@ describe('LastUpdated (browser)', () => {
   });
 
   describe('tooltip', () => {
+    let logManagerSilence: SilencedLogManager;
+
+    beforeEach(() => {
+      logManagerSilence = vitestBrowserUtils.silenceLogManager();
+    });
+
+    afterEach(() => {
+      logManagerSilence.restore();
+    });
+
     it('wraps the content in a tooltip when tooltip text is provided', () => {
       const fixture = createLastUpdated({ tooltipText: 'absolute time' });
       const host = queryByTestId(fixture, 'last-updated');

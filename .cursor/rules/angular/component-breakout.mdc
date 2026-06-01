@@ -9,8 +9,11 @@ alwaysApply: true
   - breaks up a really large component into smaller but still not trival component **AND** there are logic points of separation.
 - If multiple components need access to input() values, you **MUST** place them in the top parent component and inject the parent component into the sub component to read those values to avoid input() duplications.
 
-# References
-Use the following components as references for how the codebase does sub-components:
-- `projects/shared-ui/src/lib/core/avatar`
-- `projects/shared-ui/src/lib/core/button`
-- `projects/shared-ui/src/lib/core/card`
+# Example
+A card component depend on the supported feature might have the following compone the the `/card` directory:
+- `card.ts`
+- `card-header.ts`
+- `card-content.ts`
+- `card-footer.ts`
+- `card-image.ts`
+- `card-icon.ts`

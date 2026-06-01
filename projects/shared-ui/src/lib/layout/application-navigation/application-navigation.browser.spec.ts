@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { type ComponentFixture } from '@angular/core/testing';
 import { userEvent } from 'vitest/browser';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { vitestBrowserUtils } from '../../../../../../vitest-browser-utils';
+import { vitestBrowserUtils, type SilencedLogManager } from '../../../../../../vitest-browser-utils';
 import {
   ApplicationNavigation,
   type NavigationGroup,
@@ -421,6 +421,16 @@ describe('ApplicationNavigation (browser)', () => {
   });
 
   describe('section groups', () => {
+    let logManagerSilence: SilencedLogManager;
+
+    beforeEach(() => {
+      logManagerSilence = vitestBrowserUtils.silenceLogManager();
+    });
+
+    afterEach(() => {
+      logManagerSilence.restore();
+    });
+
     it('renders the provided group header text', async () => {
       const fixture = createApplicationNavigation();
       const host = queryByTestId(fixture, 'nav');

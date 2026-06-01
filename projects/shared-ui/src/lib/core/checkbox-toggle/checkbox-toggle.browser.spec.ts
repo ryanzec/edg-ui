@@ -10,6 +10,7 @@ import {
   type CheckboxToggleLabelPosition,
   type CheckboxToggleSize,
 } from './checkbox-toggle';
+import { FormDisabledDirective } from '../form-disabled-directive/form-disabled-directive';
 import { FormField } from '../form-fields/form-field';
 import { type IconName } from '../icon/icon-brain';
 
@@ -76,7 +77,7 @@ class CheckboxToggleProjectionHost {}
 @Component({
   selector: 'test-checkbox-toggle-form-host',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CheckboxToggle, ReactiveFormsModule],
+  imports: [CheckboxToggle, ReactiveFormsModule, FormDisabledDirective],
   host: { class: 'block' },
   template: `
     <org-checkbox-toggle
@@ -84,7 +85,7 @@ class CheckboxToggleProjectionHost {}
       name="setting"
       value="on"
       [formControl]="control"
-      [disabled]="consumerDisabled()"
+      [orgFormDisabled]="formDisabled()"
     >
       Label
     </org-checkbox-toggle>
@@ -93,7 +94,7 @@ class CheckboxToggleProjectionHost {}
 })
 class CheckboxToggleFormHost {
   public readonly control = new FormControl<boolean>(false, { nonNullable: true });
-  public readonly consumerDisabled = signal<boolean>(false);
+  public readonly formDisabled = signal<boolean>(false);
 
   protected readout(): string {
     return `value=${this.control.value} touched=${this.control.touched} disabled=${this.control.disabled}`;
@@ -648,18 +649,16 @@ describe('CheckboxToggle (browser)', () => {
       expect(readout.textContent).toContain('value=false');
     });
 
-    it('clears the disabled state when both the consumer and form sources are cleared', async () => {
+    it('disables and clears the disabled state as orgFormDisabled is toggled', async () => {
       const fixture = createFixture(CheckboxToggleFormHost);
       const host = queryByTestId(fixture, 'toggle');
 
-      fixture.componentInstance.consumerDisabled.set(true);
-      fixture.componentInstance.control.disable();
+      fixture.componentInstance.formDisabled.set(true);
       await flush(fixture);
 
       expect(host.getAttribute('data-disabled')).toBe('');
 
-      fixture.componentInstance.consumerDisabled.set(false);
-      fixture.componentInstance.control.enable();
+      fixture.componentInstance.formDisabled.set(false);
       await flush(fixture);
 
       expect(host.getAttribute('data-disabled')).toBeNull();

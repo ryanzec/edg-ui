@@ -1,4 +1,15 @@
-import { Directive, InjectionToken, Signal, TemplateRef, inject, input, output, signal } from '@angular/core';
+import {
+  Directive,
+  DestroyRef,
+  InjectionToken,
+  Signal,
+  TemplateRef,
+  inject,
+  input,
+  output,
+  signal,
+} from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Dialog as CdkDialog, DialogRef } from '@angular/cdk/dialog';
 import { ComponentType } from '@angular/cdk/portal';
 import { take } from 'rxjs';
@@ -42,6 +53,7 @@ export const DIALOG_SHOW_CLOSE_ICON_DEFAULT = true;
 })
 export class DialogBrainDirective {
   private readonly _cdkDialog = inject(CdkDialog);
+  private readonly _destroyRef = inject(DestroyRef);
 
   private _dialogRef: DialogRef<unknown, unknown> | undefined = undefined;
   private _escapeKeyEnabled = true;
@@ -103,7 +115,7 @@ export class DialogBrainDirective {
       providers,
     }) as DialogRef<unknown, unknown>;
 
-    this._dialogRef.closed.pipe(take(1)).subscribe(() => {
+    this._dialogRef.closed.pipe(take(1), takeUntilDestroyed(this._destroyRef)).subscribe(() => {
       this.closed.emit();
     });
 

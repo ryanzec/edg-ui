@@ -10,7 +10,7 @@ import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { type ComponentFixture } from '@angular/core/testing';
 import { userEvent } from 'vitest/browser';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { vitestBrowserUtils } from '../../../../../../vitest-browser-utils';
+import { vitestBrowserUtils, type SilencedLogManager } from '../../../../../../vitest-browser-utils';
 import { KanbanBoard } from './kanban-board';
 import { KanbanLane, type KanbanItem } from './kanban-lane';
 
@@ -129,6 +129,16 @@ describe('KanbanBoard (browser)', () => {
   };
 
   describe('mouse selection', () => {
+    let logManagerSilence: SilencedLogManager;
+
+    beforeEach(() => {
+      logManagerSilence = vitestBrowserUtils.silenceLogManager();
+    });
+
+    afterEach(() => {
+      logManagerSilence.restore();
+    });
+
     it('selects a single card on click', async () => {
       const user = userEvent.setup();
       const fixture = createFixture(KanbanTestsHost);

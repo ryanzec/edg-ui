@@ -2,6 +2,7 @@ import { ApplicationRef, type Type } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { vi } from 'vitest';
 import { userEvent } from 'vitest/browser';
+import { logManager } from './projects/shared-utils/src/utils/log-manager';
 
 /**
  * shared scaffolding for vitest browser component tests. each describe block creates its own harness
@@ -124,6 +125,30 @@ const queryCdkOverlayBackdrop = (): HTMLElement | null => document.body.querySel
 /** resolves after the given number of milliseconds; used to let real timers / measurement effects settle. */
 const sleep = (durationMs: number): Promise<void> => new Promise((resolve) => setTimeout(resolve, durationMs));
 
+/** handle returned by silenceLogManager; call restore() to re-enable real logManager output. */
+export type SilencedLogManager = {
+  /** restores the real logManager.warn / logManager.error implementations. */
+  restore: () => void;
+};
+
+/**
+ * silences logManager.warn / logManager.error for tests that DELIBERATELY exercise a warning / error
+ * branch. call in a beforeEach (or at the start of the specific it) and restore in afterEach. never
+ * assert on the suppressed output; this only removes expected console noise so a genuinely unexpected
+ * log elsewhere still surfaces.
+ */
+const silenceLogManager = (): SilencedLogManager => {
+  const warnSpy = vi.spyOn(logManager, 'warn').mockImplementation(() => undefined);
+  const errorSpy = vi.spyOn(logManager, 'error').mockImplementation(() => undefined);
+
+  return {
+    restore: (): void => {
+      warnSpy.mockRestore();
+      errorSpy.mockRestore();
+    },
+  };
+};
+
 /** a controllable stub for the cdk Clipboard service; only the boolean-returning copy() is modeled. */
 export type ClipboardStub = {
   /** the value provided to `{ provide: Clipboard, useValue: ... }`. */
@@ -179,4 +204,5 @@ export const vitestBrowserUtils = {
   queryCdkOverlayBackdrop,
   sleep,
   createClipboardStub,
+  silenceLogManager,
 };

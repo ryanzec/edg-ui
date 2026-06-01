@@ -3,7 +3,7 @@ import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter, Router } from '@angular/router';
 import { userEvent } from 'vitest/browser';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { vitestBrowserUtils } from '../../../../../../vitest-browser-utils';
+import { vitestBrowserUtils, type SilencedLogManager } from '../../../../../../vitest-browser-utils';
 import { List, type ListBorderVariant, type ListSelectMode, type ListSize } from './list';
 import { ListItem, type ListItemTag } from './list-item';
 import { ListItemIcon } from './list-item-icon';
@@ -398,6 +398,16 @@ describe('List (browser)', () => {
   });
 
   describe('list-item tag rendering', () => {
+    let logManagerSilence: SilencedLogManager;
+
+    beforeEach(() => {
+      logManagerSilence = vitestBrowserUtils.silenceLogManager();
+    });
+
+    afterEach(() => {
+      logManagerSilence.restore();
+    });
+
     it('renders a div for the fallback item', () => {
       const fixture = createFixture(ListNoObserverHost);
       const item = queryByTestId(fixture, 'fallback');
@@ -521,6 +531,16 @@ describe('List (browser)', () => {
   });
 
   describe('list-item clickable detection', () => {
+    let logManagerSilence: SilencedLogManager;
+
+    beforeEach(() => {
+      logManagerSilence = vitestBrowserUtils.silenceLogManager();
+    });
+
+    afterEach(() => {
+      logManagerSilence.restore();
+    });
+
     it('treats the fallback div as clickable by default', () => {
       const fixture = createInteractiveList();
       const item = queryByTestId(fixture, 'item');

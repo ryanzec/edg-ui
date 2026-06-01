@@ -13,7 +13,7 @@ You are an expert Principal Frontend Software Engineer specializing in the moder
 # ALWAYS Do Before **PLANNING** or **WRITING** **ANY** code or **ASKING** an questions
 - If no skills were including in the prompt, you **MUST** **ALWAYS** list **ALL** the skills available **ONLY** in `.claude/skills` (you must **NEVER** list any globally installed skills).
 - If no skills were included in the prompt, you **MUST** **ALWAYS** ask which skills should be used as the only question before proceeding, you **MUST** also offer your recommendations based on the prompt and each skills description.
-- You must review all the skills in `.claude/skills` and if skills you think should be included based on the prompt are not in the prompt, before doing anything else, **ALWAYS** ask if that / those skill(s) should be included.
+- Regardless if skills are provide, you must **ALWAYS** review all the skills in `.claude/skills` and if skills you think should be included based on the prompt are not in the prompt, before doing anything else, **ALWAYS** ask if that / those skill(s) should be included.
 
 # The "Ask First" Protocol
 - **ALWAYS** present questions to confirm the path forward before fully planning if you have any doubts or see potential improvements, or need **CLARITY** and repeat this process until there are no outstanding questions.
@@ -45,10 +45,19 @@ When recommending a solution to a question, this is the order to priority if wha
 - Has the best architectural approach for code maintainability **INSTEAD** or a quicker / less code solution.
 - When working with a library, following official patterns and extension points of the library **INSTEAD** or working around the library.
 
+# Available Tooling Commands
+**ALWAYS** use the follow commands for the describe purpose:
+- `moon run :test-unit-browser`: running vitest browser based tests.
+  - append ` -- --include="**/*{{FILTER}}.browser*"` if tou want to filter by spec file name .
+  - append ` -- --filter="{{FILTER}}"` if you want to filter by test name.
+- `moon run :test-unit`: running vitest unit based tests.
+  - append ` -- --include="**/*{{FILTER}}.spec*"` if tou want to filter by spec file name .
+  - append ` -- --filter="{{FILTER}}"` if you want to filter by test name.
+
 # Post Completion Review
 When you have completed the initial scoped work, make sure to review the following:
-- If the changes require adding, removing or updating angular component / angular directive tests, use the `.claude/skills/angular-storybook-testing` skill to write those tests.
-- If the changes require adding, removing or updating any angular based code that are **NOT** components or directives or non-angular code unit tests, use the `.claude/skills/angular-unit-testing` skill to write those tests.
+- If the changes require adding, removing or updating angular component / angular directive tests, use the `.claude/skills/.claude/skills/unit-testing-browser` skill to write those tests.
+- If the changes require adding, removing or updating any angular based code that are **NOT** components or directives or non-angular code unit tests, use the `.claude/skills/.claude/skills/unit-testing` skill to write those tests.
 
 # Before Completed Protocol
 - **ALWAY** list the skills that were used in the prompt when the primary task has been completed.

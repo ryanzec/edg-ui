@@ -7,13 +7,6 @@ alwaysApply: true
 - **ALWAYS** have a export default value for each input of the comopnent using the pattern of `{DIRECTORY_NAME}_{INPUT_NAME}_DEFAULT`.
 - **ONLY** use modern signal based features like `input()`, `output()`, `computed()`
 - **ALWAYS** use `computed()` when generating a property from another signal even if it current is not used reactively **ONLY** if it requires **NO** parameters.
-- **ALWAYS** use `rxjs` + `outputFromObservable()` when you need to determine if an output event is being listened to like this:
-```ts
-private _preIconClicked$ = new Subject<void>();
-// ...
-public preIconClicked = outputFromObservable(this._preIconClicked$);
-// ...
-```
 - **ALWAYS** have selector be prefixed with `org-` for components in `projects/shared-ui`.
 - **ALWAYS** explicitly mark members (data) / methods (functions) of the class component `protected` if it need to be accessed by the template
 - **ALWAYS** explicitly mark methods (functions) of the class component as `public` for anything that is request to be part of the public api
@@ -31,7 +24,7 @@ public preIconClicked = outputFromObservable(this._preIconClicked$);
   //...
 })
 ```
-- **ONLY** allow a `containerClass` input if it is applied to the outer most element in the template.
+- **ONLY** allow a `containerClass` input if it is applied to the outer most element in the template and has no better semanic name.
 - **ALWAYS** explicitly define the input(s) that the directive defines on the component itself when adding a `hostDirective` to a component and **NOT** as standalone property `input()`'s of the class.
 - If an icon is requested that is not available via `IconName` in `projects/shared-ui/src/lib/core/icon/icon.ts` **ALWAYS** ask before added a newicon, always say which icon you are adding,a nd the icon needs to come from lucide icons.
 - **ALWAYS** prefix any input with `default*` when it is **ONLY** used to default internal state
@@ -76,45 +69,6 @@ public inputPlaceholder = input<string>('');
 - **ALWAYS** use a `model()` instead of a `input()` when the component itself and its parent need acces to modify and / or know when it changes.
 - **ONLY** use `output()` to signal an internal event has happened in the component, NOT for state changing.
 - **ONLY** follow Angular's official naming conventions for internal event handler methods — use descriptive verb-based names (e.g., `save()`, `click()`, `submit()`) without requiring any specific prefix.
-- **ALWAYS** use `toObservable()` on request data that is passed to methods of api or data store services.
-```ts
-export class MyView implements AfterViewInit {
-  // other code...
- 
-  private _fetchRequestData = signal<GetRequest>({
-    limit: 10,
-    offset: 0,
-    orderBy: 'updatedAt',
-    orderDirection: 'desc',
-  });
- 
-  // other code...
- 
-  public ngAfterViewInit(): void {
-    // we run this in here to avoid the init event storm that happens when the children components emit events that
-    // update the fetch request data to prevent unnecessary duplicate fetch requests
-    runInInjectionContext(this._injector, () => {
-      toObservable(this._fetchRequestData)
-        .pipe(
-          debounceTime(0),
-          takeUntilDestroyed(),
-          distinctUntilChanged((previous, current) => JSON.stringify(previous) === JSON.stringify(current))
-        )
-        .subscribe((requestData) => {
-          this._myDataStore.fetch(requestData);
-        });
-    });
-  }
- 
-  protected onSortingChanged(sortingData: MySortingData): void {
-    // code to update _fetchRequestData
-  }
- 
-  protected onFilterChanged(filterData: MyFilterData): void {
-    // code to update _fetchRequestData
-  }
-}
-```
 - **ALWAYS** inject the component intp a sub component when it needs to access property of the parent component.
 - **ALWAYS** use `computed()` is the reference data is a signal.
 - **NEVER** allow `null` as a true value for an input(), instead, **ALWAYS** allow it as a input transform value and transform it to `undefined`.

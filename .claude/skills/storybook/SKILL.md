@@ -7,12 +7,19 @@ description: Use this skill whenever a new Angular component is being created, a
 When an addition or change is made to a component that effects the the visuals of the component, Storybook **MUST** be updated to account for these changes.
 
 ## New Input
+
 - Add a new section to the Showcase story for the new input.
 - Add a control for the new input to the Live Demo story.
 
 ## New Input Value
-- Update the existing section in the Showcase story with the new value.
+-
+Update the existing section in the Showcase story with the new value.
 - Update the control for the input to include the option to select the new input value.
 
 # Live Demo Story
-- The controls for the Live Demo story must **ALWAYS** use custom input components, NEVER native ones
+
+- The controls for the Live Demo story must **ALWAYS** use custom input components, NEVER native ones.
+
+# Showcase Story
+
+- When a new variant or variant option is added / removed, make sure to update the showcase story accordingly.

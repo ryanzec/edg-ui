@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { type ComponentFixture } from '@angular/core/testing';
 import { userEvent } from 'vitest/browser';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { vitestBrowserUtils } from '../../../../../../vitest-browser-utils';
+import { vitestBrowserUtils, type SilencedLogManager } from '../../../../../../vitest-browser-utils';
 import { Label } from './label';
 
 @Component({
@@ -131,6 +131,16 @@ describe('Label (browser)', () => {
   });
 
   describe('htmlFor', () => {
+    let logManagerSilence: SilencedLogManager;
+
+    beforeEach(() => {
+      logManagerSilence = vitestBrowserUtils.silenceLogManager();
+    });
+
+    afterEach(() => {
+      logManagerSilence.restore();
+    });
+
     it('applies htmlFor as the for attribute', () => {
       const fixture = createInteractiveLabel();
       const host = queryByTestId(fixture, 'label');

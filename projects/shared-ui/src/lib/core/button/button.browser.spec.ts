@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, signal, viewChild } from '@angular/
 import { type ComponentFixture } from '@angular/core/testing';
 import { userEvent } from 'vitest/browser';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { vitestBrowserUtils } from '../../../../../../vitest-browser-utils';
+import { vitestBrowserUtils, type SilencedLogManager } from '../../../../../../vitest-browser-utils';
 import { Button, type ButtonColor, type ButtonSize, type ButtonType, type ButtonVariant } from './button';
 import { ButtonGroup, type ButtonGroupOrientation } from './button-group';
 import { type IconName } from '../icon/icon-brain';
@@ -261,6 +261,16 @@ describe('Button (browser)', () => {
   afterEach(destroyFixture);
 
   describe('host attribute reflection', () => {
+    let logManagerSilence: SilencedLogManager;
+
+    beforeEach(() => {
+      logManagerSilence = vitestBrowserUtils.silenceLogManager();
+    });
+
+    afterEach(() => {
+      logManagerSilence.restore();
+    });
+
     it('renders the default color, variant, and size attributes', () => {
       const fixture = createInteractiveButton();
       const host = queryByTestId(fixture, 'button');
@@ -396,6 +406,16 @@ describe('Button (browser)', () => {
   });
 
   describe('content projection', () => {
+    let logManagerSilence: SilencedLogManager;
+
+    beforeEach(() => {
+      logManagerSilence = vitestBrowserUtils.silenceLogManager();
+    });
+
+    afterEach(() => {
+      logManagerSilence.restore();
+    });
+
     it('renders the projected content template instead of the label', () => {
       const fixture = createFixture(ButtonContentProjectionHost);
       const host = queryByTestId(fixture, 'button-content');

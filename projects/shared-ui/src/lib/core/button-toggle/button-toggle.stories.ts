@@ -13,6 +13,7 @@ import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/d
 import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
 import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
 import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
+import { FormDisabledDirective } from '../form-disabled-directive/form-disabled-directive';
 import { ButtonToggle, ButtonToggleItem } from './button-toggle';
 
 const liveDemoSizeItems: ButtonToggleItem[] = [
@@ -153,6 +154,7 @@ export const Default: Story = {
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     ReactiveFormsModule,
+    FormDisabledDirective,
     ButtonToggle,
     CheckboxToggle,
     DesignSystemDemo,
@@ -203,7 +205,7 @@ export const Default: Story = {
               [items]="toggleItems"
               formControlName="value"
               [buttonSize]="liveDemoForm.controls.buttonSize.value"
-              [disabled]="liveDemoForm.controls.disabled.value"
+              [orgFormDisabled]="liveDemoForm.controls.disabled.value"
               [fullWidth]="liveDemoForm.controls.fullWidth.value"
             />
           </div>

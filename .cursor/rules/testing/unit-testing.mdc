@@ -13,3 +13,4 @@ alwaysApply: true
 - **NEVER** write unit tests that are just a combination of multiple other unit tests.
 - **ALWAYS** test the output of RxJS related code and **NEVER** subscribe to the subject directly.
 - **NEVER** validation any logging from `logManager` in tests.
+- **ONLY** mock logManager when the test in question **SHOULD** trigger the logging.

@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, signal, viewChild } from '@angular/core';
 import { userEvent } from 'vitest/browser';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { vitestBrowserUtils } from '../../../../../../vitest-browser-utils';
+import { vitestBrowserUtils, type SilencedLogManager } from '../../../../../../vitest-browser-utils';
 import { Tooltip, type TooltipPlacement, type TooltipTriggerType } from './tooltip';
 import { TooltipBrainDirective } from './tooltip-brain';
 import { TooltipContent, type TooltipLayout, type TooltipPhase, type TooltipSize } from './tooltip-content';
@@ -476,6 +476,16 @@ describe('Tooltip (browser)', () => {
   });
 
   describe('missing template', () => {
+    let logManagerSilence: SilencedLogManager;
+
+    beforeEach(() => {
+      logManagerSilence = vitestBrowserUtils.silenceLogManager();
+    });
+
+    afterEach(() => {
+      logManagerSilence.restore();
+    });
+
     it('renders no overlay when no template is provided', async () => {
       const fixture = createFixture(TooltipNoTemplateShell);
       const trigger = queryByTestId(fixture, 'trigger');
@@ -544,6 +554,16 @@ describe('Tooltip (browser)', () => {
   });
 
   describe('trigger override', () => {
+    let logManagerSilence: SilencedLogManager;
+
+    beforeEach(() => {
+      logManagerSilence = vitestBrowserUtils.silenceLogManager();
+    });
+
+    afterEach(() => {
+      logManagerSilence.restore();
+    });
+
     it('overrides the auto-resolved trigger via setTriggerElement', async () => {
       const fixture = createFixture(TooltipTriggerOverrideShell);
       const defaultTrigger = queryByTestId(fixture, 'default-trigger');

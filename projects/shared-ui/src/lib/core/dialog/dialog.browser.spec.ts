@@ -3,7 +3,7 @@ import { type ComponentFixture } from '@angular/core/testing';
 import { DIALOG_DATA } from '@angular/cdk/dialog';
 import { delay } from 'es-toolkit';
 import { userEvent } from 'vitest/browser';
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { vitestBrowserUtils } from '../../../../../../vitest-browser-utils';
 import { Dialog, type DialogPosition } from './dialog';
 import { DialogBrainDirective } from './dialog-brain';
@@ -406,6 +406,31 @@ describe('Dialog (browser)', () => {
       fixture.componentInstance.brain.closeDialog();
 
       await waitFor(() => expect(readout.textContent).toContain('closedCount=1'));
+    });
+
+    it('does not emit on the destroyed output when an orphaned dialog closes after the brain is destroyed', async () => {
+      const warnSpy = vi.spyOn(console, 'warn');
+
+      const fixture = createTriggerHost();
+      const dialogRef = fixture.componentInstance.brain.openDialog(DialogOverlayContentHost, {
+        title: 'Overlay Title',
+        message: 'overlay message',
+      });
+
+      await waitForOverlayPane();
+
+      // destroy the host (and its brain directive) while the dialog is still open, orphaning the cdk dialog ref
+      destroyFixture();
+
+      // simulate cdk closing the orphaned dialog after teardown; the lifecycle-bound subscription must not emit on the
+      // now-destroyed closed output (which would otherwise log NG0953)
+      dialogRef?.close();
+
+      await delay(50);
+
+      expect(warnSpy.mock.calls.some((call) => String(call[0]).includes('NG0953'))).toBe(false);
+
+      warnSpy.mockRestore();
     });
 
     it('closes the dialog programmatically via the brain', async () => {
