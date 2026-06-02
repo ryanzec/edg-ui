@@ -116,7 +116,7 @@ export class FeatureFlagStore implements OnDestroy {
 
   /** returns whether the given feature flag is enabled */
   public has(featureFlag: FeatureFlag): boolean {
-    return this._state().featureFlags[featureFlag];
+    return this._state().featureFlags[featureFlag] ?? false;
   }
 
   /** resets all feature flags to defaults and marks the store as uninitialized */

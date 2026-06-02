@@ -144,13 +144,13 @@ const liveDemoNavigatePaths = ['/', '/inbox', '/inbox/today', '/archive'] as con
               {{ liveDemoForm.controls.disabled.value ? 'on' : 'off' }}
             </org-checkbox-toggle>
           </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="isExternalHref">
+          <org-design-system-demo-control-group label="showAsExternal">
             <org-checkbox-toggle
               name="live-demo-is-external-href"
-              value="isExternalHref"
-              formControlName="isExternalHref"
+              value="showAsExternal"
+              formControlName="showAsExternal"
             >
-              {{ liveDemoForm.controls.isExternalHref.value ? 'on' : 'off' }}
+              {{ liveDemoForm.controls.showAsExternal.value ? 'on' : 'off' }}
             </org-checkbox-toggle>
           </org-design-system-demo-control-group>
           <org-design-system-demo-control-group label="forceClickable">
@@ -214,7 +214,7 @@ const liveDemoNavigatePaths = ['/', '/inbox', '/inbox/today', '/archive'] as con
             [routerMatchExact]="liveDemoForm.controls.routerMatchExact.value"
             [isSelected]="first && liveDemoForm.controls.isSelected.value"
             [disabled]="liveDemoForm.controls.disabled.value"
-            [isExternalHref]="liveDemoForm.controls.isExternalHref.value"
+            [showAsExternal]="liveDemoForm.controls.showAsExternal.value"
             [forceClickable]="liveDemoForm.controls.forceClickable.value"
             [hideLabel]="liveDemoForm.controls.hideLabel.value"
             [label]="item.label"
@@ -256,7 +256,7 @@ class ListLiveDemoStory {
     selectMode: new FormControl<ListSelectMode>('single', { nonNullable: true }),
     isSelected: new FormControl<boolean>(true, { nonNullable: true }),
     disabled: new FormControl<boolean>(false, { nonNullable: true }),
-    isExternalHref: new FormControl<boolean>(false, { nonNullable: true }),
+    showAsExternal: new FormControl<boolean>(false, { nonNullable: true }),
     forceClickable: new FormControl<boolean>(false, { nonNullable: true }),
     hideLabel: new FormControl<boolean>(false, { nonNullable: true }),
     wrapInBox: new FormControl<boolean>(false, { nonNullable: true }),
@@ -395,7 +395,7 @@ const meta: Meta<List> = {
   - Required \`label\` input renders the main text
   - Project \`<org-list-item-icon pre>\` / \`<org-list-item-icon post>\` to render icons before / after the label
   - Project \`<org-list-item-image pre>\` to render an image before the label
-  - When \`isExternalHref\` is true, the post-icon is automatically overridden to \`arrow-up-right\`
+  - When \`showAsExternal\` is true, the post-icon is automatically overridden to \`arrow-up-right\`
   - \`hideLabel\` visually hides the label while keeping it accessible to screen readers
   - Conditionally clickable — only shows cursor and hover when a click listener is attached
   - Hover background color change (neutral subtle) when clickable
@@ -484,7 +484,7 @@ export const LiveDemo: Story = {
     docs: {
       description: {
         story:
-          'Fully interactive demo. Use the controls to drive every visual input on the list (size, asTag, pre, post, select mode, isSelected, disabled, isExternalHref, forceClickable, hideLabel, wrap in box) and observe the live result in the canvas.',
+          'Fully interactive demo. Use the controls to drive every visual input on the list (size, asTag, pre, post, select mode, isSelected, disabled, showAsExternal, forceClickable, hideLabel, wrap in box) and observe the live result in the canvas.',
       },
     },
   },
@@ -752,7 +752,7 @@ export const Showcase: Story = {
                     <org-list-item-icon pre name="users" />
                   </org-list-item>
                   <org-divider />
-                  <org-list-item asTag="a" href="https://example.com" [isExternalHref]="true" label="Help &amp; docs">
+                  <org-list-item asTag="a" href="https://example.com" [showAsExternal]="true" label="Help &amp; docs">
                     <org-list-item-icon pre name="circle-help" />
                   </org-list-item>
                   <org-list-item asTag="button" label="Sign out" (clicked)="undefined">

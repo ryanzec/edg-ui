@@ -37,7 +37,7 @@ export const LIST_ITEM_FORCE_CLICKABLE_DEFAULT = false;
 /** the default hide-label state of the list item */
 export const LIST_ITEM_HIDE_LABEL_DEFAULT = false;
 
-/** the icon auto-rendered as a post indicator when isExternalHref is true */
+/** the icon auto-rendered as a post indicator when showAsExternal is true */
 const EXTERNAL_HREF_ICON_NAME: IconName = 'arrow-up-right';
 
 @Component({
@@ -61,7 +61,7 @@ const EXTERNAL_HREF_ICON_NAME: IconName = 'arrow-up-right';
     ['[attr.data-clickable]']: 'isClickable() ? "" : null',
     ['[attr.data-as-tag]']: 'asTag()',
     ['[attr.data-disabled]']: 'disabled() ? "" : null',
-    ['[attr.data-is-external-href]']: 'isExternalHref() ? "" : null',
+    ['[attr.data-is-external-href]']: 'showAsExternal() ? "" : null',
     ['[attr.data-override-size]']: 'overrideSize()',
     ['[attr.data-force-clickable]']: 'forceClickable() ? "" : null',
     ['[attr.data-parent-select-mode]']: 'parentList.selectMode() ?? null',
@@ -90,7 +90,7 @@ export class ListItem {
   });
 
   /** whether the href is an external url that should open in a new tab; auto-renders a post external-link icon */
-  public readonly isExternalHref = input<boolean>(LIST_ITEM_IS_EXTERNAL_HREF_DEFAULT);
+  public readonly showAsExternal = input<boolean>(LIST_ITEM_IS_EXTERNAL_HREF_DEFAULT);
 
   /** overrides the size inherited from the parent list component for this item only */
   public readonly overrideSize = input<ListSize | undefined, ListSize | null | undefined>(
@@ -139,7 +139,7 @@ export class ListItem {
     return this.parentList.size();
   });
 
-  /** the icon name auto-rendered as a post indicator when isExternalHref is true */
+  /** the icon name auto-rendered as a post indicator when showAsExternal is true */
   protected readonly externalHrefIconName: IconName = EXTERNAL_HREF_ICON_NAME;
 
   constructor() {

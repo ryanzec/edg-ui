@@ -2,7 +2,7 @@
   <ng-content select="[pre]" />
   <span [class]="hideLabel() ? 'sr-only' : 'flex-1'">{{ label() }}</span>
   <ng-content select="[post]" />
-  @if (isExternalHref()) {
+  @if (showAsExternal()) {
     <org-list-item-icon class="external-href-icon" [name]="externalHrefIconName" />
   }
 </ng-template>
@@ -26,8 +26,8 @@
       } @else {
         <a
           [attr.href]="href()"
-          [target]="isExternalHref() ? '_blank' : '_self'"
-          [attr.rel]="isExternalHref() ? 'noopener noreferrer' : null"
+          [target]="showAsExternal() ? '_blank' : '_self'"
+          [attr.rel]="showAsExternal() ? 'noopener noreferrer' : null"
           class="list-item-content"
           (click)="onClick($event)"
         >

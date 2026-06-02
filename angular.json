@@ -151,7 +151,7 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": ["projects/customer-portal"],
+            "lintFilePatterns": ["projects/customer-portal/src"],
             "eslintConfig": "eslint.config.mjs"
           }
         }
@@ -264,16 +264,16 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "customer-portal:build:production"
+              "buildTarget": "internal-portal:build:production"
             },
             "staging": {
-              "buildTarget": "customer-portal:build:staging"
+              "buildTarget": "internal-portal:build:staging"
             },
             "development": {
-              "buildTarget": "customer-portal:build:development"
+              "buildTarget": "internal-portal:build:development"
             },
             "local": {
-              "buildTarget": "customer-portal:build:local"
+              "buildTarget": "internal-portal:build:local"
             }
           },
           "defaultConfiguration": "local",
@@ -300,7 +300,7 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": ["projects/internal-portal"],
+            "lintFilePatterns": ["projects/internal-portal/src"],
             "eslintConfig": "eslint.config.mjs"
           }
         }
@@ -358,7 +358,7 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": ["projects/shared-ui"],
+            "lintFilePatterns": ["projects/shared-ui/src"],
             "eslintConfig": "eslint.config.mjs"
           }
         }

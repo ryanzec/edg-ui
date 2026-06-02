@@ -34,7 +34,7 @@ export abstract class BaseLimitDataStore<T, TMeta extends ResponseMeta = Respons
   /** the total number of items across all pages */
   public readonly totalItemCount = computed(() => this.limitState().totalItemCount);
 
-  constructor(idField: keyof T, defaultLimitState: Partial<LimitState> = {}) {
+  constructor(idField: keyof T | undefined, defaultLimitState: Partial<LimitState> = {}) {
     super(idField);
 
     this.limitState.set({
@@ -49,8 +49,11 @@ export abstract class BaseLimitDataStore<T, TMeta extends ResponseMeta = Respons
   public override setLocalMeta(meta: TMeta | undefined): void {
     super.setLocalMeta(meta);
 
+    const currentPage = meta?.currentPage || 1;
+    const offset = (currentPage > 0 ? currentPage - 1 : 0) * (meta?.itemsPerPage ?? 10);
+
     this.limitState.set({
-      offset: meta?.offset ?? 0,
+      offset: offset ?? 0,
       limit: meta?.itemsPerPage ?? 10,
       totalItemCount: meta?.totalItemCount ?? 0,
       currentPage: meta?.currentPage ?? 1,

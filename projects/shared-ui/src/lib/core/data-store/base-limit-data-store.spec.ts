@@ -78,7 +78,6 @@ describe('BaseLimitDataStore', () => {
 
     it('updates the pagination state from response metadata', () => {
       store.setLocalMeta({
-        offset: 30,
         itemsPerPage: 15,
         totalItemCount: 120,
         currentPage: 3,
@@ -92,7 +91,6 @@ describe('BaseLimitDataStore', () => {
 
     it('forwards the meta to the base data store', () => {
       const meta = {
-        offset: 30,
         itemsPerPage: 15,
         totalItemCount: 120,
         currentPage: 3,
@@ -113,7 +111,7 @@ describe('BaseLimitDataStore', () => {
     });
 
     it('falls back to defaults when meta is undefined', () => {
-      store.setLocalMeta({ offset: 30, itemsPerPage: 15, totalItemCount: 120, currentPage: 3 });
+      store.setLocalMeta({ itemsPerPage: 15, totalItemCount: 120, currentPage: 3 });
 
       store.setLocalMeta(undefined);
 
@@ -129,7 +127,6 @@ describe('BaseLimitDataStore', () => {
     it('resets pagination state back to defaults', () => {
       const store = new TestLimitDataStore('id');
       store.setLocalMeta({
-        offset: 30,
         itemsPerPage: 15,
         totalItemCount: 120,
         currentPage: 3,

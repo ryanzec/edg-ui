@@ -3,6 +3,8 @@
     display: inline-flex;
     position: relative;
     vertical-align: middle;
+    max-width: 100%;
+    min-height: 0;
   }
 
   :host > button,
@@ -10,6 +12,7 @@
     display: inline-flex;
     align-items: center;
     gap: var(--avatar-gap);
+    min-height: 0;
   }
 
   /* size variants — set every size-derived avatar variable on the avatar host so it inherits down to sub-components (base matches slot defaults) */

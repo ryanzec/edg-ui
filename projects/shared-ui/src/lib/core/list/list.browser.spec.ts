@@ -29,7 +29,7 @@ import { ListItemImage } from './list-item-image';
         [isSelected]="isSelected()"
         [disabled]="disabled()"
         [href]="href()"
-        [isExternalHref]="isExternalHref()"
+        [showAsExternal]="showAsExternal()"
         [overrideSize]="overrideSize()"
         [forceClickable]="forceClickable()"
         [hideLabel]="hideLabel()"
@@ -49,7 +49,7 @@ class ListInteractiveHost {
   public readonly isSelected = signal<boolean>(false);
   public readonly disabled = signal<boolean>(false);
   public readonly href = signal<string | null | undefined>(undefined);
-  public readonly isExternalHref = signal<boolean>(false);
+  public readonly showAsExternal = signal<boolean>(false);
   public readonly overrideSize = signal<ListSize | null | undefined>(undefined);
   public readonly forceClickable = signal<boolean>(false);
   public readonly hideLabel = signal<boolean>(false);
@@ -134,7 +134,7 @@ type ListHostConfig = {
   isSelected?: boolean;
   disabled?: boolean;
   href?: string | null;
-  isExternalHref?: boolean;
+  showAsExternal?: boolean;
   overrideSize?: ListSize | null;
   forceClickable?: boolean;
   hideLabel?: boolean;
@@ -182,8 +182,8 @@ describe('List (browser)', () => {
         instance.href.set(config.href);
       }
 
-      if (config.isExternalHref !== undefined) {
-        instance.isExternalHref.set(config.isExternalHref);
+      if (config.showAsExternal !== undefined) {
+        instance.showAsExternal.set(config.showAsExternal);
       }
 
       if (config.overrideSize !== undefined) {
@@ -384,13 +384,13 @@ describe('List (browser)', () => {
       expect(item.getAttribute('data-force-clickable')).toBe('');
     });
 
-    it('adds the is-external-href data attribute when isExternalHref is set', async () => {
+    it('adds the is-external-href data attribute when showAsExternal is set', async () => {
       const fixture = createInteractiveList();
       const item = queryByTestId(fixture, 'item');
 
       expect(item.getAttribute('data-is-external-href')).toBeNull();
 
-      fixture.componentInstance.isExternalHref.set(true);
+      fixture.componentInstance.showAsExternal.set(true);
       await flush(fixture);
 
       expect(item.getAttribute('data-is-external-href')).toBe('');
@@ -476,7 +476,7 @@ describe('List (browser)', () => {
 
       fixture.componentInstance.asTag.set('a');
       fixture.componentInstance.href.set('https://example.com');
-      fixture.componentInstance.isExternalHref.set(true);
+      fixture.componentInstance.showAsExternal.set(true);
       await flush(fixture);
 
       const anchor = item.querySelector('a') as HTMLAnchorElement;
@@ -493,7 +493,7 @@ describe('List (browser)', () => {
 
       fixture.componentInstance.asTag.set('a');
       fixture.componentInstance.href.set('https://example.com');
-      fixture.componentInstance.isExternalHref.set(true);
+      fixture.componentInstance.showAsExternal.set(true);
       await flush(fixture);
 
       const externalIcon = item.querySelector('.external-href-icon') as HTMLElement;

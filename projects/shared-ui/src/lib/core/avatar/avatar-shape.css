@@ -29,7 +29,7 @@
    * this prevent the background color from slightly bleeding for image that don't have a
    * transparent background but all some level of consistency when they do
    */
-  :host-content(org-avatar[data-has-image]) .background {
+  :host-context(org-avatar[data-has-image]) .background {
     height: calc(100% - 0.125rem);
     width: calc(100% - 0.125rem);
   }
