@@ -1,8 +1,0 @@
-@layer components {
-  :host {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--chat-suggestions-gap);
-    margin-top: var(--chat-suggestions-margin-top);
-  }
-}

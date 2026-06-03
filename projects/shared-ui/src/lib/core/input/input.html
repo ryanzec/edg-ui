@@ -2,7 +2,7 @@
   @if (preTemplate()) {
     <ng-container [ngTemplateOutlet]="preTemplate()!" />
   } @else if (preIcon()) {
-    @if (isPreIconClickable()) {
+    @if (brainRef.isPreIconInteractive()) {
       <button
         type="button"
         class="icon-btn"
@@ -49,6 +49,8 @@
     [autoFocus]="autoFocus()"
     [selectAllOnFocus]="selectAllOnFocus()"
     [showPasswordToggle]="showPasswordToggle()"
+    [preIconIsClickable]="preIconIsClickable()"
+    [postIconIsClickable]="postIconIsClickable()"
     [autocomplete]="autocomplete()"
     [blockPasswordManager]="blockPasswordManager()"
     [ariaExpanded]="ariaExpanded()"
@@ -61,8 +63,8 @@
     [placeholder]="placeholder()"
     (focused)="onBrainFocused()"
     (blurred)="onBrainBlurred()"
-    (preIconRequested)="onBrainPreIconRequested()"
-    (postIconRequested)="onBrainPostIconRequested()"
+    (preIconClicked)="onBrainPreIconClicked()"
+    (postIconClicked)="onBrainPostIconClicked()"
   />
 </div>
 
@@ -90,7 +92,7 @@
   @if (postTemplate()) {
     <ng-container [ngTemplateOutlet]="postTemplate()!" />
   } @else if (currentPostIcon()) {
-    @if (isPostIconInteractive()) {
+    @if (brainRef.isPostIconInteractive()) {
       <button
         type="button"
         class="icon-btn"

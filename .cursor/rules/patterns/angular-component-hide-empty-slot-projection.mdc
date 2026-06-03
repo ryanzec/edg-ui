@@ -1,7 +1,7 @@
 ---
 alwaysApply: true
 ---
-# Angular Component Hide Empty Slot Projection
+# Angular Component Hide Empty Slot Projection Pattern
 
 If a component has an element that only wraps a `ng-content select` content projection but that project is not given, it can sometimes cause styling issue, to resolve this issue, we should **ALWAYS** hide said container with css.
 

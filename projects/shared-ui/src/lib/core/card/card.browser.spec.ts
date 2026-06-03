@@ -25,6 +25,7 @@ import { CardImage, type CardImageMode } from './card-image';
       [containerClass]="containerClass()"
       [isExpandable]="isExpandable()"
       [(isExpanded)]="isExpanded"
+      [isClickable]="isClickable()"
       (clicked)="handleClicked()"
     >
       <span data-testid="projected">projected content</span>
@@ -40,6 +41,7 @@ class CardInteractiveHost {
   public readonly containerClass = signal<string>('');
   public readonly isExpandable = signal<boolean>(false);
   public readonly isExpanded = signal<boolean>(true);
+  public readonly isClickable = signal<boolean>(false);
 
   protected readonly clickCount = signal<number>(0);
 
@@ -179,6 +181,7 @@ type CardHostConfig = {
   containerClass?: string;
   isExpandable?: boolean;
   isExpanded?: boolean;
+  isClickable?: boolean;
 };
 
 type CardHeaderConfig = {
@@ -234,6 +237,10 @@ describe('Card (browser)', () => {
 
       if (config.isExpanded !== undefined) {
         instance.isExpanded.set(config.isExpanded);
+      }
+
+      if (config.isClickable !== undefined) {
+        instance.isClickable.set(config.isClickable);
       }
     });
 
@@ -377,7 +384,7 @@ describe('Card (browser)', () => {
       expect(box.querySelector('[data-testid="projected"]')).not.toBeNull();
     });
 
-    it('omits the clickable attributes on the inner box when there is no clicked listener', () => {
+    it('omits the clickable attributes on the inner box when isClickable is false', () => {
       const fixture = createFixture(CardStaticHost);
       const host = queryByTestId(fixture, 'card');
       const box = host.querySelector('org-box') as HTMLElement;
@@ -387,8 +394,17 @@ describe('Card (browser)', () => {
       expect(box.getAttribute('data-clickable')).toBeNull();
     });
 
-    it('flips the inner box to clickable when a clicked listener is bound', () => {
-      const fixture = createCardHost();
+    it('stays non-clickable when clicked is bound but isClickable is false', () => {
+      const fixture = createCardHost({ isClickable: false });
+      const host = queryByTestId(fixture, 'card');
+      const box = host.querySelector('org-box') as HTMLElement;
+
+      expect(box.getAttribute('role')).toBeNull();
+      expect(box.getAttribute('data-clickable')).toBeNull();
+    });
+
+    it('flips the inner box to clickable when isClickable is true', () => {
+      const fixture = createCardHost({ isClickable: true });
       const host = queryByTestId(fixture, 'card');
       const box = host.querySelector('org-box') as HTMLElement;
 
@@ -398,7 +414,7 @@ describe('Card (browser)', () => {
     });
 
     it('emits clicked when the inner box is clicked', async () => {
-      const fixture = createCardHost();
+      const fixture = createCardHost({ isClickable: true });
       const host = queryByTestId(fixture, 'card');
       const readout = queryByTestId(fixture, 'readout');
 
@@ -413,7 +429,7 @@ describe('Card (browser)', () => {
     });
 
     it('does not flip the inner box to clickable when the card is expandable', () => {
-      const fixture = createCardHost({ isExpandable: true });
+      const fixture = createCardHost({ isExpandable: true, isClickable: true });
       const host = queryByTestId(fixture, 'card');
       const box = host.querySelector('org-box') as HTMLElement;
 
@@ -422,7 +438,7 @@ describe('Card (browser)', () => {
     });
 
     it('does not emit clicked when the card is expandable', async () => {
-      const fixture = createCardHost({ isExpandable: true });
+      const fixture = createCardHost({ isExpandable: true, isClickable: true });
       const host = queryByTestId(fixture, 'card');
       const readout = queryByTestId(fixture, 'readout');
       const box = host.querySelector('org-box') as HTMLElement;

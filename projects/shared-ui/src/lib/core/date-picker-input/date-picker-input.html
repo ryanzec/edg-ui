@@ -8,6 +8,7 @@
     [asTrigger]="true"
     preIcon="calendar"
     [postIcon]="allowTriggerClear() ? null : 'chevron-down'"
+    [postIconIsClickable]="true"
     [class.is-focus]="isOverlayOpen()"
     (postIconClicked)="onPostIconClick()"
     (click)="onInputClick()"

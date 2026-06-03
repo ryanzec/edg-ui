@@ -1,6 +1,4 @@
-import { Directive, DestroyRef, computed, inject, input, model, signal } from '@angular/core';
-import { Subject } from 'rxjs';
-import { outputFromObservable } from '@angular/core/rxjs-interop';
+import { Directive, DestroyRef, computed, inject, input, model, output, signal } from '@angular/core';
 import { angularUtils } from '@organization/shared-utils';
 import { monitorForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
 import type { ElementDragPayload } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
@@ -74,8 +72,6 @@ export class ViewOptionsBrainDirective {
     draggingName: null,
   });
 
-  private readonly _fieldsChanged$ = new Subject<ViewOptionsFieldsChangeEvent>();
-
   /** optional accessible label describing the panel; falls back to a generic label */
   public readonly ariaLabel = input<string | undefined, string | null | undefined>(
     VIEW_OPTIONS_BRAIN_ARIA_LABEL_DEFAULT,
@@ -88,7 +84,7 @@ export class ViewOptionsBrainDirective {
   public readonly fields = model<readonly ViewField[]>(VIEW_OPTIONS_BRAIN_FIELDS_DEFAULT);
 
   /** emitted whenever a drop, toggle, or keyboard reorder mutates the fields list */
-  public readonly fieldsChanged = outputFromObservable(this._fieldsChanged$.asObservable());
+  public readonly fieldsChanged = output<ViewOptionsFieldsChangeEvent>();
 
   /** whether a row is currently being dragged */
   public readonly isDragging = computed<boolean>(() => this._state().isDragging);
@@ -168,7 +164,7 @@ export class ViewOptionsBrainDirective {
   /** writes the new fields array to the model and emits the change event */
   private _commit(next: readonly ViewField[]): void {
     this.fields.set(next);
-    this._fieldsChanged$.next({ fields: next });
+    this.fieldsChanged.emit({ fields: next });
   }
 
   /** shared implementation for moveUp and moveDown */

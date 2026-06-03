@@ -116,7 +116,7 @@ const liveDemoNavigatePaths = ['/', '/inbox', '/inbox/today', '/archive'] as con
         <org-design-system-demo-header
           slot="header"
           title="Live demo"
-          description="Toggle the inputs to see every combination. asTag determines what the row renders as; clickable styling activates for a, button, or when forceClickable is set."
+          description="Toggle the inputs to see every combination. asTag determines what the row renders as; clickable styling activates for a, button, when forceClickable is set, or when isClickable makes the row itself the click target."
         />
         <org-design-system-demo-controls slot="controls">
           <org-design-system-demo-control-group label="Size">
@@ -160,6 +160,11 @@ const liveDemoNavigatePaths = ['/', '/inbox', '/inbox/today', '/archive'] as con
               formControlName="forceClickable"
             >
               {{ liveDemoForm.controls.forceClickable.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="isClickable">
+            <org-checkbox-toggle name="live-demo-is-clickable" value="isClickable" formControlName="isClickable">
+              {{ liveDemoForm.controls.isClickable.value ? 'on' : 'off' }}
             </org-checkbox-toggle>
           </org-design-system-demo-control-group>
           <org-design-system-demo-control-group label="hideLabel">
@@ -216,9 +221,9 @@ const liveDemoNavigatePaths = ['/', '/inbox', '/inbox/today', '/archive'] as con
             [disabled]="liveDemoForm.controls.disabled.value"
             [showAsExternal]="liveDemoForm.controls.showAsExternal.value"
             [forceClickable]="liveDemoForm.controls.forceClickable.value"
+            [isClickable]="liveDemoForm.controls.isClickable.value"
             [hideLabel]="liveDemoForm.controls.hideLabel.value"
             [label]="item.label"
-            (clicked)="(undefined)"
           >
             @if (liveDemoForm.controls.pre.value === 'icon') {
               <org-list-item-icon pre name="mail" />
@@ -258,6 +263,7 @@ class ListLiveDemoStory {
     disabled: new FormControl<boolean>(false, { nonNullable: true }),
     showAsExternal: new FormControl<boolean>(false, { nonNullable: true }),
     forceClickable: new FormControl<boolean>(false, { nonNullable: true }),
+    isClickable: new FormControl<boolean>(true, { nonNullable: true }),
     hideLabel: new FormControl<boolean>(false, { nonNullable: true }),
     wrapInBox: new FormControl<boolean>(false, { nonNullable: true }),
     routerMatchExact: new FormControl<boolean>(false, { nonNullable: true }),
@@ -484,7 +490,7 @@ export const LiveDemo: Story = {
     docs: {
       description: {
         story:
-          'Fully interactive demo. Use the controls to drive every visual input on the list (size, asTag, pre, post, select mode, isSelected, disabled, showAsExternal, forceClickable, hideLabel, wrap in box) and observe the live result in the canvas.',
+          'Fully interactive demo. Use the controls to drive every visual input on the list (size, asTag, pre, post, select mode, isSelected, disabled, showAsExternal, forceClickable, isClickable, hideLabel, wrap in box) and observe the live result in the canvas.',
       },
     },
   },
@@ -864,7 +870,7 @@ export const Showcase: Story = {
 
         <org-design-system-demo-expected-behaviour>
           <ul class="list-inside list-disc flex flex-col gap-1">
-            <li><strong>Item states</strong>: rows are static unless they have a click target (button/anchor/forceClickable); selected and disabled are independent of clickable</li>
+            <li><strong>Item states</strong>: rows are static unless they have a click target (button/anchor/forceClickable/isClickable); selected and disabled are independent of clickable</li>
             <li><strong>Empty state</strong>: when zero rows, swap the list for an org-empty-indicator — keep the surrounding frame so the panel doesn't shift</li>
             <li><strong>In context</strong>: every example reuses the same org-list / org-list-item primitives — only the projected pre/post slots and label change</li>
             <li><strong>Dividers</strong>: separators come from a projected org-divider — list owns no separator CSS</li>

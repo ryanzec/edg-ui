@@ -1,6 +1,4 @@
-import { Directive, computed, input } from '@angular/core';
-import { outputFromObservable } from '@angular/core/rxjs-interop';
-import { Subject } from 'rxjs';
+import { Directive, computed, input, output } from '@angular/core';
 
 /** all available row variant values */
 export const allTableRowVariants = ['header', 'body'] as const;
@@ -38,8 +36,6 @@ export const TABLE_ROW_EXPANDED_SECTION_DEFAULT = false;
   exportAs: 'orgTableRowBrain',
 })
 export class TableRowBrainDirective {
-  private readonly _clicked$ = new Subject<void>();
-
   /** the structural variant of the row; header rows do not participate in selected / clickable / empty state */
   public readonly variant = input<TableRowVariant>(TABLE_ROW_VARIANT_DEFAULT);
 
@@ -80,7 +76,7 @@ export class TableRowBrainDirective {
   });
 
   /** emitted when the row is activated via click or keyboard while clickable */
-  public readonly clicked = outputFromObservable(this._clicked$);
+  public readonly clicked = output<void>();
 
   /** activates the row (dispatches the clicked output) when clickable */
   public activate(): void {
@@ -88,7 +84,7 @@ export class TableRowBrainDirective {
       return;
     }
 
-    this._clicked$.next();
+    this.clicked.emit();
   }
 
   /** keyboard handler for enter / space; prevents the default page-scroll on space and activates the row */

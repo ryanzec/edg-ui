@@ -1,6 +1,4 @@
-import { Directive, computed, input } from '@angular/core';
-import { outputFromObservable } from '@angular/core/rxjs-interop';
-import { Subject } from 'rxjs';
+import { Directive, computed, input, output } from '@angular/core';
 
 /** default value for the disabled input */
 export const AVATAR_BRAIN_DISABLED_DEFAULT = false;
@@ -8,20 +6,20 @@ export const AVATAR_BRAIN_DISABLED_DEFAULT = false;
 /** default value for the isOverflow input */
 export const AVATAR_BRAIN_IS_OVERFLOW_DEFAULT = false;
 
+/** default value for the isClickable input */
+export const AVATAR_BRAIN_IS_CLICKABLE_DEFAULT = false;
+
 /**
  * headless brain directive for the avatar. owns the display label (used to derive initials and accessible
- * surfaces), disabled state, clickable detection (whether any consumer is listening to the clicked output),
- * the click subject, and the click forwarding method. carries no styling or template — apply it to the host
- * of a presentation component via hostDirectives.
+ * surfaces), disabled state, the explicit clickable flag, the clicked output, and the click forwarding
+ * method. carries no styling or template — apply it to the host of a presentation component via
+ * hostDirectives.
  */
 @Directive({
   selector: '[orgAvatarBrain]',
   exportAs: 'orgAvatarBrain',
 })
 export class AvatarBrainDirective {
-  /** @internal emits when the host avatar is clicked while it is in clickable mode */
-  private readonly _clicked$ = new Subject<void>();
-
   /** the display name; used to derive initials, image alt fallback, and the clickable button's aria-label */
   public readonly label = input.required<string>();
 
@@ -31,11 +29,11 @@ export class AvatarBrainDirective {
   /** whether the avatar is rendered as a "+N" overflow pill; suppresses initials derivation */
   public readonly isOverflow = input<boolean>(AVATAR_BRAIN_IS_OVERFLOW_DEFAULT);
 
-  /** emitted when the host avatar is clicked; binding this output causes the avatar to render as a button */
-  public readonly clicked = outputFromObservable(this._clicked$);
+  /** whether the avatar renders as an interactive button and emits the clicked output */
+  public readonly isClickable = input<boolean>(AVATAR_BRAIN_IS_CLICKABLE_DEFAULT);
 
-  /** true when at least one listener is bound to the clicked output */
-  public readonly isClickable = computed<boolean>(() => this._clicked$.observed);
+  /** emitted when the host avatar is clicked while clickable and enabled */
+  public readonly clicked = output<void>();
 
   /** true when the avatar should be treated as disabled */
   public readonly isDisabled = computed<boolean>(() => this.disabled());
@@ -63,10 +61,14 @@ export class AvatarBrainDirective {
 
   /** triggers the clicked output; called by the presentation template's button click handler */
   public click(): void {
+    if (!this.isClickable()) {
+      return;
+    }
+
     if (this.isDisabled()) {
       return;
     }
 
-    this._clicked$.next();
+    this.clicked.emit();
   }
 }

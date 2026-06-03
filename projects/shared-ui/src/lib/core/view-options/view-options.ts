@@ -1,6 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
-import { Subject } from 'rxjs';
-import { outputFromObservable } from '@angular/core/rxjs-interop';
+import { ChangeDetectionStrategy, Component, computed, inject, input, output } from '@angular/core';
 import { ViewOptionsBrainDirective } from '../view-options/view-options-brain';
 import { Icon } from '../icon/icon';
 import { TextDirective } from '../text-directive/text-directive';
@@ -19,6 +17,9 @@ export { VIEW_OPTIONS_FIELD_SELECTION_SECTION_LABEL_DEFAULT } from './view-optio
 
 /** default value for the panelLabel input */
 export const VIEW_OPTIONS_PANEL_LABEL_DEFAULT = 'View options';
+
+/** default value for the closable input */
+export const VIEW_OPTIONS_CLOSABLE_DEFAULT = false;
 
 /** the icon used in the panel header title prefix */
 const VIEW_OPTIONS_PANEL_HEADER_ICON: IconName = 'sliders-horizontal';
@@ -41,19 +42,17 @@ const VIEW_OPTIONS_PANEL_CLOSE_ICON: IconName = 'panel-right-close';
   ],
 })
 export class ViewOptions {
-  private readonly _closed$ = new Subject<void>();
-
   /** reference to the host view-options brain directive; the template reads fields + counts through this */
   protected readonly brain = inject(ViewOptionsBrainDirective);
 
   /** the visible label for the field-selection section header; forwarded to the internal sub-component */
   public readonly sectionLabel = input<string>(VIEW_OPTIONS_FIELD_SELECTION_SECTION_LABEL_DEFAULT);
 
-  /** emitted when the user clicks the header close button; the button is only rendered when there's a listener */
-  public readonly closed = outputFromObservable(this._closed$.asObservable());
+  /** when true, renders the header close button (which emits the closed output on click) */
+  public readonly closable = input<boolean>(VIEW_OPTIONS_CLOSABLE_DEFAULT);
 
-  /** whether a consumer has subscribed to the closed output; drives conditional rendering of the close button */
-  protected readonly hasClosedListener = computed<boolean>(() => this._closed$.observed);
+  /** emitted when the user clicks the header close button (only rendered when closable is true) */
+  public readonly closed = output<void>();
 
   /** the resolved title for the panel header, defaulting to a generic label when the brain's ariaLabel is omitted */
   protected readonly resolvedPanelLabel = computed<string>(
@@ -66,8 +65,8 @@ export class ViewOptions {
   /** the icon name used in the panel header close button */
   protected readonly panelCloseIconName: IconName = VIEW_OPTIONS_PANEL_CLOSE_ICON;
 
-  /** handles the close-button click by emitting on the closed subject */
+  /** handles the close-button click by emitting the closed output */
   protected onCloseClick(): void {
-    this._closed$.next();
+    this.closed.emit();
   }
 }

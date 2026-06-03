@@ -1,4 +1,5 @@
 export * from './angular';
+export * from './browser-tabs-manager';
 export * from './date';
 export * from './string';
 export * from './email';

@@ -131,11 +131,11 @@ class CheckboxSelectAllSection {
       <org-design-system-demo-header
         slot="header"
         title="Card-tile pattern"
-        description="Wrap each option in org-card and bind (clicked) so the whole tile toggles the checkbox underneath. Useful for permission pickers, feature opt-ins, and any list where each option needs to read as its own surface."
+        description='Wrap each option in org-card, set [isClickable]="true", and bind (clicked) so the whole tile toggles the checkbox underneath. Useful for permission pickers, feature opt-ins, and any list where each option needs to read as its own surface.'
       />
       <org-design-system-demo-canvas slot="canvas">
         <div class="flex flex-col gap-2 w-full">
-          <org-card (clicked)="toggle('read')">
+          <org-card [isClickable]="true" (clicked)="toggle('read')">
             <org-checkbox
               name="card-read"
               value="read"
@@ -147,7 +147,7 @@ class CheckboxSelectAllSection {
               Read
             </org-checkbox>
           </org-card>
-          <org-card (clicked)="toggle('write')">
+          <org-card [isClickable]="true" (clicked)="toggle('write')">
             <org-checkbox
               name="card-write"
               value="write"
@@ -159,7 +159,7 @@ class CheckboxSelectAllSection {
               Write
             </org-checkbox>
           </org-card>
-          <org-card (clicked)="toggle('admin')">
+          <org-card [isClickable]="true" (clicked)="toggle('admin')">
             <org-checkbox
               name="card-admin"
               value="admin"
@@ -201,11 +201,11 @@ class CheckboxCardSection {
       <org-design-system-demo-header
         slot="header"
         title="Checkbox Group — card-tile pattern"
-        description="Pair org-checkbox-group with org-card-wrapped children for a permissions-list layout. Each card forwards (clicked) to its checkbox so the entire surface is a hit target."
+        description='Pair org-checkbox-group with org-card-wrapped children for a permissions-list layout. Each card sets [isClickable]="true" and forwards (clicked) to its checkbox so the entire surface is a hit target.'
       />
       <org-design-system-demo-canvas slot="canvas">
         <org-checkbox-group legend="Permissions" description="What this teammate can do in the workspace.">
-          <org-card (clicked)="toggle('read')">
+          <org-card [isClickable]="true" (clicked)="toggle('read')">
             <org-checkbox
               name="cbg-card-read"
               value="read"
@@ -217,7 +217,7 @@ class CheckboxCardSection {
               Read
             </org-checkbox>
           </org-card>
-          <org-card (clicked)="toggle('write')">
+          <org-card [isClickable]="true" (clicked)="toggle('write')">
             <org-checkbox
               name="cbg-card-write"
               value="write"
@@ -229,7 +229,7 @@ class CheckboxCardSection {
               Write
             </org-checkbox>
           </org-card>
-          <org-card (clicked)="toggle('admin')">
+          <org-card [isClickable]="true" (clicked)="toggle('admin')">
             <org-checkbox
               name="cbg-card-admin"
               value="admin"
@@ -349,8 +349,8 @@ const meta: Meta<Checkbox> = {
   <org-checkbox name="small" value="small" size="sm">Small</org-checkbox>
   <org-checkbox name="large" value="large" size="lg">Large</org-checkbox>
 
-  <!-- Card-tile pattern: wrap with org-card and forward (clicked) to a toggle handler -->
-  <org-card (clicked)="readSelected.set(!readSelected())">
+  <!-- Card-tile pattern: wrap with org-card, set [isClickable]="true", and forward (clicked) to a toggle handler -->
+  <org-card [isClickable]="true" (clicked)="readSelected.set(!readSelected())">
     <org-checkbox
       name="read"
       value="read"
@@ -761,7 +761,7 @@ export const Showcase: Story = {
         <story-checkbox-card-section />
         <org-design-system-demo-expected-behaviour>
           <ul class="list-inside list-disc flex flex-col gap-1">
-            <li>Wrap each checkbox in <strong>org-card</strong> and bind its <strong>(clicked)</strong> output to toggle the inner checkbox</li>
+            <li>Wrap each checkbox in <strong>org-card</strong>, set <strong>[isClickable]="true"</strong>, and bind its <strong>(clicked)</strong> output to toggle the inner checkbox</li>
             <li>Card already supplies the bordered tile, hover/pressed tint, focus ring, and role=button affordance — no bespoke styling needed</li>
             <li>Combine with the checkbox's <strong>description</strong> input to clarify what each option grants</li>
           </ul>

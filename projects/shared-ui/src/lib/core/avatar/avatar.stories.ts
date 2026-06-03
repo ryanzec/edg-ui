@@ -125,38 +125,22 @@ const liveDemoImageItems: ButtonToggleItem[] = (['none', 'gravatar', 'custom'] a
         </org-design-system-demo-controls>
         <org-design-system-demo-canvas slot="canvas">
           <div class="canvas-stage">
-            @if (liveDemoForm.controls.clickable.value) {
-              <org-avatar
-                [label]="liveDemoForm.controls.label.value"
-                [size]="liveDemoForm.controls.size.value"
-                [shape]="liveDemoForm.controls.shape.value"
-                [disabled]="liveDemoForm.controls.disabled.value"
-                [hasIndicator]="liveDemoForm.controls.statusPip.value"
-                indicatorColor="safe"
-                [showLabel]="liveDemoForm.controls.showLabel.value"
-                [subLabel]="resolvedSubLabel()"
-                [imgSrc]="resolvedImgSrc()"
-                [imgEmail]="resolvedImgEmail()"
-                [isOverflow]="liveDemoForm.controls.isOverflow.value"
-                [count]="liveDemoForm.controls.count.value"
-                (clicked)="onClicked()"
-              />
-            } @else {
-              <org-avatar
-                [label]="liveDemoForm.controls.label.value"
-                [size]="liveDemoForm.controls.size.value"
-                [shape]="liveDemoForm.controls.shape.value"
-                [disabled]="liveDemoForm.controls.disabled.value"
-                [hasIndicator]="liveDemoForm.controls.statusPip.value"
-                indicatorColor="safe"
-                [showLabel]="liveDemoForm.controls.showLabel.value"
-                [subLabel]="resolvedSubLabel()"
-                [imgSrc]="resolvedImgSrc()"
-                [imgEmail]="resolvedImgEmail()"
-                [isOverflow]="liveDemoForm.controls.isOverflow.value"
-                [count]="liveDemoForm.controls.count.value"
-              />
-            }
+            <org-avatar
+              [label]="liveDemoForm.controls.label.value"
+              [size]="liveDemoForm.controls.size.value"
+              [shape]="liveDemoForm.controls.shape.value"
+              [disabled]="liveDemoForm.controls.disabled.value"
+              [hasIndicator]="liveDemoForm.controls.statusPip.value"
+              indicatorColor="safe"
+              [showLabel]="liveDemoForm.controls.showLabel.value"
+              [subLabel]="resolvedSubLabel()"
+              [imgSrc]="resolvedImgSrc()"
+              [imgEmail]="resolvedImgEmail()"
+              [isOverflow]="liveDemoForm.controls.isOverflow.value"
+              [count]="liveDemoForm.controls.count.value"
+              [isClickable]="liveDemoForm.controls.clickable.value"
+              (clicked)="onClicked()"
+            />
           </div>
         </org-design-system-demo-canvas>
       </org-design-system-demo>
@@ -226,6 +210,7 @@ const meta: Meta<Avatar> = {
   - **imgSrc** — explicit image url overlaying the colored shape; takes priority over imgEmail
   - **imgEmail** — email used to fetch a gravatar image when no imgSrc is provided
   - **imgAlt** — overrides the image alt text; falls back to the label when omitted
+  - **isClickable** — when true, renders the avatar as a real button and emits the clicked output on activation
   - **hasIndicator** + **indicatorColor** / **indicatorNumber** / **indicatorPosition** — optional status indicator pinned to the corner
 
   ### Size Options
@@ -497,13 +482,20 @@ export const Showcase: Story = {
           <org-design-system-demo-header slot="header" title="Clickable" />
           <org-design-system-demo-canvas slot="canvas">
             <div class="flex gap-4 items-center">
-              <org-avatar label="Sarah Chen" [showLabel]="true" subLabel="View profile" (clicked)="onAvatarClicked()" />
-              <org-avatar label="Noah Park" (clicked)="onAvatarClicked()" />
+              <org-avatar
+                label="Sarah Chen"
+                [showLabel]="true"
+                subLabel="View profile"
+                [isClickable]="true"
+                (clicked)="onAvatarClicked()"
+              />
+              <org-avatar label="Noah Park" [isClickable]="true" (clicked)="onAvatarClicked()" />
               <org-avatar
                 label="Renée Marin"
                 [disabled]="true"
                 [showLabel]="true"
                 subLabel="Disabled"
+                [isClickable]="true"
                 (clicked)="onAvatarClicked()"
               />
             </div>
@@ -511,7 +503,7 @@ export const Showcase: Story = {
         </org-design-system-demo>
         <org-design-system-demo-expected-behaviour>
           <ul class="list-inside list-disc flex flex-col gap-1">
-            <li>Binding <code>(clicked)</code> renders the avatar as a real &lt;button&gt; — focus ring, keyboard activation, all native</li>
+            <li>Setting <code>[isClickable]="true"</code> renders the avatar as a real &lt;button&gt; — focus ring, keyboard activation, all native — and the <code>(clicked)</code> output emits on activation</li>
             <li>Hover dims slightly, focus shows the system focus ring, active dims further</li>
             <li><code>[disabled]="true"</code> on a clickable avatar applies cursor: not-allowed and 50% opacity, and suppresses click emission</li>
           </ul>

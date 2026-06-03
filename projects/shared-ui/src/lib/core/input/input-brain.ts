@@ -12,9 +12,8 @@ import {
   output,
   signal,
 } from '@angular/core';
-import { outputFromObservable, takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FocusMonitor } from '@angular/cdk/a11y';
-import { Subject } from 'rxjs';
 import { angularUtils } from '@organization/shared-utils';
 import { FORM_FIELD_COMPONENT } from '../form-fields/form-field';
 
@@ -38,6 +37,12 @@ export const INPUT_DISABLED_DEFAULT = false;
 
 /** default value for the readonly input */
 export const INPUT_READONLY_DEFAULT = false;
+
+/** default value for the preIconIsClickable input */
+export const INPUT_PRE_ICON_IS_CLICKABLE_DEFAULT = false;
+
+/** default value for the postIconIsClickable input */
+export const INPUT_POST_ICON_IS_CLICKABLE_DEFAULT = false;
 
 /** default value for the autoFocus input */
 export const INPUT_AUTO_FOCUS_DEFAULT = false;
@@ -125,9 +130,6 @@ export class InputBrainDirective implements OnInit, OnDestroy {
     isDisabledFromForms: false,
   });
 
-  private readonly _preIconRequested$ = new Subject<void>();
-  private readonly _postIconRequested$ = new Subject<void>();
-
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private _onChange: (value: string) => void = () => {};
   // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -152,6 +154,12 @@ export class InputBrainDirective implements OnInit, OnDestroy {
 
   /** whether the input is readonly */
   public readonly readonly = input<boolean>(INPUT_READONLY_DEFAULT);
+
+  /** whether the pre-icon renders as an interactive button and emits the preIconClicked output */
+  public readonly preIconIsClickable = input<boolean>(INPUT_PRE_ICON_IS_CLICKABLE_DEFAULT);
+
+  /** whether the post-icon renders as an interactive button and emits the postIconClicked output (password toggle aside) */
+  public readonly postIconIsClickable = input<boolean>(INPUT_POST_ICON_IS_CLICKABLE_DEFAULT);
 
   /** whether the input should automatically receive focus on first commit */
   public readonly autoFocus = input<boolean>(INPUT_AUTO_FOCUS_DEFAULT);
@@ -208,11 +216,11 @@ export class InputBrainDirective implements OnInit, OnDestroy {
   /** emitted when the input loses focus */
   public readonly blurred = output<void>();
 
-  /** emitted by the brain when a pre-icon click was requested and the input is interactive */
-  public readonly preIconRequested = outputFromObservable(this._preIconRequested$);
+  /** emitted when the pre-icon is clicked while clickable and the input is interactive */
+  public readonly preIconClicked = output<void>();
 
-  /** emitted by the brain when a post-icon click was requested and the action is not the password toggle */
-  public readonly postIconRequested = outputFromObservable(this._postIconRequested$);
+  /** emitted when the post-icon is clicked while clickable, interactive, and not acting as the password toggle */
+  public readonly postIconClicked = output<void>();
 
   /** whether the input currently has focus */
   public readonly isFocused = computed<boolean>(() => this._state().isFocused);
@@ -246,19 +254,13 @@ export class InputBrainDirective implements OnInit, OnDestroy {
     return this.showPasswordToggle() && this.type() === 'password';
   });
 
-  /** whether the post-icon click has any registered listener (icon-clicked output observed) */
-  public readonly hasPostIconObserver = computed<boolean>(() => this._postIconRequested$.observed);
-
-  /** whether the pre-icon click has any registered listener */
-  public readonly hasPreIconObserver = computed<boolean>(() => this._preIconRequested$.observed);
-
-  /** whether the post-icon should be rendered as an interactive button (password toggle or click observed) */
+  /** whether the post-icon should be rendered as an interactive button (password toggle or explicitly clickable) */
   public readonly isPostIconInteractive = computed<boolean>(() => {
-    return this.isPasswordToggleActive() || this.hasPostIconObserver();
+    return this.isPasswordToggleActive() || this.postIconIsClickable();
   });
 
-  /** whether the pre-icon should be rendered as an interactive button (click observed) */
-  public readonly isPreIconInteractive = computed<boolean>(() => this.hasPreIconObserver());
+  /** whether the pre-icon should be rendered as an interactive button (explicitly clickable) */
+  public readonly isPreIconInteractive = computed<boolean>(() => this.preIconIsClickable());
 
   /** whether the associated form-field currently has a validation message */
   public readonly hasValidationMessage = computed<boolean>(() => {
@@ -341,7 +343,11 @@ export class InputBrainDirective implements OnInit, OnDestroy {
       return;
     }
 
-    this._preIconRequested$.next();
+    if (!this.preIconIsClickable()) {
+      return;
+    }
+
+    this.preIconClicked.emit();
   }
 
   /** routes a post-icon click request, toggling password visibility when appropriate */
@@ -356,7 +362,11 @@ export class InputBrainDirective implements OnInit, OnDestroy {
       return;
     }
 
-    this._postIconRequested$.next();
+    if (!this.postIconIsClickable()) {
+      return;
+    }
+
+    this.postIconClicked.emit();
   }
 
   /** programmatically focuses the native input element when interaction is allowed */

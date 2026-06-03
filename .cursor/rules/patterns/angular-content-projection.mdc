@@ -1,7 +1,7 @@
 ---
 alwaysApply: true
 ---
-# Angular Content Projection
+# Angular Content Projection Pattern
 
 When a component need to project content in the the component when using it are are two main ways to do this with defined contexts of when you use which.
 

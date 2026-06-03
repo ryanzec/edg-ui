@@ -1,6 +1,16 @@
-import { Directive, DestroyRef, ElementRef, OnDestroy, OnInit, computed, inject, signal } from '@angular/core';
-import { outputFromObservable, takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Subject } from 'rxjs';
+import {
+  Directive,
+  DestroyRef,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  computed,
+  inject,
+  input,
+  output,
+  signal,
+} from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FocusMonitor } from '@angular/cdk/a11y';
 
 /** the internal interaction state for the box brain directive */
@@ -9,19 +19,22 @@ type BoxState = {
   isFocused: boolean;
 };
 
+/** default value for the isClickable input */
+export const BOX_BRAIN_IS_CLICKABLE_DEFAULT = false;
+
 /**
  * headless brain directive for the box. owns the optional clickable interaction layer — role/tabindex/keyboard
  * activation, pressed/focused state, and the clicked output — without any styling concerns. clickable mode is
- * auto-detected when a consumer subscribes to the `clicked` output, and can also be forced on by a wrapping
- * component (e.g. card) via `setExternallyClickable`.
+ * enabled by the explicit `isClickable` input, and can also be forced on by a wrapping component (e.g. card)
+ * via `setExternallyClickable`.
  */
 @Directive({
   selector: '[orgBoxBrain]',
   exportAs: 'orgBoxBrain',
   host: {
-    '[attr.role]': 'isClickable() ? "button" : null',
-    '[attr.tabindex]': 'isClickable() ? "0" : null',
-    '[attr.data-clickable]': 'isClickable() ? "" : null',
+    '[attr.role]': 'isInteractive() ? "button" : null',
+    '[attr.tabindex]': 'isInteractive() ? "0" : null',
+    '[attr.data-clickable]': 'isInteractive() ? "" : null',
     '[attr.data-pressed]': 'isPressed() ? "" : null',
     '(click)': 'click()',
     '(keydown)': 'keydown($event)',
@@ -42,20 +55,20 @@ export class BoxBrainDirective implements OnInit, OnDestroy {
 
   private readonly _externallyClickable = signal<boolean>(false);
 
-  private readonly _clicked$ = new Subject<void>();
+  /** whether the host is an explicit click target */
+  public readonly isClickable = input<boolean>(BOX_BRAIN_IS_CLICKABLE_DEFAULT);
 
   /** emitted when the host is clicked or activated via Enter / Space while in clickable mode */
-  public readonly clicked = outputFromObservable(this._clicked$);
+  public readonly clicked = output<void>();
 
-  /** whether the host should render as an interactive button (auto-detected, or forced by a wrapper) */
-  public readonly isClickable = computed<boolean>(() => {
-    // read both eagerly so `_externallyClickable` is always registered as a signal dependency — short-circuit
-    // evaluation on `||` would otherwise skip the signal read when `_clicked$.observed` is true, leaving the
-    // computed unable to invalidate when a wrapper (e.g. card) later flips externally-clickable back off.
-    const observed = this._clicked$.observed;
+  /** whether the host should render as an interactive button (explicit isClickable input, or forced by a wrapper) */
+  public readonly isInteractive = computed<boolean>(() => {
+    // read both eagerly so each stays a registered dependency regardless of `||` short-circuit evaluation,
+    // keeping the computed reactive when a wrapper (e.g. card) later flips externally-clickable back off.
+    const clickable = this.isClickable();
     const externallyClickable = this._externallyClickable();
 
-    return observed || externallyClickable;
+    return clickable || externallyClickable;
   });
 
   /** whether the host is currently being pressed by mouse or keyboard activation */
@@ -94,16 +107,16 @@ export class BoxBrainDirective implements OnInit, OnDestroy {
 
   /** handles pointer clicks, emitting clicked when the host is in clickable mode */
   protected click(): void {
-    if (!this.isClickable()) {
+    if (!this.isInteractive()) {
       return;
     }
 
-    this._clicked$.next();
+    this.clicked.emit();
   }
 
   /** handles enter / space activation, emitting clicked and suppressing default behavior */
   protected keydown(event: KeyboardEvent): void {
-    if (!this.isClickable()) {
+    if (!this.isInteractive()) {
       return;
     }
 
@@ -112,12 +125,12 @@ export class BoxBrainDirective implements OnInit, OnDestroy {
     }
 
     event.preventDefault();
-    this._clicked$.next();
+    this.clicked.emit();
   }
 
   /** sets the pressed state when the pointer is depressed over the host */
   protected mouseDown(): void {
-    if (!this.isClickable()) {
+    if (!this.isInteractive()) {
       return;
     }
 

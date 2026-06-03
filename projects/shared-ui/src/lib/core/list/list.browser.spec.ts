@@ -32,6 +32,7 @@ import { ListItemImage } from './list-item-image';
         [showAsExternal]="showAsExternal()"
         [overrideSize]="overrideSize()"
         [forceClickable]="forceClickable()"
+        [isClickable]="isClickable()"
         [hideLabel]="hideLabel()"
         (clicked)="handleClicked()"
       />
@@ -52,6 +53,7 @@ class ListInteractiveHost {
   public readonly showAsExternal = signal<boolean>(false);
   public readonly overrideSize = signal<ListSize | null | undefined>(undefined);
   public readonly forceClickable = signal<boolean>(false);
+  public readonly isClickable = signal<boolean>(true);
   public readonly hideLabel = signal<boolean>(false);
 
   protected readonly clickCount = signal<number>(0);
@@ -137,6 +139,7 @@ type ListHostConfig = {
   showAsExternal?: boolean;
   overrideSize?: ListSize | null;
   forceClickable?: boolean;
+  isClickable?: boolean;
   hideLabel?: boolean;
 };
 
@@ -192,6 +195,10 @@ describe('List (browser)', () => {
 
       if (config.forceClickable !== undefined) {
         instance.forceClickable.set(config.forceClickable);
+      }
+
+      if (config.isClickable !== undefined) {
+        instance.isClickable.set(config.isClickable);
       }
 
       if (config.hideLabel !== undefined) {
@@ -586,7 +593,7 @@ describe('List (browser)', () => {
       expect(fallback.getAttribute('data-clickable')).toBe('');
     });
 
-    it('enables clickable when a click observer is present', async () => {
+    it('enables clickable when isClickable is set', async () => {
       const fixture = createInteractiveList();
       const item = queryByTestId(fixture, 'item');
 
@@ -594,6 +601,22 @@ describe('List (browser)', () => {
       await flush(fixture);
 
       expect(item.getAttribute('data-clickable')).toBe('');
+    });
+
+    it('renders a non-interactive div when clicked is bound but isClickable is false', async () => {
+      const fixture = createInteractiveList({ isClickable: false });
+      const item = queryByTestId(fixture, 'item');
+      const readout = queryByTestId(fixture, 'readout');
+
+      expect(item.querySelector('div.list-item-content')).not.toBeNull();
+      expect(item.querySelector('button.list-item-content')).toBeNull();
+
+      const content = item.querySelector('.list-item-content') as HTMLElement;
+
+      await userEvent.click(content);
+      await flush(fixture);
+
+      expect(readout.textContent).toContain('clickCount=0');
     });
   });
 

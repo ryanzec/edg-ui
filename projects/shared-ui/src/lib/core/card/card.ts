@@ -1,6 +1,4 @@
-import { ChangeDetectionStrategy, Component, effect, inject, input, viewChild } from '@angular/core';
-import { outputFromObservable } from '@angular/core/rxjs-interop';
-import { Subject } from 'rxjs';
+import { ChangeDetectionStrategy, Component, effect, inject, input, output, viewChild } from '@angular/core';
 import { angularUtils } from '@organization/shared-utils';
 import { BoxBrainDirective } from '../box/box-brain';
 import { ExpandableBrainDirective } from '../expandable-brain/expandable-brain';
@@ -29,6 +27,9 @@ export const CARD_BOX_BACKGROUND_DEFAULT = BOX_BACKGROUND_DEFAULT;
 /** default value for the card box padding input */
 export const CARD_BOX_PADDING_DEFAULT = BOX_PADDING_DEFAULT;
 
+/** default value for the card isClickable input */
+export const CARD_IS_CLICKABLE_DEFAULT = false;
+
 @Component({
   selector: 'org-card',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -51,8 +52,6 @@ export const CARD_BOX_PADDING_DEFAULT = BOX_PADDING_DEFAULT;
 export class Card {
   private readonly _boxBrainDirective = viewChild(BoxBrainDirective);
 
-  private readonly _clicked$ = new Subject<void>();
-
   /** reference to the host expandable brain directive; sub-components inject Card to read this */
   public readonly expandableBrain = inject(ExpandableBrainDirective);
 
@@ -74,16 +73,21 @@ export class Card {
   public boxPadding = input<BoxPadding>(CARD_BOX_PADDING_DEFAULT);
 
   /**
-   * emitted when the card is clicked or activated via keyboard while in clickable mode; binding this output
-   * auto-flips the underlying box into its clickable affordance. ignored when isExpandable is true — the
-   * expandable header drives the interaction instead.
+   * when true, flips the underlying box into its clickable affordance so the whole card surface is
+   * interactive. ignored when isExpandable is true — the expandable header drives the interaction instead.
    */
-  public readonly clicked = outputFromObservable(this._clicked$);
+  public readonly isClickable = input<boolean>(CARD_IS_CLICKABLE_DEFAULT);
+
+  /**
+   * emitted when the card is clicked or activated via keyboard while clickable. only meaningful when
+   * isClickable is true and the card is not expandable.
+   */
+  public readonly clicked = output<void>();
 
   constructor() {
-    // forward the inner box's clicked emissions to the card's own clicked subject, but only when the card
-    // itself has a consumer listening AND the card is not in expandable mode. expandable mode owns the
-    // clickable affordance on the header itself and cannot share a click target with the whole surface.
+    // forward the inner box's clicked emissions to the card's own clicked output, but only when the card
+    // is explicitly clickable AND not in expandable mode. expandable mode owns the clickable affordance on
+    // the header itself and cannot share a click target with the whole surface.
     effect((onCleanup) => {
       const brain = this._boxBrainDirective();
 
@@ -95,13 +99,13 @@ export class Card {
         return;
       }
 
-      if (!this._clicked$.observed) {
+      if (!this.isClickable()) {
         return;
       }
 
       brain.setExternallyClickable(true);
 
-      const subscription = brain.clicked.subscribe(() => this._clicked$.next());
+      const subscription = brain.clicked.subscribe(() => this.clicked.emit());
 
       onCleanup(() => {
         brain.setExternallyClickable(false);

@@ -105,8 +105,8 @@ const meta: Meta<CheckboxToggle> = {
     Visibility
   </org-checkbox-toggle>
 
-  <!-- Card-tile pattern: wrap with org-card and forward (clicked) to a toggle handler -->
-  <org-card (clicked)="autosaveOn.set(!autosaveOn())">
+  <!-- Card-tile pattern: wrap with org-card, set [isClickable]="true", and forward (clicked) to a toggle handler -->
+  <org-card [isClickable]="true" (clicked)="autosaveOn.set(!autosaveOn())">
     <org-checkbox-toggle
       name="autosave"
       value="on"
@@ -380,11 +380,11 @@ export const LiveDemo: Story = {
       <org-design-system-demo-header
         slot="header"
         title="Card-tile pattern"
-        description="Wrap each toggle in org-card and bind (clicked) so the entire tile flips the switch underneath. This is the canonical settings-list pattern."
+        description='Wrap each toggle in org-card, set [isClickable]="true", and bind (clicked) so the entire tile flips the switch underneath. This is the canonical settings-list pattern.'
       />
       <org-design-system-demo-canvas slot="canvas">
         <div class="flex flex-col gap-2 w-full">
-          <org-card (clicked)="toggle('autosave')">
+          <org-card [isClickable]="true" (clicked)="toggle('autosave')">
             <org-checkbox-toggle
               name="card-autosave"
               value="autosave"
@@ -397,7 +397,7 @@ export const LiveDemo: Story = {
               Autosave
             </org-checkbox-toggle>
           </org-card>
-          <org-card (clicked)="toggle('slack')">
+          <org-card [isClickable]="true" (clicked)="toggle('slack')">
             <org-checkbox-toggle
               name="card-slack"
               value="slack"
@@ -410,7 +410,7 @@ export const LiveDemo: Story = {
               Slack notifications
             </org-checkbox-toggle>
           </org-card>
-          <org-card (clicked)="toggle('public')">
+          <org-card [isClickable]="true" (clicked)="toggle('public')">
             <org-checkbox-toggle
               name="card-public"
               value="public"
@@ -739,7 +739,7 @@ export const Showcase: Story = {
         <story-checkbox-toggle-card-section />
         <org-design-system-demo-expected-behaviour>
           <ul class="list-inside list-disc flex flex-col gap-1">
-            <li>Wrap each toggle in <strong>org-card</strong> and bind its <strong>(clicked)</strong> output to flip the inner toggle</li>
+            <li>Wrap each toggle in <strong>org-card</strong>, set <strong>[isClickable]="true"</strong>, and bind its <strong>(clicked)</strong> output to flip the inner toggle</li>
             <li>Card already supplies the bordered tile, hover/pressed tint, focus ring, and role=button affordance — no bespoke styling needed</li>
             <li>Use <strong>labelPosition="start"</strong> on the toggle so the label fills the tile width and the track sits at the post edge — the settings-list idiom</li>
           </ul>

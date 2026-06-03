@@ -59,6 +59,7 @@ export const BOX_BACKGROUND_DEFAULT: BoxBackground = 'colored';
   hostDirectives: [
     {
       directive: BoxBrainDirective,
+      inputs: ['isClickable'],
       outputs: ['clicked'],
     },
   ],

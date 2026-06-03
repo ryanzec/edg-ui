@@ -141,6 +141,8 @@ class InputInteractiveHost {
       postIcon="check"
       preIconAriaLabel="open search"
       postIconAriaLabel="apply"
+      [preIconIsClickable]="true"
+      [postIconIsClickable]="true"
       (preIconClicked)="onPreClicked()"
       (postIconClicked)="onPostClicked()"
     />
@@ -161,6 +163,28 @@ class InputOutputListenersHost {
 
   protected onPostClicked(): void {
     this.postCount.update((value) => value + 1);
+  }
+}
+
+@Component({
+  selector: 'test-input-icons-not-clickable-host',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [Input],
+  host: { class: 'block' },
+  template: `
+    <org-input
+      data-testid="input"
+      name="icons-not-clickable-input"
+      preIcon="mail"
+      postIcon="check"
+      (preIconClicked)="noop()"
+      (postIconClicked)="noop()"
+    />
+  `,
+})
+class InputIconsNotClickableHost {
+  protected noop(): void {
+    // intentionally empty — present only to bind the outputs without marking the icons clickable
   }
 }
 
@@ -688,7 +712,7 @@ describe('Input (browser)', () => {
       });
     });
 
-    it('renders the pre-icon as a button when a listener is attached', async () => {
+    it('renders the pre-icon as a button when preIconIsClickable is true', async () => {
       const fixture = createFixture(InputOutputListenersHost);
       const host = queryByTestId(fixture, 'input');
 
@@ -698,6 +722,18 @@ describe('Input (browser)', () => {
 
       expect(preButton).not.toBeNull();
       expect(preButton?.getAttribute('aria-label')).toBe('open search');
+    });
+
+    it('keeps the icons non-interactive when the clicked outputs are bound but isClickable is false', async () => {
+      const fixture = createFixture(InputIconsNotClickableHost);
+      const host = queryByTestId(fixture, 'input');
+
+      await flush(fixture);
+
+      expect(host.querySelector('.pre button')).toBeNull();
+      expect(host.querySelector('.pre span.icon-btn')).not.toBeNull();
+      expect(host.querySelector('.post button.icon-btn')).toBeNull();
+      expect(host.querySelector('.post span.icon-btn')).not.toBeNull();
     });
 
     it('renders the post-icon non-interactive by default', async () => {
@@ -712,7 +748,7 @@ describe('Input (browser)', () => {
       });
     });
 
-    it('renders the post-icon as a button when a listener is attached', async () => {
+    it('renders the post-icon as a button when postIconIsClickable is true', async () => {
       const fixture = createFixture(InputOutputListenersHost);
       const host = queryByTestId(fixture, 'input');
 

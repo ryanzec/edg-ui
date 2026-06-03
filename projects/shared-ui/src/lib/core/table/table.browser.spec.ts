@@ -44,6 +44,7 @@ const SAMPLE_USERS: TestUser[] = [
       [isBackgroundLoading]="isBackgroundLoading()"
       [selectionData]="selectionStoreValue()"
       [expandedData]="expansionStoreValue()"
+      [rowsClickable]="rowsClickable()"
       (rowClicked)="handleRowClicked($event)"
     >
       <ng-template #header>
@@ -97,6 +98,7 @@ class TableInteractiveHost {
   public readonly emphasizeFirst = signal<boolean>(false);
   public readonly isLoading = signal<boolean>(false);
   public readonly isBackgroundLoading = signal<boolean>(false);
+  public readonly rowsClickable = signal<boolean>(true);
   public readonly selectionEnabled = signal<boolean>(false);
   public readonly expansionEnabled = signal<boolean>(false);
 
@@ -645,7 +647,7 @@ describe('Table (browser)', () => {
       expect(firstRow.getAttribute('data-clickable')).toBeNull();
     });
 
-    it('applies role=button, tabindex=0, and data-clickable when a rowClicked listener is attached', () => {
+    it('applies role=button, tabindex=0, and data-clickable when rowsClickable is set', () => {
       const fixture = createInteractiveTable();
       const tableHost = queryByTestId(fixture, 'table');
       const firstRow = tableHost.querySelector('tbody org-table-tr:first-of-type tr') as HTMLElement;
@@ -653,6 +655,26 @@ describe('Table (browser)', () => {
       expect(firstRow.getAttribute('role')).toBe('button');
       expect(firstRow.getAttribute('tabindex')).toBe('0');
       expect(firstRow.getAttribute('data-clickable')).toBe('');
+    });
+
+    it('keeps rows non-interactive when rowClicked is bound but rowsClickable is false and no stores are active', async () => {
+      const fixture = createInteractiveTable();
+      const tableHost = queryByTestId(fixture, 'table');
+      const readout = queryByTestId(fixture, 'readout');
+
+      fixture.componentInstance.rowsClickable.set(false);
+      await flush(fixture);
+
+      const firstRow = tableHost.querySelector('tbody org-table-tr:first-of-type tr') as HTMLElement;
+
+      expect(firstRow.getAttribute('role')).toBeNull();
+      expect(firstRow.getAttribute('tabindex')).toBeNull();
+      expect(firstRow.getAttribute('data-clickable')).toBeNull();
+
+      await userEvent.click(firstRow);
+      await flush(fixture);
+
+      expect(readout.textContent).toContain('rowClicked=[]');
     });
 
     it('activates the row on keyboard Enter', async () => {

@@ -25,7 +25,6 @@ const BUTTON_TOGGLE_TOKENS_CSS = path.join(
 const CALENDAR_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/core/calendar/calendar-tokens.css');
 const CARD_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/core/card/card-tokens.css');
 const CHART_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/core/chart/chart-tokens.css');
-const CHAT_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/core/chat/chat-tokens.css');
 const CHECKBOX_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/core/checkbox/checkbox-tokens.css');
 const CHECKBOX_GROUP_TOKENS_CSS = path.join(
   REPO_ROOT,
@@ -311,8 +310,7 @@ async function main() {
   const buttonContent = cleanCss(fs.readFileSync(BUTTON_TOKENS_CSS, 'utf-8'));
   const buttonToggleContent = cleanCss(fs.readFileSync(BUTTON_TOGGLE_TOKENS_CSS, 'utf-8'));
   const calendarContent = cleanCss(fs.readFileSync(CALENDAR_TOKENS_CSS, 'utf-8'));
-  const cardContent = cleanCss(fs.readFileSync(CARD_TOKENS_CSS, 'utf-8'));
-  const chatContent = cleanCss(fs.readFileSync(CHAT_TOKENS_CSS, 'utf-8'));
+  const cardContent = cleanCss(fs.readFileSync(CARD_TOKENS_CSS, 'utf-8'))
   const checkboxContent = cleanCss(fs.readFileSync(CHECKBOX_TOKENS_CSS, 'utf-8'));
   const checkboxGroupContent = cleanCss(fs.readFileSync(CHECKBOX_GROUP_TOKENS_CSS, 'utf-8'));
   const checkboxToggleContent = cleanCss(fs.readFileSync(CHECKBOX_TOGGLE_TOKENS_CSS, 'utf-8'));
@@ -369,7 +367,6 @@ async function main() {
     ...findBlocks(buttonToggleContent, ':root').map(extractVariables),
     ...findBlocks(calendarContent, ':root').map(extractVariables),
     ...findBlocks(cardContent, ':root').map(extractVariables),
-    ...findBlocks(chatContent, ':root').map(extractVariables),
     ...findBlocks(checkboxContent, ':root').map(extractVariables),
     ...findBlocks(checkboxGroupContent, ':root').map(extractVariables),
     ...findBlocks(checkboxToggleContent, ':root').map(extractVariables),
@@ -423,7 +420,6 @@ async function main() {
     ...findBlocks(buttonToggleContent, '.dark').map(extractVariables),
     ...findBlocks(calendarContent, '.dark').map(extractVariables),
     ...findBlocks(cardContent, '.dark').map(extractVariables),
-    ...findBlocks(chatContent, '.dark').map(extractVariables),
     ...findBlocks(checkboxContent, '.dark').map(extractVariables),
     ...findBlocks(checkboxGroupContent, '.dark').map(extractVariables),
     ...findBlocks(checkboxToggleContent, '.dark').map(extractVariables),

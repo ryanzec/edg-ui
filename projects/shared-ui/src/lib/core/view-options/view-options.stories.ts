@@ -42,6 +42,7 @@ const defaultFields: ViewField[] = [
       [(fields)]="fields"
       [panelLabel]="panelLabel"
       [sectionLabel]="sectionLabel"
+      [closable]="true"
       (closed)="onClose()"
     />
   `,
@@ -299,7 +300,7 @@ const meta: Meta<ViewOptions> = {
   - Locked rows (lock icon, no toggle, no drag) — other rows can still be moved above / below them
   - Optional per-row icon via \`field.iconName\`; rows without one render a generic icon
   - Live enabled / total count tag in the section header
-  - Optional close button rendered automatically when a \`(closed)\` listener is bound
+  - Optional close button rendered when \`[closable]="true"\`; emits \`(closed)\` on click
   - Keyboard reorder via ArrowUp / ArrowDown on the focused drag handle
 
   ### Data shape
@@ -319,6 +320,7 @@ const meta: Meta<ViewOptions> = {
     [(fields)]="fields"
     panelLabel="View options"
     sectionLabel="Fields"
+    [closable]="true"
     (closed)="onClose()"
   /&gt;
   \`\`\`
@@ -387,7 +389,7 @@ export const Default: Story = {
         <org-design-system-demo-header
           slot="header"
           title="Live demo"
-          description="Tweak inputs and toggle the closed-listener wiring. The panel reacts immediately."
+          description="Tweak inputs and toggle the closable affordance. The panel reacts immediately."
         />
         <org-design-system-demo-controls slot="controls">
           <org-design-system-demo-control-group label="Panel label">
@@ -396,13 +398,9 @@ export const Default: Story = {
           <org-design-system-demo-control-group label="Section label">
             <org-input name="live-demo-section-label" formControlName="sectionLabel" />
           </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Bind (closed) listener">
-            <org-checkbox-toggle
-              name="live-demo-closed-listener"
-              value="closed-listener"
-              formControlName="closedListenerOn"
-            >
-              {{ liveDemoForm.controls.closedListenerOn.value ? 'on' : 'off' }}
+          <org-design-system-demo-control-group label="Closable">
+            <org-checkbox-toggle name="live-demo-closable" value="closable" formControlName="closable">
+              {{ liveDemoForm.controls.closable.value ? 'on' : 'off' }}
             </org-checkbox-toggle>
           </org-design-system-demo-control-group>
           <org-design-system-demo-control-group label='Lock the "Name" row'>
@@ -420,20 +418,13 @@ export const Default: Story = {
         <org-design-system-demo-canvas slot="canvas">
           <div class="canvas-stage">
             <div class="panel-frame">
-              @if (liveDemoForm.controls.closedListenerOn.value) {
-                <org-view-options
-                  [(fields)]="fields"
-                  [panelLabel]="liveDemoForm.controls.panelLabel.value"
-                  [sectionLabel]="liveDemoForm.controls.sectionLabel.value"
-                  (closed)="onClose()"
-                />
-              } @else {
-                <org-view-options
-                  [(fields)]="fields"
-                  [panelLabel]="liveDemoForm.controls.panelLabel.value"
-                  [sectionLabel]="liveDemoForm.controls.sectionLabel.value"
-                />
-              }
+              <org-view-options
+                [(fields)]="fields"
+                [panelLabel]="liveDemoForm.controls.panelLabel.value"
+                [sectionLabel]="liveDemoForm.controls.sectionLabel.value"
+                [closable]="liveDemoForm.controls.closable.value"
+                (closed)="onClose()"
+              />
             </div>
           </div>
         </org-design-system-demo-canvas>
@@ -450,7 +441,7 @@ class ViewOptionsLiveDemoStory {
   protected readonly liveDemoForm = new FormGroup({
     panelLabel: new FormControl<string>('View options', { nonNullable: true }),
     sectionLabel: new FormControl<string>('Fields', { nonNullable: true }),
-    closedListenerOn: new FormControl<boolean>(true, { nonNullable: true }),
+    closable: new FormControl<boolean>(true, { nonNullable: true }),
     nameLocked: new FormControl<boolean>(true, { nonNullable: true }),
   });
 

@@ -1,7 +1,7 @@
 ---
 alwaysApply: true
 ---
-# Request Data Management
+# Request Data Management Pattern
 
 When you have request data that need to be passed to an API or Data Store method, you must **ALWAYS** store the request data in a `signal()` and then use the `toObservable` rxjs-interop helper method to manage making the request to the api or data store, this help centralize the location where api / data store method are called and can group logic for the request data itself.
 

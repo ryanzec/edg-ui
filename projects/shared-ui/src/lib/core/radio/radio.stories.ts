@@ -61,9 +61,9 @@ const meta: Meta<Radio> = {
     Pro plan
   </org-radio>
 
-  <!-- Card-tile pattern: wrap with org-card and forward (clicked) to the radio-group -->
+  <!-- Card-tile pattern: wrap with org-card, set [isClickable]="true", and forward (clicked) to the radio-group -->
   <org-radio-group [value]="selectedPlan()" (valueChange)="selectedPlan.set($event)" name="plan">
-    <org-card (clicked)="selectedPlan.set('pro')">
+    <org-card [isClickable]="true" (clicked)="selectedPlan.set('pro')">
       <org-radio value="pro" description="Up to 25 members.">Pro plan</org-radio>
     </org-card>
   </org-radio-group>
@@ -293,11 +293,11 @@ export const LiveDemo: Story = {
       <org-design-system-demo-header
         slot="header"
         title="Card-tile pattern"
-        description="Wrap each radio in org-card and bind (clicked) so the entire tile selects the option. Used for plan-pickers, settings pages, and any selection where each choice needs to read as its own surface."
+        description='Wrap each radio in org-card, set [isClickable]="true", and bind (clicked) so the entire tile selects the option. Used for plan-pickers, settings pages, and any selection where each choice needs to read as its own surface.'
       />
       <org-design-system-demo-canvas slot="canvas">
         <org-radio-group name="card-plan" [value]="selectedPlan()" (valueChange)="selectedPlan.set($event)">
-          <org-card (clicked)="selectedPlan.set('free')">
+          <org-card [isClickable]="true" (clicked)="selectedPlan.set('free')">
             <org-radio
               value="free"
               (click)="$event.stopPropagation()"
@@ -306,7 +306,7 @@ export const LiveDemo: Story = {
               Free
             </org-radio>
           </org-card>
-          <org-card (clicked)="selectedPlan.set('team')">
+          <org-card [isClickable]="true" (clicked)="selectedPlan.set('team')">
             <org-radio
               value="team"
               (click)="$event.stopPropagation()"
@@ -315,7 +315,7 @@ export const LiveDemo: Story = {
               Team
             </org-radio>
           </org-card>
-          <org-card (clicked)="selectedPlan.set('enterprise')">
+          <org-card [isClickable]="true" (clicked)="selectedPlan.set('enterprise')">
             <org-radio
               value="enterprise"
               (click)="$event.stopPropagation()"
@@ -532,7 +532,7 @@ export const Showcase: Story = {
         <story-radio-card-section />
         <org-design-system-demo-expected-behaviour>
           <ul class="list-inside list-disc flex flex-col gap-1">
-            <li>Wrap each radio in <strong>org-card</strong> and bind its <strong>(clicked)</strong> output to set the radio-group's value</li>
+            <li>Wrap each radio in <strong>org-card</strong>, set <strong>[isClickable]="true"</strong>, and bind its <strong>(clicked)</strong> output to set the radio-group's value</li>
             <li>Card already supplies the bordered tile, hover/pressed tint, focus ring, and role=button affordance — no bespoke styling needed</li>
             <li>Combine with the radio's <strong>description</strong> input to clarify what each option grants</li>
           </ul>

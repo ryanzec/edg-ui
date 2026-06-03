@@ -153,6 +153,11 @@ const liveDemoStateItems: ButtonToggleItem[] = allLiveDemoStates.map((state) => 
               {{ liveDemoForm.controls.expandable.value ? 'on' : 'off' }}
             </org-checkbox-toggle>
           </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Clickable rows">
+            <org-checkbox-toggle name="live-demo-clickable" value="clickable" formControlName="clickable">
+              {{ liveDemoForm.controls.clickable.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
           <org-design-system-demo-control-group label="Sortable">
             <org-checkbox-toggle name="live-demo-sortable" value="sortable" formControlName="sortable">
               {{ liveDemoForm.controls.sortable.value ? 'on' : 'off' }}
@@ -185,6 +190,7 @@ const liveDemoStateItems: ButtonToggleItem[] = allLiveDemoStates.map((state) => 
               [stickyHeader]="liveDemoForm.controls.stickyHeader.value!"
               [selectionData]="selectionDataValue()"
               [expandedData]="expandedDataValue()"
+              [rowsClickable]="liveDemoForm.controls.clickable.value"
               [isLoading]="isLoading()"
               [isBackgroundLoading]="isBackgroundLoading()"
               [style.maxHeight]="'18rem'"
@@ -272,6 +278,7 @@ class TableLiveDemo {
     hover: new FormControl<boolean>(true, { nonNullable: true }),
     selectable: new FormControl<boolean>(false, { nonNullable: true }),
     expandable: new FormControl<boolean>(false, { nonNullable: true }),
+    clickable: new FormControl<boolean>(false, { nonNullable: true }),
     sortable: new FormControl<boolean>(false, { nonNullable: true }),
     stickyFirstColumn: new FormControl<boolean>(false, { nonNullable: true }),
     stickyHeader: new FormControl<boolean>(false, { nonNullable: true }),
@@ -879,7 +886,7 @@ class TableInContextDemo {
     `,
   ],
   template: `
-    <org-table [data]="users" [hover]="true" (rowClicked)="handleRowClicked($event)">
+    <org-table [data]="users" [hover]="true" [rowsClickable]="true" (rowClicked)="handleRowClicked($event)">
       <ng-template #header>
         <org-table-th>Project</org-table-th>
         <org-table-th>Owner</org-table-th>

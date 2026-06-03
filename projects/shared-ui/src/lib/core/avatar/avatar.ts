@@ -71,7 +71,7 @@ const AVATAR_COLOR_COUNT = 8;
   hostDirectives: [
     {
       directive: AvatarBrainDirective,
-      inputs: ['label', 'disabled', 'isOverflow'],
+      inputs: ['label', 'disabled', 'isOverflow', 'isClickable'],
       outputs: ['clicked'],
     },
   ],

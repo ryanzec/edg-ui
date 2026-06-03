@@ -11,9 +11,8 @@ import {
   Injector,
   contentChild,
   viewChild,
+  output,
 } from '@angular/core';
-import { outputFromObservable } from '@angular/core/rxjs-interop';
-import { Subject } from 'rxjs';
 import { NgTemplateOutlet } from '@angular/common';
 import { ScrollArea } from '../scroll-area/scroll-area';
 import { LoadingSpinner } from '../loading-spinner/loading-spinner';
@@ -52,6 +51,9 @@ export const TABLE_STICKY_FIRST_COLUMN_DEFAULT = false;
 
 /** default value for the emphasizeFirst input */
 export const TABLE_EMPHASIZE_FIRST_DEFAULT = false;
+
+/** default value for the rowsClickable input */
+export const TABLE_ROWS_CLICKABLE_DEFAULT = false;
 
 /** default track-by function that uses item identity */
 export const TABLE_TRACK_BY_DEFAULT = (item: unknown): unknown => item;
@@ -95,7 +97,6 @@ export const TABLE_TRACK_BY_DEFAULT = (item: unknown): unknown => item;
 export class Table<T = unknown> {
   private readonly _injector = inject(Injector);
   protected readonly brain = inject(TableBrainDirective, { self: true });
-  private readonly _rowClicked$ = new Subject<T>();
 
   /** array of data items to render in the table body */
   public readonly data = input.required<T[]>();
@@ -124,8 +125,11 @@ export class Table<T = unknown> {
   /** function used to track items in the for loop for optimal re-rendering */
   public readonly trackBy = input<(item: T) => unknown>(TABLE_TRACK_BY_DEFAULT as (item: T) => unknown);
 
-  /** emitted when a body row is clicked; binding this output makes every body row clickable + focusable */
-  public readonly rowClicked = outputFromObservable(this._rowClicked$);
+  /** when true, makes every body row clickable + focusable (independent of selection / expansion) */
+  public readonly rowsClickable = input<boolean>(TABLE_ROWS_CLICKABLE_DEFAULT);
+
+  /** emitted with the row's data when a body row is clicked while no selection / expansion store is active */
+  public readonly rowClicked = output<T>();
 
   protected readonly headerTemplate = contentChild<TemplateRef<void>>('header');
 
@@ -145,12 +149,9 @@ export class Table<T = unknown> {
   /** whether the data array is currently empty (no rows to render) */
   protected readonly isEmpty = computed<boolean>(() => this.data().length === 0);
 
-  /** whether any consumer is listening to rowClicked; one of the inputs that drives row clickability */
-  protected readonly hasRowClickedListener = computed<boolean>(() => this._rowClicked$.observed);
-
-  /** whether body rows are interactive (focusable + role=button) — true when expansion, selection, or a rowClicked listener is active */
+  /** whether body rows are interactive (focusable + role=button) — true when expansion, selection, or rowsClickable is active */
   protected readonly isRowClickable = computed<boolean>(
-    () => this.brain.hasExpansionEnabled() || this.brain.hasSelectionEnabled() || this.hasRowClickedListener()
+    () => this.brain.hasExpansionEnabled() || this.brain.hasSelectionEnabled() || this.rowsClickable()
   );
 
   private readonly _scrollAreaComponent = viewChild<ScrollArea>('scrollAreaComponent');
@@ -221,6 +222,6 @@ export class Table<T = unknown> {
       return;
     }
 
-    this._rowClicked$.next(item);
+    this.rowClicked.emit(item);
   }
 }

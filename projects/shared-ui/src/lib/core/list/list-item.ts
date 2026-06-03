@@ -49,7 +49,7 @@ const EXTERNAL_HREF_ICON_NAME: IconName = 'arrow-up-right';
   hostDirectives: [
     {
       directive: ListItemBrainDirective,
-      inputs: ['disabled', 'routerLink', 'routerMatchExact'],
+      inputs: ['disabled', 'routerLink', 'routerMatchExact', 'isClickable'],
       outputs: ['clicked'],
     },
   ],
@@ -58,7 +58,7 @@ const EXTERNAL_HREF_ICON_NAME: IconName = 'arrow-up-right';
     ['[attr.data-size]']: 'effectiveSize()',
     ['[attr.data-selected]']: 'isActuallySelected() ? "" : null',
     ['[attr.aria-disabled]']: 'disabled() ? "true" : null',
-    ['[attr.data-clickable]']: 'isClickable() ? "" : null',
+    ['[attr.data-clickable]']: 'appearsClickable() ? "" : null',
     ['[attr.data-as-tag]']: 'asTag()',
     ['[attr.data-disabled]']: 'disabled() ? "" : null',
     ['[attr.data-is-external-href]']: 'showAsExternal() ? "" : null',
@@ -99,8 +99,9 @@ export class ListItem {
   );
 
   /**
-   * forces the list item to display clickable styles even when no direct click handler is attached;
-   * useful when the clickable interaction is handled by a child element rather than the item itself
+   * forces the list item to display clickable styles only — without making the item itself a click target;
+   * use when the clickable interaction is handled by a child element rather than the item. to make the item
+   * itself the click target (button render in the no-tag case + clicked emission), use isClickable instead.
    */
   public readonly forceClickable = input<boolean>(LIST_ITEM_FORCE_CLICKABLE_DEFAULT);
 
@@ -125,9 +126,9 @@ export class ListItem {
     return this.asTag() === 'a' && (!!this.href() || !!this.brain.routerLink());
   });
 
-  /** whether the list item should display clickable styles and respond to interaction */
-  protected readonly isClickable = computed<boolean>(() => {
-    return !this.disabled() && (this.forceClickable() || this._isValidLink() || this.brain.hasClickObserver());
+  /** whether the list item should display clickable styles (structural link / button, forced, or explicit click target) */
+  protected readonly appearsClickable = computed<boolean>(() => {
+    return !this.disabled() && (this.forceClickable() || this._isValidLink() || this.brain.isClickable());
   });
 
   /** the resolved size, using overrideSize when provided or falling back to the parent list size */

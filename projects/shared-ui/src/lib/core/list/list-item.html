@@ -45,7 +45,7 @@
       </button>
     }
     @default {
-      @if (brain.hasClickObserver()) {
+      @if (brain.isClickable()) {
         <button type="button" class="list-item-content" (click)="onClick($event)">
           <ng-container [ngTemplateOutlet]="contentTemplate" />
         </button>

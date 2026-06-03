@@ -1,11 +1,14 @@
-import { Directive, computed, inject, input, signal } from '@angular/core';
-import { Observable, Subject, filter, type Subscriber } from 'rxjs';
-import { outputFromObservable, takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Directive, computed, inject, input, output, signal } from '@angular/core';
+import { filter } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, NavigationEnd, Router, type IsActiveMatchOptions } from '@angular/router';
 import { angularUtils } from '@organization/shared-utils';
 
 /** default value for the disabled input */
 export const LIST_ITEM_DISABLED_DEFAULT = false;
+
+/** default value for the isClickable input */
+export const LIST_ITEM_BRAIN_IS_CLICKABLE_DEFAULT = false;
 
 /** default value for the routerLink input */
 export const LIST_ITEM_BRAIN_ROUTER_LINK_DEFAULT: string | undefined = undefined;
@@ -14,10 +17,9 @@ export const LIST_ITEM_BRAIN_ROUTER_LINK_DEFAULT: string | undefined = undefined
 export const LIST_ITEM_BRAIN_ROUTER_MATCH_EXACT_DEFAULT = false;
 
 /**
- * headless brain directive for the list-item component. owns the click subject (with observer-tracking so the
- * presentation can flip clickable styles based on whether anyone is listening), the router-link-active
- * computation (mirroring RouterLink semantics by resolving relative paths against ActivatedRoute), and the
- * click handler that suppresses interaction when disabled.
+ * headless brain directive for the list-item component. owns the explicit clickable flag and the clicked
+ * output, the router-link-active computation (mirroring RouterLink semantics by resolving relative paths
+ * against ActivatedRoute), and the click handler that suppresses interaction when disabled.
  */
 @Directive({
   selector: '[orgListItemBrain]',
@@ -31,11 +33,11 @@ export class ListItemBrainDirective {
   // (router.url is a getter, not reactive)
   private readonly _currentUrl = signal<string>(this._router.url);
 
-  private readonly _hasClickObserver = signal<boolean>(false);
-  private readonly _clicked$ = new Subject<void>();
-
   /** whether the list item is disabled */
   public readonly disabled = input<boolean>(LIST_ITEM_DISABLED_DEFAULT);
+
+  /** whether the list item is itself a click target (renders the no-tag item as a button and emits clicked) */
+  public readonly isClickable = input<boolean>(LIST_ITEM_BRAIN_IS_CLICKABLE_DEFAULT);
 
   /** the router link the item navigates to; also used to compute the router-active state */
   public readonly routerLink = input<string | undefined, string | null | undefined>(
@@ -46,22 +48,8 @@ export class ListItemBrainDirective {
   /** when true, router-active matches only on exact path equality; when false, subset matching is used */
   public readonly routerMatchExact = input<boolean>(LIST_ITEM_BRAIN_ROUTER_MATCH_EXACT_DEFAULT);
 
-  /** emits when the list item is clicked and is not disabled; observer-tracked so presentation can react */
-  public readonly clicked = outputFromObservable(
-    new Observable<void>((subscriber: Subscriber<void>) => {
-      this._hasClickObserver.set(true);
-
-      const subscription = this._clicked$.subscribe(subscriber);
-
-      return () => {
-        subscription.unsubscribe();
-        this._hasClickObserver.set(this._clicked$.observed);
-      };
-    })
-  );
-
-  /** whether at least one observer is currently subscribed to the click output */
-  public readonly hasClickObserver = computed<boolean>(() => this._hasClickObserver());
+  /** emits when the list item is clicked and is not disabled */
+  public readonly clicked = output<void>();
 
   /** whether the router link is currently active based on the current url and match mode */
   public readonly isRouterLinkActive = computed<boolean>(() => {
@@ -107,8 +95,6 @@ export class ListItemBrainDirective {
       return;
     }
 
-    if (this._clicked$.observed) {
-      this._clicked$.next();
-    }
+    this.clicked.emit();
   }
 }

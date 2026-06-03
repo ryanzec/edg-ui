@@ -13,8 +13,6 @@ import {
 } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { Subject } from 'rxjs';
-import { outputFromObservable } from '@angular/core/rxjs-interop';
 import { angularUtils } from '@organization/shared-utils';
 import { type IconName } from '../icon/icon-brain';
 import { Icon } from '../icon/icon';
@@ -36,6 +34,8 @@ import {
   INPUT_BLOCK_PASSWORD_MANAGER_DEFAULT,
   INPUT_DISABLED_DEFAULT,
   INPUT_INITIAL_VALUE,
+  INPUT_POST_ICON_IS_CLICKABLE_DEFAULT,
+  INPUT_PRE_ICON_IS_CLICKABLE_DEFAULT,
   INPUT_READONLY_DEFAULT,
   INPUT_ROLE_DEFAULT,
   INPUT_SELECT_ALL_ON_FOCUS_DEFAULT,
@@ -129,9 +129,6 @@ export type InputInlineItem = {
 })
 export class Input implements ControlValueAccessor {
   private readonly _brain = viewChild.required(InputBrainDirective);
-
-  private readonly _preIconClicked$ = new Subject<void>();
-  private readonly _postIconClicked$ = new Subject<void>();
 
   /** projected template for the pre slot — when provided, takes precedence over the preIcon input */
   protected readonly preTemplate = contentChild<TemplateRef<unknown>>('pre');
@@ -232,6 +229,9 @@ export class Input implements ControlValueAccessor {
     { transform: angularUtils.transformNullToUndefined }
   );
 
+  /** whether the pre-icon renders as an interactive button and emits preIconClicked (forwarded to the brain) */
+  public readonly preIconIsClickable = input<boolean>(INPUT_PRE_ICON_IS_CLICKABLE_DEFAULT);
+
   /** icon displayed after the input text (ignored when a projected #post template is provided) */
   public readonly postIcon = input<IconName | undefined, IconName | null | undefined>(INPUT_POST_ICON_DEFAULT, {
     transform: angularUtils.transformNullToUndefined,
@@ -242,6 +242,9 @@ export class Input implements ControlValueAccessor {
     INPUT_POST_ICON_ARIA_LABEL_DEFAULT,
     { transform: angularUtils.transformNullToUndefined }
   );
+
+  /** whether the post-icon renders as an interactive button and emits postIconClicked (forwarded to the brain; password toggle aside) */
+  public readonly postIconIsClickable = input<boolean>(INPUT_POST_ICON_IS_CLICKABLE_DEFAULT);
 
   /** array of inline tag items displayed inside the input */
   public readonly inlineItems = input<InputInlineItem[]>(INPUT_INLINE_ITEMS_DEFAULT);
@@ -262,10 +265,10 @@ export class Input implements ControlValueAccessor {
   public readonly blurred = output<void>();
 
   /** emitted when the pre-icon button is clicked */
-  public readonly preIconClicked = outputFromObservable(this._preIconClicked$);
+  public readonly preIconClicked = output<void>();
 
   /** emitted when the post-icon button is clicked */
-  public readonly postIconClicked = outputFromObservable(this._postIconClicked$);
+  public readonly postIconClicked = output<void>();
 
   /** emitted when an inline item's remove button is clicked */
   public readonly inlineItemRemoved = output<InputInlineItem>();
@@ -325,14 +328,6 @@ export class Input implements ControlValueAccessor {
   /** whether any inline items are present */
   protected readonly hasInputInlineItems = computed<boolean>(() => this.inlineItems().length > 0);
 
-  /** whether the pre-icon should render as an interactive button (consumer is listening) */
-  protected readonly isPreIconClickable = computed<boolean>(() => this._preIconClicked$.observed);
-
-  /** whether the post-icon should render as an interactive button (password toggle active or consumer listening) */
-  protected readonly isPostIconInteractive = computed<boolean>(() => {
-    return this._brain().isPasswordToggleActive() || this._postIconClicked$.observed;
-  });
-
   /** the effective aria-label for the post-icon button, swapping copy when in password-toggle mode */
   protected readonly postIconAriaLabelText = computed<string | undefined>(() => {
     const brain = this._brain();
@@ -357,14 +352,14 @@ export class Input implements ControlValueAccessor {
     this.blurred.emit();
   }
 
-  /** forwards the brain's pre-icon request to the public preIconClicked output */
-  protected onBrainPreIconRequested(): void {
-    this._preIconClicked$.next();
+  /** forwards the brain's pre-icon click to the public preIconClicked output */
+  protected onBrainPreIconClicked(): void {
+    this.preIconClicked.emit();
   }
 
-  /** forwards the brain's post-icon request to the public postIconClicked output */
-  protected onBrainPostIconRequested(): void {
-    this._postIconClicked$.next();
+  /** forwards the brain's post-icon click to the public postIconClicked output */
+  protected onBrainPostIconClicked(): void {
+    this.postIconClicked.emit();
   }
 
   /** handles inline item remove button clicks, gated by the brain's content modification rules */

@@ -82,7 +82,7 @@ const liveDemoBackgroundItems: ButtonToggleItem[] = allBoxBackgrounds.map((backg
         <org-design-system-demo-header
           slot="header"
           title="Live demo"
-          description="Toggle the inputs to see every visual combination. Flip the 'clickable' toggle to attach a click handler — the box auto-detects the listener and gains cursor, hover, pressed, and focus-visible affordances along with role=button + keyboard activation."
+          description="Toggle the inputs to see every visual combination. Flip the 'clickable' toggle to set [isClickable]=true — the box gains cursor, hover, pressed, and focus-visible affordances along with role=button + keyboard activation, and emits (clicked)."
         />
         <org-design-system-demo-controls slot="controls">
           <org-design-system-demo-control-group label="Color">
@@ -105,26 +105,20 @@ const liveDemoBackgroundItems: ButtonToggleItem[] = allBoxBackgrounds.map((backg
         </org-design-system-demo-controls>
         <org-design-system-demo-canvas slot="canvas">
           <div class="canvas-stage">
-            @if (liveDemoForm.controls.clickable.value) {
-              <org-box
-                [color]="liveDemoForm.controls.color.value === 'none' ? null : liveDemoForm.controls.color.value"
-                [border]="liveDemoForm.controls.border.value"
-                [padding]="liveDemoForm.controls.padding.value"
-                [background]="liveDemoForm.controls.background.value"
-                (clicked)="onBoxClicked()"
-              >
+            <org-box
+              [color]="liveDemoForm.controls.color.value === 'none' ? null : liveDemoForm.controls.color.value"
+              [border]="liveDemoForm.controls.border.value"
+              [padding]="liveDemoForm.controls.padding.value"
+              [background]="liveDemoForm.controls.background.value"
+              [isClickable]="liveDemoForm.controls.clickable.value"
+              (clicked)="onBoxClicked()"
+            >
+              @if (liveDemoForm.controls.clickable.value) {
                 <div class="flex flex-col gap-1">
                   <strong>Clickable box</strong>
                   <span>Click count: {{ clickCount() }}</span>
                 </div>
-              </org-box>
-            } @else {
-              <org-box
-                [color]="liveDemoForm.controls.color.value === 'none' ? null : liveDemoForm.controls.color.value"
-                [border]="liveDemoForm.controls.border.value"
-                [padding]="liveDemoForm.controls.padding.value"
-                [background]="liveDemoForm.controls.background.value"
-              >
+              } @else {
                 <div class="flex flex-col gap-1">
                   <strong>Box content</strong>
                   <span
@@ -132,8 +126,8 @@ const liveDemoBackgroundItems: ButtonToggleItem[] = allBoxBackgrounds.map((backg
                     another component.</span
                   >
                 </div>
-              </org-box>
-            }
+              }
+            </org-box>
           </div>
         </org-design-system-demo-canvas>
       </org-design-system-demo>
@@ -170,7 +164,7 @@ class BoxLiveDemoStory {
       <org-design-system-demo-header
         slot="header"
         title="Clickable"
-        description="Binding the clicked output auto-flips the box into an interactive surface. Compare the static and clickable boxes — only the clickable ones gain cursor, hover/pressed tint, focus-visible ring, role=button, tabindex=0, and Enter/Space activation."
+        description="Setting [isClickable]=true flips the box into an interactive surface. Compare the static and clickable boxes — only the clickable ones gain cursor, hover/pressed tint, focus-visible ring, role=button, tabindex=0, and Enter/Space activation."
       />
       <org-design-system-demo-canvas slot="canvas">
         <div class="flex flex-col gap-3 max-w-md">
@@ -180,19 +174,19 @@ class BoxLiveDemoStory {
               <span>No click handler — purely presentational. Hovering and focusing change nothing.</span>
             </div>
           </org-box>
-          <org-box color="info" (clicked)="onClicked('info')">
+          <org-box color="info" [isClickable]="true" (clicked)="onClicked('info')">
             <div class="flex flex-col gap-1">
               <strong>Clickable · info</strong>
               <span>Try clicking, hovering, or tab-then-Enter / Space.</span>
             </div>
           </org-box>
-          <org-box color="safe" border="border-emphasize" (clicked)="onClicked('safe')">
+          <org-box color="safe" border="border-emphasize" [isClickable]="true" (clicked)="onClicked('safe')">
             <div class="flex flex-col gap-1">
               <strong>Clickable · safe · border-emphasize</strong>
               <span>The clickable affordance respects every other visual variant.</span>
             </div>
           </org-box>
-          <org-box color="danger" background="colorless" (clicked)="onClicked('danger')">
+          <org-box color="danger" background="colorless" [isClickable]="true" (clicked)="onClicked('danger')">
             <div class="flex flex-col gap-1">
               <strong>Clickable · danger · colorless</strong>
               <span>Hover/pressed tints fall back to the neutral background slot in colorless mode.</span>
@@ -208,7 +202,8 @@ class BoxLiveDemoStory {
     <org-design-system-demo-expected-behaviour>
       <ul class="list-inside list-disc flex flex-col gap-1">
         <li>
-          <strong>Auto-detect</strong>: a (clicked) listener on the box flips it into clickable mode — no explicit input
+          <strong>Explicit opt-in</strong>: setting [isClickable]=true flips the box into clickable mode and emits
+          (clicked)
         </li>
         <li><strong>Cursor</strong>: pointer cursor over clickable boxes only</li>
         <li>
@@ -254,7 +249,7 @@ const meta: Meta<Box> = {
   - Configurable internal padding
   - Optional colorless background mode so color only affects the border
   - Accepts any content via ng-content
-  - Auto-detects clickable mode: binding the \`clicked\` output flips the box into an interactive surface
+  - Explicit clickable mode: set \`[isClickable]="true"\` to flip the box into an interactive surface that emits \`clicked\`
     (cursor, hover/pressed tint, focus-visible ring, role=button, tabindex=0, Enter/Space activation)
 
   ### Border Options
@@ -306,8 +301,8 @@ const meta: Meta<Box> = {
     Danger border, default background.
   </org-box>
 
-  <!-- clickable box — binding (clicked) auto-flips on the interactive affordance -->
-  <org-box color="info" (clicked)="onSelect()">
+  <!-- clickable box — set [isClickable]="true" to turn on the interactive affordance -->
+  <org-box color="info" [isClickable]="true" (clicked)="onSelect()">
     Click anywhere on this surface.
   </org-box>
   \`\`\`

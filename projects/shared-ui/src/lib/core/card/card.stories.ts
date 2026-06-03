@@ -82,10 +82,10 @@ const meta: Meta<Card> = {
   - **CardFooter**: Button row with \`start\` / \`center\` / \`end\` alignment (default \`end\`).
 
   ### Clickable
-  Card forwards the underlying Box's clickable affordance: binding the \`clicked\` output on \`org-card\` flips
+  Card forwards the underlying Box's clickable affordance: setting \`[isClickable]="true"\` on \`org-card\` flips
   the whole surface into an interactive button (cursor, hover/pressed tint, focus-visible ring, role=button,
-  tabindex=0, Enter/Space activation). Cards without a \`(clicked)\` listener remain purely presentational —
-  the forwarding mechanism short-circuits when no consumer is listening.
+  tabindex=0, Enter/Space activation) and emits the \`clicked\` output on activation. Cards with \`isClickable\`
+  false remain purely presentational.
 
   ### Padding model
   Each sub-region owns its own 12px padding. Adjacent text regions collapse the doubled gap
@@ -281,100 +281,53 @@ export const Default: Story = {
         <org-design-system-demo-canvas slot="canvas">
           <div class="canvas-stage">
             <div class="card-shell">
-              @if (liveDemoForm.controls.clickable.value) {
-                <org-card
-                  [color]="liveDemoForm.controls.color.value === 'none' ? null : liveDemoForm.controls.color.value"
-                  [boxBorder]="liveDemoForm.controls.border.value"
-                  [boxBackground]="liveDemoForm.controls.useBackgroundColor.value ? 'colored' : 'colorless'"
-                  [isExpandable]="liveDemoForm.controls.expandable.value"
-                  [(isExpanded)]="expandedSignal"
-                  (clicked)="onCardClicked()"
-                >
-                  @if (liveDemoForm.controls.header.value || liveDemoForm.controls.actions.value) {
-                    <org-card-header
-                      [title]="liveDemoForm.controls.header.value ? 'Project settings' : null"
-                      [subtitle]="
-                        liveDemoForm.controls.header.value && liveDemoForm.controls.subtitle.value
-                          ? 'Configuration shared across every environment.'
-                          : null
-                      "
-                    >
-                      @if (liveDemoForm.controls.actions.value) {
-                        <org-button
-                          actions
-                          variant="text"
-                          color="neutral"
-                          label="More options"
-                          preIcon="ellipsis"
-                          [iconOnly]="true"
-                          ariaLabel="More options"
-                        />
-                      }
-                    </org-card-header>
-                  }
-                  @if (liveDemoForm.controls.image.value) {
-                    <org-card-image src="${SAMPLE_IMAGE_TOP}" alt="Workspace photo" />
-                  }
-                  @if (liveDemoForm.controls.content.value) {
-                    <org-card-content>
-                      Cards group related content into a discrete visual block. Drop any composition inside — settings
-                      rows, KPI tiles, prose, or sub-components from elsewhere in the system.
-                    </org-card-content>
-                  }
-                  @if (liveDemoForm.controls.footer.value) {
-                    <org-card-footer [alignment]="liveDemoForm.controls.footerAlignment.value">
-                      <org-button color="neutral" variant="ghost" label="Cancel" />
-                      <org-button color="primary" label="Save" />
-                    </org-card-footer>
-                  }
-                </org-card>
-              } @else {
-                <org-card
-                  [color]="liveDemoForm.controls.color.value === 'none' ? null : liveDemoForm.controls.color.value"
-                  [boxBorder]="liveDemoForm.controls.border.value"
-                  [boxBackground]="liveDemoForm.controls.useBackgroundColor.value ? 'colored' : 'colorless'"
-                  [isExpandable]="liveDemoForm.controls.expandable.value"
-                  [(isExpanded)]="expandedSignal"
-                >
-                  @if (liveDemoForm.controls.header.value || liveDemoForm.controls.actions.value) {
-                    <org-card-header
-                      [title]="liveDemoForm.controls.header.value ? 'Project settings' : null"
-                      [subtitle]="
-                        liveDemoForm.controls.header.value && liveDemoForm.controls.subtitle.value
-                          ? 'Configuration shared across every environment.'
-                          : null
-                      "
-                    >
-                      @if (liveDemoForm.controls.actions.value) {
-                        <org-button
-                          actions
-                          variant="text"
-                          color="neutral"
-                          label="More options"
-                          preIcon="ellipsis"
-                          [iconOnly]="true"
-                          ariaLabel="More options"
-                        />
-                      }
-                    </org-card-header>
-                  }
-                  @if (liveDemoForm.controls.image.value) {
-                    <org-card-image src="${SAMPLE_IMAGE_TOP}" alt="Workspace photo" />
-                  }
-                  @if (liveDemoForm.controls.content.value) {
-                    <org-card-content>
-                      Cards group related content into a discrete visual block. Drop any composition inside — settings
-                      rows, KPI tiles, prose, or sub-components from elsewhere in the system.
-                    </org-card-content>
-                  }
-                  @if (liveDemoForm.controls.footer.value) {
-                    <org-card-footer [alignment]="liveDemoForm.controls.footerAlignment.value">
-                      <org-button color="neutral" variant="ghost" label="Cancel" />
-                      <org-button color="primary" label="Save" />
-                    </org-card-footer>
-                  }
-                </org-card>
-              }
+              <org-card
+                [color]="liveDemoForm.controls.color.value === 'none' ? null : liveDemoForm.controls.color.value"
+                [boxBorder]="liveDemoForm.controls.border.value"
+                [boxBackground]="liveDemoForm.controls.useBackgroundColor.value ? 'colored' : 'colorless'"
+                [isExpandable]="liveDemoForm.controls.expandable.value"
+                [(isExpanded)]="expandedSignal"
+                [isClickable]="liveDemoForm.controls.clickable.value"
+                (clicked)="onCardClicked()"
+              >
+                @if (liveDemoForm.controls.header.value || liveDemoForm.controls.actions.value) {
+                  <org-card-header
+                    [title]="liveDemoForm.controls.header.value ? 'Project settings' : null"
+                    [subtitle]="
+                      liveDemoForm.controls.header.value && liveDemoForm.controls.subtitle.value
+                        ? 'Configuration shared across every environment.'
+                        : null
+                    "
+                  >
+                    @if (liveDemoForm.controls.actions.value) {
+                      <org-button
+                        actions
+                        variant="text"
+                        color="neutral"
+                        label="More options"
+                        preIcon="ellipsis"
+                        [iconOnly]="true"
+                        ariaLabel="More options"
+                      />
+                    }
+                  </org-card-header>
+                }
+                @if (liveDemoForm.controls.image.value) {
+                  <org-card-image src="${SAMPLE_IMAGE_TOP}" alt="Workspace photo" />
+                }
+                @if (liveDemoForm.controls.content.value) {
+                  <org-card-content>
+                    Cards group related content into a discrete visual block. Drop any composition inside — settings
+                    rows, KPI tiles, prose, or sub-components from elsewhere in the system.
+                  </org-card-content>
+                }
+                @if (liveDemoForm.controls.footer.value) {
+                  <org-card-footer [alignment]="liveDemoForm.controls.footerAlignment.value">
+                    <org-button color="neutral" variant="ghost" label="Cancel" />
+                    <org-button color="primary" label="Save" />
+                  </org-card-footer>
+                }
+              </org-card>
               @if (liveDemoForm.controls.clickable.value) {
                 <div class="text-xs text-fg-muted mt-2">
                   Card click count: <strong>{{ cardClickCount() }}</strong>
@@ -433,27 +386,37 @@ class CardLiveDemoStory {
       <org-design-system-demo-header
         slot="header"
         title="Clickable"
-        description="Binding the clicked output on org-card forwards the underlying Box's clickable affordance to the whole surface. Static cards (no listener) remain purely presentational."
+        description="Setting [isClickable]=true on org-card forwards the underlying Box's clickable affordance to the whole surface and emits the clicked output on activation. Static cards (isClickable false) remain purely presentational."
       />
       <org-design-system-demo-canvas slot="canvas">
         <div class="grid grid-cols-2 gap-3 items-start max-w-3xl">
           <org-card>
-            <org-card-header title="Static card" subtitle="No (clicked) listener." />
+            <org-card-header title="Static card" subtitle="isClickable is false." />
             <org-card-content>
               Hovering and focusing change nothing — the card is a purely presentational surface.
             </org-card-content>
           </org-card>
-          <org-card color="info" (clicked)="onClicked('info card')">
-            <org-card-header title="Clickable · info" subtitle="(clicked) is bound." />
+          <org-card color="info" [isClickable]="true" (clicked)="onClicked('info card')">
+            <org-card-header title="Clickable · info" subtitle="[isClickable]=true." />
             <org-card-content>
               The whole surface is interactive. Hover, click, or tab-then-Enter / Space.
             </org-card-content>
           </org-card>
-          <org-card color="safe" boxBorder="border-emphasize" (clicked)="onClicked('safe emphasize')">
+          <org-card
+            color="safe"
+            boxBorder="border-emphasize"
+            [isClickable]="true"
+            (clicked)="onClicked('safe emphasize')"
+          >
             <org-card-header title="Clickable · safe · emphasize" subtitle="Pairs with any visual variant." />
             <org-card-content>The clickable affordance respects all other card visual inputs.</org-card-content>
           </org-card>
-          <org-card color="caution" boxBackground="colorless" (clicked)="onClicked('caution colorless')">
+          <org-card
+            color="caution"
+            boxBackground="colorless"
+            [isClickable]="true"
+            (clicked)="onClicked('caution colorless')"
+          >
             <org-card-header title="Clickable · caution · colorless" subtitle="Hover / pressed use neutral tints." />
             <org-card-content>
               In colorless mode the hover and pressed states fall back to neutral background tokens.
@@ -469,16 +432,16 @@ class CardLiveDemoStory {
     <org-design-system-demo-expected-behaviour>
       <ul class="list-inside list-disc flex flex-col gap-1">
         <li>
-          <strong>Auto-detect</strong>: a (clicked) listener on org-card flips the inner box into clickable mode — no
-          extra input
+          <strong>Explicit opt-in</strong>: setting [isClickable]=true on org-card flips the inner box into clickable
+          mode
         </li>
         <li>
-          <strong>Static cards stay static</strong>: cards without a (clicked) listener show no cursor / hover / focus /
-          aria affordance
+          <strong>Static cards stay static</strong>: cards with isClickable false show no cursor / hover / focus / aria
+          affordance
         </li>
         <li>
-          <strong>Forwarding is lazy</strong>: the card only wires up to the box's clicked when its own consumer is
-          listening
+          <strong>Clicked output</strong>: while clickable, activation emits the card's (clicked) output for consumers
+          to handle
         </li>
         <li><strong>Keyboard</strong>: Enter and Space activate the card; Space's default page scroll is suppressed</li>
         <li><strong>Aria</strong>: role="button" and tabindex="0" applied to the org-box host element</li>
@@ -517,7 +480,7 @@ class CardClickableShowcaseStory {
       <org-design-system-demo-header
         slot="header"
         title="Expandable"
-        description="Setting [isExpandable]=true makes the header act as a toggle button. Clicking or activating it flips the [(isExpanded)] model, which the image, content, and footer regions react to. Per design, the (clicked) whole-card affordance is not wired up when the card is expandable — the header toggle owns the interaction."
+        description="Setting [isExpandable]=true makes the header act as a toggle button. Clicking or activating it flips the [(isExpanded)] model, which the image, content, and footer regions react to. Per design, the [isClickable] whole-card affordance is not wired up when the card is expandable — the header toggle owns the interaction."
       />
       <org-design-system-demo-canvas slot="canvas">
         <div class="grid grid-cols-2 gap-3 items-start max-w-3xl">
@@ -593,8 +556,8 @@ class CardClickableShowcaseStory {
         </li>
         <li><strong>Aria</strong>: aria-expanded reflects the current state on the toggle button</li>
         <li>
-          <strong>Mutually exclusive with (clicked)</strong>: when isExpandable is true, the whole-card (clicked)
-          affordance is intentionally skipped — only one click target per surface
+          <strong>Mutually exclusive with [isClickable]</strong>: when isExpandable is true, the whole-card
+          [isClickable] affordance is intentionally skipped — only one click target per surface
         </li>
       </ul>
     </org-design-system-demo-expected-behaviour>

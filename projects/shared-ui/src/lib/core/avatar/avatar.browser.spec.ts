@@ -26,6 +26,7 @@ import { AvatarStack, type AvatarStackSize } from './avatar-stack';
       [imgSrc]="imgSrc()"
       [imgEmail]="imgEmail()"
       [imgAlt]="imgAlt()"
+      [isClickable]="isClickable()"
       (clicked)="handleClicked()"
     />
     <pre data-testid="readout">{{ readout() }}</pre>
@@ -44,6 +45,7 @@ class AvatarInteractiveHost {
   public readonly imgSrc = signal<string | null | undefined>(undefined);
   public readonly imgEmail = signal<string | null | undefined>(undefined);
   public readonly imgAlt = signal<string | null | undefined>(undefined);
+  public readonly isClickable = signal<boolean>(false);
 
   protected readonly clickCount = signal<number>(0);
 
@@ -95,6 +97,7 @@ type AvatarHostConfig = {
   imgSrc?: string | null;
   imgEmail?: string | null;
   imgAlt?: string | null;
+  isClickable?: boolean;
 };
 
 /**
@@ -191,6 +194,10 @@ describe('Avatar (browser)', () => {
 
       if (config.imgAlt !== undefined) {
         instance.imgAlt.set(config.imgAlt);
+      }
+
+      if (config.isClickable !== undefined) {
+        instance.isClickable.set(config.isClickable);
       }
     });
 
@@ -589,7 +596,7 @@ describe('Avatar (browser)', () => {
     });
 
     it('renders an inner button with an aria-label when clickable', () => {
-      const fixture = createInteractiveAvatar();
+      const fixture = createInteractiveAvatar({ isClickable: true });
       const host = queryByTestId(fixture, 'avatar');
 
       const innerButton = host.querySelector('button');
@@ -607,8 +614,16 @@ describe('Avatar (browser)', () => {
       expect(host.querySelector(':scope > span')).not.toBeNull();
     });
 
+    it('stays a non-button span when clicked is bound but isClickable is false', () => {
+      const fixture = createInteractiveAvatar({ isClickable: false });
+      const host = queryByTestId(fixture, 'avatar');
+
+      expect(host.querySelector('button')).toBeNull();
+      expect(host.getAttribute('data-clickable')).toBeNull();
+    });
+
     it('emits clicked on inner button click', async () => {
-      const fixture = createInteractiveAvatar();
+      const fixture = createInteractiveAvatar({ isClickable: true });
       const host = queryByTestId(fixture, 'avatar');
       const innerButton = host.querySelector('button') as HTMLButtonElement;
       const readout = queryByTestId(fixture, 'readout');
@@ -621,7 +636,7 @@ describe('Avatar (browser)', () => {
     });
 
     it('disables the inner button when disabled', () => {
-      const fixture = createInteractiveAvatar({ disabled: true });
+      const fixture = createInteractiveAvatar({ disabled: true, isClickable: true });
       const host = queryByTestId(fixture, 'avatar');
 
       const innerButton = host.querySelector('button') as HTMLButtonElement;
@@ -630,7 +645,7 @@ describe('Avatar (browser)', () => {
     });
 
     it('does not emit clicked when disabled', async () => {
-      const fixture = createInteractiveAvatar({ disabled: true });
+      const fixture = createInteractiveAvatar({ disabled: true, isClickable: true });
       const host = queryByTestId(fixture, 'avatar');
       const innerButton = host.querySelector('button') as HTMLButtonElement;
       const readout = queryByTestId(fixture, 'readout');

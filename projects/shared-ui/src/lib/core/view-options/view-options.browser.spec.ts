@@ -50,7 +50,7 @@ class ViewOptionsLabelsHost {
   imports: [ViewOptions],
   host: { class: 'block' },
   template: `
-    <org-view-options [(fields)]="fields" (closed)="onClose()" />
+    <org-view-options [(fields)]="fields" [closable]="true" (closed)="onClose()" />
     <pre data-testid="view-options-closed-readout">{{ readout() }}</pre>
   `,
 })
@@ -62,6 +62,21 @@ class ViewOptionsClosedHost {
 
   protected onClose(): void {
     this.closeCount.update((value) => value + 1);
+  }
+}
+
+@Component({
+  selector: 'test-view-options-closed-not-closable-host',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [ViewOptions],
+  host: { class: 'block' },
+  template: `<org-view-options [(fields)]="fields" (closed)="onClose()" />`,
+})
+class ViewOptionsClosedNotClosableHost {
+  public readonly fields = signal<ViewField[]>(buildFields());
+
+  protected onClose(): void {
+    // intentionally empty — present only to bind the closed output without marking the panel closable
   }
 }
 
@@ -140,18 +155,25 @@ describe('ViewOptions (browser)', () => {
   });
 
   describe('close button', () => {
-    it('hides the close button when no listener is bound', async () => {
+    it('hides the close button when closable is false', async () => {
       const fixture = createFixture(ViewOptionsDefaultHost);
       await flush(fixture);
 
       expect(queryAll(fixture, 'view-options-close-button').length).toBe(0);
     });
 
-    it('shows the close button when a listener is bound', async () => {
+    it('shows the close button when closable is true', async () => {
       const fixture = createFixture(ViewOptionsClosedHost);
       await flush(fixture);
 
       expect(queryAll(fixture, 'view-options-close-button').length).toBe(1);
+    });
+
+    it('hides the close button when closed is bound but closable is false', async () => {
+      const fixture = createFixture(ViewOptionsClosedNotClosableHost);
+      await flush(fixture);
+
+      expect(queryAll(fixture, 'view-options-close-button').length).toBe(0);
     });
 
     it('emits closed on each click', async () => {

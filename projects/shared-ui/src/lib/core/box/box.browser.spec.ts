@@ -18,6 +18,7 @@ import { BoxBrainDirective } from './box-brain';
       [border]="border()"
       [padding]="padding()"
       [background]="background()"
+      [isClickable]="isClickable()"
       (clicked)="handleClicked()"
     >
       <span data-testid="content">box content</span>
@@ -32,6 +33,7 @@ class BoxInteractiveHost {
   public readonly border = signal<BoxBorder>('bordered');
   public readonly padding = signal<BoxPadding>('base');
   public readonly background = signal<BoxBackground>('colored');
+  public readonly isClickable = signal<boolean>(true);
 
   protected readonly clickCount = signal<number>(0);
 
@@ -73,6 +75,7 @@ type BoxHostConfig = {
   border?: BoxBorder;
   padding?: BoxPadding;
   background?: BoxBackground;
+  isClickable?: boolean;
 };
 
 describe('Box (browser)', () => {
@@ -95,6 +98,10 @@ describe('Box (browser)', () => {
 
       if (config.background !== undefined) {
         instance.background.set(config.background);
+      }
+
+      if (config.isClickable !== undefined) {
+        instance.isClickable.set(config.isClickable);
       }
     });
 
@@ -175,13 +182,28 @@ describe('Box (browser)', () => {
       expect(host.getAttribute('data-clickable')).toBeNull();
     });
 
-    it('applies the clickable host attributes when a clicked listener is attached', () => {
+    it('applies the clickable host attributes when isClickable is set', () => {
       const fixture = createInteractiveBox();
       const host = queryByTestId(fixture, 'box');
 
       expect(host.getAttribute('role')).toBe('button');
       expect(host.getAttribute('tabindex')).toBe('0');
       expect(host.getAttribute('data-clickable')).toBe('');
+    });
+
+    it('stays non-interactive when clicked is bound but isClickable is false', async () => {
+      const fixture = createInteractiveBox({ isClickable: false });
+      const host = queryByTestId(fixture, 'box');
+      const readout = queryByTestId(fixture, 'readout');
+
+      expect(host.getAttribute('role')).toBeNull();
+      expect(host.getAttribute('tabindex')).toBeNull();
+      expect(host.getAttribute('data-clickable')).toBeNull();
+
+      await userEvent.click(host);
+      await flush(fixture);
+
+      expect(readout.textContent).toContain('clickCount=0');
     });
 
     it('enables the clickable host attributes when externally forced on', async () => {

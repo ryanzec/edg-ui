@@ -1,7 +1,8 @@
 ---
 name: production-review
-description: Use when doing a production review of the code.
+description: Use this skill when doing a production review of code. Verifies code follows all rules and reports only violations, producing a grouped fix-plan file in `ai-plans` when violations exist.
 ---
+# Production Review Skill
 
 You are tasked to verify the referenced code (and all related code) is following all rules as needed.
 

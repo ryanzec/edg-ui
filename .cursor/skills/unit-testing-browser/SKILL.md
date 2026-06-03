@@ -1,19 +1,23 @@
 ---
 name: unit-testing-browser
-description: Use this skill whenever being asked to write unit style tests for angular components, angular directives, or any code that requires a browser to properly test.
+description: Use this skill whenever writing unit tests for Angular components, directives, or any code that needs a browser. Covers vitest browser-mode host-wrapper fixtures, readout-string assertions, the shared `vitest-browser-utils`, and CDK-overlay/cursor gotchas.
 ---
-# Unit Testing Browser
+# Unit Testing Browser Skill
 
 You are tasked to create unit style tests utilizing vitest's browser mode.
 
-# MUST FOLLOW RULES
-
+# Rules
 - **ONLY** use vitest's browser feature for angular components, angular directives, or any code that requires a browser to properly test. 
 - All generic code that might apply to any vitest browser test needs to be add to `vitest-browser-utils.ts` so it is re-usable.
 - **ALWAYS** favor stub when they are more realiable (since these are effectively unit tests).
+- **ALWAYS** test brain component through the primary component whenever possible
+- When testing subcomponents of the primary component, **ALWAYS** testing them through the primary component and **NEVER** independently.
+- **ALWAYS** use readout string pattern instead of structured json to avoid whitespace brittleness.
+- When testing reactive form related functionality, **ALWAYS** create a specific shell for testing that functionality.
+- Browser based tests must focus on **LOGICAL** and **A11Y** functionality and **NOT** styling concerns.
+- **NEVER** validation any logging from `logManager` in tests.
 
-# General Testing Guidelines
-
+# Vitest Gotcha
 - **ALWAYS** park the virtual cursor on the trigger input before opening a CDK overlay in vitest browser tests (e.g. `await userEvent.hover(input)` then focus), since the cursor stays where the last `userEvent` left it and an overlay opening beneath it fires a stray `mouseenter` that focuses whatever option sits under the cursor and corrupts keyboard-nav/focus assertions.
 
 # Fixture Creation Pattern
