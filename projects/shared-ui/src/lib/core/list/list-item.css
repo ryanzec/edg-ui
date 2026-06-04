@@ -1,10 +1,62 @@
 @layer components {
   :host {
     display: block;
+    border-style: solid;
+    border-color: var(--list-item-border-color);
+    border-left-color: var(--list-item-border-left-color);
+    border-width: var(--list-item-border-top-width) 0 var(--list-item-border-bottom-width)
+      var(--list-item-border-left-width);
   }
 
   :host li {
     list-style: none;
+  }
+
+  /* items-only and full both render a separator under every item except the last (full adds the outer frame on the list) */
+  :host([data-parent-border='items-only']:not(:last-child)),
+  :host([data-parent-border='full']:not(:last-child)) {
+    --list-item-border-bottom-width: var(--border-width);
+  }
+
+  /* emphasize-color: a thick left accent border using the color's border token */
+  :host([data-emphasize-color='primary']) {
+    --list-item-border-left-width: var(--border-width-emphasize);
+    --list-item-border-left-color: var(--color-primary-border);
+  }
+
+  :host([data-emphasize-color='secondary']) {
+    --list-item-border-left-width: var(--border-width-emphasize);
+    --list-item-border-left-color: var(--color-secondary-border);
+  }
+
+  :host([data-emphasize-color='neutral']) {
+    --list-item-border-left-width: var(--border-width-emphasize);
+    --list-item-border-left-color: var(--color-neutral-border);
+  }
+
+  :host([data-emphasize-color='safe']) {
+    --list-item-border-left-width: var(--border-width-emphasize);
+    --list-item-border-left-color: var(--color-safe-border);
+  }
+
+  :host([data-emphasize-color='info']) {
+    --list-item-border-left-width: var(--border-width-emphasize);
+    --list-item-border-left-color: var(--color-info-border);
+  }
+
+  :host([data-emphasize-color='caution']) {
+    --list-item-border-left-width: var(--border-width-emphasize);
+    --list-item-border-left-color: var(--color-caution-border);
+  }
+
+  :host([data-emphasize-color='warning']) {
+    --list-item-border-left-width: var(--border-width-emphasize);
+    --list-item-border-left-color: var(--color-warning-border);
+  }
+
+  :host([data-emphasize-color='danger']) {
+    --list-item-border-left-width: var(--border-width-emphasize);
+    --list-item-border-left-color: var(--color-danger-border);
   }
 
   .list-item-content {
@@ -56,6 +108,12 @@
   /* single-mode parent list rounds the selected and hovered item content */
   :host([data-parent-select-mode='single']) .list-item-content {
     border-radius: var(--list-item-radius);
+  }
+
+  /* a bordered list or an emphasized item renders square item corners, even in single select-mode */
+  :host([data-parent-border]),
+  :host([data-emphasize-color]) {
+    --list-item-radius: 0;
   }
 
   /* keeps the auto-rendered external-href icon aligned to the rightmost edge of the row */

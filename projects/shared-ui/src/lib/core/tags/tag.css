@@ -38,105 +38,105 @@
     --tag-gap: var(--spacing-1_5);
   }
 
-  /* color × variant: primary */
-  :host([data-color='primary'][data-variant='strong']) {
+  /* color × color strength: primary */
+  :host([data-color='primary'][data-color-strength='strong']) {
     --tag-bg: var(--color-primary);
     --tag-fg: var(--color-primary-on);
     --tag-border: var(--color-primary);
   }
 
-  :host([data-color='primary'][data-variant='soft']) {
+  :host([data-color='primary'][data-color-strength='soft']) {
     --tag-bg: var(--color-primary-soft);
     --tag-fg: var(--color-primary);
     --tag-border: var(--color-primary-soft);
   }
 
-  /* color × variant: secondary */
-  :host([data-color='secondary'][data-variant='strong']) {
+  /* color × color strength: secondary */
+  :host([data-color='secondary'][data-color-strength='strong']) {
     --tag-bg: var(--color-secondary);
     --tag-fg: var(--color-secondary-on);
     --tag-border: var(--color-secondary);
   }
 
-  :host([data-color='secondary'][data-variant='soft']) {
+  :host([data-color='secondary'][data-color-strength='soft']) {
     --tag-bg: var(--color-secondary-soft);
     --tag-fg: var(--color-secondary);
     --tag-border: var(--color-secondary-soft);
   }
 
-  /* color × variant: neutral */
-  :host([data-color='neutral'][data-variant='strong']) {
+  /* color × color strength: neutral */
+  :host([data-color='neutral'][data-color-strength='strong']) {
     --tag-bg: var(--color-neutral);
     --tag-fg: var(--color-neutral-on);
     --tag-border: var(--color-neutral);
   }
 
-  :host([data-color='neutral'][data-variant='soft']) {
+  :host([data-color='neutral'][data-color-strength='soft']) {
     --tag-bg: var(--color-neutral-soft);
     --tag-fg: var(--color-fg);
     --tag-border: var(--color-neutral-soft);
   }
 
-  /* color × variant: safe */
-  :host([data-color='safe'][data-variant='strong']) {
+  /* color × color strength: safe */
+  :host([data-color='safe'][data-color-strength='strong']) {
     --tag-bg: var(--color-safe);
     --tag-fg: var(--color-safe-on);
     --tag-border: var(--color-safe);
   }
 
-  :host([data-color='safe'][data-variant='soft']) {
+  :host([data-color='safe'][data-color-strength='soft']) {
     --tag-bg: var(--color-safe-soft);
     --tag-fg: var(--color-safe);
     --tag-border: var(--color-safe-soft);
   }
 
-  /* color × variant: info */
-  :host([data-color='info'][data-variant='strong']) {
+  /* color × color strength: info */
+  :host([data-color='info'][data-color-strength='strong']) {
     --tag-bg: var(--color-info);
     --tag-fg: var(--color-info-on);
     --tag-border: var(--color-info);
   }
 
-  :host([data-color='info'][data-variant='soft']) {
+  :host([data-color='info'][data-color-strength='soft']) {
     --tag-bg: var(--color-info-soft);
     --tag-fg: var(--color-info);
     --tag-border: var(--color-info-soft);
   }
 
-  /* color × variant: caution */
-  :host([data-color='caution'][data-variant='strong']) {
+  /* color × color strength: caution */
+  :host([data-color='caution'][data-color-strength='strong']) {
     --tag-bg: var(--color-caution);
     --tag-fg: var(--color-caution-on);
     --tag-border: var(--color-caution);
   }
 
-  :host([data-color='caution'][data-variant='soft']) {
+  :host([data-color='caution'][data-color-strength='soft']) {
     --tag-bg: var(--color-caution-soft);
     --tag-fg: var(--color-caution);
     --tag-border: var(--color-caution-soft);
   }
 
-  /* color × variant: warning */
-  :host([data-color='warning'][data-variant='strong']) {
+  /* color × color strength: warning */
+  :host([data-color='warning'][data-color-strength='strong']) {
     --tag-bg: var(--color-warning);
     --tag-fg: var(--color-warning-on);
     --tag-border: var(--color-warning);
   }
 
-  :host([data-color='warning'][data-variant='soft']) {
+  :host([data-color='warning'][data-color-strength='soft']) {
     --tag-bg: var(--color-warning-soft);
     --tag-fg: var(--color-warning);
     --tag-border: var(--color-warning-soft);
   }
 
-  /* color × variant: danger */
-  :host([data-color='danger'][data-variant='strong']) {
+  /* color × color strength: danger */
+  :host([data-color='danger'][data-color-strength='strong']) {
     --tag-bg: var(--color-danger);
     --tag-fg: var(--color-danger-on);
     --tag-border: var(--color-danger);
   }
 
-  :host([data-color='danger'][data-variant='soft']) {
+  :host([data-color='danger'][data-color-strength='soft']) {
     --tag-bg: var(--color-danger-soft);
     --tag-fg: var(--color-danger);
     --tag-border: var(--color-danger-soft);

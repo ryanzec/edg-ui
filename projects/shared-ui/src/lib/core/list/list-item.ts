@@ -5,6 +5,7 @@ import { angularUtils, logManager } from '@organization/shared-utils';
 import { ListItemBrainDirective } from '../list/list-item-brain';
 import { List, type ListSize } from './list';
 import { ListItemIcon } from './list-item-icon';
+import { allComponentColors, type ComponentColor } from '../types/component-types';
 import type { IconName } from '../icon/icon-brain';
 
 /** all available list item tag values */
@@ -37,6 +38,15 @@ export const LIST_ITEM_FORCE_CLICKABLE_DEFAULT = false;
 /** the default hide-label state of the list item */
 export const LIST_ITEM_HIDE_LABEL_DEFAULT = false;
 
+/** all available list item emphasize-color values */
+export const allListItemEmphasizeColors = ['none', ...allComponentColors] as const;
+
+/** the emphasize accent applied as a thick left border; 'none' renders no accent */
+export type ListItemEmphasizeColor = 'none' | ComponentColor;
+
+/** the default emphasize-color of the list item */
+export const LIST_ITEM_EMPHASIZE_COLOR_DEFAULT: ListItemEmphasizeColor = 'none';
+
 /** the icon auto-rendered as a post indicator when showAsExternal is true */
 const EXTERNAL_HREF_ICON_NAME: IconName = 'arrow-up-right';
 
@@ -65,6 +75,8 @@ const EXTERNAL_HREF_ICON_NAME: IconName = 'arrow-up-right';
     ['[attr.data-override-size]']: 'overrideSize()',
     ['[attr.data-force-clickable]']: 'forceClickable() ? "" : null',
     ['[attr.data-parent-select-mode]']: 'parentList.selectMode() ?? null',
+    ['[attr.data-parent-border]']: 'parentList.border() === "none" ? null : parentList.border()',
+    ['[attr.data-emphasize-color]']: 'emphasizeColor() === "none" ? null : emphasizeColor()',
   },
 })
 export class ListItem {
@@ -113,6 +125,9 @@ export class ListItem {
    * projected pre content conveys the visible meaning (e.g. collapsed navigation rows)
    */
   public readonly hideLabel = input<boolean>(LIST_ITEM_HIDE_LABEL_DEFAULT);
+
+  /** the emphasize accent color rendered as a thick left border; 'none' renders no accent */
+  public readonly emphasizeColor = input<ListItemEmphasizeColor>(LIST_ITEM_EMPHASIZE_COLOR_DEFAULT);
 
   /** the resolved selected state combining the external isSelected input and the router link active state */
   protected readonly isActuallySelected = computed<boolean>(() => this.isSelected() || this.brain.isRouterLinkActive());

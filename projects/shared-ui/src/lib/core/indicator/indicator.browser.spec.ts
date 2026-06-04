@@ -3,7 +3,14 @@ import { type ComponentFixture } from '@angular/core/testing';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { vitestBrowserUtils } from '../../../../../../vitest-browser-utils';
 import { Icon } from '../icon/icon';
-import { Indicator, type IndicatorColor, type IndicatorPosition, type IndicatorSize } from './indicator';
+import {
+  Indicator,
+  type IndicatorColor,
+  type IndicatorColorStrength,
+  type IndicatorPosition,
+  type IndicatorShape,
+  type IndicatorSize,
+} from './indicator';
 import { IndicatorAnchor } from './indicator-anchor';
 
 @Component({
@@ -15,7 +22,9 @@ import { IndicatorAnchor } from './indicator-anchor';
     <org-indicator
       data-testid="indicator"
       [color]="color()"
+      [colorStrength]="colorStrength()"
       [size]="size()"
+      [shape]="shape()"
       [number]="number()"
       [ring]="ring()"
       [pulse]="pulse()"
@@ -31,7 +40,9 @@ import { IndicatorAnchor } from './indicator-anchor';
 })
 class IndicatorInteractiveHost {
   public readonly color = signal<IndicatorColor>('primary');
+  public readonly colorStrength = signal<IndicatorColorStrength>('strong');
   public readonly size = signal<IndicatorSize>('base');
+  public readonly shape = signal<IndicatorShape>('circle');
   public readonly number = signal<number | null | undefined>(undefined);
   public readonly ring = signal<boolean>(false);
   public readonly pulse = signal<boolean>(false);
@@ -57,7 +68,9 @@ class IndicatorAnchorHost {}
 
 type IndicatorHostConfig = {
   color?: IndicatorColor;
+  colorStrength?: IndicatorColorStrength;
   size?: IndicatorSize;
+  shape?: IndicatorShape;
   number?: number | null;
   ring?: boolean;
   pulse?: boolean;
@@ -77,8 +90,16 @@ describe('Indicator (browser)', () => {
         instance.color.set(config.color);
       }
 
+      if (config.colorStrength !== undefined) {
+        instance.colorStrength.set(config.colorStrength);
+      }
+
       if (config.size !== undefined) {
         instance.size.set(config.size);
+      }
+
+      if (config.shape !== undefined) {
+        instance.shape.set(config.shape);
       }
 
       if (config.number !== undefined) {
@@ -114,13 +135,15 @@ describe('Indicator (browser)', () => {
   afterEach(destroyFixture);
 
   describe('host attribute reflection', () => {
-    it('renders the default mode, color, and size', () => {
+    it('renders the default mode, color, color strength, and size', () => {
       const fixture = createIndicator();
       const host = queryByTestId(fixture, 'indicator');
 
       expect(host.getAttribute('data-mode')).toBe('dot');
       expect(host.getAttribute('data-color')).toBe('primary');
+      expect(host.getAttribute('data-color-strength')).toBe('strong');
       expect(host.getAttribute('data-size')).toBe('base');
+      expect(host.getAttribute('data-shape')).toBe('circle');
     });
 
     it('omits position, ring, pulse, and fade by default', () => {
@@ -154,6 +177,25 @@ describe('Indicator (browser)', () => {
       expect(host.getAttribute('data-size')).toBe('sm');
     });
 
+    it('reflects the colorStrength input', () => {
+      const fixture = createIndicator({ colorStrength: 'soft' });
+      const host = queryByTestId(fixture, 'indicator');
+
+      expect(host.getAttribute('data-color-strength')).toBe('soft');
+    });
+
+    it('updates the color strength attribute when colorStrength changes', async () => {
+      const fixture = createIndicator();
+      const host = queryByTestId(fixture, 'indicator');
+
+      expect(host.getAttribute('data-color-strength')).toBe('strong');
+
+      fixture.componentInstance.colorStrength.set('soft');
+      await flush(fixture);
+
+      expect(host.getAttribute('data-color-strength')).toBe('soft');
+    });
+
     it('updates the color attribute when color changes', async () => {
       const fixture = createIndicator();
       const host = queryByTestId(fixture, 'indicator');
@@ -172,6 +214,25 @@ describe('Indicator (browser)', () => {
       await flush(fixture);
 
       expect(host.getAttribute('data-size')).toBe('sm');
+    });
+
+    it('reflects the shape input', () => {
+      const fixture = createIndicator({ shape: 'rounded' });
+      const host = queryByTestId(fixture, 'indicator');
+
+      expect(host.getAttribute('data-shape')).toBe('rounded');
+    });
+
+    it('updates the shape attribute when shape changes', async () => {
+      const fixture = createIndicator();
+      const host = queryByTestId(fixture, 'indicator');
+
+      expect(host.getAttribute('data-shape')).toBe('circle');
+
+      fixture.componentInstance.shape.set('rounded');
+      await flush(fixture);
+
+      expect(host.getAttribute('data-shape')).toBe('rounded');
     });
   });
 

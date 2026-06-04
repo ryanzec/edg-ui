@@ -381,12 +381,19 @@ class NotificationsIntentsStory implements OnDestroy {
     </ng-template>
 
     <ng-template [orgTypedContext]="idType" #cautionActions let-id>
-      <org-button color="primary" variant="soft" size="sm" label="Add card" (click)="dismiss(id)" />
+      <org-button
+        color="primary"
+        variant="filled"
+        colorStrength="soft"
+        size="sm"
+        label="Add card"
+        (click)="dismiss(id)"
+      />
       <org-button color="neutral" variant="text" size="sm" label="Remind later" (click)="dismiss(id)" />
     </ng-template>
 
     <ng-template [orgTypedContext]="idType" #mentionActions let-id>
-      <org-button color="primary" variant="soft" size="sm" label="Reply" (click)="dismiss(id)" />
+      <org-button color="primary" variant="filled" colorStrength="soft" size="sm" label="Reply" (click)="dismiss(id)" />
     </ng-template>
 
     <div class="flex flex-wrap gap-2">

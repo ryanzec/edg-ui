@@ -82,6 +82,10 @@ const OVERLAY_MENU_TOKENS_CSS = path.join(
   'projects/shared-ui/src/lib/core/overlay-menu/overlay-menu-tokens.css',
 );
 const PAGINATION_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/core/pagination/pagination-tokens.css');
+const PROGRESS_BAR_TOKENS_CSS = path.join(
+  REPO_ROOT,
+  'projects/shared-ui/src/lib/core/progress-bar/progress-bar-tokens.css',
+);
 const RADIO_TOKENS_CSS = path.join(REPO_ROOT, 'projects/shared-ui/src/lib/core/radio/radio-tokens.css');
 const RADIO_GROUP_TOKENS_CSS = path.join(
   REPO_ROOT,
@@ -310,7 +314,7 @@ async function main() {
   const buttonContent = cleanCss(fs.readFileSync(BUTTON_TOKENS_CSS, 'utf-8'));
   const buttonToggleContent = cleanCss(fs.readFileSync(BUTTON_TOGGLE_TOKENS_CSS, 'utf-8'));
   const calendarContent = cleanCss(fs.readFileSync(CALENDAR_TOKENS_CSS, 'utf-8'));
-  const cardContent = cleanCss(fs.readFileSync(CARD_TOKENS_CSS, 'utf-8'))
+  const cardContent = cleanCss(fs.readFileSync(CARD_TOKENS_CSS, 'utf-8'));
   const checkboxContent = cleanCss(fs.readFileSync(CHECKBOX_TOKENS_CSS, 'utf-8'));
   const checkboxGroupContent = cleanCss(fs.readFileSync(CHECKBOX_GROUP_TOKENS_CSS, 'utf-8'));
   const checkboxToggleContent = cleanCss(fs.readFileSync(CHECKBOX_TOGGLE_TOKENS_CSS, 'utf-8'));
@@ -330,6 +334,7 @@ async function main() {
   const kbdContent = cleanCss(fs.readFileSync(KBD_TOKENS_CSS, 'utf-8'));
   const overlayMenuContent = cleanCss(fs.readFileSync(OVERLAY_MENU_TOKENS_CSS, 'utf-8'));
   const paginationContent = cleanCss(fs.readFileSync(PAGINATION_TOKENS_CSS, 'utf-8'));
+  const progressBarContent = cleanCss(fs.readFileSync(PROGRESS_BAR_TOKENS_CSS, 'utf-8'));
   const radioContent = cleanCss(fs.readFileSync(RADIO_TOKENS_CSS, 'utf-8'));
   const radioGroupContent = cleanCss(fs.readFileSync(RADIO_GROUP_TOKENS_CSS, 'utf-8'));
   const skeletonContent = cleanCss(fs.readFileSync(SKELETON_TOKENS_CSS, 'utf-8'));
@@ -386,6 +391,7 @@ async function main() {
     ...findBlocks(kbdContent, ':root').map(extractVariables),
     ...findBlocks(overlayMenuContent, ':root').map(extractVariables),
     ...findBlocks(paginationContent, ':root').map(extractVariables),
+    ...findBlocks(progressBarContent, ':root').map(extractVariables),
     ...findBlocks(radioContent, ':root').map(extractVariables),
     ...findBlocks(radioGroupContent, ':root').map(extractVariables),
     ...findBlocks(skeletonContent, ':root').map(extractVariables),
@@ -439,6 +445,7 @@ async function main() {
     ...findBlocks(kbdContent, '.dark').map(extractVariables),
     ...findBlocks(overlayMenuContent, '.dark').map(extractVariables),
     ...findBlocks(paginationContent, '.dark').map(extractVariables),
+    ...findBlocks(progressBarContent, '.dark').map(extractVariables),
     ...findBlocks(radioContent, '.dark').map(extractVariables),
     ...findBlocks(radioGroupContent, '.dark').map(extractVariables),
     ...findBlocks(skeletonContent, '.dark').map(extractVariables),

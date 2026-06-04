@@ -9,6 +9,7 @@
     height: var(--indicator-height);
     padding-inline: var(--indicator-pad-x);
     border-radius: var(--indicator-radius);
+    border: var(--indicator-border-width) solid var(--indicator-border-color);
     background: var(--indicator-bg);
     color: var(--indicator-fg);
     font-family: inherit;
@@ -33,6 +34,11 @@
     padding-inline: var(--indicator-icon-pad-x);
   }
 
+  /* rounded shape: swap the pill radius for a per-size rounded-box radius (applies across all modes) */
+  :host([data-shape='rounded']) {
+    --indicator-radius: var(--indicator-rounded-radius);
+  }
+
   /* sizes */
   :host([data-size='sm']) {
     --indicator-dot-size: var(--spacing-1_5);
@@ -43,7 +49,7 @@
   }
 
   :host([data-size='base']) {
-    --indicator-dot-size: var(--spacing-2);
+    --indicator-dot-size: var(--spacing-3);
     --indicator-height: var(--spacing-4);
     --indicator-pad-x: var(--spacing-1);
     --indicator-font-size: var(--font-size-xs);
@@ -51,7 +57,7 @@
   }
 
   :host([data-size='lg']) {
-    --indicator-dot-size: var(--spacing-2_5);
+    --indicator-dot-size: var(--spacing-5);
     --indicator-height: var(--spacing-5);
     --indicator-pad-x: var(--spacing-1_5);
     --indicator-font-size: var(--font-size-sm);
@@ -62,49 +68,106 @@
   :host([data-color='primary']) {
     --indicator-bg: var(--color-primary);
     --indicator-fg: var(--color-primary-on);
+    --indicator-border-color: var(--color-primary);
     --indicator-fade-color: var(--color-primary-soft);
   }
 
   :host([data-color='secondary']) {
     --indicator-bg: var(--color-secondary);
     --indicator-fg: var(--color-secondary-on);
+    --indicator-border-color: var(--color-secondary);
     --indicator-fade-color: var(--color-secondary-soft);
   }
 
   :host([data-color='neutral']) {
     --indicator-bg: var(--color-neutral);
     --indicator-fg: var(--color-neutral-on);
+    --indicator-border-color: var(--color-neutral);
     --indicator-fade-color: var(--color-neutral-soft);
   }
 
   :host([data-color='safe']) {
     --indicator-bg: var(--color-safe);
     --indicator-fg: var(--color-safe-on);
+    --indicator-border-color: var(--color-safe);
     --indicator-fade-color: var(--color-safe-soft);
   }
 
   :host([data-color='info']) {
     --indicator-bg: var(--color-info);
     --indicator-fg: var(--color-info-on);
+    --indicator-border-color: var(--color-info);
     --indicator-fade-color: var(--color-info-soft);
   }
 
   :host([data-color='caution']) {
     --indicator-bg: var(--color-caution);
     --indicator-fg: var(--color-caution-on);
+    --indicator-border-color: var(--color-caution);
     --indicator-fade-color: var(--color-caution-soft);
   }
 
   :host([data-color='warning']) {
     --indicator-bg: var(--color-warning);
     --indicator-fg: var(--color-warning-on);
+    --indicator-border-color: var(--color-warning);
     --indicator-fade-color: var(--color-warning-soft);
   }
 
   :host([data-color='danger']) {
     --indicator-bg: var(--color-danger);
     --indicator-fg: var(--color-danger-on);
+    --indicator-border-color: var(--color-danger);
     --indicator-fade-color: var(--color-danger-soft);
+  }
+
+  /* soft strength: swap the solid fill for the soft tint + neutral foreground; fade halo uses the soft color at half opacity */
+  :host([data-color='primary'][data-color-strength='soft']) {
+    --indicator-bg: var(--color-primary-soft);
+    --indicator-fg: var(--color-fg);
+    --indicator-fade-color: color-mix(in oklch, var(--color-primary-soft) 50%, transparent);
+  }
+
+  :host([data-color='secondary'][data-color-strength='soft']) {
+    --indicator-bg: var(--color-secondary-soft);
+    --indicator-fg: var(--color-fg);
+    --indicator-fade-color: color-mix(in oklch, var(--color-secondary-soft) 50%, transparent);
+  }
+
+  :host([data-color='neutral'][data-color-strength='soft']) {
+    --indicator-bg: var(--color-neutral-soft);
+    --indicator-fg: var(--color-fg);
+    --indicator-fade-color: color-mix(in oklch, var(--color-neutral-soft) 50%, transparent);
+  }
+
+  :host([data-color='safe'][data-color-strength='soft']) {
+    --indicator-bg: var(--color-safe-soft);
+    --indicator-fg: var(--color-fg);
+    --indicator-fade-color: color-mix(in oklch, var(--color-safe-soft) 50%, transparent);
+  }
+
+  :host([data-color='info'][data-color-strength='soft']) {
+    --indicator-bg: var(--color-info-soft);
+    --indicator-fg: var(--color-fg);
+    --indicator-fade-color: color-mix(in oklch, var(--color-info-soft) 50%, transparent);
+  }
+
+  :host([data-color='caution'][data-color-strength='soft']) {
+    --indicator-bg: var(--color-caution-soft);
+    --indicator-fg: var(--color-fg);
+    --indicator-fade-color: color-mix(in oklch, var(--color-caution-soft) 50%, transparent);
+  }
+
+  :host([data-color='warning'][data-color-strength='soft']) {
+    --indicator-bg: var(--color-warning-soft);
+    --indicator-fg: var(--color-fg);
+    --indicator-fade-color: color-mix(in oklch, var(--color-warning-soft) 50%, transparent);
+  }
+
+  :host([data-color='danger'][data-color-strength='soft']) {
+    --indicator-bg: var(--color-danger-soft);
+    --indicator-fg: var(--color-fg);
+    --indicator-fade-color: color-mix(in oklch, var(--color-danger-soft) 50%, transparent);
   }
 
   /* outline ring: visible when sitting over imagery */
@@ -161,6 +224,15 @@
     background: var(--indicator-bg);
     z-index: -1;
     animation: var(--animate-org-indicator-pulse);
+  }
+
+  /*
+   * isolate establishes a stacking context on the host so the z-index:-1 ::before halo resolves behind the
+   * indicator's own content but above the surface it sits on — without it the halo is hoisted behind the
+   * nearest ancestor stacking context (the surrounding surface/card) and is never visible
+   */
+  :host([data-pulse]) {
+    isolation: isolate;
   }
 
   /* the pulse needs the host to act as a positioning context for ::before when the indicator is not pinned */

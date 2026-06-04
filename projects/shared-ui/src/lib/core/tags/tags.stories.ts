@@ -4,14 +4,14 @@ import type { Meta, StoryObj } from '@storybook/angular';
 import { ButtonToggle, ButtonToggleItem } from '../button-toggle/button-toggle';
 import { CheckboxToggle } from '../checkbox-toggle/checkbox-toggle';
 import { Input } from '../input/input';
-import { allComponentColors } from '../types/component-types';
+import { allColorStrengths, allComponentColors } from '../types/component-types';
 import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
 import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
 import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
 import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
 import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
 import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
-import { Tag, TagColor, TagSize, TagVariant, allTagSizes, allTagVariants } from './tag';
+import { Tag, TagColor, TagColorStrength, TagSize, allTagSizes } from './tag';
 import { TagIcon } from './tag-icon';
 import { Tags } from './tags';
 
@@ -21,9 +21,9 @@ const liveDemoColorItems: ButtonToggleItem[] = allComponentColors.map((color) =>
   buttonColor: 'primary',
 }));
 
-const liveDemoVariantItems: ButtonToggleItem[] = allTagVariants.map((variant) => ({
-  label: variant,
-  value: variant,
+const liveDemoColorStrengthItems: ButtonToggleItem[] = allColorStrengths.map((colorStrength) => ({
+  label: colorStrength,
+  value: colorStrength,
   buttonColor: 'primary',
 }));
 
@@ -50,7 +50,7 @@ const liveDemoSizeItems: ButtonToggleItem[] = allTagSizes.map((size) => ({
             Removed events: <strong>{{ removedCount() }}</strong>
           </p>
         </div>
-        <org-tag color="safe" variant="strong" [removable]="true">Removable Strong</org-tag>
+        <org-tag color="safe" colorStrength="strong" [removable]="true">Removable Strong</org-tag>
         <org-tag color="info" [removable]="true">
           <org-tag-icon name="cog" />
           Settings Tag
@@ -125,22 +125,22 @@ const meta: Meta<Tag> = {
 <div class="docs-top-level-overview">
   ## Tag Component
 
-  A small inline pill / chip for status, categories, and filters. Pill-shaped (fully rounded) so it never reads as a button. Two variants × eight semantic colors × three sizes; optional pre/post icons; optional built-in removable "×" affordance.
+  A small inline pill / chip for status, categories, and filters. Pill-shaped (fully rounded) so it never reads as a button. Two color strengths × eight semantic colors × three sizes; optional pre/post icons; optional built-in removable "×" affordance.
 
   ### Composition Parts
-  - **org-tag** — the pill container. Drives color, size, variant, and the built-in removable affordance.
+  - **org-tag** — the pill container. Drives color, size, color strength, and the built-in removable affordance.
   - **org-tag-icon** — slotted icon; the icon inherits the tag's color and per-size dimension. Becomes interactive when its \`clicked\` output is observed.
   - **org-tags** — purely presentational wrapper that lays out a group of \`<org-tag>\` children in a flex container that wraps with a consistent \`spacing-1\` gap.
 
   ### Features
   - Three sizes: xs, sm, base (default)
-  - Two visual variants: soft (default) and strong
+  - Two color strengths: soft (default) and strong
   - Eight color options: primary, secondary, neutral, safe, info, caution, warning, danger
   - Composable pre / post icons via &lt;org-tag-icon /&gt;
   - Built-in removable affordance via the tag-level \`removable\` input (overrides any post tag-icon)
   - Clickable icon support via the icon's \`clicked\` output
 
-  ### Variants
+  ### Color Strength
   - **soft** (default): Tinted background paired with same-color text. Quieter; designed to pack densely.
   - **strong**: Saturated fill with contrasting text. Reads at a glance; suitable for status and emphasis.
 
@@ -159,8 +159,8 @@ const meta: Meta<Tag> = {
   <!-- Basic tag -->
   <org-tag color="primary">Tag Content</org-tag>
 
-  <!-- Strong variant -->
-  <org-tag color="primary" variant="strong">Strong Tag</org-tag>
+  <!-- Strong color strength -->
+  <org-tag color="primary" colorStrength="strong">Strong Tag</org-tag>
 
   <!-- Tag with pre icon -->
   <org-tag color="info">
@@ -200,7 +200,7 @@ export const Default: Story = {
   args: {
     color: 'primary',
     size: 'base',
-    variant: 'soft',
+    colorStrength: 'soft',
     removable: false,
     removeAriaLabel: null,
   },
@@ -215,10 +215,10 @@ export const Default: Story = {
       options: allTagSizes,
       description: 'The size of the tag',
     },
-    variant: {
+    colorStrength: {
       control: 'select',
-      options: allTagVariants,
-      description: 'The visual variant of the tag',
+      options: allColorStrengths,
+      description: 'The color strength of the tag',
     },
     removable: {
       control: 'boolean',
@@ -233,7 +233,7 @@ export const Default: Story = {
     docs: {
       description: {
         story:
-          'Default tag with primary color and soft variant. Use the controls below to interact with the component, including toggling the built-in removable affordance.',
+          'Default tag with primary color and soft color strength. Use the controls below to interact with the component, including toggling the built-in removable affordance.',
       },
     },
   },
@@ -243,7 +243,7 @@ export const Default: Story = {
       <org-tag
         [color]="color"
         [size]="size"
-        [variant]="variant"
+        [colorStrength]="colorStrength"
         [removable]="removable"
         [removeAriaLabel]="removeAriaLabel"
       >
@@ -291,14 +291,14 @@ export const Default: Story = {
         <org-design-system-demo-header
           slot="header"
           title="Live demo"
-          description="Walk every combination — color, variant, size, and the optional icon and removable flags. The label text is editable so you can sanity-check truncation and icon spacing on real copy."
+          description="Walk every combination — color, color strength, size, and the optional icon and removable flags. The label text is editable so you can sanity-check truncation and icon spacing on real copy."
         />
         <org-design-system-demo-controls slot="controls">
           <org-design-system-demo-control-group label="Color">
             <org-button-toggle [items]="colorItems" formControlName="color" buttonSize="sm" />
           </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Variant">
-            <org-button-toggle [items]="variantItems" formControlName="variant" buttonSize="sm" />
+          <org-design-system-demo-control-group label="Color Strength">
+            <org-button-toggle [items]="colorStrengthItems" formControlName="colorStrength" buttonSize="sm" />
           </org-design-system-demo-control-group>
           <org-design-system-demo-control-group label="Size">
             <org-button-toggle [items]="sizeItems" formControlName="size" buttonSize="sm" />
@@ -326,7 +326,7 @@ export const Default: Story = {
           <div class="canvas-stage">
             <org-tag
               [color]="liveDemoForm.controls.color.value"
-              [variant]="liveDemoForm.controls.variant.value"
+              [colorStrength]="liveDemoForm.controls.colorStrength.value"
               [size]="liveDemoForm.controls.size.value"
               [removable]="liveDemoForm.controls.removable.value"
             >
@@ -346,12 +346,12 @@ export const Default: Story = {
 })
 class TagLiveDemoStory {
   protected readonly colorItems = liveDemoColorItems;
-  protected readonly variantItems = liveDemoVariantItems;
+  protected readonly colorStrengthItems = liveDemoColorStrengthItems;
   protected readonly sizeItems = liveDemoSizeItems;
 
   protected readonly liveDemoForm = new FormGroup({
     color: new FormControl<TagColor>('primary', { nonNullable: true }),
-    variant: new FormControl<TagVariant>('strong', { nonNullable: true }),
+    colorStrength: new FormControl<TagColorStrength>('strong', { nonNullable: true }),
     size: new FormControl<TagSize>('base', { nonNullable: true }),
     label: new FormControl<string>('Design', { nonNullable: true }),
     preIcon: new FormControl<boolean>(false, { nonNullable: true }),
@@ -365,7 +365,7 @@ export const LiveDemo: Story = {
     docs: {
       description: {
         story:
-          'Fully interactive demo. Walk every combination — color, variant, size, and the optional icon and removable flags — and edit the label text to sanity-check truncation and icon spacing on real copy.',
+          'Fully interactive demo. Walk every combination — color, color strength, size, and the optional icon and removable flags — and edit the label text to sanity-check truncation and icon spacing on real copy.',
       },
     },
   },
@@ -382,7 +382,7 @@ export const Showcase: Story = {
     docs: {
       description: {
         story:
-          'Comprehensive showcase of every tag variant axis — variant style, color × size matrix, color, size, icon composition, removable affordance, clickable icons, and realistic in-context placements — in a single scrollable view.',
+          'Comprehensive showcase of every tag axis — color strength style, color × size matrix, color, size, icon composition, removable affordance, clickable icons, and realistic in-context placements — in a single scrollable view.',
       },
     },
   },
@@ -390,15 +390,15 @@ export const Showcase: Story = {
     template: `
       <div class="flex flex-col gap-4">
         <org-design-system-demo>
-          <org-design-system-demo-header slot="header" title="Variant Comparison" />
+          <org-design-system-demo-header slot="header" title="Color Strength Comparison" />
           <org-design-system-demo-canvas slot="canvas">
             <org-tags>
-              <org-tag color="neutral" variant="strong">Design</org-tag>
-              <org-tag color="safe" variant="strong">Active</org-tag>
-              <org-tag color="info" variant="strong">Beta</org-tag>
-              <org-tag color="caution" variant="strong">Review</org-tag>
-              <org-tag color="danger" variant="strong">Blocked</org-tag>
-              <org-tag color="primary" variant="strong">Draft</org-tag>
+              <org-tag color="neutral" colorStrength="strong">Design</org-tag>
+              <org-tag color="safe" colorStrength="strong">Active</org-tag>
+              <org-tag color="info" colorStrength="strong">Beta</org-tag>
+              <org-tag color="caution" colorStrength="strong">Review</org-tag>
+              <org-tag color="danger" colorStrength="strong">Blocked</org-tag>
+              <org-tag color="primary" colorStrength="strong">Draft</org-tag>
             </org-tags>
             <org-tags>
               <org-tag color="neutral">Design</org-tag>
@@ -421,44 +421,44 @@ export const Showcase: Story = {
           <org-design-system-demo-header slot="header" title="Color × Size · Strong" />
           <org-design-system-demo-canvas slot="canvas">
             <org-tags>
-              <org-tag color="primary" variant="strong" size="xs">Label</org-tag>
-              <org-tag color="primary" variant="strong" size="sm">Label</org-tag>
-              <org-tag color="primary" variant="strong" size="base">Label</org-tag>
+              <org-tag color="primary" colorStrength="strong" size="xs">Label</org-tag>
+              <org-tag color="primary" colorStrength="strong" size="sm">Label</org-tag>
+              <org-tag color="primary" colorStrength="strong" size="base">Label</org-tag>
             </org-tags>
             <org-tags>
-              <org-tag color="secondary" variant="strong" size="xs">Label</org-tag>
-              <org-tag color="secondary" variant="strong" size="sm">Label</org-tag>
-              <org-tag color="secondary" variant="strong" size="base">Label</org-tag>
+              <org-tag color="secondary" colorStrength="strong" size="xs">Label</org-tag>
+              <org-tag color="secondary" colorStrength="strong" size="sm">Label</org-tag>
+              <org-tag color="secondary" colorStrength="strong" size="base">Label</org-tag>
             </org-tags>
             <org-tags>
-              <org-tag color="neutral" variant="strong" size="xs">Label</org-tag>
-              <org-tag color="neutral" variant="strong" size="sm">Label</org-tag>
-              <org-tag color="neutral" variant="strong" size="base">Label</org-tag>
+              <org-tag color="neutral" colorStrength="strong" size="xs">Label</org-tag>
+              <org-tag color="neutral" colorStrength="strong" size="sm">Label</org-tag>
+              <org-tag color="neutral" colorStrength="strong" size="base">Label</org-tag>
             </org-tags>
             <org-tags>
-              <org-tag color="safe" variant="strong" size="xs">Label</org-tag>
-              <org-tag color="safe" variant="strong" size="sm">Label</org-tag>
-              <org-tag color="safe" variant="strong" size="base">Label</org-tag>
+              <org-tag color="safe" colorStrength="strong" size="xs">Label</org-tag>
+              <org-tag color="safe" colorStrength="strong" size="sm">Label</org-tag>
+              <org-tag color="safe" colorStrength="strong" size="base">Label</org-tag>
             </org-tags>
             <org-tags>
-              <org-tag color="info" variant="strong" size="xs">Label</org-tag>
-              <org-tag color="info" variant="strong" size="sm">Label</org-tag>
-              <org-tag color="info" variant="strong" size="base">Label</org-tag>
+              <org-tag color="info" colorStrength="strong" size="xs">Label</org-tag>
+              <org-tag color="info" colorStrength="strong" size="sm">Label</org-tag>
+              <org-tag color="info" colorStrength="strong" size="base">Label</org-tag>
             </org-tags>
             <org-tags>
-              <org-tag color="caution" variant="strong" size="xs">Label</org-tag>
-              <org-tag color="caution" variant="strong" size="sm">Label</org-tag>
-              <org-tag color="caution" variant="strong" size="base">Label</org-tag>
+              <org-tag color="caution" colorStrength="strong" size="xs">Label</org-tag>
+              <org-tag color="caution" colorStrength="strong" size="sm">Label</org-tag>
+              <org-tag color="caution" colorStrength="strong" size="base">Label</org-tag>
             </org-tags>
             <org-tags>
-              <org-tag color="warning" variant="strong" size="xs">Label</org-tag>
-              <org-tag color="warning" variant="strong" size="sm">Label</org-tag>
-              <org-tag color="warning" variant="strong" size="base">Label</org-tag>
+              <org-tag color="warning" colorStrength="strong" size="xs">Label</org-tag>
+              <org-tag color="warning" colorStrength="strong" size="sm">Label</org-tag>
+              <org-tag color="warning" colorStrength="strong" size="base">Label</org-tag>
             </org-tags>
             <org-tags>
-              <org-tag color="danger" variant="strong" size="xs">Label</org-tag>
-              <org-tag color="danger" variant="strong" size="sm">Label</org-tag>
-              <org-tag color="danger" variant="strong" size="base">Label</org-tag>
+              <org-tag color="danger" colorStrength="strong" size="xs">Label</org-tag>
+              <org-tag color="danger" colorStrength="strong" size="sm">Label</org-tag>
+              <org-tag color="danger" colorStrength="strong" size="base">Label</org-tag>
             </org-tags>
           </org-design-system-demo-canvas>
         </org-design-system-demo>
@@ -485,14 +485,14 @@ export const Showcase: Story = {
               <org-tag color="danger">Danger</org-tag>
             </org-tags>
             <org-tags>
-              <org-tag color="primary" variant="strong">Primary</org-tag>
-              <org-tag color="secondary" variant="strong">Secondary</org-tag>
-              <org-tag color="neutral" variant="strong">Neutral</org-tag>
-              <org-tag color="safe" variant="strong">Safe</org-tag>
-              <org-tag color="info" variant="strong">Info</org-tag>
-              <org-tag color="caution" variant="strong">Caution</org-tag>
-              <org-tag color="warning" variant="strong">Warning</org-tag>
-              <org-tag color="danger" variant="strong">Danger</org-tag>
+              <org-tag color="primary" colorStrength="strong">Primary</org-tag>
+              <org-tag color="secondary" colorStrength="strong">Secondary</org-tag>
+              <org-tag color="neutral" colorStrength="strong">Neutral</org-tag>
+              <org-tag color="safe" colorStrength="strong">Safe</org-tag>
+              <org-tag color="info" colorStrength="strong">Info</org-tag>
+              <org-tag color="caution" colorStrength="strong">Caution</org-tag>
+              <org-tag color="warning" colorStrength="strong">Warning</org-tag>
+              <org-tag color="danger" colorStrength="strong">Danger</org-tag>
             </org-tags>
           </org-design-system-demo-canvas>
         </org-design-system-demo>
@@ -570,7 +570,7 @@ export const Showcase: Story = {
               Action
               <org-tag-icon name="arrow-right" />
             </org-tag>
-            <org-tag color="danger" variant="strong">
+            <org-tag color="danger" colorStrength="strong">
               <org-tag-icon name="trash" />
               Delete
             </org-tag>
@@ -642,22 +642,22 @@ export const Showcase: Story = {
           <org-design-system-demo-canvas slot="canvas">
             <div class="flex flex-col gap-2">
               <div class="flex items-center gap-2">
-                <org-tag color="safe" variant="strong" size="sm">Active</org-tag>
+                <org-tag color="safe" colorStrength="strong" size="sm">Active</org-tag>
                 <strong>Tokens — light + dark parity audit</strong>
                 <span class="ml-auto">due Fri</span>
               </div>
               <div class="flex items-center gap-2">
-                <org-tag color="caution" variant="strong" size="sm">Review</org-tag>
+                <org-tag color="caution" colorStrength="strong" size="sm">Review</org-tag>
                 <strong>Input · password show/hide affordance</strong>
                 <span class="ml-auto">opened 2d</span>
               </div>
               <div class="flex items-center gap-2">
-                <org-tag color="danger" variant="strong" size="sm">Blocked</org-tag>
+                <org-tag color="danger" colorStrength="strong" size="sm">Blocked</org-tag>
                 <strong>List item · long-press disclosure on touch</strong>
                 <span class="ml-auto">waiting on a11y</span>
               </div>
               <div class="flex items-center gap-2">
-                <org-tag color="neutral" variant="strong" size="sm">Draft</org-tag>
+                <org-tag color="neutral" colorStrength="strong" size="sm">Draft</org-tag>
                 <strong>Modal · scrim opacity in dark mode</strong>
                 <span class="ml-auto">no owner</span>
               </div>
@@ -677,7 +677,7 @@ export const Showcase: Story = {
         <org-design-system-demo-expected-behaviour>
           <ul class="list-inside list-disc flex flex-col gap-1">
             <li>Tags read as "what this thing is", not "what to do with it" — pair with adjacent labels for context</li>
-            <li>Use <strong>strong</strong> for status indicators (Active, Review, Blocked) and <strong>soft</strong> for category tags that should not compete with surrounding content</li>
+            <li>Use <strong>strong</strong> color strength for status indicators (Active, Review, Blocked) and <strong>soft</strong> for category tags that should not compete with surrounding content</li>
             <li>Pick semantic colors that match the meaning: safe for active, caution for review, danger for blocked, neutral for de-emphasized</li>
           </ul>
         </org-design-system-demo-expected-behaviour>

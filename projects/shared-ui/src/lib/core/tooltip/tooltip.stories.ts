@@ -145,6 +145,7 @@ export const Default: Story = {
     closeDelay: 0,
     keepOpenOnHover: false,
     placement: 'top',
+    disabled: false,
   },
   argTypes: {
     triggerType: {
@@ -169,6 +170,10 @@ export const Default: Story = {
       options: allTooltipPlacementValues,
       description: 'Placement of the tooltip relative to the trigger (one of 12 = 4 sides × 3 alignments)',
     },
+    disabled: {
+      control: 'boolean',
+      description: 'Whether the tooltip is disabled; when true the tooltip never opens',
+    },
   },
   parameters: {
     docs: {
@@ -187,6 +192,7 @@ export const Default: Story = {
           [closeDelay]="closeDelay"
           [keepOpenOnHover]="keepOpenOnHover"
           [placement]="placement"
+          [disabled]="disabled"
         >
           <org-button color="primary" label="Hover or click me" />
           <ng-template #tooltipContent>
@@ -266,6 +272,11 @@ export const Default: Story = {
               {{ liveDemoForm.controls.keepOpenOnHover.value ? 'on' : 'off' }}
             </org-checkbox-toggle>
           </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Disabled">
+            <org-checkbox-toggle name="live-demo-disabled" value="disabled" formControlName="disabled">
+              {{ liveDemoForm.controls.disabled.value ? 'on' : 'off' }}
+            </org-checkbox-toggle>
+          </org-design-system-demo-control-group>
           <org-design-system-demo-control-group label="Arrow">
             <org-checkbox-toggle name="live-demo-arrow" value="arrow" formControlName="arrow">
               {{ liveDemoForm.controls.arrow.value ? 'on' : 'off' }}
@@ -285,6 +296,7 @@ export const Default: Story = {
               [openDelay]="toMs(liveDemoForm.controls.openDelay.value)"
               [closeDelay]="toMs(liveDemoForm.controls.closeDelay.value)"
               [keepOpenOnHover]="liveDemoForm.controls.keepOpenOnHover.value"
+              [disabled]="liveDemoForm.controls.disabled.value"
             >
               <org-button color="primary" label="Hover or focus me" />
               <ng-template #tooltipContent>
@@ -337,6 +349,7 @@ class TooltipLiveDemoStory {
     openDelay: new FormControl<LiveDemoDelay>('200', { nonNullable: true }),
     closeDelay: new FormControl<LiveDemoDelay>('0', { nonNullable: true }),
     keepOpenOnHover: new FormControl<boolean>(false, { nonNullable: true }),
+    disabled: new FormControl<boolean>(false, { nonNullable: true }),
     arrow: new FormControl<boolean>(true, { nonNullable: true }),
     showKbd: new FormControl<boolean>(false, { nonNullable: true }),
   });
@@ -351,7 +364,7 @@ export const LiveDemo: Story = {
     docs: {
       description: {
         story:
-          'Fully interactive demo. Walk every input — placement, size, layout, trigger, open/close delays, keep-open-on-hover, arrow, kbd hint — and observe the live result in the canvas.',
+          'Fully interactive demo. Walk every input — placement, size, layout, trigger, open/close delays, keep-open-on-hover, disabled, arrow, kbd hint — and observe the live result in the canvas.',
       },
     },
   },

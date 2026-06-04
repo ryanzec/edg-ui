@@ -3,7 +3,7 @@ import { type ComponentFixture } from '@angular/core/testing';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { userEvent } from 'vitest/browser';
 import { vitestBrowserUtils } from '../../../../../../vitest-browser-utils';
-import { Tag, type TagColor, type TagSize, type TagVariant } from './tag';
+import { Tag, type TagColor, type TagColorStrength, type TagSize } from './tag';
 import { TagIcon } from './tag-icon';
 import { Tags } from './tags';
 
@@ -17,7 +17,7 @@ import { Tags } from './tags';
       data-testid="tag"
       [color]="color()"
       [size]="size()"
-      [variant]="variant()"
+      [colorStrength]="colorStrength()"
       [removable]="removable()"
       [removeAriaLabel]="removeAriaLabel()"
       (removed)="handleRemoved()"
@@ -30,7 +30,7 @@ import { Tags } from './tags';
 class TagHost {
   public readonly color = signal<TagColor>('primary');
   public readonly size = signal<TagSize>('sm');
-  public readonly variant = signal<TagVariant>('soft');
+  public readonly colorStrength = signal<TagColorStrength>('soft');
   public readonly removable = signal<boolean>(false);
   public readonly removeAriaLabel = signal<string | null | undefined>(undefined);
 
@@ -168,7 +168,7 @@ describe('Tags (browser)', () => {
       const host = queryByTestId(fixture, 'tag');
 
       expect(host.getAttribute('data-color')).toBe('primary');
-      expect(host.getAttribute('data-variant')).toBe('soft');
+      expect(host.getAttribute('data-color-strength')).toBe('soft');
       expect(host.getAttribute('data-size')).toBe('sm');
       expect(host.getAttribute('data-removable')).toBeNull();
     });
@@ -178,13 +178,13 @@ describe('Tags (browser)', () => {
       const host = queryByTestId(fixture, 'tag');
 
       fixture.componentInstance.color.set('danger');
-      fixture.componentInstance.variant.set('strong');
+      fixture.componentInstance.colorStrength.set('strong');
       fixture.componentInstance.size.set('base');
       fixture.componentInstance.removable.set(true);
       await flush(fixture);
 
       expect(host.getAttribute('data-color')).toBe('danger');
-      expect(host.getAttribute('data-variant')).toBe('strong');
+      expect(host.getAttribute('data-color-strength')).toBe('strong');
       expect(host.getAttribute('data-size')).toBe('base');
       expect(host.getAttribute('data-removable')).toBe('');
     });

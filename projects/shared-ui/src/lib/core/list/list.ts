@@ -14,11 +14,18 @@ export const allListSelectModes = ['single', 'multiple'] as const;
 /** the selection mode of the list; drives child list-item border-radius behavior on selection */
 export type ListSelectMode = (typeof allListSelectModes)[number];
 
-/** all available list border variant values */
-export const allListBorderVariants = ['outer'] as const;
+/** all available list border values */
+export const allListBorders = ['none', 'items-only', 'full', 'list-only'] as const;
 
-/** the border style variant of the list */
-export type ListBorderVariant = (typeof allListBorderVariants)[number];
+/**
+ * the border style applied to the list
+ *
+ * none: no borders
+ * items-only: a standard bottom border on every item except the last (no outer frame)
+ * full: an outer frame around the list with a bottom separator on every item except the last
+ * list-only: an outer frame around the list with no item separators
+ */
+export type ListBorder = (typeof allListBorders)[number];
 
 /** default value for the size input */
 export const LIST_SIZE_DEFAULT: ListSize = 'sm';
@@ -26,8 +33,8 @@ export const LIST_SIZE_DEFAULT: ListSize = 'sm';
 /** default value for the selectMode input */
 export const LIST_SELECT_MODE_DEFAULT: ListSelectMode | undefined = undefined;
 
-/** default value for the borderVariant input */
-export const LIST_BORDER_VARIANT_DEFAULT: ListBorderVariant | undefined = undefined;
+/** default value for the border input */
+export const LIST_BORDER_DEFAULT: ListBorder = 'none';
 
 @Component({
   selector: 'org-list',
@@ -44,7 +51,7 @@ export const LIST_BORDER_VARIANT_DEFAULT: ListBorderVariant | undefined = undefi
   host: {
     '[attr.data-size]': 'size()',
     '[attr.data-select-mode]': 'selectMode() ?? null',
-    '[attr.data-border-variant]': 'borderVariant() ?? null',
+    '[attr.data-border]': 'border()',
   },
 })
 export class List {
@@ -59,9 +66,6 @@ export class List {
     { transform: angularUtils.transformNullToUndefined }
   );
 
-  /** the border style variant applied to the host list */
-  public readonly borderVariant = input<ListBorderVariant | undefined, ListBorderVariant | null | undefined>(
-    LIST_BORDER_VARIANT_DEFAULT,
-    { transform: angularUtils.transformNullToUndefined }
-  );
+  /** the border style applied to the host list and its child items */
+  public readonly border = input<ListBorder>(LIST_BORDER_DEFAULT);
 }

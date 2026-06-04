@@ -12,7 +12,16 @@ import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/d
 import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
 import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
 import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
-import { Button, allButtonSizes, allButtonVariants, ButtonColor, ButtonSize, ButtonVariant } from './button';
+import {
+  Button,
+  allButtonSizes,
+  allButtonVariants,
+  allButtonColorStrengths,
+  ButtonColor,
+  ButtonColorStrength,
+  ButtonSize,
+  ButtonVariant,
+} from './button';
 import { ButtonGroup } from './button-group';
 
 const liveDemoColorItems: ButtonToggleItem[] = allComponentColors.map((color) => ({
@@ -24,6 +33,12 @@ const liveDemoColorItems: ButtonToggleItem[] = allComponentColors.map((color) =>
 const liveDemoVariantItems: ButtonToggleItem[] = allButtonVariants.map((variant) => ({
   label: variant,
   value: variant,
+  buttonColor: 'primary',
+}));
+
+const liveDemoColorStrengthItems: ButtonToggleItem[] = allButtonColorStrengths.map((colorStrength) => ({
+  label: colorStrength,
+  value: colorStrength,
   buttonColor: 'primary',
 }));
 
@@ -98,7 +113,8 @@ const meta: Meta<Button> = {
 
   ### Features
   - 8 color variants for different semantic meanings
-  - 4 style variants (filled, ghost, text, soft)
+  - 4 style variants (filled, ghost, text, plain)
+  - 2 color strengths (strong, soft) applied orthogonally to the variant
   - 3 size options (small, base, large)
   - Built-in icon support via the preIcon and postIcon inputs
   - Custom pre/post content via projected #pre / #post templates (ngTemplateOutlet)
@@ -167,6 +183,7 @@ export const Default: Story = {
     color: 'primary',
     size: 'base',
     variant: 'filled',
+    colorStrength: 'strong',
     disabled: false,
     loading: false,
     iconOnly: false,
@@ -191,8 +208,13 @@ export const Default: Story = {
     },
     variant: {
       control: 'select',
-      options: ['filled', 'ghost', 'text', 'soft'],
+      options: ['filled', 'outline', 'ghost', 'text', 'plain'],
       description: 'The variant style of the button',
+    },
+    colorStrength: {
+      control: 'select',
+      options: ['strong', 'soft'],
+      description: "The color intensity of the variant; 'soft' uses the soft color tokens where applicable",
     },
     disabled: {
       control: 'boolean',
@@ -252,6 +274,7 @@ export const Default: Story = {
         [color]="color"
         [size]="size"
         [variant]="variant"
+        [colorStrength]="colorStrength"
         [disabled]="disabled"
         [loading]="loading"
         [iconOnly]="iconOnly"
@@ -313,6 +336,9 @@ export const Default: Story = {
           <org-design-system-demo-control-group label="Variant">
             <org-button-toggle [items]="variantItems" formControlName="variant" buttonSize="sm" />
           </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Color Strength">
+            <org-button-toggle [items]="colorStrengthItems" formControlName="colorStrength" buttonSize="sm" />
+          </org-design-system-demo-control-group>
           <org-design-system-demo-control-group label="Size">
             <org-button-toggle [items]="sizeItems" formControlName="size" buttonSize="sm" />
           </org-design-system-demo-control-group>
@@ -347,6 +373,7 @@ export const Default: Story = {
                 <org-button
                   [color]="liveDemoForm.controls.color.value"
                   [variant]="liveDemoForm.controls.variant.value"
+                  [colorStrength]="liveDemoForm.controls.colorStrength.value"
                   [size]="liveDemoForm.controls.size.value"
                   [disabled]="liveDemoForm.controls.disabled.value"
                   [loading]="liveDemoForm.controls.loading.value"
@@ -368,6 +395,7 @@ export const Default: Story = {
                 <org-button
                   [color]="liveDemoForm.controls.color.value"
                   [variant]="liveDemoForm.controls.variant.value"
+                  [colorStrength]="liveDemoForm.controls.colorStrength.value"
                   [size]="liveDemoForm.controls.size.value"
                   [disabled]="liveDemoForm.controls.disabled.value"
                   [loading]="liveDemoForm.controls.loading.value"
@@ -390,6 +418,7 @@ export const Default: Story = {
                 <org-button
                   [color]="liveDemoForm.controls.color.value"
                   [variant]="liveDemoForm.controls.variant.value"
+                  [colorStrength]="liveDemoForm.controls.colorStrength.value"
                   [size]="liveDemoForm.controls.size.value"
                   [disabled]="liveDemoForm.controls.disabled.value"
                   [loading]="liveDemoForm.controls.loading.value"
@@ -412,6 +441,7 @@ export const Default: Story = {
                 <org-button
                   [color]="liveDemoForm.controls.color.value"
                   [variant]="liveDemoForm.controls.variant.value"
+                  [colorStrength]="liveDemoForm.controls.colorStrength.value"
                   [size]="liveDemoForm.controls.size.value"
                   [disabled]="liveDemoForm.controls.disabled.value"
                   [loading]="liveDemoForm.controls.loading.value"
@@ -435,6 +465,7 @@ export const Default: Story = {
                 <org-button
                   [color]="liveDemoForm.controls.color.value"
                   [variant]="liveDemoForm.controls.variant.value"
+                  [colorStrength]="liveDemoForm.controls.colorStrength.value"
                   [size]="liveDemoForm.controls.size.value"
                   [disabled]="liveDemoForm.controls.disabled.value"
                   [loading]="liveDemoForm.controls.loading.value"
@@ -465,12 +496,14 @@ export const Default: Story = {
 class ButtonLiveDemoStory {
   protected readonly colorItems = liveDemoColorItems;
   protected readonly variantItems = liveDemoVariantItems;
+  protected readonly colorStrengthItems = liveDemoColorStrengthItems;
   protected readonly sizeItems = liveDemoSizeItems;
   protected readonly iconItems = liveDemoIconItems;
 
   protected readonly liveDemoForm = new FormGroup({
     color: new FormControl<ButtonColor>('primary', { nonNullable: true }),
     variant: new FormControl<ButtonVariant>('filled', { nonNullable: true }),
+    colorStrength: new FormControl<ButtonColorStrength>('strong', { nonNullable: true }),
     size: new FormControl<ButtonSize>('base', { nonNullable: true }),
     icon: new FormControl<LiveDemoIconChoice>('none', { nonNullable: true }),
     disabled: new FormControl<boolean>(false, { nonNullable: true }),
@@ -626,61 +659,117 @@ export const Showcase: Story = {
           <org-design-system-demo-canvas slot="canvas">
             <div class="flex gap-2">
               <org-button color="primary" variant="filled" label="Filled" />
-              <org-button color="primary" variant="soft" label="Soft" />
+              <org-button color="primary" variant="outline" label="Outline" />
               <org-button color="primary" variant="ghost" label="Ghost" />
               <org-button color="primary" variant="text" label="Text" />
+              <org-button color="primary" variant="plain" label="Plain" />
             </div>
             <div class="flex gap-2">
               <org-button color="secondary" variant="filled" label="Filled" />
-              <org-button color="secondary" variant="soft" label="Soft" />
+              <org-button color="secondary" variant="outline" label="Outline" />
               <org-button color="secondary" variant="ghost" label="Ghost" />
               <org-button color="secondary" variant="text" label="Text" />
+              <org-button color="secondary" variant="plain" label="Plain" />
             </div>
             <div class="flex gap-2">
               <org-button color="neutral" variant="filled" label="Filled" />
-              <org-button color="neutral" variant="soft" label="Soft" />
+              <org-button color="neutral" variant="outline" label="Outline" />
               <org-button color="neutral" variant="ghost" label="Ghost" />
               <org-button color="neutral" variant="text" label="Text" />
+              <org-button color="neutral" variant="plain" label="Plain" />
             </div>
             <div class="flex gap-2">
               <org-button color="safe" variant="filled" label="Filled" />
-              <org-button color="safe" variant="soft" label="Soft" />
+              <org-button color="safe" variant="outline" label="Outline" />
               <org-button color="safe" variant="ghost" label="Ghost" />
               <org-button color="safe" variant="text" label="Text" />
+              <org-button color="safe" variant="plain" label="Plain" />
             </div>
             <div class="flex gap-2">
               <org-button color="info" variant="filled" label="Filled" />
-              <org-button color="info" variant="soft" label="Soft" />
+              <org-button color="info" variant="outline" label="Outline" />
               <org-button color="info" variant="ghost" label="Ghost" />
               <org-button color="info" variant="text" label="Text" />
+              <org-button color="info" variant="plain" label="Plain" />
             </div>
             <div class="flex gap-2">
               <org-button color="caution" variant="filled" label="Filled" />
-              <org-button color="caution" variant="soft" label="Soft" />
+              <org-button color="caution" variant="outline" label="Outline" />
               <org-button color="caution" variant="ghost" label="Ghost" />
               <org-button color="caution" variant="text" label="Text" />
+              <org-button color="caution" variant="plain" label="Plain" />
             </div>
             <div class="flex gap-2">
               <org-button color="warning" variant="filled" label="Filled" />
-              <org-button color="warning" variant="soft" label="Soft" />
+              <org-button color="warning" variant="outline" label="Outline" />
               <org-button color="warning" variant="ghost" label="Ghost" />
               <org-button color="warning" variant="text" label="Text" />
+              <org-button color="warning" variant="plain" label="Plain" />
             </div>
             <div class="flex gap-2">
               <org-button color="danger" variant="filled" label="Filled" />
-              <org-button color="danger" variant="soft" label="Soft" />
+              <org-button color="danger" variant="outline" label="Outline" />
               <org-button color="danger" variant="ghost" label="Ghost" />
               <org-button color="danger" variant="text" label="Text" />
+              <org-button color="danger" variant="plain" label="Plain" />
             </div>
           </org-design-system-demo-canvas>
         </org-design-system-demo>
         <org-design-system-demo-expected-behaviour>
           <ul class="list-inside list-disc flex flex-col gap-1">
             <li><strong>Filled</strong>: Default variant with colored background and border</li>
-            <li><strong>Ghost</strong>: Transparent background and border in default state, colored text</li>
-            <li><strong>Hover/Focus/Active</strong>: Ghost variant matches filled variant styling on interaction</li>
-            <li><strong>Text</strong>: Always transparent background and border, uses color-specific text tokens (e.g., primary-text, danger-text) in default state, bold variant (e.g., primary-text-bold, danger-text-bold) on hover/focus/active</li>
-            <li><strong>Soft</strong>: Mirrors the filled pattern but uses soft color tokens for a low-emphasis tinted background with colored text; hover/focus/active step through the soft state tokens</li>
+            <li><strong>Outline</strong>: Filled-like colored border and text, but the background stays transparent in every state; the border and text step through the hover/active color tokens on interaction</li>
+            <li><strong>Ghost</strong>: Transparent background and border in default state, colored text; hover/focus/active matches the filled styling on interaction</li>
+            <li><strong>Text</strong>: Always transparent background and border, uses color-specific text tokens in default state, with a filled-like focus-visible state</li>
+            <li><strong>Plain</strong>: Color-agnostic — neutral border, transparent background, inherited foreground regardless of the color input</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Color Strength" />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="flex flex-col gap-2">
+              <div class="flex gap-2">
+                <org-button color="primary" variant="filled" colorStrength="strong" label="Filled strong" />
+                <org-button color="primary" variant="filled" colorStrength="soft" label="Filled soft" />
+                <org-button color="primary" variant="outline" colorStrength="strong" label="Outline strong" />
+                <org-button color="primary" variant="outline" colorStrength="soft" label="Outline soft" />
+                <org-button color="primary" variant="ghost" colorStrength="strong" label="Ghost strong" />
+                <org-button color="primary" variant="ghost" colorStrength="soft" label="Ghost soft" />
+                <org-button color="primary" variant="text" colorStrength="strong" label="Text strong" />
+                <org-button color="primary" variant="text" colorStrength="soft" label="Text soft" />
+              </div>
+              <div class="flex gap-2">
+                <org-button color="safe" variant="filled" colorStrength="strong" label="Filled strong" />
+                <org-button color="safe" variant="filled" colorStrength="soft" label="Filled soft" />
+                <org-button color="safe" variant="outline" colorStrength="strong" label="Outline strong" />
+                <org-button color="safe" variant="outline" colorStrength="soft" label="Outline soft" />
+                <org-button color="safe" variant="ghost" colorStrength="strong" label="Ghost strong" />
+                <org-button color="safe" variant="ghost" colorStrength="soft" label="Ghost soft" />
+                <org-button color="safe" variant="text" colorStrength="strong" label="Text strong" />
+                <org-button color="safe" variant="text" colorStrength="soft" label="Text soft" />
+              </div>
+              <div class="flex gap-2">
+                <org-button color="danger" variant="filled" colorStrength="strong" label="Filled strong" />
+                <org-button color="danger" variant="filled" colorStrength="soft" label="Filled soft" />
+                <org-button color="danger" variant="outline" colorStrength="strong" label="Outline strong" />
+                <org-button color="danger" variant="outline" colorStrength="soft" label="Outline soft" />
+                <org-button color="danger" variant="ghost" colorStrength="strong" label="Ghost strong" />
+                <org-button color="danger" variant="ghost" colorStrength="soft" label="Ghost soft" />
+                <org-button color="danger" variant="text" colorStrength="strong" label="Text strong" />
+                <org-button color="danger" variant="text" colorStrength="soft" label="Text soft" />
+              </div>
+            </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>colorStrength</strong>: An axis orthogonal to variant — <code>strong</code> (default) uses the strong accent tokens, <code>soft</code> swaps in the soft color tokens where a variant actually paints with a color</li>
+            <li><strong>Filled + soft</strong>: Low-emphasis tinted background with neutral foreground; hover/focus/active step through the soft state tokens</li>
+            <li><strong>Outline + soft</strong>: Transparent background with neutral foreground; the border softens through the soft state tokens on hover/focus/active</li>
+            <li><strong>Ghost + soft</strong>: Resting state still transparent with colored text, but the hover/active fill uses the soft tint instead of the strong fill</li>
+            <li><strong>Text + soft</strong>: Resting and hover text are unchanged; only the focus-visible fill softens</li>
+            <li><strong>Plain</strong>: Unaffected by colorStrength — it is color-agnostic by design</li>
           </ul>
         </org-design-system-demo-expected-behaviour>
 

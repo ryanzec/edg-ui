@@ -18,6 +18,9 @@
   /* background slot */
   --box-bg: var(--color-bg-surface);
 
+  /* foreground slot — defaults to the standard text color; strong colored boxes override with the on-color */
+  --box-fg: var(--color-fg);
+
   /* clickable state slots — hover / pressed tints layer on top of --box-bg */
   --box-bg-clickable-hover: var(--color-bg-hover);
   --box-bg-clickable-pressed: var(--color-bg-active);

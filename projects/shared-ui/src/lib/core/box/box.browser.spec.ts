@@ -3,7 +3,15 @@ import { type ComponentFixture } from '@angular/core/testing';
 import { userEvent } from 'vitest/browser';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { vitestBrowserUtils } from '../../../../../../vitest-browser-utils';
-import { Box, type BoxBackground, type BoxBorder, type BoxColor, type BoxPadding } from './box';
+import {
+  Box,
+  type BoxBackground,
+  type BoxBorder,
+  type BoxColor,
+  type BoxColorStrength,
+  type BoxPadding,
+  type BoxShape,
+} from './box';
 import { BoxBrainDirective } from './box-brain';
 
 @Component({
@@ -15,9 +23,11 @@ import { BoxBrainDirective } from './box-brain';
     <org-box
       data-testid="box"
       [color]="color()"
+      [colorStrength]="colorStrength()"
       [border]="border()"
       [padding]="padding()"
       [background]="background()"
+      [shape]="shape()"
       [isClickable]="isClickable()"
       (clicked)="handleClicked()"
     >
@@ -30,9 +40,11 @@ class BoxInteractiveHost {
   protected readonly boxBrain = viewChild.required(BoxBrainDirective);
 
   public readonly color = signal<BoxColor | null | undefined>(undefined);
+  public readonly colorStrength = signal<BoxColorStrength>('soft');
   public readonly border = signal<BoxBorder>('bordered');
   public readonly padding = signal<BoxPadding>('base');
   public readonly background = signal<BoxBackground>('colored');
+  public readonly shape = signal<BoxShape>('rounded');
   public readonly isClickable = signal<boolean>(true);
 
   protected readonly clickCount = signal<number>(0);
@@ -72,9 +84,11 @@ class BoxExternalClickableHost {
 
 type BoxHostConfig = {
   color?: BoxColor | null;
+  colorStrength?: BoxColorStrength;
   border?: BoxBorder;
   padding?: BoxPadding;
   background?: BoxBackground;
+  shape?: BoxShape;
   isClickable?: boolean;
 };
 
@@ -86,6 +100,10 @@ describe('Box (browser)', () => {
     createFixture(BoxInteractiveHost, (instance) => {
       if (config.color !== undefined) {
         instance.color.set(config.color);
+      }
+
+      if (config.colorStrength !== undefined) {
+        instance.colorStrength.set(config.colorStrength);
       }
 
       if (config.border !== undefined) {
@@ -100,6 +118,10 @@ describe('Box (browser)', () => {
         instance.background.set(config.background);
       }
 
+      if (config.shape !== undefined) {
+        instance.shape.set(config.shape);
+      }
+
       if (config.isClickable !== undefined) {
         instance.isClickable.set(config.isClickable);
       }
@@ -110,13 +132,15 @@ describe('Box (browser)', () => {
   afterEach(destroyFixture);
 
   describe('host attribute reflection', () => {
-    it('renders the default border, padding, and background attributes and omits color', () => {
+    it('renders the default border, padding, background, shape, and color strength attributes and omits color', () => {
       const fixture = createFixture(BoxStaticHost);
       const host = queryByTestId(fixture, 'box');
 
       expect(host.getAttribute('data-border')).toBe('bordered');
       expect(host.getAttribute('data-padding')).toBe('base');
       expect(host.getAttribute('data-background')).toBe('colored');
+      expect(host.getAttribute('data-shape')).toBe('rounded');
+      expect(host.getAttribute('data-color-strength')).toBe('soft');
       expect(host.getAttribute('data-color')).toBeNull();
     });
 
@@ -146,6 +170,44 @@ describe('Box (browser)', () => {
       const host = queryByTestId(fixture, 'box');
 
       expect(host.getAttribute('data-background')).toBe('colorless');
+    });
+
+    it('reflects the colorStrength input on the host', () => {
+      const fixture = createInteractiveBox({ colorStrength: 'strong' });
+      const host = queryByTestId(fixture, 'box');
+
+      expect(host.getAttribute('data-color-strength')).toBe('strong');
+    });
+
+    it('reflects the shape input on the host', () => {
+      const fixture = createInteractiveBox({ shape: 'square' });
+      const host = queryByTestId(fixture, 'box');
+
+      expect(host.getAttribute('data-shape')).toBe('square');
+    });
+
+    it('updates the shape attribute when shape changes', async () => {
+      const fixture = createInteractiveBox({ shape: 'rounded' });
+      const host = queryByTestId(fixture, 'box');
+
+      expect(host.getAttribute('data-shape')).toBe('rounded');
+
+      fixture.componentInstance.shape.set('square');
+      await flush(fixture);
+
+      expect(host.getAttribute('data-shape')).toBe('square');
+    });
+
+    it('updates the color strength attribute when colorStrength changes', async () => {
+      const fixture = createInteractiveBox({ colorStrength: 'soft' });
+      const host = queryByTestId(fixture, 'box');
+
+      expect(host.getAttribute('data-color-strength')).toBe('soft');
+
+      fixture.componentInstance.colorStrength.set('strong');
+      await flush(fixture);
+
+      expect(host.getAttribute('data-color-strength')).toBe('strong');
     });
 
     it('transforms a null color into an omitted attribute', async () => {

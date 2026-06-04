@@ -8,6 +8,7 @@
       var(--box-border-left-width);
     border-radius: var(--box-radius);
     background-color: var(--box-bg);
+    color: var(--box-fg);
     padding: var(--box-padding);
   }
 
@@ -26,6 +27,11 @@
 
   :host([data-padding='lg']) {
     --box-padding: var(--spacing-4);
+  }
+
+  /* shape variants — rounded (default) keeps --box-radius; square drops it to 0 */
+  :host([data-shape='square']) {
+    --box-radius: 0;
   }
 
   /* color variants — border color + background */
@@ -85,9 +91,75 @@
     --box-bg-clickable-pressed: var(--color-danger-soft-active);
   }
 
-  /* colorless reverts bg back to default regardless of color */
+  /* strong strength: solid fill + on-color foreground + matching border (only when the background is colored) */
+  :host([data-color='primary'][data-color-strength='strong'][data-background='colored']) {
+    --box-border-color: var(--color-primary);
+    --box-bg: var(--color-primary);
+    --box-fg: var(--color-primary-on);
+    --box-bg-clickable-hover: var(--color-primary-hover);
+    --box-bg-clickable-pressed: var(--color-primary-active);
+  }
+
+  :host([data-color='secondary'][data-color-strength='strong'][data-background='colored']) {
+    --box-border-color: var(--color-secondary);
+    --box-bg: var(--color-secondary);
+    --box-fg: var(--color-secondary-on);
+    --box-bg-clickable-hover: var(--color-secondary-hover);
+    --box-bg-clickable-pressed: var(--color-secondary-active);
+  }
+
+  :host([data-color='neutral'][data-color-strength='strong'][data-background='colored']) {
+    --box-border-color: var(--color-neutral);
+    --box-bg: var(--color-neutral);
+    --box-fg: var(--color-neutral-on);
+    --box-bg-clickable-hover: var(--color-neutral-hover);
+    --box-bg-clickable-pressed: var(--color-neutral-active);
+  }
+
+  :host([data-color='safe'][data-color-strength='strong'][data-background='colored']) {
+    --box-border-color: var(--color-safe);
+    --box-bg: var(--color-safe);
+    --box-fg: var(--color-safe-on);
+    --box-bg-clickable-hover: var(--color-safe-hover);
+    --box-bg-clickable-pressed: var(--color-safe-active);
+  }
+
+  :host([data-color='info'][data-color-strength='strong'][data-background='colored']) {
+    --box-border-color: var(--color-info);
+    --box-bg: var(--color-info);
+    --box-fg: var(--color-info-on);
+    --box-bg-clickable-hover: var(--color-info-hover);
+    --box-bg-clickable-pressed: var(--color-info-active);
+  }
+
+  :host([data-color='caution'][data-color-strength='strong'][data-background='colored']) {
+    --box-border-color: var(--color-caution);
+    --box-bg: var(--color-caution);
+    --box-fg: var(--color-caution-on);
+    --box-bg-clickable-hover: var(--color-caution-hover);
+    --box-bg-clickable-pressed: var(--color-caution-active);
+  }
+
+  :host([data-color='warning'][data-color-strength='strong'][data-background='colored']) {
+    --box-border-color: var(--color-warning);
+    --box-bg: var(--color-warning);
+    --box-fg: var(--color-warning-on);
+    --box-bg-clickable-hover: var(--color-warning-hover);
+    --box-bg-clickable-pressed: var(--color-warning-active);
+  }
+
+  :host([data-color='danger'][data-color-strength='strong'][data-background='colored']) {
+    --box-border-color: var(--color-danger);
+    --box-bg: var(--color-danger);
+    --box-fg: var(--color-danger-on);
+    --box-bg-clickable-hover: var(--color-danger-hover);
+    --box-bg-clickable-pressed: var(--color-danger-active);
+  }
+
+  /* colorless reverts bg + foreground back to default regardless of color / strength */
   :host([data-background='colorless']) {
     --box-bg: var(--color-bg-app);
+    --box-fg: var(--color-fg);
     --box-bg-clickable-hover: var(--color-bg-hover);
     --box-bg-clickable-pressed: var(--color-bg-active);
   }

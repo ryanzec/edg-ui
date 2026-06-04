@@ -6,7 +6,7 @@ import { Button } from '../button/button';
 import { ButtonToggle, ButtonToggleItem } from '../button-toggle/button-toggle';
 import { CheckboxToggle } from '../checkbox-toggle/checkbox-toggle';
 import { Icon } from '../icon/icon';
-import { allComponentColors } from '../types/component-types';
+import { allColorStrengths, allComponentColors } from '../types/component-types';
 import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
 import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
 import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
@@ -15,11 +15,14 @@ import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-
 import {
   Indicator,
   IndicatorColor,
+  IndicatorColorStrength,
   IndicatorMode,
   IndicatorPosition,
+  IndicatorShape,
   IndicatorSize,
   allIndicatorModes,
   allIndicatorPositions,
+  allIndicatorShapes,
   allIndicatorSizes,
 } from './indicator';
 import { IndicatorAnchor } from './indicator-anchor';
@@ -39,6 +42,18 @@ const liveDemoColorItems: ButtonToggleItem[] = allComponentColors.map((color) =>
 const liveDemoSizeItems: ButtonToggleItem[] = allIndicatorSizes.map((size) => ({
   label: size,
   value: size,
+  buttonColor: 'primary',
+}));
+
+const liveDemoShapeItems: ButtonToggleItem[] = allIndicatorShapes.map((shape) => ({
+  label: shape,
+  value: shape,
+  buttonColor: 'primary',
+}));
+
+const liveDemoColorStrengthItems: ButtonToggleItem[] = allColorStrengths.map((colorStrength) => ({
+  label: colorStrength,
+  value: colorStrength,
   buttonColor: 'primary',
 }));
 
@@ -109,7 +124,9 @@ type Story = StoryObj<Indicator & { number: number | null; ariaLabel: string | n
 export const Default: Story = {
   args: {
     color: 'primary',
+    colorStrength: 'strong',
     size: 'base',
+    shape: 'circle',
     number: null,
     pulse: false,
     ring: false,
@@ -123,10 +140,20 @@ export const Default: Story = {
       options: allComponentColors,
       description: 'The semantic color of the indicator',
     },
+    colorStrength: {
+      control: 'select',
+      options: allColorStrengths,
+      description: "The color intensity of the indicator; 'soft' swaps the solid fill for its soft equivalent",
+    },
     size: {
       control: 'select',
       options: allIndicatorSizes,
       description: 'The size of the indicator',
+    },
+    shape: {
+      control: 'select',
+      options: allIndicatorShapes,
+      description: "The outer shape of the indicator; 'rounded' swaps the pill radius for a rounded-box radius",
     },
     number: {
       control: 'number',
@@ -167,7 +194,9 @@ export const Default: Story = {
     template: `
       <org-indicator
         [color]="color"
+        [colorStrength]="colorStrength"
         [size]="size"
+        [shape]="shape"
         [number]="number"
         [pulse]="pulse"
         [ring]="ring"
@@ -242,8 +271,14 @@ export const Default: Story = {
           <org-design-system-demo-control-group label="Color">
             <org-button-toggle [items]="colorItems" formControlName="color" buttonSize="sm" />
           </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Color strength">
+            <org-button-toggle [items]="colorStrengthItems" formControlName="colorStrength" buttonSize="sm" />
+          </org-design-system-demo-control-group>
           <org-design-system-demo-control-group label="Size">
             <org-button-toggle [items]="sizeItems" formControlName="size" buttonSize="sm" />
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Shape">
+            <org-button-toggle [items]="shapeItems" formControlName="shape" buttonSize="sm" />
           </org-design-system-demo-control-group>
           <org-design-system-demo-control-group label="Number">
             <input class="number-input" type="number" formControlName="number" />
@@ -278,7 +313,10 @@ export const Default: Story = {
                   @case ('number') {
                     <org-indicator
                       [color]="liveDemoForm.controls.color.value"
+                      [colorStrength]="liveDemoForm.controls.colorStrength.value"
                       [size]="liveDemoForm.controls.size.value"
+                      [shape]="liveDemoForm.controls.shape.value"
+                      [shape]="liveDemoForm.controls.shape.value"
                       [number]="liveDemoForm.controls.number.value"
                       [pulse]="liveDemoForm.controls.pulse.value"
                       [ring]="liveDemoForm.controls.ring.value"
@@ -289,7 +327,10 @@ export const Default: Story = {
                   @case ('icon') {
                     <org-indicator
                       [color]="liveDemoForm.controls.color.value"
+                      [colorStrength]="liveDemoForm.controls.colorStrength.value"
                       [size]="liveDemoForm.controls.size.value"
+                      [shape]="liveDemoForm.controls.shape.value"
+                      [shape]="liveDemoForm.controls.shape.value"
                       [pulse]="liveDemoForm.controls.pulse.value"
                       [ring]="liveDemoForm.controls.ring.value"
                       [hasFade]="liveDemoForm.controls.hasFade.value"
@@ -301,7 +342,10 @@ export const Default: Story = {
                   @default {
                     <org-indicator
                       [color]="liveDemoForm.controls.color.value"
+                      [colorStrength]="liveDemoForm.controls.colorStrength.value"
                       [size]="liveDemoForm.controls.size.value"
+                      [shape]="liveDemoForm.controls.shape.value"
+                      [shape]="liveDemoForm.controls.shape.value"
                       [pulse]="liveDemoForm.controls.pulse.value"
                       [ring]="liveDemoForm.controls.ring.value"
                       [hasFade]="liveDemoForm.controls.hasFade.value"
@@ -316,7 +360,9 @@ export const Default: Story = {
                 @case ('number') {
                   <org-indicator
                     [color]="liveDemoForm.controls.color.value"
+                    [colorStrength]="liveDemoForm.controls.colorStrength.value"
                     [size]="liveDemoForm.controls.size.value"
+                    [shape]="liveDemoForm.controls.shape.value"
                     [number]="liveDemoForm.controls.number.value"
                     [pulse]="liveDemoForm.controls.pulse.value"
                     [ring]="liveDemoForm.controls.ring.value"
@@ -326,7 +372,9 @@ export const Default: Story = {
                 @case ('icon') {
                   <org-indicator
                     [color]="liveDemoForm.controls.color.value"
+                    [colorStrength]="liveDemoForm.controls.colorStrength.value"
                     [size]="liveDemoForm.controls.size.value"
+                    [shape]="liveDemoForm.controls.shape.value"
                     [pulse]="liveDemoForm.controls.pulse.value"
                     [ring]="liveDemoForm.controls.ring.value"
                     [hasFade]="liveDemoForm.controls.hasFade.value"
@@ -337,7 +385,9 @@ export const Default: Story = {
                 @default {
                   <org-indicator
                     [color]="liveDemoForm.controls.color.value"
+                    [colorStrength]="liveDemoForm.controls.colorStrength.value"
                     [size]="liveDemoForm.controls.size.value"
+                    [shape]="liveDemoForm.controls.shape.value"
                     [pulse]="liveDemoForm.controls.pulse.value"
                     [ring]="liveDemoForm.controls.ring.value"
                     [hasFade]="liveDemoForm.controls.hasFade.value"
@@ -355,12 +405,16 @@ export const Default: Story = {
 class IndicatorLiveDemoStory {
   protected readonly modeItems = liveDemoModeItems;
   protected readonly colorItems = liveDemoColorItems;
+  protected readonly colorStrengthItems = liveDemoColorStrengthItems;
   protected readonly sizeItems = liveDemoSizeItems;
+  protected readonly shapeItems = liveDemoShapeItems;
 
   protected readonly liveDemoForm = new FormGroup({
     mode: new FormControl<IndicatorMode>('dot', { nonNullable: true }),
     color: new FormControl<IndicatorColor>('primary', { nonNullable: true }),
+    colorStrength: new FormControl<IndicatorColorStrength>('strong', { nonNullable: true }),
     size: new FormControl<IndicatorSize>('base', { nonNullable: true }),
+    shape: new FormControl<IndicatorShape>('circle', { nonNullable: true }),
     number: new FormControl<number>(12, { nonNullable: true }),
     pulse: new FormControl<boolean>(false, { nonNullable: true }),
     ring: new FormControl<boolean>(false, { nonNullable: true }),
@@ -387,7 +441,9 @@ export const LiveDemo: Story = {
 };
 
 const showcaseColors: IndicatorColor[] = [...allComponentColors];
+const showcaseColorStrengths: IndicatorColorStrength[] = [...allColorStrengths];
 const showcaseSizes: IndicatorSize[] = [...allIndicatorSizes];
+const showcaseShapes: IndicatorShape[] = [...allIndicatorShapes];
 const showcasePositions: IndicatorPosition[] = [...allIndicatorPositions];
 
 @Component({
@@ -508,6 +564,68 @@ class IndicatorColorSizeNumberGridSection {
 }
 
 @Component({
+  selector: 'story-indicator-color-strength-grid',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [Icon, Indicator],
+  styles: [
+    `
+      :host {
+        display: block;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 6rem repeat(2, 1fr);
+        align-items: center;
+        row-gap: var(--spacing-2);
+        column-gap: var(--spacing-4);
+      }
+      .col-header {
+        text-transform: uppercase;
+        font-size: var(--font-size-2xs);
+        letter-spacing: 0.06em;
+        color: var(--color-fg-muted);
+      }
+      .row-label {
+        text-transform: capitalize;
+        font-size: var(--font-size-xs);
+        font-weight: var(--font-weight-medium);
+        color: var(--color-fg-muted);
+      }
+      .cell {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-3);
+      }
+    `,
+  ],
+  template: `
+    <div class="grid">
+      <span></span>
+      @for (strength of strengths; track strength) {
+        <span class="col-header">{{ strength }}</span>
+      }
+
+      @for (color of colors; track color) {
+        <span class="row-label">{{ color }}</span>
+        @for (strength of strengths; track strength) {
+          <span class="cell">
+            <org-indicator [color]="color" [colorStrength]="strength" ariaLabel="status" />
+            <org-indicator [color]="color" [colorStrength]="strength" [number]="12" />
+            <org-indicator [color]="color" [colorStrength]="strength">
+              <org-icon name="check" size="2xs" />
+            </org-indicator>
+          </span>
+        }
+      }
+    </div>
+  `,
+})
+class IndicatorColorStrengthGridSection {
+  protected readonly colors = showcaseColors;
+  protected readonly strengths = showcaseColorStrengths;
+}
+
+@Component({
   selector: 'story-indicator-fade-grid',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [Icon, Indicator],
@@ -566,6 +684,68 @@ class IndicatorColorSizeNumberGridSection {
 })
 class IndicatorFadeGridSection {
   protected readonly colors = showcaseColors;
+  protected readonly sizes = showcaseSizes;
+}
+
+@Component({
+  selector: 'story-indicator-shape-grid',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [Icon, Indicator],
+  styles: [
+    `
+      :host {
+        display: block;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 6rem repeat(3, 1fr);
+        align-items: center;
+        row-gap: var(--spacing-3);
+        column-gap: var(--spacing-4);
+      }
+      .col-header {
+        text-transform: uppercase;
+        font-size: var(--font-size-2xs);
+        letter-spacing: 0.06em;
+        color: var(--color-fg-muted);
+      }
+      .row-label {
+        text-transform: capitalize;
+        font-size: var(--font-size-xs);
+        font-weight: var(--font-weight-medium);
+        color: var(--color-fg-muted);
+      }
+      .cell {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-4);
+      }
+    `,
+  ],
+  template: `
+    <div class="grid">
+      <span></span>
+      @for (size of sizes; track size) {
+        <span class="col-header">{{ size }}</span>
+      }
+
+      @for (shape of shapes; track shape) {
+        <span class="row-label">{{ shape }}</span>
+        @for (size of sizes; track size) {
+          <span class="cell">
+            <org-indicator color="primary" [size]="size" [shape]="shape" ariaLabel="status" />
+            <org-indicator color="primary" [size]="size" [shape]="shape" [number]="12" />
+            <org-indicator color="primary" [size]="size" [shape]="shape">
+              <org-icon name="check" size="2xs" />
+            </org-indicator>
+          </span>
+        }
+      }
+    </div>
+  `,
+})
+class IndicatorShapeGridSection {
+  protected readonly shapes = showcaseShapes;
   protected readonly sizes = showcaseSizes;
 }
 
@@ -966,6 +1146,28 @@ export const Showcase: Story = {
         <org-design-system-demo>
           <org-design-system-demo-header
             slot="header"
+            title="Color strength"
+            description="Set [colorStrength]='soft' to swap the solid fill for the matching soft tint with neutral foreground text. Strong (default) is the saturated fill; soft suits lower-emphasis status. Shown across all colors for dot, number, and icon modes."
+          />
+          <org-design-system-demo-canvas slot="canvas">
+            <story-indicator-color-strength-grid />
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header
+            slot="header"
+            title="Shape"
+            description="Set [shape]='rounded' to swap the default pill/circle radius for a rounded-box radius that scales per size (sm 4px · base 6px · lg 8px). Applies across all three modes. Shown against the default 'circle' shape."
+          />
+          <org-design-system-demo-canvas slot="canvas">
+            <story-indicator-shape-grid />
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header
+            slot="header"
             title="With fade"
             description="Set [hasFade]='true' to paint a 4px halo around the indicator using the matching soft color — softens the edge so the dot reads as 'fading' into its surroundings. Composes with [ring], [pulse], and [position]."
           />
@@ -1007,6 +1209,8 @@ export const Showcase: Story = {
         DesignSystemDemoCanvas,
         IndicatorColorSizeDotGridSection,
         IndicatorColorSizeNumberGridSection,
+        IndicatorColorStrengthGridSection,
+        IndicatorShapeGridSection,
         IndicatorFadeGridSection,
         IndicatorPinnedSection,
         IndicatorInlineSection,

@@ -1,11 +1,14 @@
 import { Component, ChangeDetectionStrategy, computed, contentChildren, inject, input } from '@angular/core';
 import { angularUtils } from '@organization/shared-utils';
-import { ComponentColor, ComponentSize } from '../types/component-types';
+import { ColorStrength, ComponentColor, ComponentSize } from '../types/component-types';
 import { Icon } from '../icon/icon';
 import { IndicatorBrainDirective } from '../indicator/indicator-brain';
 
 /** color options for the indicator component */
 export type IndicatorColor = ComponentColor;
+
+/** color strength options for the indicator component */
+export type IndicatorColorStrength = ColorStrength;
 
 /** all available indicator size values */
 export const allIndicatorSizes = ['sm', 'base', 'lg'] as const satisfies readonly ComponentSize[];
@@ -19,6 +22,12 @@ export const allIndicatorModes = ['dot', 'number', 'icon'] as const;
 /** the rendering mode for the indicator: bare dot, numeric pill, or glyph pill */
 export type IndicatorMode = (typeof allIndicatorModes)[number];
 
+/** all available indicator shapes */
+export const allIndicatorShapes = ['circle', 'rounded'] as const;
+
+/** the outer shape of the indicator: fully-rounded pill/circle, or a rounded box */
+export type IndicatorShape = (typeof allIndicatorShapes)[number];
+
 /** all available indicator corner positions when pinned to an anchor */
 export const allIndicatorPositions = ['top-left', 'top-right', 'bottom-left', 'bottom-right'] as const;
 
@@ -28,8 +37,14 @@ export type IndicatorPosition = (typeof allIndicatorPositions)[number];
 /** default value for the color input */
 export const INDICATOR_COLOR_DEFAULT: IndicatorColor = 'primary';
 
+/** default value for the colorStrength input */
+export const INDICATOR_COLOR_STRENGTH_DEFAULT: IndicatorColorStrength = 'strong';
+
 /** default value for the size input */
 export const INDICATOR_SIZE_DEFAULT: IndicatorSize = 'base';
+
+/** default value for the shape input */
+export const INDICATOR_SHAPE_DEFAULT: IndicatorShape = 'circle';
 
 /** default value for the position input */
 export const INDICATOR_POSITION_DEFAULT: IndicatorPosition | undefined = undefined;
@@ -58,7 +73,9 @@ export const INDICATOR_HAS_FADE_DEFAULT = false;
   host: {
     '[attr.data-mode]': 'mode()',
     '[attr.data-color]': 'color()',
+    '[attr.data-color-strength]': 'colorStrength()',
     '[attr.data-size]': 'size()',
+    '[attr.data-shape]': 'shape()',
     '[attr.data-position]': 'position() ?? null',
     '[attr.data-ring]': 'ring() ? "" : null',
     '[attr.data-pulse]': 'pulse() ? "" : null',
@@ -75,8 +92,14 @@ export class Indicator {
   /** the semantic color of the indicator */
   public readonly color = input<IndicatorColor>(INDICATOR_COLOR_DEFAULT);
 
+  /** the color intensity of the indicator; 'soft' swaps the solid fill for its soft equivalent */
+  public readonly colorStrength = input<IndicatorColorStrength>(INDICATOR_COLOR_STRENGTH_DEFAULT);
+
   /** the size of the indicator */
   public readonly size = input<IndicatorSize>(INDICATOR_SIZE_DEFAULT);
+
+  /** the outer shape of the indicator; 'rounded' swaps the pill radius for a per-size rounded-box radius */
+  public readonly shape = input<IndicatorShape>(INDICATOR_SHAPE_DEFAULT);
 
   /** when set, pins the indicator to the named corner of its anchor (anchor must be position: relative) */
   public readonly position = input<IndicatorPosition | undefined, IndicatorPosition | null | undefined>(

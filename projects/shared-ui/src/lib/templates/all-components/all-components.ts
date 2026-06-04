@@ -21,8 +21,6 @@ import { CardContent } from '../../core/card/card-content';
 import { CardFooter } from '../../core/card/card-footer';
 import { CardHeader } from '../../core/card/card-header';
 import { Chart } from '../../core/chart/chart';
-import { Chat } from '../../core/chat/chat';
-import { ChatMessage } from '../../core/chat/chat-message';
 import { Checkbox } from '../../core/checkbox/checkbox';
 import { CheckboxGroup } from '../../core/checkbox/checkbox-group';
 import { CheckboxToggle } from '../../core/checkbox-toggle/checkbox-toggle';
@@ -115,8 +113,6 @@ type TableUser = {
     CardFooter,
     CardHeader,
     Chart,
-    Chat,
-    ChatMessage,
     Checkbox,
     CheckboxGroup,
     CheckboxToggle,

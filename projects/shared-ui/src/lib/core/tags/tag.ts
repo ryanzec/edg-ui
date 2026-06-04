@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, computed, contentChildren, inject, input } from '@angular/core';
 import { TagBrainDirective } from '../tags/tag-brain';
 import { Icon, type IconSize } from '../icon/icon';
-import { ComponentColor, ComponentSize } from '../types/component-types';
+import { ColorStrength, ComponentColor, ComponentSize } from '../types/component-types';
 import { TagIcon } from './tag-icon';
 
 /** the color variant of the tag */
@@ -13,17 +13,14 @@ export const allTagSizes = ['xs', 'sm', 'base'] as const satisfies readonly Comp
 /** the size variant of the tag */
 export type TagSize = (typeof allTagSizes)[number];
 
-/** all available tag variant values */
-export const allTagVariants = ['strong', 'soft'] as const;
-
-/** the visual style variant of the tag */
-export type TagVariant = (typeof allTagVariants)[number];
+/** the color strength of the tag */
+export type TagColorStrength = ColorStrength;
 
 /** the default size of the tag */
 export const TAG_SIZE_DEFAULT: TagSize = 'sm';
 
-/** the default variant of the tag */
-export const TAG_VARIANT_DEFAULT: TagVariant = 'soft';
+/** the default color strength of the tag */
+export const COLOR_STRENGTH_DEFAULT: TagColorStrength = 'soft';
 
 /** maps a tag size to the org-icon size used for the built-in remove affordance */
 const TAG_REMOVE_ICON_SIZE: Record<TagSize, IconSize> = {
@@ -47,7 +44,7 @@ const TAG_REMOVE_ICON_SIZE: Record<TagSize, IconSize> = {
   ],
   host: {
     '[attr.data-color]': 'color()',
-    '[attr.data-variant]': 'variant()',
+    '[attr.data-color-strength]': 'colorStrength()',
     '[attr.data-size]': 'size()',
     '[attr.data-removable]': 'brain.removable() ? "" : null',
   },
@@ -65,8 +62,8 @@ export class Tag {
   /** the size of the tag */
   public readonly size = input<TagSize>(TAG_SIZE_DEFAULT);
 
-  /** the visual style variant of the tag */
-  public readonly variant = input<TagVariant>(TAG_VARIANT_DEFAULT);
+  /** the color strength of the tag */
+  public readonly colorStrength = input<TagColorStrength>(COLOR_STRENGTH_DEFAULT);
 
   /** computed mirror of the brain's removable state, exposed so child TagIcons can react */
   public readonly isRemovable = computed<boolean>(() => this.brain.removable());

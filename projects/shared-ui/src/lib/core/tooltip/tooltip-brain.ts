@@ -15,6 +15,7 @@ import {
   input,
   output,
   signal,
+  untracked,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
@@ -74,6 +75,9 @@ export const TOOLTIP_KEEP_OPEN_ON_HOVER_DEFAULT = false;
 
 /** default value for the placement input */
 export const TOOLTIP_PLACEMENT_DEFAULT: TooltipPlacement = 'top';
+
+/** default value for the disabled input */
+export const TOOLTIP_DISABLED_DEFAULT = false;
 
 /**
  * shape of the contextual data provided to the portaled tooltip surface so it can read brain-resolved placement
@@ -276,6 +280,9 @@ export class TooltipBrainDirective implements OnDestroy {
   /** placement of the tooltip relative to the trigger (one of 12 = 4 sides × 3 alignments) */
   public readonly placement = input<TooltipPlacement>(TOOLTIP_PLACEMENT_DEFAULT);
 
+  /** whether the tooltip is disabled; when true the tooltip never opens and any open tooltip is closed */
+  public readonly disabled = input<boolean>(TOOLTIP_DISABLED_DEFAULT);
+
   /** emitted when the tooltip opens */
   public readonly opened = output<void>();
 
@@ -330,6 +337,17 @@ export class TooltipBrainDirective implements OnDestroy {
       }
 
       this._overlayRef.updatePositionStrategy(this._buildPositionStrategy(trigger, placement));
+    });
+
+    /** close an already-open tooltip the moment it becomes disabled */
+    effect(() => {
+      if (!this.disabled()) {
+        return;
+      }
+
+      untracked(() => {
+        this._beginClose();
+      });
     });
 
     afterNextRender(() => {
@@ -420,6 +438,10 @@ export class TooltipBrainDirective implements OnDestroy {
   }
 
   private _scheduleOpen(): void {
+    if (this.disabled()) {
+      return;
+    }
+
     this._clearCloseTimeout();
 
     if (this._isVisuallyOpen()) {
@@ -448,6 +470,10 @@ export class TooltipBrainDirective implements OnDestroy {
   }
 
   private _beginOpen(): void {
+    if (this.disabled()) {
+      return;
+    }
+
     if (this._isVisuallyOpen()) {
       return;
     }

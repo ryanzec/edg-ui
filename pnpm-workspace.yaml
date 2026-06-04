@@ -1,3 +1,4 @@
+minimumReleaseAge: 2880 # 2 days
 packages:
   - 'projects/*'
   - 'figma-plugin'

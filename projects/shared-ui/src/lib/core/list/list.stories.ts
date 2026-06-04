@@ -5,8 +5,16 @@ import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import type { Meta, StoryObj } from '@storybook/angular';
-import { List, type ListSize, type ListSelectMode, allListSizes, allListSelectModes } from './list';
-import { ListItem } from './list-item';
+import {
+  List,
+  type ListSize,
+  type ListSelectMode,
+  type ListBorder,
+  allListSizes,
+  allListSelectModes,
+  allListBorders,
+} from './list';
+import { ListItem, type ListItemEmphasizeColor, allListItemEmphasizeColors } from './list-item';
 import { ListItemIcon } from './list-item-icon';
 import { ListItemImage } from './list-item-image';
 import { Box } from '../box/box';
@@ -62,6 +70,18 @@ const liveDemoPostItems: ButtonToggleItem[] = allLiveDemoPost.map((value) => ({
 const liveDemoSelectModeItems: ButtonToggleItem[] = allListSelectModes.map((mode) => ({
   label: mode,
   value: mode,
+  buttonColor: 'primary',
+}));
+
+const liveDemoBorderItems: ButtonToggleItem[] = allListBorders.map((border) => ({
+  label: border,
+  value: border,
+  buttonColor: 'primary',
+}));
+
+const liveDemoEmphasizeColorItems: ButtonToggleItem[] = allListItemEmphasizeColors.map((color) => ({
+  label: color,
+  value: color,
   buttonColor: 'primary',
 }));
 
@@ -133,6 +153,12 @@ const liveDemoNavigatePaths = ['/', '/inbox', '/inbox/today', '/archive'] as con
           </org-design-system-demo-control-group>
           <org-design-system-demo-control-group label="selectMode">
             <org-button-toggle [items]="selectModeItems" formControlName="selectMode" buttonSize="sm" />
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="border">
+            <org-button-toggle [items]="borderItems" formControlName="border" buttonSize="sm" />
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="emphasizeColor (first item)">
+            <org-button-toggle [items]="emphasizeColorItems" formControlName="emphasizeColor" buttonSize="sm" />
           </org-design-system-demo-control-group>
           <org-design-system-demo-control-group label="isSelected">
             <org-checkbox-toggle name="live-demo-is-selected" value="isSelected" formControlName="isSelected">
@@ -211,7 +237,11 @@ const liveDemoNavigatePaths = ['/', '/inbox', '/inbox/today', '/archive'] as con
     </form>
 
     <ng-template #listTemplate>
-      <org-list [size]="liveDemoForm.controls.size.value" [selectMode]="liveDemoForm.controls.selectMode.value">
+      <org-list
+        [size]="liveDemoForm.controls.size.value"
+        [selectMode]="liveDemoForm.controls.selectMode.value"
+        [border]="liveDemoForm.controls.border.value"
+      >
         @for (item of items; track item.label; let first = $first) {
           <org-list-item
             [asTag]="liveDemoForm.controls.asTag.value === 'static' ? null : liveDemoForm.controls.asTag.value"
@@ -223,6 +253,7 @@ const liveDemoNavigatePaths = ['/', '/inbox', '/inbox/today', '/archive'] as con
             [forceClickable]="liveDemoForm.controls.forceClickable.value"
             [isClickable]="liveDemoForm.controls.isClickable.value"
             [hideLabel]="liveDemoForm.controls.hideLabel.value"
+            [emphasizeColor]="first ? liveDemoForm.controls.emphasizeColor.value : 'none'"
             [label]="item.label"
           >
             @if (liveDemoForm.controls.pre.value === 'icon') {
@@ -248,6 +279,8 @@ class ListLiveDemoStory {
   protected readonly preItems = liveDemoPreItems;
   protected readonly postItems = liveDemoPostItems;
   protected readonly selectModeItems = liveDemoSelectModeItems;
+  protected readonly borderItems = liveDemoBorderItems;
+  protected readonly emphasizeColorItems = liveDemoEmphasizeColorItems;
   protected readonly items = liveDemoListItems;
   protected readonly navigatePaths = liveDemoNavigatePaths;
 
@@ -259,6 +292,8 @@ class ListLiveDemoStory {
     pre: new FormControl<LiveDemoPre>('none', { nonNullable: true }),
     post: new FormControl<LiveDemoPost>('none', { nonNullable: true }),
     selectMode: new FormControl<ListSelectMode>('single', { nonNullable: true }),
+    border: new FormControl<ListBorder>('none', { nonNullable: true }),
+    emphasizeColor: new FormControl<ListItemEmphasizeColor>('none', { nonNullable: true }),
     isSelected: new FormControl<boolean>(true, { nonNullable: true }),
     disabled: new FormControl<boolean>(false, { nonNullable: true }),
     showAsExternal: new FormControl<boolean>(false, { nonNullable: true }),
@@ -507,7 +542,7 @@ export const Showcase: Story = {
     docs: {
       description: {
         story:
-          'Comprehensive showcase of every list axis — item states, empty state handoff, real-world usage contexts, dividers between rows, outer border via org-box, and size variants — in a single scrollable view.',
+          'Comprehensive showcase of every list axis — item states, empty state handoff, real-world usage contexts, dividers between rows, border variants, item emphasize colors, and size variants — in a single scrollable view.',
       },
     },
   },
@@ -775,13 +810,13 @@ export const Showcase: Story = {
           <org-design-system-demo-header
             slot="header"
             title="Border"
-            description="No border prop on the list itself — when you need an outer frame, wrap the list in an org-box with padding=&quot;none&quot;. This keeps borders consistent with every other component on the page."
+            description="The border input frames the list and/or separates its items. none has no borders; items-only adds a separator between items (under every item except the last); full wraps the list and separates every item except the last; list-only wraps the list without item separators."
           />
           <org-design-system-demo-canvas slot="canvas">
             <div class="grid grid-cols-2 gap-6 w-full">
               <div class="flex flex-col gap-2">
-                <p class="text-2xs uppercase letter-spacing-wide text-muted">No outer border</p>
-                <org-list selectMode="single">
+                <p class="text-2xs uppercase letter-spacing-wide text-muted">none (default)</p>
+                <org-list selectMode="single" border="none">
                   <org-list-item asTag="button" label="General" (clicked)="undefined">
                     <org-list-item-icon pre name="settings" />
                   </org-list-item>
@@ -798,24 +833,88 @@ export const Showcase: Story = {
               </div>
 
               <div class="flex flex-col gap-2">
-                <p class="text-2xs uppercase letter-spacing-wide text-muted">Wrapped in org-box (bordered, padding=none)</p>
-                <org-box [padding]="'none'">
-                  <org-list selectMode="single">
-                    <org-list-item asTag="button" label="General" (clicked)="undefined">
-                      <org-list-item-icon pre name="settings" />
-                    </org-list-item>
-                    <org-list-item asTag="button" label="Members" [isSelected]="true" (clicked)="undefined">
-                      <org-list-item-icon pre name="users" />
-                    </org-list-item>
-                    <org-list-item asTag="button" label="Billing" (clicked)="undefined">
-                      <org-list-item-icon pre name="credit-card" />
-                    </org-list-item>
-                    <org-list-item asTag="button" label="Notifications" (clicked)="undefined">
-                      <org-list-item-icon pre name="notification" />
-                    </org-list-item>
-                  </org-list>
-                </org-box>
+                <p class="text-2xs uppercase letter-spacing-wide text-muted">items-only</p>
+                <org-list selectMode="single" border="items-only">
+                  <org-list-item asTag="button" label="General" (clicked)="undefined">
+                    <org-list-item-icon pre name="settings" />
+                  </org-list-item>
+                  <org-list-item asTag="button" label="Members" [isSelected]="true" (clicked)="undefined">
+                    <org-list-item-icon pre name="users" />
+                  </org-list-item>
+                  <org-list-item asTag="button" label="Billing" (clicked)="undefined">
+                    <org-list-item-icon pre name="credit-card" />
+                  </org-list-item>
+                  <org-list-item asTag="button" label="Notifications" (clicked)="undefined">
+                    <org-list-item-icon pre name="notification" />
+                  </org-list-item>
+                </org-list>
               </div>
+
+              <div class="flex flex-col gap-2">
+                <p class="text-2xs uppercase letter-spacing-wide text-muted">full</p>
+                <org-list selectMode="single" border="full">
+                  <org-list-item asTag="button" label="General" (clicked)="undefined">
+                    <org-list-item-icon pre name="settings" />
+                  </org-list-item>
+                  <org-list-item asTag="button" label="Members" [isSelected]="true" (clicked)="undefined">
+                    <org-list-item-icon pre name="users" />
+                  </org-list-item>
+                  <org-list-item asTag="button" label="Billing" (clicked)="undefined">
+                    <org-list-item-icon pre name="credit-card" />
+                  </org-list-item>
+                  <org-list-item asTag="button" label="Notifications" (clicked)="undefined">
+                    <org-list-item-icon pre name="notification" />
+                  </org-list-item>
+                </org-list>
+              </div>
+
+              <div class="flex flex-col gap-2">
+                <p class="text-2xs uppercase letter-spacing-wide text-muted">list-only</p>
+                <org-list selectMode="single" border="list-only">
+                  <org-list-item asTag="button" label="General" (clicked)="undefined">
+                    <org-list-item-icon pre name="settings" />
+                  </org-list-item>
+                  <org-list-item asTag="button" label="Members" [isSelected]="true" (clicked)="undefined">
+                    <org-list-item-icon pre name="users" />
+                  </org-list-item>
+                  <org-list-item asTag="button" label="Billing" (clicked)="undefined">
+                    <org-list-item-icon pre name="credit-card" />
+                  </org-list-item>
+                  <org-list-item asTag="button" label="Notifications" (clicked)="undefined">
+                    <org-list-item-icon pre name="notification" />
+                  </org-list-item>
+                </org-list>
+              </div>
+            </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+
+        <!-- EMPHASIZE COLOR -->
+        <org-design-system-demo>
+          <org-design-system-demo-header
+            slot="header"
+            title="Item emphasize color"
+            description="emphasizeColor adds a thick colored left accent to an individual item using any ComponentColor. It stacks on top of any list-level border separators and is independent per item."
+          />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="flex justify-center w-full">
+              <org-list border="full" class="w-2xs">
+                <org-list-item label="Deploy succeeded" emphasizeColor="safe">
+                  <org-list-item-icon pre name="circle-check" />
+                </org-list-item>
+                <org-list-item label="New version available" emphasizeColor="info">
+                  <org-list-item-icon pre name="circle-help" />
+                </org-list-item>
+                <org-list-item label="Usage nearing limit" emphasizeColor="warning">
+                  <org-list-item-icon pre name="package" />
+                </org-list-item>
+                <org-list-item label="Build failed" emphasizeColor="danger">
+                  <org-list-item-icon pre name="trash" />
+                </org-list-item>
+                <org-list-item label="No accent (none)">
+                  <org-list-item-icon pre name="file-text" />
+                </org-list-item>
+              </org-list>
             </div>
           </org-design-system-demo-canvas>
         </org-design-system-demo>
@@ -874,7 +973,8 @@ export const Showcase: Story = {
             <li><strong>Empty state</strong>: when zero rows, swap the list for an org-empty-indicator — keep the surrounding frame so the panel doesn't shift</li>
             <li><strong>In context</strong>: every example reuses the same org-list / org-list-item primitives — only the projected pre/post slots and label change</li>
             <li><strong>Dividers</strong>: separators come from a projected org-divider — list owns no separator CSS</li>
-            <li><strong>Border</strong>: no border input on org-list — wrap in an org-box with padding=&quot;none&quot;</li>
+            <li><strong>Border</strong>: the border input frames the list and/or separates items — none, items-only, full, list-only</li>
+            <li><strong>Item emphasize color</strong>: emphasizeColor adds a thick colored left accent per item, independent of the list border</li>
             <li><strong>Size</strong>: sm is the dense default; base is for reading-heavy lists</li>
           </ul>
         </org-design-system-demo-expected-behaviour>

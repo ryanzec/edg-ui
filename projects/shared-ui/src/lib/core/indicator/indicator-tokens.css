@@ -12,6 +12,7 @@
   --indicator-pad-x: var(--spacing-1);
   --indicator-icon-pad-x: 0.1875rem; /* 3px */
   --indicator-font-size: var(--font-size-xs);
+  --indicator-rounded-radius: var(--radius-xs);
 
   /* outline ring (default off) */
   --indicator-ring-width: 0rem;
@@ -20,6 +21,10 @@
   /* fade border (default off) — applied via box-shadow when [data-fade] is set */
   --indicator-fade-thickness: 0.1875rem; /* 3px */
   --indicator-fade-color: transparent;
+
+  /* border (always uses the strong color regardless of color strength) */
+  --indicator-border-width: var(--border-width);
+  --indicator-border-color: var(--color-primary);
 
   /* color: primary (default) */
   --indicator-bg: var(--color-primary);

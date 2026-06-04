@@ -1,0 +1,13 @@
+:root {
+  /* layout */
+  --progress-bar-radius: var(--radius-pill);
+  --progress-bar-track-bg: var(--color-neutral-soft);
+  --progress-bar-transition-duration: var(--motion-duration-base);
+  --progress-bar-transition-easing: var(--motion-ease-standard);
+
+  /* size: base (default) */
+  --progress-bar-height: var(--sizing-13xs);
+
+  /* color: primary (default) — the filled portion */
+  --progress-bar-fill-bg: var(--color-primary);
+}

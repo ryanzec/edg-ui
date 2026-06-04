@@ -19,6 +19,9 @@
   }
 
   .background {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border-radius: var(--avatar-radius);
     background-color: var(--avatar-color);
     height: 100%;

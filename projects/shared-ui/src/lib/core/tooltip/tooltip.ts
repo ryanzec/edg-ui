@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import {
   TOOLTIP_CLOSE_DELAY_DEFAULT,
+  TOOLTIP_DISABLED_DEFAULT,
   TOOLTIP_KEEP_OPEN_ON_HOVER_DEFAULT,
   TOOLTIP_OPEN_DELAY_DEFAULT,
   TOOLTIP_PLACEMENT_DEFAULT,
@@ -25,6 +26,7 @@ import {
 
 export {
   TOOLTIP_CLOSE_DELAY_DEFAULT,
+  TOOLTIP_DISABLED_DEFAULT,
   TOOLTIP_KEEP_OPEN_ON_HOVER_DEFAULT,
   TOOLTIP_OPEN_DELAY_DEFAULT,
   TOOLTIP_PLACEMENT_DEFAULT,
@@ -51,7 +53,7 @@ export {
   hostDirectives: [
     {
       directive: TooltipBrainDirective,
-      inputs: ['triggerType', 'openDelay', 'closeDelay', 'keepOpenOnHover', 'placement'],
+      inputs: ['triggerType', 'openDelay', 'closeDelay', 'keepOpenOnHover', 'placement', 'disabled'],
       outputs: ['opened', 'closed'],
     },
   ],
@@ -76,6 +78,9 @@ export class Tooltip {
 
   /** placement of the tooltip relative to the trigger (one of 12 = 4 sides × 3 alignments) */
   public readonly placement = input<TooltipPlacement>(TOOLTIP_PLACEMENT_DEFAULT);
+
+  /** whether the tooltip is disabled; when true the tooltip never opens */
+  public readonly disabled = input<boolean>(TOOLTIP_DISABLED_DEFAULT);
 
   /** emitted when the tooltip opens */
   public readonly opened = output<void>();

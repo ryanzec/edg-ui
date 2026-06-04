@@ -4,8 +4,8 @@ import { provideRouter, Router } from '@angular/router';
 import { userEvent } from 'vitest/browser';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { vitestBrowserUtils, type SilencedLogManager } from '../../../../../../vitest-browser-utils';
-import { List, type ListBorderVariant, type ListSelectMode, type ListSize } from './list';
-import { ListItem, type ListItemTag } from './list-item';
+import { List, type ListBorder, type ListSelectMode, type ListSize } from './list';
+import { ListItem, type ListItemEmphasizeColor, type ListItemTag } from './list-item';
 import { ListItemIcon } from './list-item-icon';
 import { ListItemImage } from './list-item-image';
 
@@ -19,7 +19,7 @@ import { ListItemImage } from './list-item-image';
       data-testid="list"
       [size]="size()"
       [selectMode]="selectMode()"
-      [borderVariant]="borderVariant()"
+      [border]="border()"
       [listRole]="listRole()"
     >
       <org-list-item
@@ -34,6 +34,7 @@ import { ListItemImage } from './list-item-image';
         [forceClickable]="forceClickable()"
         [isClickable]="isClickable()"
         [hideLabel]="hideLabel()"
+        [emphasizeColor]="emphasizeColor()"
         (clicked)="handleClicked()"
       />
     </org-list>
@@ -43,7 +44,7 @@ import { ListItemImage } from './list-item-image';
 class ListInteractiveHost {
   public readonly size = signal<ListSize>('sm');
   public readonly selectMode = signal<ListSelectMode | null | undefined>(undefined);
-  public readonly borderVariant = signal<ListBorderVariant | null | undefined>(undefined);
+  public readonly border = signal<ListBorder>('none');
   public readonly listRole = signal<string | null | undefined>(undefined);
   public readonly label = signal<string>('Item');
   public readonly asTag = signal<ListItemTag | null | undefined>(undefined);
@@ -55,6 +56,7 @@ class ListInteractiveHost {
   public readonly forceClickable = signal<boolean>(false);
   public readonly isClickable = signal<boolean>(true);
   public readonly hideLabel = signal<boolean>(false);
+  public readonly emphasizeColor = signal<ListItemEmphasizeColor>('none');
 
   protected readonly clickCount = signal<number>(0);
 
@@ -129,7 +131,7 @@ class ListRouterHost {
 type ListHostConfig = {
   size?: ListSize;
   selectMode?: ListSelectMode | null;
-  borderVariant?: ListBorderVariant | null;
+  border?: ListBorder;
   listRole?: string | null;
   label?: string;
   asTag?: ListItemTag | null;
@@ -141,6 +143,7 @@ type ListHostConfig = {
   forceClickable?: boolean;
   isClickable?: boolean;
   hideLabel?: boolean;
+  emphasizeColor?: ListItemEmphasizeColor;
 };
 
 describe('List (browser)', () => {
@@ -157,8 +160,8 @@ describe('List (browser)', () => {
         instance.selectMode.set(config.selectMode);
       }
 
-      if (config.borderVariant !== undefined) {
-        instance.borderVariant.set(config.borderVariant);
+      if (config.border !== undefined) {
+        instance.border.set(config.border);
       }
 
       if (config.listRole !== undefined) {
@@ -204,6 +207,10 @@ describe('List (browser)', () => {
       if (config.hideLabel !== undefined) {
         instance.hideLabel.set(config.hideLabel);
       }
+
+      if (config.emphasizeColor !== undefined) {
+        instance.emphasizeColor.set(config.emphasizeColor);
+      }
     });
 
   beforeEach(setupTestBed);
@@ -211,13 +218,13 @@ describe('List (browser)', () => {
   afterEach(destroyFixture);
 
   describe('list host reflection', () => {
-    it('renders default host attributes for size, select-mode, and border-variant', () => {
+    it('renders default host attributes for size, select-mode, and border', () => {
       const fixture = createInteractiveList();
       const host = queryByTestId(fixture, 'list');
 
       expect(host.getAttribute('data-size')).toBe('sm');
       expect(host.getAttribute('data-select-mode')).toBeNull();
-      expect(host.getAttribute('data-border-variant')).toBeNull();
+      expect(host.getAttribute('data-border')).toBe('none');
     });
 
     it('reflects the list size input on the host', async () => {
@@ -256,14 +263,35 @@ describe('List (browser)', () => {
       expect(host.getAttribute('data-select-mode')).toBeNull();
     });
 
-    it('reflects the list border-variant input on the host', async () => {
+    it('reflects every list border value on the host', async () => {
       const fixture = createInteractiveList();
       const host = queryByTestId(fixture, 'list');
 
-      fixture.componentInstance.borderVariant.set('outer');
-      await flush(fixture);
+      for (const border of ['items-only', 'full', 'list-only', 'none'] as const) {
+        fixture.componentInstance.border.set(border);
+        await flush(fixture);
 
-      expect(host.getAttribute('data-border-variant')).toBe('outer');
+        expect(host.getAttribute('data-border'), `border: ${border}`).toBe(border);
+      }
+    });
+
+    it('propagates the parent border to the child item except for none', async () => {
+      const fixture = createInteractiveList();
+      const item = queryByTestId(fixture, 'item');
+
+      expect(item.getAttribute('data-parent-border')).toBeNull();
+
+      fixture.componentInstance.border.set('items-only');
+      await flush(fixture);
+      expect(item.getAttribute('data-parent-border')).toBe('items-only');
+
+      fixture.componentInstance.border.set('full');
+      await flush(fixture);
+      expect(item.getAttribute('data-parent-border')).toBe('full');
+
+      fixture.componentInstance.border.set('none');
+      await flush(fixture);
+      expect(item.getAttribute('data-parent-border')).toBeNull();
     });
 
     it('defaults the inner ul role to null', () => {
@@ -401,6 +429,26 @@ describe('List (browser)', () => {
       await flush(fixture);
 
       expect(item.getAttribute('data-is-external-href')).toBe('');
+    });
+
+    it('omits the emphasize-color attribute by default', () => {
+      const fixture = createInteractiveList();
+      const item = queryByTestId(fixture, 'item');
+
+      expect(item.getAttribute('data-emphasize-color')).toBeNull();
+    });
+
+    it('reflects an emphasize-color value and omits it again for none', async () => {
+      const fixture = createInteractiveList();
+      const item = queryByTestId(fixture, 'item');
+
+      fixture.componentInstance.emphasizeColor.set('danger');
+      await flush(fixture);
+      expect(item.getAttribute('data-emphasize-color')).toBe('danger');
+
+      fixture.componentInstance.emphasizeColor.set('none');
+      await flush(fixture);
+      expect(item.getAttribute('data-emphasize-color')).toBeNull();
     });
   });
 

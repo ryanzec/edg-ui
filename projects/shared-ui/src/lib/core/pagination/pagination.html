@@ -38,7 +38,8 @@
         <org-button
           size="sm"
           color="neutral"
-          [variant]="page.isActive ? 'soft' : 'text'"
+          [variant]="page.isActive ? 'filled' : 'text'"
+          [colorStrength]="page.isActive ? 'soft' : 'strong'"
           [disabled]="brain.disabled()"
           [attr.aria-current]="page.isActive ? 'page' : null"
           [label]="page.value!.toString()"

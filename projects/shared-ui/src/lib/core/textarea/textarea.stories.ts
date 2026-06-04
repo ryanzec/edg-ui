@@ -439,7 +439,14 @@ export const LiveDemo: Story = {
               <org-textarea-toolbar-item>
                 <org-button [iconOnly]="true" label="link" ariaLabel="link" variant="text" preIcon="link" />
               </org-textarea-toolbar-item>
-              <org-button toolbar-right label="Save draft" variant="soft" color="neutral" size="sm" />
+              <org-button
+                toolbar-right
+                label="Save draft"
+                variant="filled"
+                colorStrength="soft"
+                color="neutral"
+                size="sm"
+              />
               <org-button toolbar-right label="Publish" variant="filled" color="primary" size="sm" />
             </org-textarea-toolbar>
           </org-textarea>

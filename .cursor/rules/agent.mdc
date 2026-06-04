@@ -64,6 +64,7 @@ These are the available project tool based commands that you must **ONLY** use w
   - append ` -- --include="**/*{{FILTER}}.spec*"` If you want to filter by spec file name .
   - append ` -- --filter="{{FILTER}}"` If you want to filter by test name.
 - `moon run :build-artifact`: Used to build design tokens typescript files and sync ai files for claude / cursor.
+- 
 # Post Completion Review
 When you have completed the initial scoped work, make sure to review the following:
 - If the changes require adding, removing or updating angular component / angular directive tests, use the `.claude/skills/.claude/skills/unit-testing-browser` skill to write those tests.

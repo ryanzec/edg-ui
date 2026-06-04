@@ -9,16 +9,20 @@ import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/d
 import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
 import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
 import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
+import { allColorStrengths } from '../types/component-types';
 import {
   Box,
   BoxBackground,
   BoxBorder,
   BoxColor,
+  BoxColorStrength,
   BoxPadding,
+  BoxShape,
   allBoxBackgrounds,
   allBoxBorders,
   allBoxColors,
   allBoxPaddings,
+  allBoxShapes,
 } from './box';
 
 type LiveDemoColorChoice = 'none' | BoxColor;
@@ -28,6 +32,12 @@ const allLiveDemoColorChoices = ['none', ...allBoxColors] as const;
 const liveDemoColorItems: ButtonToggleItem[] = allLiveDemoColorChoices.map((color) => ({
   label: color,
   value: color,
+  buttonColor: 'primary',
+}));
+
+const liveDemoColorStrengthItems: ButtonToggleItem[] = allColorStrengths.map((colorStrength) => ({
+  label: colorStrength,
+  value: colorStrength,
   buttonColor: 'primary',
 }));
 
@@ -46,6 +56,12 @@ const liveDemoPaddingItems: ButtonToggleItem[] = allBoxPaddings.map((padding) =>
 const liveDemoBackgroundItems: ButtonToggleItem[] = allBoxBackgrounds.map((background) => ({
   label: background,
   value: background,
+  buttonColor: 'primary',
+}));
+
+const liveDemoShapeItems: ButtonToggleItem[] = allBoxShapes.map((shape) => ({
+  label: shape,
+  value: shape,
   buttonColor: 'primary',
 }));
 
@@ -88,6 +104,9 @@ const liveDemoBackgroundItems: ButtonToggleItem[] = allBoxBackgrounds.map((backg
           <org-design-system-demo-control-group label="Color">
             <org-button-toggle [items]="colorItems" formControlName="color" buttonSize="sm" />
           </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Color strength">
+            <org-button-toggle [items]="colorStrengthItems" formControlName="colorStrength" buttonSize="sm" />
+          </org-design-system-demo-control-group>
           <org-design-system-demo-control-group label="Border">
             <org-button-toggle [items]="borderItems" formControlName="border" buttonSize="sm" />
           </org-design-system-demo-control-group>
@@ -96,6 +115,9 @@ const liveDemoBackgroundItems: ButtonToggleItem[] = allBoxBackgrounds.map((backg
           </org-design-system-demo-control-group>
           <org-design-system-demo-control-group label="Background">
             <org-button-toggle [items]="backgroundItems" formControlName="background" buttonSize="sm" />
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Shape">
+            <org-button-toggle [items]="shapeItems" formControlName="shape" buttonSize="sm" />
           </org-design-system-demo-control-group>
           <org-design-system-demo-control-group label="Clickable">
             <org-checkbox-toggle name="live-demo-clickable" value="clickable" formControlName="clickable">
@@ -107,9 +129,11 @@ const liveDemoBackgroundItems: ButtonToggleItem[] = allBoxBackgrounds.map((backg
           <div class="canvas-stage">
             <org-box
               [color]="liveDemoForm.controls.color.value === 'none' ? null : liveDemoForm.controls.color.value"
+              [colorStrength]="liveDemoForm.controls.colorStrength.value"
               [border]="liveDemoForm.controls.border.value"
               [padding]="liveDemoForm.controls.padding.value"
               [background]="liveDemoForm.controls.background.value"
+              [shape]="liveDemoForm.controls.shape.value"
               [isClickable]="liveDemoForm.controls.clickable.value"
               (clicked)="onBoxClicked()"
             >
@@ -136,17 +160,21 @@ const liveDemoBackgroundItems: ButtonToggleItem[] = allBoxBackgrounds.map((backg
 })
 class BoxLiveDemoStory {
   protected readonly colorItems = liveDemoColorItems;
+  protected readonly colorStrengthItems = liveDemoColorStrengthItems;
   protected readonly borderItems = liveDemoBorderItems;
   protected readonly paddingItems = liveDemoPaddingItems;
   protected readonly backgroundItems = liveDemoBackgroundItems;
+  protected readonly shapeItems = liveDemoShapeItems;
 
   protected readonly clickCount = signal<number>(0);
 
   protected readonly liveDemoForm = new FormGroup({
     color: new FormControl<LiveDemoColorChoice>('info', { nonNullable: true }),
+    colorStrength: new FormControl<BoxColorStrength>('soft', { nonNullable: true }),
     border: new FormControl<BoxBorder>('bordered', { nonNullable: true }),
     padding: new FormControl<BoxPadding>('base', { nonNullable: true }),
     background: new FormControl<BoxBackground>('colored', { nonNullable: true }),
+    shape: new FormControl<BoxShape>('rounded', { nonNullable: true }),
     clickable: new FormControl<boolean>(false, { nonNullable: true }),
   });
 
@@ -279,6 +307,10 @@ const meta: Meta<Box> = {
   - **colored**: Color input tints both the border and the background (default)
   - **colorless**: Color input only affects the border; background stays at the default
 
+  ### Shape Options
+  - **rounded**: Rounded corners using the base radius (default)
+  - **square**: Drops the corner radius to 0 for a square container
+
   ### Usage Examples
   \`\`\`html
   <!-- basic box -->
@@ -319,15 +351,23 @@ type Story = StoryObj<Box>;
 export const Default: Story = {
   args: {
     color: null,
+    colorStrength: 'soft',
     border: 'bordered',
     padding: 'base',
     background: 'colored',
+    shape: 'rounded',
   },
   argTypes: {
     color: {
       control: 'select',
       options: [null, ...allBoxColors],
       description: 'the color variant applied to the border and background',
+    },
+    colorStrength: {
+      control: 'select',
+      options: allColorStrengths,
+      description:
+        "the color intensity of the box; 'strong' renders a solid fill while 'soft' renders the soft tint (only applies when background is 'colored')",
     },
     border: {
       control: 'select',
@@ -344,6 +384,11 @@ export const Default: Story = {
       options: allBoxBackgrounds,
       description: 'whether the color input tints the background (colored) or leaves the default (colorless)',
     },
+    shape: {
+      control: 'select',
+      options: allBoxShapes,
+      description: "the corner shape of the box; 'square' drops the rounded radius to 0",
+    },
   },
   parameters: {
     docs: {
@@ -356,7 +401,14 @@ export const Default: Story = {
     props: args,
     template: `
       <div>
-        <org-box [color]="color" [border]="border" [padding]="padding" [background]="background">
+        <org-box
+          [color]="color"
+          [colorStrength]="colorStrength"
+          [border]="border"
+          [padding]="padding"
+          [background]="background"
+          [shape]="shape"
+        >
           Box content.
         </org-box>
       </div>
@@ -421,6 +473,49 @@ export const Showcase: Story = {
             <li><strong>Caution</strong>: Yellow for caution states</li>
             <li><strong>Warning</strong>: Orange for important warnings</li>
             <li><strong>Danger</strong>: Red for error/critical status</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Color strength" />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="flex flex-col gap-2 max-w-sm">
+              <org-box color="primary" colorStrength="soft">Primary soft.</org-box>
+              <org-box color="secondary" colorStrength="soft">Secondary soft.</org-box>
+              <org-box color="neutral" colorStrength="soft">Neutral soft.</org-box>
+              <org-box color="safe" colorStrength="soft">Safe soft.</org-box>
+              <org-box color="info" colorStrength="soft">Info soft.</org-box>
+              <org-box color="caution" colorStrength="soft">Caution soft.</org-box>
+              <org-box color="warning" colorStrength="soft">Warning soft.</org-box>
+              <org-box color="danger" colorStrength="soft">Danger soft.</org-box>
+            </div>
+            <div class="flex flex-col gap-2 max-w-sm">
+              <org-box color="primary" colorStrength="strong">Primary strong.</org-box>
+              <org-box color="secondary" colorStrength="strong">Secondary strong.</org-box>
+              <org-box color="neutral" colorStrength="strong">Neutral strong.</org-box>
+              <org-box color="safe" colorStrength="strong">Safe strong.</org-box>
+              <org-box color="info" colorStrength="strong">Info strong.</org-box>
+              <org-box color="caution" colorStrength="strong">Caution strong.</org-box>
+              <org-box color="warning" colorStrength="strong">Warning strong.</org-box>
+              <org-box color="danger" colorStrength="strong">Danger strong.</org-box>
+            </div>
+            <div class="flex flex-col gap-2 max-w-sm">
+              <org-box color="primary" colorStrength="strong" background="colorless">
+                Primary strong colorless.
+              </org-box>
+              <org-box color="safe" colorStrength="strong" background="colorless">Safe strong colorless.</org-box>
+              <org-box color="danger" colorStrength="strong" background="colorless">Danger strong colorless.</org-box>
+            </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>Soft</strong> (default): the soft tinted background with standard foreground text</li>
+            <li><strong>Strong</strong>: a solid saturated fill with the matching on-color foreground and border</li>
+            <li>
+              <strong>Strong + Colorless</strong>: colorless wins — the background and foreground revert to the neutral
+              default, so strength only affects the <code>colored</code> background
+            </li>
           </ul>
         </org-design-system-demo-expected-behaviour>
 
@@ -523,6 +618,20 @@ export const Showcase: Story = {
             <li><strong>Small</strong>: Small padding</li>
             <li><strong>Base</strong>: Base padding — the default value</li>
             <li><strong>Large</strong>: Large padding for spacious content areas</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Shape" />
+          <org-design-system-demo-canvas slot="canvas">
+            <org-box color="info" shape="rounded">Rounded box (default).</org-box>
+            <org-box color="info" shape="square">Square box.</org-box>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>Rounded</strong>: rounded corners using the base radius (default)</li>
+            <li><strong>Square</strong>: drops the corner radius to 0 for a flush, square container</li>
           </ul>
         </org-design-system-demo-expected-behaviour>
 

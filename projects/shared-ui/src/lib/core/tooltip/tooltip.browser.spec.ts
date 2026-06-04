@@ -40,6 +40,7 @@ const allPlacementValues = [
       [closeDelay]="closeDelay()"
       [keepOpenOnHover]="keepOpenOnHover()"
       [placement]="placement()"
+      [disabled]="disabled()"
       (opened)="onOpened()"
       (closed)="onClosed()"
     >
@@ -57,6 +58,7 @@ class TooltipShell {
   public readonly closeDelay = signal<number>(0);
   public readonly keepOpenOnHover = signal<boolean>(false);
   public readonly placement = signal<TooltipPlacement>('top');
+  public readonly disabled = signal<boolean>(false);
 
   protected readonly openedCount = signal<number>(0);
   protected readonly closedCount = signal<number>(0);
@@ -406,6 +408,75 @@ describe('Tooltip (browser)', () => {
       await userEvent.click(backdrop!, { position: { x: 5, y: 5 } });
 
       await waitFor(() => expect(queryOverlaySurface()).toBeNull());
+    });
+  });
+
+  describe('disabled', () => {
+    it('does not open on hover when disabled', async () => {
+      const fixture = createFixture(TooltipShell, (instance) => {
+        instance.disabled.set(true);
+      });
+      const trigger = queryByTestId(fixture, 'trigger');
+      const readout = queryByTestId(fixture, 'readout');
+
+      await userEvent.hover(trigger);
+
+      // allow any scheduled open setTimeout(0) to fire; a disabled tooltip must not open
+      await sleep(50);
+
+      expect(queryOverlaySurface()).toBeNull();
+      expect(readout.textContent).toContain('openedCount=0');
+    });
+
+    it('does not open on focus in when disabled', async () => {
+      const fixture = createFixture(TooltipShell, (instance) => {
+        instance.disabled.set(true);
+      });
+      const trigger = queryByTestId(fixture, 'trigger');
+
+      trigger.focus();
+
+      await sleep(50);
+
+      expect(queryOverlaySurface()).toBeNull();
+    });
+
+    it('does not open on click when disabled', async () => {
+      const fixture = createFixture(TooltipShell, (instance) => {
+        instance.triggerType.set('click');
+        instance.disabled.set(true);
+      });
+      const trigger = queryByTestId(fixture, 'trigger');
+
+      await userEvent.click(trigger);
+
+      await sleep(50);
+
+      expect(queryOverlaySurface()).toBeNull();
+    });
+
+    it('closes an open tooltip when disabled flips to true', async () => {
+      const fixture = createFixture(TooltipShell);
+      const trigger = queryByTestId(fixture, 'trigger');
+
+      await userEvent.hover(trigger);
+      await waitFor(() => expect(queryOverlaySurface()).not.toBeNull());
+
+      fixture.componentInstance.disabled.set(true);
+      await flush(fixture);
+
+      await waitFor(() => expect(queryOverlaySurface()).toBeNull());
+    });
+
+    it('still opens when disabled is false', async () => {
+      const fixture = createFixture(TooltipShell, (instance) => {
+        instance.disabled.set(false);
+      });
+      const trigger = queryByTestId(fixture, 'trigger');
+
+      await userEvent.hover(trigger);
+
+      await waitFor(() => expect(queryOverlaySurface()).not.toBeNull());
     });
   });
 

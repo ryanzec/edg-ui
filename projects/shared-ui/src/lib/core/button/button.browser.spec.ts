@@ -3,7 +3,14 @@ import { type ComponentFixture } from '@angular/core/testing';
 import { userEvent } from 'vitest/browser';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { vitestBrowserUtils, type SilencedLogManager } from '../../../../../../vitest-browser-utils';
-import { Button, type ButtonColor, type ButtonSize, type ButtonType, type ButtonVariant } from './button';
+import {
+  Button,
+  type ButtonColor,
+  type ButtonColorStrength,
+  type ButtonSize,
+  type ButtonType,
+  type ButtonVariant,
+} from './button';
 import { ButtonGroup, type ButtonGroupOrientation } from './button-group';
 import { type IconName } from '../icon/icon-brain';
 
@@ -18,6 +25,7 @@ import { type IconName } from '../icon/icon-brain';
       [label]="label()"
       [color]="color()"
       [variant]="variant()"
+      [colorStrength]="colorStrength()"
       [size]="size()"
       [type]="type()"
       [disabled]="disabled()"
@@ -45,6 +53,7 @@ class ButtonInteractiveHost {
   public readonly label = signal<string>('click me');
   public readonly color = signal<ButtonColor>('primary');
   public readonly variant = signal<ButtonVariant>('filled');
+  public readonly colorStrength = signal<ButtonColorStrength>('strong');
   public readonly size = signal<ButtonSize>('base');
   public readonly type = signal<ButtonType>('button');
   public readonly disabled = signal<boolean>(false);
@@ -152,6 +161,7 @@ type ButtonHostConfig = {
   label?: string;
   color?: ButtonColor;
   variant?: ButtonVariant;
+  colorStrength?: ButtonColorStrength;
   size?: ButtonSize;
   type?: ButtonType;
   disabled?: boolean;
@@ -186,6 +196,10 @@ describe('Button (browser)', () => {
 
       if (config.variant !== undefined) {
         instance.variant.set(config.variant);
+      }
+
+      if (config.colorStrength !== undefined) {
+        instance.colorStrength.set(config.colorStrength);
       }
 
       if (config.size !== undefined) {
@@ -271,13 +285,21 @@ describe('Button (browser)', () => {
       logManagerSilence.restore();
     });
 
-    it('renders the default color, variant, and size attributes', () => {
+    it('renders the default color, variant, color-strength, and size attributes', () => {
       const fixture = createInteractiveButton();
       const host = queryByTestId(fixture, 'button');
 
       expect(host.getAttribute('data-color')).toBe('primary');
       expect(host.getAttribute('data-variant')).toBe('filled');
+      expect(host.getAttribute('data-color-strength')).toBe('strong');
       expect(host.getAttribute('data-size')).toBe('base');
+    });
+
+    it('reflects the configured color strength', () => {
+      const fixture = createInteractiveButton({ colorStrength: 'soft' });
+      const host = queryByTestId(fixture, 'button');
+
+      expect(host.getAttribute('data-color-strength')).toBe('soft');
     });
 
     it('omits the boolean host attributes by default', () => {
@@ -307,6 +329,13 @@ describe('Button (browser)', () => {
       expect(host.getAttribute('data-icon-only')).toBe('');
       expect(host.getAttribute('data-exclude-spacing')).toBe('');
       expect(host.getAttribute('data-active')).toBe('');
+    });
+
+    it('reflects the outline variant', () => {
+      const fixture = createInteractiveButton({ variant: 'outline' });
+      const host = queryByTestId(fixture, 'button');
+
+      expect(host.getAttribute('data-variant')).toBe('outline');
     });
 
     it('toggles the data-loading attribute', async () => {

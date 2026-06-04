@@ -76,9 +76,9 @@
     --button-padding: 0;
   }
 
-  /* filled / soft / ghost focus mirrors hover; text and plain define their own focus slots */
+  /* filled / outline / ghost focus mirrors hover (any strength); text and plain define their own focus slots */
   :host([data-variant='filled']),
-  :host([data-variant='soft']),
+  :host([data-variant='outline']),
   :host([data-variant='ghost']) {
     --button-bg-focus: var(--button-bg-hover);
     --button-fg-focus: var(--button-fg-hover);
@@ -183,9 +183,12 @@
     --button-border-active: var(--color-danger-active);
   }
 
-  /* ===== SOFT VARIANT ===== */
+  /* ===== FILLED VARIANT — SOFT STRENGTH =====
+     mirrors the filled pattern but uses soft color tokens for a low-emphasis tinted background with
+     neutral foreground; hover / focus / active step through the soft state tokens
+   */
 
-  :host([data-color='primary'][data-variant='soft']) {
+  :host([data-color='primary'][data-variant='filled'][data-color-strength='soft']) {
     --button-bg: var(--color-primary-soft);
     --button-fg: var(--color-fg);
     --button-border: var(--color-primary-soft);
@@ -197,7 +200,7 @@
     --button-border-active: var(--color-primary-soft-active);
   }
 
-  :host([data-color='secondary'][data-variant='soft']) {
+  :host([data-color='secondary'][data-variant='filled'][data-color-strength='soft']) {
     --button-bg: var(--color-secondary-soft);
     --button-fg: var(--color-fg);
     --button-border: var(--color-secondary-soft);
@@ -209,7 +212,7 @@
     --button-border-active: var(--color-secondary-soft-active);
   }
 
-  :host([data-color='neutral'][data-variant='soft']) {
+  :host([data-color='neutral'][data-variant='filled'][data-color-strength='soft']) {
     --button-bg: var(--color-neutral-soft);
     --button-fg: var(--color-fg);
     --button-border: var(--color-neutral-soft);
@@ -221,7 +224,7 @@
     --button-border-active: var(--color-neutral-soft-active);
   }
 
-  :host([data-color='safe'][data-variant='soft']) {
+  :host([data-color='safe'][data-variant='filled'][data-color-strength='soft']) {
     --button-bg: var(--color-safe-soft);
     --button-fg: var(--color-fg);
     --button-border: var(--color-safe-soft);
@@ -233,7 +236,7 @@
     --button-border-active: var(--color-safe-soft-active);
   }
 
-  :host([data-color='info'][data-variant='soft']) {
+  :host([data-color='info'][data-variant='filled'][data-color-strength='soft']) {
     --button-bg: var(--color-info-soft);
     --button-fg: var(--color-fg);
     --button-border: var(--color-info-soft);
@@ -245,7 +248,7 @@
     --button-border-active: var(--color-info-soft-active);
   }
 
-  :host([data-color='caution'][data-variant='soft']) {
+  :host([data-color='caution'][data-variant='filled'][data-color-strength='soft']) {
     --button-bg: var(--color-caution-soft);
     --button-fg: var(--color-fg);
     --button-border: var(--color-caution-soft);
@@ -257,7 +260,7 @@
     --button-border-active: var(--color-caution-soft-active);
   }
 
-  :host([data-color='warning'][data-variant='soft']) {
+  :host([data-color='warning'][data-variant='filled'][data-color-strength='soft']) {
     --button-bg: var(--color-warning-soft);
     --button-fg: var(--color-fg);
     --button-border: var(--color-warning-soft);
@@ -269,7 +272,7 @@
     --button-border-active: var(--color-warning-soft-active);
   }
 
-  :host([data-color='danger'][data-variant='soft']) {
+  :host([data-color='danger'][data-variant='filled'][data-color-strength='soft']) {
     --button-bg: var(--color-danger-soft);
     --button-fg: var(--color-fg);
     --button-border: var(--color-danger-soft);
@@ -277,6 +280,208 @@
     --button-fg-hover: var(--color-fg);
     --button-border-hover: var(--color-danger-soft-hover);
     --button-bg-active: var(--color-danger-soft-active);
+    --button-fg-active: var(--color-fg);
+    --button-border-active: var(--color-danger-soft-active);
+  }
+
+  /* ===== OUTLINE VARIANT =====
+     filled-like colored border, but the background stays transparent in every state; the border and
+     foreground step through the strong hover / active color tokens on interaction.
+   */
+
+  :host([data-color='primary'][data-variant='outline']) {
+    --button-bg: transparent;
+    --button-fg: var(--color-primary);
+    --button-border: var(--color-primary);
+    --button-bg-hover: transparent;
+    --button-fg-hover: var(--color-primary-hover);
+    --button-border-hover: var(--color-primary-hover);
+    --button-bg-active: transparent;
+    --button-fg-active: var(--color-primary-active);
+    --button-border-active: var(--color-primary-active);
+  }
+
+  :host([data-color='secondary'][data-variant='outline']) {
+    --button-bg: transparent;
+    --button-fg: var(--color-secondary);
+    --button-border: var(--color-secondary);
+    --button-bg-hover: transparent;
+    --button-fg-hover: var(--color-secondary-hover);
+    --button-border-hover: var(--color-secondary-hover);
+    --button-bg-active: transparent;
+    --button-fg-active: var(--color-secondary-active);
+    --button-border-active: var(--color-secondary-active);
+  }
+
+  :host([data-color='neutral'][data-variant='outline']) {
+    --button-bg: transparent;
+    --button-fg: var(--color-neutral);
+    --button-border: var(--color-neutral);
+    --button-bg-hover: transparent;
+    --button-fg-hover: var(--color-neutral-hover);
+    --button-border-hover: var(--color-neutral-hover);
+    --button-bg-active: transparent;
+    --button-fg-active: var(--color-neutral-active);
+    --button-border-active: var(--color-neutral-active);
+  }
+
+  :host([data-color='safe'][data-variant='outline']) {
+    --button-bg: transparent;
+    --button-fg: var(--color-safe);
+    --button-border: var(--color-safe);
+    --button-bg-hover: transparent;
+    --button-fg-hover: var(--color-safe-hover);
+    --button-border-hover: var(--color-safe-hover);
+    --button-bg-active: transparent;
+    --button-fg-active: var(--color-safe-active);
+    --button-border-active: var(--color-safe-active);
+  }
+
+  :host([data-color='info'][data-variant='outline']) {
+    --button-bg: transparent;
+    --button-fg: var(--color-info);
+    --button-border: var(--color-info);
+    --button-bg-hover: transparent;
+    --button-fg-hover: var(--color-info-hover);
+    --button-border-hover: var(--color-info-hover);
+    --button-bg-active: transparent;
+    --button-fg-active: var(--color-info-active);
+    --button-border-active: var(--color-info-active);
+  }
+
+  :host([data-color='caution'][data-variant='outline']) {
+    --button-bg: transparent;
+    --button-fg: var(--color-caution);
+    --button-border: var(--color-caution);
+    --button-bg-hover: transparent;
+    --button-fg-hover: var(--color-caution-hover);
+    --button-border-hover: var(--color-caution-hover);
+    --button-bg-active: transparent;
+    --button-fg-active: var(--color-caution-active);
+    --button-border-active: var(--color-caution-active);
+  }
+
+  :host([data-color='warning'][data-variant='outline']) {
+    --button-bg: transparent;
+    --button-fg: var(--color-warning);
+    --button-border: var(--color-warning);
+    --button-bg-hover: transparent;
+    --button-fg-hover: var(--color-warning-hover);
+    --button-border-hover: var(--color-warning-hover);
+    --button-bg-active: transparent;
+    --button-fg-active: var(--color-warning-active);
+    --button-border-active: var(--color-warning-active);
+  }
+
+  :host([data-color='danger'][data-variant='outline']) {
+    --button-bg: transparent;
+    --button-fg: var(--color-danger);
+    --button-border: var(--color-danger);
+    --button-bg-hover: transparent;
+    --button-fg-hover: var(--color-danger-hover);
+    --button-border-hover: var(--color-danger-hover);
+    --button-bg-active: transparent;
+    --button-fg-active: var(--color-danger-active);
+    --button-border-active: var(--color-danger-active);
+  }
+
+  /* ===== OUTLINE VARIANT — SOFT STRENGTH =====
+     mirrors the outline pattern but uses the soft border tokens with a neutral foreground, matching
+     the low-emphasis foreground convention of the filled-soft blocks; background stays transparent.
+   */
+
+  :host([data-color='primary'][data-variant='outline'][data-color-strength='soft']) {
+    --button-bg: transparent;
+    --button-fg: var(--color-fg);
+    --button-border: var(--color-primary-soft);
+    --button-bg-hover: transparent;
+    --button-fg-hover: var(--color-fg);
+    --button-border-hover: var(--color-primary-soft-hover);
+    --button-bg-active: transparent;
+    --button-fg-active: var(--color-fg);
+    --button-border-active: var(--color-primary-soft-active);
+  }
+
+  :host([data-color='secondary'][data-variant='outline'][data-color-strength='soft']) {
+    --button-bg: transparent;
+    --button-fg: var(--color-fg);
+    --button-border: var(--color-secondary-soft);
+    --button-bg-hover: transparent;
+    --button-fg-hover: var(--color-fg);
+    --button-border-hover: var(--color-secondary-soft-hover);
+    --button-bg-active: transparent;
+    --button-fg-active: var(--color-fg);
+    --button-border-active: var(--color-secondary-soft-active);
+  }
+
+  :host([data-color='neutral'][data-variant='outline'][data-color-strength='soft']) {
+    --button-bg: transparent;
+    --button-fg: var(--color-fg);
+    --button-border: var(--color-neutral-soft);
+    --button-bg-hover: transparent;
+    --button-fg-hover: var(--color-fg);
+    --button-border-hover: var(--color-neutral-soft-hover);
+    --button-bg-active: transparent;
+    --button-fg-active: var(--color-fg);
+    --button-border-active: var(--color-neutral-soft-active);
+  }
+
+  :host([data-color='safe'][data-variant='outline'][data-color-strength='soft']) {
+    --button-bg: transparent;
+    --button-fg: var(--color-fg);
+    --button-border: var(--color-safe-soft);
+    --button-bg-hover: transparent;
+    --button-fg-hover: var(--color-fg);
+    --button-border-hover: var(--color-safe-soft-hover);
+    --button-bg-active: transparent;
+    --button-fg-active: var(--color-fg);
+    --button-border-active: var(--color-safe-soft-active);
+  }
+
+  :host([data-color='info'][data-variant='outline'][data-color-strength='soft']) {
+    --button-bg: transparent;
+    --button-fg: var(--color-fg);
+    --button-border: var(--color-info-soft);
+    --button-bg-hover: transparent;
+    --button-fg-hover: var(--color-fg);
+    --button-border-hover: var(--color-info-soft-hover);
+    --button-bg-active: transparent;
+    --button-fg-active: var(--color-fg);
+    --button-border-active: var(--color-info-soft-active);
+  }
+
+  :host([data-color='caution'][data-variant='outline'][data-color-strength='soft']) {
+    --button-bg: transparent;
+    --button-fg: var(--color-fg);
+    --button-border: var(--color-caution-soft);
+    --button-bg-hover: transparent;
+    --button-fg-hover: var(--color-fg);
+    --button-border-hover: var(--color-caution-soft-hover);
+    --button-bg-active: transparent;
+    --button-fg-active: var(--color-fg);
+    --button-border-active: var(--color-caution-soft-active);
+  }
+
+  :host([data-color='warning'][data-variant='outline'][data-color-strength='soft']) {
+    --button-bg: transparent;
+    --button-fg: var(--color-fg);
+    --button-border: var(--color-warning-soft);
+    --button-bg-hover: transparent;
+    --button-fg-hover: var(--color-fg);
+    --button-border-hover: var(--color-warning-soft-hover);
+    --button-bg-active: transparent;
+    --button-fg-active: var(--color-fg);
+    --button-border-active: var(--color-warning-soft-active);
+  }
+
+  :host([data-color='danger'][data-variant='outline'][data-color-strength='soft']) {
+    --button-bg: transparent;
+    --button-fg: var(--color-fg);
+    --button-border: var(--color-danger-soft);
+    --button-bg-hover: transparent;
+    --button-fg-hover: var(--color-fg);
+    --button-border-hover: var(--color-danger-soft-hover);
+    --button-bg-active: transparent;
     --button-fg-active: var(--color-fg);
     --button-border-active: var(--color-danger-soft-active);
   }
@@ -377,6 +582,84 @@
     --button-bg-active: var(--color-danger-active);
     --button-fg-active: var(--color-danger-on);
     --button-border-active: var(--color-danger-active);
+  }
+
+  /* ===== GHOST VARIANT — SOFT STRENGTH =====
+     resting transparent background with colored text inherited from the ghost blocks; only the
+     interactive fill changes — hover / active use the soft state tokens with neutral foreground.
+     focus mirrors hover via the shared filled/ghost focus rule.
+   */
+
+  :host([data-color='primary'][data-variant='ghost'][data-color-strength='soft']) {
+    --button-bg-hover: var(--color-primary-soft-hover);
+    --button-fg-hover: var(--color-fg);
+    --button-border-hover: var(--color-primary-soft-hover);
+    --button-bg-active: var(--color-primary-soft-active);
+    --button-fg-active: var(--color-fg);
+    --button-border-active: var(--color-primary-soft-active);
+  }
+
+  :host([data-color='secondary'][data-variant='ghost'][data-color-strength='soft']) {
+    --button-bg-hover: var(--color-secondary-soft-hover);
+    --button-fg-hover: var(--color-fg);
+    --button-border-hover: var(--color-secondary-soft-hover);
+    --button-bg-active: var(--color-secondary-soft-active);
+    --button-fg-active: var(--color-fg);
+    --button-border-active: var(--color-secondary-soft-active);
+  }
+
+  :host([data-color='neutral'][data-variant='ghost'][data-color-strength='soft']) {
+    --button-bg-hover: var(--color-neutral-soft-hover);
+    --button-fg-hover: var(--color-fg);
+    --button-border-hover: var(--color-neutral-soft-hover);
+    --button-bg-active: var(--color-neutral-soft-active);
+    --button-fg-active: var(--color-fg);
+    --button-border-active: var(--color-neutral-soft-active);
+  }
+
+  :host([data-color='safe'][data-variant='ghost'][data-color-strength='soft']) {
+    --button-bg-hover: var(--color-safe-soft-hover);
+    --button-fg-hover: var(--color-fg);
+    --button-border-hover: var(--color-safe-soft-hover);
+    --button-bg-active: var(--color-safe-soft-active);
+    --button-fg-active: var(--color-fg);
+    --button-border-active: var(--color-safe-soft-active);
+  }
+
+  :host([data-color='info'][data-variant='ghost'][data-color-strength='soft']) {
+    --button-bg-hover: var(--color-info-soft-hover);
+    --button-fg-hover: var(--color-fg);
+    --button-border-hover: var(--color-info-soft-hover);
+    --button-bg-active: var(--color-info-soft-active);
+    --button-fg-active: var(--color-fg);
+    --button-border-active: var(--color-info-soft-active);
+  }
+
+  :host([data-color='caution'][data-variant='ghost'][data-color-strength='soft']) {
+    --button-bg-hover: var(--color-caution-soft-hover);
+    --button-fg-hover: var(--color-fg);
+    --button-border-hover: var(--color-caution-soft-hover);
+    --button-bg-active: var(--color-caution-soft-active);
+    --button-fg-active: var(--color-fg);
+    --button-border-active: var(--color-caution-soft-active);
+  }
+
+  :host([data-color='warning'][data-variant='ghost'][data-color-strength='soft']) {
+    --button-bg-hover: var(--color-warning-soft-hover);
+    --button-fg-hover: var(--color-fg);
+    --button-border-hover: var(--color-warning-soft-hover);
+    --button-bg-active: var(--color-warning-soft-active);
+    --button-fg-active: var(--color-fg);
+    --button-border-active: var(--color-warning-soft-active);
+  }
+
+  :host([data-color='danger'][data-variant='ghost'][data-color-strength='soft']) {
+    --button-bg-hover: var(--color-danger-soft-hover);
+    --button-fg-hover: var(--color-fg);
+    --button-border-hover: var(--color-danger-soft-hover);
+    --button-bg-active: var(--color-danger-soft-active);
+    --button-fg-active: var(--color-fg);
+    --button-border-active: var(--color-danger-soft-active);
   }
 
   /* ===== TEXT VARIANT =====
@@ -501,6 +784,59 @@
     --button-bg-active: transparent;
     --button-fg-active: var(--color-danger-active);
     --button-border-active: transparent;
+  }
+
+  /* ===== TEXT VARIANT — SOFT STRENGTH =====
+     resting and hover text states are inherited from the text blocks; only the focus-visible fill
+     changes — it uses the soft hover token with neutral foreground instead of the strong fill.
+   */
+
+  :host([data-color='primary'][data-variant='text'][data-color-strength='soft']) {
+    --button-bg-focus: var(--color-primary-soft-hover);
+    --button-fg-focus: var(--color-fg);
+    --button-border-focus: var(--color-primary-soft-hover);
+  }
+
+  :host([data-color='secondary'][data-variant='text'][data-color-strength='soft']) {
+    --button-bg-focus: var(--color-secondary-soft-hover);
+    --button-fg-focus: var(--color-fg);
+    --button-border-focus: var(--color-secondary-soft-hover);
+  }
+
+  :host([data-color='neutral'][data-variant='text'][data-color-strength='soft']) {
+    --button-bg-focus: var(--color-neutral-soft-hover);
+    --button-fg-focus: var(--color-fg);
+    --button-border-focus: var(--color-neutral-soft-hover);
+  }
+
+  :host([data-color='safe'][data-variant='text'][data-color-strength='soft']) {
+    --button-bg-focus: var(--color-safe-soft-hover);
+    --button-fg-focus: var(--color-fg);
+    --button-border-focus: var(--color-safe-soft-hover);
+  }
+
+  :host([data-color='info'][data-variant='text'][data-color-strength='soft']) {
+    --button-bg-focus: var(--color-info-soft-hover);
+    --button-fg-focus: var(--color-fg);
+    --button-border-focus: var(--color-info-soft-hover);
+  }
+
+  :host([data-color='caution'][data-variant='text'][data-color-strength='soft']) {
+    --button-bg-focus: var(--color-caution-soft-hover);
+    --button-fg-focus: var(--color-fg);
+    --button-border-focus: var(--color-caution-soft-hover);
+  }
+
+  :host([data-color='warning'][data-variant='text'][data-color-strength='soft']) {
+    --button-bg-focus: var(--color-warning-soft-hover);
+    --button-fg-focus: var(--color-fg);
+    --button-border-focus: var(--color-warning-soft-hover);
+  }
+
+  :host([data-color='danger'][data-variant='text'][data-color-strength='soft']) {
+    --button-bg-focus: var(--color-danger-soft-hover);
+    --button-fg-focus: var(--color-fg);
+    --button-border-focus: var(--color-danger-soft-hover);
   }
 
   /* ===== PLAIN VARIANT =====

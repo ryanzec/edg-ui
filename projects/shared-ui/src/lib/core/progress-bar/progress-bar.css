@@ -1,0 +1,78 @@
+@layer components {
+  :host {
+    display: block;
+    width: 100%;
+    height: var(--progress-bar-height);
+    border-radius: var(--progress-bar-radius);
+    background-color: var(--progress-bar-track-bg);
+    overflow: hidden;
+  }
+
+  .fill {
+    height: 100%;
+    border-radius: inherit;
+    background-color: var(--progress-bar-fill-bg);
+    transition: width var(--progress-bar-transition-duration) var(--progress-bar-transition-easing);
+  }
+
+  /* shape */
+  :host([data-shape='pill']) {
+    --progress-bar-radius: var(--radius-pill);
+  }
+
+  :host([data-shape='rounded']) {
+    --progress-bar-radius: var(--radius-xs);
+  }
+
+  /* sizes */
+  :host([data-size='sm']) {
+    --progress-bar-height: var(--sizing-14xs);
+  }
+
+  :host([data-size='base']) {
+    --progress-bar-height: var(--sizing-13xs);
+  }
+
+  :host([data-size='lg']) {
+    --progress-bar-height: var(--sizing-12xs);
+  }
+
+  /* colors — the filled portion */
+  :host([data-color='primary']) {
+    --progress-bar-fill-bg: var(--color-primary);
+  }
+
+  :host([data-color='secondary']) {
+    --progress-bar-fill-bg: var(--color-secondary);
+  }
+
+  :host([data-color='neutral']) {
+    --progress-bar-fill-bg: var(--color-neutral);
+  }
+
+  :host([data-color='safe']) {
+    --progress-bar-fill-bg: var(--color-safe);
+  }
+
+  :host([data-color='info']) {
+    --progress-bar-fill-bg: var(--color-info);
+  }
+
+  :host([data-color='caution']) {
+    --progress-bar-fill-bg: var(--color-caution);
+  }
+
+  :host([data-color='warning']) {
+    --progress-bar-fill-bg: var(--color-warning);
+  }
+
+  :host([data-color='danger']) {
+    --progress-bar-fill-bg: var(--color-danger);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fill {
+      transition: none;
+    }
+  }
+}

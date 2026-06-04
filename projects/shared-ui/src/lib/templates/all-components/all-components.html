@@ -93,18 +93,6 @@
   </div>
 
   <div class="component-block">
-    <h3 class="component-block-name">Chat</h3>
-    <org-chat>
-      <org-chat-message role="user" runPosition="only" authorName="Sarah Chen" time="2:14 PM">
-        Hey — can you summarise the release?
-      </org-chat-message>
-      <org-chat-message role="assistant" runPosition="only" authorName="Assistant" time="2:14 PM">
-        Sure: build #421 was promoted to prod, no regressions in tests.
-      </org-chat-message>
-    </org-chat>
-  </div>
-
-  <div class="component-block">
     <h3 class="component-block-name">Checkbox</h3>
     <div class="flex items-center gap-2">
       <org-checkbox name="cb-1" value="a" [checked]="true" />
@@ -277,7 +265,7 @@
 
   <div class="component-block">
     <h3 class="component-block-name">List</h3>
-    <org-list size="sm" borderVariant="outer">
+    <org-list size="sm" border="list-only">
       <org-list-item label="Home">
         <org-list-item-icon name="house" />
       </org-list-item>

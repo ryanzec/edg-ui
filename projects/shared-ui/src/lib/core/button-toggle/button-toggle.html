@@ -1,7 +1,8 @@
 <org-button-group>
   @for (item of items(); track item.value) {
     <org-button
-      variant="soft"
+      variant="filled"
+      colorStrength="soft"
       [class.w-full]="fullWidth()"
       [color]="item.buttonColor"
       [size]="buttonSize()"

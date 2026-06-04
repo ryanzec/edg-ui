@@ -32,6 +32,7 @@
 @import './notifications/notifications-tokens.css';
 @import './overlay-menu/overlay-menu-tokens.css';
 @import './pagination/pagination-tokens.css';
+@import './progress-bar/progress-bar-tokens.css';
 @import './radio/radio-tokens.css';
 @import './radio/radio-group-tokens.css';
 @import './skeleton/skeleton-tokens.css';

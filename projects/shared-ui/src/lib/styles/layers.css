@@ -3,4 +3,4 @@
  * other css is processed so we crake this is own file and can make sure this is always the first import which will
  * ensure the layer ordering is correct.
  */
-@layer reset, base, theme, components, utilities, application;
+@layer reset, base, theme, components, application, utilities;

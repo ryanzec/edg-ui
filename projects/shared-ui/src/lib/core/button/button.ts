@@ -45,10 +45,16 @@ export const allButtonTypes = ['button', 'submit', 'reset'] as const;
 export type ButtonType = (typeof allButtonTypes)[number];
 
 /** all available button variant values */
-export const allButtonVariants = ['filled', 'ghost', 'text', 'soft', 'plain'] as const;
+export const allButtonVariants = ['filled', 'outline', 'ghost', 'text', 'plain'] as const;
 
 /** the visual style variant of the button */
 export type ButtonVariant = (typeof allButtonVariants)[number];
+
+/** all available button color-strength values */
+export const allButtonColorStrengths = ['strong', 'soft'] as const;
+
+/** the color intensity applied to the button's variant */
+export type ButtonColorStrength = (typeof allButtonColorStrengths)[number];
 
 /** the default color of the button */
 export const BUTTON_COLOR_DEFAULT: ButtonColor = 'primary';
@@ -58,6 +64,9 @@ export const BUTTON_SIZE_DEFAULT: ButtonSize = 'base';
 
 /** the default variant of the button */
 export const BUTTON_VARIANT_DEFAULT: ButtonVariant = 'filled';
+
+/** the default color strength of the button */
+export const BUTTON_COLOR_STRENGTH_DEFAULT: ButtonColorStrength = 'strong';
 
 /** the default html button type */
 export const BUTTON_TYPE_DEFAULT: ButtonType = 'button';
@@ -83,6 +92,7 @@ export const BUTTON_POST_ICON_DEFAULT: IconName | undefined = undefined;
   host: {
     '[attr.data-color]': 'color()',
     '[attr.data-variant]': 'variant()',
+    '[attr.data-color-strength]': 'colorStrength()',
     '[attr.data-size]': 'size()',
     '[attr.data-icon-only]': 'iconOnly() ? "" : null',
     '[attr.data-exclude-spacing]': 'excludeSpacing() ? "" : null',
@@ -113,6 +123,9 @@ export class Button {
 
   /** the visual style variant of the button */
   public readonly variant = input<ButtonVariant>(BUTTON_VARIANT_DEFAULT);
+
+  /** the color intensity of the variant; 'soft' swaps strong color tokens for their soft equivalents where applicable */
+  public readonly colorStrength = input<ButtonColorStrength>(BUTTON_COLOR_STRENGTH_DEFAULT);
 
   /** whether the button is disabled and non-interactive */
   public readonly disabled = input<boolean>(BUTTON_DISABLED_DEFAULT);
