@@ -1,5 +1,5 @@
 /** the single broadcast channel name shared across all browser tabs */
-const TAB_CHANNEL_NAME = 'tab-channel';
+export const BROWSER_TAB_CHANNEL_NAME = 'tab-channel';
 
 /** the kinds of messages that can be broadcast between browser tabs */
 export const TabMessageType = {
@@ -16,7 +16,7 @@ export type BrowserTabMessage = {
 
 class BrowserTabsManager {
   /** the single broadcast channel used to communicate between browser tabs */
-  private _channel = new BroadcastChannel(TAB_CHANNEL_NAME);
+  private _channel = new BroadcastChannel(BROWSER_TAB_CHANNEL_NAME);
 
   constructor() {
     this._channel.onmessage = (event: MessageEvent<BrowserTabMessage>) => {

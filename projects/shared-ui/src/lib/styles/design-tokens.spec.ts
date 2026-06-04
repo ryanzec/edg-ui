@@ -10,7 +10,7 @@ describe('designTokenUtils', () => {
       });
 
       it('returns the resting chevron color for the date picker trigger', () => {
-        expect(designTokenUtils.getColorToken('date.picker.input.trigger.chevron.fg')).toBe('oklch(0.46 0.008 260)');
+        expect(designTokenUtils.getColorToken('date.picker.input.trigger.chevron.fg')).toBe('oklch(0.46 0 260)');
       });
 
       it('returns the hover chevron color for the date picker trigger', () => {
@@ -35,15 +35,15 @@ describe('designTokenUtils', () => {
 
     describe('dark theme', () => {
       it('returns the dark override value for the foreground color', () => {
-        expect(designTokenUtils.getColorToken('fg', 'dark')).toBe('oklch(0.89 0.005 95)');
+        expect(designTokenUtils.getColorToken('fg', 'dark')).toBe('oklch(0.89 0 95)');
       });
 
       it('returns a different value than light for bg.app', () => {
-        expect(designTokenUtils.getColorToken('bg.app', 'dark')).toBe('oklch(0.17 0.01 260)');
+        expect(designTokenUtils.getColorToken('bg.app', 'dark')).toBe('oklch(0.17 0 260)');
       });
 
       it('returns a dark-specific border color', () => {
-        expect(designTokenUtils.getColorToken('border', 'dark')).toBe('oklch(0.34 0.009 260)');
+        expect(designTokenUtils.getColorToken('border', 'dark')).toBe('oklch(0.34 0 260)');
       });
 
       it('returns a dark-specific link color', () => {

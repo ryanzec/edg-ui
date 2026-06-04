@@ -1,6 +1,11 @@
 import { afterEach, describe, expect, it } from 'vitest';
 
-import { type BrowserTabMessage, browserTabsManager, TabMessageType } from './browser-tabs-manager';
+import {
+  type BrowserTabMessage,
+  browserTabsManager,
+  TabMessageType,
+  BROWSER_TAB_CHANNEL_NAME,
+} from './browser-tabs-manager';
 
 describe('browserTabsManager', () => {
   describe('sendMessage', () => {
@@ -8,7 +13,7 @@ describe('browserTabsManager', () => {
       const message: BrowserTabMessage = { type: TabMessageType.MESSAGE, data: { value: 'sent' } };
 
       const received = new Promise<BrowserTabMessage>((resolve) => {
-        const listener = new BroadcastChannel('tab-channel');
+        const listener = new BroadcastChannel(BROWSER_TAB_CHANNEL_NAME);
 
         listener.onmessage = (event: MessageEvent<BrowserTabMessage>) => {
           listener.close();
@@ -30,7 +35,7 @@ describe('browserTabsManager', () => {
         browserTabsManager.onMessage = resolve;
       });
 
-      const sender = new BroadcastChannel('tab-channel');
+      const sender = new BroadcastChannel(BROWSER_TAB_CHANNEL_NAME);
 
       sender.postMessage(message);
 
