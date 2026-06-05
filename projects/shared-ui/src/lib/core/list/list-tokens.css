@@ -14,9 +14,9 @@
 
   /* list-item: border slots — default to no visible border; per-side widths drive separators + emphasize */
   --list-item-border-color: var(--color-border);
-  --list-item-border-top-width: 0;
-  --list-item-border-bottom-width: 0;
-  --list-item-border-left-width: 0;
+  --list-item-border-top-width: 0rem;
+  --list-item-border-bottom-width: 0rem;
+  --list-item-border-left-width: 0rem;
   --list-item-border-left-color: var(--list-item-border-color);
 
   /* list-item: state colors */

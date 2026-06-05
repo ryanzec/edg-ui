@@ -14,7 +14,7 @@
 
   /* padding variants */
   :host([data-padding='none']) {
-    --box-padding: 0;
+    --box-padding: 0rem;
   }
 
   :host([data-padding='sm']) {
@@ -31,7 +31,7 @@
 
   /* shape variants — rounded (default) keeps --box-radius; square drops it to 0 */
   :host([data-shape='square']) {
-    --box-radius: 0;
+    --box-radius: 0rem;
   }
 
   /* color variants — border color + background */

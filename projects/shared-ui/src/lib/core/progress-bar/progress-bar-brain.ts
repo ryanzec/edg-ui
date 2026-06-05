@@ -1,5 +1,5 @@
 import { Directive, computed, input } from '@angular/core';
-import { angularUtils } from '@organization/shared-utils';
+import { angularUtils, logManager } from '@organization/shared-utils';
 
 /** default value for the percentage input */
 export const PROGRESS_BAR_PERCENTAGE_DEFAULT = 0;
@@ -40,6 +40,17 @@ export class ProgressBarBrainDirective {
 
   /** the percentage clamped to the valid 0–100 range, used for both the aria value and the visual fill width */
   public readonly effectivePercentage = computed<number>(() => {
-    return Math.min(PROGRESS_BAR_PERCENTAGE_MAX, Math.max(PROGRESS_BAR_PERCENTAGE_MIN, this.percentage()));
+    const percentage = this.percentage();
+
+    if (Number.isFinite(percentage) === false) {
+      logManager.warn({
+        type: 'progress-bar-invalid-percentage',
+        percentage,
+      });
+
+      return PROGRESS_BAR_PERCENTAGE_MIN;
+    }
+
+    return Math.min(PROGRESS_BAR_PERCENTAGE_MAX, Math.max(PROGRESS_BAR_PERCENTAGE_MIN, percentage));
   });
 }

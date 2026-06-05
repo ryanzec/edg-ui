@@ -59,7 +59,6 @@ export * from './overlay-menu/overlay-menu';
 export * from './overlay-menu/overlay-menu-trigger';
 export * from './pagination/pagination';
 export * from './progress-bar/progress-bar';
-export * from './progress-bar/progress-bar-brain';
 export * from './scroll-area/scroll-area';
 export * from './slide-container/slide-container';
 export * from './slide-container/slide-container-item';
