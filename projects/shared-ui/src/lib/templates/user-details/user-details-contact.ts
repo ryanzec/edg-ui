@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { Card } from '../../core/card/card';
-import { CardContent } from '../../core/card/card-content';
-import { CardHeader } from '../../core/card/card-header';
+import { Box } from '../../core/box/box';
+import { BoxContent } from '../../core/box/box-content';
+import { BoxHeader } from '../../core/box/box-header';
 import { FormField } from '../../core/form-fields/form-field';
 import { FormFields } from '../../core/form-fields/form-fields';
 import { Input } from '../../core/input/input';
@@ -23,7 +23,7 @@ export const USER_DETAILS_CONTACT_ERRORS_DEFAULT: UserDetailsContactErrors = {};
 @Component({
   selector: 'org-user-details-contact',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Card, CardContent, CardHeader, FormField, FormFields, Input, Label, ReactiveFormsModule],
+  imports: [Box, BoxContent, BoxHeader, FormField, FormFields, Input, Label, ReactiveFormsModule],
   templateUrl: './user-details-contact.html',
   host: {
     class: 'block',

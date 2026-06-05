@@ -2,9 +2,11 @@
 alwaysApply: true
 ---
 # Vitest Loop Context Pattern
- 
-If an expect is happing in the loop of a vitest test, you **MUST** use the second paramets to provicde context of the loop data for better failed test debugging.
- 
+
+When an `expect` happens inside a loop in a vitest test, the loop data must be surfaced for better failed-test debugging.
+
+- **MUST** use the second parameter of `expect` to provide context of the loop data.
+
 # Example
 ```ts
 it('returns false for every known feature flag', () => {

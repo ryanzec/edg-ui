@@ -4,8 +4,8 @@ import type { Meta, StoryObj } from '@storybook/angular';
 import { ButtonToggle, ButtonToggleItem } from '../button-toggle/button-toggle';
 import { IconName } from '../icon/icon-brain';
 import { CheckboxToggle } from '../checkbox-toggle/checkbox-toggle';
-import { Card } from '../card/card';
-import { CardContent } from '../card/card-content';
+import { Box } from '../box/box';
+import { BoxContent } from '../box/box-content';
 import { Button } from '../button/button';
 import { Icon } from '../icon/icon';
 import { Tag } from '../tags/tag';
@@ -545,10 +545,10 @@ class TabsClosableShowcase {
 @Component({
   selector: 'story-tabs-inside-card',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Tabs, Tab, Tag, Card, CardContent],
+  imports: [Tabs, Tab, Tag, Box, BoxContent],
   template: `
-    <org-card>
-      <org-card-content>
+    <org-box layout="stack">
+      <org-box-content>
         <div class="flex flex-col gap-2">
           <org-tabs [value]="value()" (valueChange)="value.set($event)">
             <org-tab value="details">Details</org-tab>
@@ -562,8 +562,8 @@ class TabsClosableShowcase {
             Active panel: <strong>{{ value() }}</strong>
           </p>
         </div>
-      </org-card-content>
-    </org-card>
+      </org-box-content>
+    </org-box>
   `,
 })
 class TabsInsideCardShowcase {

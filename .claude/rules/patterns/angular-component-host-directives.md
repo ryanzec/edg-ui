@@ -3,7 +3,9 @@ alwaysApply: true
 ---
 # Angular Component Host Directives Pattern
 
-You want to **ALWAYS** use explicitly pattern for add `hostDirectives` to components to avoid angular compile issues.
+When adding `hostDirectives` to a component, use the explicit form to avoid Angular compile issues.
+
+- **ALWAYS** use the explicit object form (`directive` + `inputs`) shown below.
 
 # Example
 

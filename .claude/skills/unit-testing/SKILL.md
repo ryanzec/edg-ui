@@ -5,7 +5,7 @@ description: Use this skill whenever writing tests for code that does not requir
 # Unit Testing
 
 # **CRITICAL** Rules
-- **ONLY** write vitest unit tests without the browser feature for code that does not require a browser to properly test .
+- **ONLY** write vitest unit tests without the browser feature for code that does not require a browser to properly test it.
 
 # Rules
 - **ALWAYS** use `vitest` apis.
@@ -18,12 +18,9 @@ description: Use this skill whenever writing tests for code that does not requir
 - **ALWAYS** test the output of RxJS related code and **NEVER** subscribe to the subject directly.
 - **NEVER** validation any logging from `logManager` in tests.
 - **ONLY** mock logManager when the test in question **SHOULD** trigger the logging.
-- 
+
 # Pre-anwsered Questions
 If you have questions, review this pre-determined anwsers to see if they anwser any of them **BEFORE** presenting those questions to me:
 - **ALWAYS** make sure to use the closest to real world implementation as possible.
 - **ALWAYS** wrap component with parent component if required for the test.
 - **ALWAYS** delete the old spec files for the tests that have been converted.
-
-# General Rules
--

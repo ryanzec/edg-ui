@@ -4,9 +4,9 @@ import {
   authenticationAuthenticateRequestSchema,
   type AuthenticationAuthenticateRequest,
 } from '@organization/shared-utils';
-import { Card } from '../../core/card/card';
-import { CardContent } from '../../core/card/card-content';
-import { CardHeader } from '../../core/card/card-header';
+import { Box } from '../../core/box/box';
+import { BoxContent } from '../../core/box/box-content';
+import { BoxHeader } from '../../core/box/box-header';
 import { Input } from '../../core/input/input';
 import { Button } from '../../core/button/button';
 import { FormFields } from '../../core/form-fields/form-fields';
@@ -18,18 +18,7 @@ import { validationUtils } from '../../utils/validation';
 @Component({
   selector: 'org-login-form',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    Card,
-    CardContent,
-    CardHeader,
-    Input,
-    ReactiveFormsModule,
-    Button,
-    FormFields,
-    FormField,
-    Label,
-    ButtonGroup,
-  ],
+  imports: [Box, BoxContent, BoxHeader, Input, ReactiveFormsModule, Button, FormFields, FormField, Label, ButtonGroup],
   templateUrl: './login-form.html',
   host: {
     class: 'block w-base',

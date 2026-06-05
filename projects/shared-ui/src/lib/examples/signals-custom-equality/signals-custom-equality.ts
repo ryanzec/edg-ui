@@ -1,14 +1,14 @@
 import { Component, effect, signal } from '@angular/core';
 import { isEqual } from 'es-toolkit';
-import { Card } from '../../core/card/card';
-import { CardHeader } from '../../core/card/card-header';
-import { CardContent } from '../../core/card/card-content';
+import { Box } from '../../core/box/box';
+import { BoxHeader } from '../../core/box/box-header';
+import { BoxContent } from '../../core/box/box-content';
 import { Button } from '../../core/button/button';
 
 @Component({
   selector: 'org-example-signals-custom-equality',
   templateUrl: './signals-custom-equality.html',
-  imports: [Card, CardHeader, CardContent, Button],
+  imports: [Box, BoxHeader, BoxContent, Button],
 })
 export class EXAMPLESignalsCustomEquality {
   private _messages = signal<string[]>(['test', 'test2']);

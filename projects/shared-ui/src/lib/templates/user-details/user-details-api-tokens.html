@@ -1,15 +1,10 @@
-<org-card>
-  <org-card-header title="API tokens" subtitle="Personal access tokens for CLI, CI, and scripts. Scoped and revocable.">
-    <org-button
-      actions
-      variant="ghost"
-      color="neutral"
-      preIcon="plus"
-      label="New token"
-      (clicked)="onNewTokenClicked()"
-    />
-  </org-card-header>
-  <org-card-content>
+<org-box layout="stack">
+  <org-box-header title="API tokens" subtitle="Personal access tokens for CLI, CI, and scripts. Scoped and revocable.">
+    <ng-template #actions>
+      <org-button variant="ghost" color="neutral" preIcon="plus" label="New token" (clicked)="onNewTokenClicked()" />
+    </ng-template>
+  </org-box-header>
+  <org-box-content>
     <div class="tokens-body flex flex-col gap-3">
       @for (token of tokens(); track token.id; let last = $last) {
         <div class="token-row flex items-center gap-4">
@@ -43,5 +38,5 @@
         }
       }
     </div>
-  </org-card-content>
-</org-card>
+  </org-box-content>
+</org-box>

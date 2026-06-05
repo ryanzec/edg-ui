@@ -16,10 +16,9 @@ import { Button } from '../../core/button/button';
 import { ButtonGroup } from '../../core/button/button-group';
 import { ButtonToggle, type ButtonToggleItem } from '../../core/button-toggle/button-toggle';
 import { Calendar } from '../../core/calendar/calendar';
-import { Card } from '../../core/card/card';
-import { CardContent } from '../../core/card/card-content';
-import { CardFooter } from '../../core/card/card-footer';
-import { CardHeader } from '../../core/card/card-header';
+import { BoxContent } from '../../core/box/box-content';
+import { BoxFooter } from '../../core/box/box-footer';
+import { BoxHeader } from '../../core/box/box-header';
 import { Chart } from '../../core/chart/chart';
 import { Checkbox } from '../../core/checkbox/checkbox';
 import { CheckboxGroup } from '../../core/checkbox/checkbox-group';
@@ -108,10 +107,9 @@ type TableUser = {
     ButtonGroup,
     ButtonToggle,
     Calendar,
-    Card,
-    CardContent,
-    CardFooter,
-    CardHeader,
+    BoxContent,
+    BoxFooter,
+    BoxHeader,
     Chart,
     Checkbox,
     CheckboxGroup,

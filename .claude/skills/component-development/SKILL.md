@@ -23,6 +23,9 @@ When an input of a component maps to css related functionality, the values of th
 - `bg` instead of `background`.
 - `fg` instead of `foreground`.
 
+# Prework Validation
+If the code being worked on is in the `projects/shared-ui` directroy and it is injecting a service, if it is not stated **EXPLICITLY** that the service should be added to the `providers` of the components, **ALWAYS** ask if the component needs to add the service to the `providers` and **ALWAYS** recomend to **NOT** do that.
+
 # Reuse Protocol
 - **ALWAYS** use Angular CDK whenever it has functionality available, **ONLY** resort to custom logic when Angular CDK does not provide the needed functionality or the functionality is one of the following:
   - For drag and drop functionality, **ALWAYS** use `@atlaskit/pragmatic-drag-and-drop` **INSTEAD** of Angular CDK.

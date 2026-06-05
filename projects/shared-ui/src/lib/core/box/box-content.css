@@ -1,0 +1,18 @@
+@layer components {
+  :host {
+    display: block;
+    font-size: var(--box-content-font-size);
+    line-height: var(--box-content-line-height);
+    color: var(--box-content-fg);
+  }
+
+  /* adjacent-region padding collapse: drop bottom padding when followed by footer */
+  :host(:has(+ org-box-footer)) {
+    --box-content-padding-bottom: 0;
+  }
+
+  /* expandable collapsed state: parent box removes us from layout entirely */
+  :host-context(org-box[data-collapsed]) {
+    display: none;
+  }
+}

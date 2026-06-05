@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, computed, input, model } from '@angular/core';
 import { Avatar } from '../../core/avatar/avatar';
-import { Card } from '../../core/card/card';
-import { CardContent } from '../../core/card/card-content';
-import { CardHeader } from '../../core/card/card-header';
+import { Box, type BoxExpandedState } from '../../core/box/box';
+import { BoxContent } from '../../core/box/box-content';
+import { BoxHeader } from '../../core/box/box-header';
 import { Icon } from '../../core/icon/icon';
 import { Indicator } from '../../core/indicator/indicator';
 import { Tag, type TagColor } from '../../core/tags/tag';
@@ -16,13 +16,13 @@ import {
   type TicketConnectedWorkItem,
 } from './ticket-details-types';
 
-/** default value for the isExpanded model */
-export const TICKET_DETAILS_CONNECTED_WORK_IS_EXPANDED_DEFAULT = false;
+/** default value for the expandedState model */
+export const TICKET_DETAILS_CONNECTED_WORK_EXPANDED_STATE_DEFAULT: BoxExpandedState = 'header-only';
 
 @Component({
   selector: 'org-ticket-details-connected-work',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Avatar, Card, CardContent, CardHeader, Icon, Indicator, Tag],
+  imports: [Avatar, Box, BoxContent, BoxHeader, Icon, Indicator, Tag],
   templateUrl: './ticket-details-connected-work.html',
   host: {
     class: 'block',
@@ -36,7 +36,7 @@ export class TicketDetailsConnectedWork {
   public readonly attentionCount = input<number>(0);
 
   /** two-way bindable expanded state of the card */
-  public readonly isExpanded = model<boolean>(TICKET_DETAILS_CONNECTED_WORK_IS_EXPANDED_DEFAULT);
+  public readonly expandedState = model<BoxExpandedState>(TICKET_DETAILS_CONNECTED_WORK_EXPANDED_STATE_DEFAULT);
 
   /** parent items, grouped under the PARENT section */
   protected readonly parentItems = computed<TicketConnectedParent[]>(() =>

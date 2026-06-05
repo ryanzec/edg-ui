@@ -4,9 +4,9 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { Avatar } from '../../core/avatar/avatar';
 import { Button } from '../../core/button/button';
-import { Card } from '../../core/card/card';
-import { CardContent } from '../../core/card/card-content';
-import { CardHeader } from '../../core/card/card-header';
+import { Box } from '../../core/box/box';
+import { BoxContent } from '../../core/box/box-content';
+import { BoxHeader } from '../../core/box/box-header';
 import { Divider } from '../../core/divider/divider';
 import { FormField } from '../../core/form-fields/form-field';
 import { FormFields } from '../../core/form-fields/form-fields';
@@ -32,9 +32,9 @@ export const USER_DETAILS_IDENTITY_ERRORS_DEFAULT: UserDetailsIdentityErrors = {
   imports: [
     Avatar,
     Button,
-    Card,
-    CardContent,
-    CardHeader,
+    Box,
+    BoxContent,
+    BoxHeader,
     Divider,
     FormField,
     FormFields,

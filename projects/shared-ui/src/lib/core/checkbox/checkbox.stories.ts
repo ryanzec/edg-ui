@@ -4,7 +4,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs';
 import type { Meta, StoryObj } from '@storybook/angular';
 import { ButtonToggle, ButtonToggleItem } from '../button-toggle/button-toggle';
-import { Card } from '../card/card';
+import { Box } from '../box/box';
 import { CheckboxToggle } from '../checkbox-toggle/checkbox-toggle';
 import { Input } from '../input/input';
 import { FormFields } from '../form-fields/form-fields';
@@ -125,17 +125,17 @@ class CheckboxSelectAllSection {
 @Component({
   selector: 'story-checkbox-card-section',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Card, Checkbox, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
+  imports: [Box, Checkbox, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
   template: `
     <org-design-system-demo>
       <org-design-system-demo-header
         slot="header"
         title="Card-tile pattern"
-        description='Wrap each option in org-card, set [isClickable]="true", and bind (clicked) so the whole tile toggles the checkbox underneath. Useful for permission pickers, feature opt-ins, and any list where each option needs to read as its own surface.'
+        description='Wrap each option in org-box, set [isClickable]="true", and bind (clicked) so the whole tile toggles the checkbox underneath. Useful for permission pickers, feature opt-ins, and any list where each option needs to read as its own surface.'
       />
       <org-design-system-demo-canvas slot="canvas">
         <div class="flex flex-col gap-2 w-full">
-          <org-card [isClickable]="true" (clicked)="toggle('read')">
+          <org-box layout="stack" [isClickable]="true" (clicked)="toggle('read')">
             <org-checkbox
               name="card-read"
               value="read"
@@ -146,8 +146,8 @@ class CheckboxSelectAllSection {
             >
               Read
             </org-checkbox>
-          </org-card>
-          <org-card [isClickable]="true" (clicked)="toggle('write')">
+          </org-box>
+          <org-box layout="stack" [isClickable]="true" (clicked)="toggle('write')">
             <org-checkbox
               name="card-write"
               value="write"
@@ -158,8 +158,8 @@ class CheckboxSelectAllSection {
             >
               Write
             </org-checkbox>
-          </org-card>
-          <org-card [isClickable]="true" (clicked)="toggle('admin')">
+          </org-box>
+          <org-box layout="stack" [isClickable]="true" (clicked)="toggle('admin')">
             <org-checkbox
               name="card-admin"
               value="admin"
@@ -170,7 +170,7 @@ class CheckboxSelectAllSection {
             >
               Admin
             </org-checkbox>
-          </org-card>
+          </org-box>
         </div>
       </org-design-system-demo-canvas>
     </org-design-system-demo>
@@ -195,17 +195,17 @@ class CheckboxCardSection {
 @Component({
   selector: 'story-checkbox-group-card-section',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Card, Checkbox, CheckboxGroup, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
+  imports: [Box, Checkbox, CheckboxGroup, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
   template: `
     <org-design-system-demo>
       <org-design-system-demo-header
         slot="header"
         title="Checkbox Group — card-tile pattern"
-        description='Pair org-checkbox-group with org-card-wrapped children for a permissions-list layout. Each card sets [isClickable]="true" and forwards (clicked) to its checkbox so the entire surface is a hit target.'
+        description='Pair org-checkbox-group with org-box-wrapped children for a permissions-list layout. Each card sets [isClickable]="true" and forwards (clicked) to its checkbox so the entire surface is a hit target.'
       />
       <org-design-system-demo-canvas slot="canvas">
         <org-checkbox-group legend="Permissions" description="What this teammate can do in the workspace.">
-          <org-card [isClickable]="true" (clicked)="toggle('read')">
+          <org-box layout="stack" [isClickable]="true" (clicked)="toggle('read')">
             <org-checkbox
               name="cbg-card-read"
               value="read"
@@ -216,8 +216,8 @@ class CheckboxCardSection {
             >
               Read
             </org-checkbox>
-          </org-card>
-          <org-card [isClickable]="true" (clicked)="toggle('write')">
+          </org-box>
+          <org-box layout="stack" [isClickable]="true" (clicked)="toggle('write')">
             <org-checkbox
               name="cbg-card-write"
               value="write"
@@ -228,8 +228,8 @@ class CheckboxCardSection {
             >
               Write
             </org-checkbox>
-          </org-card>
-          <org-card [isClickable]="true" (clicked)="toggle('admin')">
+          </org-box>
+          <org-box layout="stack" [isClickable]="true" (clicked)="toggle('admin')">
             <org-checkbox
               name="cbg-card-admin"
               value="admin"
@@ -240,7 +240,7 @@ class CheckboxCardSection {
             >
               Admin
             </org-checkbox>
-          </org-card>
+          </org-box>
         </org-checkbox-group>
       </org-design-system-demo-canvas>
     </org-design-system-demo>
@@ -349,8 +349,8 @@ const meta: Meta<Checkbox> = {
   <org-checkbox name="small" value="small" size="sm">Small</org-checkbox>
   <org-checkbox name="large" value="large" size="lg">Large</org-checkbox>
 
-  <!-- Card-tile pattern: wrap with org-card, set [isClickable]="true", and forward (clicked) to a toggle handler -->
-  <org-card [isClickable]="true" (clicked)="readSelected.set(!readSelected())">
+  <!-- Card-tile pattern: wrap with org-box, set [isClickable]="true", and forward (clicked) to a toggle handler -->
+  <org-box layout="stack" [isClickable]="true" (clicked)="readSelected.set(!readSelected())">
     <org-checkbox
       name="read"
       value="read"
@@ -360,7 +360,7 @@ const meta: Meta<Checkbox> = {
     >
       Read
     </org-checkbox>
-  </org-card>
+  </org-box>
 
   <!-- Reactive forms -->
   <form [formGroup]="myForm">
@@ -761,7 +761,7 @@ export const Showcase: Story = {
         <story-checkbox-card-section />
         <org-design-system-demo-expected-behaviour>
           <ul class="list-inside list-disc flex flex-col gap-1">
-            <li>Wrap each checkbox in <strong>org-card</strong>, set <strong>[isClickable]="true"</strong>, and bind its <strong>(clicked)</strong> output to toggle the inner checkbox</li>
+            <li>Wrap each checkbox in <strong>org-box</strong>, set <strong>[isClickable]="true"</strong>, and bind its <strong>(clicked)</strong> output to toggle the inner checkbox</li>
             <li>Card already supplies the bordered tile, hover/pressed tint, focus ring, and role=button affordance — no bespoke styling needed</li>
             <li>Combine with the checkbox's <strong>description</strong> input to clarify what each option grants</li>
           </ul>
@@ -880,7 +880,7 @@ export const Showcase: Story = {
         <story-checkbox-group-card-section />
         <org-design-system-demo-expected-behaviour>
           <ul class="list-inside list-disc flex flex-col gap-1">
-            <li>org-checkbox-group accepts any node as a child — wrap each checkbox in <strong>org-card</strong> to get the tiled surface treatment</li>
+            <li>org-checkbox-group accepts any node as a child — wrap each checkbox in <strong>org-box</strong> to get the tiled surface treatment</li>
             <li>Card's <strong>(clicked)</strong> output toggles the inner checkbox so the entire tile is the hit target</li>
             <li>The legend, description, and required marker on org-checkbox-group continue to apply unchanged</li>
           </ul>

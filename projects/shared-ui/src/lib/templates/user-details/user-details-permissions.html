@@ -1,6 +1,6 @@
-<org-card>
-  <org-card-header title="Permissions" subtitle="Defaults for Admin role. Check or uncheck to override." />
-  <org-card-content>
+<org-box layout="stack">
+  <org-box-header title="Permissions" subtitle="Defaults for Admin role. Check or uncheck to override." />
+  <org-box-content>
     <div class="permissions-body">
       <org-table [data]="permissions()" [bordered]="false" [stickyHeader]="false">
         <ng-template #header>
@@ -44,5 +44,5 @@
         </ng-template>
       </org-table>
     </div>
-  </org-card-content>
-</org-card>
+  </org-box-content>
+</org-box>

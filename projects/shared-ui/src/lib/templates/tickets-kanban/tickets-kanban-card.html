@@ -1,6 +1,6 @@
-<org-card>
-  <org-card-header [title]="ticket().title" />
-  <org-card-content>
+<org-box layout="stack">
+  <org-box-header [title]="ticket().title" />
+  <org-box-content>
     <div class="flex flex-col gap-2">
       <p class="line-clamp-2 text-sm text-muted">{{ ticket().description }}</p>
       @if (ticket().tags.length > 0) {
@@ -11,8 +11,8 @@
         </div>
       }
     </div>
-  </org-card-content>
-  <org-card-footer alignment="start">
+  </org-box-content>
+  <org-box-footer alignment="start">
     <div class="flex flex-row items-center justify-between gap-2 w-full">
       <org-avatar
         size="sm"
@@ -24,5 +24,5 @@
       />
       <span class="text-xs text-muted">{{ updatedRelative() }}</span>
     </div>
-  </org-card-footer>
-</org-card>
+  </org-box-footer>
+</org-box>

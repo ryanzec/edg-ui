@@ -1,15 +1,16 @@
-<org-card>
-  <org-card-header title="Active sessions" [subtitle]="deviceCountLabel()">
-    <org-button
-      actions
-      variant="text"
-      color="danger"
-      preIcon="log-out"
-      label="Sign out all others"
-      (clicked)="onSignOutAllClicked()"
-    />
-  </org-card-header>
-  <org-card-content>
+<org-box layout="stack">
+  <org-box-header title="Active sessions" [subtitle]="deviceCountLabel()">
+    <ng-template #actions>
+      <org-button
+        variant="text"
+        color="danger"
+        preIcon="log-out"
+        label="Sign out all others"
+        (clicked)="onSignOutAllClicked()"
+      />
+    </ng-template>
+  </org-box-header>
+  <org-box-content>
     <div class="sessions-body flex flex-col gap-3">
       @for (session of sessions(); track session.id; let last = $last) {
         <div class="session-row flex items-center gap-4">
@@ -35,5 +36,5 @@
         }
       }
     </div>
-  </org-card-content>
-</org-card>
+  </org-box-content>
+</org-box>

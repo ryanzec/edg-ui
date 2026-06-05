@@ -1,7 +1,9 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, input } from '@angular/core';
 import { angularUtils } from '@organization/shared-utils';
 import { BoxBrainDirective } from '../box/box-brain';
 import { ColorStrength, ComponentColor, allComponentColors } from '../types/component-types';
+
+export { allBoxExpandedStates, BOX_EXPANDED_STATE_DEFAULT, type BoxExpandedState } from './box-brain';
 
 /** the color variant type for the box component */
 export type BoxColor = ComponentColor;
@@ -53,6 +55,18 @@ export const allBoxShapes = ['rounded', 'square'] as const;
  */
 export type BoxShape = (typeof allBoxShapes)[number];
 
+/** all available box layout values */
+export const allBoxLayouts = ['block', 'stack'] as const;
+
+/**
+ * the layout type for the box component
+ *
+ * block: the box lays out its content as a normal block (default)
+ * stack: the box becomes a vertical flex container that spaces its slotted regions with a shared gap —
+ *   the foundation for composing header / image / content / footer sub-components into a card-like surface
+ */
+export type BoxLayout = (typeof allBoxLayouts)[number];
+
 /** default value for the box color input */
 export const BOX_COLOR_DEFAULT: BoxColor | undefined = undefined;
 
@@ -71,28 +85,41 @@ export const BOX_BACKGROUND_DEFAULT: BoxBackground = 'colored';
 /** default value for the box shape input */
 export const BOX_SHAPE_DEFAULT: BoxShape = 'rounded';
 
+/** default value for the box layout input */
+export const BOX_LAYOUT_DEFAULT: BoxLayout = 'block';
+
+/** default value for the box isClickable input */
+export const BOX_IS_CLICKABLE_DEFAULT = false;
+
 @Component({
   selector: 'org-box',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: '<ng-content />',
+  templateUrl: './box.html',
   styleUrl: './box.css',
   hostDirectives: [
     {
       directive: BoxBrainDirective,
-      inputs: ['isClickable'],
-      outputs: ['clicked'],
+      inputs: ['isExpandable', 'expandedState'],
+      outputs: ['clicked', 'expandedStateChange'],
     },
   ],
   host: {
+    // the semantic style attributes stay on the host (public attribute contract); box.css applies them to the
+    // inner .box-surface element via :host([data-*]) .box-surface so the surface can be removed in the 'none'
+    // state. data-collapsed also drives the slotted regions self-hiding via :host-context(org-box[data-collapsed]).
     '[attr.data-color]': 'color()',
     '[attr.data-color-strength]': 'colorStrength()',
     '[attr.data-border]': 'border()',
     '[attr.data-padding]': 'padding()',
     '[attr.data-background]': 'background()',
     '[attr.data-shape]': 'shape()',
+    '[attr.data-layout]': 'layout()',
+    '[attr.data-collapsed]': 'isHeaderOnly() ? "" : null',
   },
 })
 export class Box {
+  /** reference to the host box brain directive; slotted sub-components inject Box to read / drive expand state */
+  public readonly boxBrain = inject(BoxBrainDirective);
   /**
    * the semantic color applied to the border and background of the box.
    * note: color variants (danger, warning, info, safe) convey meaning visually only —
@@ -117,4 +144,32 @@ export class Box {
 
   /** the corner shape of the box; 'square' drops the rounded radius to 0 */
   public shape = input<BoxShape>(BOX_SHAPE_DEFAULT);
+
+  /** the layout of the box; 'stack' turns it into a vertical flex container for composing slotted regions */
+  public layout = input<BoxLayout>(BOX_LAYOUT_DEFAULT);
+
+  /**
+   * when true, flips the box into its clickable affordance so the whole surface is interactive and emits
+   * clicked. ignored when the box is expandable — the expandable header drives the interaction instead.
+   */
+  public readonly isClickable = input<boolean>(BOX_IS_CLICKABLE_DEFAULT);
+
+  /** whether the box surface renders at all; only the 'none' state (when expandable) removes the surface */
+  protected readonly isRendered = computed<boolean>(
+    () => !this.boxBrain.isExpandable() || this.boxBrain.expandedState() !== 'none'
+  );
+
+  /** whether the box is collapsed to header-only; drives hiding of slotted regions via host-context */
+  protected readonly isHeaderOnly = computed<boolean>(
+    () => this.boxBrain.isExpandable() && this.boxBrain.expandedState() === 'header-only'
+  );
+
+  constructor() {
+    // drive the brain's clickable affordance from the box's own isClickable input, but suppress it while the
+    // box is expandable: an expandable surface owns its click target on the header toggle and cannot share a
+    // single click target with the whole surface.
+    effect(() => {
+      this.boxBrain.setExternallyClickable(this.isClickable() && !this.boxBrain.isExpandable());
+    });
+  }
 }

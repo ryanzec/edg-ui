@@ -1,0 +1,63 @@
+@layer components {
+  :host {
+    display: flex;
+    gap: var(--box-header-gap);
+  }
+
+  /* actions-only mode: single column, actions hugged right */
+  :host([data-actions-only]) {
+    grid-template-columns: 1fr;
+    justify-items: end;
+  }
+
+  .header-titles {
+    display: flex;
+    flex-direction: column;
+    gap: var(--box-header-titles-gap);
+    min-width: 0;
+    flex: 1;
+  }
+
+  .header-title {
+    margin: 0;
+    font-size: var(--box-header-title-font-size);
+    font-weight: var(--box-header-title-font-weight);
+    line-height: var(--box-header-title-line-height);
+    letter-spacing: var(--box-header-title-letter-spacing);
+    color: var(--box-header-title-fg);
+    overflow-wrap: anywhere;
+  }
+
+  .header-subtitle {
+    margin: 0;
+    font-size: var(--box-header-subtitle-font-size);
+    line-height: var(--box-header-subtitle-line-height);
+    color: var(--box-header-subtitle-fg);
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--box-header-actions-gap);
+    flex-shrink: 0;
+  }
+
+  /* expandable: the whole title block is a click target; cursor signals the affordance */
+  .header-toggle {
+    flex: 1;
+    cursor: pointer;
+  }
+
+  /* the title row pairs the heading with the chevron toggle so they share a baseline regardless of subtitle */
+  .header-title-row {
+    display: flex;
+    align-items: center;
+    gap: var(--box-header-titles-gap);
+  }
+
+  /* the chevron always sits at the trailing edge of the title row */
+  .header-toggle-icon {
+    margin-inline-start: auto;
+    flex-shrink: 0;
+  }
+}

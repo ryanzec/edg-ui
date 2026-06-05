@@ -2,9 +2,9 @@ import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, input
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { EMPTY, startWith, switchMap } from 'rxjs';
-import { Card } from '../../core/card/card';
-import { CardContent } from '../../core/card/card-content';
-import { CardHeader } from '../../core/card/card-header';
+import { Box } from '../../core/box/box';
+import { BoxContent } from '../../core/box/box-content';
+import { BoxHeader } from '../../core/box/box-header';
 import { DropDownSelector } from '../../core/drop-down-selector/drop-down-selector';
 import { type SelectionValue } from '../../core/drop-down-selector/drop-down-selector-brain';
 import { FormField } from '../../core/form-fields/form-field';
@@ -15,7 +15,7 @@ import type { UserDetailsLocalizationOption } from './user-details-types';
 @Component({
   selector: 'org-user-details-localization',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Card, CardContent, CardHeader, DropDownSelector, FormField, FormFields, Label, ReactiveFormsModule],
+  imports: [Box, BoxContent, BoxHeader, DropDownSelector, FormField, FormFields, Label, ReactiveFormsModule],
   templateUrl: './user-details-localization.html',
   host: {
     class: 'block',

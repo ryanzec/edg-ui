@@ -37,11 +37,15 @@ type LiveDemoPre = 'none' | 'icon' | 'image';
 
 type LiveDemoPost = 'none' | 'icon';
 
+type LiveDemoLabelMode = 'label' | 'content';
+
 const allLiveDemoAsTags = ['static', 'a', 'button'] as const;
 
 const allLiveDemoPre = ['none', 'icon', 'image'] as const;
 
 const allLiveDemoPost = ['none', 'icon'] as const;
+
+const allLiveDemoLabelModes = ['label', 'content'] as const;
 
 const liveDemoSizeItems: ButtonToggleItem[] = allListSizes.map((size) => ({
   label: size,
@@ -62,6 +66,12 @@ const liveDemoPreItems: ButtonToggleItem[] = allLiveDemoPre.map((value) => ({
 }));
 
 const liveDemoPostItems: ButtonToggleItem[] = allLiveDemoPost.map((value) => ({
+  label: value,
+  value,
+  buttonColor: 'primary',
+}));
+
+const liveDemoLabelModeItems: ButtonToggleItem[] = allLiveDemoLabelModes.map((value) => ({
   label: value,
   value,
   buttonColor: 'primary',
@@ -150,6 +160,9 @@ const liveDemoNavigatePaths = ['/', '/inbox', '/inbox/today', '/archive'] as con
           </org-design-system-demo-control-group>
           <org-design-system-demo-control-group label="Post">
             <org-button-toggle [items]="postItems" formControlName="post" buttonSize="sm" />
+          </org-design-system-demo-control-group>
+          <org-design-system-demo-control-group label="Label vs content slot">
+            <org-button-toggle [items]="labelModeItems" formControlName="labelMode" buttonSize="sm" />
           </org-design-system-demo-control-group>
           <org-design-system-demo-control-group label="selectMode">
             <org-button-toggle [items]="selectModeItems" formControlName="selectMode" buttonSize="sm" />
@@ -254,13 +267,16 @@ const liveDemoNavigatePaths = ['/', '/inbox', '/inbox/today', '/archive'] as con
             [isClickable]="liveDemoForm.controls.isClickable.value"
             [hideLabel]="liveDemoForm.controls.hideLabel.value"
             [emphasizeColor]="first ? liveDemoForm.controls.emphasizeColor.value : 'none'"
-            [label]="item.label"
+            [label]="liveDemoForm.controls.labelMode.value === 'content' ? null : item.label"
           >
             @if (liveDemoForm.controls.pre.value === 'icon') {
               <org-list-item-icon pre name="mail" />
             }
             @if (liveDemoForm.controls.pre.value === 'image') {
               <org-list-item-image pre [src]="item.imageSrc" [alt]="item.label + ' avatar'" />
+            }
+            @if (liveDemoForm.controls.labelMode.value === 'content') {
+              <span content>{{ item.label }} <em class="text-faint">(content slot)</em></span>
             }
             @if (liveDemoForm.controls.post.value === 'icon') {
               <org-list-item-icon post name="chevron-right" />
@@ -278,6 +294,7 @@ class ListLiveDemoStory {
   protected readonly asTagItems = liveDemoAsTagItems;
   protected readonly preItems = liveDemoPreItems;
   protected readonly postItems = liveDemoPostItems;
+  protected readonly labelModeItems = liveDemoLabelModeItems;
   protected readonly selectModeItems = liveDemoSelectModeItems;
   protected readonly borderItems = liveDemoBorderItems;
   protected readonly emphasizeColorItems = liveDemoEmphasizeColorItems;
@@ -291,6 +308,7 @@ class ListLiveDemoStory {
     asTag: new FormControl<LiveDemoAsTag>('static', { nonNullable: true }),
     pre: new FormControl<LiveDemoPre>('none', { nonNullable: true }),
     post: new FormControl<LiveDemoPost>('none', { nonNullable: true }),
+    labelMode: new FormControl<LiveDemoLabelMode>('label', { nonNullable: true }),
     selectMode: new FormControl<ListSelectMode>('single', { nonNullable: true }),
     border: new FormControl<ListBorder>('none', { nonNullable: true }),
     emphasizeColor: new FormControl<ListItemEmphasizeColor>('none', { nonNullable: true }),
@@ -422,7 +440,7 @@ const meta: Meta<List> = {
 
   ### Composition Parts
   - **org-list** — parent wrapper providing shared \`size\` and \`listRole\` context to children
-  - **org-list-item** — individual list row supporting anchor / button / div rendering, selected / disabled / clickable states, with a structured \`label\` input and \`pre\` / \`post\` content projection slots
+  - **org-list-item** — individual list row supporting anchor / button / div rendering, selected / disabled / clickable states, with an optional \`label\` input (or a projected \`content\` slot in its place) and \`pre\` / \`post\` content projection slots
   - **org-list-item-icon** — icon slotted via \`pre\` or \`post\` (must be used inside an \`org-list-item\`); size is inherited from the parent list item
   - **org-list-item-image** — image slotted via \`pre\` or \`post\` (must be used inside an \`org-list-item\`); size matches the icon footprint for the current list item size
 
@@ -433,7 +451,7 @@ const meta: Meta<List> = {
   - Supports sm and base size variants
 
   ### ListItem Features
-  - Required \`label\` input renders the main text
+  - Optional \`label\` input renders the main text; when omitted, the projected \`content\` slot is rendered in its place (\`label\` wins when both are provided)
   - Project \`<org-list-item-icon pre>\` / \`<org-list-item-icon post>\` to render icons before / after the label
   - Project \`<org-list-item-image pre>\` to render an image before the label
   - When \`showAsExternal\` is true, the post-icon is automatically overridden to \`arrow-up-right\`
@@ -482,6 +500,13 @@ const meta: Meta<List> = {
   <org-list>
     <org-list-item label="Item with image">
       <org-list-item-image pre src="path/to/image.jpg" alt="User avatar" />
+    </org-list-item>
+  </org-list>
+
+  <!-- Custom row markup via the content slot (omit label) -->
+  <org-list>
+    <org-list-item>
+      <span content>Custom <strong>row</strong> markup</span>
     </org-list-item>
   </org-list>
   \`\`\`
@@ -919,6 +944,37 @@ export const Showcase: Story = {
           </org-design-system-demo-canvas>
         </org-design-system-demo>
 
+        <!-- CONTENT SLOT -->
+        <org-design-system-demo>
+          <org-design-system-demo-header
+            slot="header"
+            title="Content slot"
+            description="When the label input is omitted, the projected content slot is rendered in its place — use it when a row needs richer markup than a single text label. pre / post slots still work alongside it."
+          />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="flex justify-center w-full">
+              <org-box [padding]="'none'" class="w-2xs">
+                <org-list>
+                  <org-list-item asTag="button" (clicked)="undefined">
+                    <org-list-item-icon pre name="folder" />
+                    <span content>
+                      <strong>Design system</strong>
+                      <span class="text-faint"> · updated 2h ago</span>
+                    </span>
+                  </org-list-item>
+                  <org-list-item asTag="button" (clicked)="undefined">
+                    <org-list-item-icon pre name="package" />
+                    <span content>
+                      <strong>Release 4.12</strong>
+                      <span class="text-faint"> · updated 1d ago</span>
+                    </span>
+                  </org-list-item>
+                </org-list>
+              </org-box>
+            </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+
         <!-- SIZE -->
         <org-design-system-demo>
           <org-design-system-demo-header
@@ -975,6 +1031,7 @@ export const Showcase: Story = {
             <li><strong>Dividers</strong>: separators come from a projected org-divider — list owns no separator CSS</li>
             <li><strong>Border</strong>: the border input frames the list and/or separates items — none, items-only, full, list-only</li>
             <li><strong>Item emphasize color</strong>: emphasizeColor adds a thick colored left accent per item, independent of the list border</li>
+            <li><strong>Content slot</strong>: omit the label input to render the projected content slot in its place for richer row markup</li>
             <li><strong>Size</strong>: sm is the dense default; base is for reading-heavy lists</li>
           </ul>
         </org-design-system-demo-expected-behaviour>

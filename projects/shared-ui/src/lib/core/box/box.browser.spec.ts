@@ -9,6 +9,7 @@ import {
   type BoxBorder,
   type BoxColor,
   type BoxColorStrength,
+  type BoxLayout,
   type BoxPadding,
   type BoxShape,
 } from './box';
@@ -80,6 +81,49 @@ class BoxStaticHost {}
 })
 class BoxExternalClickableHost {
   public readonly boxBrain = viewChild.required(BoxBrainDirective);
+}
+
+@Component({
+  selector: 'test-box-layout-host',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [Box],
+  host: { class: 'block' },
+  template: `<org-box data-testid="box" [layout]="layout()">layout content</org-box>`,
+})
+class BoxLayoutHost {
+  public readonly layout = signal<BoxLayout>('block');
+}
+
+@Component({
+  selector: 'test-box-expandable-host',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [Box],
+  host: { class: 'block' },
+  template: `
+    <org-box
+      data-testid="box"
+      [isExpandable]="isExpandable()"
+      [isClickable]="isClickable()"
+      (clicked)="handleClicked()"
+    >
+      content
+    </org-box>
+    <pre data-testid="readout">{{ readout() }}</pre>
+  `,
+})
+class BoxExpandableHost {
+  public readonly isExpandable = signal<boolean>(false);
+  public readonly isClickable = signal<boolean>(false);
+
+  protected readonly clickCount = signal<number>(0);
+
+  protected readout(): string {
+    return `clickCount=${this.clickCount()}`;
+  }
+
+  protected handleClicked(): void {
+    this.clickCount.update((value) => value + 1);
+  }
 }
 
 type BoxHostConfig = {
@@ -395,6 +439,74 @@ describe('Box (browser)', () => {
       await flush(fixture);
       expect(host.getAttribute('data-pressed')).toBeNull();
       expect(readout.textContent).toContain('isPressed=false');
+    });
+  });
+
+  describe('layout', () => {
+    it('reflects the default block layout on the host', () => {
+      const fixture = createFixture(BoxLayoutHost);
+      const host = queryByTestId(fixture, 'box');
+
+      expect(host.getAttribute('data-layout')).toBe('block');
+    });
+
+    it('reflects the stack layout when set', () => {
+      const fixture = createFixture(BoxLayoutHost, (instance) => {
+        instance.layout.set('stack');
+      });
+      const host = queryByTestId(fixture, 'box');
+
+      expect(host.getAttribute('data-layout')).toBe('stack');
+    });
+
+    it('updates the layout attribute when the layout input changes', async () => {
+      const fixture = createFixture(BoxLayoutHost);
+      const host = queryByTestId(fixture, 'box');
+
+      expect(host.getAttribute('data-layout')).toBe('block');
+
+      fixture.componentInstance.layout.set('stack');
+      await flush(fixture);
+
+      expect(host.getAttribute('data-layout')).toBe('stack');
+    });
+  });
+
+  describe('expandable clickable suppression', () => {
+    it('flips to clickable when isClickable is true and the box is not expandable', () => {
+      const fixture = createFixture(BoxExpandableHost, (instance) => {
+        instance.isClickable.set(true);
+      });
+      const host = queryByTestId(fixture, 'box');
+
+      expect(host.getAttribute('role')).toBe('button');
+      expect(host.getAttribute('data-clickable')).toBe('');
+    });
+
+    it('does not flip to clickable when the box is expandable even if isClickable is true', () => {
+      const fixture = createFixture(BoxExpandableHost, (instance) => {
+        instance.isExpandable.set(true);
+        instance.isClickable.set(true);
+      });
+      const host = queryByTestId(fixture, 'box');
+
+      expect(host.getAttribute('role')).toBeNull();
+      expect(host.getAttribute('tabindex')).toBeNull();
+      expect(host.getAttribute('data-clickable')).toBeNull();
+    });
+
+    it('does not emit clicked when the box is expandable', async () => {
+      const fixture = createFixture(BoxExpandableHost, (instance) => {
+        instance.isExpandable.set(true);
+        instance.isClickable.set(true);
+      });
+      const host = queryByTestId(fixture, 'box');
+      const readout = queryByTestId(fixture, 'readout');
+
+      host.click();
+      await flush(fixture);
+
+      expect(readout.textContent).toContain('clickCount=0');
     });
   });
 });

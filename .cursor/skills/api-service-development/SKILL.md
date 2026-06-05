@@ -9,6 +9,7 @@ description: Use this skill whenever working on an API service (a `*-api.ts` fil
 - **NEVER** use `put` for http update requests
 - **ALWAYS** use the `providedIn: 'root'` option
 - **NEVER** create stories for these types of services
+- **ALWAYS** convert DateTime fields to strings before sending them to the API.
 
 # **REQUIRED** End Review
 

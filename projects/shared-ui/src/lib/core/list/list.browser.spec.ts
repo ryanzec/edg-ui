@@ -109,6 +109,24 @@ class ListNoObserverHost {}
 class ListProjectionHost {}
 
 @Component({
+  selector: 'test-list-content-slot-host',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [List, ListItem],
+  host: { class: 'block' },
+  template: `
+    <org-list>
+      <org-list-item data-testid="content-only">
+        <span content data-testid="content-only-text">Custom content</span>
+      </org-list-item>
+      <org-list-item data-testid="label-wins" label="Label text">
+        <span content data-testid="label-wins-content">Custom content</span>
+      </org-list-item>
+    </org-list>
+  `,
+})
+class ListContentSlotHost {}
+
+@Component({
   selector: 'test-list-router-host',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [List, ListItem],
@@ -756,6 +774,27 @@ describe('List (browser)', () => {
       const item = queryByTestId(fixture, 'item-projected');
 
       expect(item.querySelector('[data-testid="custom-post"]')).not.toBeNull();
+    });
+  });
+
+  describe('list-item content slot', () => {
+    it('renders the projected content slot inside a flex-1 span when the label is omitted', () => {
+      const fixture = createFixture(ListContentSlotHost);
+      const item = queryByTestId(fixture, 'content-only');
+      const projected = item.querySelector('[data-testid="content-only-text"]') as HTMLElement;
+
+      expect(projected).not.toBeNull();
+      expect(projected.textContent?.trim()).toBe('Custom content');
+      expect(projected.closest('span.flex-1')).not.toBeNull();
+    });
+
+    it('renders the label and ignores the content slot when both are provided', () => {
+      const fixture = createFixture(ListContentSlotHost);
+      const item = queryByTestId(fixture, 'label-wins');
+      const labelSpan = item.querySelector('span.flex-1') as HTMLSpanElement;
+
+      expect(labelSpan.textContent?.trim()).toBe('Label text');
+      expect(item.querySelector('[data-testid="label-wins-content"]')).toBeNull();
     });
   });
 

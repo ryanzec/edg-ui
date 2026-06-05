@@ -1,8 +1,8 @@
-<org-card [isExpandable]="true" [(isExpanded)]="isExpanded">
-  <org-card-header title="Subtasks">
+<org-box layout="stack" [isExpandable]="true" [(expandedState)]="expandedState">
+  <org-box-header title="Subtasks">
     <span post class="text-xs text-muted">{{ fractionLabel() }}</span>
-  </org-card-header>
-  <org-card-content>
+  </org-box-header>
+  <org-box-content>
     <div class="flex flex-col gap-2">
       @for (subtask of subtasks(); track subtask.id) {
         <button
@@ -22,5 +22,5 @@
       }
       <org-button variant="text" color="neutral" preIcon="plus" label="Add subtask" (clicked)="onAddSubtaskClicked()" />
     </div>
-  </org-card-content>
-</org-card>
+  </org-box-content>
+</org-box>

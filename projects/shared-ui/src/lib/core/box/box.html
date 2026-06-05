@@ -1,0 +1,13 @@
+<!--
+  the outer container is the org-box host itself (unstyled); the outer header projects here so it stays outside the
+  box surface and keeps rendering even when expandedState is 'none'. the styled surface holds the rest of the
+  projected content and is removed entirely in the 'none' state.
+-->
+<div class="box-outer-container">
+  <ng-content select="org-box-outer-header" />
+  @if (isRendered()) {
+    <div class="box-surface">
+      <ng-content />
+    </div>
+  }
+</div>

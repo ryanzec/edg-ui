@@ -5,7 +5,7 @@ import type { Meta, StoryObj } from '@storybook/angular';
 import { map } from 'rxjs';
 import { IconName } from '../icon/icon-brain';
 import { ButtonToggle, ButtonToggleItem } from '../button-toggle/button-toggle';
-import { Card } from '../card/card';
+import { Box } from '../box/box';
 import { Input } from '../input/input';
 import { FormField } from '../form-fields/form-field';
 import { FormFields } from '../form-fields/form-fields';
@@ -105,8 +105,8 @@ const meta: Meta<CheckboxToggle> = {
     Visibility
   </org-checkbox-toggle>
 
-  <!-- Card-tile pattern: wrap with org-card, set [isClickable]="true", and forward (clicked) to a toggle handler -->
-  <org-card [isClickable]="true" (clicked)="autosaveOn.set(!autosaveOn())">
+  <!-- Card-tile pattern: wrap with org-box, set [isClickable]="true", and forward (clicked) to a toggle handler -->
+  <org-box layout="stack" [isClickable]="true" (clicked)="autosaveOn.set(!autosaveOn())">
     <org-checkbox-toggle
       name="autosave"
       value="on"
@@ -117,7 +117,7 @@ const meta: Meta<CheckboxToggle> = {
     >
       Autosave
     </org-checkbox-toggle>
-  </org-card>
+  </org-box>
 
   <!-- Reactive forms -->
   <form [formGroup]="myForm">
@@ -374,17 +374,17 @@ export const LiveDemo: Story = {
 @Component({
   selector: 'story-checkbox-toggle-card-section',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Card, CheckboxToggle, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
+  imports: [Box, CheckboxToggle, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
   template: `
     <org-design-system-demo>
       <org-design-system-demo-header
         slot="header"
         title="Card-tile pattern"
-        description='Wrap each toggle in org-card, set [isClickable]="true", and bind (clicked) so the entire tile flips the switch underneath. This is the canonical settings-list pattern.'
+        description='Wrap each toggle in org-box, set [isClickable]="true", and bind (clicked) so the entire tile flips the switch underneath. This is the canonical settings-list pattern.'
       />
       <org-design-system-demo-canvas slot="canvas">
         <div class="flex flex-col gap-2 w-full">
-          <org-card [isClickable]="true" (clicked)="toggle('autosave')">
+          <org-box layout="stack" [isClickable]="true" (clicked)="toggle('autosave')">
             <org-checkbox-toggle
               name="card-autosave"
               value="autosave"
@@ -396,8 +396,8 @@ export const LiveDemo: Story = {
             >
               Autosave
             </org-checkbox-toggle>
-          </org-card>
-          <org-card [isClickable]="true" (clicked)="toggle('slack')">
+          </org-box>
+          <org-box layout="stack" [isClickable]="true" (clicked)="toggle('slack')">
             <org-checkbox-toggle
               name="card-slack"
               value="slack"
@@ -409,8 +409,8 @@ export const LiveDemo: Story = {
             >
               Slack notifications
             </org-checkbox-toggle>
-          </org-card>
-          <org-card [isClickable]="true" (clicked)="toggle('public')">
+          </org-box>
+          <org-box layout="stack" [isClickable]="true" (clicked)="toggle('public')">
             <org-checkbox-toggle
               name="card-public"
               value="public"
@@ -422,7 +422,7 @@ export const LiveDemo: Story = {
             >
               Public workspace
             </org-checkbox-toggle>
-          </org-card>
+          </org-box>
         </div>
       </org-design-system-demo-canvas>
     </org-design-system-demo>
@@ -739,7 +739,7 @@ export const Showcase: Story = {
         <story-checkbox-toggle-card-section />
         <org-design-system-demo-expected-behaviour>
           <ul class="list-inside list-disc flex flex-col gap-1">
-            <li>Wrap each toggle in <strong>org-card</strong>, set <strong>[isClickable]="true"</strong>, and bind its <strong>(clicked)</strong> output to flip the inner toggle</li>
+            <li>Wrap each toggle in <strong>org-box</strong>, set <strong>[isClickable]="true"</strong>, and bind its <strong>(clicked)</strong> output to flip the inner toggle</li>
             <li>Card already supplies the bordered tile, hover/pressed tint, focus ring, and role=button affordance — no bespoke styling needed</li>
             <li>Use <strong>labelPosition="start"</strong> on the toggle so the label fills the tile width and the track sits at the post edge — the settings-list idiom</li>
           </ul>

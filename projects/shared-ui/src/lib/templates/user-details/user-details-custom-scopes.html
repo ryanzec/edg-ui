@@ -1,9 +1,9 @@
-<org-card>
-  <org-card-header
+<org-box layout="stack">
+  <org-box-header
     title="Custom scopes"
     subtitle="Additive permissions beyond the role. Use sparingly — most users don't need any."
   />
-  <org-card-content>
+  <org-box-content>
     <div class="custom-scopes-body flex flex-col gap-3">
       <div class="chips-row flex items-center gap-2 flex-wrap">
         @for (scope of scopes(); track scope.id) {
@@ -32,5 +32,5 @@
         }
       </div>
     </div>
-  </org-card-content>
-</org-card>
+  </org-box-content>
+</org-box>

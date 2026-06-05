@@ -1,6 +1,6 @@
-<org-card>
-  <org-card-header title="Single sign-on" subtitle="Workspace enforces SSO. Local password is fallback only." />
-  <org-card-content>
+<org-box layout="stack">
+  <org-box-header title="Single sign-on" subtitle="Workspace enforces SSO. Local password is fallback only." />
+  <org-box-content>
     <div class="sso-body flex flex-col gap-3">
       <div class="provider-row flex items-center gap-3">
         <org-icon [name]="sso().provider.iconName" size="lg" />
@@ -31,5 +31,5 @@
         />
       </div>
     </div>
-  </org-card-content>
-</org-card>
+  </org-box-content>
+</org-box>

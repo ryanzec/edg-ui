@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { Card } from '../../core/card/card';
-import { CardContent } from '../../core/card/card-content';
-import { CardHeader } from '../../core/card/card-header';
+import { Box } from '../../core/box/box';
+import { BoxContent } from '../../core/box/box-content';
+import { BoxHeader } from '../../core/box/box-header';
 import { Table } from '../../core/table/table';
 import { TableCell } from '../../core/table/table-cell';
 import { TableHeader } from '../../core/table/table-header';
@@ -12,7 +12,7 @@ import type { UserDetailsSigninHistoryEntry } from './user-details-types';
 @Component({
   selector: 'org-user-details-signin-history',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Card, CardContent, CardHeader, Table, TableCell, TableHeader, Tag, TypedContextDirective],
+  imports: [Box, BoxContent, BoxHeader, Table, TableCell, TableHeader, Tag, TypedContextDirective],
   templateUrl: './user-details-signin-history.html',
   host: {
     class: 'block',

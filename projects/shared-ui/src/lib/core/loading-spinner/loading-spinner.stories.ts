@@ -6,7 +6,7 @@ import { LoadingSpinnerBrainDirective, LOADING_SPINNER_LABEL_DEFAULT } from '../
 import { allIconSizes, allIconColors, IconColor, IconSize } from '../icon/icon';
 import { Button } from '../button/button';
 import { ButtonToggle, ButtonToggleItem } from '../button-toggle/button-toggle';
-import { Card } from '../card/card';
+import { Box } from '../box/box';
 import { LoadingBlocker } from '../loading-blocker/loading-blocker';
 import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
 import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
@@ -356,7 +356,7 @@ class LoadingSpinnerInsideButtonSection {}
 @Component({
   selector: 'story-loading-spinner-loading-blocker-section',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [LoadingBlocker, Card, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
+  imports: [LoadingBlocker, Box, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
   styles: [
     `
       :host {
@@ -398,22 +398,22 @@ class LoadingSpinnerInsideButtonSection {}
       <org-design-system-demo-canvas slot="canvas">
         <div class="pair">
           <div class="blocked-region">
-            <org-card>
+            <org-box layout="stack">
               <div class="body">
                 <strong>Quarterly report</strong>
                 <p>Revenue across all regions trended upward by 11.3% with the strongest gains in EMEA and APAC.</p>
                 <p>Headcount grew by 12% while engineering margin expanded 3.6% over year-over-year.</p>
               </div>
-            </org-card>
+            </org-box>
             <org-loading-blocker [isVisible]="true" />
           </div>
           <div class="blocked-region">
-            <org-card>
+            <org-box layout="stack">
               <div class="body">
                 <strong>Live activity</strong>
                 <p>Streaming events from the production cluster. Latency p99: 142ms. Errors window 5m: 0.</p>
               </div>
-            </org-card>
+            </org-box>
             <org-loading-blocker [isVisible]="true" label="Loading data..." />
           </div>
         </div>

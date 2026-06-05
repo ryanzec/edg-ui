@@ -1,0 +1,34 @@
+@layer components {
+  :host {
+    display: block;
+    width: 100%;
+    position: var(--box-image-position);
+    aspect-ratio: var(--box-image-aspect-ratio);
+    /*padding-inline: var(--box-image-padding-inline);*/
+  }
+
+  :host img {
+    display: block;
+    width: 100%;
+    height: var(--box-image-img-height);
+    object-fit: cover;
+    border-radius: var(--box-image-img-radius);
+  }
+
+  /* constrained: inset by the shared box gutter, inner img gets its own rounding */
+  :host([data-full-width='0']) {
+    --box-image-img-radius: var(--box-image-inset-radius);
+  }
+
+  /* fill mode: forced aspect ratio; ngOptimizedImage's [fill] places the img absolute inside us */
+  :host([data-mode='fill']) {
+    --box-image-position: relative;
+    --box-image-aspect-ratio: var(--box-image-fill-aspect-ratio);
+    --box-image-img-height: 100%;
+  }
+
+  /* expandable collapsed state: parent box removes us from layout entirely */
+  :host-context(org-box[data-collapsed]) {
+    display: none;
+  }
+}

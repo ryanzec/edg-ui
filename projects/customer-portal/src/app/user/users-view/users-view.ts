@@ -7,9 +7,9 @@ import {
   UserDeleteDialog,
   UserFormData,
   UserDeleteData,
-  Card,
-  CardHeader,
-  CardContent,
+  Box,
+  BoxHeader,
+  BoxContent,
 } from '@organization/shared-ui';
 import { logManager } from '@organization/shared-utils';
 import { type User } from '@organization/shared-utils';
@@ -19,7 +19,7 @@ import { DialogRef } from '@angular/cdk/dialog';
 @Component({
   selector: 'cp-users-view',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [UsersList, UserFormDialog, UserDeleteDialog, Card, CardHeader, CardContent],
+  imports: [UsersList, UserFormDialog, UserDeleteDialog, Box, BoxHeader, BoxContent],
   providers: [UsersDataStore],
   templateUrl: './users-view.html',
 })

@@ -1,6 +1,6 @@
 import { Injectable, signal, computed, type TemplateRef } from '@angular/core';
 import { v4 as uuidv4 } from 'uuid';
-import type { CardColor } from '../card/card';
+import type { BoxColor } from '../box/box';
 import type { IconName } from '../icon/icon-brain';
 
 /** default auto-close delay in milliseconds */
@@ -16,7 +16,7 @@ export type NotificationData = {
   icon?: IconName;
   avatarUrl?: string;
   autoCloseIn?: number;
-  color?: CardColor;
+  color?: BoxColor;
   canClose: boolean;
   resetTimerOnHover?: boolean;
 };

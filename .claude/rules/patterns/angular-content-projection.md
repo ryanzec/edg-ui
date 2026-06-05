@@ -3,11 +3,11 @@ alwaysApply: true
 ---
 # Angular Content Projection Pattern
 
-When a component need to project content in the the component when using it are are two main ways to do this with defined contexts of when you use which.
+When a component needs to project content, there are two ways to do this, each with a defined context for when to use which.
 
 ## NG Content Select (Default)
 
-The default pattern which is a simpler implementation is to use the named slot pattern with`<ng-content select="">`:
+The default, simpler implementation uses the named slot pattern with `<ng-content select="">`:
 ```html
 <!-- component template --> 
 <ng select="header" />
@@ -20,7 +20,7 @@ The default pattern which is a simpler implementation is to use the named slot p
 
 ## Template Outlet (Power Usage)
 
-This patterns is to use the `<ng-container>` + `<ng-template>` and `ngTemplateOutlet` which is:
+The power-usage implementation uses `<ng-container>` + `<ng-template>` with `ngTemplateOutlet`:
 ```ts
 // in the component class
 protected headerTemplate = contentChild<TemplateRef<unknown>>('header');
@@ -38,8 +38,8 @@ protected headerTemplate = contentChild<TemplateRef<unknown>>('header');
 </org-custom-component>
 ```
 
-If any of the following things are true, you must **ALWAYS** use the Template Outlet pattern:
+You must **ALWAYS** use the Template Outlet pattern if any of the following are true:
 - The template needs to be applied multiple times in a loop.
 - Internal data of the component needs to be passed to the template.
-- If the presentence of the template is conditional used to in **ANY** way.
+- The presence of the template is conditional in **ANY** way.
 - You need to lazy load the content.

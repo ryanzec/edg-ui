@@ -6,6 +6,9 @@ description: Use this skill whenever writing unit tests for Angular components, 
 
 You are tasked to create unit style tests utilizing vitest's browser mode.
 
+# Prework Validation
+- If you feel it would be far better / easier to test a individual sub-components in there own file instead of testing all components at the same time in one browser spec file, you must **ALWAYS** confirm that approach and provide the details on why you are recommending it.
+
 # Rules
 - **ONLY** use vitest's browser feature for angular components, angular directives, or any code that requires a browser to properly test. 
 - All generic code that might apply to any vitest browser test needs to be add to `vitest-browser-utils.ts` so it is re-usable.

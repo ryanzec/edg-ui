@@ -3,7 +3,7 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import type { Meta, StoryObj } from '@storybook/angular';
 import { ButtonToggle, ButtonToggleItem } from '../button-toggle/button-toggle';
 import { CheckboxToggle } from '../checkbox-toggle/checkbox-toggle';
-import { Card } from '../card/card';
+import { Box } from '../box/box';
 import { List } from '../list/list';
 import { ListItem } from '../list/list-item';
 import { allComponentColors, ComponentColor } from '../types/component-types';
@@ -82,7 +82,7 @@ const meta: Meta<LoadingBlocker> = {
   \`\`\`html
   <!-- Region blocker over a card -->
   <div class="relative">
-    <org-card>...</org-card>
+    <org-box layout="stack">...</org-box>
     <org-loading-blocker [isVisible]="isLoading()" label="Loading data..." />
   </div>
 
@@ -171,7 +171,7 @@ export const Default: Story = {
   imports: [
     ReactiveFormsModule,
     LoadingBlocker,
-    Card,
+    Box,
     ButtonToggle,
     CheckboxToggle,
     DesignSystemDemo,
@@ -239,7 +239,7 @@ export const Default: Story = {
         </org-design-system-demo-controls>
         <org-design-system-demo-canvas slot="canvas">
           <div class="canvas-stage">
-            <org-card>
+            <org-box layout="stack">
               <div class="panel">
                 <div class="panel-row">
                   <strong>Quarterly report</strong>
@@ -258,7 +258,7 @@ export const Default: Story = {
                   <span>$31.3M</span>
                 </div>
               </div>
-            </org-card>
+            </org-box>
             <org-loading-blocker
               [isVisible]="liveDemoForm.controls.isVisible.value"
               [label]="liveDemoForm.controls.showText.value ? 'Loading data...' : ''"
@@ -317,7 +317,7 @@ export const LiveDemo: Story = {
 @Component({
   selector: 'story-loading-blocker-visual-states',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [LoadingBlocker, Card, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
+  imports: [LoadingBlocker, Box, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
   styles: [
     `
       :host {
@@ -373,56 +373,56 @@ export const LiveDemo: Story = {
           <div class="cell">
             <span class="cell-label">Hidden · isVisible=false</span>
             <div class="surface">
-              <org-card>
+              <org-box layout="stack">
                 <div class="panel">
                   <div class="panel-row"><strong>Quarterly report</strong><span>3 rows</span></div>
                   <div class="panel-row"><span>EMEA — revenue +14% YoY</span><span>$24.1M</span></div>
                   <div class="panel-row"><span>APAC — revenue +9% YoY</span><span>$18.7M</span></div>
                   <div class="panel-row"><span>Americas — revenue +6% YoY</span><span>$31.3M</span></div>
                 </div>
-              </org-card>
+              </org-box>
               <org-loading-blocker [isVisible]="false" />
             </div>
           </div>
           <div class="cell">
             <span class="cell-label">Visible · spinner only</span>
             <div class="surface">
-              <org-card>
+              <org-box layout="stack">
                 <div class="panel">
                   <div class="panel-row"><strong>Quarterly report</strong><span>3 rows</span></div>
                   <div class="panel-row"><span>EMEA — revenue +14% YoY</span><span>$24.1M</span></div>
                   <div class="panel-row"><span>APAC — revenue +9% YoY</span><span>$18.7M</span></div>
                   <div class="panel-row"><span>Americas — revenue +6% YoY</span><span>$31.3M</span></div>
                 </div>
-              </org-card>
+              </org-box>
               <org-loading-blocker [isVisible]="true" />
             </div>
           </div>
           <div class="cell">
             <span class="cell-label">Visible · spinner + text</span>
             <div class="surface">
-              <org-card>
+              <org-box layout="stack">
                 <div class="panel">
                   <div class="panel-row"><strong>Quarterly report</strong><span>3 rows</span></div>
                   <div class="panel-row"><span>EMEA — revenue +14% YoY</span><span>$24.1M</span></div>
                   <div class="panel-row"><span>APAC — revenue +9% YoY</span><span>$18.7M</span></div>
                   <div class="panel-row"><span>Americas — revenue +6% YoY</span><span>$31.3M</span></div>
                 </div>
-              </org-card>
+              </org-box>
               <org-loading-blocker [isVisible]="true" label="Loading data..." />
             </div>
           </div>
           <div class="cell">
             <span class="cell-label">Visible · colored (danger)</span>
             <div class="surface">
-              <org-card>
+              <org-box layout="stack">
                 <div class="panel">
                   <div class="panel-row"><strong>Pending deletion</strong><span>3 files</span></div>
                   <div class="panel-row"><span>aurora-landing.tar.gz</span><span>$42.1M</span></div>
                   <div class="panel-row"><span>internal-tooling.zip</span><span>$1.2.7M</span></div>
                   <div class="panel-row"><span>quarterly-review.pdf</span><span>$32.1M</span></div>
                 </div>
-              </org-card>
+              </org-box>
               <org-loading-blocker [isVisible]="true" color="danger" label="Deleting 3 files..." />
             </div>
           </div>
@@ -436,7 +436,7 @@ class LoadingBlockerVisualStatesSection {}
 @Component({
   selector: 'story-loading-blocker-intensity',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [LoadingBlocker, Card, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
+  imports: [LoadingBlocker, Box, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
   styles: [
     `
       :host {
@@ -492,39 +492,39 @@ class LoadingBlockerVisualStatesSection {}
           <div class="cell">
             <span class="cell-label">Intensity · light</span>
             <div class="surface">
-              <org-card>
+              <org-box layout="stack">
                 <div class="panel">
                   <div class="panel-row"><strong>Quarterly report · light</strong></div>
                   <div class="panel-row"><span>EMEA — revenue +14% YoY</span><span>$24.1M</span></div>
                   <div class="panel-row"><span>APAC — revenue +9% YoY</span><span>$18.7M</span></div>
                 </div>
-              </org-card>
+              </org-box>
               <org-loading-blocker [isVisible]="true" intensity="light" label="Loading..." />
             </div>
           </div>
           <div class="cell">
             <span class="cell-label">Intensity · medium</span>
             <div class="surface">
-              <org-card>
+              <org-box layout="stack">
                 <div class="panel">
                   <div class="panel-row"><strong>Quarterly report · medium</strong></div>
                   <div class="panel-row"><span>EMEA — revenue +14% YoY</span><span>$24.1M</span></div>
                   <div class="panel-row"><span>APAC — revenue +9% YoY</span><span>$18.7M</span></div>
                 </div>
-              </org-card>
+              </org-box>
               <org-loading-blocker [isVisible]="true" intensity="medium" label="Loading..." />
             </div>
           </div>
           <div class="cell">
             <span class="cell-label">Intensity · heavy</span>
             <div class="surface">
-              <org-card>
+              <org-box layout="stack">
                 <div class="panel">
                   <div class="panel-row"><strong>Quarterly report · heavy</strong></div>
                   <div class="panel-row"><span>EMEA — revenue +14% YoY</span><span>$24.1M</span></div>
                   <div class="panel-row"><span>APAC — revenue +9% YoY</span><span>$18.7M</span></div>
                 </div>
-              </org-card>
+              </org-box>
               <org-loading-blocker [isVisible]="true" intensity="heavy" label="Loading..." />
             </div>
           </div>
@@ -538,7 +538,7 @@ class LoadingBlockerIntensitySection {}
 @Component({
   selector: 'story-loading-blocker-color',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [LoadingBlocker, Card, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
+  imports: [LoadingBlocker, Box, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
   styles: [
     `
       :host {
@@ -595,117 +595,117 @@ class LoadingBlockerIntensitySection {}
           <div class="cell">
             <span class="cell-label">Color · none</span>
             <div class="surface">
-              <org-card>
+              <org-box layout="stack">
                 <div class="panel">
                   <div class="placeholder"></div>
                   <div class="placeholder"></div>
                   <div class="placeholder"></div>
                 </div>
-              </org-card>
+              </org-box>
               <org-loading-blocker [isVisible]="true" label="Default" />
             </div>
           </div>
           <div class="cell">
             <span class="cell-label">Color · primary</span>
             <div class="surface">
-              <org-card>
+              <org-box layout="stack">
                 <div class="panel">
                   <div class="placeholder"></div>
                   <div class="placeholder"></div>
                   <div class="placeholder"></div>
                 </div>
-              </org-card>
+              </org-box>
               <org-loading-blocker [isVisible]="true" color="primary" label="primary" />
             </div>
           </div>
           <div class="cell">
             <span class="cell-label">Color · secondary</span>
             <div class="surface">
-              <org-card>
+              <org-box layout="stack">
                 <div class="panel">
                   <div class="placeholder"></div>
                   <div class="placeholder"></div>
                   <div class="placeholder"></div>
                 </div>
-              </org-card>
+              </org-box>
               <org-loading-blocker [isVisible]="true" color="secondary" label="secondary" />
             </div>
           </div>
           <div class="cell">
             <span class="cell-label">Color · neutral</span>
             <div class="surface">
-              <org-card>
+              <org-box layout="stack">
                 <div class="panel">
                   <div class="placeholder"></div>
                   <div class="placeholder"></div>
                   <div class="placeholder"></div>
                 </div>
-              </org-card>
+              </org-box>
               <org-loading-blocker [isVisible]="true" color="neutral" label="neutral" />
             </div>
           </div>
           <div class="cell">
             <span class="cell-label">Color · safe</span>
             <div class="surface">
-              <org-card>
+              <org-box layout="stack">
                 <div class="panel">
                   <div class="placeholder"></div>
                   <div class="placeholder"></div>
                   <div class="placeholder"></div>
                 </div>
-              </org-card>
+              </org-box>
               <org-loading-blocker [isVisible]="true" color="safe" label="safe" />
             </div>
           </div>
           <div class="cell">
             <span class="cell-label">Color · info</span>
             <div class="surface">
-              <org-card>
+              <org-box layout="stack">
                 <div class="panel">
                   <div class="placeholder"></div>
                   <div class="placeholder"></div>
                   <div class="placeholder"></div>
                 </div>
-              </org-card>
+              </org-box>
               <org-loading-blocker [isVisible]="true" color="info" label="info" />
             </div>
           </div>
           <div class="cell">
             <span class="cell-label">Color · caution</span>
             <div class="surface">
-              <org-card>
+              <org-box layout="stack">
                 <div class="panel">
                   <div class="placeholder"></div>
                   <div class="placeholder"></div>
                   <div class="placeholder"></div>
                 </div>
-              </org-card>
+              </org-box>
               <org-loading-blocker [isVisible]="true" color="caution" label="caution" />
             </div>
           </div>
           <div class="cell">
             <span class="cell-label">Color · warning</span>
             <div class="surface">
-              <org-card>
+              <org-box layout="stack">
                 <div class="panel">
                   <div class="placeholder"></div>
                   <div class="placeholder"></div>
                   <div class="placeholder"></div>
                 </div>
-              </org-card>
+              </org-box>
               <org-loading-blocker [isVisible]="true" color="warning" label="warning" />
             </div>
           </div>
           <div class="cell">
             <span class="cell-label">Color · danger</span>
             <div class="surface">
-              <org-card>
+              <org-box layout="stack">
                 <div class="panel">
                   <div class="placeholder"></div>
                   <div class="placeholder"></div>
                   <div class="placeholder"></div>
                 </div>
-              </org-card>
+              </org-box>
               <org-loading-blocker [isVisible]="true" color="danger" label="danger" />
             </div>
           </div>
@@ -719,7 +719,7 @@ class LoadingBlockerColorSection {}
 @Component({
   selector: 'story-loading-blocker-scope',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [LoadingBlocker, Card, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
+  imports: [LoadingBlocker, Box, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
   styles: [
     `
       :host {
@@ -770,20 +770,20 @@ class LoadingBlockerColorSection {}
           <div class="cell">
             <span class="cell-label">Scope: region · over a card</span>
             <div class="surface">
-              <org-card>
+              <org-box layout="stack">
                 <div class="panel">
                   <strong>Settings</strong>
                   <span>General · Notifications · Billing · Members</span>
                   <span>Loaded from a workspace-scoped store.</span>
                 </div>
-              </org-card>
+              </org-box>
               <org-loading-blocker [isVisible]="true" scope="region" label="Loading settings..." />
             </div>
           </div>
           <div class="cell">
             <span class="cell-label">Scope: viewport · route transition (simulated)</span>
             <div class="surface">
-              <org-card>
+              <org-box layout="stack">
                 <div class="panel">
                   <strong>App-level loader</strong>
                   <span
@@ -791,7 +791,7 @@ class LoadingBlockerColorSection {}
                     app background as the scrim.</span
                   >
                 </div>
-              </org-card>
+              </org-box>
               <org-loading-blocker [isVisible]="true" scope="region" intensity="heavy" label="Loading workspace..." />
             </div>
           </div>
@@ -805,7 +805,7 @@ class LoadingBlockerScopeSection {}
 @Component({
   selector: 'story-loading-blocker-spinner-size',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [LoadingBlocker, Card, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
+  imports: [LoadingBlocker, Box, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
   styles: [
     `
       :host {
@@ -862,36 +862,36 @@ class LoadingBlockerScopeSection {}
           <div class="cell">
             <span class="cell-label">Spinner Size · lg</span>
             <div class="surface">
-              <org-card>
+              <org-box layout="stack">
                 <div class="panel">
                   <div class="placeholder"></div>
                   <div class="placeholder"></div>
                 </div>
-              </org-card>
+              </org-box>
               <org-loading-blocker [isVisible]="true" spinnerSize="lg" label="Loading..." />
             </div>
           </div>
           <div class="cell">
             <span class="cell-label">Spinner Size · xl</span>
             <div class="surface">
-              <org-card>
+              <org-box layout="stack">
                 <div class="panel">
                   <div class="placeholder"></div>
                   <div class="placeholder"></div>
                 </div>
-              </org-card>
+              </org-box>
               <org-loading-blocker [isVisible]="true" spinnerSize="xl" label="Loading..." />
             </div>
           </div>
           <div class="cell">
             <span class="cell-label">Spinner Size · 2xl</span>
             <div class="surface">
-              <org-card>
+              <org-box layout="stack">
                 <div class="panel">
                   <div class="placeholder"></div>
                   <div class="placeholder"></div>
                 </div>
-              </org-card>
+              </org-box>
               <org-loading-blocker [isVisible]="true" spinnerSize="2xl" label="Loading..." />
             </div>
           </div>
@@ -905,7 +905,7 @@ class LoadingBlockerSpinnerSizeSection {}
 @Component({
   selector: 'story-loading-blocker-in-context-card',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [LoadingBlocker, Card, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
+  imports: [LoadingBlocker, Box, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
   styles: [
     `
       :host {
@@ -963,26 +963,26 @@ class LoadingBlockerSpinnerSizeSection {}
           <div class="cell">
             <span class="cell-label">Card · body blocked, header live</span>
             <div class="surface">
-              <org-card>
+              <org-box layout="stack">
                 <div class="panel">
                   <div class="panel-header"><span>Live activity</span><span>x</span></div>
                   <span>Streaming events from production.</span>
                   <span>Latency p99 · 142ms.</span>
                 </div>
-              </org-card>
+              </org-box>
               <org-loading-blocker [isVisible]="true" label="Refreshing activity..." />
             </div>
           </div>
           <div class="cell">
             <span class="cell-label">Card · whole card blocked (intensity: heavy)</span>
             <div class="surface">
-              <org-card>
+              <org-box layout="stack">
                 <div class="panel">
                   <div class="panel-header"><span>Live activity</span><span>x</span></div>
                   <span>Streaming events from production.</span>
                   <span>Latency p99 · 142ms.</span>
                 </div>
-              </org-card>
+              </org-box>
               <org-loading-blocker [isVisible]="true" intensity="heavy" color="info" label="Saving changes..." />
             </div>
           </div>
@@ -996,7 +996,7 @@ class LoadingBlockerInContextCardSection {}
 @Component({
   selector: 'story-loading-blocker-in-context-list',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [LoadingBlocker, Card, List, ListItem, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
+  imports: [LoadingBlocker, Box, List, ListItem, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
   styles: [
     `
       :host {
@@ -1040,28 +1040,28 @@ class LoadingBlockerInContextCardSection {}
           <div class="cell">
             <span class="cell-label">List · light intensity</span>
             <div class="surface">
-              <org-card>
+              <org-box layout="stack">
                 <org-list>
                   <org-list-item label="Aurora landing page" />
                   <org-list-item label="Internal tooling rewrite" />
                   <org-list-item label="Quarterly review deck" />
                   <org-list-item label="Onboarding flow v3" />
                 </org-list>
-              </org-card>
+              </org-box>
               <org-loading-blocker [isVisible]="true" intensity="light" />
             </div>
           </div>
           <div class="cell">
             <span class="cell-label">List · medium intensity + label</span>
             <div class="surface">
-              <org-card>
+              <org-box layout="stack">
                 <org-list>
                   <org-list-item label="Aurora landing page" />
                   <org-list-item label="Internal tooling rewrite" />
                   <org-list-item label="Quarterly review deck" />
                   <org-list-item label="Onboarding flow v3" />
                 </org-list>
-              </org-card>
+              </org-box>
               <org-loading-blocker [isVisible]="true" intensity="medium" label="Reordering items..." />
             </div>
           </div>

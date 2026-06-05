@@ -2,9 +2,9 @@ import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, input
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { EMPTY, startWith, switchMap } from 'rxjs';
-import { Card } from '../../core/card/card';
-import { CardContent } from '../../core/card/card-content';
-import { CardHeader } from '../../core/card/card-header';
+import { Box } from '../../core/box/box';
+import { BoxContent } from '../../core/box/box-content';
+import { BoxHeader } from '../../core/box/box-header';
 import { FormField } from '../../core/form-fields/form-field';
 import { Textarea } from '../../core/textarea/textarea';
 import type { UserDetailsBioSection } from './user-details-types';
@@ -20,7 +20,7 @@ export const USER_DETAILS_BIO_ERRORS_DEFAULT: UserDetailsBioErrors = {};
 @Component({
   selector: 'org-user-details-bio',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Card, CardContent, CardHeader, FormField, Textarea, ReactiveFormsModule],
+  imports: [Box, BoxContent, BoxHeader, FormField, Textarea, ReactiveFormsModule],
   templateUrl: './user-details-bio.html',
   host: {
     class: 'block',

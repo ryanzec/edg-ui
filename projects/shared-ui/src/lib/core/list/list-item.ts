@@ -38,6 +38,9 @@ export const LIST_ITEM_FORCE_CLICKABLE_DEFAULT = false;
 /** the default hide-label state of the list item */
 export const LIST_ITEM_HIDE_LABEL_DEFAULT = false;
 
+/** the default label of the list item */
+export const LIST_ITEM_LABEL_DEFAULT: string | undefined = undefined;
+
 /** all available list item emphasize-color values */
 export const allListItemEmphasizeColors = ['none', ...allComponentColors] as const;
 
@@ -117,8 +120,10 @@ export class ListItem {
    */
   public readonly forceClickable = input<boolean>(LIST_ITEM_FORCE_CLICKABLE_DEFAULT);
 
-  /** the main text content of the list item */
-  public readonly label = input.required<string>();
+  /** the main text content of the list item; when omitted, the projected `content` slot is rendered instead */
+  public readonly label = input<string | undefined, string | null | undefined>(LIST_ITEM_LABEL_DEFAULT, {
+    transform: angularUtils.transformNullToUndefined,
+  });
 
   /**
    * visually hides the label while keeping it in the dom for screen readers; useful when only the

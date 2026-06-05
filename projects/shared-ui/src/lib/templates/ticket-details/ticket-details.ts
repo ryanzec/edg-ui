@@ -6,9 +6,9 @@ import { DateFormat } from '@organization/shared-utils';
 import { Avatar } from '../../core/avatar/avatar';
 import { AvatarStack } from '../../core/avatar/avatar-stack';
 import { Button } from '../../core/button/button';
-import { Card } from '../../core/card/card';
-import { CardContent } from '../../core/card/card-content';
-import { CardHeader } from '../../core/card/card-header';
+import { Box } from '../../core/box/box';
+import { BoxContent } from '../../core/box/box-content';
+import { BoxHeader } from '../../core/box/box-header';
 import { Checklist, type ChecklistItemData } from '../../core/checklist/checklist';
 import { DatePickerInput } from '../../core/date-picker-input/date-picker-input';
 import { Divider } from '../../core/divider/divider';
@@ -61,9 +61,9 @@ export type TicketDetailsAcceptanceCriterionToggledEvent = {
     Avatar,
     AvatarStack,
     Button,
-    Card,
-    CardContent,
-    CardHeader,
+    Box,
+    BoxContent,
+    BoxHeader,
     Checklist,
     DatePickerInput,
     Divider,

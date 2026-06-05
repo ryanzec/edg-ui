@@ -1,9 +1,9 @@
-<org-card>
-  <org-card-header
+<org-box layout="stack">
+  <org-box-header
     title="Primary role"
     subtitle="Determines the default permission set. Customizing below overrides individual permissions."
   />
-  <org-card-content>
+  <org-box-content>
     <div class="roles-body" [formGroup]="formGroup()">
       <org-radio-group name="user-details-primary-role" formControlName="primaryRole">
         <div class="roles-grid grid grid-cols-2 gap-3">
@@ -13,5 +13,5 @@
         </div>
       </org-radio-group>
     </div>
-  </org-card-content>
-</org-card>
+  </org-box-content>
+</org-box>

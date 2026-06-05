@@ -4,7 +4,7 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import type { Meta, StoryObj } from '@storybook/angular';
 import { map } from 'rxjs';
 import { ButtonToggle, ButtonToggleItem } from '../button-toggle/button-toggle';
-import { Card } from '../card/card';
+import { Box } from '../box/box';
 import { CheckboxToggle } from '../checkbox-toggle/checkbox-toggle';
 import { Input } from '../input/input';
 import { FormFields } from '../form-fields/form-fields';
@@ -61,11 +61,11 @@ const meta: Meta<Radio> = {
     Pro plan
   </org-radio>
 
-  <!-- Card-tile pattern: wrap with org-card, set [isClickable]="true", and forward (clicked) to the radio-group -->
+  <!-- Card-tile pattern: wrap with org-box, set [isClickable]="true", and forward (clicked) to the radio-group -->
   <org-radio-group [value]="selectedPlan()" (valueChange)="selectedPlan.set($event)" name="plan">
-    <org-card [isClickable]="true" (clicked)="selectedPlan.set('pro')">
+    <org-box layout="stack" [isClickable]="true" (clicked)="selectedPlan.set('pro')">
       <org-radio value="pro" description="Up to 25 members.">Pro plan</org-radio>
-    </org-card>
+    </org-box>
   </org-radio-group>
 
   <!-- Reactive forms via radio-group -->
@@ -287,17 +287,17 @@ export const LiveDemo: Story = {
 @Component({
   selector: 'story-radio-card-section',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Card, Radio, RadioGroup, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
+  imports: [Box, Radio, RadioGroup, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
   template: `
     <org-design-system-demo>
       <org-design-system-demo-header
         slot="header"
         title="Card-tile pattern"
-        description='Wrap each radio in org-card, set [isClickable]="true", and bind (clicked) so the entire tile selects the option. Used for plan-pickers, settings pages, and any selection where each choice needs to read as its own surface.'
+        description='Wrap each radio in org-box, set [isClickable]="true", and bind (clicked) so the entire tile selects the option. Used for plan-pickers, settings pages, and any selection where each choice needs to read as its own surface.'
       />
       <org-design-system-demo-canvas slot="canvas">
         <org-radio-group name="card-plan" [value]="selectedPlan()" (valueChange)="selectedPlan.set($event)">
-          <org-card [isClickable]="true" (clicked)="selectedPlan.set('free')">
+          <org-box layout="stack" [isClickable]="true" (clicked)="selectedPlan.set('free')">
             <org-radio
               value="free"
               (click)="$event.stopPropagation()"
@@ -305,8 +305,8 @@ export const LiveDemo: Story = {
             >
               Free
             </org-radio>
-          </org-card>
-          <org-card [isClickable]="true" (clicked)="selectedPlan.set('team')">
+          </org-box>
+          <org-box layout="stack" [isClickable]="true" (clicked)="selectedPlan.set('team')">
             <org-radio
               value="team"
               (click)="$event.stopPropagation()"
@@ -314,8 +314,8 @@ export const LiveDemo: Story = {
             >
               Team
             </org-radio>
-          </org-card>
-          <org-card [isClickable]="true" (clicked)="selectedPlan.set('enterprise')">
+          </org-box>
+          <org-box layout="stack" [isClickable]="true" (clicked)="selectedPlan.set('enterprise')">
             <org-radio
               value="enterprise"
               (click)="$event.stopPropagation()"
@@ -323,7 +323,7 @@ export const LiveDemo: Story = {
             >
               Enterprise
             </org-radio>
-          </org-card>
+          </org-box>
         </org-radio-group>
       </org-design-system-demo-canvas>
     </org-design-system-demo>
@@ -532,7 +532,7 @@ export const Showcase: Story = {
         <story-radio-card-section />
         <org-design-system-demo-expected-behaviour>
           <ul class="list-inside list-disc flex flex-col gap-1">
-            <li>Wrap each radio in <strong>org-card</strong>, set <strong>[isClickable]="true"</strong>, and bind its <strong>(clicked)</strong> output to set the radio-group's value</li>
+            <li>Wrap each radio in <strong>org-box</strong>, set <strong>[isClickable]="true"</strong>, and bind its <strong>(clicked)</strong> output to set the radio-group's value</li>
             <li>Card already supplies the bordered tile, hover/pressed tint, focus ring, and role=button affordance — no bespoke styling needed</li>
             <li>Combine with the radio's <strong>description</strong> input to clarify what each option grants</li>
           </ul>

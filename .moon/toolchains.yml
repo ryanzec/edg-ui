@@ -3,5 +3,6 @@ node:
   version: 24.15.0
 javascript:
   packageManager: pnpm
+  dedupeOnLockfileChange: false
 pnpm:
   version: 11.1.2

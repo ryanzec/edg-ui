@@ -1,7 +1,7 @@
 <div class="flex gap-4">
-  <org-card class="h-full w-sm">
-    <org-card-header title="Signal without custom equality" />
-    <org-card-content>
+  <org-box layout="stack" class="h-full w-sm">
+    <org-box-header title="Signal without custom equality" />
+    <org-box-content>
       <div class="flex flex-col gap-3">
         <div class="text-sm text-fg">
           By default, updating a signal that tracks a non-scalar value will trigger an effect to be called even if the
@@ -16,11 +16,11 @@
           <div class="text-3xl font-bold text-fg">{{ signalTriggeredCount() }}</div>
         </div>
       </div>
-    </org-card-content>
-  </org-card>
-  <org-card class="w-sm">
-    <org-card-header title="Signal with custom equality" />
-    <org-card-content class="h-full">
+    </org-box-content>
+  </org-box>
+  <org-box layout="stack" class="w-sm">
+    <org-box-header title="Signal with custom equality" />
+    <org-box-content class="h-full">
       <div class="flex h-full flex-col gap-3">
         <div class="text-sm text-fg">
           You can provide a custom <code class="rounded bg-app px-1 py-0.5 text-xs">equal</code> function when creating
@@ -45,6 +45,6 @@
           </div>
         </div>
       </div>
-    </org-card-content>
-  </org-card>
+    </org-box-content>
+  </org-box>
 </div>

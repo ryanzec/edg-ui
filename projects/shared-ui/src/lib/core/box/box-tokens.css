@@ -27,4 +27,41 @@
 
   /* one-off design value */
   --box-border-emphasize-left-width: 0.4375rem; /* 7px */
+
+  /* stack layout — vertical gap between slotted regions when layout is 'stack' */
+  --box-stack-gap: var(--spacing-2);
+
+  /* header layout */
+  --box-header-gap: var(--spacing-3);
+  --box-header-titles-gap: var(--spacing-0_5);
+  --box-header-actions-gap: var(--spacing-1_5);
+
+  /* header title */
+  --box-header-title-font-size: var(--font-size-lg);
+  --box-header-title-font-weight: var(--font-weight-semibold);
+  --box-header-title-line-height: var(--line-height-tight);
+  --box-header-title-letter-spacing: var(--letter-spacing-tight);
+  --box-header-title-fg: var(--color-fg);
+
+  /* header subtitle */
+  --box-header-subtitle-font-size: var(--font-size-base);
+  --box-header-subtitle-line-height: var(--line-height-normal);
+  --box-header-subtitle-fg: var(--color-fg-muted);
+
+  /* content */
+  --box-content-font-size: var(--font-size-base);
+  --box-content-line-height: var(--line-height-normal);
+  --box-content-fg: var(--color-fg);
+
+  /* footer */
+  --box-footer-gap: var(--spacing-1_5);
+
+  /* image */
+  --box-image-inset-radius: var(--radius-sm);
+  --box-image-fill-aspect-ratio: 16 / 9;
+  --box-image-padding-inline: 0;
+  --box-image-img-radius: 0;
+  --box-image-position: static;
+  --box-image-aspect-ratio: auto;
+  --box-image-img-height: auto;
 }

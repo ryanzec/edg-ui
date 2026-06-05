@@ -89,7 +89,8 @@
     background-color: var(--list-item-selected-bg);
   }
 
-  :host([data-clickable]) .list-item-content:is(:hover, :focus-visible) {
+  /* selected items keep their selected background even while hovered/focused (active wins) */
+  :host([data-clickable]:not([data-selected])) .list-item-content:is(:hover, :focus-visible) {
     background-color: var(--list-item-hover-bg);
   }
 

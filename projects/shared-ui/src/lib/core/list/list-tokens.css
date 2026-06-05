@@ -20,8 +20,8 @@
   --list-item-border-left-color: var(--list-item-border-color);
 
   /* list-item: state colors */
-  --list-item-selected-bg: var(--color-primary-soft);
-  --list-item-hover-bg: var(--color-neutral-soft-hover);
+  --list-item-selected-bg: var(--color-primary-soft-hover);
+  --list-item-hover-bg: var(--color-primary-soft);
   --list-item-disabled-fg: var(--color-fg-faint);
 
   /* list-item media (icon + image): base (default) */

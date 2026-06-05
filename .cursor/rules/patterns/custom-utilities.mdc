@@ -3,9 +3,13 @@ alwaysApply: true
 ---
 # Custom Utilities Pattern
 
-When a library in `.cursor/rules/libraries.md` does not provided the need functionality, you must **ALWAYS** place common re-usable functionality into util methods in `projects/shared-utils/src/utils`, if a method already exists use it, otherwise add it (or add a new file in needed in `projects/shared-utils/src/utils`).
+When a library in `.cursor/rules/libraries.md` does not provide the needed functionality, place common re-usable functionality into util methods in `projects/shared-utils/src/utils`.
 
-Utility files must **ONLY** export the types and a single object of `{file_name}-Utils` like:
+- **ALWAYS** reuse an existing method if one exists; otherwise add it (or add a new file in `projects/shared-utils/src/utils` if needed).
+- Utility files must **ONLY** export the types and a single `{file_name}Utils` object.
+- It must **NEVER** export the method individually.
+
+# Example
 ```ts
 import { DateTime, Settings } from 'luxon';
 
@@ -30,5 +34,3 @@ export const dateUtils = {
   fromNow,
 };
 ```
-
-It must **NEVER** export the method individually.

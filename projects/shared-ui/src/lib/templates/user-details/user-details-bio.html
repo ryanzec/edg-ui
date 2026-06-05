@@ -1,6 +1,6 @@
-<org-card>
-  <org-card-header title="Bio" subtitle="Markdown supported. Visible to everyone in the workspace." />
-  <org-card-content>
+<org-box layout="stack">
+  <org-box-header title="Bio" subtitle="Markdown supported. Visible to everyone in the workspace." />
+  <org-box-content>
     <div [formGroup]="formGroup()">
       <org-form-field [validationMessage]="errors().body">
         <org-textarea name="user-details-bio-body" formControlName="body" [minLines]="3" [maxLines]="6" />
@@ -10,5 +10,5 @@
         <span>**bold** _italic_ `code` supported</span>
       </div>
     </div>
-  </org-card-content>
-</org-card>
+  </org-box-content>
+</org-box>

@@ -1,10 +1,10 @@
 @if (usersError()) {
-  <org-card class="mb-2" color="danger">
-    <org-card-header title="Error" />
-    <org-card-content>
+  <org-box layout="stack" class="mb-2" color="danger">
+    <org-box-header title="Error" />
+    <org-box-content>
       <div>{{ usersError() }}</div>
-    </org-card-content>
-  </org-card>
+    </org-box-content>
+  </org-box>
 }
 
 <org-users-list

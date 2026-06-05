@@ -2,15 +2,15 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { outputFromObservable } from '@angular/core/rxjs-interop';
 import { Subject } from 'rxjs';
 import { Button } from '../../core/button/button';
-import { Card } from '../../core/card/card';
-import { CardContent } from '../../core/card/card-content';
-import { CardHeader } from '../../core/card/card-header';
+import { Box } from '../../core/box/box';
+import { BoxContent } from '../../core/box/box-content';
+import { BoxHeader } from '../../core/box/box-header';
 import { Divider } from '../../core/divider/divider';
 
 @Component({
   selector: 'org-user-details-danger-zone',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Button, Card, CardContent, CardHeader, Divider],
+  imports: [Button, Box, BoxContent, BoxHeader, Divider],
   templateUrl: './user-details-danger-zone.html',
   host: {
     class: 'block',

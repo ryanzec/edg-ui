@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { outputFromObservable } from '@angular/core/rxjs-interop';
 import { Subject } from 'rxjs';
-import { Card } from '../../core/card/card';
-import { CardContent } from '../../core/card/card-content';
-import { CardHeader } from '../../core/card/card-header';
+import { Box } from '../../core/box/box';
+import { BoxContent } from '../../core/box/box-content';
+import { BoxHeader } from '../../core/box/box-header';
 import { Divider } from '../../core/divider/divider';
 import { Indicator } from '../../core/indicator/indicator';
 import { Link } from '../../core/link/link';
@@ -13,7 +13,7 @@ import { userDetailsAuditCategoryColorMap, type UserDetailsAuditEntry } from './
 @Component({
   selector: 'org-user-details-role-audit-log',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Card, CardContent, CardHeader, Divider, Indicator, Link, Tag],
+  imports: [Box, BoxContent, BoxHeader, Divider, Indicator, Link, Tag],
   templateUrl: './user-details-role-audit-log.html',
   host: {
     class: 'block',

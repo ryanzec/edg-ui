@@ -1,15 +1,10 @@
-<org-card>
-  <org-card-header title="Identity" subtitle="How you appear to teammates across the workspace.">
-    <org-button
-      actions
-      variant="ghost"
-      color="neutral"
-      preIcon="upload"
-      label="Upload photo"
-      (clicked)="onUploadPhoto()"
-    />
-  </org-card-header>
-  <org-card-content>
+<org-box layout="stack">
+  <org-box-header title="Identity" subtitle="How you appear to teammates across the workspace.">
+    <ng-template #actions>
+      <org-button variant="ghost" color="neutral" preIcon="upload" label="Upload photo" (clicked)="onUploadPhoto()" />
+    </ng-template>
+  </org-box-header>
+  <org-box-content>
     <div [formGroup]="formGroup()">
       <div class="flex gap-2">
         <org-avatar
@@ -48,5 +43,5 @@
         </org-form-field>
       </org-form-fields>
     </div>
-  </org-card-content>
-</org-card>
+  </org-box-content>
+</org-box>

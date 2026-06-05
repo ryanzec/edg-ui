@@ -66,20 +66,21 @@
         />
       }
 
-      <org-card>
-        <org-card-header title="Description">
-          <org-button
-            actions
-            variant="text"
-            color="neutral"
-            preIcon="pencil"
-            [iconOnly]="true"
-            label="Edit description"
-            ariaLabel="Edit description"
-            (clicked)="onDescriptionEditClicked()"
-          />
-        </org-card-header>
-        <org-card-content>
+      <org-box layout="stack">
+        <org-box-header title="Description">
+          <ng-template #actions>
+            <org-button
+              variant="text"
+              color="neutral"
+              preIcon="pencil"
+              [iconOnly]="true"
+              label="Edit description"
+              ariaLabel="Edit description"
+              (clicked)="onDescriptionEditClicked()"
+            />
+          </ng-template>
+        </org-box-header>
+        <org-box-content>
           <div class="flex flex-col gap-4">
             <p class="m-0">{{ ticket().description }}</p>
 
@@ -105,8 +106,8 @@
               </div>
             }
           </div>
-        </org-card-content>
-      </org-card>
+        </org-box-content>
+      </org-box>
 
       <org-ticket-details-activity [activity]="ticket().activity" (commentSubmitted)="onCommentSubmitted($event)" />
     </div>

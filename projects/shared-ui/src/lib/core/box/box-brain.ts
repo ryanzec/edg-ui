@@ -7,6 +7,7 @@ import {
   computed,
   inject,
   input,
+  model,
   output,
   signal,
 } from '@angular/core';
@@ -22,11 +23,31 @@ type BoxState = {
 /** default value for the isClickable input */
 export const BOX_BRAIN_IS_CLICKABLE_DEFAULT = false;
 
+/** all available box expanded state values */
+export const allBoxExpandedStates = ['full', 'header-only', 'none'] as const;
+
+/**
+ * the tri-state expand mode for the box.
+ *
+ * full: the box surface renders fully expanded (header + all regions)
+ * header-only: the box surface renders but the collapsible regions (image / content / footer) are hidden
+ * none: the box surface does not render at all — only an outer header (if projected) remains
+ */
+export type BoxExpandedState = (typeof allBoxExpandedStates)[number];
+
+/** default value for the expandedState model */
+export const BOX_EXPANDED_STATE_DEFAULT: BoxExpandedState = 'full';
+
+/** default value for the isExpandable input */
+export const BOX_BRAIN_IS_EXPANDABLE_DEFAULT = false;
+
 /**
  * headless brain directive for the box. owns the optional clickable interaction layer — role/tabindex/keyboard
  * activation, pressed/focused state, and the clicked output — without any styling concerns. clickable mode is
  * enabled by the explicit `isClickable` input, and can also be forced on by a wrapping component (e.g. card)
- * via `setExternallyClickable`.
+ * via `setExternallyClickable`. it also owns the box's tri-state expand affordance (`expandedState`): the two
+ * box headers inject Box to drive different transitions — the internal header flips full ⟷ header-only, the
+ * outer header flips full ⟷ none.
  */
 @Directive({
   selector: '[orgBoxBrain]',
@@ -57,6 +78,12 @@ export class BoxBrainDirective implements OnInit, OnDestroy {
 
   /** whether the host is an explicit click target */
   public readonly isClickable = input<boolean>(BOX_BRAIN_IS_CLICKABLE_DEFAULT);
+
+  /** whether the host supports the expand / collapse affordance at all */
+  public readonly isExpandable = input<boolean>(BOX_BRAIN_IS_EXPANDABLE_DEFAULT);
+
+  /** the current expanded state of the box; ignored by consumers when isExpandable is false */
+  public readonly expandedState = model<BoxExpandedState>(BOX_EXPANDED_STATE_DEFAULT);
 
   /** emitted when the host is clicked or activated via Enter / Space while in clickable mode */
   public readonly clicked = output<void>();
@@ -103,6 +130,30 @@ export class BoxBrainDirective implements OnInit, OnDestroy {
    */
   public setExternallyClickable(value: boolean): void {
     this._externallyClickable.set(value);
+  }
+
+  /**
+   * internal box header toggle: flips between full and header-only. no-ops when not expandable so consumers do
+   * not need to guard. only meaningful while the box surface renders (state is not none).
+   */
+  public toggleHeaderOnly(): void {
+    if (!this.isExpandable()) {
+      return;
+    }
+
+    this.expandedState.update((value) => (value === 'full' ? 'header-only' : 'full'));
+  }
+
+  /**
+   * outer box header toggle: flips between full and none. no-ops when not expandable so consumers do not need to
+   * guard. collapsing from header-only also resolves to none so the single outer toggle always restores to full.
+   */
+  public toggleNone(): void {
+    if (!this.isExpandable()) {
+      return;
+    }
+
+    this.expandedState.update((value) => (value === 'none' ? 'full' : 'none'));
   }
 
   /** handles pointer clicks, emitting clicked when the host is in clickable mode */

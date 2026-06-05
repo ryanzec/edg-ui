@@ -1,9 +1,9 @@
-<org-card>
-  <org-card-header
+<org-box layout="stack">
+  <org-box-header
     title="Contact"
     subtitle="Used for sign-in, recovery, and notifications. Editing email requires re-verification."
   />
-  <org-card-content>
+  <org-box-content>
     <div [formGroup]="formGroup()">
       <org-form-fields>
         <org-form-field [validationMessage]="errors().workEmail">
@@ -32,5 +32,5 @@
         </org-form-field>
       </org-form-fields>
     </div>
-  </org-card-content>
-</org-card>
+  </org-box-content>
+</org-box>

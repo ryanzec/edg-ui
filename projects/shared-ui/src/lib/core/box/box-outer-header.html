@@ -1,0 +1,78 @@
+<ng-template #content>
+  <ng-content select="[pre]" />
+  @if (hasTitle()) {
+    @switch (boxHeaderBrainDirective.headingLevel()) {
+      @case (1) {
+        <h1 class="header-title">{{ title() }}</h1>
+      }
+      @case (2) {
+        <h2 class="header-title">{{ title() }}</h2>
+      }
+      @case (3) {
+        <h3 class="header-title">{{ title() }}</h3>
+      }
+      @case (4) {
+        <h4 class="header-title">{{ title() }}</h4>
+      }
+      @case (5) {
+        <h5 class="header-title">{{ title() }}</h5>
+      }
+      @case (6) {
+        <h6 class="header-title">{{ title() }}</h6>
+      }
+    }
+  }
+  <ng-content select="[post]" />
+</ng-template>
+
+<ng-template #subtitleContent>
+  @if (hasSubtitle()) {
+    <p class="header-subtitle">{{ subtitle() }}</p>
+  }
+</ng-template>
+
+@if (hasContent()) {
+  <div class="header-titles">
+    <div
+      [attr.tabindex]="isExpandable() ? 0 : null"
+      (keydown.enter)="onToggle()"
+      (keydown.space)="onToggle()"
+      class="header-title-row"
+      [attr.data-clickable]="isExpandable()"
+      (click)="onToggle()"
+    >
+      <div class="flex flex-1 items-center gap-2">
+        <div>
+          <ng-container [ngTemplateOutlet]="content" />
+        </div>
+        <div class="flex gap-2 ml-auto">
+          @if (actionsTemplate(); as actionsTemplateRef) {
+            <!--
+              actions for a box should never propagate (since the box might be collapsible) so this wrapper
+              force-stops propagation. it is a mouse-only propagation guard, not an interactive control — the
+              projected actions own their own keyboard / focus semantics, so making this wrapper focusable
+              would add a phantom tab stop
+            -->
+            <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events,@angular-eslint/template/interactive-supports-focus -->
+            <div class="header-actions" (click)="$event.stopPropagation()">
+              <ng-container [ngTemplateOutlet]="actionsTemplateRef" />
+            </div>
+          }
+          @if (isExpandable()) {
+            <org-button
+              class="header-toggle-icon"
+              variant="text"
+              color="neutral"
+              [label]="toggleLabel()"
+              [ariaLabel]="toggleLabel()"
+              [preIcon]="isExpanded() ? 'chevron-up' : 'chevron-down'"
+              [iconOnly]="true"
+              [ariaExpanded]="isExpanded()"
+            />
+          }
+        </div>
+      </div>
+    </div>
+    <ng-container [ngTemplateOutlet]="subtitleContent" />
+  </div>
+}

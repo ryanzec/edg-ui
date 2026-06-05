@@ -2,9 +2,9 @@ import { ChangeDetectionStrategy, Component, computed, input } from '@angular/co
 import { outputFromObservable } from '@angular/core/rxjs-interop';
 import { Subject } from 'rxjs';
 import { Button } from '../../core/button/button';
-import { Card } from '../../core/card/card';
-import { CardContent } from '../../core/card/card-content';
-import { CardHeader } from '../../core/card/card-header';
+import { Box } from '../../core/box/box';
+import { BoxContent } from '../../core/box/box-content';
+import { BoxHeader } from '../../core/box/box-header';
 import { Divider } from '../../core/divider/divider';
 import { Icon } from '../../core/icon/icon';
 import { Link } from '../../core/link/link';
@@ -14,7 +14,7 @@ import type { UserDetailsSession } from './user-details-types';
 @Component({
   selector: 'org-user-details-sessions',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Button, Card, CardContent, CardHeader, Divider, Icon, Link, Tag],
+  imports: [Button, Box, BoxContent, BoxHeader, Divider, Icon, Link, Tag],
   templateUrl: './user-details-sessions.html',
   host: {
     class: 'block',

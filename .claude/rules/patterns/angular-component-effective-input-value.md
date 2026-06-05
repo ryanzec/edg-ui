@@ -3,7 +3,10 @@ alwaysApply: true
 ---
 # Angular Component Effective Input Value Pattern
 
-If a component has an `input()` that is passed but also has logic to determine the effective value, the `input()` must be as clean as possible and then the component has a protected member that prefixes the `inout()` name with `effective`.
+When a component has an `input()` that is passed but also has logic to determine the value actually used, keep the input clean and resolve the final value separately.
+
+- Keep the `input()` as clean as possible.
+- Expose a protected member that holds the resolved value, prefixing the `input()` name with `effective` (e.g. `effectiveSize`).
 
 # Reference
 ```ts

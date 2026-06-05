@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, computed, effect, input, signal } from '@angular/core';
 import { outputFromObservable } from '@angular/core/rxjs-interop';
 import { Subject } from 'rxjs';
-import { Card } from '../../core/card/card';
-import { CardContent } from '../../core/card/card-content';
-import { CardHeader } from '../../core/card/card-header';
+import { Box } from '../../core/box/box';
+import { BoxContent } from '../../core/box/box-content';
+import { BoxHeader } from '../../core/box/box-header';
 import { CheckboxToggle } from '../../core/checkbox-toggle/checkbox-toggle';
 import { Divider } from '../../core/divider/divider';
 import { Icon } from '../../core/icon/icon';
@@ -15,7 +15,7 @@ import type { UserDetailsSsoSection } from './user-details-types';
 @Component({
   selector: 'org-user-details-sso',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Card, CardContent, CardHeader, CheckboxToggle, Divider, Icon, Link, Tag],
+  imports: [Box, BoxContent, BoxHeader, CheckboxToggle, Divider, Icon, Link, Tag],
   templateUrl: './user-details-sso.html',
   host: {
     class: 'block',

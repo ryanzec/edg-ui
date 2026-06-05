@@ -1,6 +1,6 @@
-<org-card>
-  <org-card-header title="Work" subtitle="Role, team, and reporting line." />
-  <org-card-content>
+<org-box layout="stack">
+  <org-box-header title="Work" subtitle="Role, team, and reporting line." />
+  <org-box-content>
     <div [formGroup]="formGroup()">
       <org-form-fields>
         <org-form-field [validationMessage]="errors().title">
@@ -29,5 +29,5 @@
         </org-form-field>
       </org-form-fields>
     </div>
-  </org-card-content>
-</org-card>
+  </org-box-content>
+</org-box>

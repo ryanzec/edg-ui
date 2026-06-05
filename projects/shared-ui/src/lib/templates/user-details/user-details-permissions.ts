@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { Card } from '../../core/card/card';
-import { CardContent } from '../../core/card/card-content';
-import { CardHeader } from '../../core/card/card-header';
+import { Box } from '../../core/box/box';
+import { BoxContent } from '../../core/box/box-content';
+import { BoxHeader } from '../../core/box/box-header';
 import { Checkbox } from '../../core/checkbox/checkbox';
 import { Table } from '../../core/table/table';
 import { TableCell } from '../../core/table/table-cell';
@@ -14,9 +14,9 @@ import type { UserDetailsPermissionResource } from './user-details-types';
   selector: 'org-user-details-permissions',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    Card,
-    CardContent,
-    CardHeader,
+    Box,
+    BoxContent,
+    BoxHeader,
     Checkbox,
     ReactiveFormsModule,
     Table,

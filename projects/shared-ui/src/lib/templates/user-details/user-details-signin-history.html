@@ -1,6 +1,6 @@
-<org-card>
-  <org-card-header title="Sign-in history" subtitle="Last 5 attempts. Older history available in the audit log." />
-  <org-card-content>
+<org-box layout="stack">
+  <org-box-header title="Sign-in history" subtitle="Last 5 attempts. Older history available in the audit log." />
+  <org-box-content>
     <div class="history-body">
       <org-table [data]="entries()" [bordered]="false" [stickyHeader]="false">
         <ng-template #header>
@@ -27,5 +27,5 @@
         </ng-template>
       </org-table>
     </div>
-  </org-card-content>
-</org-card>
+  </org-box-content>
+</org-box>

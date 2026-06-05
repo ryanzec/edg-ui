@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, type TemplateRef, computed, inject,
 import { NgTemplateOutlet } from '@angular/common';
 import { angularUtils } from '@organization/shared-utils';
 import { Button } from '../button/button';
-import type { CardColor } from '../card/card';
+import type { BoxColor } from '../box/box';
 import { Icon } from '../icon/icon';
 import type { IconName } from '../icon/icon-brain';
 import { NotificationItemBrainDirective } from '../notifications/notification-item-brain';
@@ -26,16 +26,16 @@ export const NOTIFICATION_ITEM_ICON_DEFAULT: IconName | undefined = undefined;
 export const NOTIFICATION_ITEM_AVATAR_URL_DEFAULT: string | undefined = undefined;
 
 /** default value for the color input */
-export const NOTIFICATION_ITEM_COLOR_DEFAULT: CardColor | undefined = undefined;
+export const NOTIFICATION_ITEM_COLOR_DEFAULT: BoxColor | undefined = undefined;
 
 /** default value for the canClose input */
 export const NOTIFICATION_ITEM_CAN_CLOSE_DEFAULT = true;
 
 /** intent colors that use role="alert" for screen-reader interruption; everything else uses role="status" */
-const ALERT_ROLE_COLORS = new Set<CardColor>(['danger', 'warning']);
+const ALERT_ROLE_COLORS = new Set<BoxColor>(['danger', 'warning']);
 
 /** maps each intent color to its default pre icon when the consumer does not supply one */
-const INTENT_DEFAULT_ICON: Record<CardColor, IconName> = {
+const INTENT_DEFAULT_ICON: Record<BoxColor, IconName> = {
   info: 'info',
   safe: 'circle-check',
   caution: 'triangle-alert',
@@ -116,7 +116,7 @@ export class NotificationItem {
   );
 
   /** the semantic intent driving the rail accent, pre icon color, and screen-reader role */
-  public readonly color = input<CardColor | undefined, CardColor | null | undefined>(NOTIFICATION_ITEM_COLOR_DEFAULT, {
+  public readonly color = input<BoxColor | undefined, BoxColor | null | undefined>(NOTIFICATION_ITEM_COLOR_DEFAULT, {
     transform: angularUtils.transformNullToUndefined,
   });
 
@@ -124,7 +124,7 @@ export class NotificationItem {
   public readonly canClose = input<boolean>(NOTIFICATION_ITEM_CAN_CLOSE_DEFAULT);
 
   /** resolved intent color used for the host data-color attribute; falls back to 'info' when no color is supplied */
-  protected readonly resolvedColor = computed<CardColor>(() => this.color() ?? 'info');
+  protected readonly resolvedColor = computed<BoxColor>(() => this.color() ?? 'info');
 
   /** resolved pre icon: explicit icon input wins, otherwise the intent-default icon */
   protected readonly resolvedIcon = computed<IconName>(() => this.icon() ?? INTENT_DEFAULT_ICON[this.resolvedColor()]);

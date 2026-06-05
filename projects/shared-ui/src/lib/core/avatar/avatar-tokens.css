@@ -30,7 +30,7 @@
   --avatar-label-sub-font-size: var(--font-size-xs);
 
   /* shared typography */
-  --avatar-line-height: var(--line-height-tight);
+  --avatar-line-height: var(--line-height-none);
   --avatar-letter-spacing: var(--letter-spacing-wide);
 
   /* stack ring slots */

@@ -2,7 +2,7 @@
   :host {
     display: flex;
     align-items: center;
-    gap: var(--card-footer-gap);
+    gap: var(--box-footer-gap);
   }
 
   :host([data-alignment='start']) {
@@ -17,8 +17,8 @@
     justify-content: flex-end;
   }
 
-  /* expandable collapsed state: parent card removes us from layout entirely */
-  :host([data-hidden]) {
+  /* expandable collapsed state: parent box removes us from layout entirely */
+  :host-context(org-box[data-collapsed]) {
     display: none;
   }
 }

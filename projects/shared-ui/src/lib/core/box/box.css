@@ -1,5 +1,17 @@
 @layer components {
+  /* the host is the unstyled outer wrapper — it only lays the outer header above the box surface as blocks */
   :host {
+    display: block;
+  }
+
+  .box-outer-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--box-stack-gap);
+  }
+
+  /* the box surface carries every visual treatment; it is removed entirely when expandedState is 'none' */
+  .box-surface {
     display: block;
     overflow: hidden;
     border-style: solid;
@@ -13,78 +25,86 @@
   }
 
   /* padding variants */
-  :host([data-padding='none']) {
+  :host([data-padding='none']) .box-surface {
     --box-padding: 0rem;
   }
 
-  :host([data-padding='sm']) {
+  :host([data-padding='sm']) .box-surface {
     --box-padding: var(--spacing-2);
   }
 
-  :host([data-padding='base']) {
+  :host([data-padding='base']) .box-surface {
     --box-padding: var(--spacing-3);
   }
 
-  :host([data-padding='lg']) {
+  :host([data-padding='lg']) .box-surface {
     --box-padding: var(--spacing-4);
   }
 
   /* shape variants — rounded (default) keeps --box-radius; square drops it to 0 */
-  :host([data-shape='square']) {
+  :host([data-shape='square']) .box-surface {
     --box-radius: 0rem;
   }
 
+  /* layout variants — block (default) is a normal block; stack becomes a vertical flex container that spaces
+     its slotted regions (header / image / content / footer) with the shared stack gap */
+  :host([data-layout='stack']) .box-surface {
+    display: flex;
+    flex-direction: column;
+    gap: var(--box-stack-gap);
+  }
+
   /* color variants — border color + background */
-  :host([data-color='primary']) {
+  :host([data-color='primary']) .box-surface {
     --box-border-color: var(--color-primary-border);
     --box-bg: var(--color-primary-soft);
     --box-bg-clickable-hover: var(--color-primary-soft-hover);
     --box-bg-clickable-pressed: var(--color-primary-soft-active);
   }
 
-  :host([data-color='secondary']) {
+  :host([data-color='secondary']) .box-surface {
     --box-border-color: var(--color-secondary-border);
     --box-bg: var(--color-secondary-soft);
     --box-bg-clickable-hover: var(--color-secondary-soft-hover);
     --box-bg-clickable-pressed: var(--color-secondary-soft-active);
   }
 
-  :host([data-color='neutral']) {
+  :host([data-color='neutral']) .box-surface {
     --box-border-color: var(--color-neutral-border);
     --box-bg: var(--color-neutral-soft);
     --box-bg-clickable-hover: var(--color-neutral-soft-hover);
     --box-bg-clickable-pressed: var(--color-neutral-soft-active);
   }
 
-  :host([data-color='safe']) {
+  :host([data-color='safe']) .box-surface {
     --box-border-color: var(--color-safe-border);
     --box-bg: var(--color-safe-soft);
     --box-bg-clickable-hover: var(--color-safe-soft-hover);
     --box-bg-clickable-pressed: var(--color-safe-soft-active);
   }
 
-  :host([data-color='info']) {
+  :host([data-color='info']) .box-surface {
     --box-border-color: var(--color-info-border);
     --box-bg: var(--color-info-soft);
     --box-bg-clickable-hover: var(--color-info-soft-hover);
     --box-bg-clickable-pressed: var(--color-info-soft-active);
   }
 
-  :host([data-color='caution']) {
+  :host([data-color='caution']) .box-surface {
     --box-border-color: var(--color-caution-border);
     --box-bg: var(--color-caution-soft);
     --box-bg-clickable-hover: var(--color-caution-soft-hover);
     --box-bg-clickable-pressed: var(--color-caution-soft-active);
   }
 
-  :host([data-color='warning']) {
+  :host([data-color='warning']) .box-surface {
     --box-border-color: var(--color-warning-border);
     --box-bg: var(--color-warning-soft);
     --box-bg-clickable-hover: var(--color-warning-soft-hover);
     --box-bg-clickable-pressed: var(--color-warning-soft-active);
   }
 
-  :host([data-color='danger']) {
+  :host([data-color='danger']) .box-surface {
     --box-border-color: var(--color-danger-border);
     --box-bg: var(--color-danger-soft);
     --box-bg-clickable-hover: var(--color-danger-soft-hover);
@@ -92,7 +112,7 @@
   }
 
   /* strong strength: solid fill + on-color foreground + matching border (only when the background is colored) */
-  :host([data-color='primary'][data-color-strength='strong'][data-background='colored']) {
+  :host([data-color='primary'][data-color-strength='strong'][data-background='colored']) .box-surface {
     --box-border-color: var(--color-primary);
     --box-bg: var(--color-primary);
     --box-fg: var(--color-primary-on);
@@ -100,7 +120,7 @@
     --box-bg-clickable-pressed: var(--color-primary-active);
   }
 
-  :host([data-color='secondary'][data-color-strength='strong'][data-background='colored']) {
+  :host([data-color='secondary'][data-color-strength='strong'][data-background='colored']) .box-surface {
     --box-border-color: var(--color-secondary);
     --box-bg: var(--color-secondary);
     --box-fg: var(--color-secondary-on);
@@ -108,7 +128,7 @@
     --box-bg-clickable-pressed: var(--color-secondary-active);
   }
 
-  :host([data-color='neutral'][data-color-strength='strong'][data-background='colored']) {
+  :host([data-color='neutral'][data-color-strength='strong'][data-background='colored']) .box-surface {
     --box-border-color: var(--color-neutral);
     --box-bg: var(--color-neutral);
     --box-fg: var(--color-neutral-on);
@@ -116,7 +136,7 @@
     --box-bg-clickable-pressed: var(--color-neutral-active);
   }
 
-  :host([data-color='safe'][data-color-strength='strong'][data-background='colored']) {
+  :host([data-color='safe'][data-color-strength='strong'][data-background='colored']) .box-surface {
     --box-border-color: var(--color-safe);
     --box-bg: var(--color-safe);
     --box-fg: var(--color-safe-on);
@@ -124,7 +144,7 @@
     --box-bg-clickable-pressed: var(--color-safe-active);
   }
 
-  :host([data-color='info'][data-color-strength='strong'][data-background='colored']) {
+  :host([data-color='info'][data-color-strength='strong'][data-background='colored']) .box-surface {
     --box-border-color: var(--color-info);
     --box-bg: var(--color-info);
     --box-fg: var(--color-info-on);
@@ -132,7 +152,7 @@
     --box-bg-clickable-pressed: var(--color-info-active);
   }
 
-  :host([data-color='caution'][data-color-strength='strong'][data-background='colored']) {
+  :host([data-color='caution'][data-color-strength='strong'][data-background='colored']) .box-surface {
     --box-border-color: var(--color-caution);
     --box-bg: var(--color-caution);
     --box-fg: var(--color-caution-on);
@@ -140,7 +160,7 @@
     --box-bg-clickable-pressed: var(--color-caution-active);
   }
 
-  :host([data-color='warning'][data-color-strength='strong'][data-background='colored']) {
+  :host([data-color='warning'][data-color-strength='strong'][data-background='colored']) .box-surface {
     --box-border-color: var(--color-warning);
     --box-bg: var(--color-warning);
     --box-fg: var(--color-warning-on);
@@ -148,7 +168,7 @@
     --box-bg-clickable-pressed: var(--color-warning-active);
   }
 
-  :host([data-color='danger'][data-color-strength='strong'][data-background='colored']) {
+  :host([data-color='danger'][data-color-strength='strong'][data-background='colored']) .box-surface {
     --box-border-color: var(--color-danger);
     --box-bg: var(--color-danger);
     --box-fg: var(--color-danger-on);
@@ -157,7 +177,7 @@
   }
 
   /* colorless reverts bg + foreground back to default regardless of color / strength */
-  :host([data-background='colorless']) {
+  :host([data-background='colorless']) .box-surface {
     --box-bg: var(--color-bg-app);
     --box-fg: var(--color-fg);
     --box-bg-clickable-hover: var(--color-bg-hover);
@@ -165,41 +185,45 @@
   }
 
   /* border variants */
-  :host([data-border='border-thick']) {
+  :host([data-border='border-thick']) .box-surface {
     --box-border-width: var(--border-width-thick);
   }
 
-  :host([data-border='borderless']) {
+  :host([data-border='borderless']) .box-surface {
     --box-border-color: transparent;
   }
 
-  :host([data-border='border-emphasize']) {
+  :host([data-border='border-emphasize']) .box-surface {
     --box-border-left-width: var(--box-border-emphasize-left-width);
   }
 
   /* emphasize + colorless: top/right/bottom revert to neutral; left keeps the color */
-  :host([data-border='border-emphasize'][data-background='colorless']) {
+  :host([data-border='border-emphasize'][data-background='colorless']) .box-surface {
     --box-border-top-color: var(--color-border);
     --box-border-right-color: var(--color-border);
     --box-border-bottom-color: var(--color-border);
   }
 
-  /* clickable affordance — only applied when the brain is in clickable mode */
+  /* clickable affordance — the brain sets data-clickable / data-pressed on the host; the cursor sits on the host
+     while the hover / pressed / focus treatments paint the surface so they line up with the visible box */
   :host([data-clickable]) {
     cursor: pointer;
   }
 
-  :host([data-clickable]:hover) {
+  :host([data-clickable]:hover) .box-surface {
     background-color: var(--box-bg-clickable-hover);
   }
 
-  :host([data-clickable][data-pressed]),
-  :host([data-clickable]:active) {
+  :host([data-clickable][data-pressed]) .box-surface,
+  :host([data-clickable]:active) .box-surface {
     background-color: var(--box-bg-clickable-pressed);
   }
 
   :host([data-clickable]:focus-visible) {
     outline: var(--border-width-thick) solid transparent;
+  }
+
+  :host([data-clickable]:focus-visible) .box-surface {
     box-shadow: var(--shadow-focus-ring);
   }
 }

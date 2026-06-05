@@ -1,15 +1,10 @@
-<org-card>
-  <org-card-header title="Two-factor authentication" subtitle="Required for sign-in to this workspace.">
-    <org-button
-      actions
-      variant="ghost"
-      color="neutral"
-      preIcon="settings"
-      label="Manage"
-      (clicked)="onManageClicked()"
-    />
-  </org-card-header>
-  <org-card-content>
+<org-box layout="stack">
+  <org-box-header title="Two-factor authentication" subtitle="Required for sign-in to this workspace.">
+    <ng-template #actions>
+      <org-button variant="ghost" color="neutral" preIcon="settings" label="Manage" (clicked)="onManageClicked()" />
+    </ng-template>
+  </org-box-header>
+  <org-box-content>
     <div class="two-factor-body flex flex-col gap-3">
       @for (method of methods(); track method.id; let last = $last) {
         <div class="method-row flex items-center gap-4">
@@ -35,5 +30,5 @@
         }
       }
     </div>
-  </org-card-content>
-</org-card>
+  </org-box-content>
+</org-box>

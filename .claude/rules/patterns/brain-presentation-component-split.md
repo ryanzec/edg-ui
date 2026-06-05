@@ -13,8 +13,8 @@ This is the pattern for splitting a component into a brain / presentation split 
 - Responsibilities: Must handle all state management (using Angular Signals), event handling, and complex logic.
 - Accessibility: Must manage all ARIA attributes and keyboard navigation using host bindings or strictly controlled template logic.
 - API: Must be designed as a standalone component or directive that cleanly exposes its state and methods (e.g., using exportAs or modern Signal inputs/models) so the presentation layer can easily consume it.
-- **ALWAYS** favor using a directive, **ONLY** use a component when **100%** needed
-- Do **NOT** keep empty methods
+- **ALWAYS** favor using a directive, **ONLY** use a component when **100%** needed.
+- Do **NOT** keep empty methods.
 
 ### The Presentation Component
 - Location: Remains in the original component's current directory.
@@ -23,7 +23,7 @@ This is the pattern for splitting a component into a brain / presentation split 
 - Integration: Must import and internally utilize the new Brain component to function.
 
 # What Must **ALWAYS** Go In An Angular Brain Directive / Component
-The following is a list of logic / state that must **ALWAYS** go into the brain directive / component:
+The following logic / state must **ALWAYS** go into the brain directive / component:
 - state management like opened / closed, checked, focused, active (but **NOT** limited to only those).
 - event handlers (e.g., `keydown`, `click`).
 - focus management (roving tabindex, trapping focus).
@@ -31,7 +31,7 @@ The following is a list of logic / state that must **ALWAYS** go into the brain 
 - stylistic attributes that have accessibility or interaction concerns, like `orientation` or `direction` (but **NOT** limited to those).
 
 # What Must **NEVER** Go In An Angular Brain Directive / Component
-The following is a list of logic / state that must **NEVER** go into the brain directive / component:
+The following logic / state must **NEVER** go into the brain directive / component:
 - sizing attributes.
 - spacing attributes.
 - color / theming attributes.

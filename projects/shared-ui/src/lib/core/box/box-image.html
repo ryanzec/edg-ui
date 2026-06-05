@@ -1,0 +1,11 @@
+@if (mode() === 'fill') {
+  <img [ngSrc]="boxImageBrainDirective.src()" [alt]="boxImageBrainDirective.alt()" fill [priority]="priority()" />
+} @else {
+  <img
+    [ngSrc]="boxImageBrainDirective.src()"
+    [alt]="boxImageBrainDirective.alt()"
+    [width]="width()!"
+    [height]="height()!"
+    [priority]="priority()"
+  />
+}

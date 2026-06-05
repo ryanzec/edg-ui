@@ -1,6 +1,6 @@
-<org-card>
-  <org-card-header title="Sign In" subtitle="Please enter your credentials to continue" />
-  <org-card-content>
+<org-box layout="stack">
+  <org-box-header title="Sign In" subtitle="Please enter your credentials to continue" />
+  <org-box-content>
     <form [formGroup]="loginForm" (ngSubmit)="login()">
       <org-form-fields>
         <org-form-field [validationMessage]="getFieldError('email') || ''">
@@ -34,5 +34,5 @@
         <org-button color="primary" buttonClass="w-full" label="Single Sign-On" [disabled]="isProcessing()" />
       </org-button-group>
     </form>
-  </org-card-content>
-</org-card>
+  </org-box-content>
+</org-box>

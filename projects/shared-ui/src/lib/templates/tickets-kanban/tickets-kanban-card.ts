@@ -1,17 +1,17 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { dateUtils } from '@organization/shared-utils';
 import { Avatar } from '../../core/avatar/avatar';
-import { Card } from '../../core/card/card';
-import { CardContent } from '../../core/card/card-content';
-import { CardFooter } from '../../core/card/card-footer';
-import { CardHeader } from '../../core/card/card-header';
+import { Box } from '../../core/box/box';
+import { BoxContent } from '../../core/box/box-content';
+import { BoxFooter } from '../../core/box/box-footer';
+import { BoxHeader } from '../../core/box/box-header';
 import { Tag } from '../../core/tags/tag';
 import { type KanbanTicket } from './tickets-kanban-types';
 
 @Component({
   selector: 'org-tickets-kanban-card',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Avatar, Card, CardContent, CardFooter, CardHeader, Tag],
+  imports: [Avatar, Box, BoxContent, BoxFooter, BoxHeader, Tag],
   templateUrl: './tickets-kanban-card.html',
 })
 export class TicketsKanbanCard {

@@ -4,9 +4,9 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import type { Meta, StoryObj } from '@storybook/angular';
 import { distinctUntilChanged, map } from 'rxjs';
 import { Button } from '../button/button';
-import { Card } from '../card/card';
-import { CardContent } from '../card/card-content';
-import { CardHeader } from '../card/card-header';
+import { Box } from '../box/box';
+import { BoxContent } from '../box/box-content';
+import { BoxHeader } from '../box/box-header';
 import { CheckboxToggle } from '../checkbox-toggle/checkbox-toggle';
 import { Input } from '../input/input';
 import { Tag } from '../tags/tag';
@@ -139,17 +139,17 @@ const moveItems = (lanes: DemoLane[], event: KanbanItemsMovedEvent): DemoLane[] 
 @Component({
   selector: 'story-kanban-card-content',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Card, CardHeader, CardContent, Tag],
+  imports: [Box, BoxHeader, BoxContent, Tag],
   template: `
-    <org-card>
-      <org-card-header [title]="card().title" [subtitle]="card().description" />
-      <org-card-content>
+    <org-box layout="stack">
+      <org-box-header [title]="card().title" [subtitle]="card().description" />
+      <org-box-content>
         <div class="flex items-center justify-between gap-2">
           <span class="text-xs text-muted">{{ card().assignee }}</span>
           <org-tag [color]="priorityColor()" size="sm">{{ card().priority }}</org-tag>
         </div>
-      </org-card-content>
-    </org-card>
+      </org-box-content>
+    </org-box>
   `,
 })
 class StoryKanbanCardContent {

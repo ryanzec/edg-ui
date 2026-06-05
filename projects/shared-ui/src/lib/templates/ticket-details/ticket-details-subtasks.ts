@@ -2,14 +2,14 @@ import { ChangeDetectionStrategy, Component, computed, input, model } from '@ang
 import { outputFromObservable } from '@angular/core/rxjs-interop';
 import { Subject } from 'rxjs';
 import { Button } from '../../core/button/button';
-import { Card } from '../../core/card/card';
-import { CardContent } from '../../core/card/card-content';
-import { CardHeader } from '../../core/card/card-header';
+import { Box, type BoxExpandedState } from '../../core/box/box';
+import { BoxContent } from '../../core/box/box-content';
+import { BoxHeader } from '../../core/box/box-header';
 import { Icon } from '../../core/icon/icon';
 import { type TicketSubtask } from './ticket-details-types';
 
-/** default value for the isExpanded model */
-export const TICKET_DETAILS_SUBTASKS_IS_EXPANDED_DEFAULT = false;
+/** default value for the expandedState model */
+export const TICKET_DETAILS_SUBTASKS_EXPANDED_STATE_DEFAULT: BoxExpandedState = 'header-only';
 
 /** event payload emitted when a subtask's completed state is toggled by the user */
 export type TicketDetailsSubtaskToggledEvent = {
@@ -22,7 +22,7 @@ export type TicketDetailsSubtaskToggledEvent = {
 @Component({
   selector: 'org-ticket-details-subtasks',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Button, Card, CardContent, CardHeader, Icon],
+  imports: [Button, Box, BoxContent, BoxHeader, Icon],
   templateUrl: './ticket-details-subtasks.html',
   styleUrl: './ticket-details-subtasks.css',
   host: {
@@ -38,7 +38,7 @@ export class TicketDetailsSubtasks {
   public readonly subtasks = input.required<TicketSubtask[]>();
 
   /** two-way bindable expanded state of the card */
-  public readonly isExpanded = model<boolean>(TICKET_DETAILS_SUBTASKS_IS_EXPANDED_DEFAULT);
+  public readonly expandedState = model<BoxExpandedState>(TICKET_DETAILS_SUBTASKS_EXPANDED_STATE_DEFAULT);
 
   /** emitted when a subtask checkbox is toggled */
   public readonly subtaskToggled = outputFromObservable(this._subtaskToggled$);
