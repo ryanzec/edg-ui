@@ -1,7 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/angular';
 import { Markdown } from './markdown';
-import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
-import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
+import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
+import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
+import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
+import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
 
 const meta: Meta<Markdown> = {
   title: 'Core/Components/Markdown',
@@ -102,26 +104,34 @@ export const Headings: Story = {
   },
   render: () => ({
     template: `
-      <org-storybook-example-container
-        title="Headings"
-        currentState="Showing all heading levels (H1-H6)"
-      >
-        <org-storybook-example-container-section label="All Heading Levels">
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Headings" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">All Heading Levels</div>
           <org-markdown [markdown]="markdown"></org-markdown>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
           <li>H1 is the largest heading (3xl)</li>
           <li>H6 is the smallest heading (sm)</li>
           <li>All headings have proper spacing and hierarchy</li>
         </ul>
-      </org-storybook-example-container>
+      </org-design-system-demo-expected-behaviour>
     `,
     props: {
       markdown: headingsMarkdown,
     },
     moduleMetadata: {
-      imports: [Markdown, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [
+        Markdown,
+        DesignSystemDemo,
+        DesignSystemDemoHeader,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
+      ],
     },
   }),
 };
@@ -150,27 +160,35 @@ export const TextFormatting: Story = {
   },
   render: () => ({
     template: `
-      <org-storybook-example-container
-        title="Text Formatting"
-        currentState="Showing bold, italic, and strikethrough"
-      >
-        <org-storybook-example-container-section label="Formatted Text">
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Text Formatting" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Formatted Text</div>
           <org-markdown [markdown]="markdown"></org-markdown>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
           <li><strong>Bold</strong>: Use ** or __ around text</li>
           <li><em>Italic</em>: Use * or _ around text</li>
           <li><del>Strikethrough</del>: Use ~~ around text (GitHub flavored)</li>
           <li>Combine multiple formats for emphasis</li>
         </ul>
-      </org-storybook-example-container>
+      </org-design-system-demo-expected-behaviour>
     `,
     props: {
       markdown: textFormattingMarkdown,
     },
     moduleMetadata: {
-      imports: [Markdown, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [
+        Markdown,
+        DesignSystemDemo,
+        DesignSystemDemoHeader,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
+      ],
     },
   }),
 };
@@ -210,27 +228,35 @@ export const Lists: Story = {
   },
   render: () => ({
     template: `
-      <org-storybook-example-container
-        title="Lists"
-        currentState="Showing unordered, ordered, and task lists"
-      >
-        <org-storybook-example-container-section label="Various List Types">
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Lists" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Various List Types</div>
           <org-markdown [markdown]="markdown"></org-markdown>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
           <li><strong>Unordered</strong>: Use *, -, or + for bullet points</li>
           <li><strong>Ordered</strong>: Use numbers followed by a period</li>
           <li><strong>Task Lists</strong>: Use - [ ] for unchecked, - [x] for checked (GitHub flavored)</li>
           <li><strong>Nesting</strong>: Indent with 2-4 spaces for nested items</li>
         </ul>
-      </org-storybook-example-container>
+      </org-design-system-demo-expected-behaviour>
     `,
     props: {
       markdown: listsMarkdown,
     },
     moduleMetadata: {
-      imports: [Markdown, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [
+        Markdown,
+        DesignSystemDemo,
+        DesignSystemDemoHeader,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
+      ],
     },
   }),
 };
@@ -259,27 +285,35 @@ export const LinksAndImages: Story = {
   },
   render: () => ({
     template: `
-      <org-storybook-example-container
-        title="Links and Images"
-        currentState="Showing different link and image formats"
-      >
-        <org-storybook-example-container-section label="Links and Images">
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Links and Images" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Links and Images</div>
           <org-markdown [markdown]="markdown"></org-markdown>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
           <li><strong>Links</strong>: Use [text](url) or [text](url "title")</li>
           <li><strong>Auto-linking</strong>: URLs are automatically converted to links</li>
           <li><strong>Images</strong>: Use ![alt](url) or ![alt](url "title")</li>
           <li><strong>Responsive</strong>: Images scale to fit container width</li>
         </ul>
-      </org-storybook-example-container>
+      </org-design-system-demo-expected-behaviour>
     `,
     props: {
       markdown: linksAndImagesMarkdown,
     },
     moduleMetadata: {
-      imports: [Markdown, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [
+        Markdown,
+        DesignSystemDemo,
+        DesignSystemDemoHeader,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
+      ],
     },
   }),
 };
@@ -304,26 +338,34 @@ export const ExternalLinkSecurity: Story = {
   },
   render: () => ({
     template: `
-      <org-storybook-example-container
-        title="External Link Security"
-        currentState="Showing external vs internal link rendering"
-      >
-        <org-storybook-example-container-section label="Link Security Attributes">
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="External Link Security" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Link Security Attributes</div>
           <org-markdown [markdown]="markdown"></org-markdown>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
           <li><strong>External links</strong>: Must have rel="noopener noreferrer" (inspect the anchor element)</li>
           <li><strong>Internal links</strong>: Must NOT have rel="noopener noreferrer"</li>
           <li><strong>Auto-linked URLs</strong>: External auto-linked URLs must also carry the rel attribute</li>
         </ul>
-      </org-storybook-example-container>
+      </org-design-system-demo-expected-behaviour>
     `,
     props: {
       markdown: externalLinkSecurityMarkdown,
     },
     moduleMetadata: {
-      imports: [Markdown, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [
+        Markdown,
+        DesignSystemDemo,
+        DesignSystemDemoHeader,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
+      ],
     },
   }),
 };
@@ -376,27 +418,35 @@ export const Code: Story = {
   },
   render: () => ({
     template: `
-      <org-storybook-example-container
-        title="Code"
-        currentState="Showing inline code and code blocks"
-      >
-        <org-storybook-example-container-section label="Code Examples">
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Code" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Code Examples</div>
           <org-markdown [markdown]="markdown"></org-markdown>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
           <li><strong>Inline Code</strong>: Use backticks around text</li>
           <li><strong>Code Blocks</strong>: Use triple backticks with optional language</li>
           <li><strong>Languages</strong>: Specify language identifier for fenced blocks (no syntax highlighting)</li>
           <li><strong>Scrollable</strong>: Long code blocks scroll horizontally</li>
         </ul>
-      </org-storybook-example-container>
+      </org-design-system-demo-expected-behaviour>
     `,
     props: {
       markdown: codeMarkdown,
     },
     moduleMetadata: {
-      imports: [Markdown, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [
+        Markdown,
+        DesignSystemDemo,
+        DesignSystemDemoHeader,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
+      ],
     },
   }),
 };
@@ -431,27 +481,35 @@ export const Blockquotes: Story = {
   },
   render: () => ({
     template: `
-      <org-storybook-example-container
-        title="Blockquotes"
-        currentState="Showing single, nested, and formatted blockquotes"
-      >
-        <org-storybook-example-container-section label="Blockquote Examples">
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Blockquotes" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Blockquote Examples</div>
           <org-markdown [markdown]="markdown"></org-markdown>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
           <li><strong>Basic</strong>: Use > at the start of lines</li>
           <li><strong>Nested</strong>: Use >> for nested quotes</li>
           <li><strong>Formatting</strong>: All markdown formatting works inside blockquotes</li>
           <li><strong>Styling</strong>: Left border indicates quoted content</li>
         </ul>
-      </org-storybook-example-container>
+      </org-design-system-demo-expected-behaviour>
     `,
     props: {
       markdown: blockquotesMarkdown,
     },
     moduleMetadata: {
-      imports: [Markdown, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [
+        Markdown,
+        DesignSystemDemo,
+        DesignSystemDemoHeader,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
+      ],
     },
   }),
 };
@@ -490,27 +548,35 @@ export const Tables: Story = {
   },
   render: () => ({
     template: `
-      <org-storybook-example-container
-        title="Tables"
-        currentState="Showing various table configurations"
-      >
-        <org-storybook-example-container-section label="Table Examples">
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Tables" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Table Examples</div>
           <org-markdown [markdown]="markdown"></org-markdown>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
           <li><strong>Structure</strong>: Use pipes | to separate columns</li>
           <li><strong>Headers</strong>: First row with --- separator</li>
           <li><strong>Alignment</strong>: Use :--- (left), :---: (center), ---: (right)</li>
           <li><strong>Formatting</strong>: All markdown formatting works in cells</li>
         </ul>
-      </org-storybook-example-container>
+      </org-design-system-demo-expected-behaviour>
     `,
     props: {
       markdown: tablesMarkdown,
     },
     moduleMetadata: {
-      imports: [Markdown, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [
+        Markdown,
+        DesignSystemDemo,
+        DesignSystemDemoHeader,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
+      ],
     },
   }),
 };
@@ -547,26 +613,34 @@ export const HorizontalRules: Story = {
   },
   render: () => ({
     template: `
-      <org-storybook-example-container
-        title="Horizontal Rules"
-        currentState="Showing horizontal rules as section separators"
-      >
-        <org-storybook-example-container-section label="Section Separators">
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Horizontal Rules" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Section Separators</div>
           <org-markdown [markdown]="markdown"></org-markdown>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
           <li><strong>Syntax</strong>: Use ---, ***, or ___ on their own line</li>
           <li><strong>Purpose</strong>: Visual separation between content sections</li>
           <li><strong>Styling</strong>: Rendered as a horizontal line with spacing</li>
         </ul>
-      </org-storybook-example-container>
+      </org-design-system-demo-expected-behaviour>
     `,
     props: {
       markdown: horizontalRulesMarkdown,
     },
     moduleMetadata: {
-      imports: [Markdown, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [
+        Markdown,
+        DesignSystemDemo,
+        DesignSystemDemoHeader,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
+      ],
     },
   }),
 };
@@ -721,15 +795,17 @@ export const ComprehensiveExample: Story = {
   },
   render: () => ({
     template: `
-      <org-storybook-example-container
-        title="Comprehensive Example"
-        currentState="Showing all markdown features together"
-      >
-        <org-storybook-example-container-section label="Complete Markdown Document">
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Comprehensive Example" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Complete Markdown Document</div>
           <org-markdown [markdown]="markdown"></org-markdown>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
           <li>All heading levels (H1-H6)</li>
           <li>Text formatting (bold, italic, combined)</li>
           <li><strong>Strikethrough</strong> with ~~ syntax (GitHub flavored)</li>
@@ -743,13 +819,19 @@ export const ComprehensiveExample: Story = {
           <li>Horizontal rules for section breaks</li>
           <li>All GitHub flavored markdown extensions</li>
         </ul>
-      </org-storybook-example-container>
+      </org-design-system-demo-expected-behaviour>
     `,
     props: {
       markdown: comprehensiveMarkdown,
     },
     moduleMetadata: {
-      imports: [Markdown, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [
+        Markdown,
+        DesignSystemDemo,
+        DesignSystemDemoHeader,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
+      ],
     },
   }),
 };

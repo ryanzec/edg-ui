@@ -4,6 +4,22 @@
     font-size: var(--box-content-font-size);
     line-height: var(--box-content-line-height);
     color: var(--box-content-fg);
+    /* content has no divider, so the inline padding sits on the host directly (inner-items mode) */
+    padding-inline: var(--box-region-padding);
+  }
+
+  /* inner-items application mode: arm the region padding to the box padding amount */
+  :host-context(org-box[data-padding-application='inner-items']) {
+    --box-region-padding: var(--box-padding);
+  }
+
+  /* the first / last region gets the leading / trailing edge padding on its host (resolves to 0 otherwise) */
+  :host(:first-child) {
+    padding-top: var(--box-region-padding);
+  }
+
+  :host(:last-child) {
+    padding-bottom: var(--box-region-padding);
   }
 
   /* adjacent-region padding collapse: drop bottom padding when followed by footer */

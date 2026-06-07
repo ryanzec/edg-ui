@@ -8,12 +8,10 @@ import { Label } from '../label/label';
 import { Textarea } from '../textarea/textarea';
 import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
 import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
-import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
+import { DesignSystemDemoControlInput } from '../../example/design-system-demo/design-system-demo-control-input';
 import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
 import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
 import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
-import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
-import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
 import { FormField } from './form-field';
 import { FormFields } from './form-fields';
 
@@ -30,7 +28,7 @@ import { FormFields } from './form-fields';
     DesignSystemDemo,
     DesignSystemDemoHeader,
     DesignSystemDemoControls,
-    DesignSystemDemoControlGroup,
+    DesignSystemDemoControlInput,
     DesignSystemDemoCanvas,
   ],
   styles: [
@@ -59,15 +57,15 @@ import { FormFields } from './form-fields';
           description="All form fields below are real and interactive — hover, focus, press, or tab through them to see every state."
         />
         <org-design-system-demo-controls slot="controls">
-          <org-design-system-demo-control-group label="Validation message">
+          <org-design-system-demo-control-input label="Validation message">
             <org-input
               name="live-demo-validation-message"
               formControlName="validationMessage"
               placeholder="Type a message to flip into the error state"
               ariaLabel="Validation message"
             />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Reserve validation space">
+          </org-design-system-demo-control-input>
+          <org-design-system-demo-control-input label="Reserve validation space">
             <org-checkbox-toggle
               name="live-demo-reserve-validation-space"
               value="reserveValidationSpace"
@@ -75,8 +73,8 @@ import { FormFields } from './form-fields';
             >
               {{ liveDemoForm.controls.reserveValidationSpace.value ? 'on' : 'off' }}
             </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Label orientation">
+          </org-design-system-demo-control-input>
+          <org-design-system-demo-control-input label="Label orientation">
             <org-checkbox-toggle
               name="live-demo-label-orientation"
               value="labelOrientation"
@@ -84,8 +82,8 @@ import { FormFields } from './form-fields';
             >
               {{ liveDemoForm.controls.labelOrientation.value ? 'horizontal' : 'vertical' }}
             </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Container orientation">
+          </org-design-system-demo-control-input>
+          <org-design-system-demo-control-input label="Container orientation">
             <org-checkbox-toggle
               name="live-demo-container-orientation"
               value="containerOrientation"
@@ -93,7 +91,7 @@ import { FormFields } from './form-fields';
             >
               {{ liveDemoForm.controls.containerOrientation.value ? 'horizontal' : 'vertical' }}
             </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
+          </org-design-system-demo-control-input>
         </org-design-system-demo-controls>
         <org-design-system-demo-canvas slot="canvas">
           <div class="canvas-stage">
@@ -223,11 +221,11 @@ export const Default: Story = {
   },
   render: () => ({
     template: `
-      <org-storybook-example-container
-        title="Form Fields"
-        currentState="Default"
-      >
-        <org-storybook-example-container-section label="Basic Text Inputs">
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Form Fields" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Basic Text Inputs</div>
           <org-form-fields>
             <org-form-field>
               <org-label text="First Name" htmlFor="first-name-input" />
@@ -244,11 +242,12 @@ export const Default: Story = {
               <org-input name="email-input" type="email" placeholder="Enter your email" />
             </org-form-field>
           </org-form-fields>
-        </org-storybook-example-container-section>
-      </org-storybook-example-container>
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
     `,
     moduleMetadata: {
-      imports: [FormFields, FormField, Label, Input, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [FormFields, FormField, Label, Input, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
     },
   }),
 };

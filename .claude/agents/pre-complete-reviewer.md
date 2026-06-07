@@ -32,6 +32,7 @@ Flag a comment **only** if it falls into one of these:
 
 ## What to KEEP (never flag)
 
+- TSDoc comments (they might beem redundant but useful for ide support).
 - Comments that explain the **WHY** — intent, rationale, trade-offs, non-obvious constraints, gotchas, or the reason a non-obvious approach was taken.
 - Comments that clarify **relatively complex** logic that is genuinely hard to follow from the code alone.
 - When you are **in doubt** whether a comment carries real "why" or complexity value, **do not flag it**. Only flag comments you are confident are redundant or duplicated.

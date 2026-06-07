@@ -10,7 +10,7 @@ import { Box } from '../box/box';
 import { LoadingBlocker } from '../loading-blocker/loading-blocker';
 import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
 import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
-import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
+import { DesignSystemDemoControlInput } from '../../example/design-system-demo/design-system-demo-control-input';
 import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
 import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
 import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
@@ -108,7 +108,7 @@ export const Default: Story = {
     DesignSystemDemo,
     DesignSystemDemoHeader,
     DesignSystemDemoControls,
-    DesignSystemDemoControlGroup,
+    DesignSystemDemoControlInput,
     DesignSystemDemoCanvas,
   ],
   styles: [
@@ -139,12 +139,12 @@ export const Default: Story = {
           description="Pick a size and color. Both are pass-throughs to the underlying Icon — they map to --sizing-icon-* and the semantic color tokens."
         />
         <org-design-system-demo-controls slot="controls">
-          <org-design-system-demo-control-group label="Size">
+          <org-design-system-demo-control-input label="Size">
             <org-button-toggle [items]="sizeItems" formControlName="size" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Color">
+          </org-design-system-demo-control-input>
+          <org-design-system-demo-control-input label="Color">
             <org-button-toggle [items]="iconColorItems" formControlName="iconColor" buttonSize="sm" />
-          </org-design-system-demo-control-group>
+          </org-design-system-demo-control-input>
         </org-design-system-demo-controls>
         <org-design-system-demo-canvas slot="canvas">
           <div class="canvas-stage">
@@ -398,7 +398,7 @@ class LoadingSpinnerInsideButtonSection {}
       <org-design-system-demo-canvas slot="canvas">
         <div class="pair">
           <div class="blocked-region">
-            <org-box layout="stack">
+            <org-box>
               <div class="body">
                 <strong>Quarterly report</strong>
                 <p>Revenue across all regions trended upward by 11.3% with the strongest gains in EMEA and APAC.</p>
@@ -408,7 +408,7 @@ class LoadingSpinnerInsideButtonSection {}
             <org-loading-blocker [isVisible]="true" />
           </div>
           <div class="blocked-region">
-            <org-box layout="stack">
+            <org-box>
               <div class="body">
                 <strong>Live activity</strong>
                 <p>Streaming events from the production cluster. Latency p99: 142ms. Errors window 5m: 0.</p>

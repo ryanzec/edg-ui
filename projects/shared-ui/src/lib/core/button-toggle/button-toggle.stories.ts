@@ -9,7 +9,7 @@ import { FormFields } from '../form-fields/form-fields';
 import { allComponentColors } from '../types/component-types';
 import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
 import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
-import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
+import { DesignSystemDemoControlInput } from '../../example/design-system-demo/design-system-demo-control-input';
 import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
 import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
 import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
@@ -160,7 +160,7 @@ export const Default: Story = {
     DesignSystemDemo,
     DesignSystemDemoHeader,
     DesignSystemDemoControls,
-    DesignSystemDemoControlGroup,
+    DesignSystemDemoControlInput,
     DesignSystemDemoCanvas,
   ],
   styles: [
@@ -185,19 +185,19 @@ export const Default: Story = {
           description="The button toggle below is real and interactive — click any button to update the selected value, and use the controls to drive the visual state."
         />
         <org-design-system-demo-controls slot="controls">
-          <org-design-system-demo-control-group label="Button Size">
+          <org-design-system-demo-control-input label="Button Size">
             <org-button-toggle [items]="sizeItems" formControlName="buttonSize" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Disabled">
+          </org-design-system-demo-control-input>
+          <org-design-system-demo-control-input label="Disabled">
             <org-checkbox-toggle name="live-demo-disabled" value="disabled" formControlName="disabled">
               {{ liveDemoForm.controls.disabled.value ? 'on' : 'off' }}
             </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Full Width">
+          </org-design-system-demo-control-input>
+          <org-design-system-demo-control-input label="Full Width">
             <org-checkbox-toggle name="live-demo-full-width" value="fullWidth" formControlName="fullWidth">
               {{ liveDemoForm.controls.fullWidth.value ? 'on' : 'off' }}
             </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
+          </org-design-system-demo-control-input>
         </org-design-system-demo-controls>
         <org-design-system-demo-canvas slot="canvas">
           <div class="canvas-stage">

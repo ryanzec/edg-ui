@@ -1,0 +1,36 @@
+@layer components {
+  :host {
+    display: flex;
+    flex-direction: column;
+    gap: var(--design-system-demo-controls-group-gap);
+    /* take a full row inside the parent controls' wrapping flex layout so groups stack vertically */
+    flex-basis: 100%;
+  }
+
+  /* hide the whole group (label + divider) when it projects no control inputs — e.g. all of its inputs
+     sit behind a falsy @if; keeps a labeled-but-empty group from rendering */
+  :host:not(:has(.inputs > *)) {
+    display: none;
+  }
+
+  /* divider separating each group from the one above it */
+  :host(:not(:first-child)) {
+    border-top: var(--border-width) solid var(--design-system-demo-controls-group-divider-color);
+    padding-top: var(--design-system-demo-controls-group-gap);
+  }
+
+  .label {
+    color: var(--design-system-demo-controls-group-label-color);
+    font-size: var(--design-system-demo-controls-group-label-font-size);
+    font-weight: var(--design-system-demo-controls-group-label-font-weight);
+    letter-spacing: var(--design-system-demo-controls-group-label-letter-spacing);
+    text-transform: uppercase;
+  }
+
+  .inputs {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: var(--design-system-demo-controls-group-inputs-gap);
+  }
+}

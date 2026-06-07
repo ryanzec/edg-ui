@@ -10,6 +10,7 @@ import {
   untracked,
 } from '@angular/core';
 import { ScrollArea } from '../scroll-area/scroll-area';
+import { LoadingSpinner } from '../loading-spinner/loading-spinner';
 import { Combobox } from './combobox';
 import { ComboboxOption } from './combobox-option';
 import { ComboboxOptionsBrainDirective } from '../combobox/combobox-options-brain';
@@ -23,7 +24,7 @@ import type { ComboboxGroupedOptions, ComboboxOption as ComboboxOptionData } fro
 @Component({
   selector: 'org-combobox-options',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ScrollArea, ComboboxOption],
+  imports: [ScrollArea, ComboboxOption, LoadingSpinner],
   templateUrl: './combobox-options.html',
   styleUrl: './combobox-options.css',
   hostDirectives: [ComboboxOptionsBrainDirective],
@@ -49,6 +50,17 @@ export class ComboboxOptions {
 
   /** whether options should be rendered in groups. */
   protected readonly isGroupingEnabled = computed<boolean>(() => this._comboboxComponent.isGroupingEnabled());
+
+  /** consumer-managed loading state from the parent combobox. */
+  protected readonly isLoading = computed<boolean>(() => this._comboboxComponent.isLoading());
+
+  /** whether the current input value is below the parent combobox's character threshold. */
+  protected readonly isBelowCharacterThreshold = computed<boolean>(() =>
+    this._comboboxComponent.isBelowCharacterThreshold()
+  );
+
+  /** the parent combobox's required character threshold. */
+  protected readonly characterThreshold = computed<number>(() => this._comboboxComponent.characterThreshold());
 
   /** synthetic option representing a new value the user can add. */
   protected readonly newOptionSuggestion = computed<ComboboxOptionData | null>(() =>

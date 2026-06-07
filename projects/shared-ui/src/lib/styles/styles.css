@@ -9,6 +9,7 @@
 @import '../example/design-system-demo/design-system-demo-tokens.css';
 @import './animations.css';
 @import './background-utility.css';
+@import './gradient-utility.css';
 @import './border-utility.css';
 @import './display.css';
 @import './flex-utility.css';

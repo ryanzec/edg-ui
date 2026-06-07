@@ -26,7 +26,8 @@ import { EmptyIndicatorIcon } from '../empty-indicator/empty-indicator-icon';
 import { Indicator } from '../indicator/indicator';
 import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
 import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
-import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
+import { DesignSystemDemoControlInput } from '../../example/design-system-demo/design-system-demo-control-input';
+import { DesignSystemDemoControlsGroup } from '../../example/design-system-demo/design-system-demo-controls-group';
 import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
 import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
 import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
@@ -37,15 +38,11 @@ type LiveDemoPre = 'none' | 'icon' | 'image';
 
 type LiveDemoPost = 'none' | 'icon';
 
-type LiveDemoLabelMode = 'label' | 'content';
-
 const allLiveDemoAsTags = ['static', 'a', 'button'] as const;
 
 const allLiveDemoPre = ['none', 'icon', 'image'] as const;
 
 const allLiveDemoPost = ['none', 'icon'] as const;
-
-const allLiveDemoLabelModes = ['label', 'content'] as const;
 
 const liveDemoSizeItems: ButtonToggleItem[] = allListSizes.map((size) => ({
   label: size,
@@ -66,12 +63,6 @@ const liveDemoPreItems: ButtonToggleItem[] = allLiveDemoPre.map((value) => ({
 }));
 
 const liveDemoPostItems: ButtonToggleItem[] = allLiveDemoPost.map((value) => ({
-  label: value,
-  value,
-  buttonColor: 'primary',
-}));
-
-const liveDemoLabelModeItems: ButtonToggleItem[] = allLiveDemoLabelModes.map((value) => ({
   label: value,
   value,
   buttonColor: 'primary',
@@ -120,7 +111,8 @@ const liveDemoNavigatePaths = ['/', '/inbox', '/inbox/today', '/archive'] as con
     DesignSystemDemo,
     DesignSystemDemoHeader,
     DesignSystemDemoControls,
-    DesignSystemDemoControlGroup,
+    DesignSystemDemoControlsGroup,
+    DesignSystemDemoControlInput,
     DesignSystemDemoCanvas,
   ],
   styles: [
@@ -149,89 +141,87 @@ const liveDemoNavigatePaths = ['/', '/inbox', '/inbox/today', '/archive'] as con
           description="Toggle the inputs to see every combination. asTag determines what the row renders as; clickable styling activates for a, button, when forceClickable is set, or when isClickable makes the row itself the click target."
         />
         <org-design-system-demo-controls slot="controls">
-          <org-design-system-demo-control-group label="Size">
-            <org-button-toggle [items]="sizeItems" formControlName="size" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="asTag">
-            <org-button-toggle [items]="asTagItems" formControlName="asTag" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Pre">
-            <org-button-toggle [items]="preItems" formControlName="pre" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Post">
-            <org-button-toggle [items]="postItems" formControlName="post" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Label vs content slot">
-            <org-button-toggle [items]="labelModeItems" formControlName="labelMode" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="selectMode">
-            <org-button-toggle [items]="selectModeItems" formControlName="selectMode" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="border">
-            <org-button-toggle [items]="borderItems" formControlName="border" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="emphasizeColor (first item)">
-            <org-button-toggle [items]="emphasizeColorItems" formControlName="emphasizeColor" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="isSelected">
-            <org-checkbox-toggle name="live-demo-is-selected" value="isSelected" formControlName="isSelected">
-              {{ liveDemoForm.controls.isSelected.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="disabled">
-            <org-checkbox-toggle name="live-demo-disabled" value="disabled" formControlName="disabled">
-              {{ liveDemoForm.controls.disabled.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="showAsExternal">
-            <org-checkbox-toggle
-              name="live-demo-is-external-href"
-              value="showAsExternal"
-              formControlName="showAsExternal"
-            >
-              {{ liveDemoForm.controls.showAsExternal.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="forceClickable">
-            <org-checkbox-toggle
-              name="live-demo-force-clickable"
-              value="forceClickable"
-              formControlName="forceClickable"
-            >
-              {{ liveDemoForm.controls.forceClickable.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="isClickable">
-            <org-checkbox-toggle name="live-demo-is-clickable" value="isClickable" formControlName="isClickable">
-              {{ liveDemoForm.controls.isClickable.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="hideLabel">
-            <org-checkbox-toggle name="live-demo-hide-label" value="hideLabel" formControlName="hideLabel">
-              {{ liveDemoForm.controls.hideLabel.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Wrap in org-box">
-            <org-checkbox-toggle name="live-demo-wrap-in-box" value="wrapInBox" formControlName="wrapInBox">
-              {{ liveDemoForm.controls.wrapInBox.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="routerMatchExact">
-            <org-checkbox-toggle
-              name="live-demo-router-match-exact"
-              value="routerMatchExact"
-              formControlName="routerMatchExact"
-            >
-              {{ liveDemoForm.controls.routerMatchExact.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Navigate to (current: {{ currentUrl() }})">
-            <div class="flex flex-row gap-2 flex-wrap">
-              @for (path of navigatePaths; track path) {
-                <button type="button" class="text-xs" (click)="onNavigate(path)">{{ path }}</button>
-              }
-            </div>
-          </org-design-system-demo-control-group>
+          <org-design-system-demo-controls-group label="Visual">
+            <org-design-system-demo-control-input label="Size">
+              <org-button-toggle [items]="sizeItems" formControlName="size" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Pre">
+              <org-button-toggle [items]="preItems" formControlName="pre" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Post">
+              <org-button-toggle [items]="postItems" formControlName="post" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="border">
+              <org-button-toggle [items]="borderItems" formControlName="border" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="emphasizeColor (first item)">
+              <org-button-toggle [items]="emphasizeColorItems" formControlName="emphasizeColor" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
+          <org-design-system-demo-controls-group label="Behavior">
+            <org-design-system-demo-control-input label="asTag">
+              <org-button-toggle [items]="asTagItems" formControlName="asTag" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="selectMode">
+              <org-button-toggle [items]="selectModeItems" formControlName="selectMode" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="isSelected">
+              <org-checkbox-toggle name="live-demo-is-selected" value="isSelected" formControlName="isSelected">
+                {{ liveDemoForm.controls.isSelected.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="disabled">
+              <org-checkbox-toggle name="live-demo-disabled" value="disabled" formControlName="disabled">
+                {{ liveDemoForm.controls.disabled.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="showAsExternal">
+              <org-checkbox-toggle
+                name="live-demo-is-external-href"
+                value="showAsExternal"
+                formControlName="showAsExternal"
+              >
+                {{ liveDemoForm.controls.showAsExternal.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="forceClickable">
+              <org-checkbox-toggle
+                name="live-demo-force-clickable"
+                value="forceClickable"
+                formControlName="forceClickable"
+              >
+                {{ liveDemoForm.controls.forceClickable.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="isClickable">
+              <org-checkbox-toggle name="live-demo-is-clickable" value="isClickable" formControlName="isClickable">
+                {{ liveDemoForm.controls.isClickable.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="routerMatchExact">
+              <org-checkbox-toggle
+                name="live-demo-router-match-exact"
+                value="routerMatchExact"
+                formControlName="routerMatchExact"
+              >
+                {{ liveDemoForm.controls.routerMatchExact.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
+          <org-design-system-demo-controls-group label="Navigation">
+            <org-design-system-demo-control-input label="Wrap in org-box">
+              <org-checkbox-toggle name="live-demo-wrap-in-box" value="wrapInBox" formControlName="wrapInBox">
+                {{ liveDemoForm.controls.wrapInBox.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Navigate to (current: {{ currentUrl() }})">
+              <div class="flex flex-row gap-2 flex-wrap">
+                @for (path of navigatePaths; track path) {
+                  <button type="button" class="text-xs" (click)="onNavigate(path)">{{ path }}</button>
+                }
+              </div>
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
         </org-design-system-demo-controls>
         <org-design-system-demo-canvas slot="canvas">
           <div class="canvas-stage">
@@ -265,9 +255,7 @@ const liveDemoNavigatePaths = ['/', '/inbox', '/inbox/today', '/archive'] as con
             [showAsExternal]="liveDemoForm.controls.showAsExternal.value"
             [forceClickable]="liveDemoForm.controls.forceClickable.value"
             [isClickable]="liveDemoForm.controls.isClickable.value"
-            [hideLabel]="liveDemoForm.controls.hideLabel.value"
             [emphasizeColor]="first ? liveDemoForm.controls.emphasizeColor.value : 'none'"
-            [label]="liveDemoForm.controls.labelMode.value === 'content' ? null : item.label"
           >
             @if (liveDemoForm.controls.pre.value === 'icon') {
               <org-list-item-icon pre name="mail" />
@@ -275,9 +263,7 @@ const liveDemoNavigatePaths = ['/', '/inbox', '/inbox/today', '/archive'] as con
             @if (liveDemoForm.controls.pre.value === 'image') {
               <org-list-item-image pre [src]="item.imageSrc" [alt]="item.label + ' avatar'" />
             }
-            @if (liveDemoForm.controls.labelMode.value === 'content') {
-              <span content>{{ item.label }} <em class="text-faint">(content slot)</em></span>
-            }
+            {{ item.label }}
             @if (liveDemoForm.controls.post.value === 'icon') {
               <org-list-item-icon post name="chevron-right" />
             }
@@ -294,7 +280,6 @@ class ListLiveDemoStory {
   protected readonly asTagItems = liveDemoAsTagItems;
   protected readonly preItems = liveDemoPreItems;
   protected readonly postItems = liveDemoPostItems;
-  protected readonly labelModeItems = liveDemoLabelModeItems;
   protected readonly selectModeItems = liveDemoSelectModeItems;
   protected readonly borderItems = liveDemoBorderItems;
   protected readonly emphasizeColorItems = liveDemoEmphasizeColorItems;
@@ -308,7 +293,6 @@ class ListLiveDemoStory {
     asTag: new FormControl<LiveDemoAsTag>('static', { nonNullable: true }),
     pre: new FormControl<LiveDemoPre>('none', { nonNullable: true }),
     post: new FormControl<LiveDemoPost>('none', { nonNullable: true }),
-    labelMode: new FormControl<LiveDemoLabelMode>('label', { nonNullable: true }),
     selectMode: new FormControl<ListSelectMode>('single', { nonNullable: true }),
     border: new FormControl<ListBorder>('none', { nonNullable: true }),
     emphasizeColor: new FormControl<ListItemEmphasizeColor>('none', { nonNullable: true }),
@@ -317,7 +301,6 @@ class ListLiveDemoStory {
     showAsExternal: new FormControl<boolean>(false, { nonNullable: true }),
     forceClickable: new FormControl<boolean>(false, { nonNullable: true }),
     isClickable: new FormControl<boolean>(true, { nonNullable: true }),
-    hideLabel: new FormControl<boolean>(false, { nonNullable: true }),
     wrapInBox: new FormControl<boolean>(false, { nonNullable: true }),
     routerMatchExact: new FormControl<boolean>(false, { nonNullable: true }),
   });
@@ -373,14 +356,17 @@ const showcaseRouterPaths = ['/', '/products', '/products/123', '/settings'] as 
         <div class="flex flex-col gap-2">
           <p class="text-2xs uppercase letter-spacing-wide text-muted">routerMatchExact = false (subset)</p>
           <org-list selectMode="single">
-            <org-list-item asTag="a" routerLink="/products" label="Products">
+            <org-list-item asTag="a" routerLink="/products">
               <org-list-item-icon pre name="package" />
+              Products
             </org-list-item>
-            <org-list-item asTag="a" routerLink="/products/123" label="Product 123">
+            <org-list-item asTag="a" routerLink="/products/123">
               <org-list-item-icon pre name="package" />
+              Product 123
             </org-list-item>
-            <org-list-item asTag="a" routerLink="/settings" label="Settings">
+            <org-list-item asTag="a" routerLink="/settings">
               <org-list-item-icon pre name="settings" />
+              Settings
             </org-list-item>
           </org-list>
         </div>
@@ -388,14 +374,17 @@ const showcaseRouterPaths = ['/', '/products', '/products/123', '/settings'] as 
         <div class="flex flex-col gap-2">
           <p class="text-2xs uppercase letter-spacing-wide text-muted">routerMatchExact = true (exact)</p>
           <org-list selectMode="single">
-            <org-list-item asTag="a" routerLink="/products" [routerMatchExact]="true" label="Products">
+            <org-list-item asTag="a" routerLink="/products" [routerMatchExact]="true">
               <org-list-item-icon pre name="package" />
+              Products
             </org-list-item>
-            <org-list-item asTag="a" routerLink="/products/123" [routerMatchExact]="true" label="Product 123">
+            <org-list-item asTag="a" routerLink="/products/123" [routerMatchExact]="true">
               <org-list-item-icon pre name="package" />
+              Product 123
             </org-list-item>
-            <org-list-item asTag="a" routerLink="/settings" [routerMatchExact]="true" label="Settings">
+            <org-list-item asTag="a" routerLink="/settings" [routerMatchExact]="true">
               <org-list-item-icon pre name="settings" />
+              Settings
             </org-list-item>
           </org-list>
         </div>
@@ -440,7 +429,7 @@ const meta: Meta<List> = {
 
   ### Composition Parts
   - **org-list** — parent wrapper providing shared \`size\` and \`listRole\` context to children
-  - **org-list-item** — individual list row supporting anchor / button / div rendering, selected / disabled / clickable states, with an optional \`label\` input (or a projected \`content\` slot in its place) and \`pre\` / \`post\` content projection slots
+  - **org-list-item** — individual list row supporting anchor / button / div rendering, selected / disabled / clickable states; its main text is provided as projected child content, with optional \`pre\` / \`post\` content projection slots
   - **org-list-item-icon** — icon slotted via \`pre\` or \`post\` (must be used inside an \`org-list-item\`); size is inherited from the parent list item
   - **org-list-item-image** — image slotted via \`pre\` or \`post\` (must be used inside an \`org-list-item\`); size matches the icon footprint for the current list item size
 
@@ -451,11 +440,11 @@ const meta: Meta<List> = {
   - Supports sm and base size variants
 
   ### ListItem Features
-  - Optional \`label\` input renders the main text; when omitted, the projected \`content\` slot is rendered in its place (\`label\` wins when both are provided)
-  - Project \`<org-list-item-icon pre>\` / \`<org-list-item-icon post>\` to render icons before / after the label
-  - Project \`<org-list-item-image pre>\` to render an image before the label
+  - The row's main text / markup is projected as child content
+  - Project \`<org-list-item-icon pre>\` / \`<org-list-item-icon post>\` to render icons before / after the content
+  - Project \`<org-list-item-image pre>\` to render an image before the content
   - When \`showAsExternal\` is true, the post-icon is automatically overridden to \`arrow-up-right\`
-  - \`hideLabel\` visually hides the label while keeping it accessible to screen readers
+  - For an icon-only row, project the accessible text inside a \`<span class="sr-only">\` so it stays available to screen readers
   - Conditionally clickable — only shows cursor and hover when a click listener is attached
   - Hover background color change (neutral subtle) when clickable
   - Selected state with primary subtle background
@@ -466,47 +455,51 @@ const meta: Meta<List> = {
   \`\`\`html
   <!-- Basic list (non-clickable items) -->
   <org-list>
-    <org-list-item label="Item 1" />
-    <org-list-item label="Item 2" />
-    <org-list-item label="Item 3" />
+    <org-list-item>Item 1</org-list-item>
+    <org-list-item>Item 2</org-list-item>
+    <org-list-item>Item 3</org-list-item>
   </org-list>
 
   <!-- List with selected items -->
   <org-list>
-    <org-list-item label="Selected Item" [isSelected]="true" />
-    <org-list-item label="Normal Item" />
+    <org-list-item [isSelected]="true">Selected Item</org-list-item>
+    <org-list-item>Normal Item</org-list-item>
   </org-list>
 
   <!-- With click handler (clickable items) -->
   <org-list>
-    <org-list-item asTag="button" label="Clickable Item" (clicked)="onClick()" />
+    <org-list-item asTag="button" (clicked)="onClick()">Clickable Item</org-list-item>
   </org-list>
 
   <!-- With pre / post icons via content projection -->
   <org-list>
-    <org-list-item label="Item with pre icon">
+    <org-list-item>
       <org-list-item-icon pre name="arrow-down" />
+      Item with pre icon
     </org-list-item>
-    <org-list-item label="Item with post icon">
+    <org-list-item>
+      Item with post icon
       <org-list-item-icon post name="arrow-right" />
     </org-list-item>
-    <org-list-item label="Inbox">
+    <org-list-item>
       <org-list-item-icon pre name="mail" />
+      Inbox
       <org-list-item-icon post name="chevron-right" />
     </org-list-item>
   </org-list>
 
   <!-- With image via content projection -->
   <org-list>
-    <org-list-item label="Item with image">
+    <org-list-item>
       <org-list-item-image pre src="path/to/image.jpg" alt="User avatar" />
+      Item with image
     </org-list-item>
   </org-list>
 
-  <!-- Custom row markup via the content slot (omit label) -->
+  <!-- Custom row markup as projected content -->
   <org-list>
     <org-list-item>
-      <span content>Custom <strong>row</strong> markup</span>
+      <span>Custom <strong>row</strong> markup</span>
     </org-list-item>
   </org-list>
   \`\`\`
@@ -534,9 +527,9 @@ export const Default: Story = {
     props: args,
     template: `
       <org-list>
-        <org-list-item label="List Item 1" />
-        <org-list-item label="List Item 2" />
-        <org-list-item label="List Item 3" />
+        <org-list-item>List Item 1</org-list-item>
+        <org-list-item>List Item 2</org-list-item>
+        <org-list-item>List Item 3</org-list-item>
       </org-list>
     `,
     moduleMetadata: {
@@ -550,7 +543,7 @@ export const LiveDemo: Story = {
     docs: {
       description: {
         story:
-          'Fully interactive demo. Use the controls to drive every visual input on the list (size, asTag, pre, post, select mode, isSelected, disabled, showAsExternal, forceClickable, isClickable, hideLabel, wrap in box) and observe the live result in the canvas.',
+          'Fully interactive demo. Use the controls to drive every visual input on the list (size, asTag, pre, post, select mode, isSelected, disabled, showAsExternal, forceClickable, isClickable, wrap in box) and observe the live result in the canvas.',
       },
     },
   },
@@ -586,35 +579,35 @@ export const Showcase: Story = {
               <div class="flex flex-col gap-2">
                 <p class="text-2xs uppercase letter-spacing-wide text-muted">Default · Static</p>
                 <org-list>
-                  <org-list-item label="Plain row, no interaction" />
-                  <org-list-item label="Another static row" />
+                  <org-list-item>Plain row, no interaction</org-list-item>
+                  <org-list-item>Another static row</org-list-item>
                 </org-list>
               </div>
 
               <div class="flex flex-col gap-2">
                 <p class="text-2xs uppercase letter-spacing-wide text-muted">Clickable · Hover / Focus / Active are live</p>
                 <org-list>
-                  <org-list-item asTag="button" label="Button row" (clicked)="undefined" />
-                  <org-list-item asTag="a" href="#" label="Anchor row" />
-                  <org-list-item asTag="button" label="Tab here for focus ring" (clicked)="undefined" />
+                  <org-list-item asTag="button" (clicked)="undefined">Button row</org-list-item>
+                  <org-list-item asTag="a" href="#">Anchor row</org-list-item>
+                  <org-list-item asTag="button" (clicked)="undefined">Tab here for focus ring</org-list-item>
                 </org-list>
               </div>
 
               <div class="flex flex-col gap-2">
                 <p class="text-2xs uppercase letter-spacing-wide text-muted">Selected</p>
                 <org-list selectMode="single">
-                  <org-list-item asTag="button" label="Inbox" (clicked)="undefined" />
-                  <org-list-item asTag="button" label="Drafts" [isSelected]="true" (clicked)="undefined" />
-                  <org-list-item asTag="button" label="Sent" (clicked)="undefined" />
+                  <org-list-item asTag="button" (clicked)="undefined">Inbox</org-list-item>
+                  <org-list-item asTag="button" [isSelected]="true" (clicked)="undefined">Drafts</org-list-item>
+                  <org-list-item asTag="button" (clicked)="undefined">Sent</org-list-item>
                 </org-list>
               </div>
 
               <div class="flex flex-col gap-2">
                 <p class="text-2xs uppercase letter-spacing-wide text-muted">Disabled</p>
                 <org-list>
-                  <org-list-item asTag="button" label="Available action" (clicked)="undefined" />
-                  <org-list-item asTag="button" label="Unavailable action" [disabled]="true" (clicked)="undefined" />
-                  <org-list-item asTag="button" label="Available action" (clicked)="undefined" />
+                  <org-list-item asTag="button" (clicked)="undefined">Available action</org-list-item>
+                  <org-list-item asTag="button" [disabled]="true" (clicked)="undefined">Unavailable action</org-list-item>
+                  <org-list-item asTag="button" (clicked)="undefined">Available action</org-list-item>
                 </org-list>
               </div>
             </div>
@@ -646,14 +639,17 @@ export const Showcase: Story = {
                 <p class="text-2xs uppercase letter-spacing-wide text-muted">List · With rows</p>
                 <org-box [padding]="'none'">
                   <org-list>
-                    <org-list-item label="Aurora landing page">
+                    <org-list-item>
                       <org-list-item-icon pre name="folder" />
+                      Aurora landing page
                     </org-list-item>
-                    <org-list-item label="Internal tooling rewrite">
+                    <org-list-item>
                       <org-list-item-icon pre name="folder" />
+                      Internal tooling rewrite
                     </org-list-item>
-                    <org-list-item label="Quarterly review deck">
+                    <org-list-item>
                       <org-list-item-icon pre name="folder" />
+                      Quarterly review deck
                     </org-list-item>
                   </org-list>
                 </org-box>
@@ -679,29 +675,34 @@ export const Showcase: Story = {
           <org-design-system-demo-header
             slot="header"
             title="In context"
-            description="Five realistic uses. Notice that all of them are built from the same primitives — only the pre slot, label, and meta change."
+            description="Five realistic uses. Notice that all of them are built from the same primitives — only the pre slot, text, and meta change."
           />
           <org-design-system-demo-canvas slot="canvas">
             <div class="grid grid-cols-2 gap-6 w-full">
               <div class="flex flex-col gap-2">
                 <p class="text-2xs uppercase letter-spacing-wide text-muted">Sidebar navigation</p>
                 <org-list selectMode="single">
-                  <org-list-item asTag="button" label="Home" (clicked)="undefined">
+                  <org-list-item asTag="button" (clicked)="undefined">
                     <org-list-item-icon pre name="house" />
+                    Home
                   </org-list-item>
-                  <org-list-item asTag="button" label="Inbox" [isSelected]="true" (clicked)="undefined">
+                  <org-list-item asTag="button" [isSelected]="true" (clicked)="undefined">
                     <org-list-item-icon pre name="mail" />
+                    Inbox
                     <org-indicator post color="neutral" [number]="12" />
                   </org-list-item>
-                  <org-list-item asTag="button" label="Calendar" (clicked)="undefined">
+                  <org-list-item asTag="button" (clicked)="undefined">
                     <org-list-item-icon pre name="calendar" />
+                    Calendar
                   </org-list-item>
-                  <org-list-item asTag="button" label="Documents" (clicked)="undefined">
+                  <org-list-item asTag="button" (clicked)="undefined">
                     <org-list-item-icon pre name="file-text" />
+                    Documents
                     <org-indicator post color="danger" ariaLabel="Unread documents" />
                   </org-list-item>
-                  <org-list-item asTag="button" label="Team" (clicked)="undefined">
+                  <org-list-item asTag="button" (clicked)="undefined">
                     <org-list-item-icon pre name="users" />
+                    Team
                   </org-list-item>
                 </org-list>
               </div>
@@ -710,11 +711,11 @@ export const Showcase: Story = {
                 <p class="text-2xs uppercase letter-spacing-wide text-muted">Settings menu (no pre icons)</p>
                 <org-box [padding]="'none'">
                   <org-list selectMode="single">
-                    <org-list-item asTag="button" label="General" (clicked)="undefined" />
-                    <org-list-item asTag="button" label="Members &amp; permissions" [isSelected]="true" (clicked)="undefined" />
-                    <org-list-item asTag="button" label="Billing" (clicked)="undefined" />
-                    <org-list-item asTag="button" label="Security" (clicked)="undefined" />
-                    <org-list-item asTag="button" label="API tokens" (clicked)="undefined" />
+                    <org-list-item asTag="button" (clicked)="undefined">General</org-list-item>
+                    <org-list-item asTag="button" [isSelected]="true" (clicked)="undefined">Members &amp; permissions</org-list-item>
+                    <org-list-item asTag="button" (clicked)="undefined">Billing</org-list-item>
+                    <org-list-item asTag="button" (clicked)="undefined">Security</org-list-item>
+                    <org-list-item asTag="button" (clicked)="undefined">API tokens</org-list-item>
                   </org-list>
                 </org-box>
               </div>
@@ -723,20 +724,24 @@ export const Showcase: Story = {
                 <p class="text-2xs uppercase letter-spacing-wide text-muted">Search results · ListItemImage</p>
                 <org-box [padding]="'none'">
                   <org-list>
-                    <org-list-item asTag="button" label="Sarah Chen" (clicked)="undefined">
+                    <org-list-item asTag="button" (clicked)="undefined">
                       <org-list-item-image pre src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah" alt="Sarah Chen avatar" />
+                      Sarah Chen
                       <span post class="text-faint">Engineering</span>
                     </org-list-item>
-                    <org-list-item asTag="button" label="Marcus Holt" (clicked)="undefined">
+                    <org-list-item asTag="button" (clicked)="undefined">
                       <org-list-item-image pre src="https://api.dicebear.com/7.x/avataaars/svg?seed=Marcus" alt="Marcus Holt avatar" />
+                      Marcus Holt
                       <span post class="text-faint">Design</span>
                     </org-list-item>
-                    <org-list-item asTag="button" label="Aisha Patel" (clicked)="undefined">
+                    <org-list-item asTag="button" (clicked)="undefined">
                       <org-list-item-image pre src="https://api.dicebear.com/7.x/avataaars/svg?seed=Aisha" alt="Aisha Patel avatar" />
+                      Aisha Patel
                       <span post class="text-faint">Product</span>
                     </org-list-item>
-                    <org-list-item asTag="button" label="Diego Ramirez" (clicked)="undefined">
+                    <org-list-item asTag="button" (clicked)="undefined">
                       <org-list-item-image pre src="https://api.dicebear.com/7.x/avataaars/svg?seed=Diego" alt="Diego Ramirez avatar" />
+                      Diego Ramirez
                       <span post class="text-faint">Sales</span>
                     </org-list-item>
                   </org-list>
@@ -747,21 +752,26 @@ export const Showcase: Story = {
                 <p class="text-2xs uppercase letter-spacing-wide text-muted">Action menu · button items</p>
                 <org-box [padding]="'none'">
                   <org-list>
-                    <org-list-item asTag="button" label="Copy link" (clicked)="undefined">
+                    <org-list-item asTag="button" (clicked)="undefined">
                       <org-list-item-icon pre name="copy" />
+                      Copy link
                     </org-list-item>
-                    <org-list-item asTag="button" label="Duplicate" (clicked)="undefined">
+                    <org-list-item asTag="button" (clicked)="undefined">
                       <org-list-item-icon pre name="package" />
+                      Duplicate
                     </org-list-item>
-                    <org-list-item asTag="button" label="Rename" (clicked)="undefined">
+                    <org-list-item asTag="button" (clicked)="undefined">
                       <org-list-item-icon pre name="pencil" />
+                      Rename
                     </org-list-item>
                     <org-divider />
-                    <org-list-item asTag="button" label="Move to archive" [disabled]="true" (clicked)="undefined">
+                    <org-list-item asTag="button" [disabled]="true" (clicked)="undefined">
                       <org-list-item-icon pre name="download" />
+                      Move to archive
                     </org-list-item>
-                    <org-list-item asTag="button" label="Delete" (clicked)="undefined">
+                    <org-list-item asTag="button" (clicked)="undefined">
                       <org-list-item-icon pre name="trash" />
+                      Delete
                     </org-list-item>
                   </org-list>
                 </org-box>
@@ -771,19 +781,23 @@ export const Showcase: Story = {
                 <p class="text-2xs uppercase letter-spacing-wide text-muted">Plain data list · static rows, no asTag</p>
                 <org-box [padding]="'none'">
                   <org-list>
-                    <org-list-item label="Authentication service">
+                    <org-list-item>
+                      Authentication service
                       <span post class="text-faint">v4.12.1 · deployed 2h ago</span>
                     </org-list-item>
                     <org-divider />
-                    <org-list-item label="Payments service">
+                    <org-list-item>
+                      Payments service
                       <span post class="text-faint">v2.8.3 · deployed 6h ago</span>
                     </org-list-item>
                     <org-divider />
-                    <org-list-item label="Notifications service">
+                    <org-list-item>
+                      Notifications service
                       <span post class="text-faint">v1.4.0 · deployed 1d ago</span>
                     </org-list-item>
                     <org-divider />
-                    <org-list-item label="Search service">
+                    <org-list-item>
+                      Search service
                       <span post class="text-faint">v3.0.0-rc.2 · deployed 3d ago</span>
                     </org-list-item>
                   </org-list>
@@ -804,25 +818,31 @@ export const Showcase: Story = {
             <div class="flex justify-center w-full">
               <org-box [padding]="'none'" class="w-2xs">
                 <org-list>
-                  <org-list-item asTag="button" label="Profile" (clicked)="undefined">
+                  <org-list-item asTag="button" (clicked)="undefined">
                     <org-list-item-icon pre name="users" />
+                    Profile
                   </org-list-item>
-                  <org-list-item asTag="button" label="Account" (clicked)="undefined">
+                  <org-list-item asTag="button" (clicked)="undefined">
                     <org-list-item-icon pre name="lock-keyhole" />
+                    Account
                   </org-list-item>
                   <org-divider />
-                  <org-list-item asTag="button" label="Workspace" (clicked)="undefined">
+                  <org-list-item asTag="button" (clicked)="undefined">
                     <org-list-item-icon pre name="package" />
+                    Workspace
                   </org-list-item>
-                  <org-list-item asTag="button" label="Members" (clicked)="undefined">
+                  <org-list-item asTag="button" (clicked)="undefined">
                     <org-list-item-icon pre name="users" />
+                    Members
                   </org-list-item>
                   <org-divider />
-                  <org-list-item asTag="a" href="https://example.com" [showAsExternal]="true" label="Help &amp; docs">
+                  <org-list-item asTag="a" href="https://example.com" [showAsExternal]="true">
                     <org-list-item-icon pre name="circle-help" />
+                    Help &amp; docs
                   </org-list-item>
-                  <org-list-item asTag="button" label="Sign out" (clicked)="undefined">
+                  <org-list-item asTag="button" (clicked)="undefined">
                     <org-list-item-icon pre name="log-out" />
+                    Sign out
                   </org-list-item>
                 </org-list>
               </org-box>
@@ -842,17 +862,21 @@ export const Showcase: Story = {
               <div class="flex flex-col gap-2">
                 <p class="text-2xs uppercase letter-spacing-wide text-muted">none (default)</p>
                 <org-list selectMode="single" border="none">
-                  <org-list-item asTag="button" label="General" (clicked)="undefined">
+                  <org-list-item asTag="button" (clicked)="undefined">
                     <org-list-item-icon pre name="settings" />
+                    General
                   </org-list-item>
-                  <org-list-item asTag="button" label="Members" [isSelected]="true" (clicked)="undefined">
+                  <org-list-item asTag="button" [isSelected]="true" (clicked)="undefined">
                     <org-list-item-icon pre name="users" />
+                    Members
                   </org-list-item>
-                  <org-list-item asTag="button" label="Billing" (clicked)="undefined">
+                  <org-list-item asTag="button" (clicked)="undefined">
                     <org-list-item-icon pre name="credit-card" />
+                    Billing
                   </org-list-item>
-                  <org-list-item asTag="button" label="Notifications" (clicked)="undefined">
+                  <org-list-item asTag="button" (clicked)="undefined">
                     <org-list-item-icon pre name="notification" />
+                    Notifications
                   </org-list-item>
                 </org-list>
               </div>
@@ -860,17 +884,21 @@ export const Showcase: Story = {
               <div class="flex flex-col gap-2">
                 <p class="text-2xs uppercase letter-spacing-wide text-muted">items-only</p>
                 <org-list selectMode="single" border="items-only">
-                  <org-list-item asTag="button" label="General" (clicked)="undefined">
+                  <org-list-item asTag="button" (clicked)="undefined">
                     <org-list-item-icon pre name="settings" />
+                    General
                   </org-list-item>
-                  <org-list-item asTag="button" label="Members" [isSelected]="true" (clicked)="undefined">
+                  <org-list-item asTag="button" [isSelected]="true" (clicked)="undefined">
                     <org-list-item-icon pre name="users" />
+                    Members
                   </org-list-item>
-                  <org-list-item asTag="button" label="Billing" (clicked)="undefined">
+                  <org-list-item asTag="button" (clicked)="undefined">
                     <org-list-item-icon pre name="credit-card" />
+                    Billing
                   </org-list-item>
-                  <org-list-item asTag="button" label="Notifications" (clicked)="undefined">
+                  <org-list-item asTag="button" (clicked)="undefined">
                     <org-list-item-icon pre name="notification" />
+                    Notifications
                   </org-list-item>
                 </org-list>
               </div>
@@ -878,17 +906,21 @@ export const Showcase: Story = {
               <div class="flex flex-col gap-2">
                 <p class="text-2xs uppercase letter-spacing-wide text-muted">full</p>
                 <org-list selectMode="single" border="full">
-                  <org-list-item asTag="button" label="General" (clicked)="undefined">
+                  <org-list-item asTag="button" (clicked)="undefined">
                     <org-list-item-icon pre name="settings" />
+                    General
                   </org-list-item>
-                  <org-list-item asTag="button" label="Members" [isSelected]="true" (clicked)="undefined">
+                  <org-list-item asTag="button" [isSelected]="true" (clicked)="undefined">
                     <org-list-item-icon pre name="users" />
+                    Members
                   </org-list-item>
-                  <org-list-item asTag="button" label="Billing" (clicked)="undefined">
+                  <org-list-item asTag="button" (clicked)="undefined">
                     <org-list-item-icon pre name="credit-card" />
+                    Billing
                   </org-list-item>
-                  <org-list-item asTag="button" label="Notifications" (clicked)="undefined">
+                  <org-list-item asTag="button" (clicked)="undefined">
                     <org-list-item-icon pre name="notification" />
+                    Notifications
                   </org-list-item>
                 </org-list>
               </div>
@@ -896,17 +928,21 @@ export const Showcase: Story = {
               <div class="flex flex-col gap-2">
                 <p class="text-2xs uppercase letter-spacing-wide text-muted">list-only</p>
                 <org-list selectMode="single" border="list-only">
-                  <org-list-item asTag="button" label="General" (clicked)="undefined">
+                  <org-list-item asTag="button" (clicked)="undefined">
                     <org-list-item-icon pre name="settings" />
+                    General
                   </org-list-item>
-                  <org-list-item asTag="button" label="Members" [isSelected]="true" (clicked)="undefined">
+                  <org-list-item asTag="button" [isSelected]="true" (clicked)="undefined">
                     <org-list-item-icon pre name="users" />
+                    Members
                   </org-list-item>
-                  <org-list-item asTag="button" label="Billing" (clicked)="undefined">
+                  <org-list-item asTag="button" (clicked)="undefined">
                     <org-list-item-icon pre name="credit-card" />
+                    Billing
                   </org-list-item>
-                  <org-list-item asTag="button" label="Notifications" (clicked)="undefined">
+                  <org-list-item asTag="button" (clicked)="undefined">
                     <org-list-item-icon pre name="notification" />
+                    Notifications
                   </org-list-item>
                 </org-list>
               </div>
@@ -924,20 +960,25 @@ export const Showcase: Story = {
           <org-design-system-demo-canvas slot="canvas">
             <div class="flex justify-center w-full">
               <org-list border="full" class="w-2xs">
-                <org-list-item label="Deploy succeeded" emphasizeColor="safe">
+                <org-list-item emphasizeColor="safe">
                   <org-list-item-icon pre name="circle-check" />
+                  Deploy succeeded
                 </org-list-item>
-                <org-list-item label="New version available" emphasizeColor="info">
+                <org-list-item emphasizeColor="info">
                   <org-list-item-icon pre name="circle-help" />
+                  New version available
                 </org-list-item>
-                <org-list-item label="Usage nearing limit" emphasizeColor="warning">
+                <org-list-item emphasizeColor="warning">
                   <org-list-item-icon pre name="package" />
+                  Usage nearing limit
                 </org-list-item>
-                <org-list-item label="Build failed" emphasizeColor="danger">
+                <org-list-item emphasizeColor="danger">
                   <org-list-item-icon pre name="trash" />
+                  Build failed
                 </org-list-item>
-                <org-list-item label="No accent (none)">
+                <org-list-item>
                   <org-list-item-icon pre name="file-text" />
+                  No accent (none)
                 </org-list-item>
               </org-list>
             </div>
@@ -948,8 +989,8 @@ export const Showcase: Story = {
         <org-design-system-demo>
           <org-design-system-demo-header
             slot="header"
-            title="Content slot"
-            description="When the label input is omitted, the projected content slot is rendered in its place — use it when a row needs richer markup than a single text label. pre / post slots still work alongside it."
+            title="Rich content"
+            description="A row's text is projected as child content — project richer markup than a single text label when a row needs it. pre / post slots still work alongside it."
           />
           <org-design-system-demo-canvas slot="canvas">
             <div class="flex justify-center w-full">
@@ -957,14 +998,14 @@ export const Showcase: Story = {
                 <org-list>
                   <org-list-item asTag="button" (clicked)="undefined">
                     <org-list-item-icon pre name="folder" />
-                    <span content>
+                    <span>
                       <strong>Design system</strong>
                       <span class="text-faint"> · updated 2h ago</span>
                     </span>
                   </org-list-item>
                   <org-list-item asTag="button" (clicked)="undefined">
                     <org-list-item-icon pre name="package" />
-                    <span content>
+                    <span>
                       <strong>Release 4.12</strong>
                       <span class="text-faint"> · updated 1d ago</span>
                     </span>
@@ -987,17 +1028,21 @@ export const Showcase: Story = {
               <div class="flex flex-col gap-2">
                 <p class="text-2xs uppercase letter-spacing-wide text-muted">sm (default)</p>
                 <org-list selectMode="single">
-                  <org-list-item asTag="button" label="Inbox" (clicked)="undefined">
+                  <org-list-item asTag="button" (clicked)="undefined">
                     <org-list-item-icon pre name="mail" />
+                    Inbox
                   </org-list-item>
-                  <org-list-item asTag="button" label="Calendar" (clicked)="undefined">
+                  <org-list-item asTag="button" (clicked)="undefined">
                     <org-list-item-icon pre name="calendar" />
+                    Calendar
                   </org-list-item>
-                  <org-list-item asTag="button" label="Drafts" [isSelected]="true" (clicked)="undefined">
+                  <org-list-item asTag="button" [isSelected]="true" (clicked)="undefined">
                     <org-list-item-icon pre name="file-text" />
+                    Drafts
                   </org-list-item>
-                  <org-list-item asTag="button" label="Archive" (clicked)="undefined">
+                  <org-list-item asTag="button" (clicked)="undefined">
                     <org-list-item-icon pre name="package" />
+                    Archive
                   </org-list-item>
                 </org-list>
               </div>
@@ -1005,17 +1050,21 @@ export const Showcase: Story = {
               <div class="flex flex-col gap-2">
                 <p class="text-2xs uppercase letter-spacing-wide text-muted">base</p>
                 <org-list size="base" selectMode="single">
-                  <org-list-item asTag="button" label="Inbox" (clicked)="undefined">
+                  <org-list-item asTag="button" (clicked)="undefined">
                     <org-list-item-icon pre name="mail" />
+                    Inbox
                   </org-list-item>
-                  <org-list-item asTag="button" label="Calendar" (clicked)="undefined">
+                  <org-list-item asTag="button" (clicked)="undefined">
                     <org-list-item-icon pre name="calendar" />
+                    Calendar
                   </org-list-item>
-                  <org-list-item asTag="button" label="Drafts" [isSelected]="true" (clicked)="undefined">
+                  <org-list-item asTag="button" [isSelected]="true" (clicked)="undefined">
                     <org-list-item-icon pre name="file-text" />
+                    Drafts
                   </org-list-item>
-                  <org-list-item asTag="button" label="Archive" (clicked)="undefined">
+                  <org-list-item asTag="button" (clicked)="undefined">
                     <org-list-item-icon pre name="package" />
+                    Archive
                   </org-list-item>
                 </org-list>
               </div>
@@ -1027,11 +1076,11 @@ export const Showcase: Story = {
           <ul class="list-inside list-disc flex flex-col gap-1">
             <li><strong>Item states</strong>: rows are static unless they have a click target (button/anchor/forceClickable/isClickable); selected and disabled are independent of clickable</li>
             <li><strong>Empty state</strong>: when zero rows, swap the list for an org-empty-indicator — keep the surrounding frame so the panel doesn't shift</li>
-            <li><strong>In context</strong>: every example reuses the same org-list / org-list-item primitives — only the projected pre/post slots and label change</li>
+            <li><strong>In context</strong>: every example reuses the same org-list / org-list-item primitives — only the projected pre/post slots and text change</li>
             <li><strong>Dividers</strong>: separators come from a projected org-divider — list owns no separator CSS</li>
             <li><strong>Border</strong>: the border input frames the list and/or separates items — none, items-only, full, list-only</li>
             <li><strong>Item emphasize color</strong>: emphasizeColor adds a thick colored left accent per item, independent of the list border</li>
-            <li><strong>Content slot</strong>: omit the label input to render the projected content slot in its place for richer row markup</li>
+            <li><strong>Rich content</strong>: project richer markup than plain text directly as the row content</li>
             <li><strong>Size</strong>: sm is the dense default; base is for reading-heavy lists</li>
           </ul>
         </org-design-system-demo-expected-behaviour>

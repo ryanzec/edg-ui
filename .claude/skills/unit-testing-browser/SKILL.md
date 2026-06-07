@@ -19,6 +19,7 @@ You are tasked to create unit style tests utilizing vitest's browser mode.
 - When testing reactive form related functionality, **ALWAYS** create a specific shell for testing that functionality.
 - Browser based tests must focus on **LOGICAL** and **A11Y** functionality and **NOT** styling concerns.
 - **NEVER** validation any logging from `logManager` in tests.
+- Angular services **MUST** always be mcoked for tests.
 
 # Vitest Gotcha
 - **ALWAYS** park the virtual cursor on the trigger input before opening a CDK overlay in vitest browser tests (e.g. `await userEvent.hover(input)` then focus), since the cursor stays where the last `userEvent` left it and an overlay opening beneath it fires a stray `mouseenter` that focuses whatever option sits under the cursor and corrupts keyboard-nav/focus assertions.

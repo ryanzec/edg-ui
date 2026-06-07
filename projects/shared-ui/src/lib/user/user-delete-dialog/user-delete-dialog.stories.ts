@@ -1,7 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/angular';
 import { UserDeleteDialog, type UserDeleteData } from './user-delete-dialog';
-import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
-import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
+import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
+import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
+import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
+import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
 import { Button } from '../../core/button/button';
 import { ChangeDetectionStrategy, Component, signal, ViewChild } from '@angular/core';
 
@@ -206,33 +208,38 @@ export const States: Story = {
   },
   render: () => ({
     template: `
-      <org-storybook-example-container
-        title="User Delete Dialog - States"
-        currentState="Comparing different dialog states"
-      >
-        <org-storybook-example-container-section label="Default State">
-          <story-user-delete-dialog-story />
-        </org-storybook-example-container-section>
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="User Delete Dialog - States" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Default State</div>
+            <story-user-delete-dialog-story />
+          </div>
 
-        <org-storybook-example-container-section label="Processing State">
-          <story-user-delete-dialog-story-processing />
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="flex flex-col gap-1 mt-1 list-inside list-disc">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Processing State</div>
+            <story-user-delete-dialog-story-processing />
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="flex flex-col gap-1 mt-1 list-inside list-disc">
           <li><strong>Default State</strong>: Both buttons enabled, escape key enabled</li>
           <li><strong>Processing State</strong>: Both buttons disabled, delete shows loading, escape disabled</li>
           <li><strong>User Name</strong>: Displayed in confirmation message</li>
           <li><strong>Event Tracking</strong>: Last action and user data displayed below buttons</li>
           <li><strong>Console Logging</strong>: Check console for event details</li>
         </ul>
-      </org-storybook-example-container>
+      </org-design-system-demo-expected-behaviour>
     `,
     moduleMetadata: {
       imports: [
         UserDeleteDialogStory,
         UserDeleteDialogStoryProcessing,
-        StorybookExampleContainer,
-        StorybookExampleContainerSection,
+        DesignSystemDemo,
+        DesignSystemDemoHeader,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
       ],
     },
   }),

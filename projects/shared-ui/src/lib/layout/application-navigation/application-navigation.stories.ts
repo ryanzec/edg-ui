@@ -8,8 +8,10 @@ import {
   type SettingsMenuItem,
   type Theme,
 } from './application-navigation';
-import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
-import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
+import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
+import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
+import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
+import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
 
 const meta: Meta<ApplicationNavigation> = {
   title: 'Layout/Components/Application Navigation',
@@ -328,48 +330,50 @@ export const CollapseExpandComparison: Story = {
   },
   render: () => ({
     template: `
-      <org-storybook-example-container
-        title="Collapse / Expand States"
-        currentState="Expanded and collapsed variants"
-      >
-        <org-storybook-example-container-section label="Expanded (default)">
-          <div style="height: 32rem; display: flex;">
-            <org-application-navigation
-              [currentOrganization]="currentOrganization"
-              [availableOrganizations]="availableOrganizations"
-              [navigationItems]="navigationItems"
-              [settingsMenuItems]="settingsItems"
-              userName="Maya Brennan"
-              userEmail="maya@acme.co"
-              userStatusColor="safe"
-              theme="dark"
-            />
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Collapse / Expand States" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Expanded (default)</div>
+            <div style="height: 32rem; display: flex;">
+              <org-application-navigation
+                [currentOrganization]="currentOrganization"
+                [availableOrganizations]="availableOrganizations"
+                [navigationItems]="navigationItems"
+                [settingsMenuItems]="settingsItems"
+                userName="Maya Brennan"
+                userEmail="maya@acme.co"
+                userStatusColor="safe"
+                theme="dark"
+              />
+            </div>
           </div>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Collapsed">
-          <div style="height: 32rem; display: flex;">
-            <org-application-navigation
-              [currentOrganization]="currentOrganization"
-              [availableOrganizations]="availableOrganizations"
-              [navigationItems]="navigationItems"
-              [settingsMenuItems]="settingsItems"
-              userName="Maya Brennan"
-              userEmail="maya@acme.co"
-              userStatusColor="safe"
-              theme="dark"
-              [collapsed]="true"
-            />
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Collapsed</div>
+            <div style="height: 32rem; display: flex;">
+              <org-application-navigation
+                [currentOrganization]="currentOrganization"
+                [availableOrganizations]="availableOrganizations"
+                [navigationItems]="navigationItems"
+                [settingsMenuItems]="settingsItems"
+                userName="Maya Brennan"
+                userEmail="maya@acme.co"
+                userStatusColor="safe"
+                theme="dark"
+                [collapsed]="true"
+              />
+            </div>
           </div>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
           <li>Width transitions smoothly between expanded and collapsed states via the right-edge handle</li>
           <li>Organization header collapses to just the icon when in collapsed state</li>
           <li>Plain items show tooltips on hover when collapsed; expandable groups open an overlay menu instead</li>
           <li>The user avatar status dot remains visible in both states</li>
         </ul>
-      </org-storybook-example-container>
+      </org-design-system-demo-expected-behaviour>
     `,
     props: {
       currentOrganization: defaultCurrentOrganization,
@@ -378,7 +382,13 @@ export const CollapseExpandComparison: Story = {
       settingsItems: defaultSettingsItems,
     },
     moduleMetadata: {
-      imports: [ApplicationNavigation, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [
+        ApplicationNavigation,
+        DesignSystemDemo,
+        DesignSystemDemoHeader,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
+      ],
     },
   }),
 };
@@ -394,50 +404,52 @@ export const GroupedNavigation: Story = {
   },
   render: () => ({
     template: `
-      <org-storybook-example-container
-        title="Grouped Navigation Items"
-        currentState="Ungrouped items + multiple expandable section groups"
-      >
-        <org-storybook-example-container-section label="All groups expanded by default">
-          <div style="height: 40rem; display: flex;">
-            <org-application-navigation
-              [currentOrganization]="currentOrganization"
-              [availableOrganizations]="availableOrganizations"
-              [navigationItems]="ungroupedItems"
-              [groupedNavigationItems]="groupedItems"
-              [settingsMenuItems]="settingsItems"
-              userName="Maya Brennan"
-              userEmail="maya@acme.co"
-              userStatusColor="safe"
-              theme="dark"
-            />
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Grouped Navigation Items" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">All groups expanded by default</div>
+            <div style="height: 40rem; display: flex;">
+              <org-application-navigation
+                [currentOrganization]="currentOrganization"
+                [availableOrganizations]="availableOrganizations"
+                [navigationItems]="ungroupedItems"
+                [groupedNavigationItems]="groupedItems"
+                [settingsMenuItems]="settingsItems"
+                userName="Maya Brennan"
+                userEmail="maya@acme.co"
+                userStatusColor="safe"
+                theme="dark"
+              />
+            </div>
           </div>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Collapsed sidebar (group headers hidden, items render flat)">
-          <div style="height: 40rem; display: flex;">
-            <org-application-navigation
-              [currentOrganization]="currentOrganization"
-              [availableOrganizations]="availableOrganizations"
-              [navigationItems]="ungroupedItems"
-              [groupedNavigationItems]="groupedItems"
-              [settingsMenuItems]="settingsItems"
-              userName="Maya Brennan"
-              userStatusColor="safe"
-              theme="dark"
-              [collapsed]="true"
-            />
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Collapsed sidebar (group headers hidden, items render flat)</div>
+            <div style="height: 40rem; display: flex;">
+              <org-application-navigation
+                [currentOrganization]="currentOrganization"
+                [availableOrganizations]="availableOrganizations"
+                [navigationItems]="ungroupedItems"
+                [groupedNavigationItems]="groupedItems"
+                [settingsMenuItems]="settingsItems"
+                userName="Maya Brennan"
+                userStatusColor="safe"
+                theme="dark"
+                [collapsed]="true"
+              />
+            </div>
           </div>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
           <li>Ungrouped items (Overview, Inbox) render before any group</li>
           <li>Each group header is clickable and toggles its items via an animated grid-row reveal</li>
           <li>Customer Pipeline starts collapsed because the group declares <code>defaultExpanded: false</code></li>
           <li>Items inside a group with nested children (e.g. Projects) keep their own expand/collapse chevron</li>
           <li>When the sidebar collapses, group headers hide and grouped items render flat alongside ungrouped icons with tooltips</li>
         </ul>
-      </org-storybook-example-container>
+      </org-design-system-demo-expected-behaviour>
     `,
     props: {
       currentOrganization: defaultCurrentOrganization,
@@ -447,7 +459,13 @@ export const GroupedNavigation: Story = {
       settingsItems: defaultSettingsItems,
     },
     moduleMetadata: {
-      imports: [ApplicationNavigation, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [
+        ApplicationNavigation,
+        DesignSystemDemo,
+        DesignSystemDemoHeader,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
+      ],
     },
   }),
 };
@@ -499,40 +517,42 @@ export const AppearanceToggle: Story = {
   },
   render: () => ({
     template: `
-      <org-storybook-example-container
-        title="Appearance Toggle"
-        currentState="Theme model controlling the appearance section"
-      >
-        <org-storybook-example-container-section label="With theme (appearance section visible)">
-          <div style="height: 24rem; display: flex;">
-            <org-application-navigation
-              [currentOrganization]="currentOrganization"
-              [availableOrganizations]="availableOrganizations"
-              [navigationItems]="navigationItems"
-              [settingsMenuItems]="settingsItems"
-              userName="Maya Brennan"
-              theme="dark"
-            />
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Appearance Toggle" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">With theme (appearance section visible)</div>
+            <div style="height: 24rem; display: flex;">
+              <org-application-navigation
+                [currentOrganization]="currentOrganization"
+                [availableOrganizations]="availableOrganizations"
+                [navigationItems]="navigationItems"
+                [settingsMenuItems]="settingsItems"
+                userName="Maya Brennan"
+                theme="dark"
+              />
+            </div>
           </div>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Without theme (appearance section hidden)">
-          <div style="height: 24rem; display: flex;">
-            <org-application-navigation
-              [currentOrganization]="currentOrganization"
-              [availableOrganizations]="availableOrganizations"
-              [navigationItems]="navigationItems"
-              [settingsMenuItems]="settingsItems"
-              userName="Maya Brennan"
-            />
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Without theme (appearance section hidden)</div>
+            <div style="height: 24rem; display: flex;">
+              <org-application-navigation
+                [currentOrganization]="currentOrganization"
+                [availableOrganizations]="availableOrganizations"
+                [navigationItems]="navigationItems"
+                [settingsMenuItems]="settingsItems"
+                userName="Maya Brennan"
+              />
+            </div>
           </div>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
           <li>Opening Settings shows / hides the appearance section based on whether theme is supplied</li>
           <li>Picking a theme emits a model change that the parent can persist</li>
         </ul>
-      </org-storybook-example-container>
+      </org-design-system-demo-expected-behaviour>
     `,
     props: {
       currentOrganization: defaultCurrentOrganization,
@@ -541,7 +561,13 @@ export const AppearanceToggle: Story = {
       settingsItems: settingsItemsWithDivider,
     },
     moduleMetadata: {
-      imports: [ApplicationNavigation, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [
+        ApplicationNavigation,
+        DesignSystemDemo,
+        DesignSystemDemoHeader,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
+      ],
     },
   }),
 };
@@ -556,57 +582,59 @@ export const UserDisplayVariants: Story = {
   },
   render: () => ({
     template: `
-      <org-storybook-example-container
-        title="User Display Variants"
-        currentState="Different user row configurations"
-      >
-        <org-storybook-example-container-section label="Name + email + status">
-          <div style="height: 24rem; display: flex;">
-            <org-application-navigation
-              [currentOrganization]="currentOrganization"
-              [availableOrganizations]="availableOrganizations"
-              [navigationItems]="navigationItems"
-              [settingsMenuItems]="settingsItems"
-              userName="Maya Brennan"
-              userEmail="maya@acme.co"
-              userStatusColor="safe"
-            />
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="User Display Variants" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Name + email + status</div>
+            <div style="height: 24rem; display: flex;">
+              <org-application-navigation
+                [currentOrganization]="currentOrganization"
+                [availableOrganizations]="availableOrganizations"
+                [navigationItems]="navigationItems"
+                [settingsMenuItems]="settingsItems"
+                userName="Maya Brennan"
+                userEmail="maya@acme.co"
+                userStatusColor="safe"
+              />
+            </div>
           </div>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Name only">
-          <div style="height: 24rem; display: flex;">
-            <org-application-navigation
-              [currentOrganization]="currentOrganization"
-              [availableOrganizations]="availableOrganizations"
-              [navigationItems]="navigationItems"
-              [settingsMenuItems]="settingsItems"
-              userName="Maya Brennan"
-            />
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Name only</div>
+            <div style="height: 24rem; display: flex;">
+              <org-application-navigation
+                [currentOrganization]="currentOrganization"
+                [availableOrganizations]="availableOrganizations"
+                [navigationItems]="navigationItems"
+                [settingsMenuItems]="settingsItems"
+                userName="Maya Brennan"
+              />
+            </div>
           </div>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="With avatar image">
-          <div style="height: 24rem; display: flex;">
-            <org-application-navigation
-              [currentOrganization]="currentOrganization"
-              [availableOrganizations]="availableOrganizations"
-              [navigationItems]="navigationItems"
-              [settingsMenuItems]="settingsItems"
-              userName="Maya Brennan"
-              userEmail="maya@acme.co"
-              userAvatarUrl="https://i.pravatar.cc/64?img=5"
-              userStatusColor="safe"
-            />
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">With avatar image</div>
+            <div style="height: 24rem; display: flex;">
+              <org-application-navigation
+                [currentOrganization]="currentOrganization"
+                [availableOrganizations]="availableOrganizations"
+                [navigationItems]="navigationItems"
+                [settingsMenuItems]="settingsItems"
+                userName="Maya Brennan"
+                userEmail="maya@acme.co"
+                userAvatarUrl="https://i.pravatar.cc/64?img=5"
+                userStatusColor="safe"
+              />
+            </div>
           </div>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
           <li>The user row hides when userName is empty</li>
           <li>userEmail renders as a sub-label under the name</li>
           <li>userStatusColor pins a status dot to the bottom-right of the avatar</li>
         </ul>
-      </org-storybook-example-container>
+      </org-design-system-demo-expected-behaviour>
     `,
     props: {
       currentOrganization: defaultCurrentOrganization,
@@ -615,7 +643,13 @@ export const UserDisplayVariants: Story = {
       settingsItems: defaultSettingsItems,
     },
     moduleMetadata: {
-      imports: [ApplicationNavigation, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [
+        ApplicationNavigation,
+        DesignSystemDemo,
+        DesignSystemDemoHeader,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
+      ],
     },
   }),
 };
@@ -630,51 +664,53 @@ export const EmptyStates: Story = {
   },
   render: () => ({
     template: `
-      <org-storybook-example-container
-        title="Empty States"
-        currentState="Different empty state configurations"
-      >
-        <org-storybook-example-container-section label="No Navigation Items">
-          <div style="height: 24rem; display: flex;">
-            <org-application-navigation
-              [currentOrganization]="currentOrganization"
-              [availableOrganizations]="availableOrganizations"
-              userName="Maya Brennan"
-              [navigationItems]="[]"
-              [settingsMenuItems]="settingsItems"
-            />
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Empty States" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">No Navigation Items</div>
+            <div style="height: 24rem; display: flex;">
+              <org-application-navigation
+                [currentOrganization]="currentOrganization"
+                [availableOrganizations]="availableOrganizations"
+                userName="Maya Brennan"
+                [navigationItems]="[]"
+                [settingsMenuItems]="settingsItems"
+              />
+            </div>
           </div>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="No Settings Items">
-          <div style="height: 24rem; display: flex;">
-            <org-application-navigation
-              [currentOrganization]="currentOrganization"
-              [availableOrganizations]="availableOrganizations"
-              userName="Maya Brennan"
-              [navigationItems]="navigationItems"
-              [settingsMenuItems]="[]"
-            />
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">No Settings Items</div>
+            <div style="height: 24rem; display: flex;">
+              <org-application-navigation
+                [currentOrganization]="currentOrganization"
+                [availableOrganizations]="availableOrganizations"
+                userName="Maya Brennan"
+                [navigationItems]="navigationItems"
+                [settingsMenuItems]="[]"
+              />
+            </div>
           </div>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="No User">
-          <div style="height: 24rem; display: flex;">
-            <org-application-navigation
-              [currentOrganization]="currentOrganization"
-              [availableOrganizations]="availableOrganizations"
-              [navigationItems]="navigationItems"
-              [settingsMenuItems]="settingsItems"
-            />
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">No User</div>
+            <div style="height: 24rem; display: flex;">
+              <org-application-navigation
+                [currentOrganization]="currentOrganization"
+                [availableOrganizations]="availableOrganizations"
+                [navigationItems]="navigationItems"
+                [settingsMenuItems]="settingsItems"
+              />
+            </div>
           </div>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
           <li>Component gracefully handles empty data arrays</li>
           <li>Settings still renders the appearance toggle when theme is supplied even if no settingsMenuItems</li>
           <li>The user row is hidden entirely when userName is empty</li>
         </ul>
-      </org-storybook-example-container>
+      </org-design-system-demo-expected-behaviour>
     `,
     props: {
       currentOrganization: defaultCurrentOrganization,
@@ -683,7 +719,13 @@ export const EmptyStates: Story = {
       settingsItems: defaultSettingsItems,
     },
     moduleMetadata: {
-      imports: [ApplicationNavigation, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [
+        ApplicationNavigation,
+        DesignSystemDemo,
+        DesignSystemDemoHeader,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
+      ],
     },
   }),
 };
@@ -699,57 +741,59 @@ export const OrganizationSwitcher: Story = {
   },
   render: () => ({
     template: `
-      <org-storybook-example-container
-        title="Organization Switcher"
-        currentState="Interactive vs static organization header"
-      >
-        <org-storybook-example-container-section label="Multiple selectable organizations (interactive header with chevron)">
-          <div style="height: 28rem; display: flex;">
-            <org-application-navigation
-              [currentOrganization]="currentOrganization"
-              [availableOrganizations]="availableOrganizations"
-              [navigationItems]="navigationItems"
-              [settingsMenuItems]="settingsItems"
-              userName="Maya Brennan"
-              theme="dark"
-            />
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Organization Switcher" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Multiple selectable organizations (interactive header with chevron)</div>
+            <div style="height: 28rem; display: flex;">
+              <org-application-navigation
+                [currentOrganization]="currentOrganization"
+                [availableOrganizations]="availableOrganizations"
+                [navigationItems]="navigationItems"
+                [settingsMenuItems]="settingsItems"
+                userName="Maya Brennan"
+                theme="dark"
+              />
+            </div>
           </div>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Only the current organization (static header, no chevron)">
-          <div style="height: 28rem; display: flex;">
-            <org-application-navigation
-              [currentOrganization]="currentOrganization"
-              [availableOrganizations]="onlyCurrentOrganizations"
-              [navigationItems]="navigationItems"
-              [settingsMenuItems]="settingsItems"
-              userName="Maya Brennan"
-              theme="dark"
-            />
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Only the current organization (static header, no chevron)</div>
+            <div style="height: 28rem; display: flex;">
+              <org-application-navigation
+                [currentOrganization]="currentOrganization"
+                [availableOrganizations]="onlyCurrentOrganizations"
+                [navigationItems]="navigationItems"
+                [settingsMenuItems]="settingsItems"
+                userName="Maya Brennan"
+                theme="dark"
+              />
+            </div>
           </div>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Current organization without an imageUrl (header shows name only)">
-          <div style="height: 28rem; display: flex;">
-            <org-application-navigation
-              [currentOrganization]="currentOrganizationNoIcon"
-              [availableOrganizations]="availableOrganizations"
-              [navigationItems]="navigationItems"
-              [settingsMenuItems]="settingsItems"
-              userName="Maya Brennan"
-              theme="dark"
-            />
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Current organization without an imageUrl (header shows name only)</div>
+            <div style="height: 28rem; display: flex;">
+              <org-application-navigation
+                [currentOrganization]="currentOrganizationNoIcon"
+                [availableOrganizations]="availableOrganizations"
+                [navigationItems]="navigationItems"
+                [settingsMenuItems]="settingsItems"
+                userName="Maya Brennan"
+                theme="dark"
+              />
+            </div>
           </div>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
           <li>The header is a button (with a right-side chevron) when other organizations are available</li>
           <li>Clicking the header opens an overlay menu listing every organization except the current one</li>
           <li>Menu rows render the organization icon when <code>imageUrl</code> is set; otherwise the row shows just the name</li>
           <li>The header degrades to a non-interactive label when no other organizations are available</li>
           <li>When <code>currentOrganization.imageUrl</code> is empty, the header shows only the name</li>
         </ul>
-      </org-storybook-example-container>
+      </org-design-system-demo-expected-behaviour>
     `,
     props: {
       currentOrganization: defaultCurrentOrganization,
@@ -760,7 +804,13 @@ export const OrganizationSwitcher: Story = {
       settingsItems: defaultSettingsItems,
     },
     moduleMetadata: {
-      imports: [ApplicationNavigation, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [
+        ApplicationNavigation,
+        DesignSystemDemo,
+        DesignSystemDemoHeader,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
+      ],
     },
   }),
 };

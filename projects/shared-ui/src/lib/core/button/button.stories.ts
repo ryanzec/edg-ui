@@ -8,7 +8,8 @@ import { Icon } from '../icon/icon';
 import { allComponentColors } from '../types/component-types';
 import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
 import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
-import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
+import { DesignSystemDemoControlInput } from '../../example/design-system-demo/design-system-demo-control-input';
+import { DesignSystemDemoControlsGroup } from '../../example/design-system-demo/design-system-demo-controls-group';
 import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
 import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
 import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
@@ -305,7 +306,8 @@ export const Default: Story = {
     DesignSystemDemo,
     DesignSystemDemoHeader,
     DesignSystemDemoControls,
-    DesignSystemDemoControlGroup,
+    DesignSystemDemoControlsGroup,
+    DesignSystemDemoControlInput,
     DesignSystemDemoCanvas,
   ],
   styles: [
@@ -330,41 +332,47 @@ export const Default: Story = {
           description="All buttons below are real and interactive — hover, focus, press, or tab through them to see every state."
         />
         <org-design-system-demo-controls slot="controls">
-          <org-design-system-demo-control-group label="Color">
-            <org-button-toggle [items]="colorItems" formControlName="color" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Variant">
-            <org-button-toggle [items]="variantItems" formControlName="variant" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Color Strength">
-            <org-button-toggle [items]="colorStrengthItems" formControlName="colorStrength" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Size">
-            <org-button-toggle [items]="sizeItems" formControlName="size" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Icon">
-            <org-button-toggle [items]="iconItems" formControlName="icon" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Disabled">
-            <org-checkbox-toggle name="live-demo-disabled" value="disabled" formControlName="disabled">
-              {{ liveDemoForm.controls.disabled.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Loading">
-            <org-checkbox-toggle name="live-demo-loading" value="loading" formControlName="loading">
-              {{ liveDemoForm.controls.loading.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Custom pre">
-            <org-checkbox-toggle name="live-demo-custom-pre" value="custom-pre" formControlName="customPre">
-              {{ liveDemoForm.controls.customPre.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Custom post">
-            <org-checkbox-toggle name="live-demo-custom-post" value="custom-post" formControlName="customPost">
-              {{ liveDemoForm.controls.customPost.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
+          <org-design-system-demo-controls-group label="Appearance">
+            <org-design-system-demo-control-input label="Color">
+              <org-button-toggle [items]="colorItems" formControlName="color" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Variant">
+              <org-button-toggle [items]="variantItems" formControlName="variant" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Color Strength">
+              <org-button-toggle [items]="colorStrengthItems" formControlName="colorStrength" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Size">
+              <org-button-toggle [items]="sizeItems" formControlName="size" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
+          <org-design-system-demo-controls-group label="Content">
+            <org-design-system-demo-control-input label="Icon">
+              <org-button-toggle [items]="iconItems" formControlName="icon" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Custom pre">
+              <org-checkbox-toggle name="live-demo-custom-pre" value="custom-pre" formControlName="customPre">
+                {{ liveDemoForm.controls.customPre.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Custom post">
+              <org-checkbox-toggle name="live-demo-custom-post" value="custom-post" formControlName="customPost">
+                {{ liveDemoForm.controls.customPost.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
+          <org-design-system-demo-controls-group label="State">
+            <org-design-system-demo-control-input label="Disabled">
+              <org-checkbox-toggle name="live-demo-disabled" value="disabled" formControlName="disabled">
+                {{ liveDemoForm.controls.disabled.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Loading">
+              <org-checkbox-toggle name="live-demo-loading" value="loading" formControlName="loading">
+                {{ liveDemoForm.controls.loading.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
         </org-design-system-demo-controls>
         <org-design-system-demo-canvas slot="canvas">
           <div class="canvas-stage">

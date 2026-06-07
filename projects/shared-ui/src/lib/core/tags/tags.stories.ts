@@ -7,7 +7,8 @@ import { Input } from '../input/input';
 import { allColorStrengths, allComponentColors } from '../types/component-types';
 import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
 import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
-import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
+import { DesignSystemDemoControlInput } from '../../example/design-system-demo/design-system-demo-control-input';
+import { DesignSystemDemoControlsGroup } from '../../example/design-system-demo/design-system-demo-controls-group';
 import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
 import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
 import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
@@ -269,7 +270,8 @@ export const Default: Story = {
     DesignSystemDemo,
     DesignSystemDemoHeader,
     DesignSystemDemoControls,
-    DesignSystemDemoControlGroup,
+    DesignSystemDemoControlsGroup,
+    DesignSystemDemoControlInput,
     DesignSystemDemoCanvas,
   ],
   styles: [
@@ -294,33 +296,39 @@ export const Default: Story = {
           description="Walk every combination — color, color strength, size, and the optional icon and removable flags. The label text is editable so you can sanity-check truncation and icon spacing on real copy."
         />
         <org-design-system-demo-controls slot="controls">
-          <org-design-system-demo-control-group label="Color">
-            <org-button-toggle [items]="colorItems" formControlName="color" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Color Strength">
-            <org-button-toggle [items]="colorStrengthItems" formControlName="colorStrength" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Size">
-            <org-button-toggle [items]="sizeItems" formControlName="size" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Label">
-            <org-input name="live-demo-label" formControlName="label" ariaLabel="Tag label" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Pre icon">
-            <org-checkbox-toggle name="live-demo-pre-icon" value="preIcon" formControlName="preIcon">
-              {{ liveDemoForm.controls.preIcon.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Post icon">
-            <org-checkbox-toggle name="live-demo-post-icon" value="postIcon" formControlName="postIcon">
-              {{ liveDemoForm.controls.postIcon.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Removable">
-            <org-checkbox-toggle name="live-demo-removable" value="removable" formControlName="removable">
-              {{ liveDemoForm.controls.removable.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
+          <org-design-system-demo-controls-group label="Presentation">
+            <org-design-system-demo-control-input label="Color">
+              <org-button-toggle [items]="colorItems" formControlName="color" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Color Strength">
+              <org-button-toggle [items]="colorStrengthItems" formControlName="colorStrength" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Size">
+              <org-button-toggle [items]="sizeItems" formControlName="size" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
+          <org-design-system-demo-controls-group label="Content">
+            <org-design-system-demo-control-input label="Label">
+              <org-input name="live-demo-label" formControlName="label" ariaLabel="Tag label" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Pre icon">
+              <org-checkbox-toggle name="live-demo-pre-icon" value="preIcon" formControlName="preIcon">
+                {{ liveDemoForm.controls.preIcon.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Post icon">
+              <org-checkbox-toggle name="live-demo-post-icon" value="postIcon" formControlName="postIcon">
+                {{ liveDemoForm.controls.postIcon.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
+          <org-design-system-demo-controls-group label="Behavior">
+            <org-design-system-demo-control-input label="Removable">
+              <org-checkbox-toggle name="live-demo-removable" value="removable" formControlName="removable">
+                {{ liveDemoForm.controls.removable.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
         </org-design-system-demo-controls>
         <org-design-system-demo-canvas slot="canvas">
           <div class="canvas-stage">

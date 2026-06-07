@@ -1,30 +1,41 @@
 <div class="combobox-panel">
-  <org-scroll-area #optionsScrollAreaComponent scrollClass="h-full w-full">
-    <div [attr.id]="brain.listboxId()" [attr.role]="brain.listboxRole" [attr.aria-label]="brain.listboxAriaLabel">
-      @if (hasFilteredOptions()) {
-        @if (!isGroupingEnabled()) {
-          @for (option of filteredOptions(); track option.value) {
-            <org-combobox-option [option]="option" />
-          }
-        } @else {
-          @for (group of filteredGroupedOptions(); track group.groupLabel) {
-            <div class="combobox-group" [attr.role]="brain.groupRole" [attr.aria-label]="group.groupLabel">
-              <div class="combobox-group-label">{{ group.groupLabel }}</div>
-              @for (option of group.options; track option.value) {
-                <org-combobox-option [option]="option" />
-              }
-            </div>
+  @if (isLoading()) {
+    <div class="combobox-status" role="status" aria-live="polite">
+      <org-loading-spinner size="sm" />
+      <span>Loading...</span>
+    </div>
+  } @else if (isBelowCharacterThreshold()) {
+    <div class="combobox-status" role="status" aria-live="polite">
+      {{ characterThreshold() }} characters needed for results
+    </div>
+  } @else {
+    <org-scroll-area #optionsScrollAreaComponent scrollClass="h-full w-full">
+      <div [attr.id]="brain.listboxId()" [attr.role]="brain.listboxRole" [attr.aria-label]="brain.listboxAriaLabel">
+        @if (hasFilteredOptions()) {
+          @if (!isGroupingEnabled()) {
+            @for (option of filteredOptions(); track option.value) {
+              <org-combobox-option [option]="option" />
+            }
+          } @else {
+            @for (group of filteredGroupedOptions(); track group.groupLabel) {
+              <div class="combobox-group" [attr.role]="brain.groupRole" [attr.aria-label]="group.groupLabel">
+                <div class="combobox-group-label">{{ group.groupLabel }}</div>
+                @for (option of group.options; track option.value) {
+                  <org-combobox-option [option]="option" />
+                }
+              </div>
+            }
           }
         }
-      }
 
-      @if (newOptionSuggestion(); as suggestion) {
-        <org-combobox-option [option]="suggestion" displayLabelPrefix="Add" />
-      }
+        @if (newOptionSuggestion(); as suggestion) {
+          <org-combobox-option [option]="suggestion" displayLabelPrefix="Add" />
+        }
 
-      @if (!hasFilteredOptions() && !newOptionSuggestion()) {
-        <div class="combobox-empty">No options available</div>
-      }
-    </div>
-  </org-scroll-area>
+        @if (!hasFilteredOptions() && !newOptionSuggestion()) {
+          <div class="combobox-empty">No options available</div>
+        }
+      </div>
+    </org-scroll-area>
+  }
 </div>

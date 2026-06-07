@@ -12,8 +12,10 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators, AbstractControl } from '@angular/forms';
 import { DateTime } from 'luxon';
-import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
-import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
+import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
+import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
+import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
+import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
 import { Input } from '../input/input';
 import { Textarea } from '../textarea/textarea';
 import { Checkbox } from '../checkbox/checkbox';
@@ -44,8 +46,10 @@ const skillOptions: ComboboxOptionInput[] = [
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     ReactiveFormsModule,
-    StorybookExampleContainer,
-    StorybookExampleContainerSection,
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoCanvas,
+    DesignSystemDemoExpectedBehaviour,
     Input,
     Textarea,
     Checkbox,
@@ -60,126 +64,118 @@ const skillOptions: ComboboxOptionInput[] = [
     Label,
   ],
   template: `
-    <org-storybook-example-container
-      title="Reactive Forms Integration"
-      currentState="All form controls work with Angular reactive forms"
-    >
-      <org-storybook-example-container-section label="Complete Form Example">
-        <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-1 max-w-lg">
-          <org-form-fields>
-            <org-form-field [validationMessage]="getFieldError('username')">
-              <org-label text="Username" htmlFor="username" [isRequired]="true" />
-              <org-input formControlName="username" name="username" placeholder="Enter your username" />
-            </org-form-field>
+    <org-design-system-demo>
+      <org-design-system-demo-header slot="header" title="Reactive Forms Integration" />
+      <org-design-system-demo-canvas slot="canvas">
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Complete Form Example</div>
+          <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-1 max-w-lg">
+            <org-form-fields>
+              <org-form-field [validationMessage]="getFieldError('username')">
+                <org-label text="Username" htmlFor="username" [isRequired]="true" />
+                <org-input formControlName="username" name="username" placeholder="Enter your username" />
+              </org-form-field>
 
-            <!-- email input field -->
-            <org-form-field [validationMessage]="getFieldError('email')">
-              <org-label text="Email" htmlFor="email" [isRequired]="true" />
-              <org-input
-                type="email"
-                formControlName="email"
-                name="email"
-                placeholder="Enter your email"
-                preIcon="mail"
-              />
-            </org-form-field>
+              <org-form-field [validationMessage]="getFieldError('email')">
+                <org-label text="Email" htmlFor="email" [isRequired]="true" />
+                <org-input
+                  type="email"
+                  formControlName="email"
+                  name="email"
+                  placeholder="Enter your email"
+                  preIcon="mail"
+                />
+              </org-form-field>
 
-            <!-- textarea field -->
-            <org-form-field [validationMessage]="getFieldError('bio')">
-              <org-label text="Bio (max 200 chars)" htmlFor="bio" />
-              <org-textarea formControlName="bio" name="bio" placeholder="Tell us about yourself..." [minLines]="4" />
-            </org-form-field>
+              <org-form-field [validationMessage]="getFieldError('bio')">
+                <org-label text="Bio (max 200 chars)" htmlFor="bio" />
+                <org-textarea formControlName="bio" name="bio" placeholder="Tell us about yourself..." [minLines]="4" />
+              </org-form-field>
 
-            <!-- checkbox field -->
-            <org-form-field [validationMessage]="getFieldError('agreeToTerms')">
-              <org-checkbox formControlName="agreeToTerms" name="terms" value="agree">
-                I agree to the terms and conditions *
-              </org-checkbox>
-            </org-form-field>
+              <org-form-field [validationMessage]="getFieldError('agreeToTerms')">
+                <org-checkbox formControlName="agreeToTerms" name="terms" value="agree">
+                  I agree to the terms and conditions *
+                </org-checkbox>
+              </org-form-field>
 
-            <!-- checkbox toggle field -->
-            <org-form-field>
-              <org-checkbox-toggle
-                formControlName="notifications"
-                name="notifications"
-                value="on"
-                onIcon="notification"
-                offIcon="notification-off"
-                onText="On"
-                offText="Off"
-              >
-                Enable notifications
-              </org-checkbox-toggle>
-            </org-form-field>
+              <org-form-field>
+                <org-checkbox-toggle
+                  formControlName="notifications"
+                  name="notifications"
+                  value="on"
+                  onIcon="notification"
+                  offIcon="notification-off"
+                  onText="On"
+                  offText="Off"
+                >
+                  Enable notifications
+                </org-checkbox-toggle>
+              </org-form-field>
 
-            <!-- radio group -->
-            <org-form-field [validationMessage]="getFieldError('contactMethod')">
-              <org-label text="Preferred Contact Method" htmlFor="contactMethod" [isRequired]="true" />
-              <org-radio-group formControlName="contactMethod" name="contactMethod">
-                <org-radio value="email">Email</org-radio>
-                <org-radio value="phone">Phone</org-radio>
-                <org-radio value="sms">SMS</org-radio>
-              </org-radio-group>
-            </org-form-field>
+              <org-form-field [validationMessage]="getFieldError('contactMethod')">
+                <org-label text="Preferred Contact Method" htmlFor="contactMethod" [isRequired]="true" />
+                <org-radio-group formControlName="contactMethod" name="contactMethod">
+                  <org-radio value="email">Email</org-radio>
+                  <org-radio value="phone">Phone</org-radio>
+                  <org-radio value="sms">SMS</org-radio>
+                </org-radio-group>
+              </org-form-field>
 
-            <!-- combobox field -->
-            <org-form-field [validationMessage]="getFieldError('skills')">
-              <org-label text="Skills" htmlFor="skills" [isRequired]="true" />
-              <org-combobox
-                formControlName="skills"
-                [options]="skillOptions"
-                [isMultiSelect]="true"
-                placeholder="Select your skills..."
-                name="skills"
-              />
-            </org-form-field>
+              <org-form-field [validationMessage]="getFieldError('skills')">
+                <org-label text="Skills" htmlFor="skills" [isRequired]="true" />
+                <org-combobox
+                  formControlName="skills"
+                  [options]="skillOptions"
+                  [isMultiSelect]="true"
+                  placeholder="Select your skills..."
+                  name="skills"
+                />
+              </org-form-field>
 
-            <!-- date range field -->
-            <org-form-field [validationMessage]="getFieldError('dateRange')">
-              <org-label text="Date Range" htmlFor="dateRange" [isRequired]="true" />
-              <org-date-picker-input
-                formControlName="dateRange"
-                [allowRangeSelection]="true"
-                placeholder="Select date range..."
-                name="dateRange"
-              />
-            </org-form-field>
-          </org-form-fields>
+              <org-form-field [validationMessage]="getFieldError('dateRange')">
+                <org-label text="Date Range" htmlFor="dateRange" [isRequired]="true" />
+                <org-date-picker-input
+                  formControlName="dateRange"
+                  [allowRangeSelection]="true"
+                  placeholder="Select date range..."
+                  name="dateRange"
+                />
+              </org-form-field>
+            </org-form-fields>
 
-          <!-- submit button -->
-          <org-button type="submit" color="primary" buttonClass="w-full" label="Submit Form" />
-        </form>
-      </org-storybook-example-container-section>
-
-      <div class="flex gap-1">
-        <!-- form state display -->
-        <div class="rounded-base bg-neutral-soft p-3 text-sm flex flex-col gap-2">
-          <div class="font-medium">Form State:</div>
-          <div class="flex flex-col gap-1 text-xs font-mono">
-            <div>Valid: {{ form.valid }}</div>
-            <div>Dirty: {{ form.dirty }}</div>
-            <div>Touched: {{ form.touched }}</div>
-            <div>Pristine: {{ form.pristine }}</div>
-          </div>
+            <org-button type="submit" color="primary" buttonClass="w-full" label="Submit Form" />
+          </form>
         </div>
 
-        <!-- current form values display -->
-        <div class="rounded-base bg-info-soft p-3 text-sm flex flex-col gap-2">
-          <div class="font-medium">Current Form Values:</div>
-          <div class="flex flex-col gap-1 text-xs font-mono">
-            <div>username: "{{ formValues().username }}"</div>
-            <div>email: "{{ formValues().email }}"</div>
-            <div>bio: "{{ formValues().bio }}"</div>
-            <div>agreeToTerms: {{ formValues().agreeToTerms }}</div>
-            <div>notifications: {{ formValues().notifications }}</div>
-            <div>contactMethod: "{{ formValues().contactMethod }}"</div>
-            <div>skills: {{ formValues().skills.length }} selected</div>
-            <div>dateRange: {{ formatDateRange(formValues().dateRange) }}</div>
+        <div class="flex gap-1">
+          <div class="rounded-base bg-neutral-soft p-3 text-sm flex flex-col gap-2">
+            <div class="font-medium">Form State:</div>
+            <div class="flex flex-col gap-1 text-xs font-mono">
+              <div>Valid: {{ form.valid }}</div>
+              <div>Dirty: {{ form.dirty }}</div>
+              <div>Touched: {{ form.touched }}</div>
+              <div>Pristine: {{ form.pristine }}</div>
+            </div>
+          </div>
+
+          <div class="rounded-base bg-info-soft p-3 text-sm flex flex-col gap-2">
+            <div class="font-medium">Current Form Values:</div>
+            <div class="flex flex-col gap-1 text-xs font-mono">
+              <div>username: "{{ formValues().username }}"</div>
+              <div>email: "{{ formValues().email }}"</div>
+              <div>bio: "{{ formValues().bio }}"</div>
+              <div>agreeToTerms: {{ formValues().agreeToTerms }}</div>
+              <div>notifications: {{ formValues().notifications }}</div>
+              <div>contactMethod: "{{ formValues().contactMethod }}"</div>
+              <div>skills: {{ formValues().skills.length }} selected</div>
+              <div>dateRange: {{ formatDateRange(formValues().dateRange) }}</div>
+            </div>
           </div>
         </div>
-      </div>
-
-      <ul expected-behaviour class="flex flex-col gap-1 mt-1 list-inside list-disc">
+      </org-design-system-demo-canvas>
+    </org-design-system-demo>
+    <org-design-system-demo-expected-behaviour>
+      <ul class="flex flex-col gap-1 mt-1 list-inside list-disc">
         <li><strong>Input</strong>: Binds to form control with 'formControlName', displays validation messages</li>
         <li><strong>Textarea</strong>: Multi-line text input with character limit validation</li>
         <li><strong>Checkbox</strong>: Boolean form control with required validation support</li>
@@ -192,7 +188,7 @@ const skillOptions: ComboboxOptionInput[] = [
         <li><strong>Form Values</strong>: Live display of current form values updates as you type/interact</li>
         <li><strong>Submission</strong>: Form submission prevented until all validations pass</li>
       </ul>
-    </org-storybook-example-container>
+    </org-design-system-demo-expected-behaviour>
   `,
 })
 class ReactiveFormDemoComponent {
@@ -308,8 +304,10 @@ class ReactiveFormDemoComponent {
   selector: 'story-simple-binding-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    StorybookExampleContainer,
-    StorybookExampleContainerSection,
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoCanvas,
+    DesignSystemDemoExpectedBehaviour,
     Input,
     Textarea,
     Checkbox,
@@ -324,120 +322,112 @@ class ReactiveFormDemoComponent {
     Label,
   ],
   template: `
-    <org-storybook-example-container
-      title="Simple Data Binding"
-      currentState="All form controls work with simple two-way binding"
-    >
-      <org-storybook-example-container-section label="Complete Form Example">
-        <form (submit)="onSubmit($event)" class="flex flex-col gap-1 max-w-lg">
-          <org-form-fields>
-            <org-form-field [validationMessage]="usernameError()">
-              <org-label text="Username" htmlFor="username" [isRequired]="true" />
-              <org-input [(value)]="username" name="username" placeholder="Enter your username" />
-            </org-form-field>
+    <org-design-system-demo>
+      <org-design-system-demo-header slot="header" title="Simple Data Binding" />
+      <org-design-system-demo-canvas slot="canvas">
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Complete Form Example</div>
+          <form (submit)="onSubmit($event)" class="flex flex-col gap-1 max-w-lg">
+            <org-form-fields>
+              <org-form-field [validationMessage]="usernameError()">
+                <org-label text="Username" htmlFor="username" [isRequired]="true" />
+                <org-input [(value)]="username" name="username" placeholder="Enter your username" />
+              </org-form-field>
 
-            <!-- email input field -->
-            <org-form-field [validationMessage]="emailError()">
-              <org-label text="Email" htmlFor="email" [isRequired]="true" />
-              <org-input type="email" [(value)]="email" name="email" placeholder="Enter your email" preIcon="mail" />
-            </org-form-field>
+              <org-form-field [validationMessage]="emailError()">
+                <org-label text="Email" htmlFor="email" [isRequired]="true" />
+                <org-input type="email" [(value)]="email" name="email" placeholder="Enter your email" preIcon="mail" />
+              </org-form-field>
 
-            <!-- textarea field -->
-            <org-form-field [validationMessage]="bioError()">
-              <org-label text="Bio" htmlFor="bio" [isRequired]="true" />
-              <org-textarea [(value)]="bio" name="bio" placeholder="Tell us about yourself..." [minLines]="4" />
-            </org-form-field>
+              <org-form-field [validationMessage]="bioError()">
+                <org-label text="Bio" htmlFor="bio" [isRequired]="true" />
+                <org-textarea [(value)]="bio" name="bio" placeholder="Tell us about yourself..." [minLines]="4" />
+              </org-form-field>
 
-            <!-- checkbox field -->
-            <org-form-field [validationMessage]="agreeToTermsError()">
-              <org-checkbox [(checked)]="agreeToTerms" name="agreeToTerms" value="agree">
-                I agree to the terms and conditions *
-              </org-checkbox>
-            </org-form-field>
+              <org-form-field [validationMessage]="agreeToTermsError()">
+                <org-checkbox [(checked)]="agreeToTerms" name="agreeToTerms" value="agree">
+                  I agree to the terms and conditions *
+                </org-checkbox>
+              </org-form-field>
 
-            <!-- checkbox toggle field -->
-            <org-form-field [validationMessage]="notificationsError()">
-              <org-checkbox-toggle
-                [(checked)]="notifications"
-                name="notifications"
-                value="on"
-                onIcon="notification"
-                offIcon="notification-off"
-                onText="On"
-                offText="Off"
-              >
-                Enable notifications *
-              </org-checkbox-toggle>
-            </org-form-field>
+              <org-form-field [validationMessage]="notificationsError()">
+                <org-checkbox-toggle
+                  [(checked)]="notifications"
+                  name="notifications"
+                  value="on"
+                  onIcon="notification"
+                  offIcon="notification-off"
+                  onText="On"
+                  offText="Off"
+                >
+                  Enable notifications *
+                </org-checkbox-toggle>
+              </org-form-field>
 
-            <!-- radio group -->
-            <org-form-field [validationMessage]="contactMethodError()">
-              <org-label text="Preferred Contact Method" htmlFor="contactMethod" [isRequired]="true" />
-              <org-radio-group [(value)]="contactMethod" name="contactMethod" class="flex flex-col gap-2">
-                <org-radio value="email">Email</org-radio>
-                <org-radio value="phone">Phone</org-radio>
-                <org-radio value="sms">SMS</org-radio>
-              </org-radio-group>
-            </org-form-field>
+              <org-form-field [validationMessage]="contactMethodError()">
+                <org-label text="Preferred Contact Method" htmlFor="contactMethod" [isRequired]="true" />
+                <org-radio-group [(value)]="contactMethod" name="contactMethod" class="flex flex-col gap-2">
+                  <org-radio value="email">Email</org-radio>
+                  <org-radio value="phone">Phone</org-radio>
+                  <org-radio value="sms">SMS</org-radio>
+                </org-radio-group>
+              </org-form-field>
 
-            <!-- combobox field -->
-            <org-form-field [validationMessage]="skillsError()">
-              <org-label text="Skills" htmlFor="skills" [isRequired]="true" />
-              <org-combobox
-                [options]="skillOptions"
-                [isMultiSelect]="true"
-                placeholder="Select your skills..."
-                (selectedValuesChanged)="skills.set($event)"
-                name="skills"
-              />
-            </org-form-field>
+              <org-form-field [validationMessage]="skillsError()">
+                <org-label text="Skills" htmlFor="skills" [isRequired]="true" />
+                <org-combobox
+                  [options]="skillOptions"
+                  [isMultiSelect]="true"
+                  placeholder="Select your skills..."
+                  (selectedValuesChanged)="skills.set($event)"
+                  name="skills"
+                />
+              </org-form-field>
 
-            <!-- date range field -->
-            <org-form-field [validationMessage]="dateRangeError()">
-              <org-label text="Date Range" htmlFor="dateRange" [isRequired]="true" />
-              <org-date-picker-input
-                [allowRangeSelection]="true"
-                [selectedStartDate]="startDate()"
-                [selectedEndDate]="endDate()"
-                placeholder="Select date range..."
-                (dateSelected)="onDateSelected($event)"
-                name="dateRange"
-              />
-            </org-form-field>
-          </org-form-fields>
+              <org-form-field [validationMessage]="dateRangeError()">
+                <org-label text="Date Range" htmlFor="dateRange" [isRequired]="true" />
+                <org-date-picker-input
+                  [allowRangeSelection]="true"
+                  [selectedStartDate]="startDate()"
+                  [selectedEndDate]="endDate()"
+                  placeholder="Select date range..."
+                  (dateSelected)="onDateSelected($event)"
+                  name="dateRange"
+                />
+              </org-form-field>
+            </org-form-fields>
 
-          <!-- submit button -->
-          <org-button type="submit" color="primary" buttonClass="w-full" label="Submit Form" />
-        </form>
-      </org-storybook-example-container-section>
-
-      <div class="flex gap-1">
-        <!-- form state display -->
-        <div class="rounded-base bg-neutral-soft p-3 text-sm flex flex-col gap-2">
-          <div class="font-medium">Form State:</div>
-          <div class="flex flex-col gap-1 text-xs font-mono">
-            <div>Valid: {{ isFormValid() }}</div>
-            <div>Submitted: {{ submitted() }}</div>
-          </div>
+            <org-button type="submit" color="primary" buttonClass="w-full" label="Submit Form" />
+          </form>
         </div>
 
-        <!-- current form values display -->
-        <div class="rounded-base bg-info-soft p-3 text-sm flex flex-col gap-2">
-          <div class="font-medium">Current Form Values:</div>
-          <div class="flex flex-col gap-1 text-xs font-mono">
-            <div>username: "{{ username() }}"</div>
-            <div>email: "{{ email() }}"</div>
-            <div>bio: "{{ bio() }}"</div>
-            <div>agreeToTerms: {{ agreeToTerms() }}</div>
-            <div>notifications: {{ notifications() }}</div>
-            <div>contactMethod: "{{ contactMethod() }}"</div>
-            <div>skills: {{ skills().length }} selected</div>
-            <div>dateRange: {{ formatDateRange() }}</div>
+        <div class="flex gap-1">
+          <div class="rounded-base bg-neutral-soft p-3 text-sm flex flex-col gap-2">
+            <div class="font-medium">Form State:</div>
+            <div class="flex flex-col gap-1 text-xs font-mono">
+              <div>Valid: {{ isFormValid() }}</div>
+              <div>Submitted: {{ submitted() }}</div>
+            </div>
+          </div>
+
+          <div class="rounded-base bg-info-soft p-3 text-sm flex flex-col gap-2">
+            <div class="font-medium">Current Form Values:</div>
+            <div class="flex flex-col gap-1 text-xs font-mono">
+              <div>username: "{{ username() }}"</div>
+              <div>email: "{{ email() }}"</div>
+              <div>bio: "{{ bio() }}"</div>
+              <div>agreeToTerms: {{ agreeToTerms() }}</div>
+              <div>notifications: {{ notifications() }}</div>
+              <div>contactMethod: "{{ contactMethod() }}"</div>
+              <div>skills: {{ skills().length }} selected</div>
+              <div>dateRange: {{ formatDateRange() }}</div>
+            </div>
           </div>
         </div>
-      </div>
-
-      <ul expected-behaviour class="flex flex-col gap-1 mt-1 list-inside list-disc">
+      </org-design-system-demo-canvas>
+    </org-design-system-demo>
+    <org-design-system-demo-expected-behaviour>
+      <ul class="flex flex-col gap-1 mt-1 list-inside list-disc">
         <li><strong>Input</strong>: Two-way binding with [(value)], displays validation on submit</li>
         <li><strong>Textarea</strong>: Multi-line text input with required validation</li>
         <li><strong>Checkbox</strong>: Boolean control with [(checked)] two-way binding and required validation</li>
@@ -452,7 +442,7 @@ class ReactiveFormDemoComponent {
         <li><strong>Form Values</strong>: Live display updates as you type/interact using signals</li>
         <li><strong>No FormControl needed</strong>: Uses signals and two-way binding instead</li>
       </ul>
-    </org-storybook-example-container>
+    </org-design-system-demo-expected-behaviour>
   `,
 })
 class SimpleBindingDemoComponent {
@@ -658,8 +648,10 @@ type PrePopulatedFormData = {
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     ReactiveFormsModule,
-    StorybookExampleContainer,
-    StorybookExampleContainerSection,
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoCanvas,
+    DesignSystemDemoExpectedBehaviour,
     Input,
     Textarea,
     Checkbox,
@@ -674,127 +666,118 @@ type PrePopulatedFormData = {
     Label,
   ],
   template: `
-    <org-storybook-example-container
-      title="Reactive Forms with Pre-populated Data"
-      currentState="Form is initialized with data passed via input property"
-    >
-      <org-storybook-example-container-section label="Pre-populated Form Example">
-        <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-1 max-w-lg">
-          <org-form-fields>
-            <!-- input field -->
-            <org-form-field [validationMessage]="getFieldError('username')">
-              <org-label text="Username" htmlFor="username" [isRequired]="true" />
-              <org-input formControlName="username" name="username" placeholder="Enter your username" />
-            </org-form-field>
+    <org-design-system-demo>
+      <org-design-system-demo-header slot="header" title="Reactive Forms with Pre-populated Data" />
+      <org-design-system-demo-canvas slot="canvas">
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Pre-populated Form Example</div>
+          <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-1 max-w-lg">
+            <org-form-fields>
+              <org-form-field [validationMessage]="getFieldError('username')">
+                <org-label text="Username" htmlFor="username" [isRequired]="true" />
+                <org-input formControlName="username" name="username" placeholder="Enter your username" />
+              </org-form-field>
 
-            <!-- email input field -->
-            <org-form-field [validationMessage]="getFieldError('email')">
-              <org-label text="Email" htmlFor="email" [isRequired]="true" />
-              <org-input
-                type="email"
-                formControlName="email"
-                name="email"
-                placeholder="Enter your email"
-                preIcon="mail"
-              />
-            </org-form-field>
+              <org-form-field [validationMessage]="getFieldError('email')">
+                <org-label text="Email" htmlFor="email" [isRequired]="true" />
+                <org-input
+                  type="email"
+                  formControlName="email"
+                  name="email"
+                  placeholder="Enter your email"
+                  preIcon="mail"
+                />
+              </org-form-field>
 
-            <!-- textarea field -->
-            <org-form-field [validationMessage]="getFieldError('bio')">
-              <org-label text="Bio (max 200 chars)" htmlFor="bio" />
-              <org-textarea formControlName="bio" name="bio" placeholder="Tell us about yourself..." [minLines]="4" />
-            </org-form-field>
+              <org-form-field [validationMessage]="getFieldError('bio')">
+                <org-label text="Bio (max 200 chars)" htmlFor="bio" />
+                <org-textarea formControlName="bio" name="bio" placeholder="Tell us about yourself..." [minLines]="4" />
+              </org-form-field>
 
-            <!-- checkbox field -->
-            <org-form-field [validationMessage]="getFieldError('agreeToTerms')">
-              <org-checkbox formControlName="agreeToTerms" name="terms" value="agree">
-                I agree to the terms and conditions *
-              </org-checkbox>
-            </org-form-field>
+              <org-form-field [validationMessage]="getFieldError('agreeToTerms')">
+                <org-checkbox formControlName="agreeToTerms" name="terms" value="agree">
+                  I agree to the terms and conditions *
+                </org-checkbox>
+              </org-form-field>
 
-            <!-- checkbox toggle field -->
-            <org-form-field>
-              <org-checkbox-toggle
-                formControlName="notifications"
-                name="notifications"
-                value="on"
-                onIcon="notification"
-                offIcon="notification-off"
-                onText="On"
-                offText="Off"
-              >
-                Enable notifications
-              </org-checkbox-toggle>
-            </org-form-field>
+              <org-form-field>
+                <org-checkbox-toggle
+                  formControlName="notifications"
+                  name="notifications"
+                  value="on"
+                  onIcon="notification"
+                  offIcon="notification-off"
+                  onText="On"
+                  offText="Off"
+                >
+                  Enable notifications
+                </org-checkbox-toggle>
+              </org-form-field>
 
-            <!-- radio group -->
-            <org-form-field [validationMessage]="getFieldError('contactMethod')">
-              <org-label text="Preferred Contact Method" htmlFor="contactMethod" [isRequired]="true" />
-              <org-radio-group formControlName="contactMethod" name="contactMethod">
-                <org-radio value="email">Email</org-radio>
-                <org-radio value="phone">Phone</org-radio>
-                <org-radio value="sms">SMS</org-radio>
-              </org-radio-group>
-            </org-form-field>
+              <org-form-field [validationMessage]="getFieldError('contactMethod')">
+                <org-label text="Preferred Contact Method" htmlFor="contactMethod" [isRequired]="true" />
+                <org-radio-group formControlName="contactMethod" name="contactMethod">
+                  <org-radio value="email">Email</org-radio>
+                  <org-radio value="phone">Phone</org-radio>
+                  <org-radio value="sms">SMS</org-radio>
+                </org-radio-group>
+              </org-form-field>
 
-            <!-- combobox field -->
-            <org-form-field [validationMessage]="getFieldError('skills')">
-              <org-label text="Skills" htmlFor="skills" [isRequired]="true" />
-              <org-combobox
-                formControlName="skills"
-                [options]="skillOptions"
-                [isMultiSelect]="true"
-                placeholder="Select your skills..."
-                name="skills"
-              />
-            </org-form-field>
+              <org-form-field [validationMessage]="getFieldError('skills')">
+                <org-label text="Skills" htmlFor="skills" [isRequired]="true" />
+                <org-combobox
+                  formControlName="skills"
+                  [options]="skillOptions"
+                  [isMultiSelect]="true"
+                  placeholder="Select your skills..."
+                  name="skills"
+                />
+              </org-form-field>
 
-            <!-- date range field -->
-            <org-form-field [validationMessage]="getFieldError('dateRange')">
-              <org-label text="Date Range" htmlFor="dateRange" [isRequired]="true" />
-              <org-date-picker-input
-                formControlName="dateRange"
-                [allowRangeSelection]="true"
-                placeholder="Select date range..."
-                name="dateRange"
-              />
-            </org-form-field>
-          </org-form-fields>
+              <org-form-field [validationMessage]="getFieldError('dateRange')">
+                <org-label text="Date Range" htmlFor="dateRange" [isRequired]="true" />
+                <org-date-picker-input
+                  formControlName="dateRange"
+                  [allowRangeSelection]="true"
+                  placeholder="Select date range..."
+                  name="dateRange"
+                />
+              </org-form-field>
+            </org-form-fields>
 
-          <!-- submit button -->
-          <org-button type="submit" color="primary" buttonClass="w-full" label="Submit Form" />
-        </form>
-      </org-storybook-example-container-section>
-
-      <div class="flex gap-1">
-        <!-- form state display -->
-        <div class="rounded-base bg-neutral-soft p-3 text-sm flex flex-col gap-2">
-          <div class="font-medium">Form State:</div>
-          <div class="flex flex-col gap-1 text-xs font-mono">
-            <div>Valid: {{ form.valid }}</div>
-            <div>Dirty: {{ form.dirty }}</div>
-            <div>Touched: {{ form.touched }}</div>
-            <div>Pristine: {{ form.pristine }}</div>
-          </div>
+            <org-button type="submit" color="primary" buttonClass="w-full" label="Submit Form" />
+          </form>
         </div>
 
-        <!-- current form values display -->
-        <div class="rounded-base bg-info-soft p-3 text-sm flex flex-col gap-2">
-          <div class="font-medium">Current Form Values:</div>
-          <div class="flex flex-col gap-1 text-xs font-mono">
-            <div>username: "{{ formValues().username }}"</div>
-            <div>email: "{{ formValues().email }}"</div>
-            <div>bio: "{{ formValues().bio }}"</div>
-            <div>agreeToTerms: {{ formValues().agreeToTerms }}</div>
-            <div>notifications: {{ formValues().notifications }}</div>
-            <div>contactMethod: "{{ formValues().contactMethod }}"</div>
-            <div>skills: {{ formValues().skills.length }} selected</div>
-            <div>dateRange: {{ formatDateRange(formValues().dateRange) }}</div>
+        <div class="flex gap-1">
+          <div class="rounded-base bg-neutral-soft p-3 text-sm flex flex-col gap-2">
+            <div class="font-medium">Form State:</div>
+            <div class="flex flex-col gap-1 text-xs font-mono">
+              <div>Valid: {{ form.valid }}</div>
+              <div>Dirty: {{ form.dirty }}</div>
+              <div>Touched: {{ form.touched }}</div>
+              <div>Pristine: {{ form.pristine }}</div>
+            </div>
+          </div>
+
+          <div class="rounded-base bg-info-soft p-3 text-sm flex flex-col gap-2">
+            <div class="font-medium">Current Form Values:</div>
+            <div class="flex flex-col gap-1 text-xs font-mono">
+              <div>username: "{{ formValues().username }}"</div>
+              <div>email: "{{ formValues().email }}"</div>
+              <div>bio: "{{ formValues().bio }}"</div>
+              <div>agreeToTerms: {{ formValues().agreeToTerms }}</div>
+              <div>notifications: {{ formValues().notifications }}</div>
+              <div>contactMethod: "{{ formValues().contactMethod }}"</div>
+              <div>skills: {{ formValues().skills.length }} selected</div>
+              <div>dateRange: {{ formatDateRange(formValues().dateRange) }}</div>
+            </div>
           </div>
         </div>
-      </div>
-
-      <ul expected-behaviour class="flex flex-col gap-1 mt-1 list-inside list-disc">
+      </org-design-system-demo-canvas>
+    </org-design-system-demo>
+    <org-design-system-demo-expected-behaviour>
+      <ul class="flex flex-col gap-1 mt-1 list-inside list-disc">
         <li><strong>Pre-populated Data</strong>: Form is initialized with data passed via input property</li>
         <li><strong>Input</strong>: Binds to form control with 'formControlName', displays validation messages</li>
         <li><strong>Textarea</strong>: Multi-line text input with character limit validation</li>
@@ -808,7 +791,7 @@ type PrePopulatedFormData = {
         <li><strong>Form Values</strong>: Live display of current form values updates as you type/interact</li>
         <li><strong>Submission</strong>: Form submission prevented until all validations pass</li>
       </ul>
-    </org-storybook-example-container>
+    </org-design-system-demo-expected-behaviour>
   `,
 })
 class ReactiveFormPrePopulatedDemoComponent {
@@ -944,8 +927,10 @@ class ReactiveFormPrePopulatedDemoComponent {
   selector: 'story-simple-binding-pre-populated-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    StorybookExampleContainer,
-    StorybookExampleContainerSection,
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoCanvas,
+    DesignSystemDemoExpectedBehaviour,
     Input,
     Textarea,
     Checkbox,
@@ -960,122 +945,113 @@ class ReactiveFormPrePopulatedDemoComponent {
     Label,
   ],
   template: `
-    <org-storybook-example-container
-      title="Simple Data Binding with Pre-populated Data"
-      currentState="Form is initialized with data passed via input property"
-    >
-      <org-storybook-example-container-section label="Pre-populated Form Example">
-        <form (submit)="onSubmit($event)" class="flex flex-col gap-1 max-w-lg">
-          <org-form-fields>
-            <!-- input field -->
-            <org-form-field [validationMessage]="usernameError()">
-              <org-label text="Username" htmlFor="username" [isRequired]="true" />
-              <org-input [(value)]="username" name="username" placeholder="Enter your username" />
-            </org-form-field>
+    <org-design-system-demo>
+      <org-design-system-demo-header slot="header" title="Simple Data Binding with Pre-populated Data" />
+      <org-design-system-demo-canvas slot="canvas">
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Pre-populated Form Example</div>
+          <form (submit)="onSubmit($event)" class="flex flex-col gap-1 max-w-lg">
+            <org-form-fields>
+              <org-form-field [validationMessage]="usernameError()">
+                <org-label text="Username" htmlFor="username" [isRequired]="true" />
+                <org-input [(value)]="username" name="username" placeholder="Enter your username" />
+              </org-form-field>
 
-            <!-- email input field -->
-            <org-form-field [validationMessage]="emailError()">
-              <org-label text="Email" htmlFor="email" [isRequired]="true" />
-              <org-input type="email" [(value)]="email" name="email" placeholder="Enter your email" preIcon="mail" />
-            </org-form-field>
+              <org-form-field [validationMessage]="emailError()">
+                <org-label text="Email" htmlFor="email" [isRequired]="true" />
+                <org-input type="email" [(value)]="email" name="email" placeholder="Enter your email" preIcon="mail" />
+              </org-form-field>
 
-            <!-- textarea field -->
-            <org-form-field [validationMessage]="bioError()">
-              <org-label text="Bio" htmlFor="bio" [isRequired]="true" />
-              <org-textarea [(value)]="bio" name="bio" placeholder="Tell us about yourself..." [minLines]="4" />
-            </org-form-field>
+              <org-form-field [validationMessage]="bioError()">
+                <org-label text="Bio" htmlFor="bio" [isRequired]="true" />
+                <org-textarea [(value)]="bio" name="bio" placeholder="Tell us about yourself..." [minLines]="4" />
+              </org-form-field>
 
-            <!-- checkbox field -->
-            <org-form-field [validationMessage]="agreeToTermsError()">
-              <org-checkbox [(checked)]="agreeToTerms" name="agreeToTerms" value="agree">
-                I agree to the terms and conditions *
-              </org-checkbox>
-            </org-form-field>
+              <org-form-field [validationMessage]="agreeToTermsError()">
+                <org-checkbox [(checked)]="agreeToTerms" name="agreeToTerms" value="agree">
+                  I agree to the terms and conditions *
+                </org-checkbox>
+              </org-form-field>
 
-            <!-- checkbox toggle field -->
-            <org-form-field [validationMessage]="notificationsError()">
-              <org-checkbox-toggle
-                [(checked)]="notifications"
-                name="notifications"
-                value="on"
-                onIcon="notification"
-                offIcon="notification-off"
-                onText="On"
-                offText="Off"
-              >
-                Enable notifications *
-              </org-checkbox-toggle>
-            </org-form-field>
+              <org-form-field [validationMessage]="notificationsError()">
+                <org-checkbox-toggle
+                  [(checked)]="notifications"
+                  name="notifications"
+                  value="on"
+                  onIcon="notification"
+                  offIcon="notification-off"
+                  onText="On"
+                  offText="Off"
+                >
+                  Enable notifications *
+                </org-checkbox-toggle>
+              </org-form-field>
 
-            <!-- radio group -->
-            <org-form-field [validationMessage]="contactMethodError()">
-              <org-label text="Preferred Contact Method" htmlFor="contactMethod" [isRequired]="true" />
-              <org-radio-group [(value)]="contactMethod" name="contactMethod" class="flex flex-col gap-2">
-                <org-radio value="email">Email</org-radio>
-                <org-radio value="phone">Phone</org-radio>
-                <org-radio value="sms">SMS</org-radio>
-              </org-radio-group>
-            </org-form-field>
+              <org-form-field [validationMessage]="contactMethodError()">
+                <org-label text="Preferred Contact Method" htmlFor="contactMethod" [isRequired]="true" />
+                <org-radio-group [(value)]="contactMethod" name="contactMethod" class="flex flex-col gap-2">
+                  <org-radio value="email">Email</org-radio>
+                  <org-radio value="phone">Phone</org-radio>
+                  <org-radio value="sms">SMS</org-radio>
+                </org-radio-group>
+              </org-form-field>
 
-            <!-- combobox field -->
-            <org-form-field [validationMessage]="skillsError()">
-              <org-label text="Skills" htmlFor="skills" [isRequired]="true" />
-              <org-combobox
-                #skillsComponent
-                [options]="skillOptions"
-                [isMultiSelect]="true"
-                placeholder="Select your skills..."
-                (selectedValuesChanged)="skills.set($event)"
-                name="skills"
-              />
-            </org-form-field>
+              <org-form-field [validationMessage]="skillsError()">
+                <org-label text="Skills" htmlFor="skills" [isRequired]="true" />
+                <org-combobox
+                  #skillsComponent
+                  [options]="skillOptions"
+                  [isMultiSelect]="true"
+                  placeholder="Select your skills..."
+                  (selectedValuesChanged)="skills.set($event)"
+                  name="skills"
+                />
+              </org-form-field>
 
-            <!-- date range field -->
-            <org-form-field [validationMessage]="dateRangeError()">
-              <org-label text="Date Range" htmlFor="dateRange" [isRequired]="true" />
-              <org-date-picker-input
-                [allowRangeSelection]="true"
-                [selectedStartDate]="startDate()"
-                [selectedEndDate]="endDate()"
-                placeholder="Select date range..."
-                (dateSelected)="onDateSelected($event)"
-                name="dateRange"
-              />
-            </org-form-field>
-          </org-form-fields>
+              <org-form-field [validationMessage]="dateRangeError()">
+                <org-label text="Date Range" htmlFor="dateRange" [isRequired]="true" />
+                <org-date-picker-input
+                  [allowRangeSelection]="true"
+                  [selectedStartDate]="startDate()"
+                  [selectedEndDate]="endDate()"
+                  placeholder="Select date range..."
+                  (dateSelected)="onDateSelected($event)"
+                  name="dateRange"
+                />
+              </org-form-field>
+            </org-form-fields>
 
-          <!-- submit button -->
-          <org-button type="submit" color="primary" buttonClass="w-full" label="Submit Form" />
-        </form>
-      </org-storybook-example-container-section>
-
-      <div class="flex gap-1">
-        <!-- form state display -->
-        <div class="rounded-base bg-neutral-soft p-3 text-sm flex flex-col gap-2">
-          <div class="font-medium">Form State:</div>
-          <div class="flex flex-col gap-1 text-xs font-mono">
-            <div>Valid: {{ isFormValid() }}</div>
-            <div>Submitted: {{ submitted() }}</div>
-          </div>
+            <org-button type="submit" color="primary" buttonClass="w-full" label="Submit Form" />
+          </form>
         </div>
 
-        <!-- current form values display -->
-        <div class="rounded-base bg-info-soft p-3 text-sm flex flex-col gap-2">
-          <div class="font-medium">Current Form Values:</div>
-          <div class="flex flex-col gap-1 text-xs font-mono">
-            <div>username: "{{ username() }}"</div>
-            <div>email: "{{ email() }}"</div>
-            <div>bio: "{{ bio() }}"</div>
-            <div>agreeToTerms: {{ agreeToTerms() }}</div>
-            <div>notifications: {{ notifications() }}</div>
-            <div>contactMethod: "{{ contactMethod() }}"</div>
-            <div>skills: {{ skills().length }} selected</div>
-            <div>dateRange: {{ formatDateRange() }}</div>
+        <div class="flex gap-1">
+          <div class="rounded-base bg-neutral-soft p-3 text-sm flex flex-col gap-2">
+            <div class="font-medium">Form State:</div>
+            <div class="flex flex-col gap-1 text-xs font-mono">
+              <div>Valid: {{ isFormValid() }}</div>
+              <div>Submitted: {{ submitted() }}</div>
+            </div>
+          </div>
+
+          <div class="rounded-base bg-info-soft p-3 text-sm flex flex-col gap-2">
+            <div class="font-medium">Current Form Values:</div>
+            <div class="flex flex-col gap-1 text-xs font-mono">
+              <div>username: "{{ username() }}"</div>
+              <div>email: "{{ email() }}"</div>
+              <div>bio: "{{ bio() }}"</div>
+              <div>agreeToTerms: {{ agreeToTerms() }}</div>
+              <div>notifications: {{ notifications() }}</div>
+              <div>contactMethod: "{{ contactMethod() }}"</div>
+              <div>skills: {{ skills().length }} selected</div>
+              <div>dateRange: {{ formatDateRange() }}</div>
+            </div>
           </div>
         </div>
-      </div>
-
-      <ul expected-behaviour class="flex flex-col gap-1 mt-1 list-inside list-disc">
+      </org-design-system-demo-canvas>
+    </org-design-system-demo>
+    <org-design-system-demo-expected-behaviour>
+      <ul class="flex flex-col gap-1 mt-1 list-inside list-disc">
         <li><strong>Pre-populated Data</strong>: Form is initialized with data passed via input property</li>
         <li><strong>Input</strong>: Two-way binding with [(value)], displays validation on submit</li>
         <li><strong>Textarea</strong>: Multi-line text input with required validation</li>
@@ -1091,7 +1067,7 @@ class ReactiveFormPrePopulatedDemoComponent {
         <li><strong>Form Values</strong>: Live display updates as you type/interact using signals</li>
         <li><strong>No FormControl needed</strong>: Uses signals and two-way binding instead</li>
       </ul>
-    </org-storybook-example-container>
+    </org-design-system-demo-expected-behaviour>
   `,
 })
 class SimpleBindingPrePopulatedDemoComponent implements AfterViewInit {

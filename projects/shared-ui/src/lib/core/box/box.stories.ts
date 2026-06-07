@@ -5,7 +5,8 @@ import { ButtonToggle, ButtonToggleItem } from '../button-toggle/button-toggle';
 import { CheckboxToggle } from '../checkbox-toggle/checkbox-toggle';
 import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
 import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
-import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
+import { DesignSystemDemoControlInput } from '../../example/design-system-demo/design-system-demo-control-input';
+import { DesignSystemDemoControlsGroup } from '../../example/design-system-demo/design-system-demo-controls-group';
 import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
 import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
 import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
@@ -17,10 +18,12 @@ import {
   BoxColor,
   BoxColorStrength,
   BoxPadding,
+  BoxPaddingApplication,
   BoxShape,
   allBoxBackgrounds,
   allBoxBorders,
   allBoxColors,
+  allBoxPaddingApplications,
   allBoxPaddings,
   allBoxShapes,
 } from './box';
@@ -53,6 +56,12 @@ const liveDemoPaddingItems: ButtonToggleItem[] = allBoxPaddings.map((padding) =>
   buttonColor: 'primary',
 }));
 
+const liveDemoPaddingApplicationItems: ButtonToggleItem[] = allBoxPaddingApplications.map((paddingApplication) => ({
+  label: paddingApplication,
+  value: paddingApplication,
+  buttonColor: 'primary',
+}));
+
 const liveDemoBackgroundItems: ButtonToggleItem[] = allBoxBackgrounds.map((background) => ({
   label: background,
   value: background,
@@ -76,7 +85,8 @@ const liveDemoShapeItems: ButtonToggleItem[] = allBoxShapes.map((shape) => ({
     DesignSystemDemo,
     DesignSystemDemoHeader,
     DesignSystemDemoControls,
-    DesignSystemDemoControlGroup,
+    DesignSystemDemoControlsGroup,
+    DesignSystemDemoControlInput,
     DesignSystemDemoCanvas,
   ],
   styles: [
@@ -101,29 +111,42 @@ const liveDemoShapeItems: ButtonToggleItem[] = allBoxShapes.map((shape) => ({
           description="Toggle the inputs to see every visual combination. Flip the 'clickable' toggle to set [isClickable]=true — the box gains cursor, hover, pressed, and focus-visible affordances along with role=button + keyboard activation, and emits (clicked)."
         />
         <org-design-system-demo-controls slot="controls">
-          <org-design-system-demo-control-group label="Color">
-            <org-button-toggle [items]="colorItems" formControlName="color" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Color strength">
-            <org-button-toggle [items]="colorStrengthItems" formControlName="colorStrength" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Border">
-            <org-button-toggle [items]="borderItems" formControlName="border" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Padding">
-            <org-button-toggle [items]="paddingItems" formControlName="padding" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Background">
-            <org-button-toggle [items]="backgroundItems" formControlName="background" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Shape">
-            <org-button-toggle [items]="shapeItems" formControlName="shape" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Clickable">
-            <org-checkbox-toggle name="live-demo-clickable" value="clickable" formControlName="clickable">
-              {{ liveDemoForm.controls.clickable.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
+          <org-design-system-demo-controls-group label="Visual">
+            <org-design-system-demo-control-input label="Color">
+              <org-button-toggle [items]="colorItems" formControlName="color" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Color strength">
+              <org-button-toggle [items]="colorStrengthItems" formControlName="colorStrength" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Border">
+              <org-button-toggle [items]="borderItems" formControlName="border" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Background">
+              <org-button-toggle [items]="backgroundItems" formControlName="background" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Shape">
+              <org-button-toggle [items]="shapeItems" formControlName="shape" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
+          <org-design-system-demo-controls-group label="Layout">
+            <org-design-system-demo-control-input label="Padding">
+              <org-button-toggle [items]="paddingItems" formControlName="padding" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Padding application">
+              <org-button-toggle
+                [items]="paddingApplicationItems"
+                formControlName="paddingApplication"
+                buttonSize="sm"
+              />
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
+          <org-design-system-demo-controls-group label="Behavior">
+            <org-design-system-demo-control-input label="Clickable">
+              <org-checkbox-toggle name="live-demo-clickable" value="clickable" formControlName="clickable">
+                {{ liveDemoForm.controls.clickable.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
         </org-design-system-demo-controls>
         <org-design-system-demo-canvas slot="canvas">
           <div class="canvas-stage">
@@ -132,6 +155,7 @@ const liveDemoShapeItems: ButtonToggleItem[] = allBoxShapes.map((shape) => ({
               [colorStrength]="liveDemoForm.controls.colorStrength.value"
               [border]="liveDemoForm.controls.border.value"
               [padding]="liveDemoForm.controls.padding.value"
+              [paddingApplication]="liveDemoForm.controls.paddingApplication.value"
               [background]="liveDemoForm.controls.background.value"
               [shape]="liveDemoForm.controls.shape.value"
               [isClickable]="liveDemoForm.controls.clickable.value"
@@ -163,6 +187,7 @@ class BoxLiveDemoStory {
   protected readonly colorStrengthItems = liveDemoColorStrengthItems;
   protected readonly borderItems = liveDemoBorderItems;
   protected readonly paddingItems = liveDemoPaddingItems;
+  protected readonly paddingApplicationItems = liveDemoPaddingApplicationItems;
   protected readonly backgroundItems = liveDemoBackgroundItems;
   protected readonly shapeItems = liveDemoShapeItems;
 
@@ -173,6 +198,7 @@ class BoxLiveDemoStory {
     colorStrength: new FormControl<BoxColorStrength>('soft', { nonNullable: true }),
     border: new FormControl<BoxBorder>('bordered', { nonNullable: true }),
     padding: new FormControl<BoxPadding>('base', { nonNullable: true }),
+    paddingApplication: new FormControl<BoxPaddingApplication>('container', { nonNullable: true }),
     background: new FormControl<BoxBackground>('colored', { nonNullable: true }),
     shape: new FormControl<BoxShape>('rounded', { nonNullable: true }),
     clickable: new FormControl<boolean>(false, { nonNullable: true }),
@@ -292,6 +318,11 @@ const meta: Meta<Box> = {
   - **md**: Medium padding (default)
   - **lg**: Large padding
 
+  ### Padding Application Options
+  - **container**: The padding amount is applied to the box surface itself (default)
+  - **inner-items**: The surface padding is removed and applied inside each slotted region, so header / footer
+    dividers render full-bleed to the box border while their content stays inset
+
   ### Color Options
   - **null/default**: Default border and background
   - **primary**: Primary color
@@ -354,6 +385,7 @@ export const Default: Story = {
     colorStrength: 'soft',
     border: 'bordered',
     padding: 'base',
+    paddingApplication: 'container',
     background: 'colored',
     shape: 'rounded',
   },
@@ -378,6 +410,12 @@ export const Default: Story = {
       control: 'select',
       options: allBoxPaddings,
       description: 'the internal padding applied to the box',
+    },
+    paddingApplication: {
+      control: 'select',
+      options: allBoxPaddingApplications,
+      description:
+        "where the padding is applied; 'container' pads the surface, 'inner-items' moves it into the slotted regions so their dividers render full-bleed",
     },
     background: {
       control: 'select',
@@ -406,6 +444,7 @@ export const Default: Story = {
           [colorStrength]="colorStrength"
           [border]="border"
           [padding]="padding"
+          [paddingApplication]="paddingApplication"
           [background]="background"
           [shape]="shape"
         >
@@ -441,7 +480,7 @@ export const Showcase: Story = {
     docs: {
       description: {
         story:
-          'Comprehensive showcase of every box variant axis — color, border, background, padding — plus a color × border matrix and realistic content fillings to show how the primitive carries different compositions.',
+          'Comprehensive showcase of every box variant axis — color, border, background, padding — plus a color × border matrix.',
       },
     },
   },
@@ -622,6 +661,30 @@ export const Showcase: Story = {
         </org-design-system-demo-expected-behaviour>
 
         <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Padding application" />
+          <org-design-system-demo-canvas slot="canvas">
+            <org-box color="info" paddingApplication="container">
+              <strong>container (default)</strong>
+              <span>The padding sits on the box surface.</span>
+            </org-box>
+            <org-box color="info" paddingApplication="inner-items">
+              <strong>inner-items</strong>
+              <span>The surface padding is removed; the regions own it instead.</span>
+            </org-box>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>Container</strong> (default): the padding amount is applied to the box surface itself</li>
+            <li>
+              <strong>Inner-items</strong>: the surface padding is removed and applied inside each slotted region —
+              this is mainly meaningful with the box sub-components (see <strong>Box Composition</strong>), where it lets
+              header / footer dividers render full-bleed to the box border while their content stays inset
+            </li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
           <org-design-system-demo-header slot="header" title="Shape" />
           <org-design-system-demo-canvas slot="canvas">
             <org-box color="info" shape="rounded">Rounded box (default).</org-box>
@@ -632,6 +695,30 @@ export const Showcase: Story = {
           <ul class="list-inside list-disc flex flex-col gap-1">
             <li><strong>Rounded</strong>: rounded corners using the base radius (default)</li>
             <li><strong>Square</strong>: drops the corner radius to 0 for a flush, square container</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Layout" />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="flex flex-col gap-2 max-w-sm">
+              <org-box color="info">
+                <strong>column (default)</strong>
+                <span>First region</span>
+                <span>Second region</span>
+              </org-box>
+              <org-box layout="row" color="info">
+                <strong>row</strong>
+                <span>First region</span>
+                <span>Second region</span>
+              </org-box>
+            </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>Column</strong> (default): a vertical flex container spacing the regions with the shared box gap</li>
+            <li><strong>Row</strong>: a horizontal flex container spacing the regions with the same shared box gap</li>
           </ul>
         </org-design-system-demo-expected-behaviour>
 
@@ -696,58 +783,6 @@ export const Showcase: Story = {
             <li><strong>Bordered / Thick</strong>: hairline and 2px frames carry the color on all four sides</li>
             <li><strong>Emphasize</strong>: the left edge widens to a 7px accent rail in the semantic color</li>
             <li><strong>Borderless</strong>: only the soft tinted background carries the color signal</li>
-          </ul>
-        </org-design-system-demo-expected-behaviour>
-
-        <org-design-system-demo>
-          <org-design-system-demo-header slot="header" title="Realistic fillings" />
-          <org-design-system-demo-canvas slot="canvas">
-            <div class="flex gap-2">
-              <org-box color="caution" border="border-emphasize">
-                <div class="flex flex-col gap-1">
-                  <strong>Heads up</strong>
-                  <span>Your trial expires in 4 days. Add a payment method to keep your project running.</span>
-                </div>
-              </org-box>
-              <org-box>
-                <div class="flex flex-col gap-1">
-                  <div class="flex justify-between gap-4">
-                    <span>Plan</span>
-                    <span>Team · Annual</span>
-                  </div>
-                  <div class="flex justify-between gap-4">
-                    <span>Seats</span>
-                    <span>12 / 15</span>
-                  </div>
-                  <div class="flex justify-between gap-4">
-                    <span>Renews</span>
-                    <span>Mar 4, 2026</span>
-                  </div>
-                </div>
-              </org-box>
-            </div>
-            <div class="flex gap-2">
-              <org-box color="safe" border="border-emphasize">
-                <div class="flex flex-col gap-1">
-                  <strong>Deploy succeeded</strong>
-                  <span>web · main · 2.4 MB · 1m 12s</span>
-                  <span>commit 9f3a01c · by ada</span>
-                </div>
-              </org-box>
-              <org-box color="danger" border="border-emphasize" background="colorless">
-                <div class="flex flex-col gap-1">
-                  <strong>Build failed</strong>
-                  <span>3 type errors in src/checkout/payment.ts. The previous successful build was 14 minutes ago.</span>
-                </div>
-              </org-box>
-            </div>
-          </org-design-system-demo-canvas>
-        </org-design-system-demo>
-        <org-design-system-demo-expected-behaviour>
-          <ul class="list-inside list-disc flex flex-col gap-1">
-            <li><strong>Box accepts any content</strong>: short prose, key/value rows, stacked metadata, or multi-element blocks</li>
-            <li><strong>Semantic color carries meaning</strong>: pair caution / safe / danger with text content, never color alone</li>
-            <li><strong>Composition is the consumer's job</strong>: Box only frames the content; inner layout is up to you</li>
           </ul>
         </org-design-system-demo-expected-behaviour>
 

@@ -2,50 +2,62 @@ import type { Meta, StoryObj } from '@storybook/angular';
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { SortingStore } from './sorting-store';
 import { Button } from '../button/button';
-import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
-import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
+import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
+import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
+import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
 
 @Component({
   selector: 'story-sorting-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Button, StorybookExampleContainer, StorybookExampleContainerSection],
+  imports: [Button, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
   providers: [SortingStore],
   template: `
-    <org-storybook-example-container title="Sorting Store">
-      <org-storybook-example-container-section label="State">
-        <div class="flex flex-col gap-2">
-          <div class="text-sm"><strong>Current Key:</strong> {{ sortingStore.key() ?? 'null' }}</div>
-          <div class="text-sm"><strong>Current Direction:</strong> {{ sortingStore.direction() ?? 'null' }}</div>
-          <div class="text-sm"><strong>Is Sorting:</strong> {{ sortingStore.isSorting() }}</div>
+    <org-design-system-demo>
+      <org-design-system-demo-header slot="header" title="Sorting Store" />
+      <org-design-system-demo-canvas slot="canvas">
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">State</div>
+          <div class="flex flex-col gap-2">
+            <div class="text-sm"><strong>Current Key:</strong> {{ sortingStore.key() ?? 'null' }}</div>
+            <div class="text-sm"><strong>Current Direction:</strong> {{ sortingStore.direction() ?? 'null' }}</div>
+            <div class="text-sm"><strong>Is Sorting:</strong> {{ sortingStore.isSorting() }}</div>
+          </div>
         </div>
-      </org-storybook-example-container-section>
 
-      <org-storybook-example-container-section label="Toggle Sort">
-        <div class="flex flex-wrap gap-2">
-          <org-button color="primary" size="sm" label="Toggle Sort: Name" (click)="sortingStore.toggleSort('name')" />
-          <org-button color="primary" size="sm" label="Toggle Sort: Date" (click)="sortingStore.toggleSort('date')" />
-          <org-button
-            color="primary"
-            size="sm"
-            label="Toggle Sort: Status"
-            (click)="sortingStore.toggleSort('status')"
-          />
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Toggle Sort</div>
+          <div class="flex flex-wrap gap-2">
+            <org-button color="primary" size="sm" label="Toggle Sort: Name" (click)="sortingStore.toggleSort('name')" />
+            <org-button color="primary" size="sm" label="Toggle Sort: Date" (click)="sortingStore.toggleSort('date')" />
+            <org-button
+              color="primary"
+              size="sm"
+              label="Toggle Sort: Status"
+              (click)="sortingStore.toggleSort('status')"
+            />
+          </div>
         </div>
-      </org-storybook-example-container-section>
 
-      <org-storybook-example-container-section label="Set Sort">
-        <div class="flex flex-wrap gap-2">
-          <org-button color="secondary" size="sm" label="Set: Name ASC" (click)="sortingStore.setSort('name', 'asc')" />
-          <org-button
-            color="secondary"
-            size="sm"
-            label="Set: Date DESC"
-            (click)="sortingStore.setSort('date', 'desc')"
-          />
-          <org-button color="neutral" size="sm" label="Clear Sort" (click)="sortingStore.clearSort()" />
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Set Sort</div>
+          <div class="flex flex-wrap gap-2">
+            <org-button
+              color="secondary"
+              size="sm"
+              label="Set: Name ASC"
+              (click)="sortingStore.setSort('name', 'asc')"
+            />
+            <org-button
+              color="secondary"
+              size="sm"
+              label="Set: Date DESC"
+              (click)="sortingStore.setSort('date', 'desc')"
+            />
+            <org-button color="neutral" size="sm" label="Clear Sort" (click)="sortingStore.clearSort()" />
+          </div>
         </div>
-      </org-storybook-example-container-section>
-    </org-storybook-example-container>
+      </org-design-system-demo-canvas>
+    </org-design-system-demo>
   `,
 })
 class SortingDemo {

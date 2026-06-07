@@ -1,8 +1,10 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import type { Meta, StoryObj } from '@storybook/angular';
 import { moduleMetadata } from '@storybook/angular';
-import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
-import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
+import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
+import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
+import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
+import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
 import { UserDetails } from './user-details';
 import {
   mayaBrennanUser,
@@ -103,7 +105,13 @@ const meta: Meta<UserDetails> = {
   tags: ['autodocs'],
   decorators: [
     moduleMetadata({
-      imports: [UserDetails, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [
+        UserDetails,
+        DesignSystemDemo,
+        DesignSystemDemoHeader,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
+      ],
     }),
   ],
   parameters: {
@@ -196,35 +204,39 @@ export const Showcase: Story = {
       invitedUser,
     },
     template: `
-      <org-storybook-example-container
-        title="User Details — Showcase"
-        currentState="Active, suspended, and invited reference renders"
-      >
-        <org-storybook-example-container-section label="Active (Maya Brennan)">
-          <div class="h-screen">
-            <org-user-details [user]="mayaBrennanUser" />
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="User Details — Showcase" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Active (Maya Brennan)</div>
+            <div class="h-screen">
+              <org-user-details [user]="mayaBrennanUser" />
+            </div>
           </div>
-        </org-storybook-example-container-section>
 
-        <org-storybook-example-container-section label="Suspended">
-          <div class="h-screen">
-            <org-user-details [user]="suspendedUser" />
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Suspended</div>
+            <div class="h-screen">
+              <org-user-details [user]="suspendedUser" />
+            </div>
           </div>
-        </org-storybook-example-container-section>
 
-        <org-storybook-example-container-section label="Invited (no sessions / tokens)">
-          <div class="h-screen">
-            <org-user-details [user]="invitedUser" />
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Invited (no sessions / tokens)</div>
+            <div class="h-screen">
+              <org-user-details [user]="invitedUser" />
+            </div>
           </div>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
           <li>The header status tag color reflects the user's status</li>
           <li>The right rail stays pinned while the content column scrolls</li>
           <li>The on-this-page nav highlights the section whose anchor crosses the top 30% of the viewport</li>
           <li>The Save button is always enabled; clicking it with no changes does not submit or validate</li>
         </ul>
-      </org-storybook-example-container>
+      </org-design-system-demo-expected-behaviour>
     `,
   }),
 };

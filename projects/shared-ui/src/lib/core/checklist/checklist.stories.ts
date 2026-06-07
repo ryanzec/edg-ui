@@ -5,7 +5,7 @@ import { ButtonToggle, ButtonToggleItem } from '../button-toggle/button-toggle';
 import { CheckboxToggle } from '../checkbox-toggle/checkbox-toggle';
 import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
 import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
-import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
+import { DesignSystemDemoControlInput } from '../../example/design-system-demo/design-system-demo-control-input';
 import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
 import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
 import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
@@ -209,7 +209,7 @@ export const Default: Story = {
     DesignSystemDemo,
     DesignSystemDemoHeader,
     DesignSystemDemoControls,
-    DesignSystemDemoControlGroup,
+    DesignSystemDemoControlInput,
     DesignSystemDemoCanvas,
   ],
   styles: [
@@ -239,10 +239,10 @@ export const Default: Story = {
           description="Toggle between rendering modes — flat, flat-with-meta, and nested with count + meta — to see how a single Checklist composes across the documented use cases. Flip Editable on to click leaf rows and watch parent rows auto-derive their status from their children."
         />
         <org-design-system-demo-controls slot="controls">
-          <org-design-system-demo-control-group label="Composition">
+          <org-design-system-demo-control-input label="Composition">
             <org-button-toggle [items]="compositionItems" formControlName="composition" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Emphasize invalid">
+          </org-design-system-demo-control-input>
+          <org-design-system-demo-control-input label="Emphasize invalid">
             <org-checkbox-toggle
               name="live-demo-emphasize-invalid"
               value="emphasize-invalid"
@@ -250,8 +250,8 @@ export const Default: Story = {
             >
               {{ liveDemoForm.controls.emphasizeInvalid.value ? 'on' : 'off' }}
             </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Status background">
+          </org-design-system-demo-control-input>
+          <org-design-system-demo-control-input label="Status background">
             <org-checkbox-toggle
               name="live-demo-status-background"
               value="status-background"
@@ -259,12 +259,12 @@ export const Default: Story = {
             >
               {{ liveDemoForm.controls.showStatusBackground.value ? 'on' : 'off' }}
             </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Editable">
+          </org-design-system-demo-control-input>
+          <org-design-system-demo-control-input label="Editable">
             <org-checkbox-toggle name="live-demo-editable" value="editable" formControlName="isEditable">
               {{ liveDemoForm.controls.isEditable.value ? 'on' : 'off' }}
             </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
+          </org-design-system-demo-control-input>
         </org-design-system-demo-controls>
         <org-design-system-demo-canvas slot="canvas">
           <div class="canvas-stage">

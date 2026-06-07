@@ -5,11 +5,10 @@
         [orgOverlayMenuTrigger]="subMenu"
         overlayMenuTriggerPosition="after"
         asTag="button"
-        [label]="item().label"
-        [hideLabel]="true"
         [forceClickable]="true"
       >
         <org-list-item-icon pre [name]="item().icon" />
+        <span class="sr-only">{{ item().label }}</span>
       </org-list-item>
       <ng-template #tooltipContent>
         <org-tooltip-content>
@@ -29,8 +28,9 @@
     </ng-template>
   } @else {
     <div class="nav-group" role="presentation" [attr.data-open]="isExpanded() ? '' : null">
-      <org-list-item asTag="button" [label]="item().label" [forceClickable]="true" (clicked)="onToggleExpanded()">
+      <org-list-item asTag="button" [forceClickable]="true" (clicked)="onToggleExpanded()">
         <org-list-item-icon pre [name]="item().icon" />
+        {{ item().label }}
         @if (item().indicator !== undefined) {
           <org-indicator post color="neutral" size="sm" [number]="item().indicator!" />
         }
@@ -44,12 +44,8 @@
         <div class="nav-sub-list" role="presentation">
           <org-list selectMode="single">
             @for (subItem of item().children; track subItem.id) {
-              <org-list-item
-                asTag="a"
-                [routerLink]="subItem.routePath"
-                [label]="subItem.label"
-                (clicked)="onSubItemClick(subItem)"
-              >
+              <org-list-item asTag="a" [routerLink]="subItem.routePath" (clicked)="onSubItemClick(subItem)">
+                {{ subItem.label }}
                 @if (subItem.indicator !== undefined) {
                   <org-indicator post color="neutral" size="sm" [number]="subItem.indicator" />
                 }
@@ -63,14 +59,9 @@
 } @else if (item().routePath) {
   @if (isCollapsed()) {
     <org-tooltip placement="right">
-      <org-list-item
-        asTag="a"
-        [routerLink]="item().routePath"
-        [label]="item().label"
-        [hideLabel]="true"
-        (clicked)="onItemClick()"
-      >
+      <org-list-item asTag="a" [routerLink]="item().routePath" (clicked)="onItemClick()">
         <org-list-item-icon pre [name]="item().icon" />
+        <span class="sr-only">{{ item().label }}</span>
       </org-list-item>
       <ng-template #tooltipContent>
         <org-tooltip-content>
@@ -82,8 +73,9 @@
       </ng-template>
     </org-tooltip>
   } @else {
-    <org-list-item asTag="a" [routerLink]="item().routePath" [label]="item().label" (clicked)="onItemClick()">
+    <org-list-item asTag="a" [routerLink]="item().routePath" (clicked)="onItemClick()">
       <org-list-item-icon pre [name]="item().icon" />
+      {{ item().label }}
       @if (item().indicator !== undefined) {
         <org-indicator post color="neutral" size="sm" [number]="item().indicator!" />
       }

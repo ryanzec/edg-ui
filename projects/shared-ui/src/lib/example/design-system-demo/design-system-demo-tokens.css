@@ -36,13 +36,22 @@
   --design-system-demo-controls-border: var(--color-border);
   --design-system-demo-controls-radius: var(--radius-sm);
 
-  /* control group */
-  --design-system-demo-control-group-gap: var(--spacing-1_5);
-  --design-system-demo-control-group-label-color: var(--color-fg-muted);
-  --design-system-demo-control-group-label-font-family: var(--font-mono);
-  --design-system-demo-control-group-label-font-size: var(--font-size-2xs);
-  --design-system-demo-control-group-label-font-weight: var(--font-weight-medium);
-  --design-system-demo-control-group-label-letter-spacing: var(--letter-spacing-wide);
+  /* control input */
+  --design-system-demo-control-input-gap: var(--spacing-1_5);
+  --design-system-demo-control-input-label-color: var(--color-fg-muted);
+  --design-system-demo-control-input-label-font-family: var(--font-mono);
+  --design-system-demo-control-input-label-font-size: var(--font-size-2xs);
+  --design-system-demo-control-input-label-font-weight: var(--font-weight-medium);
+  --design-system-demo-control-input-label-letter-spacing: var(--letter-spacing-wide);
+
+  /* controls group */
+  --design-system-demo-controls-group-gap: var(--spacing-2);
+  --design-system-demo-controls-group-inputs-gap: var(--spacing-3);
+  --design-system-demo-controls-group-divider-color: var(--color-border-soft);
+  --design-system-demo-controls-group-label-color: var(--color-fg);
+  --design-system-demo-controls-group-label-font-size: var(--font-size-xs);
+  --design-system-demo-controls-group-label-font-weight: var(--font-weight-semibold);
+  --design-system-demo-controls-group-label-letter-spacing: var(--letter-spacing-wide);
 
   /* expected behaviour */
   --design-system-demo-expected-behaviour-gap: var(--spacing-2);

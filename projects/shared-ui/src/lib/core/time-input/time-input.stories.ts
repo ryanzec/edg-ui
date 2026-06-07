@@ -9,7 +9,7 @@ import { Label } from '../label/label';
 import { allInputVariants } from '../input/input';
 import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
 import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
-import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
+import { DesignSystemDemoControlInput } from '../../example/design-system-demo/design-system-demo-control-input';
 import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
 import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
 import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
@@ -164,7 +164,7 @@ export const Default: Story = {
     DesignSystemDemo,
     DesignSystemDemoHeader,
     DesignSystemDemoControls,
-    DesignSystemDemoControlGroup,
+    DesignSystemDemoControlInput,
     DesignSystemDemoCanvas,
   ],
   styles: [
@@ -189,27 +189,27 @@ export const Default: Story = {
           description="A working time picker. Focusing the field auto-selects the first segment; from there, click a segment or use arrows to move between them. ↑/↓ step the focused segment by one. ←/→ move between segments and wrap at the ends — left from hours jumps to the meridiem, right from meridiem comes back to hours. Tab moves focus out of the field entirely (natural form traversal), it does not cycle segments. In 12-hour mode, A and P set the meridiem directly. Switch Format to compare 12-hour and 24-hour layouts."
         />
         <org-design-system-demo-controls slot="controls">
-          <org-design-system-demo-control-group label="Format">
+          <org-design-system-demo-control-input label="Format">
             <org-button-toggle [items]="formatItems" formControlName="format" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Variant">
+          </org-design-system-demo-control-input>
+          <org-design-system-demo-control-input label="Variant">
             <org-button-toggle [items]="variantItems" formControlName="variant" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Disabled">
+          </org-design-system-demo-control-input>
+          <org-design-system-demo-control-input label="Disabled">
             <org-checkbox-toggle name="live-demo-disabled" value="disabled" formControlName="disabled">
               {{ liveDemoForm.controls.disabled.value ? 'on' : 'off' }}
             </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Readonly">
+          </org-design-system-demo-control-input>
+          <org-design-system-demo-control-input label="Readonly">
             <org-checkbox-toggle name="live-demo-readonly" value="readonly" formControlName="readonly">
               {{ liveDemoForm.controls.readonly.value ? 'on' : 'off' }}
             </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Error">
+          </org-design-system-demo-control-input>
+          <org-design-system-demo-control-input label="Error">
             <org-checkbox-toggle name="live-demo-error" value="error" formControlName="error">
               {{ liveDemoForm.controls.error.value ? 'on' : 'off' }}
             </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
+          </org-design-system-demo-control-input>
         </org-design-system-demo-controls>
         <org-design-system-demo-canvas slot="canvas">
           <div class="canvas-stage">

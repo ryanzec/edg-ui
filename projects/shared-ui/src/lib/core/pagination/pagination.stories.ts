@@ -5,7 +5,7 @@ import { ButtonToggle, ButtonToggleItem } from '../button-toggle/button-toggle';
 import { CheckboxToggle } from '../checkbox-toggle/checkbox-toggle';
 import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
 import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
-import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
+import { DesignSystemDemoControlInput } from '../../example/design-system-demo/design-system-demo-control-input';
 import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
 import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
 import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
@@ -190,7 +190,7 @@ export const Default: Story = {
     DesignSystemDemo,
     DesignSystemDemoHeader,
     DesignSystemDemoControls,
-    DesignSystemDemoControlGroup,
+    DesignSystemDemoControlInput,
     DesignSystemDemoCanvas,
   ],
   styles: [
@@ -215,20 +215,20 @@ export const Default: Story = {
           description="All paginations below are real and interactive — hover, focus, press, or tab through them to see every state."
         />
         <org-design-system-demo-controls slot="controls">
-          <org-design-system-demo-control-group label="Total items">
+          <org-design-system-demo-control-input label="Total items">
             <org-button-toggle [items]="totalItemsItems" formControlName="totalItems" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Visible pages">
+          </org-design-system-demo-control-input>
+          <org-design-system-demo-control-input label="Visible pages">
             <org-button-toggle [items]="visiblePagesItems" formControlName="visiblePages" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Items per page options">
+          </org-design-system-demo-control-input>
+          <org-design-system-demo-control-input label="Items per page options">
             <org-button-toggle [items]="itemsPerPagePresetItems" formControlName="itemsPerPagePreset" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Disabled">
+          </org-design-system-demo-control-input>
+          <org-design-system-demo-control-input label="Disabled">
             <org-checkbox-toggle name="live-demo-disabled" value="disabled" formControlName="disabled">
               {{ liveDemoForm.controls.disabled.value ? 'on' : 'off' }}
             </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
+          </org-design-system-demo-control-input>
         </org-design-system-demo-controls>
         <org-design-system-demo-canvas slot="canvas">
           <div class="canvas-stage">

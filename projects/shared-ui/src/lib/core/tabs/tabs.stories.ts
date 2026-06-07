@@ -11,7 +11,8 @@ import { Icon } from '../icon/icon';
 import { Tag } from '../tags/tag';
 import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
 import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
-import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
+import { DesignSystemDemoControlInput } from '../../example/design-system-demo/design-system-demo-control-input';
+import { DesignSystemDemoControlsGroup } from '../../example/design-system-demo/design-system-demo-controls-group';
 import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
 import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
 import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
@@ -200,7 +201,8 @@ export const Default: Story = {
     DesignSystemDemo,
     DesignSystemDemoHeader,
     DesignSystemDemoControls,
-    DesignSystemDemoControlGroup,
+    DesignSystemDemoControlsGroup,
+    DesignSystemDemoControlInput,
     DesignSystemDemoCanvas,
   ],
   styles: [
@@ -229,40 +231,50 @@ export const Default: Story = {
           description="The tabs below are real and interactive — click any tab or use ←/→ + Home/End to walk the strip; toggle the controls to drive every visible state."
         />
         <org-design-system-demo-controls slot="controls">
-          <org-design-system-demo-control-group label="Variant">
-            <org-button-toggle [items]="variantItems" formControlName="variant" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Size">
-            <org-button-toggle [items]="sizeItems" formControlName="size" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Tabs">
-            <org-button-toggle [items]="tabsCountItems" formControlName="tabsCount" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Icons">
-            <org-checkbox-toggle name="live-demo-icons" value="icons" formControlName="icons">
-              {{ liveDemoForm.controls.icons.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Counts">
-            <org-checkbox-toggle name="live-demo-counts" value="counts" formControlName="counts">
-              {{ liveDemoForm.controls.counts.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Stretch">
-            <org-checkbox-toggle name="live-demo-stretch" value="stretch" formControlName="stretch">
-              {{ liveDemoForm.controls.stretch.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Last tab disabled">
-            <org-checkbox-toggle name="live-demo-last-disabled" value="last-disabled" formControlName="lastTabDisabled">
-              {{ liveDemoForm.controls.lastTabDisabled.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Closable">
-            <org-checkbox-toggle name="live-demo-closable" value="closable" formControlName="closable">
-              {{ liveDemoForm.controls.closable.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
+          <org-design-system-demo-controls-group label="Presentation">
+            <org-design-system-demo-control-input label="Variant">
+              <org-button-toggle [items]="variantItems" formControlName="variant" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Size">
+              <org-button-toggle [items]="sizeItems" formControlName="size" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Tabs">
+              <org-button-toggle [items]="tabsCountItems" formControlName="tabsCount" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
+          <org-design-system-demo-controls-group label="Content">
+            <org-design-system-demo-control-input label="Icons">
+              <org-checkbox-toggle name="live-demo-icons" value="icons" formControlName="icons">
+                {{ liveDemoForm.controls.icons.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Counts">
+              <org-checkbox-toggle name="live-demo-counts" value="counts" formControlName="counts">
+                {{ liveDemoForm.controls.counts.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
+          <org-design-system-demo-controls-group label="Behavior">
+            <org-design-system-demo-control-input label="Stretch">
+              <org-checkbox-toggle name="live-demo-stretch" value="stretch" formControlName="stretch">
+                {{ liveDemoForm.controls.stretch.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Last tab disabled">
+              <org-checkbox-toggle
+                name="live-demo-last-disabled"
+                value="last-disabled"
+                formControlName="lastTabDisabled"
+              >
+                {{ liveDemoForm.controls.lastTabDisabled.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Closable">
+              <org-checkbox-toggle name="live-demo-closable" value="closable" formControlName="closable">
+                {{ liveDemoForm.controls.closable.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
         </org-design-system-demo-controls>
         <org-design-system-demo-canvas slot="canvas">
           <div class="canvas-stage">
@@ -547,7 +559,7 @@ class TabsClosableShowcase {
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [Tabs, Tab, Tag, Box, BoxContent],
   template: `
-    <org-box layout="stack">
+    <org-box>
       <org-box-content>
         <div class="flex flex-col gap-2">
           <org-tabs [value]="value()" (valueChange)="value.set($event)">

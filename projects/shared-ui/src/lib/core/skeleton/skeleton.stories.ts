@@ -5,7 +5,7 @@ import { ButtonToggle, ButtonToggleItem } from '../button-toggle/button-toggle';
 import { CheckboxToggle } from '../checkbox-toggle/checkbox-toggle';
 import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
 import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
-import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
+import { DesignSystemDemoControlInput } from '../../example/design-system-demo/design-system-demo-control-input';
 import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
 import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
 import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
@@ -127,7 +127,7 @@ export const Default: Story = {
     DesignSystemDemo,
     DesignSystemDemoHeader,
     DesignSystemDemoControls,
-    DesignSystemDemoControlGroup,
+    DesignSystemDemoControlInput,
     DesignSystemDemoCanvas,
   ],
   styles: [
@@ -151,17 +151,17 @@ export const Default: Story = {
           description="Toggle the variant, the bordered framing, and the table row count to see every preset."
         />
         <org-design-system-demo-controls slot="controls">
-          <org-design-system-demo-control-group label="Variant">
+          <org-design-system-demo-control-input label="Variant">
             <org-button-toggle [items]="variantItems" formControlName="variant" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Bordered">
+          </org-design-system-demo-control-input>
+          <org-design-system-demo-control-input label="Bordered">
             <org-checkbox-toggle name="live-demo-bordered" value="bordered" formControlName="bordered">
               {{ liveDemoForm.controls.bordered.value ? 'on' : 'off' }}
             </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Rows">
+          </org-design-system-demo-control-input>
+          <org-design-system-demo-control-input label="Rows">
             <org-button-toggle [items]="rowsItems" formControlName="rows" buttonSize="sm" />
-          </org-design-system-demo-control-group>
+          </org-design-system-demo-control-input>
         </org-design-system-demo-controls>
         <org-design-system-demo-canvas slot="canvas">
           <div class="canvas-stage">

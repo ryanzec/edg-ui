@@ -12,7 +12,7 @@ import { Input } from '../input/input';
 import { Tag } from '../tags/tag';
 import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
 import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
-import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
+import { DesignSystemDemoControlInput } from '../../example/design-system-demo/design-system-demo-control-input';
 import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
 import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
 import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
@@ -141,7 +141,7 @@ const moveItems = (lanes: DemoLane[], event: KanbanItemsMovedEvent): DemoLane[] 
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [Box, BoxHeader, BoxContent, Tag],
   template: `
-    <org-box layout="stack">
+    <org-box>
       <org-box-header [title]="card().title" [subtitle]="card().description" />
       <org-box-content>
         <div class="flex items-center justify-between gap-2">
@@ -359,7 +359,7 @@ class StoryKanbanShowCount {
     DesignSystemDemo,
     DesignSystemDemoHeader,
     DesignSystemDemoControls,
-    DesignSystemDemoControlGroup,
+    DesignSystemDemoControlInput,
     DesignSystemDemoCanvas,
   ],
   template: `
@@ -371,17 +371,17 @@ class StoryKanbanShowCount {
           description="Configure lane count, item count, and count-pill visibility. Click cards to select; cmd/ctrl+click toggles, shift+click extends a range within a lane. Drag a selected card to move the whole selection."
         />
         <org-design-system-demo-controls slot="controls">
-          <org-design-system-demo-control-group label="Lane count">
+          <org-design-system-demo-control-input label="Lane count">
             <org-input name="kanban-live-demo-lane-count" type="number" formControlName="laneCount" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Items per lane">
+          </org-design-system-demo-control-input>
+          <org-design-system-demo-control-input label="Items per lane">
             <org-input name="kanban-live-demo-items-per-lane" type="number" formControlName="itemsPerLane" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Show count pill">
+          </org-design-system-demo-control-input>
+          <org-design-system-demo-control-input label="Show count pill">
             <org-checkbox-toggle name="kanban-live-demo-show-count" value="show-count" formControlName="showCount">
               {{ liveDemoForm.controls.showCount.value ? 'on' : 'off' }}
             </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
+          </org-design-system-demo-control-input>
         </org-design-system-demo-controls>
         <org-design-system-demo-canvas slot="canvas">
           <div class="block h-base">

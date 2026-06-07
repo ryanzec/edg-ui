@@ -9,7 +9,8 @@ import { ListItem } from '../list/list-item';
 import { allComponentColors, ComponentColor } from '../types/component-types';
 import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
 import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
-import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
+import { DesignSystemDemoControlInput } from '../../example/design-system-demo/design-system-demo-control-input';
+import { DesignSystemDemoControlsGroup } from '../../example/design-system-demo/design-system-demo-controls-group';
 import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
 import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
 import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
@@ -82,7 +83,7 @@ const meta: Meta<LoadingBlocker> = {
   \`\`\`html
   <!-- Region blocker over a card -->
   <div class="relative">
-    <org-box layout="stack">...</org-box>
+    <org-box>...</org-box>
     <org-loading-blocker [isVisible]="isLoading()" label="Loading data..." />
   </div>
 
@@ -177,7 +178,8 @@ export const Default: Story = {
     DesignSystemDemo,
     DesignSystemDemoHeader,
     DesignSystemDemoControls,
-    DesignSystemDemoControlGroup,
+    DesignSystemDemoControlsGroup,
+    DesignSystemDemoControlInput,
     DesignSystemDemoCanvas,
   ],
   styles: [
@@ -214,32 +216,36 @@ export const Default: Story = {
           description="Toggle the inputs to see every variant in place over a real-looking panel. The blocker sits over the same content; only its data attributes change."
         />
         <org-design-system-demo-controls slot="controls">
-          <org-design-system-demo-control-group label="Intensity">
-            <org-button-toggle [items]="intensityItems" formControlName="intensity" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Scope">
-            <org-button-toggle [items]="scopeItems" formControlName="scope" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Color">
-            <org-button-toggle [items]="colorItems" formControlName="color" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Spinner Size">
-            <org-button-toggle [items]="spinnerSizeItems" formControlName="spinnerSize" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Visible">
-            <org-checkbox-toggle name="live-demo-visible" value="visible" formControlName="isVisible">
-              {{ liveDemoForm.controls.isVisible.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Show text">
-            <org-checkbox-toggle name="live-demo-show-text" value="show-text" formControlName="showText">
-              {{ liveDemoForm.controls.showText.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
+          <org-design-system-demo-controls-group label="Appearance">
+            <org-design-system-demo-control-input label="Intensity">
+              <org-button-toggle [items]="intensityItems" formControlName="intensity" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Scope">
+              <org-button-toggle [items]="scopeItems" formControlName="scope" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Color">
+              <org-button-toggle [items]="colorItems" formControlName="color" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Spinner Size">
+              <org-button-toggle [items]="spinnerSizeItems" formControlName="spinnerSize" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
+          <org-design-system-demo-controls-group label="State">
+            <org-design-system-demo-control-input label="Visible">
+              <org-checkbox-toggle name="live-demo-visible" value="visible" formControlName="isVisible">
+                {{ liveDemoForm.controls.isVisible.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Show text">
+              <org-checkbox-toggle name="live-demo-show-text" value="show-text" formControlName="showText">
+                {{ liveDemoForm.controls.showText.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
         </org-design-system-demo-controls>
         <org-design-system-demo-canvas slot="canvas">
           <div class="canvas-stage">
-            <org-box layout="stack">
+            <org-box>
               <div class="panel">
                 <div class="panel-row">
                   <strong>Quarterly report</strong>
@@ -373,7 +379,7 @@ export const LiveDemo: Story = {
           <div class="cell">
             <span class="cell-label">Hidden · isVisible=false</span>
             <div class="surface">
-              <org-box layout="stack">
+              <org-box>
                 <div class="panel">
                   <div class="panel-row"><strong>Quarterly report</strong><span>3 rows</span></div>
                   <div class="panel-row"><span>EMEA — revenue +14% YoY</span><span>$24.1M</span></div>
@@ -387,7 +393,7 @@ export const LiveDemo: Story = {
           <div class="cell">
             <span class="cell-label">Visible · spinner only</span>
             <div class="surface">
-              <org-box layout="stack">
+              <org-box>
                 <div class="panel">
                   <div class="panel-row"><strong>Quarterly report</strong><span>3 rows</span></div>
                   <div class="panel-row"><span>EMEA — revenue +14% YoY</span><span>$24.1M</span></div>
@@ -401,7 +407,7 @@ export const LiveDemo: Story = {
           <div class="cell">
             <span class="cell-label">Visible · spinner + text</span>
             <div class="surface">
-              <org-box layout="stack">
+              <org-box>
                 <div class="panel">
                   <div class="panel-row"><strong>Quarterly report</strong><span>3 rows</span></div>
                   <div class="panel-row"><span>EMEA — revenue +14% YoY</span><span>$24.1M</span></div>
@@ -415,7 +421,7 @@ export const LiveDemo: Story = {
           <div class="cell">
             <span class="cell-label">Visible · colored (danger)</span>
             <div class="surface">
-              <org-box layout="stack">
+              <org-box>
                 <div class="panel">
                   <div class="panel-row"><strong>Pending deletion</strong><span>3 files</span></div>
                   <div class="panel-row"><span>aurora-landing.tar.gz</span><span>$42.1M</span></div>
@@ -492,7 +498,7 @@ class LoadingBlockerVisualStatesSection {}
           <div class="cell">
             <span class="cell-label">Intensity · light</span>
             <div class="surface">
-              <org-box layout="stack">
+              <org-box>
                 <div class="panel">
                   <div class="panel-row"><strong>Quarterly report · light</strong></div>
                   <div class="panel-row"><span>EMEA — revenue +14% YoY</span><span>$24.1M</span></div>
@@ -505,7 +511,7 @@ class LoadingBlockerVisualStatesSection {}
           <div class="cell">
             <span class="cell-label">Intensity · medium</span>
             <div class="surface">
-              <org-box layout="stack">
+              <org-box>
                 <div class="panel">
                   <div class="panel-row"><strong>Quarterly report · medium</strong></div>
                   <div class="panel-row"><span>EMEA — revenue +14% YoY</span><span>$24.1M</span></div>
@@ -518,7 +524,7 @@ class LoadingBlockerVisualStatesSection {}
           <div class="cell">
             <span class="cell-label">Intensity · heavy</span>
             <div class="surface">
-              <org-box layout="stack">
+              <org-box>
                 <div class="panel">
                   <div class="panel-row"><strong>Quarterly report · heavy</strong></div>
                   <div class="panel-row"><span>EMEA — revenue +14% YoY</span><span>$24.1M</span></div>
@@ -595,7 +601,7 @@ class LoadingBlockerIntensitySection {}
           <div class="cell">
             <span class="cell-label">Color · none</span>
             <div class="surface">
-              <org-box layout="stack">
+              <org-box>
                 <div class="panel">
                   <div class="placeholder"></div>
                   <div class="placeholder"></div>
@@ -608,7 +614,7 @@ class LoadingBlockerIntensitySection {}
           <div class="cell">
             <span class="cell-label">Color · primary</span>
             <div class="surface">
-              <org-box layout="stack">
+              <org-box>
                 <div class="panel">
                   <div class="placeholder"></div>
                   <div class="placeholder"></div>
@@ -621,7 +627,7 @@ class LoadingBlockerIntensitySection {}
           <div class="cell">
             <span class="cell-label">Color · secondary</span>
             <div class="surface">
-              <org-box layout="stack">
+              <org-box>
                 <div class="panel">
                   <div class="placeholder"></div>
                   <div class="placeholder"></div>
@@ -634,7 +640,7 @@ class LoadingBlockerIntensitySection {}
           <div class="cell">
             <span class="cell-label">Color · neutral</span>
             <div class="surface">
-              <org-box layout="stack">
+              <org-box>
                 <div class="panel">
                   <div class="placeholder"></div>
                   <div class="placeholder"></div>
@@ -647,7 +653,7 @@ class LoadingBlockerIntensitySection {}
           <div class="cell">
             <span class="cell-label">Color · safe</span>
             <div class="surface">
-              <org-box layout="stack">
+              <org-box>
                 <div class="panel">
                   <div class="placeholder"></div>
                   <div class="placeholder"></div>
@@ -660,7 +666,7 @@ class LoadingBlockerIntensitySection {}
           <div class="cell">
             <span class="cell-label">Color · info</span>
             <div class="surface">
-              <org-box layout="stack">
+              <org-box>
                 <div class="panel">
                   <div class="placeholder"></div>
                   <div class="placeholder"></div>
@@ -673,7 +679,7 @@ class LoadingBlockerIntensitySection {}
           <div class="cell">
             <span class="cell-label">Color · caution</span>
             <div class="surface">
-              <org-box layout="stack">
+              <org-box>
                 <div class="panel">
                   <div class="placeholder"></div>
                   <div class="placeholder"></div>
@@ -686,7 +692,7 @@ class LoadingBlockerIntensitySection {}
           <div class="cell">
             <span class="cell-label">Color · warning</span>
             <div class="surface">
-              <org-box layout="stack">
+              <org-box>
                 <div class="panel">
                   <div class="placeholder"></div>
                   <div class="placeholder"></div>
@@ -699,7 +705,7 @@ class LoadingBlockerIntensitySection {}
           <div class="cell">
             <span class="cell-label">Color · danger</span>
             <div class="surface">
-              <org-box layout="stack">
+              <org-box>
                 <div class="panel">
                   <div class="placeholder"></div>
                   <div class="placeholder"></div>
@@ -770,7 +776,7 @@ class LoadingBlockerColorSection {}
           <div class="cell">
             <span class="cell-label">Scope: region · over a card</span>
             <div class="surface">
-              <org-box layout="stack">
+              <org-box>
                 <div class="panel">
                   <strong>Settings</strong>
                   <span>General · Notifications · Billing · Members</span>
@@ -783,7 +789,7 @@ class LoadingBlockerColorSection {}
           <div class="cell">
             <span class="cell-label">Scope: viewport · route transition (simulated)</span>
             <div class="surface">
-              <org-box layout="stack">
+              <org-box>
                 <div class="panel">
                   <strong>App-level loader</strong>
                   <span
@@ -862,7 +868,7 @@ class LoadingBlockerScopeSection {}
           <div class="cell">
             <span class="cell-label">Spinner Size · lg</span>
             <div class="surface">
-              <org-box layout="stack">
+              <org-box>
                 <div class="panel">
                   <div class="placeholder"></div>
                   <div class="placeholder"></div>
@@ -874,7 +880,7 @@ class LoadingBlockerScopeSection {}
           <div class="cell">
             <span class="cell-label">Spinner Size · xl</span>
             <div class="surface">
-              <org-box layout="stack">
+              <org-box>
                 <div class="panel">
                   <div class="placeholder"></div>
                   <div class="placeholder"></div>
@@ -886,7 +892,7 @@ class LoadingBlockerScopeSection {}
           <div class="cell">
             <span class="cell-label">Spinner Size · 2xl</span>
             <div class="surface">
-              <org-box layout="stack">
+              <org-box>
                 <div class="panel">
                   <div class="placeholder"></div>
                   <div class="placeholder"></div>
@@ -963,7 +969,7 @@ class LoadingBlockerSpinnerSizeSection {}
           <div class="cell">
             <span class="cell-label">Card · body blocked, header live</span>
             <div class="surface">
-              <org-box layout="stack">
+              <org-box>
                 <div class="panel">
                   <div class="panel-header"><span>Live activity</span><span>x</span></div>
                   <span>Streaming events from production.</span>
@@ -976,7 +982,7 @@ class LoadingBlockerSpinnerSizeSection {}
           <div class="cell">
             <span class="cell-label">Card · whole card blocked (intensity: heavy)</span>
             <div class="surface">
-              <org-box layout="stack">
+              <org-box>
                 <div class="panel">
                   <div class="panel-header"><span>Live activity</span><span>x</span></div>
                   <span>Streaming events from production.</span>
@@ -1040,12 +1046,12 @@ class LoadingBlockerInContextCardSection {}
           <div class="cell">
             <span class="cell-label">List · light intensity</span>
             <div class="surface">
-              <org-box layout="stack">
+              <org-box>
                 <org-list>
-                  <org-list-item label="Aurora landing page" />
-                  <org-list-item label="Internal tooling rewrite" />
-                  <org-list-item label="Quarterly review deck" />
-                  <org-list-item label="Onboarding flow v3" />
+                  <org-list-item>Aurora landing page</org-list-item>
+                  <org-list-item>Internal tooling rewrite</org-list-item>
+                  <org-list-item>Quarterly review deck</org-list-item>
+                  <org-list-item>Onboarding flow v3</org-list-item>
                 </org-list>
               </org-box>
               <org-loading-blocker [isVisible]="true" intensity="light" />
@@ -1054,12 +1060,12 @@ class LoadingBlockerInContextCardSection {}
           <div class="cell">
             <span class="cell-label">List · medium intensity + label</span>
             <div class="surface">
-              <org-box layout="stack">
+              <org-box>
                 <org-list>
-                  <org-list-item label="Aurora landing page" />
-                  <org-list-item label="Internal tooling rewrite" />
-                  <org-list-item label="Quarterly review deck" />
-                  <org-list-item label="Onboarding flow v3" />
+                  <org-list-item>Aurora landing page</org-list-item>
+                  <org-list-item>Internal tooling rewrite</org-list-item>
+                  <org-list-item>Quarterly review deck</org-list-item>
+                  <org-list-item>Onboarding flow v3</org-list-item>
                 </org-list>
               </org-box>
               <org-loading-blocker [isVisible]="true" intensity="medium" label="Reordering items..." />

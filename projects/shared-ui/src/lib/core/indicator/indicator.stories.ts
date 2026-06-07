@@ -9,7 +9,8 @@ import { Icon } from '../icon/icon';
 import { allColorStrengths, allComponentColors } from '../types/component-types';
 import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
 import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
-import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
+import { DesignSystemDemoControlInput } from '../../example/design-system-demo/design-system-demo-control-input';
+import { DesignSystemDemoControlsGroup } from '../../example/design-system-demo/design-system-demo-controls-group';
 import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
 import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
 import {
@@ -224,7 +225,8 @@ export const Default: Story = {
     DesignSystemDemo,
     DesignSystemDemoHeader,
     DesignSystemDemoControls,
-    DesignSystemDemoControlGroup,
+    DesignSystemDemoControlsGroup,
+    DesignSystemDemoControlInput,
     DesignSystemDemoCanvas,
   ],
   styles: [
@@ -265,44 +267,50 @@ export const Default: Story = {
           description="Toggle the inputs to walk every combination — mode, color, size, and the optional pulse and outline-ring flags. The 'Pin to anchor' toggle wraps the indicator in an anchor so you can see how positioning behaves."
         />
         <org-design-system-demo-controls slot="controls">
-          <org-design-system-demo-control-group label="Mode">
-            <org-button-toggle [items]="modeItems" formControlName="mode" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Color">
-            <org-button-toggle [items]="colorItems" formControlName="color" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Color strength">
-            <org-button-toggle [items]="colorStrengthItems" formControlName="colorStrength" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Size">
-            <org-button-toggle [items]="sizeItems" formControlName="size" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Shape">
-            <org-button-toggle [items]="shapeItems" formControlName="shape" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Number">
-            <input class="number-input" type="number" formControlName="number" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Pulse">
-            <org-checkbox-toggle name="live-demo-pulse" value="pulse" formControlName="pulse">
-              {{ liveDemoForm.controls.pulse.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Outline ring">
-            <org-checkbox-toggle name="live-demo-ring" value="ring" formControlName="ring">
-              {{ liveDemoForm.controls.ring.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Fade">
-            <org-checkbox-toggle name="live-demo-has-fade" value="hasFade" formControlName="hasFade">
-              {{ liveDemoForm.controls.hasFade.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Pin to anchor">
-            <org-checkbox-toggle name="live-demo-pinned" value="pinned" formControlName="pinned">
-              {{ liveDemoForm.controls.pinned.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
+          <org-design-system-demo-controls-group label="Visual">
+            <org-design-system-demo-control-input label="Mode">
+              <org-button-toggle [items]="modeItems" formControlName="mode" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Color">
+              <org-button-toggle [items]="colorItems" formControlName="color" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Color strength">
+              <org-button-toggle [items]="colorStrengthItems" formControlName="colorStrength" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Size">
+              <org-button-toggle [items]="sizeItems" formControlName="size" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Shape">
+              <org-button-toggle [items]="shapeItems" formControlName="shape" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
+          <org-design-system-demo-controls-group label="Behavior">
+            <org-design-system-demo-control-input label="Pulse">
+              <org-checkbox-toggle name="live-demo-pulse" value="pulse" formControlName="pulse">
+                {{ liveDemoForm.controls.pulse.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Outline ring">
+              <org-checkbox-toggle name="live-demo-ring" value="ring" formControlName="ring">
+                {{ liveDemoForm.controls.ring.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Fade">
+              <org-checkbox-toggle name="live-demo-has-fade" value="hasFade" formControlName="hasFade">
+                {{ liveDemoForm.controls.hasFade.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Pin to anchor">
+              <org-checkbox-toggle name="live-demo-pinned" value="pinned" formControlName="pinned">
+                {{ liveDemoForm.controls.pinned.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
+          <org-design-system-demo-controls-group label="Content">
+            <org-design-system-demo-control-input label="Number">
+              <input class="number-input" type="number" formControlName="number" />
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
         </org-design-system-demo-controls>
         <org-design-system-demo-canvas slot="canvas">
           <div class="canvas-stage">

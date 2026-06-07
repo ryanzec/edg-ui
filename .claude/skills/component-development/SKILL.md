@@ -41,6 +41,9 @@ If the component in in the `projects/shared-ui/src/lib/core` directory, it **MUS
 - `cp` - All components in `projects/customer-portal`.
 - `ip` - All components in `projects/internal-portal`.
 
+# **CRITICAL** Reles
+- Even if you are given an list of component to use for specific pieces, **ALWAYS** make sure to looks for other components that are not mention that can be used for pieces not specified in the components to use list.
+
 # General Rules
 - **NEVER** use `standalone: true` in the `@Component` decorator.
 - **ALWAYS** have a export default value for each input of the comopnent using the pattern of `{DIRECTORY_NAME}_{INPUT_NAME}_DEFAULT`.
@@ -114,6 +117,7 @@ public inputPlaceholder = input<string>('');
 - If an element needs to be selected in the context of testing, add and use the `data-testid` attribute.
 - **ONLY** use the `style` component if the styles are dynamically generated in the typescript code.
 - **NEVER** attempt to use `JSON.*` in template files.
+- **ALWAYS** use `[slot="{{SLOT NAME}}"]` for ng-content select content projection.
 
 # UX Rules
 - **NEVER** disabled a button until the form in validate.

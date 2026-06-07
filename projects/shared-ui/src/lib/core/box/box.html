@@ -6,7 +6,7 @@
 <div class="box-outer-container">
   <ng-content select="org-box-outer-header" />
   @if (isRendered()) {
-    <div class="box-surface">
+    <div class="box-surface" [class]="surfaceClass()">
       <ng-content />
     </div>
   }

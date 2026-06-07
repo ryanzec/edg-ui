@@ -2,48 +2,62 @@ import type { Meta, StoryObj } from '@storybook/angular';
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { NotificationManager, NOTIFICATION_MANAGER_AUTO_CLOSE_IN_DEFAULT } from './notification-manager';
 import { Button } from '../button/button';
-import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
-import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
+import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
+import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
+import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
+import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
 
 @Component({
   selector: 'story-notification-manager-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Button, StorybookExampleContainer, StorybookExampleContainerSection],
+  imports: [
+    Button,
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoCanvas,
+    DesignSystemDemoExpectedBehaviour,
+  ],
   template: `
-    <org-storybook-example-container title="Notification Manager" currentState="Interactive service API demo">
-      <org-storybook-example-container-section label="Add Notifications">
-        <div class="flex flex-wrap gap-2">
-          <org-button color="info" size="sm" label="Add Info" (click)="addInfo()" />
-          <org-button color="safe" size="sm" label="Add Success" (click)="addSuccess()" />
-          <org-button color="warning" size="sm" label="Add Warning" (click)="addWarning()" />
-          <org-button color="danger" size="sm" label="Add Permanent (no auto-close)" (click)="addPermanent()" />
-          <org-button color="neutral" size="sm" label="Clear All" (click)="manager.clear()" />
+    <org-design-system-demo>
+      <org-design-system-demo-header slot="header" title="Notification Manager" />
+      <org-design-system-demo-canvas slot="canvas">
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Add Notifications</div>
+          <div class="flex flex-wrap gap-2">
+            <org-button color="info" size="sm" label="Add Info" (click)="addInfo()" />
+            <org-button color="safe" size="sm" label="Add Success" (click)="addSuccess()" />
+            <org-button color="warning" size="sm" label="Add Warning" (click)="addWarning()" />
+            <org-button color="danger" size="sm" label="Add Permanent (no auto-close)" (click)="addPermanent()" />
+            <org-button color="neutral" size="sm" label="Clear All" (click)="manager.clear()" />
+          </div>
         </div>
-      </org-storybook-example-container-section>
 
-      <org-storybook-example-container-section label="Current State">
-        <div class="flex flex-col gap-1">
-          <div class="text-sm"><strong>Count:</strong> {{ manager.notifications().length }}</div>
-          @for (notification of manager.notifications(); track notification.id) {
-            <div class="flex gap-2 text-sm items-center">
-              <span
-                ><strong>{{ notification.id.slice(0, 8) }}...</strong></span
-              >
-              <span>{{ notification.message }}</span>
-              <span>(color: {{ notification.color ?? 'none' }}, canClose: {{ notification.canClose }})</span>
-              <org-button color="danger" size="sm" label="Remove" (click)="manager.remove(notification.id)" />
-            </div>
-          }
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Current State</div>
+          <div class="flex flex-col gap-1">
+            <div class="text-sm"><strong>Count:</strong> {{ manager.notifications().length }}</div>
+            @for (notification of manager.notifications(); track notification.id) {
+              <div class="flex gap-2 text-sm items-center">
+                <span
+                  ><strong>{{ notification.id.slice(0, 8) }}...</strong></span
+                >
+                <span>{{ notification.message }}</span>
+                <span>(color: {{ notification.color ?? 'none' }}, canClose: {{ notification.canClose }})</span>
+                <org-button color="danger" size="sm" label="Remove" (click)="manager.remove(notification.id)" />
+              </div>
+            }
+          </div>
         </div>
-      </org-storybook-example-container-section>
-
-      <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+      </org-design-system-demo-canvas>
+    </org-design-system-demo>
+    <org-design-system-demo-expected-behaviour>
+      <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
         <li><strong>Add Info / Success / Warning</strong>: auto-close after {{ defaultAutoCloseIn }}ms</li>
         <li><strong>Add Permanent</strong>: no auto-close, must be removed manually</li>
         <li><strong>Remove</strong>: immediately removes a single notification by id</li>
         <li><strong>Clear All</strong>: removes all notifications at once</li>
       </ul>
-    </org-storybook-example-container>
+    </org-design-system-demo-expected-behaviour>
   `,
 })
 class NotificationManagerDemo {

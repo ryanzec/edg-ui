@@ -1,7 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/angular';
 import { Markdown } from './markdown';
-import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
-import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
+import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
+import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
+import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
+import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
 
 const meta: Meta<Markdown> = {
   title: 'Core/Components/Markdown/Use Cases',
@@ -51,15 +53,17 @@ export const LinkSanitization: Story = {
   },
   render: () => ({
     template: `
-      <org-storybook-example-container
-        title="Link Sanitization"
-        currentState="Showing links with special characters and XSS payloads"
-      >
-        <org-storybook-example-container-section label="Link Attribute Escaping and XSS Protection">
-          <org-markdown [markdown]="markdown"></org-markdown>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Link Sanitization" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Link Attribute Escaping and XSS Protection</div>
+            <org-markdown [markdown]="markdown"></org-markdown>
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
           <li><strong>Query params</strong>: href must preserve &amp; as &amp;amp; in the attribute value</li>
           <li><strong>Quotes in title</strong>: &quot; characters in title must be escaped so they do not break the attribute</li>
           <li><strong>javascript: href</strong>: must be stripped by DOMPurify — link must not be clickable</li>
@@ -68,13 +72,19 @@ export const LinkSanitization: Story = {
           <li><strong>External links</strong>: must have rel="noopener noreferrer"</li>
           <li><strong>Internal links</strong>: must NOT have rel="noopener noreferrer"</li>
         </ul>
-      </org-storybook-example-container>
+      </org-design-system-demo-expected-behaviour>
     `,
     props: {
       markdown: linkSanitizationMarkdown,
     },
     moduleMetadata: {
-      imports: [Markdown, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [
+        Markdown,
+        DesignSystemDemo,
+        DesignSystemDemoHeader,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
+      ],
     },
   }),
 };

@@ -3,6 +3,7 @@
 </div>
 <div class="body">
   <div class="stage">
+    <ng-content select="[slot=control-presets]" />
     <ng-content select="[slot=controls]" />
     <ng-content select="[slot=canvas]" />
   </div>

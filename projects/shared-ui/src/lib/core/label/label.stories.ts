@@ -8,7 +8,7 @@ import { Input } from '../input/input';
 import { Link } from '../link/link';
 import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
 import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
-import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
+import { DesignSystemDemoControlInput } from '../../example/design-system-demo/design-system-demo-control-input';
 import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
 import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
 import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
@@ -132,7 +132,7 @@ export const Default: Story = {
     DesignSystemDemo,
     DesignSystemDemoHeader,
     DesignSystemDemoControls,
-    DesignSystemDemoControlGroup,
+    DesignSystemDemoControlInput,
     DesignSystemDemoCanvas,
   ],
   styles: [
@@ -160,24 +160,24 @@ export const Default: Story = {
           description="Toggle the inputs to walk every combination of the documented inputs — text, isRequired, isLoading, and asLabel."
         />
         <org-design-system-demo-controls slot="controls">
-          <org-design-system-demo-control-group label="Label text">
+          <org-design-system-demo-control-input label="Label text">
             <org-input name="live-demo-text" formControlName="text" ariaLabel="Label text" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Required (*)">
+          </org-design-system-demo-control-input>
+          <org-design-system-demo-control-input label="Required (*)">
             <org-checkbox-toggle name="live-demo-is-required" value="isRequired" formControlName="isRequired">
               {{ liveDemoForm.controls.isRequired.value ? 'on' : 'off' }}
             </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Loading">
+          </org-design-system-demo-control-input>
+          <org-design-system-demo-control-input label="Loading">
             <org-checkbox-toggle name="live-demo-is-loading" value="isLoading" formControlName="isLoading">
               {{ liveDemoForm.controls.isLoading.value ? 'on' : 'off' }}
             </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="As <label>">
+          </org-design-system-demo-control-input>
+          <org-design-system-demo-control-input label="As <label>">
             <org-checkbox-toggle name="live-demo-as-label" value="asLabel" formControlName="asLabel">
               {{ liveDemoForm.controls.asLabel.value ? 'on' : 'off' }}
             </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
+          </org-design-system-demo-control-input>
         </org-design-system-demo-controls>
         <org-design-system-demo-canvas slot="canvas">
           <div class="canvas-stage">

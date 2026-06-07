@@ -7,12 +7,14 @@ import { startWith } from 'rxjs';
 import { CdkContextMenuTrigger } from '@angular/cdk/menu';
 import { Avatar } from '../avatar/avatar';
 import { Button } from '../button/button';
+import { Input } from '../input/input';
 import { ScrollArea } from '../scroll-area/scroll-area';
 import { ButtonToggle, type ButtonToggleItem } from '../button-toggle/button-toggle';
 import { CheckboxToggle } from '../checkbox-toggle/checkbox-toggle';
 import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
 import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
-import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
+import { DesignSystemDemoControlInput } from '../../example/design-system-demo/design-system-demo-control-input';
+import { DesignSystemDemoControlsGroup } from '../../example/design-system-demo/design-system-demo-controls-group';
 import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
 import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
 import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
@@ -24,7 +26,13 @@ import {
   type OverlayMenuListSize,
   allOverlayMenuListSizes,
 } from './overlay-menu';
-import { OverlayMenuTriggerDirective, type OverlayMenuTriggerPosition } from './overlay-menu-trigger';
+import {
+  OverlayMenuTriggerDirective,
+  type OverlayMenuTriggerPosition,
+  OVERLAY_MENU_TRIGGER_HOVER_DEFAULT,
+  OVERLAY_MENU_TRIGGER_OPEN_DELAY_DEFAULT,
+  OVERLAY_MENU_TRIGGER_CLOSE_DELAY_DEFAULT,
+} from './overlay-menu-trigger';
 
 @Component({
   selector: 'story-example-overlay-menu',
@@ -34,6 +42,9 @@ import { OverlayMenuTriggerDirective, type OverlayMenuTriggerPosition } from './
     <org-button
       [orgOverlayMenuTrigger]="menu"
       [overlayMenuTriggerPosition]="position()"
+      [overlayMenuTriggerHover]="hover()"
+      [overlayMenuTriggerOpenDelay]="openDelay()"
+      [overlayMenuTriggerCloseDelay]="closeDelay()"
       color="primary"
       label="Open Menu"
     />
@@ -52,6 +63,9 @@ import { OverlayMenuTriggerDirective, type OverlayMenuTriggerPosition } from './
 })
 class EXAMPLEOverlayMenu {
   public position = input<OverlayMenuTriggerPosition>('below');
+  public hover = input<boolean>(OVERLAY_MENU_TRIGGER_HOVER_DEFAULT);
+  public openDelay = input<number>(OVERLAY_MENU_TRIGGER_OPEN_DELAY_DEFAULT);
+  public closeDelay = input<number>(OVERLAY_MENU_TRIGGER_CLOSE_DELAY_DEFAULT);
   public containerClass = input<string>('');
 }
 
@@ -61,18 +75,27 @@ const liveDemoListSizeItems: ButtonToggleItem[] = allOverlayMenuListSizes.map((s
   buttonColor: 'primary',
 }));
 
+const liveDemoTriggerEventItems: ButtonToggleItem[] = [
+  { label: 'click', value: 'click', buttonColor: 'primary' },
+  { label: 'hover', value: 'hover', buttonColor: 'primary' },
+];
+
 @Component({
   selector: 'story-overlay-menu-live-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     ReactiveFormsModule,
     OverlayMenu,
+    OverlayMenuTriggerDirective,
+    Button,
+    Input,
     ButtonToggle,
     CheckboxToggle,
     DesignSystemDemo,
     DesignSystemDemoHeader,
     DesignSystemDemoControls,
-    DesignSystemDemoControlGroup,
+    DesignSystemDemoControlsGroup,
+    DesignSystemDemoControlInput,
     DesignSystemDemoCanvas,
   ],
   styles: [
@@ -98,51 +121,76 @@ const liveDemoListSizeItems: ButtonToggleItem[] = allOverlayMenuListSizes.map((s
         <org-design-system-demo-header
           slot="header"
           title="Live demo"
-          description="The overlay menu below is real and interactive — toggle the row size, enable shortcuts, post icons, a Beta tag, a divider, or a disabled row, and click an item to fire itemClicked."
+          description="The overlay menu below is real and interactive — pick the trigger event (click or hover), tune the hover open/close delays, toggle the row size, enable shortcuts, post icons, a Beta tag, a divider, or a disabled row, and click an item to fire itemClicked."
         />
         <org-design-system-demo-controls slot="controls">
-          <org-design-system-demo-control-group label="Row size">
-            <org-button-toggle [items]="listSizeItems" formControlName="listSize" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Pre icons">
-            <org-checkbox-toggle name="live-demo-pre" value="preIcons" formControlName="showPreIcons">
-              {{ liveDemoForm.controls.showPreIcons.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Shortcuts">
-            <org-checkbox-toggle name="live-demo-shortcut" value="shortcut" formControlName="showShortcut">
-              {{ liveDemoForm.controls.showShortcut.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Post icon">
-            <org-checkbox-toggle name="live-demo-post-icon" value="postIcon" formControlName="showPostIcon">
-              {{ liveDemoForm.controls.showPostIcon.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Beta tag">
-            <org-checkbox-toggle name="live-demo-tag" value="tag" formControlName="showTag">
-              {{ liveDemoForm.controls.showTag.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Divider">
-            <org-checkbox-toggle name="live-demo-divider" value="divider" formControlName="showDivider">
-              {{ liveDemoForm.controls.showDivider.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Disabled row">
-            <org-checkbox-toggle name="live-demo-disabled" value="disabled" formControlName="showDisabled">
-              {{ liveDemoForm.controls.showDisabled.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
+          <org-design-system-demo-controls-group label="Trigger">
+            <org-design-system-demo-control-input label="Trigger event">
+              <org-button-toggle [items]="triggerEventItems" formControlName="triggerEvent" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Open delay (ms)">
+              <org-input name="live-demo-open-delay" type="number" formControlName="openDelay" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Close delay (ms)">
+              <org-input name="live-demo-close-delay" type="number" formControlName="closeDelay" />
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
+          <org-design-system-demo-controls-group label="Display">
+            <org-design-system-demo-control-input label="Row size">
+              <org-button-toggle [items]="listSizeItems" formControlName="listSize" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Pre icons">
+              <org-checkbox-toggle name="live-demo-pre" value="preIcons" formControlName="showPreIcons">
+                {{ liveDemoForm.controls.showPreIcons.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Post icon">
+              <org-checkbox-toggle name="live-demo-post-icon" value="postIcon" formControlName="showPostIcon">
+                {{ liveDemoForm.controls.showPostIcon.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Beta tag">
+              <org-checkbox-toggle name="live-demo-tag" value="tag" formControlName="showTag">
+                {{ liveDemoForm.controls.showTag.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
+          <org-design-system-demo-controls-group label="Composition">
+            <org-design-system-demo-control-input label="Shortcuts">
+              <org-checkbox-toggle name="live-demo-shortcut" value="shortcut" formControlName="showShortcut">
+                {{ liveDemoForm.controls.showShortcut.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Divider">
+              <org-checkbox-toggle name="live-demo-divider" value="divider" formControlName="showDivider">
+                {{ liveDemoForm.controls.showDivider.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Disabled row">
+              <org-checkbox-toggle name="live-demo-disabled" value="disabled" formControlName="showDisabled">
+                {{ liveDemoForm.controls.showDisabled.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
         </org-design-system-demo-controls>
         <org-design-system-demo-canvas slot="canvas">
           <div class="canvas-stage">
-            <org-overlay-menu
-              [items]="liveDemoItems()"
-              [listSize]="liveDemoForm.controls.listSize.value"
-              label="Actions"
-              (itemClicked)="onItemClicked($event)"
+            <org-button
+              [orgOverlayMenuTrigger]="liveDemoMenu"
+              [overlayMenuTriggerHover]="triggerHover()"
+              [overlayMenuTriggerOpenDelay]="openDelayMs()"
+              [overlayMenuTriggerCloseDelay]="closeDelayMs()"
+              color="primary"
+              label="Open menu"
             />
+            <ng-template #liveDemoMenu>
+              <org-overlay-menu
+                [items]="liveDemoItems()"
+                [listSize]="liveDemoForm.controls.listSize.value"
+                label="Actions"
+                (itemClicked)="onItemClicked($event)"
+              />
+            </ng-template>
           </div>
           @if (lastClicked(); as last) {
             <p class="last-clicked">
@@ -156,8 +204,12 @@ const liveDemoListSizeItems: ButtonToggleItem[] = allOverlayMenuListSizes.map((s
 })
 class OverlayMenuLiveDemoStory {
   protected readonly listSizeItems = liveDemoListSizeItems;
+  protected readonly triggerEventItems = liveDemoTriggerEventItems;
 
   protected readonly liveDemoForm = new FormGroup({
+    triggerEvent: new FormControl<'click' | 'hover'>('click', { nonNullable: true }),
+    openDelay: new FormControl<string>(String(OVERLAY_MENU_TRIGGER_OPEN_DELAY_DEFAULT), { nonNullable: true }),
+    closeDelay: new FormControl<string>(String(OVERLAY_MENU_TRIGGER_CLOSE_DELAY_DEFAULT), { nonNullable: true }),
     listSize: new FormControl<OverlayMenuListSize>('sm', { nonNullable: true }),
     showPreIcons: new FormControl<boolean>(true, { nonNullable: true }),
     showShortcut: new FormControl<boolean>(false, { nonNullable: true }),
@@ -171,6 +223,24 @@ class OverlayMenuLiveDemoStory {
     this.liveDemoForm.valueChanges.pipe(startWith(this.liveDemoForm.getRawValue())),
     { initialValue: this.liveDemoForm.getRawValue() }
   );
+
+  protected readonly triggerHover = computed<boolean>(() => this._formValue().triggerEvent === 'hover');
+
+  // org-input is a string-based value accessor, so the raw delay values arrive as strings — coerce to a
+  // number for the trigger directive, falling back to the directive defaults when the field is left empty
+  protected readonly openDelayMs = computed<number>(() => {
+    const raw = this._formValue().openDelay;
+    const parsed = Number(raw);
+
+    return raw !== '' && Number.isFinite(parsed) ? parsed : OVERLAY_MENU_TRIGGER_OPEN_DELAY_DEFAULT;
+  });
+
+  protected readonly closeDelayMs = computed<number>(() => {
+    const raw = this._formValue().closeDelay;
+    const parsed = Number(raw);
+
+    return raw !== '' && Number.isFinite(parsed) ? parsed : OVERLAY_MENU_TRIGGER_CLOSE_DELAY_DEFAULT;
+  });
 
   protected readonly liveDemoItems = computed<OverlayMenuItem[]>(() => {
     const value = this._formValue();
@@ -375,6 +445,9 @@ type Story = StoryObj<EXAMPLEOverlayMenu>;
 export const Default: Story = {
   args: {
     position: 'below',
+    hover: OVERLAY_MENU_TRIGGER_HOVER_DEFAULT,
+    openDelay: OVERLAY_MENU_TRIGGER_OPEN_DELAY_DEFAULT,
+    closeDelay: OVERLAY_MENU_TRIGGER_CLOSE_DELAY_DEFAULT,
     containerClass: '',
   },
   argTypes: {
@@ -382,6 +455,18 @@ export const Default: Story = {
       control: 'select',
       options: ['below', 'above', 'before', 'after'],
       description: 'Position of the menu relative to the trigger button',
+    },
+    hover: {
+      control: 'boolean',
+      description: 'When true, the menu also opens on hover (additive — click and keyboard still work)',
+    },
+    openDelay: {
+      control: 'number',
+      description: 'Delay (ms) before the menu opens after the pointer begins hovering the trigger',
+    },
+    closeDelay: {
+      control: 'number',
+      description: 'Grace period (ms) before the menu closes after the pointer leaves both the trigger and the panel',
     },
     containerClass: {
       control: 'text',
@@ -391,13 +476,20 @@ export const Default: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Default menu example with controls to adjust positioning. Click the button to open the menu.',
+        story:
+          'Default menu example with controls to adjust positioning and hover behavior. Click the button to open the menu, or enable hover to open it on pointer hover.',
       },
     },
   },
   render: (args) => ({
     props: args,
-    template: `<story-example-overlay-menu [position]="position" [containerClass]="containerClass" />`,
+    template: `<story-example-overlay-menu
+      [position]="position"
+      [hover]="hover"
+      [openDelay]="openDelay"
+      [closeDelay]="closeDelay"
+      [containerClass]="containerClass"
+    />`,
     moduleMetadata: {
       imports: [EXAMPLEOverlayMenu],
     },
@@ -803,6 +895,57 @@ export const Showcase: Story = {
             <li><strong>Default</strong>: With <code>overlayMenuTriggerCloseOnEscape</code> omitted (defaults to <code>true</code>), pressing Escape while the menu is open dismisses the overlay regardless of where focus currently sits</li>
             <li><strong>Disabled</strong>: Setting <code>[overlayMenuTriggerCloseOnEscape]="false"</code> keeps the menu open when Escape is pressed — useful when the host view owns its own Escape semantics (e.g. closing a parent dialog)</li>
             <li>Click-outside dismissal still works in both cases</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header slot="header" title="Hover to open" />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="flex gap-4 items-start flex-wrap">
+              <org-button
+                [orgOverlayMenuTrigger]="hoverDefaultMenu"
+                [overlayMenuTriggerHover]="true"
+                color="primary"
+                label="Hover to open (default delays)"
+              />
+              <ng-template #hoverDefaultMenu>
+                <org-overlay-menu
+                  label="Hover menu"
+                  [items]="[
+                    { id: '1', label: 'Edit', icon: 'pencil' },
+                    { id: '2', label: 'Duplicate', icon: 'copy' },
+                    { id: '3', label: 'Archive', icon: 'inbox' }
+                  ]"
+                />
+              </ng-template>
+
+              <org-button
+                [orgOverlayMenuTrigger]="hoverSlowMenu"
+                [overlayMenuTriggerHover]="true"
+                [overlayMenuTriggerOpenDelay]="600"
+                [overlayMenuTriggerCloseDelay]="400"
+                color="primary"
+                label="Hover to open (slow delays)"
+              />
+              <ng-template #hoverSlowMenu>
+                <org-overlay-menu
+                  label="Hover menu (slow)"
+                  [items]="[
+                    { id: '1', label: 'Edit', icon: 'pencil' },
+                    { id: '2', label: 'Duplicate', icon: 'copy' },
+                    { id: '3', label: 'Archive', icon: 'inbox' }
+                  ]"
+                />
+              </ng-template>
+            </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>Hover open</strong>: With <code>[overlayMenuTriggerHover]="true"</code>, hovering the trigger opens the menu after <code>overlayMenuTriggerOpenDelay</code> (200ms default)</li>
+            <li><strong>Stays open across the gap</strong>: Moving the pointer from the trigger onto the panel keeps the menu open — it only closes once the pointer has left <strong>both</strong> the trigger and the panel</li>
+            <li><strong>Close grace</strong>: After leaving both, the menu closes after <code>overlayMenuTriggerCloseDelay</code> (150ms default); the slow example uses longer delays so the gap traversal is easy to observe</li>
+            <li><strong>Additive</strong>: Click and keyboard activation still work, and Escape / click-outside still dismiss</li>
           </ul>
         </org-design-system-demo-expected-behaviour>
 

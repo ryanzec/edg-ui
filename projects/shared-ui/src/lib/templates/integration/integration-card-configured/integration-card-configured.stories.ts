@@ -2,8 +2,10 @@ import type { Meta, StoryObj } from '@storybook/angular';
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { DateTime } from 'luxon';
 import { IntegrationCardConfigured, type Integration } from './integration-card-configured';
-import { StorybookExampleContainer } from '../../../private/storybook-example-container/storybook-example-container';
-import { StorybookExampleContainerSection } from '../../../private/storybook-example-container-section/storybook-example-container-section';
+import { DesignSystemDemo } from '../../../example/design-system-demo/design-system-demo';
+import { DesignSystemDemoCanvas } from '../../../example/design-system-demo/design-system-demo-canvas';
+import { DesignSystemDemoExpectedBehaviour } from '../../../example/design-system-demo/design-system-demo-expected-behaviour';
+import { DesignSystemDemoHeader } from '../../../example/design-system-demo/design-system-demo-header';
 
 const baseIntegration: Integration = {
   id: 'integration-slack',
@@ -60,32 +62,40 @@ const disconnectedIntegration: Integration = {
 @Component({
   selector: 'story-integration-card-configured-actions',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [IntegrationCardConfigured, StorybookExampleContainer, StorybookExampleContainerSection],
+  imports: [
+    IntegrationCardConfigured,
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoCanvas,
+    DesignSystemDemoExpectedBehaviour,
+  ],
   template: `
-    <org-storybook-example-container
-      title="Menu Action Outputs"
-      currentState="Open the overlay menu and select an item to observe the matching output"
-    >
-      <org-storybook-example-container-section label="Click a menu item">
-        <div class="flex flex-col gap-4">
-          <div class="w-lg">
-            <org-integration-card-configured
-              [integration]="errorIntegration"
-              (edit)="onEdit($event)"
-              (reconnect)="onReconnect($event)"
-              (delete)="onDelete($event)"
-            />
+    <org-design-system-demo>
+      <org-design-system-demo-header slot="header" title="Menu Action Outputs" />
+      <org-design-system-demo-canvas slot="canvas">
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Click a menu item</div>
+          <div class="flex flex-col gap-4">
+            <div class="w-lg">
+              <org-integration-card-configured
+                [integration]="errorIntegration"
+                (edit)="onEdit($event)"
+                (reconnect)="onReconnect($event)"
+                (delete)="onDelete($event)"
+              />
+            </div>
+            @if (lastAction(); as action) {
+              <p>
+                Last action: <strong>{{ action.type }}</strong> on
+                <strong>{{ action.integration.name }}</strong>
+              </p>
+            }
           </div>
-          @if (lastAction(); as action) {
-            <p>
-              Last action: <strong>{{ action.type }}</strong> on
-              <strong>{{ action.integration.name }}</strong>
-            </p>
-          }
         </div>
-      </org-storybook-example-container-section>
-
-      <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+      </org-design-system-demo-canvas>
+    </org-design-system-demo>
+    <org-design-system-demo-expected-behaviour>
+      <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
         <li><strong>Edit</strong> emits the integration via the <strong>edit</strong> output</li>
         <li>
           <strong>Re-connect</strong> emits the integration via the <strong>reconnect</strong> output and only appears
@@ -93,7 +103,7 @@ const disconnectedIntegration: Integration = {
         </li>
         <li><strong>Delete</strong> emits the integration via the <strong>delete</strong> output</li>
       </ul>
-    </org-storybook-example-container>
+    </org-design-system-demo-expected-behaviour>
   `,
 })
 class IntegrationCardConfiguredActionsStory {
@@ -193,44 +203,55 @@ export const Statuses: Story = {
       disconnectedIntegration,
     },
     template: `
-      <org-storybook-example-container
-        title="Status Variants"
-        currentState="Comparing active, connecting, error, and disconnected statuses"
-      >
-        <org-storybook-example-container-section label="Active">
-          <div class="w-lg">
-            <org-integration-card-configured [integration]="activeIntegration" />
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Status Variants" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Active</div>
+            <div class="w-lg">
+              <org-integration-card-configured [integration]="activeIntegration" />
+            </div>
           </div>
-        </org-storybook-example-container-section>
 
-        <org-storybook-example-container-section label="Connecting (icon spins)">
-          <div class="w-lg">
-            <org-integration-card-configured [integration]="connectingIntegration" />
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Connecting (icon spins)</div>
+            <div class="w-lg">
+              <org-integration-card-configured [integration]="connectingIntegration" />
+            </div>
           </div>
-        </org-storybook-example-container-section>
 
-        <org-storybook-example-container-section label="Error (menu includes Re-connect)">
-          <div class="w-lg">
-            <org-integration-card-configured [integration]="errorIntegration" />
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Error (menu includes Re-connect)</div>
+            <div class="w-lg">
+              <org-integration-card-configured [integration]="errorIntegration" />
+            </div>
           </div>
-        </org-storybook-example-container-section>
 
-        <org-storybook-example-container-section label="Disconnected">
-          <div class="w-lg">
-            <org-integration-card-configured [integration]="disconnectedIntegration" />
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Disconnected</div>
+            <div class="w-lg">
+              <org-integration-card-configured [integration]="disconnectedIntegration" />
+            </div>
           </div>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
           <li><strong>Active</strong>: green check icon, "Active" label</li>
           <li><strong>Connecting</strong>: blue loader icon (spinning), "Connecting" label</li>
           <li><strong>Error</strong>: red circle-x icon, "Connection error" label; menu adds "Re-connect"</li>
           <li><strong>Disconnected</strong>: neutral power-off icon, "Disconnected" label</li>
         </ul>
-      </org-storybook-example-container>
+      </org-design-system-demo-expected-behaviour>
     `,
     moduleMetadata: {
-      imports: [IntegrationCardConfigured, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [
+        IntegrationCardConfigured,
+        DesignSystemDemo,
+        DesignSystemDemoHeader,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
+      ],
     },
   }),
 };

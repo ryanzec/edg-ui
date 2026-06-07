@@ -1,7 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/angular';
 import { ScrollArea } from './scroll-area';
-import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
-import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
+import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
+import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
+import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
+import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
 
 const meta: Meta = {
   title: 'Core/Components/Scroll Area/Use Cases',
@@ -55,39 +57,15 @@ This is the approach used by the \`org-combobox\` component for its options drop
   },
   render: () => ({
     template: `
-      <org-storybook-example-container
-        title="External Wrapper Sizing Pattern"
-        currentState="Comparing standard sizing vs wrapper-based sizing"
-      >
-        <org-storybook-example-container-section label="Standard: scrollClass controls size">
-          <org-scroll-area
-            direction="vertical"
-            containerClass="rounded-lg border border-default-color"
-            scrollClass="h-6xs"
-            spacingClass="p-4"
-          >
-            <div>Option 1</div>
-            <div>Option 2</div>
-            <div>Option 3</div>
-            <div>Option 4</div>
-            <div>Option 5</div>
-            <div>Option 6</div>
-            <div>Option 7</div>
-            <div>Option 8</div>
-            <div>Option 9</div>
-            <div>Option 10</div>
-          </org-scroll-area>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Wrapper pattern: outer div controls size (used when view encapsulation prevents direct styling)">
-          <div>
-            If you need to control the size of the scroll area with css (need explicit values), then you would apply that to the outer div and set the scroll scroll to 100% (usually using flexbox to prevent the scroll area from overflowing the parent).
-          </div>
-          <div class="max-h-6xs max-w-6xs flex flex-col border border-default-color rounded-base">
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="External Wrapper Sizing Pattern" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Standard: scrollClass controls size</div>
             <org-scroll-area
               direction="vertical"
-              containerClass="flex flex-col"
-              scrollClass="h-full w-full min-h-0"
+              containerClass="rounded-lg border border-default-color"
+              scrollClass="h-6xs"
               spacingClass="p-4"
             >
               <div>Option 1</div>
@@ -102,18 +80,51 @@ This is the approach used by the \`org-combobox\` component for its options drop
               <div>Option 10</div>
             </org-scroll-area>
           </div>
-        </org-storybook-example-container-section>
 
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Wrapper pattern: outer div controls size (used when view encapsulation prevents direct styling)</div>
+            <div>
+              If you need to control the size of the scroll area with css (need explicit values), then you would apply that to the outer div and set the scroll scroll to 100% (usually using flexbox to prevent the scroll area from overflowing the parent).
+            </div>
+            <div class="max-h-6xs max-w-6xs flex flex-col border border-default-color rounded-base">
+              <org-scroll-area
+                direction="vertical"
+                containerClass="flex flex-col"
+                scrollClass="h-full w-full min-h-0"
+                spacingClass="p-4"
+              >
+                <div>Option 1</div>
+                <div>Option 2</div>
+                <div>Option 3</div>
+                <div>Option 4</div>
+                <div>Option 5</div>
+                <div>Option 6</div>
+                <div>Option 7</div>
+                <div>Option 8</div>
+                <div>Option 9</div>
+                <div>Option 10</div>
+              </org-scroll-area>
+            </div>
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
           <li><strong>Standard</strong>: scrollClass sets the explicit height — works when the component can style scroll area directly</li>
           <li><strong>Wrapper pattern</strong>: outer div owns height/width/border; scroll area uses <code>scrollClass="h-full w-full"</code> to fill it</li>
           <li>The wrapper pattern avoids leaking internal scroll area structure into the parent component's API</li>
           <li>Used by <code>org-combobox</code> for its options dropdown, where view encapsulation prevents direct scroll area styling</li>
         </ul>
-      </org-storybook-example-container>
+      </org-design-system-demo-expected-behaviour>
     `,
     moduleMetadata: {
-      imports: [ScrollArea, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [
+        ScrollArea,
+        DesignSystemDemo,
+        DesignSystemDemoHeader,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
+      ],
     },
   }),
 };

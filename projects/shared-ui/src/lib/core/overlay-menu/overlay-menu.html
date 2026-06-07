@@ -28,12 +28,13 @@
           class="menu-item-button"
           [attr.data-color]="item.color ?? null"
         >
-          <org-list-item [forceClickable]="true" [disabled]="item.disabled ?? false" [label]="item.label">
+          <org-list-item [forceClickable]="true" [disabled]="item.disabled ?? false">
             @if (item.imageUrl; as imageUrl) {
               <org-list-item-image pre [src]="imageUrl" [alt]="item.label" />
             } @else if (item.icon; as iconName) {
               <org-list-item-icon pre [name]="iconName" />
             }
+            {{ item.label }}
             @if (item.tag || item.shortcut || item.postIcon || item.indicator !== undefined) {
               <org-overlay-menu-item-meta post>
                 @if (item.tag; as itemTag) {

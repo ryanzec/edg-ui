@@ -2,8 +2,9 @@ import type { Meta, StoryObj } from '@storybook/angular';
 import { Component, ChangeDetectionStrategy, input } from '@angular/core';
 import { DataSelectionStore } from './data-selection-store';
 import { Button } from '../button/button';
-import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
-import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
+import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
+import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
+import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
 
 type User = {
   id: number;
@@ -22,63 +23,72 @@ const DEMO_USERS: User[] = [
 @Component({
   selector: 'story-data-selection-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Button, StorybookExampleContainer, StorybookExampleContainerSection],
+  imports: [Button, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
   template: `
-    <org-storybook-example-container title="Data Selection Store">
-      <org-storybook-example-container-section label="State">
-        <div class="flex flex-col gap-2">
-          <div class="text-sm"><strong>Selected Count:</strong> {{ selectionStore.selectedCount() }}</div>
-          <div class="text-sm"><strong>Has Selection:</strong> {{ selectionStore.hasSelection() }}</div>
-          <div class="text-sm"><strong>Select All Enabled:</strong> {{ selectionStore.selectAllEnabled() }}</div>
-        </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Selected Items">
-        @if (selectionStore.hasSelection()) {
-          <div class="flex flex-col gap-1">
-            @for (user of selectionStore.selectedItemsArray(); track user.id) {
-              <div class="px-3 py-2 text-sm border rounded-sm bg-info-soft">{{ user.name }} ({{ user.email }})</div>
-            }
+    <org-design-system-demo>
+      <org-design-system-demo-header slot="header" title="Data Selection Store" />
+      <org-design-system-demo-canvas slot="canvas">
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">State</div>
+          <div class="flex flex-col gap-2">
+            <div class="text-sm"><strong>Selected Count:</strong> {{ selectionStore.selectedCount() }}</div>
+            <div class="text-sm"><strong>Has Selection:</strong> {{ selectionStore.hasSelection() }}</div>
+            <div class="text-sm"><strong>Select All Enabled:</strong> {{ selectionStore.selectAllEnabled() }}</div>
           </div>
-        } @else {
-          <div class="text-sm text-neutral">No items selected</div>
-        }
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Available Users">
-        <div class="flex flex-col gap-1">
-          @for (user of users; track user.id) {
-            <button
-              class="px-3 py-2 text-sm border rounded-sm cursor-pointer"
-              [class.bg-info-soft]="selectionStore.isSelected(user)"
-              (click)="selectionStore.toggle(user)"
-            >
-              {{ user.name }} ({{ user.email }})
-            </button>
+        </div>
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Selected Items</div>
+          @if (selectionStore.hasSelection()) {
+            <div class="flex flex-col gap-1">
+              @for (user of selectionStore.selectedItemsArray(); track user.id) {
+                <div class="px-3 py-2 text-sm border rounded-sm bg-info-soft">{{ user.name }} ({{ user.email }})</div>
+              }
+            </div>
+          } @else {
+            <div class="text-sm text-neutral">No items selected</div>
           }
         </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Actions">
-        <div class="flex flex-wrap gap-2">
-          <org-button color="primary" size="sm" label="Select All" (click)="selectionStore.selectAll(users)" />
-          <org-button
-            color="primary"
-            size="sm"
-            label="Toggle Select All"
-            (click)="selectionStore.toggleSelectAll(users)"
-          />
-          <org-button color="secondary" size="sm" label="Select First User" (click)="selectionStore.select(users[0])" />
-          <org-button
-            color="secondary"
-            size="sm"
-            label="Select Users 2 &amp; 3"
-            (click)="selectionStore.selectMultiple([users[1], users[2]])"
-          />
-          <org-button color="neutral" size="sm" label="Clear Selection" (click)="selectionStore.clear()" />
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Available Users</div>
+          <div class="flex flex-col gap-1">
+            @for (user of users; track user.id) {
+              <button
+                class="px-3 py-2 text-sm border rounded-sm cursor-pointer"
+                [class.bg-info-soft]="selectionStore.isSelected(user)"
+                (click)="selectionStore.toggle(user)"
+              >
+                {{ user.name }} ({{ user.email }})
+              </button>
+            }
+          </div>
         </div>
-      </org-storybook-example-container-section>
-    </org-storybook-example-container>
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Actions</div>
+          <div class="flex flex-wrap gap-2">
+            <org-button color="primary" size="sm" label="Select All" (click)="selectionStore.selectAll(users)" />
+            <org-button
+              color="primary"
+              size="sm"
+              label="Toggle Select All"
+              (click)="selectionStore.toggleSelectAll(users)"
+            />
+            <org-button
+              color="secondary"
+              size="sm"
+              label="Select First User"
+              (click)="selectionStore.select(users[0])"
+            />
+            <org-button
+              color="secondary"
+              size="sm"
+              label="Select Users 2 &amp; 3"
+              (click)="selectionStore.selectMultiple([users[1], users[2]])"
+            />
+            <org-button color="neutral" size="sm" label="Clear Selection" (click)="selectionStore.clear()" />
+          </div>
+        </div>
+      </org-design-system-demo-canvas>
+    </org-design-system-demo>
   `,
 })
 class DataSelectionDemo {
@@ -89,37 +99,41 @@ class DataSelectionDemo {
 @Component({
   selector: 'story-data-selection-with-selection-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Button, StorybookExampleContainer, StorybookExampleContainerSection],
+  imports: [Button, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
   template: `
-    <org-storybook-example-container title="With Existing Selection">
-      <org-storybook-example-container-section label="State">
-        <div class="flex flex-col gap-2">
-          <div class="text-sm"><strong>Selected Count:</strong> {{ selectionStore.selectedCount() }}</div>
-          <div class="text-sm"><strong>Has Selection:</strong> {{ selectionStore.hasSelection() }}</div>
-          <div class="text-sm"><strong>Select All Enabled:</strong> {{ selectionStore.selectAllEnabled() }}</div>
+    <org-design-system-demo>
+      <org-design-system-demo-header slot="header" title="With Existing Selection" />
+      <org-design-system-demo-canvas slot="canvas">
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">State</div>
+          <div class="flex flex-col gap-2">
+            <div class="text-sm"><strong>Selected Count:</strong> {{ selectionStore.selectedCount() }}</div>
+            <div class="text-sm"><strong>Has Selection:</strong> {{ selectionStore.hasSelection() }}</div>
+            <div class="text-sm"><strong>Select All Enabled:</strong> {{ selectionStore.selectAllEnabled() }}</div>
+          </div>
         </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Available Users">
-        <div class="flex flex-col gap-1">
-          @for (user of users; track user.id) {
-            <button
-              class="px-3 py-2 text-sm border rounded-sm cursor-pointer"
-              [class.bg-info-soft]="selectionStore.isSelected(user)"
-              (click)="selectionStore.toggle(user)"
-            >
-              {{ user.name }} ({{ user.email }})
-            </button>
-          }
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Available Users</div>
+          <div class="flex flex-col gap-1">
+            @for (user of users; track user.id) {
+              <button
+                class="px-3 py-2 text-sm border rounded-sm cursor-pointer"
+                [class.bg-info-soft]="selectionStore.isSelected(user)"
+                (click)="selectionStore.toggle(user)"
+              >
+                {{ user.name }} ({{ user.email }})
+              </button>
+            }
+          </div>
         </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Actions">
-        <div class="flex flex-wrap gap-2">
-          <org-button color="neutral" size="sm" label="Clear" (click)="selectionStore.clear()" />
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Actions</div>
+          <div class="flex flex-wrap gap-2">
+            <org-button color="neutral" size="sm" label="Clear" (click)="selectionStore.clear()" />
+          </div>
         </div>
-      </org-storybook-example-container-section>
-    </org-storybook-example-container>
+      </org-design-system-demo-canvas>
+    </org-design-system-demo>
   `,
 })
 class DataSelectionWithSelectionDemo {
@@ -134,43 +148,47 @@ class DataSelectionWithSelectionDemo {
 @Component({
   selector: 'story-data-selection-all-selected-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Button, StorybookExampleContainer, StorybookExampleContainerSection],
+  imports: [Button, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
   template: `
-    <org-storybook-example-container title="All Items Selected">
-      <org-storybook-example-container-section label="State">
-        <div class="flex flex-col gap-2">
-          <div class="text-sm"><strong>Selected Count:</strong> {{ selectionStore.selectedCount() }}</div>
-          <div class="text-sm"><strong>Has Selection:</strong> {{ selectionStore.hasSelection() }}</div>
-          <div class="text-sm"><strong>Select All Enabled:</strong> {{ selectionStore.selectAllEnabled() }}</div>
+    <org-design-system-demo>
+      <org-design-system-demo-header slot="header" title="All Items Selected" />
+      <org-design-system-demo-canvas slot="canvas">
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">State</div>
+          <div class="flex flex-col gap-2">
+            <div class="text-sm"><strong>Selected Count:</strong> {{ selectionStore.selectedCount() }}</div>
+            <div class="text-sm"><strong>Has Selection:</strong> {{ selectionStore.hasSelection() }}</div>
+            <div class="text-sm"><strong>Select All Enabled:</strong> {{ selectionStore.selectAllEnabled() }}</div>
+          </div>
         </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Available Users">
-        <div class="flex flex-col gap-1">
-          @for (user of users; track user.id) {
-            <button
-              class="px-3 py-2 text-sm border rounded-sm cursor-pointer"
-              [class.bg-info-soft]="selectionStore.isSelected(user)"
-              (click)="selectionStore.toggle(user)"
-            >
-              {{ user.name }} ({{ user.email }})
-            </button>
-          }
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Available Users</div>
+          <div class="flex flex-col gap-1">
+            @for (user of users; track user.id) {
+              <button
+                class="px-3 py-2 text-sm border rounded-sm cursor-pointer"
+                [class.bg-info-soft]="selectionStore.isSelected(user)"
+                (click)="selectionStore.toggle(user)"
+              >
+                {{ user.name }} ({{ user.email }})
+              </button>
+            }
+          </div>
         </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Actions">
-        <div class="flex flex-wrap gap-2">
-          <org-button
-            color="primary"
-            size="sm"
-            label="Toggle Select All"
-            (click)="selectionStore.toggleSelectAll(users)"
-          />
-          <org-button color="neutral" size="sm" label="Clear" (click)="selectionStore.clear()" />
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Actions</div>
+          <div class="flex flex-wrap gap-2">
+            <org-button
+              color="primary"
+              size="sm"
+              label="Toggle Select All"
+              (click)="selectionStore.toggleSelectAll(users)"
+            />
+            <org-button color="neutral" size="sm" label="Clear" (click)="selectionStore.clear()" />
+          </div>
         </div>
-      </org-storybook-example-container-section>
-    </org-storybook-example-container>
+      </org-design-system-demo-canvas>
+    </org-design-system-demo>
   `,
 })
 class DataSelectionAllSelectedDemo {
@@ -223,33 +241,37 @@ class DataSelectionPanel {
 @Component({
   selector: 'story-data-selection-multiple-instances-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [DataSelectionPanel, StorybookExampleContainer, StorybookExampleContainerSection],
+  imports: [DataSelectionPanel, DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas],
   template: `
-    <org-storybook-example-container title="Multiple Independent Instances">
-      <org-storybook-example-container-section label="Two Independent Stores">
-        <div class="flex flex-col gap-2">
+    <org-design-system-demo>
+      <org-design-system-demo-header slot="header" title="Multiple Independent Instances" />
+      <org-design-system-demo-canvas slot="canvas">
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Two Independent Stores</div>
+          <div class="flex flex-col gap-2">
+            <div class="text-sm">
+              Each panel below instantiates its own <code>DataSelectionStore</code> with
+              <code>new DataSelectionStore&lt;User&gt;()</code>. Toggling a user in one panel does not affect the other.
+            </div>
+            <div class="flex flex-row gap-4">
+              <story-data-selection-panel [panelLabel]="'Panel A'" />
+              <story-data-selection-panel [panelLabel]="'Panel B'" />
+            </div>
+          </div>
+        </div>
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">External Writes via Public Signal</div>
           <div class="text-sm">
-            Each panel below instantiates its own <code>DataSelectionStore</code> with
-            <code>new DataSelectionStore&lt;User&gt;()</code>. Toggling a user in one panel does not affect the other.
-          </div>
-          <div class="flex flex-row gap-4">
-            <story-data-selection-panel [panelLabel]="'Panel A'" />
-            <story-data-selection-panel [panelLabel]="'Panel B'" />
+            Each panel's <strong>Set From Outside</strong> button calls
+            <code>store.selectedItems.set(new Set([...]))</code> directly on the public writable <code>signal()</code>,
+            bypassing the helper methods. The resulting <code>Set&lt;T&gt;</code> value is what a consuming component's
+            <code>model&lt;Set&lt;T&gt;&gt;()</code> accepts, so the store can be plumbed into two-way bound components
+            via <code>[value]="store.selectedItems()"</code> /
+            <code>(valueChange)="store.selectedItems.set($event)"</code>.
           </div>
         </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="External Writes via Public Signal">
-        <div class="text-sm">
-          Each panel's <strong>Set From Outside</strong> button calls
-          <code>store.selectedItems.set(new Set([...]))</code> directly on the public writable <code>signal()</code>,
-          bypassing the helper methods. The resulting <code>Set&lt;T&gt;</code> value is what a consuming component's
-          <code>model&lt;Set&lt;T&gt;&gt;()</code> accepts, so the store can be plumbed into two-way bound components
-          via <code>[value]="store.selectedItems()"</code> /
-          <code>(valueChange)="store.selectedItems.set($event)"</code>.
-        </div>
-      </org-storybook-example-container-section>
-    </org-storybook-example-container>
+      </org-design-system-demo-canvas>
+    </org-design-system-demo>
   `,
 })
 class DataSelectionMultipleInstancesDemo {}

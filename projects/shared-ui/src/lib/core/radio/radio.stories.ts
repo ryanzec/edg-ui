@@ -11,7 +11,8 @@ import { FormFields } from '../form-fields/form-fields';
 import { FormField } from '../form-fields/form-field';
 import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
 import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
-import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
+import { DesignSystemDemoControlInput } from '../../example/design-system-demo/design-system-demo-control-input';
+import { DesignSystemDemoControlsGroup } from '../../example/design-system-demo/design-system-demo-controls-group';
 import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
 import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
 import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
@@ -63,7 +64,7 @@ const meta: Meta<Radio> = {
 
   <!-- Card-tile pattern: wrap with org-box, set [isClickable]="true", and forward (clicked) to the radio-group -->
   <org-radio-group [value]="selectedPlan()" (valueChange)="selectedPlan.set($event)" name="plan">
-    <org-box layout="stack" [isClickable]="true" (clicked)="selectedPlan.set('pro')">
+    <org-box [isClickable]="true" (clicked)="selectedPlan.set('pro')">
       <org-radio value="pro" description="Up to 25 members.">Pro plan</org-radio>
     </org-box>
   </org-radio-group>
@@ -173,7 +174,8 @@ export const Default: Story = {
     DesignSystemDemo,
     DesignSystemDemoHeader,
     DesignSystemDemoControls,
-    DesignSystemDemoControlGroup,
+    DesignSystemDemoControlsGroup,
+    DesignSystemDemoControlInput,
     DesignSystemDemoCanvas,
   ],
   styles: [
@@ -198,33 +200,39 @@ export const Default: Story = {
           description="Toggle the inputs to walk every documented combination — label, description, size, color, checked, disabled, error."
         />
         <org-design-system-demo-controls slot="controls">
-          <org-design-system-demo-control-group label="Label">
-            <org-input name="live-demo-label" formControlName="label" ariaLabel="Radio label" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Description">
-            <org-input name="live-demo-description" formControlName="description" ariaLabel="Radio description" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Size">
-            <org-button-toggle [items]="sizeItems" formControlName="size" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Color">
-            <org-button-toggle [items]="colorItems" formControlName="color" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Checked">
-            <org-checkbox-toggle name="live-demo-checked" value="checked" formControlName="checked">
-              {{ liveDemoForm.controls.checked.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Disabled">
-            <org-checkbox-toggle name="live-demo-disabled" value="disabled" formControlName="disabled">
-              {{ liveDemoForm.controls.disabled.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Error">
-            <org-checkbox-toggle name="live-demo-error" value="error" formControlName="error">
-              {{ liveDemoForm.controls.error.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
+          <org-design-system-demo-controls-group label="Content">
+            <org-design-system-demo-control-input label="Label">
+              <org-input name="live-demo-label" formControlName="label" ariaLabel="Radio label" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Description">
+              <org-input name="live-demo-description" formControlName="description" ariaLabel="Radio description" />
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
+          <org-design-system-demo-controls-group label="Presentation">
+            <org-design-system-demo-control-input label="Size">
+              <org-button-toggle [items]="sizeItems" formControlName="size" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Color">
+              <org-button-toggle [items]="colorItems" formControlName="color" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
+          <org-design-system-demo-controls-group label="State">
+            <org-design-system-demo-control-input label="Checked">
+              <org-checkbox-toggle name="live-demo-checked" value="checked" formControlName="checked">
+                {{ liveDemoForm.controls.checked.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Disabled">
+              <org-checkbox-toggle name="live-demo-disabled" value="disabled" formControlName="disabled">
+                {{ liveDemoForm.controls.disabled.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Error">
+              <org-checkbox-toggle name="live-demo-error" value="error" formControlName="error">
+                {{ liveDemoForm.controls.error.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
         </org-design-system-demo-controls>
         <org-design-system-demo-canvas slot="canvas">
           <div class="canvas-stage">
@@ -297,7 +305,7 @@ export const LiveDemo: Story = {
       />
       <org-design-system-demo-canvas slot="canvas">
         <org-radio-group name="card-plan" [value]="selectedPlan()" (valueChange)="selectedPlan.set($event)">
-          <org-box layout="stack" [isClickable]="true" (clicked)="selectedPlan.set('free')">
+          <org-box [isClickable]="true" (clicked)="selectedPlan.set('free')">
             <org-radio
               value="free"
               (click)="$event.stopPropagation()"
@@ -306,7 +314,7 @@ export const LiveDemo: Story = {
               Free
             </org-radio>
           </org-box>
-          <org-box layout="stack" [isClickable]="true" (clicked)="selectedPlan.set('team')">
+          <org-box [isClickable]="true" (clicked)="selectedPlan.set('team')">
             <org-radio
               value="team"
               (click)="$event.stopPropagation()"
@@ -315,7 +323,7 @@ export const LiveDemo: Story = {
               Team
             </org-radio>
           </org-box>
-          <org-box layout="stack" [isClickable]="true" (clicked)="selectedPlan.set('enterprise')">
+          <org-box [isClickable]="true" (clicked)="selectedPlan.set('enterprise')">
             <org-radio
               value="enterprise"
               (click)="$event.stopPropagation()"

@@ -128,6 +128,9 @@ class OverlayMenuHost {
       [orgOverlayMenuTrigger]="menu"
       [overlayMenuTriggerPosition]="position()"
       [overlayMenuTriggerCloseOnEscape]="closeOnEscape()"
+      [overlayMenuTriggerHover]="hover()"
+      [overlayMenuTriggerOpenDelay]="openDelay()"
+      [overlayMenuTriggerCloseDelay]="closeDelay()"
       color="primary"
       label="Open Menu"
     />
@@ -148,6 +151,9 @@ class OverlayMenuHost {
 class OverlayMenuTriggerHost {
   public readonly position = signal<OverlayMenuTriggerPosition>('below');
   public readonly closeOnEscape = signal<boolean>(true);
+  public readonly hover = signal<boolean>(false);
+  public readonly openDelay = signal<number>(200);
+  public readonly closeDelay = signal<number>(150);
 
   protected readonly itemClickedCount = signal<number>(0);
   protected readonly lastClickedId = signal<string>('');
@@ -173,6 +179,9 @@ type OverlayMenuHostConfig = {
 type OverlayMenuTriggerHostConfig = {
   position?: OverlayMenuTriggerPosition;
   closeOnEscape?: boolean;
+  hover?: boolean;
+  openDelay?: number;
+  closeDelay?: number;
 };
 
 describe('Overlay Menu (browser)', () => {
@@ -210,6 +219,18 @@ describe('Overlay Menu (browser)', () => {
 
       if (config.closeOnEscape !== undefined) {
         instance.closeOnEscape.set(config.closeOnEscape);
+      }
+
+      if (config.hover !== undefined) {
+        instance.hover.set(config.hover);
+      }
+
+      if (config.openDelay !== undefined) {
+        instance.openDelay.set(config.openDelay);
+      }
+
+      if (config.closeDelay !== undefined) {
+        instance.closeDelay.set(config.closeDelay);
       }
     });
 
@@ -750,6 +771,89 @@ describe('Overlay Menu (browser)', () => {
         expect(readout.textContent).toContain('itemClickedCount=1');
         expect(readout.textContent).toContain('lastClickedId=1');
       });
+    });
+  });
+
+  describe('trigger directive — hover behavior', () => {
+    it('does not open on hover when hover is disabled (default)', async () => {
+      const fixture = createTriggerMenu();
+      const trigger = queryByTestId(fixture, 'trigger');
+
+      await flush(fixture);
+      vitestBrowserUtils.stubPointerCapture(trigger);
+      await userEvent.hover(trigger);
+
+      // wait beyond the open delay to be confident hover did not schedule an open
+      await vitestBrowserUtils.sleep(250);
+
+      expect(queryOverlayMenuInDocument()).toBeNull();
+    });
+
+    it('opens on hover when hover is enabled', async () => {
+      const fixture = createTriggerMenu({ hover: true, openDelay: 50, closeDelay: 80 });
+      const trigger = queryByTestId(fixture, 'trigger');
+
+      await flush(fixture);
+      vitestBrowserUtils.stubPointerCapture(trigger);
+      await userEvent.hover(trigger);
+
+      await waitFor(() => expect(queryOverlayMenuInDocument()).not.toBeNull());
+    });
+
+    it('keeps the menu open while moving from the trigger to the panel, then closes after leaving both', async () => {
+      const fixture = createTriggerMenu({ hover: true, openDelay: 50, closeDelay: 80 });
+      const trigger = queryByTestId(fixture, 'trigger');
+
+      await flush(fixture);
+      vitestBrowserUtils.stubPointerCapture(trigger);
+      await userEvent.hover(trigger);
+
+      await waitFor(() => expect(queryOverlayMenuInDocument()).not.toBeNull());
+
+      const panel = queryOverlayMenuInDocument() as HTMLElement;
+
+      // moving onto the panel fires mouseleave on the trigger (scheduling a close) and mouseenter on the
+      // panel (which must cancel that close) — the menu must stay open across the trigger→panel gap
+      await userEvent.hover(panel);
+
+      // wait well past the close grace period to prove the panel hover cancelled the pending close
+      await vitestBrowserUtils.sleep(200);
+
+      expect(queryOverlayMenuInDocument()).not.toBeNull();
+
+      // leaving the panel (now over neither trigger nor panel) must close the menu after the grace period
+      await userEvent.unhover(panel);
+
+      await waitFor(() => expect(queryOverlayMenuInDocument()).toBeNull());
+    });
+
+    it('closes after leaving the trigger without entering the panel', async () => {
+      const fixture = createTriggerMenu({ hover: true, openDelay: 50, closeDelay: 80 });
+      const trigger = queryByTestId(fixture, 'trigger');
+      const outside = queryByTestId(fixture, 'outside-target');
+
+      await flush(fixture);
+      vitestBrowserUtils.stubPointerCapture(trigger);
+      await userEvent.hover(trigger);
+
+      await waitFor(() => expect(queryOverlayMenuInDocument()).not.toBeNull());
+
+      // move the pointer away to an element that is neither the trigger nor the panel
+      await userEvent.hover(outside);
+
+      await waitFor(() => expect(queryOverlayMenuInDocument()).toBeNull());
+    });
+
+    it('still opens on click when hover is enabled (additive)', async () => {
+      const fixture = createTriggerMenu({ hover: true, openDelay: 50, closeDelay: 80 });
+      const trigger = queryByTestId(fixture, 'trigger');
+
+      await flush(fixture);
+      vitestBrowserUtils.stubPointerCapture(trigger);
+
+      await userEvent.click(trigger);
+
+      await waitFor(() => expect(queryOverlayMenuInDocument()).not.toBeNull());
     });
   });
 });

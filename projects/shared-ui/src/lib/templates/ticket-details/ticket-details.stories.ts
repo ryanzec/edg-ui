@@ -2,8 +2,10 @@ import type { Meta, StoryObj } from '@storybook/angular';
 import { moduleMetadata } from '@storybook/angular';
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { DateTime } from 'luxon';
-import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
-import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
+import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
+import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
+import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
+import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
 import { TicketDetails, type TicketDetailsSubtaskToggledEvent } from './ticket-details';
 import {
   allTicketPriorities,
@@ -287,7 +289,13 @@ const meta: Meta<TicketDetails> = {
   tags: ['autodocs'],
   decorators: [
     moduleMetadata({
-      imports: [TicketDetails, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [
+        TicketDetails,
+        DesignSystemDemo,
+        DesignSystemDemoHeader,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
+      ],
     }),
   ],
   parameters: {
@@ -385,37 +393,41 @@ export const Showcase: Story = {
       ticketsByStatus: allTicketStatuses.map((status) => ({ ...baseTicket, status, blocked: undefined })),
     },
     template: `
-      <org-storybook-example-container
-        title="Ticket Details — Showcase"
-        currentState="Covers the canonical reference, status variants, and the blocked / unblocked banner toggle"
-      >
-        <org-storybook-example-container-section label="Canonical reference (with blocked banner)">
-          <org-ticket-details [ticket]="baseTicket" />
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Without blocked banner (status = in-review)">
-          <org-ticket-details [ticket]="unblockedTicket" />
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="All status variants">
-          <div class="flex flex-col gap-6">
-            @for (ticket of ticketsByStatus; track ticket.status) {
-              <div>
-                <div class="text-xs text-muted">Status: {{ ticket.status }}</div>
-                <org-ticket-details [ticket]="ticket" />
-              </div>
-            }
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Ticket Details — Showcase" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Canonical reference (with blocked banner)</div>
+            <org-ticket-details [ticket]="baseTicket" />
           </div>
-        </org-storybook-example-container-section>
 
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Without blocked banner (status = in-review)</div>
+            <org-ticket-details [ticket]="unblockedTicket" />
+          </div>
+
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">All status variants</div>
+            <div class="flex flex-col gap-6">
+              @for (ticket of ticketsByStatus; track ticket.status) {
+                <div>
+                  <div class="text-xs text-muted">Status: {{ ticket.status }}</div>
+                  <org-ticket-details [ticket]="ticket" />
+                </div>
+              }
+            </div>
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
           <li>The status chip drop-down trigger reflects the current ticket status</li>
           <li>The blocked banner is conditionally rendered based on the <strong>blocked</strong> field</li>
           <li>The activity feed mixes change entries (timeline dot + line) with boxed comment entries</li>
           <li>Subtasks and Connected work are both expand/collapse cards driven by the card's expandable affordance</li>
           <li>Acceptance criteria toggle their valid / not-started status on click</li>
         </ul>
-      </org-storybook-example-container>
+      </org-design-system-demo-expected-behaviour>
     `,
   }),
 };

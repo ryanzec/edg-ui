@@ -26,7 +26,8 @@ import {
 } from '../drop-down-selector/drop-down-selector-brain';
 import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
 import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
-import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
+import { DesignSystemDemoControlInput } from '../../example/design-system-demo/design-system-demo-control-input';
+import { DesignSystemDemoControlsGroup } from '../../example/design-system-demo/design-system-demo-controls-group';
 import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
 import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
 import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
@@ -277,7 +278,8 @@ const liveDemoIconItems: ButtonToggleItem[] = allLiveDemoIconChoices.map((choice
     DesignSystemDemo,
     DesignSystemDemoHeader,
     DesignSystemDemoControls,
-    DesignSystemDemoControlGroup,
+    DesignSystemDemoControlsGroup,
+    DesignSystemDemoControlInput,
     DesignSystemDemoCanvas,
   ],
   styles: [
@@ -302,33 +304,39 @@ const liveDemoIconItems: ButtonToggleItem[] = allLiveDemoIconChoices.map((choice
           description="The drop-down selector below is real and interactive — open it, pick items, and use the controls to drive every visual axis."
         />
         <org-design-system-demo-controls slot="controls">
-          <org-design-system-demo-control-group label="Selection Mode">
-            <org-button-toggle [items]="selectionModeItems" formControlName="selectionMode" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Size">
-            <org-button-toggle [items]="sizeItems" formControlName="size" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Position">
-            <org-button-toggle [items]="positionItems" formControlName="position" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Icon">
-            <org-button-toggle [items]="iconItems" formControlName="icon" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="With Value">
-            <org-checkbox-toggle name="live-demo-with-value" value="with-value" formControlName="showLabelWithValue">
-              {{ liveDemoForm.controls.showLabelWithValue.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Has Search">
-            <org-checkbox-toggle name="live-demo-has-search" value="has-search" formControlName="hasSearch">
-              {{ liveDemoForm.controls.hasSearch.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Disabled">
-            <org-checkbox-toggle name="live-demo-disabled" value="disabled" formControlName="disabled">
-              {{ liveDemoForm.controls.disabled.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
+          <org-design-system-demo-controls-group label="Behavior">
+            <org-design-system-demo-control-input label="Selection Mode">
+              <org-button-toggle [items]="selectionModeItems" formControlName="selectionMode" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="With Value">
+              <org-checkbox-toggle name="live-demo-with-value" value="with-value" formControlName="showLabelWithValue">
+                {{ liveDemoForm.controls.showLabelWithValue.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Has Search">
+              <org-checkbox-toggle name="live-demo-has-search" value="has-search" formControlName="hasSearch">
+                {{ liveDemoForm.controls.hasSearch.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
+          <org-design-system-demo-controls-group label="Presentation">
+            <org-design-system-demo-control-input label="Size">
+              <org-button-toggle [items]="sizeItems" formControlName="size" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Position">
+              <org-button-toggle [items]="positionItems" formControlName="position" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Icon">
+              <org-button-toggle [items]="iconItems" formControlName="icon" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
+          <org-design-system-demo-controls-group label="State">
+            <org-design-system-demo-control-input label="Disabled">
+              <org-checkbox-toggle name="live-demo-disabled" value="disabled" formControlName="disabled">
+                {{ liveDemoForm.controls.disabled.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
         </org-design-system-demo-controls>
         <org-design-system-demo-canvas slot="canvas">
           <div class="canvas-stage">

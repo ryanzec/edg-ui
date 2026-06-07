@@ -2,8 +2,10 @@ import { type Meta, type StoryObj } from '@storybook/angular';
 import { AfterViewInit, Component, signal } from '@angular/core';
 import { LoginForm } from './login-form';
 import { AuthenticationAuthenticateRequest } from '@organization/shared-utils';
-import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
-import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
+import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
+import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
+import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
+import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
 
 const meta: Meta<LoginForm> = {
   title: 'Authentication/Components/Login Form',
@@ -118,34 +120,38 @@ export const ValidationStates: Story = {
   },
   render: () => ({
     template: `
-      <org-storybook-example-container
-        title="Validation States"
-        currentState="Comparing empty, invalid, and valid form states"
-      >
-        <org-storybook-example-container-section label="Empty Form (with errors shown)">
-          <story-login-form-validation-empty-story />
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Invalid Email">
-          <story-login-form-validation-invalid-story />
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Valid Form">
-          <story-login-form-validation-valid-story />
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Validation States" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Empty Form (with errors shown)</div>
+            <story-login-form-validation-empty-story />
+          </div>
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Invalid Email</div>
+            <story-login-form-validation-invalid-story />
+          </div>
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Valid Form</div>
+            <story-login-form-validation-valid-story />
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
           <li><strong>Empty Form</strong>: Shows "required" errors when submitted without input</li>
           <li><strong>Invalid Email</strong>: Shows email format validation error</li>
           <li><strong>Valid Form</strong>: No errors, ready to submit</li>
           <li>Validation triggers on submit to avoid interrupting user during typing</li>
         </ul>
-      </org-storybook-example-container>
+      </org-design-system-demo-expected-behaviour>
     `,
     moduleMetadata: {
       imports: [
-        StorybookExampleContainer,
-        StorybookExampleContainerSection,
+        DesignSystemDemo,
+        DesignSystemDemoHeader,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
         LoginFormValidationEmptyStory,
         LoginFormValidationInvalidStory,
         LoginFormValidationValidStory,
@@ -164,30 +170,34 @@ export const PasswordVisibility: Story = {
   },
   render: () => ({
     template: `
-      <org-storybook-example-container
-        title="Password Visibility"
-        currentState="Comparing hidden and visible password states"
-      >
-        <org-storybook-example-container-section label="Password Hidden (default)">
-          <story-login-form-password-hidden-story />
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Password Visible (toggled)">
-          <story-login-form-password-visible-story />
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Password Visibility" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Password Hidden (default)</div>
+            <story-login-form-password-hidden-story />
+          </div>
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Password Visible (toggled)</div>
+            <story-login-form-password-visible-story />
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
           <li><strong>Hidden</strong>: Password characters are masked (default state)</li>
           <li><strong>Visible</strong>: Password is shown in plain text after clicking eye icon</li>
           <li>Eye icon toggles between eye and eye-slash based on visibility state</li>
           <li>Useful for users to verify they typed their password correctly</li>
         </ul>
-      </org-storybook-example-container>
+      </org-design-system-demo-expected-behaviour>
     `,
     moduleMetadata: {
       imports: [
-        StorybookExampleContainer,
-        StorybookExampleContainerSection,
+        DesignSystemDemo,
+        DesignSystemDemoHeader,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
         LoginFormPasswordHiddenStory,
         LoginFormPasswordVisibleStory,
       ],

@@ -5,7 +5,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { userEvent } from 'vitest/browser';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { vitestBrowserUtils } from '../../../../../../vitest-browser-utils';
-import { Combobox } from './combobox';
+import { Combobox, type ComboboxDropDownWidthMode } from './combobox';
 import type { ComboboxOption, ComboboxOptionInput } from '../combobox-store/combobox-store';
 
 const simpleOptions: ComboboxOptionInput[] = [
@@ -27,6 +27,12 @@ const disabledMixOptions: ComboboxOptionInput[] = [
   { label: 'Apple', value: 'apple' },
   { label: 'Banana', value: 'banana', disabled: true },
   { label: 'Cherry', value: 'cherry' },
+];
+
+// includes one label far wider than the 22rem trigger so width modes that grow with content are observable
+const longLabelOptions: ComboboxOptionInput[] = [
+  { label: 'Apple', value: 'apple' },
+  { label: 'A considerably longer option label than the trigger input itself can ever be', value: 'long' },
 ];
 
 const startsWithFilter = (inputValue: string, option: ComboboxOption): boolean =>
@@ -62,6 +68,10 @@ const startsWithFilter = (inputValue: string, option: ComboboxOption): boolean =
         [disabled]="disabled()"
         [containerClass]="containerClass()"
         [optionFilter]="optionFilter()"
+        [isLoading]="isLoading()"
+        [characterThreshold]="characterThreshold()"
+        [enableFiltering]="enableFiltering()"
+        [dropDownWidthMode]="dropDownWidthMode()"
         (selectedValuesChanged)="onSelectedValuesChanged($event)"
         (inputValueChanged)="onInputValueChanged($event)"
         (focusedOptionChanged)="onFocusedOptionChanged($event)"
@@ -89,6 +99,10 @@ class ComboboxInteractiveHost {
   public readonly optionFilter = signal<((inputValue: string, option: ComboboxOption) => boolean) | undefined>(
     undefined
   );
+  public readonly isLoading = signal<boolean>(false);
+  public readonly characterThreshold = signal<number>(0);
+  public readonly enableFiltering = signal<boolean>(true);
+  public readonly dropDownWidthMode = signal<ComboboxDropDownWidthMode>('minimum');
 
   protected readonly lastSelectedValues = signal<(string | number)[]>([]);
   protected readonly lastInputValue = signal<string>('');
@@ -210,6 +224,10 @@ type ComboboxHostConfig = {
   disabled?: boolean;
   containerClass?: string;
   optionFilter?: (inputValue: string, option: ComboboxOption) => boolean;
+  isLoading?: boolean;
+  characterThreshold?: number;
+  enableFiltering?: boolean;
+  dropDownWidthMode?: ComboboxDropDownWidthMode;
 };
 
 describe('Combobox (browser)', () => {
@@ -260,6 +278,22 @@ describe('Combobox (browser)', () => {
 
       if (config.optionFilter !== undefined) {
         instance.optionFilter.set(config.optionFilter);
+      }
+
+      if (config.isLoading !== undefined) {
+        instance.isLoading.set(config.isLoading);
+      }
+
+      if (config.characterThreshold !== undefined) {
+        instance.characterThreshold.set(config.characterThreshold);
+      }
+
+      if (config.enableFiltering !== undefined) {
+        instance.enableFiltering.set(config.enableFiltering);
+      }
+
+      if (config.dropDownWidthMode !== undefined) {
+        instance.dropDownWidthMode.set(config.dropDownWidthMode);
       }
     });
 
@@ -739,6 +773,120 @@ describe('Combobox (browser)', () => {
       await userEvent.type(nativeInput, 'a');
 
       await waitFor(() => expect(readout.textContent).toContain('isOpened=true'));
+    });
+  });
+
+  describe('loading state', () => {
+    it('shows the loading status with a spinner and hides options when isLoading is true', async () => {
+      const fixture = createInteractiveCombobox({ isLoading: true });
+      const host = queryByTestId(fixture, 'combobox');
+
+      await vitestBrowserUtils.focusInput(host, 'input.native');
+
+      const panel = await waitForOverlayPanel();
+
+      await waitFor(() => {
+        const status = panel.querySelector('.combobox-status');
+
+        expect(status?.textContent?.trim()).toContain('Loading...');
+        expect(panel.querySelector('org-loading-spinner')).not.toBeNull();
+        expect(panel.querySelectorAll('org-combobox-option').length).toBe(0);
+      });
+    });
+
+    it('shows options instead of the loading status when isLoading is false', async () => {
+      const fixture = createInteractiveCombobox({ isLoading: false });
+      const host = queryByTestId(fixture, 'combobox');
+
+      await vitestBrowserUtils.focusInput(host, 'input.native');
+
+      const panel = await waitForOverlayPanel();
+
+      await waitFor(() => {
+        expect(panel.querySelector('.combobox-status')).toBeNull();
+        expect(panel.querySelectorAll('org-combobox-option').length).toBe(simpleOptions.length);
+      });
+    });
+  });
+
+  describe('character threshold', () => {
+    it('shows the threshold message when the input is below the character threshold', async () => {
+      const fixture = createInteractiveCombobox({ characterThreshold: 2 });
+      const host = queryByTestId(fixture, 'combobox');
+
+      await vitestBrowserUtils.focusInput(host, 'input.native');
+
+      const panel = await waitForOverlayPanel();
+
+      await waitFor(() => {
+        const status = panel.querySelector('.combobox-status');
+
+        expect(status?.textContent?.trim()).toBe('2 characters needed for results');
+        expect(panel.querySelectorAll('org-combobox-option').length).toBe(0);
+      });
+    });
+
+    it('does not emit inputValueChanged while below the character threshold', async () => {
+      const fixture = createInteractiveCombobox({ characterThreshold: 2 });
+      const host = queryByTestId(fixture, 'combobox');
+      const readout = queryByTestId(fixture, 'readout');
+
+      const nativeInput = await vitestBrowserUtils.focusInput(host, 'input.native');
+      await waitForOverlayPanel();
+
+      await userEvent.type(nativeInput, 'a');
+
+      await waitFor(() => {
+        const panel = queryOverlayPanel() as HTMLElement;
+
+        expect(panel.querySelector('.combobox-status')?.textContent?.trim()).toBe('2 characters needed for results');
+      });
+      await flush(fixture);
+      expect(readout.textContent).toContain('inputValueChangedCount=0');
+    });
+
+    it('emits inputValueChanged and shows results once the character threshold is met', async () => {
+      const fixture = createInteractiveCombobox({ characterThreshold: 2 });
+      const host = queryByTestId(fixture, 'combobox');
+      const readout = queryByTestId(fixture, 'readout');
+
+      const nativeInput = await vitestBrowserUtils.focusInput(host, 'input.native');
+      await waitForOverlayPanel();
+
+      await userEvent.type(nativeInput, 'ap');
+
+      await waitFor(() => {
+        expect(readout.textContent).toContain('inputValue="ap"');
+        expect(readout.textContent).toContain('inputValueChangedCount=1');
+      });
+
+      await waitFor(() => {
+        const panel = queryOverlayPanel() as HTMLElement;
+        const values = Array.from(panel.querySelectorAll('org-combobox-option')).map((option) =>
+          option.getAttribute('data-option-value')
+        );
+
+        expect(panel.querySelector('.combobox-status')).toBeNull();
+        expect(values).toEqual(['apple']);
+      });
+    });
+  });
+
+  describe('enable filtering', () => {
+    it('renders all options regardless of the input value when enableFiltering is false', async () => {
+      const fixture = createInteractiveCombobox({ enableFiltering: false });
+      const host = queryByTestId(fixture, 'combobox');
+
+      const nativeInput = await vitestBrowserUtils.focusInput(host, 'input.native');
+      await waitForOverlayPanel();
+
+      await userEvent.type(nativeInput, 'zzz');
+
+      await waitFor(() => {
+        const panel = queryOverlayPanel() as HTMLElement;
+
+        expect(panel.querySelectorAll('org-combobox-option').length).toBe(simpleOptions.length);
+      });
     });
   });
 
@@ -1289,6 +1437,74 @@ describe('Combobox (browser)', () => {
       nativeInput.blur();
 
       await waitFor(() => expect(readout.textContent).toContain('touched=true'));
+    });
+  });
+
+  describe('drop-down width mode', () => {
+    // the div carrying cdkOverlayOrigin is the element whose width drives the match / minimum-match modes
+    const getTriggerWidth = (host: HTMLElement): number =>
+      (host.querySelector('.combobox-container > div') as HTMLElement).offsetWidth;
+
+    const getPanelWidth = (panel: HTMLElement): number =>
+      (panel.querySelector('.combobox-panel') as HTMLElement).getBoundingClientRect().width;
+
+    it('sizes the panel to its content (narrower than the trigger) for "minimum"', async () => {
+      const fixture = createInteractiveCombobox({ dropDownWidthMode: 'minimum' });
+      const host = queryByTestId(fixture, 'combobox');
+
+      await vitestBrowserUtils.focusInput(host, 'input.native');
+
+      const panel = await waitForOverlayPanel();
+
+      await waitFor(() => {
+        expect(panel.querySelector('.combobox-panel')).not.toBeNull();
+        expect(getPanelWidth(panel)).toBeLessThan(getTriggerWidth(host));
+      });
+    });
+
+    it('matches the panel width to the trigger width for "match"', async () => {
+      const fixture = createInteractiveCombobox({ dropDownWidthMode: 'match' });
+      const host = queryByTestId(fixture, 'combobox');
+
+      await vitestBrowserUtils.focusInput(host, 'input.native');
+
+      const panel = await waitForOverlayPanel();
+
+      await waitFor(() => {
+        expect(panel.querySelector('.combobox-panel')).not.toBeNull();
+        expect(Math.abs(getPanelWidth(panel) - getTriggerWidth(host))).toBeLessThanOrEqual(1);
+      });
+    });
+
+    it('keeps the panel at least the trigger width with short content for "minimum-match"', async () => {
+      const fixture = createInteractiveCombobox({ dropDownWidthMode: 'minimum-match' });
+      const host = queryByTestId(fixture, 'combobox');
+
+      await vitestBrowserUtils.focusInput(host, 'input.native');
+
+      const panel = await waitForOverlayPanel();
+
+      await waitFor(() => {
+        expect(panel.querySelector('.combobox-panel')).not.toBeNull();
+        expect(getPanelWidth(panel)).toBeGreaterThanOrEqual(getTriggerWidth(host) - 1);
+      });
+    });
+
+    it('grows the panel beyond the trigger width with long content for "minimum-match"', async () => {
+      const fixture = createInteractiveCombobox({
+        dropDownWidthMode: 'minimum-match',
+        options: longLabelOptions,
+      });
+      const host = queryByTestId(fixture, 'combobox');
+
+      await vitestBrowserUtils.focusInput(host, 'input.native');
+
+      const panel = await waitForOverlayPanel();
+
+      await waitFor(() => {
+        expect(panel.querySelector('.combobox-panel')).not.toBeNull();
+        expect(getPanelWidth(panel)).toBeGreaterThan(getTriggerWidth(host));
+      });
     });
   });
 });

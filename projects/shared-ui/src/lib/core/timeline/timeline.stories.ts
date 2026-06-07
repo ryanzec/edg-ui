@@ -10,7 +10,7 @@ import { IconName, allIconNames } from '../icon/icon-brain';
 import { Tag } from '../tags/tag';
 import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
 import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
-import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
+import { DesignSystemDemoControlInput } from '../../example/design-system-demo/design-system-demo-control-input';
 import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
 import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
 import { Timeline } from './timeline';
@@ -62,7 +62,7 @@ const liveDemoIconItems: ButtonToggleItem[] = allLiveDemoIconChoices.map((choice
     DesignSystemDemo,
     DesignSystemDemoHeader,
     DesignSystemDemoControls,
-    DesignSystemDemoControlGroup,
+    DesignSystemDemoControlInput,
     DesignSystemDemoCanvas,
   ],
   styles: [
@@ -91,15 +91,15 @@ const liveDemoIconItems: ButtonToggleItem[] = allLiveDemoIconChoices.map((choice
           description="All timeline items below are real and interactive — drive the color and dot icon to see how the dot, the connector below it, and the icon-on color all swap together."
         />
         <org-design-system-demo-controls slot="controls">
-          <org-design-system-demo-control-group label="Color">
+          <org-design-system-demo-control-input label="Color">
             <org-button-toggle [items]="colorItems" formControlName="color" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Color mode">
+          </org-design-system-demo-control-input>
+          <org-design-system-demo-control-input label="Color mode">
             <org-button-toggle [items]="colorModeItems" formControlName="colorMode" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Dot icon">
+          </org-design-system-demo-control-input>
+          <org-design-system-demo-control-input label="Dot icon">
             <org-button-toggle [items]="iconItems" formControlName="icon" buttonSize="sm" />
-          </org-design-system-demo-control-group>
+          </org-design-system-demo-control-input>
         </org-design-system-demo-controls>
         <org-design-system-demo-canvas slot="canvas">
           <div class="canvas-stage">

@@ -529,6 +529,16 @@ describe('ComboboxStore', () => {
 
       expect(emissions).toEqual([]);
     });
+
+    it('updates the input value but suppresses the emission when emitChange is false', () => {
+      const emissions: string[] = [];
+      store.inputValueChanged$.subscribe((value) => emissions.push(value));
+
+      store.setInputValue('typed', false);
+
+      expect(store.inputValue()).toBe('typed');
+      expect(emissions).toEqual([]);
+    });
   });
 
   describe('clearInputValue', () => {
@@ -1138,6 +1148,34 @@ describe('ComboboxStore', () => {
       store.setSelectedValues(['apple']);
 
       expect(store.filteredOptions().map((opt) => opt.value)).toEqual(['apple', 'banana', 'cherry']);
+    });
+
+    it('skips the default label search when enableFiltering is false', () => {
+      store.initialize(simpleOptions, { filterSelectedOptions: false, enableFiltering: false });
+
+      store.setInputValue('APP');
+
+      expect(store.filteredOptions().map((opt) => opt.value)).toEqual(['apple', 'banana', 'cherry']);
+    });
+
+    it('skips the custom optionFilter when enableFiltering is false', () => {
+      store.initialize(simpleOptions, {
+        filterSelectedOptions: false,
+        enableFiltering: false,
+        optionFilter: (input, option) => option.label.toLowerCase().startsWith(input.toLowerCase()),
+      });
+
+      store.setInputValue('b');
+
+      expect(store.filteredOptions().map((opt) => opt.value)).toEqual(['apple', 'banana', 'cherry']);
+    });
+
+    it('still filters out selected options when enableFiltering is false', () => {
+      store.initialize(simpleOptions, { isMultiSelect: true, filterSelectedOptions: true, enableFiltering: false });
+
+      store.setSelectedValues(['apple']);
+
+      expect(store.filteredOptions().map((opt) => opt.value)).toEqual(['banana', 'cherry']);
     });
   });
 

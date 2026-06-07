@@ -16,6 +16,12 @@ export const COMBOBOX_IS_GROUPING_ENABLED_DEFAULT = false;
 /** default value for the disabled input */
 export const COMBOBOX_DISABLED_DEFAULT = false;
 
+/** default value for the isLoading input */
+export const COMBOBOX_IS_LOADING_DEFAULT = false;
+
+/** default value for the characterThreshold input */
+export const COMBOBOX_CHARACTER_THRESHOLD_DEFAULT = 0;
+
 /** static a11y role applied to the input element */
 export const COMBOBOX_INPUT_ROLE = 'combobox';
 
@@ -77,6 +83,12 @@ export class ComboboxBrainDirective {
   /** whether the combobox is disabled by its consumer (combined with form-controlled disabled state) */
   public readonly disabled = input<boolean>(COMBOBOX_DISABLED_DEFAULT);
 
+  /** consumer-managed loading state; when true the dropdown shows a non-selectable loading indicator */
+  public readonly isLoading = input<boolean>(COMBOBOX_IS_LOADING_DEFAULT);
+
+  /** minimum number of input characters required before `inputValueChanged` emits */
+  public readonly characterThreshold = input<number>(COMBOBOX_CHARACTER_THRESHOLD_DEFAULT);
+
   /** unique name used to derive the listbox dom id for aria-controls linking */
   public readonly name = input.required<string>();
 
@@ -106,6 +118,13 @@ export class ComboboxBrainDirective {
 
   /** the resolved disabled state */
   public readonly isDisabled = computed<boolean>(() => this.disabled() || this._state().isDisabledByForm);
+
+  /** whether the current input value is shorter than the required character threshold */
+  public readonly isBelowCharacterThreshold = computed<boolean>(() => {
+    const threshold = this.characterThreshold();
+
+    return threshold > 0 && this._store.inputValue().length < threshold;
+  });
 
   /** dom id for the listbox element, used by aria-controls on the input and aria-activedescendant resolution */
   public readonly listboxId = computed<string>(() => `combobox-listbox-${this.name()}`);
@@ -203,7 +222,8 @@ export class ComboboxBrainDirective {
 
   /** handles input value changes from the inner input */
   public handleInputValueChange(value: string): void {
-    this._store.setInputValue(value);
+    // gate the inputValueChanged emission on the character threshold while still updating the displayed value
+    this._store.setInputValue(value, value.length >= this.characterThreshold());
 
     if (this.autoShowOption() && value.length > 0 && !this._store.isOpened()) {
       this._store.open();

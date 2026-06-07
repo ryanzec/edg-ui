@@ -18,6 +18,7 @@ description: Use this skill whenever writing tests for code that does not requir
 - **ALWAYS** test the output of RxJS related code and **NEVER** subscribe to the subject directly.
 - **NEVER** validation any logging from `logManager` in tests.
 - **ONLY** mock logManager when the test in question **SHOULD** trigger the logging.
+- Angular services **MUST** always be mcoked for tests.
 
 # Pre-anwsered Questions
 If you have questions, review this pre-determined anwsers to see if they anwser any of them **BEFORE** presenting those questions to me:

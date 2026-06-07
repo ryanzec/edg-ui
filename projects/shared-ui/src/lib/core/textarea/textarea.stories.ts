@@ -11,7 +11,7 @@ import { FormFields } from '../form-fields/form-fields';
 import { Label } from '../label/label';
 import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
 import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
-import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
+import { DesignSystemDemoControlInput } from '../../example/design-system-demo/design-system-demo-control-input';
 import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
 import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
 import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
@@ -183,7 +183,7 @@ export const Default: Story = {
     DesignSystemDemo,
     DesignSystemDemoHeader,
     DesignSystemDemoControls,
-    DesignSystemDemoControlGroup,
+    DesignSystemDemoControlInput,
     DesignSystemDemoCanvas,
     FormField,
   ],
@@ -214,20 +214,20 @@ export const Default: Story = {
           description="Real, focusable textarea — type to see auto-grow up to maxLines, then scroll. Toggle the controls to walk every state."
         />
         <org-design-system-demo-controls slot="controls">
-          <org-design-system-demo-control-group label="Variant">
+          <org-design-system-demo-control-input label="Variant">
             <org-button-toggle [items]="variantItems" formControlName="variant" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="State">
+          </org-design-system-demo-control-input>
+          <org-design-system-demo-control-input label="State">
             <org-button-toggle [items]="stateItems" formControlName="state" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Min lines">
+          </org-design-system-demo-control-input>
+          <org-design-system-demo-control-input label="Min lines">
             <org-button-toggle [items]="minLinesItems" formControlName="minLines" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Toolbar">
+          </org-design-system-demo-control-input>
+          <org-design-system-demo-control-input label="Toolbar">
             <org-checkbox-toggle name="live-demo-toolbar" value="toolbar" formControlName="toolbar">
               {{ liveDemoForm.controls.toolbar.value ? 'on' : 'off' }}
             </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
+          </org-design-system-demo-control-input>
         </org-design-system-demo-controls>
         <org-design-system-demo-canvas slot="canvas">
           <div class="canvas-stage">

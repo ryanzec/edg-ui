@@ -1,0 +1,142 @@
+/*
+ * gradient background utilities — each class paints a semantic-color-to-app-background gradient by consuming
+ * its matching --gradient-{color}-{direction} token (defined in base-tokens.css). see that file for the ramp /
+ * direction / dark-mode details.
+ */
+@layer utilities {
+  /* primary */
+  .gradient-primary-left-to-right {
+    background-image: var(--gradient-primary-left-to-right);
+  }
+
+  .gradient-primary-top-to-bottom {
+    background-image: var(--gradient-primary-top-to-bottom);
+  }
+
+  .gradient-primary-right-to-left {
+    background-image: var(--gradient-primary-right-to-left);
+  }
+
+  .gradient-primary-bottom-to-top {
+    background-image: var(--gradient-primary-bottom-to-top);
+  }
+
+  /* secondary */
+  .gradient-secondary-left-to-right {
+    background-image: var(--gradient-secondary-left-to-right);
+  }
+
+  .gradient-secondary-top-to-bottom {
+    background-image: var(--gradient-secondary-top-to-bottom);
+  }
+
+  .gradient-secondary-right-to-left {
+    background-image: var(--gradient-secondary-right-to-left);
+  }
+
+  .gradient-secondary-bottom-to-top {
+    background-image: var(--gradient-secondary-bottom-to-top);
+  }
+
+  /* neutral */
+  .gradient-neutral-left-to-right {
+    background-image: var(--gradient-neutral-left-to-right);
+  }
+
+  .gradient-neutral-top-to-bottom {
+    background-image: var(--gradient-neutral-top-to-bottom);
+  }
+
+  .gradient-neutral-right-to-left {
+    background-image: var(--gradient-neutral-right-to-left);
+  }
+
+  .gradient-neutral-bottom-to-top {
+    background-image: var(--gradient-neutral-bottom-to-top);
+  }
+
+  /* safe */
+  .gradient-safe-left-to-right {
+    background-image: var(--gradient-safe-left-to-right);
+  }
+
+  .gradient-safe-top-to-bottom {
+    background-image: var(--gradient-safe-top-to-bottom);
+  }
+
+  .gradient-safe-right-to-left {
+    background-image: var(--gradient-safe-right-to-left);
+  }
+
+  .gradient-safe-bottom-to-top {
+    background-image: var(--gradient-safe-bottom-to-top);
+  }
+
+  /* info */
+  .gradient-info-left-to-right {
+    background-image: var(--gradient-info-left-to-right);
+  }
+
+  .gradient-info-top-to-bottom {
+    background-image: var(--gradient-info-top-to-bottom);
+  }
+
+  .gradient-info-right-to-left {
+    background-image: var(--gradient-info-right-to-left);
+  }
+
+  .gradient-info-bottom-to-top {
+    background-image: var(--gradient-info-bottom-to-top);
+  }
+
+  /* caution */
+  .gradient-caution-left-to-right {
+    background-image: var(--gradient-caution-left-to-right);
+  }
+
+  .gradient-caution-top-to-bottom {
+    background-image: var(--gradient-caution-top-to-bottom);
+  }
+
+  .gradient-caution-right-to-left {
+    background-image: var(--gradient-caution-right-to-left);
+  }
+
+  .gradient-caution-bottom-to-top {
+    background-image: var(--gradient-caution-bottom-to-top);
+  }
+
+  /* warning */
+  .gradient-warning-left-to-right {
+    background-image: var(--gradient-warning-left-to-right);
+  }
+
+  .gradient-warning-top-to-bottom {
+    background-image: var(--gradient-warning-top-to-bottom);
+  }
+
+  .gradient-warning-right-to-left {
+    background-image: var(--gradient-warning-right-to-left);
+  }
+
+  .gradient-warning-bottom-to-top {
+    background-image: var(--gradient-warning-bottom-to-top);
+  }
+
+  /* danger */
+  .gradient-danger-left-to-right {
+    background-image: var(--gradient-danger-left-to-right);
+  }
+
+  .gradient-danger-top-to-bottom {
+    background-image: var(--gradient-danger-top-to-bottom);
+  }
+
+  .gradient-danger-right-to-left {
+    background-image: var(--gradient-danger-right-to-left);
+  }
+
+  .gradient-danger-bottom-to-top {
+    background-image: var(--gradient-danger-bottom-to-top);
+  }
+}

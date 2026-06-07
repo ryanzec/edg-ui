@@ -48,6 +48,8 @@ export type ComboboxConfig = {
   filterSelectedOptions: boolean;
   /** option filter function for options */
   optionFilter: ((inputValue: string, option: ComboboxOption) => boolean) | null;
+  /** when false, skips the store's own option matching so externally-supplied (e.g. server-filtered) options pass through untouched */
+  enableFiltering: boolean;
 };
 
 /**
@@ -88,6 +90,7 @@ export class ComboboxStore {
       allowNewOptions: false,
       filterSelectedOptions: true,
       optionFilter: null,
+      enableFiltering: true,
     },
     isInitialized: false,
     isOpened: false,
@@ -140,14 +143,17 @@ export class ComboboxStore {
     const state = this._state();
     let filtered = [...state.options];
 
-    // apply custom option filter if provided, otherwise use default label search
-    if (state.config.optionFilter) {
-      filtered = filtered.filter((option) => state.config.optionFilter!(state.inputValue, option));
-    }
+    // skip option matching entirely when filtering is disabled (e.g. async / server-filtered options)
+    if (state.config.enableFiltering) {
+      // apply custom option filter if provided, otherwise use default label search
+      if (state.config.optionFilter) {
+        filtered = filtered.filter((option) => state.config.optionFilter!(state.inputValue, option));
+      }
 
-    if (!state.config.optionFilter && state.inputValue) {
-      const searchValue = state.inputValue.toLowerCase();
-      filtered = filtered.filter((option) => option.label.toLowerCase().includes(searchValue));
+      if (!state.config.optionFilter && state.inputValue) {
+        const searchValue = state.inputValue.toLowerCase();
+        filtered = filtered.filter((option) => option.label.toLowerCase().includes(searchValue));
+      }
     }
 
     // filter out selected options if configured
@@ -210,6 +216,7 @@ export class ComboboxStore {
         allowNewOptions: config.allowNewOptions ?? false,
         filterSelectedOptions: config.filterSelectedOptions ?? true,
         optionFilter: config.optionFilter ?? null,
+        enableFiltering: config.enableFiltering ?? true,
       },
       isInitialized: true,
       isOpened: false,
@@ -326,9 +333,10 @@ export class ComboboxStore {
   }
 
   /**
-   * sets the input value
+   * sets the input value. `emitChange` allows the caller (e.g. the brain's character-threshold gating) to update
+   * the displayed input value without emitting the `inputValueChanged$` event.
    */
-  public setInputValue(value: string): void {
+  public setInputValue(value: string, emitChange = true): void {
     if (!this._assertInitialized('setInputValue')) {
       return;
     }
@@ -340,7 +348,7 @@ export class ComboboxStore {
       inputValue: value,
     }));
 
-    if (value !== previousValue) {
+    if (value !== previousValue && emitChange) {
       this._inputValueChangedSubject.next(value);
     }
   }

@@ -3,20 +3,44 @@
     "CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY": "1"
   },
   "permissions": {
-    "defaultMode": "plan"
     "allow": [
-      "Bash(npx tsc:*)",
-      "Bash(npx ngc:*)",
-      "Bash(echo:*)",
-      "Bash(cp:*)",
-      "Bash(grep:*)",
-      "Bash(find:*)",
-      "Bash(moon:*)",
-      "Bash(for:*)",
-      "Bash(cd:*)",
-      "Bash(xargs:*)",
       "Edit",
-      "Write"
-    ]
-  },
+      "Write",
+      "Read",
+      "Skill",
+      "WebSearch",
+      "Bash(echo *)",
+      "Bash(cp *)",
+      "Bash(grep *)",
+      "Bash(find *)",
+      "Bash(mkdir *)",
+      "Bash(moon *)",
+      "Bash(curl *)",
+      "Bash(for *)",
+      "Bash(cd *)",
+      "Bash(xargs *)",
+      "Bash(python3 *)",
+      "Bash(wait *)",
+      "Bash(mv *)",
+      "Bash(sed *)",
+      "Bash(git mv *)",
+      "Bash(git stash *)",
+      "Bash(zed *)",
+      "Bash(proto *)",
+      "Bash(cat *)",
+      "Bash(sort *)",
+      "Bash(bash --version)",
+      "Bash(~/.proto/bin/proto *)",
+      "Bash(~/.proto/bin/moon *)",
+      "Bash(chmod +x /tmp/:*)",
+      "WebFetch(domain:localhost)",
+      "Bash(sips *)",
+      "Bash(/usr/bin/sips *)",
+      "Bash(convert --version)",
+      "Bash(magick --version)",
+      "Bash(git diff *)",
+      "Read(//tmp/**)"
+    ],
+    "defaultMode": "plan"
+  }
 }

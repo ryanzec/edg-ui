@@ -10,12 +10,54 @@
     justify-items: end;
   }
 
+  /* muted variant: drop the title to the muted foreground color (token override only) */
+  :host([data-variant='muted']) {
+    --box-header-title-fg: var(--color-fg-muted);
+  }
+
+  /* emphasized: visually uppercase the title (token override only; the title string stays unchanged) */
+  :host([data-emphasized]) {
+    --box-header-title-text-transform: uppercase;
+  }
+
+  /* column wrapper stacking the title block above the optional divider at the box main gap */
+  .header-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--box-header-divider-gap);
+    min-width: 0;
+    flex: 1;
+  }
+
   .header-titles {
     display: flex;
     flex-direction: column;
     gap: var(--box-header-titles-gap);
     min-width: 0;
-    flex: 1;
+    /* inline padding insets the title block while leaving the sibling divider full-bleed (inner-items mode) */
+    padding-inline: var(--box-region-padding);
+  }
+
+  /* inner-items application mode: arm the region padding to the box padding amount (the box surface drops its
+     own padding in this mode, so each region applies it instead) */
+  :host-context(org-box[data-padding-application='inner-items']) {
+    --box-region-padding: var(--box-padding);
+  }
+
+  /* the first / last region gets the leading / trailing edge padding on its host — vertical host padding does
+     not affect the horizontal divider bleed. resolves to 0 outside inner-items mode. */
+  :host(:first-child) {
+    padding-top: var(--box-region-padding);
+  }
+
+  :host(:last-child) {
+    padding-bottom: var(--box-region-padding);
+  }
+
+  /* collapsed (header-only): content / footer are display:none but still count for :last-child, so the visible
+     header keeps its trailing edge padding off the box border directly */
+  :host-context(org-box[data-collapsed][data-padding-application='inner-items']) {
+    padding-bottom: var(--box-region-padding);
   }
 
   .header-title {
@@ -25,6 +67,7 @@
     line-height: var(--box-header-title-line-height);
     letter-spacing: var(--box-header-title-letter-spacing);
     color: var(--box-header-title-fg);
+    text-transform: var(--box-header-title-text-transform);
     overflow-wrap: anywhere;
   }
 

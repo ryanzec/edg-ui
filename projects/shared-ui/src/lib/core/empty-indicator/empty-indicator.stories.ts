@@ -20,7 +20,8 @@ import { ListItemIcon } from '../list/list-item-icon';
 import { allComponentColors, ComponentColor } from '../types/component-types';
 import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
 import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
-import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
+import { DesignSystemDemoControlInput } from '../../example/design-system-demo/design-system-demo-control-input';
+import { DesignSystemDemoControlsGroup } from '../../example/design-system-demo/design-system-demo-controls-group';
 import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
 import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
 import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
@@ -238,7 +239,8 @@ export const Default: Story = {
     DesignSystemDemo,
     DesignSystemDemoHeader,
     DesignSystemDemoControls,
-    DesignSystemDemoControlGroup,
+    DesignSystemDemoControlsGroup,
+    DesignSystemDemoControlInput,
     DesignSystemDemoCanvas,
   ],
   styles: [
@@ -269,42 +271,48 @@ export const Default: Story = {
           description="Toggle the inputs to walk every combination — content slots, the Box's color / border / padding knobs, and which optional pieces are present."
         />
         <org-design-system-demo-controls slot="controls">
-          <org-design-system-demo-control-group label="Box color">
-            <org-button-toggle [items]="boxColorItems" formControlName="boxColor" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Box border">
-            <org-button-toggle [items]="boxBorderItems" formControlName="boxBorder" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Box padding">
-            <org-button-toggle [items]="boxPaddingItems" formControlName="boxPadding" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Icon">
-            <org-button-toggle [items]="iconItems" formControlName="icon" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Show icon">
-            <org-checkbox-toggle name="live-demo-show-icon" value="show-icon" formControlName="showIcon">
-              {{ liveDemoForm.controls.showIcon.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Show description">
-            <org-checkbox-toggle
-              name="live-demo-show-description"
-              value="show-description"
-              formControlName="showDescription"
-            >
-              {{ liveDemoForm.controls.showDescription.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Show action">
-            <org-checkbox-toggle name="live-demo-show-action" value="show-action" formControlName="showAction">
-              {{ liveDemoForm.controls.showAction.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Tint bg">
-            <org-checkbox-toggle name="live-demo-tint-bg" value="tint-bg" formControlName="tintBackground">
-              {{ liveDemoForm.controls.tintBackground.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
+          <org-design-system-demo-controls-group label="Box styling">
+            <org-design-system-demo-control-input label="Box color">
+              <org-button-toggle [items]="boxColorItems" formControlName="boxColor" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Box border">
+              <org-button-toggle [items]="boxBorderItems" formControlName="boxBorder" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Box padding">
+              <org-button-toggle [items]="boxPaddingItems" formControlName="boxPadding" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
+          <org-design-system-demo-controls-group label="Content">
+            <org-design-system-demo-control-input label="Icon">
+              <org-button-toggle [items]="iconItems" formControlName="icon" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
+          <org-design-system-demo-controls-group label="Layout">
+            <org-design-system-demo-control-input label="Show icon">
+              <org-checkbox-toggle name="live-demo-show-icon" value="show-icon" formControlName="showIcon">
+                {{ liveDemoForm.controls.showIcon.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Show description">
+              <org-checkbox-toggle
+                name="live-demo-show-description"
+                value="show-description"
+                formControlName="showDescription"
+              >
+                {{ liveDemoForm.controls.showDescription.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Show action">
+              <org-checkbox-toggle name="live-demo-show-action" value="show-action" formControlName="showAction">
+                {{ liveDemoForm.controls.showAction.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Tint bg">
+              <org-checkbox-toggle name="live-demo-tint-bg" value="tint-bg" formControlName="tintBackground">
+                {{ liveDemoForm.controls.tintBackground.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
         </org-design-system-demo-controls>
         <org-design-system-demo-canvas slot="canvas">
           <div class="canvas-stage">
@@ -662,8 +670,9 @@ const showcaseIconColors: readonly EmptyIndicatorIconColor[] = allEmptyIndicator
               <div class="list-row">
                 <org-list>
                   @for (item of listItems; track item.label) {
-                    <org-list-item [label]="item.label">
-                      <org-list-item-icon name="folder" />
+                    <org-list-item>
+                      <org-list-item-icon pre name="folder" />
+                      {{ item.label }}
                     </org-list-item>
                   }
                 </org-list>

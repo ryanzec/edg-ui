@@ -6,7 +6,8 @@ import { CheckboxToggle } from '../checkbox-toggle/checkbox-toggle';
 import { Button } from '../button/button';
 import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
 import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
-import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
+import { DesignSystemDemoControlInput } from '../../example/design-system-demo/design-system-demo-control-input';
+import { DesignSystemDemoControlsGroup } from '../../example/design-system-demo/design-system-demo-controls-group';
 import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
 import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
 import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
@@ -224,7 +225,8 @@ export const Default: Story = {
     DesignSystemDemo,
     DesignSystemDemoHeader,
     DesignSystemDemoControls,
-    DesignSystemDemoControlGroup,
+    DesignSystemDemoControlsGroup,
+    DesignSystemDemoControlInput,
     DesignSystemDemoCanvas,
   ],
   styles: [
@@ -249,44 +251,50 @@ export const Default: Story = {
           description="All tooltips below are real and interactive — hover, focus, click, or tab through them to see every state."
         />
         <org-design-system-demo-controls slot="controls">
-          <org-design-system-demo-control-group label="Placement">
-            <org-button-toggle [items]="placementItems" formControlName="placement" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Size">
-            <org-button-toggle [items]="sizeItems" formControlName="size" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Layout">
-            <org-button-toggle [items]="layoutItems" formControlName="layout" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Trigger">
-            <org-button-toggle [items]="triggerItems" formControlName="triggerType" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Open delay">
-            <org-button-toggle [items]="delayItems" formControlName="openDelay" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Close delay">
-            <org-button-toggle [items]="delayItems" formControlName="closeDelay" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Keep open on hover">
-            <org-checkbox-toggle name="live-demo-keep-open" value="keepOpenOnHover" formControlName="keepOpenOnHover">
-              {{ liveDemoForm.controls.keepOpenOnHover.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Disabled">
-            <org-checkbox-toggle name="live-demo-disabled" value="disabled" formControlName="disabled">
-              {{ liveDemoForm.controls.disabled.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Arrow">
-            <org-checkbox-toggle name="live-demo-arrow" value="arrow" formControlName="arrow">
-              {{ liveDemoForm.controls.arrow.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Show kbd hint (label only)">
-            <org-checkbox-toggle name="live-demo-show-kbd" value="showKbd" formControlName="showKbd">
-              {{ liveDemoForm.controls.showKbd.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
+          <org-design-system-demo-controls-group label="Presentation">
+            <org-design-system-demo-control-input label="Placement">
+              <org-button-toggle [items]="placementItems" formControlName="placement" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Size">
+              <org-button-toggle [items]="sizeItems" formControlName="size" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Layout">
+              <org-button-toggle [items]="layoutItems" formControlName="layout" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Arrow">
+              <org-checkbox-toggle name="live-demo-arrow" value="arrow" formControlName="arrow">
+                {{ liveDemoForm.controls.arrow.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
+          <org-design-system-demo-controls-group label="Timing">
+            <org-design-system-demo-control-input label="Open delay">
+              <org-button-toggle [items]="delayItems" formControlName="openDelay" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Close delay">
+              <org-button-toggle [items]="delayItems" formControlName="closeDelay" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
+          <org-design-system-demo-controls-group label="Behavior">
+            <org-design-system-demo-control-input label="Trigger">
+              <org-button-toggle [items]="triggerItems" formControlName="triggerType" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Keep open on hover">
+              <org-checkbox-toggle name="live-demo-keep-open" value="keepOpenOnHover" formControlName="keepOpenOnHover">
+                {{ liveDemoForm.controls.keepOpenOnHover.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Disabled">
+              <org-checkbox-toggle name="live-demo-disabled" value="disabled" formControlName="disabled">
+                {{ liveDemoForm.controls.disabled.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Show kbd hint (label only)">
+              <org-checkbox-toggle name="live-demo-show-kbd" value="showKbd" formControlName="showKbd">
+                {{ liveDemoForm.controls.showKbd.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
         </org-design-system-demo-controls>
         <org-design-system-demo-canvas slot="canvas">
           <div class="canvas-stage">

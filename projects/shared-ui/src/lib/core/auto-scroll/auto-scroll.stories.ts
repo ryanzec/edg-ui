@@ -1,8 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/angular';
 import { Component, signal, ViewChild, afterNextRender, input } from '@angular/core';
 import { AutoScroll, AutoScrollState } from './auto-scroll';
-import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
-import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
+import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
+import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
+import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
+import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
 import { ScrollArea } from '../scroll-area/scroll-area';
 import { Button } from '../button/button';
 
@@ -96,48 +98,53 @@ type Story = StoryObj<AutoScroll>;
 @Component({
   selector: 'story-auto-scroll-interactive-test',
   template: `
-    <org-storybook-example-container title="Interactive Auto Scroll Test" [currentState]="currentState()">
-      <org-storybook-example-container-section label="Interactive Demo">
-        <div class="mb-4 flex flex-wrap gap-2">
-          <org-button
-            [label]="intervalActive() ? 'Stop Adding Items' : 'Start Adding Items'"
-            (click)="toggleInterval()"
-          />
-          <org-button label="Clear Items" (click)="clearItems()" />
-          <div class="w-full"></div>
-          <org-button label="Set State: Enabled" (click)="setState('enabled')" />
-          <org-button label="Set State: Disabled" (click)="setState('disabled')" />
-          <org-button label="Set State: Forced-Disabled" (click)="setState('forced-disabled')" />
-        </div>
-
-        <div class="mb-4 rounded border border-default-color bg-muted/30 p-3 text-sm">
-          <div>
-            <strong>Auto-Scroll Internal State:</strong> <span class="font-mono">{{ getAutoScrollState() }}</span>
+    <org-design-system-demo>
+      <org-design-system-demo-header slot="header" title="Interactive Auto Scroll Test" />
+      <org-design-system-demo-canvas slot="canvas">
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Interactive Demo</div>
+          <div class="mb-4 flex flex-wrap gap-2">
+            <org-button
+              [label]="intervalActive() ? 'Stop Adding Items' : 'Start Adding Items'"
+              (click)="toggleInterval()"
+            />
+            <org-button label="Clear Items" (click)="clearItems()" />
+            <div class="w-full"></div>
+            <org-button label="Set State: Enabled" (click)="setState('enabled')" />
+            <org-button label="Set State: Disabled" (click)="setState('disabled')" />
+            <org-button label="Set State: Forced-Disabled" (click)="setState('forced-disabled')" />
           </div>
-          <div class="text-xs text-muted-foreground">
-            @if (getAutoScrollState() === 'enabled') {
-              Auto-scrolling is active - new content will trigger scroll to bottom
-            } @else if (getAutoScrollState() === 'disabled') {
-              Auto-scrolling is paused - user scrolled away from bottom
-            } @else {
-              Auto-scrolling is force disabled via input
-            }
+
+          <div class="mb-4 rounded border border-default-color bg-muted/30 p-3 text-sm">
+            <div>
+              <strong>Auto-Scroll Internal State:</strong> <span class="font-mono">{{ getAutoScrollState() }}</span>
+            </div>
+            <div class="text-xs text-muted-foreground">
+              @if (getAutoScrollState() === 'enabled') {
+                Auto-scrolling is active - new content will trigger scroll to bottom
+              } @else if (getAutoScrollState() === 'disabled') {
+                Auto-scrolling is paused - user scrolled away from bottom
+              } @else {
+                Auto-scrolling is force disabled via input
+              }
+            </div>
           </div>
+
+          <org-scroll-area containerClass="rounded-lg border border-default-color bg-muted/30" scrollClass="h-2xs">
+            <org-auto-scroll #autoScrollComponent [containerClass]="'p-4'">
+              @for (item of items(); track item.title) {
+                <div class="mb-2 rounded border border-default-color bg-card p-3 text-sm">
+                  <div class="font-semibold text-primary">{{ item.title }}</div>
+                  <div class="text-muted-foreground">{{ item.timestamp }}</div>
+                </div>
+              }
+            </org-auto-scroll>
+          </org-scroll-area>
         </div>
-
-        <org-scroll-area containerClass="rounded-lg border border-default-color bg-muted/30" scrollClass="h-2xs">
-          <org-auto-scroll #autoScrollComponent [containerClass]="'p-4'">
-            @for (item of items(); track item.title) {
-              <div class="mb-2 rounded border border-default-color bg-card p-3 text-sm">
-                <div class="font-semibold text-primary">{{ item.title }}</div>
-                <div class="text-muted-foreground">{{ item.timestamp }}</div>
-              </div>
-            }
-          </org-auto-scroll>
-        </org-scroll-area>
-      </org-storybook-example-container-section>
-
-      <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+      </org-design-system-demo-canvas>
+    </org-design-system-demo>
+    <org-design-system-demo-expected-behaviour>
+      <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
         <li>Click "Start Adding Items" to add items every 500ms</li>
         <li>Container auto-scrolls to bottom as new items appear</li>
         <li>Click state buttons to manually set the auto-scroll state</li>
@@ -147,9 +154,17 @@ type Story = StoryObj<AutoScroll>;
         <li>Click "Clear Items" to remove all items</li>
         <li>Watch the "Auto-Scroll Internal State" display to see state changes in real-time</li>
       </ul>
-    </org-storybook-example-container>
+    </org-design-system-demo-expected-behaviour>
   `,
-  imports: [AutoScroll, ScrollArea, Button, StorybookExampleContainer, StorybookExampleContainerSection],
+  imports: [
+    AutoScroll,
+    ScrollArea,
+    Button,
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoCanvas,
+    DesignSystemDemoExpectedBehaviour,
+  ],
 })
 class AutoScrollInteractiveTestComponent {
   @ViewChild('autoScrollComponent')
@@ -216,46 +231,51 @@ class AutoScrollInteractiveTestComponent {
 @Component({
   selector: 'story-auto-scroll-programmatic-demo',
   template: `
-    <org-storybook-example-container title="Programmatic Scroll Control" [currentState]="currentState()">
-      <org-storybook-example-container-section label="Interactive Demo">
-        <div class="mb-4 flex gap-2">
-          <org-button buttonStyle="primary" label="Scroll to Bottom" (click)="scrollToBottom()" />
-          <org-button buttonStyle="secondary" label="Scroll to Top" (click)="scrollToTop()" />
-          <org-button buttonStyle="secondary" label="Scroll to Middle" (click)="scrollToMiddle()" />
-        </div>
-
-        <div class="mb-4 rounded border border-default-color bg-muted/30 p-3 text-sm">
-          <div>
-            <strong>Auto-Scroll Internal State:</strong> <span class="font-mono">{{ getState() }}</span>
+    <org-design-system-demo>
+      <org-design-system-demo-header slot="header" title="Programmatic Scroll Control" />
+      <org-design-system-demo-canvas slot="canvas">
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Interactive Demo</div>
+          <div class="mb-4 flex gap-2">
+            <org-button buttonStyle="primary" label="Scroll to Bottom" (click)="scrollToBottom()" />
+            <org-button buttonStyle="secondary" label="Scroll to Top" (click)="scrollToTop()" />
+            <org-button buttonStyle="secondary" label="Scroll to Middle" (click)="scrollToMiddle()" />
           </div>
-          <div class="text-xs text-muted-foreground">
-            @if (getState() === 'enabled') {
-              Auto-scrolling is active - new content will trigger scroll to bottom
-            } @else if (getState() === 'disabled') {
-              Auto-scrolling is paused - user scrolled away from bottom
-            } @else {
-              Auto-scrolling is force disabled via input
-            }
+
+          <div class="mb-4 rounded border border-default-color bg-muted/30 p-3 text-sm">
+            <div>
+              <strong>Auto-Scroll Internal State:</strong> <span class="font-mono">{{ getState() }}</span>
+            </div>
+            <div class="text-xs text-muted-foreground">
+              @if (getState() === 'enabled') {
+                Auto-scrolling is active - new content will trigger scroll to bottom
+              } @else if (getState() === 'disabled') {
+                Auto-scrolling is paused - user scrolled away from bottom
+              } @else {
+                Auto-scrolling is force disabled via input
+              }
+            </div>
           </div>
+
+          <org-scroll-area
+            #scrollParentComponent
+            containerClass="rounded-lg border border-default-color bg-muted/30"
+            scrollClass="h-2xs"
+          >
+            <org-auto-scroll #scrollContainerComponent [containerClass]="'p-4'">
+              @for (item of items(); track item.title) {
+                <div class="mb-2 rounded border border-default-color bg-card p-3 text-sm">
+                  <div class="font-semibold text-primary">{{ item.title }}</div>
+                  <div class="text-muted-foreground">{{ item.content }}</div>
+                </div>
+              }
+            </org-auto-scroll>
+          </org-scroll-area>
         </div>
-
-        <org-scroll-area
-          #scrollParentComponent
-          containerClass="rounded-lg border border-default-color bg-muted/30"
-          scrollClass="h-2xs"
-        >
-          <org-auto-scroll #scrollContainerComponent [containerClass]="'p-4'">
-            @for (item of items(); track item.title) {
-              <div class="mb-2 rounded border border-default-color bg-card p-3 text-sm">
-                <div class="font-semibold text-primary">{{ item.title }}</div>
-                <div class="text-muted-foreground">{{ item.content }}</div>
-              </div>
-            }
-          </org-auto-scroll>
-        </org-scroll-area>
-      </org-storybook-example-container-section>
-
-      <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+      </org-design-system-demo-canvas>
+    </org-design-system-demo>
+    <org-design-system-demo-expected-behaviour>
+      <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
         <li>Container starts with enough content to require scrolling</li>
         <li>Click "Scroll to Bottom" to trigger programmatic scroll with callback</li>
         <li>Click "Scroll to Top" or "Scroll to Middle" to test user scroll behavior</li>
@@ -263,9 +283,17 @@ class AutoScrollInteractiveTestComponent {
         <li>Programmatic scrolls don't change the auto-scroll state</li>
         <li>User scrolls change state based on position</li>
       </ul>
-    </org-storybook-example-container>
+    </org-design-system-demo-expected-behaviour>
   `,
-  imports: [AutoScroll, ScrollArea, Button, StorybookExampleContainer, StorybookExampleContainerSection],
+  imports: [
+    AutoScroll,
+    ScrollArea,
+    Button,
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoCanvas,
+    DesignSystemDemoExpectedBehaviour,
+  ],
 })
 class AutoScrollProgrammaticDemoComponent {
   @ViewChild('scrollContainerComponent')
@@ -332,96 +360,110 @@ class AutoScrollProgrammaticDemoComponent {
 @Component({
   selector: 'story-auto-scroll-default-demo',
   template: `
-    <org-storybook-example-container title="Auto Scroll">
-      <org-storybook-example-container-section label="Default">
-        <div class="mb-4 rounded border border-default-color bg-muted/30 p-3 text-sm">
-          <div>
-            <strong>Auto-Scroll Internal State:</strong> <span class="font-mono">{{ getAutoScrollState() }}</span>
+    <org-design-system-demo>
+      <org-design-system-demo-header slot="header" title="Auto Scroll" />
+      <org-design-system-demo-canvas slot="canvas">
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Default</div>
+          <div class="mb-4 rounded border border-default-color bg-muted/30 p-3 text-sm">
+            <div>
+              <strong>Auto-Scroll Internal State:</strong> <span class="font-mono">{{ getAutoScrollState() }}</span>
+            </div>
+            <div class="text-xs text-muted-foreground">
+              @if (getAutoScrollState() === 'enabled') {
+                Auto-scrolling is active - new content will trigger scroll to bottom
+              } @else if (getAutoScrollState() === 'disabled') {
+                Auto-scrolling is paused - user scrolled away from bottom
+              } @else {
+                Auto-scrolling is force disabled via input
+              }
+            </div>
           </div>
-          <div class="text-xs text-muted-foreground">
-            @if (getAutoScrollState() === 'enabled') {
-              Auto-scrolling is active - new content will trigger scroll to bottom
-            } @else if (getAutoScrollState() === 'disabled') {
-              Auto-scrolling is paused - user scrolled away from bottom
-            } @else {
-              Auto-scrolling is force disabled via input
-            }
-          </div>
+
+          <org-scroll-area containerClass="rounded-lg border border-default-color bg-muted/30" scrollClass="h-2xs">
+            <org-auto-scroll #autoScrollComponent [autoScrollEnabled]="autoScrollEnabled()" [containerClass]="'p-4'">
+              <div class="mb-2 rounded border border-default-color bg-card p-3">
+                <div class="font-semibold">Message 1</div>
+                <div class="text-sm text-muted-foreground">Initial message in the container</div>
+              </div>
+              <div class="mb-2 rounded border border-default-color bg-card p-3">
+                <div class="font-semibold">Message 2</div>
+                <div class="text-sm text-muted-foreground">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                </div>
+              </div>
+              <div class="mb-2 rounded border border-default-color bg-card p-3">
+                <div class="font-semibold">Message 3</div>
+                <div class="text-sm text-muted-foreground">
+                  Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                </div>
+              </div>
+              <div class="mb-2 rounded border border-default-color bg-card p-3">
+                <div class="font-semibold">Message 4</div>
+                <div class="text-sm text-muted-foreground">
+                  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.
+                </div>
+              </div>
+              <div class="mb-2 rounded border border-default-color bg-card p-3">
+                <div class="font-semibold">Message 5</div>
+                <div class="text-sm text-muted-foreground">
+                  Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.
+                </div>
+              </div>
+              <div class="mb-2 rounded border border-default-color bg-card p-3">
+                <div class="font-semibold">Message 6</div>
+                <div class="text-sm text-muted-foreground">
+                  Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
+                  laborum.
+                </div>
+              </div>
+              <div class="mb-2 rounded border border-default-color bg-card p-3">
+                <div class="font-semibold">Message 7</div>
+                <div class="text-sm text-muted-foreground">
+                  Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.
+                </div>
+              </div>
+              <div class="mb-2 rounded border border-default-color bg-card p-3">
+                <div class="font-semibold">Message 8</div>
+                <div class="text-sm text-muted-foreground">
+                  Totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta
+                  sunt explicabo.
+                </div>
+              </div>
+              <div class="mb-2 rounded border border-default-color bg-card p-3">
+                <div class="font-semibold">Message 9</div>
+                <div class="text-sm text-muted-foreground">
+                  Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.
+                </div>
+              </div>
+              <div class="mb-2 rounded border border-default-color bg-card p-3">
+                <div class="font-semibold">Message 10</div>
+                <div class="text-sm text-muted-foreground">
+                  This is the last message at the bottom of the scroll container.
+                </div>
+              </div>
+            </org-auto-scroll>
+          </org-scroll-area>
         </div>
-
-        <org-scroll-area containerClass="rounded-lg border border-default-color bg-muted/30" scrollClass="h-2xs">
-          <org-auto-scroll #autoScrollComponent [autoScrollEnabled]="autoScrollEnabled()" [containerClass]="'p-4'">
-            <div class="mb-2 rounded border border-default-color bg-card p-3">
-              <div class="font-semibold">Message 1</div>
-              <div class="text-sm text-muted-foreground">Initial message in the container</div>
-            </div>
-            <div class="mb-2 rounded border border-default-color bg-card p-3">
-              <div class="font-semibold">Message 2</div>
-              <div class="text-sm text-muted-foreground">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
-            </div>
-            <div class="mb-2 rounded border border-default-color bg-card p-3">
-              <div class="font-semibold">Message 3</div>
-              <div class="text-sm text-muted-foreground">
-                Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-              </div>
-            </div>
-            <div class="mb-2 rounded border border-default-color bg-card p-3">
-              <div class="font-semibold">Message 4</div>
-              <div class="text-sm text-muted-foreground">
-                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.
-              </div>
-            </div>
-            <div class="mb-2 rounded border border-default-color bg-card p-3">
-              <div class="font-semibold">Message 5</div>
-              <div class="text-sm text-muted-foreground">
-                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.
-              </div>
-            </div>
-            <div class="mb-2 rounded border border-default-color bg-card p-3">
-              <div class="font-semibold">Message 6</div>
-              <div class="text-sm text-muted-foreground">
-                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
-                laborum.
-              </div>
-            </div>
-            <div class="mb-2 rounded border border-default-color bg-card p-3">
-              <div class="font-semibold">Message 7</div>
-              <div class="text-sm text-muted-foreground">
-                Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.
-              </div>
-            </div>
-            <div class="mb-2 rounded border border-default-color bg-card p-3">
-              <div class="font-semibold">Message 8</div>
-              <div class="text-sm text-muted-foreground">
-                Totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta
-                sunt explicabo.
-              </div>
-            </div>
-            <div class="mb-2 rounded border border-default-color bg-card p-3">
-              <div class="font-semibold">Message 9</div>
-              <div class="text-sm text-muted-foreground">
-                Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.
-              </div>
-            </div>
-            <div class="mb-2 rounded border border-default-color bg-card p-3">
-              <div class="font-semibold">Message 10</div>
-              <div class="text-sm text-muted-foreground">
-                This is the last message at the bottom of the scroll container.
-              </div>
-            </div>
-          </org-auto-scroll>
-        </org-scroll-area>
-      </org-storybook-example-container-section>
-
-      <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+      </org-design-system-demo-canvas>
+    </org-design-system-demo>
+    <org-design-system-demo-expected-behaviour>
+      <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
         <li>Container starts scrolled to the bottom</li>
         <li>Toggle "Auto Scroll Enabled" in the controls panel to switch between enabled and forced-disabled states</li>
         <li>Scroll up manually to see state change to "disabled"</li>
         <li>Scroll back to bottom to see state change back to "enabled"</li>
       </ul>
-    </org-storybook-example-container>
+    </org-design-system-demo-expected-behaviour>
   `,
-  imports: [AutoScroll, ScrollArea, StorybookExampleContainer, StorybookExampleContainerSection],
+  imports: [
+    AutoScroll,
+    ScrollArea,
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoCanvas,
+    DesignSystemDemoExpectedBehaviour,
+  ],
 })
 class AutoScrollDefaultDemoComponent {
   @ViewChild('autoScrollComponent')
@@ -503,60 +545,65 @@ export const ProgrammaticDemo: Story = {
 @Component({
   selector: 'story-auto-scroll-dynamic-parent-demo',
   template: `
-    <org-storybook-example-container title="Dynamic Scrollable Parent Detection" [currentState]="currentState()">
-      <org-storybook-example-container-section label="Interactive Demo">
-        <div class="mb-4 flex gap-2">
-          <org-button
-            buttonStyle="primary"
-            [label]="showLargeContainer() ? 'Switch to Small Container' : 'Switch to Large Container'"
-            (click)="toggleContainer()"
-          />
-          <org-button buttonStyle="secondary" label="Add Item" (click)="addItem()" />
-        </div>
-
-        <div class="mb-4 rounded border border-default-color bg-muted/30 p-3 text-sm">
-          <div>
-            <strong>Auto-Scroll Internal State:</strong> <span class="font-mono">{{ getAutoScrollState() }}</span>
+    <org-design-system-demo>
+      <org-design-system-demo-header slot="header" title="Dynamic Scrollable Parent Detection" />
+      <org-design-system-demo-canvas slot="canvas">
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Interactive Demo</div>
+          <div class="mb-4 flex gap-2">
+            <org-button
+              buttonStyle="primary"
+              [label]="showLargeContainer() ? 'Switch to Small Container' : 'Switch to Large Container'"
+              (click)="toggleContainer()"
+            />
+            <org-button buttonStyle="secondary" label="Add Item" (click)="addItem()" />
           </div>
-          <div class="text-xs text-muted-foreground">
-            @if (getAutoScrollState() === 'enabled') {
-              Auto-scrolling is active - new content will trigger scroll to bottom
-            } @else if (getAutoScrollState() === 'disabled') {
-              Auto-scrolling is paused - user scrolled away from bottom
+
+          <div class="mb-4 rounded border border-default-color bg-muted/30 p-3 text-sm">
+            <div>
+              <strong>Auto-Scroll Internal State:</strong> <span class="font-mono">{{ getAutoScrollState() }}</span>
+            </div>
+            <div class="text-xs text-muted-foreground">
+              @if (getAutoScrollState() === 'enabled') {
+                Auto-scrolling is active - new content will trigger scroll to bottom
+              } @else if (getAutoScrollState() === 'disabled') {
+                Auto-scrolling is paused - user scrolled away from bottom
+              } @else {
+                Auto-scrolling is force disabled via input
+              }
+            </div>
+          </div>
+
+          <div class="rounded-lg border border-default-color bg-muted/30 p-4">
+            @if (showLargeContainer()) {
+              <org-scroll-area containerClass="rounded border border-default-color bg-app" scrollClass="h-sm">
+                <org-auto-scroll #autoScrollComponent [containerClass]="'p-4'">
+                  @for (item of items(); track item.id) {
+                    <div class="mb-2 rounded border border-default-color bg-card p-3 text-sm">
+                      <div class="font-semibold text-primary">{{ item.title }}</div>
+                      <div class="text-muted-foreground">{{ item.description }}</div>
+                    </div>
+                  }
+                </org-auto-scroll>
+              </org-scroll-area>
             } @else {
-              Auto-scrolling is force disabled via input
+              <org-scroll-area containerClass="rounded border border-default-color bg-app" scrollClass="h-5xs">
+                <org-auto-scroll #autoScrollComponent [containerClass]="'p-4'">
+                  @for (item of items(); track item.id) {
+                    <div class="mb-2 rounded border border-default-color bg-card p-3 text-sm">
+                      <div class="font-semibold text-primary">{{ item.title }}</div>
+                      <div class="text-muted-foreground">{{ item.description }}</div>
+                    </div>
+                  }
+                </org-auto-scroll>
+              </org-scroll-area>
             }
           </div>
         </div>
-
-        <div class="rounded-lg border border-default-color bg-muted/30 p-4">
-          @if (showLargeContainer()) {
-            <org-scroll-area containerClass="rounded border border-default-color bg-app" scrollClass="h-sm">
-              <org-auto-scroll #autoScrollComponent [containerClass]="'p-4'">
-                @for (item of items(); track item.id) {
-                  <div class="mb-2 rounded border border-default-color bg-card p-3 text-sm">
-                    <div class="font-semibold text-primary">{{ item.title }}</div>
-                    <div class="text-muted-foreground">{{ item.description }}</div>
-                  </div>
-                }
-              </org-auto-scroll>
-            </org-scroll-area>
-          } @else {
-            <org-scroll-area containerClass="rounded border border-default-color bg-app" scrollClass="h-5xs">
-              <org-auto-scroll #autoScrollComponent [containerClass]="'p-4'">
-                @for (item of items(); track item.id) {
-                  <div class="mb-2 rounded border border-default-color bg-card p-3 text-sm">
-                    <div class="font-semibold text-primary">{{ item.title }}</div>
-                    <div class="text-muted-foreground">{{ item.description }}</div>
-                  </div>
-                }
-              </org-auto-scroll>
-            </org-scroll-area>
-          }
-        </div>
-      </org-storybook-example-container-section>
-
-      <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+      </org-design-system-demo-canvas>
+    </org-design-system-demo>
+    <org-design-system-demo-expected-behaviour>
+      <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
         <li>Click "Switch to Large Container" / "Switch to Small Container" to toggle the parent container</li>
         <li>The component automatically detects the new scrollable parent when it changes</li>
         <li>Auto-scroll continues to work after the parent change</li>
@@ -564,9 +611,17 @@ export const ProgrammaticDemo: Story = {
         <li>The component reinitializes observers and listeners for the new parent</li>
         <li>Watch the "Auto-Scroll Internal State" display to see state persistence across parent changes</li>
       </ul>
-    </org-storybook-example-container>
+    </org-design-system-demo-expected-behaviour>
   `,
-  imports: [AutoScroll, ScrollArea, Button, StorybookExampleContainer, StorybookExampleContainerSection],
+  imports: [
+    AutoScroll,
+    ScrollArea,
+    Button,
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoCanvas,
+    DesignSystemDemoExpectedBehaviour,
+  ],
 })
 class AutoScrollDynamicParentDemoComponent {
   @ViewChild('autoScrollComponent')
@@ -636,57 +691,59 @@ export const DynamicParent: Story = {
 @Component({
   selector: 'story-auto-scroll-states-demo',
   template: `
-    <org-storybook-example-container
-      title="Auto Scroll States"
-      currentState="Comparing enabled, disabled, and forced-disabled states"
-    >
-      <org-storybook-example-container-section label="Enabled (autoScrollEnabled=true)">
-        <div class="mb-2 rounded border border-default-color bg-muted/30 p-2 text-xs">
-          <strong>Auto-Scroll Internal State:</strong> <span class="font-mono">{{ getEnabledState() }}</span>
+    <org-design-system-demo>
+      <org-design-system-demo-header slot="header" title="Auto Scroll States" />
+      <org-design-system-demo-canvas slot="canvas">
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Enabled (autoScrollEnabled=true)</div>
+          <div class="mb-2 rounded border border-default-color bg-muted/30 p-2 text-xs">
+            <strong>Auto-Scroll Internal State:</strong> <span class="font-mono">{{ getEnabledState() }}</span>
+          </div>
+
+          <org-scroll-area containerClass="rounded-lg border border-default-color bg-muted/30" scrollClass="h-5xs">
+            <org-auto-scroll #enabledComponent [autoScrollEnabled]="true" [containerClass]="'p-4'">
+              <div class="mb-2 text-sm font-semibold text-primary">State: Enabled</div>
+              <div class="mb-2 rounded border border-default-color bg-card p-2 text-xs">
+                Auto-scrolling is active. If new content is added, it will scroll to bottom automatically.
+              </div>
+              <div class="mb-2 rounded border border-default-color bg-card p-2 text-xs">Message 1</div>
+              <div class="mb-2 rounded border border-default-color bg-card p-2 text-xs">Message 2</div>
+              <div class="mb-2 rounded border border-default-color bg-card p-2 text-xs">Message 3</div>
+              <div class="mb-2 rounded border border-default-color bg-card p-2 text-xs">Message 4</div>
+              <div class="mb-2 rounded border border-default-color bg-card p-2 text-xs">Message 5</div>
+              <div class="mb-2 rounded border border-default-color bg-card p-2 text-xs">Message 6</div>
+              <div class="mb-2 rounded border border-default-color bg-card p-2 text-xs">Message 7</div>
+              <div class="mb-2 rounded border border-default-color bg-card p-2 text-xs">Message 8 (last)</div>
+            </org-auto-scroll>
+          </org-scroll-area>
         </div>
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Forced Disabled (autoScrollEnabled=false)</div>
+          <div class="mb-2 rounded border border-default-color bg-muted/30 p-2 text-xs">
+            <strong>Auto-Scroll Internal State:</strong> <span class="font-mono">{{ getDisabledState() }}</span>
+          </div>
 
-        <org-scroll-area containerClass="rounded-lg border border-default-color bg-muted/30" scrollClass="h-5xs">
-          <org-auto-scroll #enabledComponent [autoScrollEnabled]="true" [containerClass]="'p-4'">
-            <div class="mb-2 text-sm font-semibold text-primary">State: Enabled</div>
-            <div class="mb-2 rounded border border-default-color bg-card p-2 text-xs">
-              Auto-scrolling is active. If new content is added, it will scroll to bottom automatically.
-            </div>
-            <div class="mb-2 rounded border border-default-color bg-card p-2 text-xs">Message 1</div>
-            <div class="mb-2 rounded border border-default-color bg-card p-2 text-xs">Message 2</div>
-            <div class="mb-2 rounded border border-default-color bg-card p-2 text-xs">Message 3</div>
-            <div class="mb-2 rounded border border-default-color bg-card p-2 text-xs">Message 4</div>
-            <div class="mb-2 rounded border border-default-color bg-card p-2 text-xs">Message 5</div>
-            <div class="mb-2 rounded border border-default-color bg-card p-2 text-xs">Message 6</div>
-            <div class="mb-2 rounded border border-default-color bg-card p-2 text-xs">Message 7</div>
-            <div class="mb-2 rounded border border-default-color bg-card p-2 text-xs">Message 8 (last)</div>
-          </org-auto-scroll>
-        </org-scroll-area>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Forced Disabled (autoScrollEnabled=false)">
-        <div class="mb-2 rounded border border-default-color bg-muted/30 p-2 text-xs">
-          <strong>Auto-Scroll Internal State:</strong> <span class="font-mono">{{ getDisabledState() }}</span>
+          <org-scroll-area containerClass="rounded-lg border border-default-color bg-muted/30" scrollClass="h-5xs">
+            <org-auto-scroll #disabledComponent [autoScrollEnabled]="false" [containerClass]="'p-4'">
+              <div class="mb-2 text-sm font-semibold text-destructive">State: Forced Disabled</div>
+              <div class="mb-2 rounded border border-default-color bg-card p-2 text-xs">
+                Auto-scrolling is disabled via input. Content will not auto-scroll even when added.
+              </div>
+              <div class="mb-2 rounded border border-default-color bg-card p-2 text-xs">Message 1</div>
+              <div class="mb-2 rounded border border-default-color bg-card p-2 text-xs">Message 2</div>
+              <div class="mb-2 rounded border border-default-color bg-card p-2 text-xs">Message 3</div>
+              <div class="mb-2 rounded border border-default-color bg-card p-2 text-xs">Message 4</div>
+              <div class="mb-2 rounded border border-default-color bg-card p-2 text-xs">Message 5</div>
+              <div class="mb-2 rounded border border-default-color bg-card p-2 text-xs">Message 6</div>
+              <div class="mb-2 rounded border border-default-color bg-card p-2 text-xs">Message 7</div>
+              <div class="mb-2 rounded border border-default-color bg-card p-2 text-xs">Message 8 (last)</div>
+            </org-auto-scroll>
+          </org-scroll-area>
         </div>
-
-        <org-scroll-area containerClass="rounded-lg border border-default-color bg-muted/30" scrollClass="h-5xs">
-          <org-auto-scroll #disabledComponent [autoScrollEnabled]="false" [containerClass]="'p-4'">
-            <div class="mb-2 text-sm font-semibold text-destructive">State: Forced Disabled</div>
-            <div class="mb-2 rounded border border-default-color bg-card p-2 text-xs">
-              Auto-scrolling is disabled via input. Content will not auto-scroll even when added.
-            </div>
-            <div class="mb-2 rounded border border-default-color bg-card p-2 text-xs">Message 1</div>
-            <div class="mb-2 rounded border border-default-color bg-card p-2 text-xs">Message 2</div>
-            <div class="mb-2 rounded border border-default-color bg-card p-2 text-xs">Message 3</div>
-            <div class="mb-2 rounded border border-default-color bg-card p-2 text-xs">Message 4</div>
-            <div class="mb-2 rounded border border-default-color bg-card p-2 text-xs">Message 5</div>
-            <div class="mb-2 rounded border border-default-color bg-card p-2 text-xs">Message 6</div>
-            <div class="mb-2 rounded border border-default-color bg-card p-2 text-xs">Message 7</div>
-            <div class="mb-2 rounded border border-default-color bg-card p-2 text-xs">Message 8 (last)</div>
-          </org-auto-scroll>
-        </org-scroll-area>
-      </org-storybook-example-container-section>
-
-      <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+      </org-design-system-demo-canvas>
+    </org-design-system-demo>
+    <org-design-system-demo-expected-behaviour>
+      <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
         <li><strong>enabled</strong>: Auto-scrolling is active, new content triggers scroll</li>
         <li><strong>disabled</strong>: Auto-scrolling paused (happens when user scrolls up)</li>
         <li><strong>forced-disabled</strong>: Auto-scrolling disabled via autoScrollEnabled input</li>
@@ -694,9 +751,16 @@ export const DynamicParent: Story = {
         <li>Scroll back to bottom to change state back to "enabled"</li>
         <li>Watch the "Auto-Scroll Internal State" displays to see real-time state</li>
       </ul>
-    </org-storybook-example-container>
+    </org-design-system-demo-expected-behaviour>
   `,
-  imports: [AutoScroll, ScrollArea, StorybookExampleContainer, StorybookExampleContainerSection],
+  imports: [
+    AutoScroll,
+    ScrollArea,
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoCanvas,
+    DesignSystemDemoExpectedBehaviour,
+  ],
 })
 class AutoScrollStatesDemoComponent {
   @ViewChild('enabledComponent')

@@ -11,6 +11,7 @@ import {
   type BoxColorStrength,
   type BoxLayout,
   type BoxPadding,
+  type BoxPaddingApplication,
   type BoxShape,
 } from './box';
 import { BoxBrainDirective } from './box-brain';
@@ -27,6 +28,7 @@ import { BoxBrainDirective } from './box-brain';
       [colorStrength]="colorStrength()"
       [border]="border()"
       [padding]="padding()"
+      [paddingApplication]="paddingApplication()"
       [background]="background()"
       [shape]="shape()"
       [isClickable]="isClickable()"
@@ -44,6 +46,7 @@ class BoxInteractiveHost {
   public readonly colorStrength = signal<BoxColorStrength>('soft');
   public readonly border = signal<BoxBorder>('bordered');
   public readonly padding = signal<BoxPadding>('base');
+  public readonly paddingApplication = signal<BoxPaddingApplication>('container');
   public readonly background = signal<BoxBackground>('colored');
   public readonly shape = signal<BoxShape>('rounded');
   public readonly isClickable = signal<boolean>(true);
@@ -91,7 +94,7 @@ class BoxExternalClickableHost {
   template: `<org-box data-testid="box" [layout]="layout()">layout content</org-box>`,
 })
 class BoxLayoutHost {
-  public readonly layout = signal<BoxLayout>('block');
+  public readonly layout = signal<BoxLayout>('column');
 }
 
 @Component({
@@ -126,11 +129,23 @@ class BoxExpandableHost {
   }
 }
 
+@Component({
+  selector: 'test-box-surface-class-host',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [Box],
+  host: { class: 'block' },
+  template: `<org-box data-testid="box" [surfaceClass]="surfaceClass()">surface content</org-box>`,
+})
+class BoxSurfaceClassHost {
+  public readonly surfaceClass = signal<string>('');
+}
+
 type BoxHostConfig = {
   color?: BoxColor | null;
   colorStrength?: BoxColorStrength;
   border?: BoxBorder;
   padding?: BoxPadding;
+  paddingApplication?: BoxPaddingApplication;
   background?: BoxBackground;
   shape?: BoxShape;
   isClickable?: boolean;
@@ -158,6 +173,10 @@ describe('Box (browser)', () => {
         instance.padding.set(config.padding);
       }
 
+      if (config.paddingApplication !== undefined) {
+        instance.paddingApplication.set(config.paddingApplication);
+      }
+
       if (config.background !== undefined) {
         instance.background.set(config.background);
       }
@@ -182,6 +201,7 @@ describe('Box (browser)', () => {
 
       expect(host.getAttribute('data-border')).toBe('bordered');
       expect(host.getAttribute('data-padding')).toBe('base');
+      expect(host.getAttribute('data-padding-application')).toBe('container');
       expect(host.getAttribute('data-background')).toBe('colored');
       expect(host.getAttribute('data-shape')).toBe('rounded');
       expect(host.getAttribute('data-color-strength')).toBe('soft');
@@ -207,6 +227,25 @@ describe('Box (browser)', () => {
       const host = queryByTestId(fixture, 'box');
 
       expect(host.getAttribute('data-padding')).toBe('lg');
+    });
+
+    it('reflects the paddingApplication input on the host', () => {
+      const fixture = createInteractiveBox({ paddingApplication: 'inner-items' });
+      const host = queryByTestId(fixture, 'box');
+
+      expect(host.getAttribute('data-padding-application')).toBe('inner-items');
+    });
+
+    it('updates the padding application attribute when paddingApplication changes', async () => {
+      const fixture = createInteractiveBox({ paddingApplication: 'container' });
+      const host = queryByTestId(fixture, 'box');
+
+      expect(host.getAttribute('data-padding-application')).toBe('container');
+
+      fixture.componentInstance.paddingApplication.set('inner-items');
+      await flush(fixture);
+
+      expect(host.getAttribute('data-padding-application')).toBe('inner-items');
     });
 
     it('reflects the background input on the host', () => {
@@ -443,32 +482,71 @@ describe('Box (browser)', () => {
   });
 
   describe('layout', () => {
-    it('reflects the default block layout on the host', () => {
+    it('reflects the default column layout on the host', () => {
       const fixture = createFixture(BoxLayoutHost);
       const host = queryByTestId(fixture, 'box');
 
-      expect(host.getAttribute('data-layout')).toBe('block');
+      expect(host.getAttribute('data-layout')).toBe('column');
     });
 
-    it('reflects the stack layout when set', () => {
+    it('reflects the row layout when set', () => {
       const fixture = createFixture(BoxLayoutHost, (instance) => {
-        instance.layout.set('stack');
+        instance.layout.set('row');
       });
       const host = queryByTestId(fixture, 'box');
 
-      expect(host.getAttribute('data-layout')).toBe('stack');
+      expect(host.getAttribute('data-layout')).toBe('row');
     });
 
     it('updates the layout attribute when the layout input changes', async () => {
       const fixture = createFixture(BoxLayoutHost);
       const host = queryByTestId(fixture, 'box');
 
-      expect(host.getAttribute('data-layout')).toBe('block');
+      expect(host.getAttribute('data-layout')).toBe('column');
 
-      fixture.componentInstance.layout.set('stack');
+      fixture.componentInstance.layout.set('row');
       await flush(fixture);
 
-      expect(host.getAttribute('data-layout')).toBe('stack');
+      expect(host.getAttribute('data-layout')).toBe('row');
+    });
+  });
+
+  describe('surface class', () => {
+    it('forwards surfaceClass onto the box-surface element while keeping the base class', () => {
+      const fixture = createFixture(BoxSurfaceClassHost, (instance) => {
+        instance.surfaceClass.set('gradient-primary-left-to-right');
+      });
+      const host = queryByTestId(fixture, 'box');
+      const surface = host.querySelector('.box-surface');
+
+      expect(surface?.classList.contains('box-surface')).toBe(true);
+      expect(surface?.classList.contains('gradient-primary-left-to-right')).toBe(true);
+    });
+
+    it('keeps only the base class on the box-surface when no surfaceClass is provided', () => {
+      const fixture = createFixture(BoxSurfaceClassHost);
+      const host = queryByTestId(fixture, 'box');
+      const surface = host.querySelector('.box-surface');
+
+      expect(surface?.classList.contains('box-surface')).toBe(true);
+      expect(surface?.className.trim()).toBe('box-surface');
+    });
+
+    it('updates the box-surface class when surfaceClass changes', async () => {
+      const fixture = createFixture(BoxSurfaceClassHost, (instance) => {
+        instance.surfaceClass.set('gradient-safe-left-to-right');
+      });
+      const host = queryByTestId(fixture, 'box');
+      const surface = host.querySelector('.box-surface');
+
+      expect(surface?.classList.contains('gradient-safe-left-to-right')).toBe(true);
+
+      fixture.componentInstance.surfaceClass.set('gradient-danger-top-to-bottom');
+      await flush(fixture);
+
+      expect(surface?.classList.contains('gradient-safe-left-to-right')).toBe(false);
+      expect(surface?.classList.contains('gradient-danger-top-to-bottom')).toBe(true);
+      expect(surface?.classList.contains('box-surface')).toBe(true);
     });
   });
 

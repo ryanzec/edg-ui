@@ -16,8 +16,10 @@ import { Dialog } from '../dialog/dialog';
 import { DialogHeader } from '../dialog/dialog-header';
 import { DialogContent } from '../dialog/dialog-content';
 import { DialogFooter } from '../dialog/dialog-footer';
-import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
-import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
+import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
+import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
+import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
+import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
 
 @Component({
   selector: 'story-custom-unsaved-changes-dialog',
@@ -141,34 +143,43 @@ class StoryUnsavedChangesCustomDialogView implements UnsavedChangesAware {
 @Component({
   selector: 'story-unsaved-changes-shell',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterOutlet, Button, StorybookExampleContainer, StorybookExampleContainerSection],
+  imports: [
+    RouterOutlet,
+    Button,
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoCanvas,
+    DesignSystemDemoExpectedBehaviour,
+  ],
   template: `
-    <org-storybook-example-container
-      title="Unsaved Changes Guard"
-      currentState="Two guarded routes wired up: /standard (default dialog) and /custom (custom dialog via getDialogComponent). Navigate between them to see each prompt."
-    >
-      <org-storybook-example-container-section label="Navigation">
-        <div class="flex gap-2">
-          <org-button
-            color="primary"
-            label="Standard Dialog"
-            (clicked)="navigateTo('/standard')"
-            data-testid="nav-standard-dialog"
-          />
-          <org-button
-            color="neutral"
-            label="Custom Dialog"
-            (clicked)="navigateTo('/custom')"
-            data-testid="nav-custom-dialog"
-          />
+    <org-design-system-demo>
+      <org-design-system-demo-header slot="header" title="Unsaved Changes Guard" />
+      <org-design-system-demo-canvas slot="canvas">
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Navigation</div>
+          <div class="flex gap-2">
+            <org-button
+              color="primary"
+              label="Standard Dialog"
+              (clicked)="navigateTo('/standard')"
+              data-testid="nav-standard-dialog"
+            />
+            <org-button
+              color="neutral"
+              label="Custom Dialog"
+              (clicked)="navigateTo('/custom')"
+              data-testid="nav-custom-dialog"
+            />
+          </div>
         </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Active Route">
-        <router-outlet />
-      </org-storybook-example-container-section>
-
-      <ul expected-behaviour class="flex flex-col gap-1 mt-1 list-inside list-disc">
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Active Route</div>
+          <router-outlet />
+        </div>
+      </org-design-system-demo-canvas>
+    </org-design-system-demo>
+    <org-design-system-demo-expected-behaviour>
+      <ul class="flex flex-col gap-1 mt-1 list-inside list-disc">
         <li>Navigating between routes while the active form is clean goes through immediately</li>
         <li>Navigating away from the standard view while dirty opens the default <code>UnsavedChangesDialog</code></li>
         <li>
@@ -179,7 +190,7 @@ class StoryUnsavedChangesCustomDialogView implements UnsavedChangesAware {
         <li>Choosing the discard option in either dialog allows the navigation to proceed</li>
         <li>Reloading the browser tab while a form is dirty triggers the native browser leave-page prompt</li>
       </ul>
-    </org-storybook-example-container>
+    </org-design-system-demo-expected-behaviour>
   `,
 })
 class StoryUnsavedChangesShell {

@@ -19,7 +19,8 @@ import { Link } from '../link/link';
 import { TypedContextDirective } from '../typed-context-directive/typed-context-directive';
 import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
 import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
-import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
+import { DesignSystemDemoControlInput } from '../../example/design-system-demo/design-system-demo-control-input';
+import { DesignSystemDemoControlsGroup } from '../../example/design-system-demo/design-system-demo-controls-group';
 import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
 import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
 import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
@@ -179,7 +180,8 @@ export const Default: Story = {
     DesignSystemDemo,
     DesignSystemDemoHeader,
     DesignSystemDemoControls,
-    DesignSystemDemoControlGroup,
+    DesignSystemDemoControlsGroup,
+    DesignSystemDemoControlInput,
     DesignSystemDemoCanvas,
   ],
   styles: [
@@ -207,33 +209,39 @@ export const Default: Story = {
           description="Push a notification with the configured options. Hover the toast to see the pause-on-hover and progress-bar behaviour in action."
         />
         <org-design-system-demo-controls slot="controls">
-          <org-design-system-demo-control-group label="Position">
-            <org-button-toggle [items]="positionItems" formControlName="position" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Color (intent)">
-            <org-button-toggle [items]="colorItems" formControlName="color" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Icon">
-            <org-button-toggle [items]="iconItems" formControlName="icon" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Auto-close">
-            <org-button-toggle [items]="autoCloseItems" formControlName="autoClose" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Avatar">
-            <org-checkbox-toggle name="live-demo-avatar" value="avatar" formControlName="useAvatar">
-              {{ liveDemoForm.controls.useAvatar.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Can close">
-            <org-checkbox-toggle name="live-demo-can-close" value="can-close" formControlName="canClose">
-              {{ liveDemoForm.controls.canClose.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Reset timer on hover">
-            <org-checkbox-toggle name="live-demo-reset-timer" value="reset-timer" formControlName="resetTimerOnHover">
-              {{ liveDemoForm.controls.resetTimerOnHover.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
+          <org-design-system-demo-controls-group label="Display">
+            <org-design-system-demo-control-input label="Position">
+              <org-button-toggle [items]="positionItems" formControlName="position" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Color (intent)">
+              <org-button-toggle [items]="colorItems" formControlName="color" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
+          <org-design-system-demo-controls-group label="Content">
+            <org-design-system-demo-control-input label="Icon">
+              <org-button-toggle [items]="iconItems" formControlName="icon" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Avatar">
+              <org-checkbox-toggle name="live-demo-avatar" value="avatar" formControlName="useAvatar">
+                {{ liveDemoForm.controls.useAvatar.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
+          <org-design-system-demo-controls-group label="Behavior">
+            <org-design-system-demo-control-input label="Auto-close">
+              <org-button-toggle [items]="autoCloseItems" formControlName="autoClose" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Can close">
+              <org-checkbox-toggle name="live-demo-can-close" value="can-close" formControlName="canClose">
+                {{ liveDemoForm.controls.canClose.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Reset timer on hover">
+              <org-checkbox-toggle name="live-demo-reset-timer" value="reset-timer" formControlName="resetTimerOnHover">
+                {{ liveDemoForm.controls.resetTimerOnHover.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
         </org-design-system-demo-controls>
         <org-design-system-demo-canvas slot="canvas">
           <div class="canvas-stage">

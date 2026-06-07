@@ -56,16 +56,29 @@ export const allBoxShapes = ['rounded', 'square'] as const;
 export type BoxShape = (typeof allBoxShapes)[number];
 
 /** all available box layout values */
-export const allBoxLayouts = ['block', 'stack'] as const;
+export const allBoxLayouts = ['column', 'row'] as const;
 
 /**
- * the layout type for the box component
+ * the layout type for the box component (describes how the box arranges its inner content as a flex container)
  *
- * block: the box lays out its content as a normal block (default)
- * stack: the box becomes a vertical flex container that spaces its slotted regions with a shared gap —
+ * column: a vertical flex container that spaces its slotted regions with a shared gap (default) —
  *   the foundation for composing header / image / content / footer sub-components into a card-like surface
+ * row: a horizontal flex container that spaces its slotted regions with the same shared gap
  */
 export type BoxLayout = (typeof allBoxLayouts)[number];
+
+/** all available box padding application values */
+export const allBoxPaddingApplications = ['container', 'inner-items'] as const;
+
+/**
+ * the padding application type for the box component (describes where the padding amount is applied)
+ *
+ * container: the padding is applied to the box surface itself (default) — the slotted regions, including any
+ *   header / footer dividers, are inset from the box border by the padding
+ * inner-items: the surface padding is removed and applied inside each slotted region instead, so the region
+ *   dividers render full-bleed (touching the box border) while the region content stays inset
+ */
+export type BoxPaddingApplication = (typeof allBoxPaddingApplications)[number];
 
 /** default value for the box color input */
 export const BOX_COLOR_DEFAULT: BoxColor | undefined = undefined;
@@ -86,7 +99,10 @@ export const BOX_BACKGROUND_DEFAULT: BoxBackground = 'colored';
 export const BOX_SHAPE_DEFAULT: BoxShape = 'rounded';
 
 /** default value for the box layout input */
-export const BOX_LAYOUT_DEFAULT: BoxLayout = 'block';
+export const BOX_LAYOUT_DEFAULT: BoxLayout = 'column';
+
+/** default value for the box paddingApplication input */
+export const BOX_PADDING_APPLICATION_DEFAULT: BoxPaddingApplication = 'container';
 
 /** default value for the box isClickable input */
 export const BOX_IS_CLICKABLE_DEFAULT = false;
@@ -111,6 +127,7 @@ export const BOX_IS_CLICKABLE_DEFAULT = false;
     '[attr.data-color-strength]': 'colorStrength()',
     '[attr.data-border]': 'border()',
     '[attr.data-padding]': 'padding()',
+    '[attr.data-padding-application]': 'paddingApplication()',
     '[attr.data-background]': 'background()',
     '[attr.data-shape]': 'shape()',
     '[attr.data-layout]': 'layout()',
@@ -139,14 +156,23 @@ export class Box {
   /** the internal padding size of the box */
   public padding = input<BoxPadding>(BOX_PADDING_DEFAULT);
 
+  /**
+   * where the padding amount is applied; 'container' (default) pads the box surface, 'inner-items' moves the
+   * padding into the slotted regions so their dividers render full-bleed while their content stays inset
+   */
+  public paddingApplication = input<BoxPaddingApplication>(BOX_PADDING_APPLICATION_DEFAULT);
+
   /** whether the color input should tint the background (colored) or leave the default background (colorless) */
   public background = input<BoxBackground>(BOX_BACKGROUND_DEFAULT);
 
   /** the corner shape of the box; 'square' drops the rounded radius to 0 */
   public shape = input<BoxShape>(BOX_SHAPE_DEFAULT);
 
-  /** the layout of the box; 'stack' turns it into a vertical flex container for composing slotted regions */
+  /** the flex layout of the box for composing slotted regions; 'column' (default) is vertical, 'row' is horizontal */
   public layout = input<BoxLayout>(BOX_LAYOUT_DEFAULT);
+
+  /** optional class string forwarded onto the inner .box-surface element (e.g. a gradient utility class) */
+  public readonly surfaceClass = input<string>('');
 
   /**
    * when true, flips the box into its clickable affordance so the whole surface is interactive and emits

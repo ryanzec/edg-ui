@@ -31,7 +31,8 @@
     [cdkConnectedOverlayPositions]="overlayPositions"
     [cdkConnectedOverlayHasBackdrop]="false"
     [cdkConnectedOverlayPanelClass]="'org-combobox-overlay'"
-    [cdkConnectedOverlayMinWidth]="inputComponent.inputRef.nativeElement.offsetWidth"
+    [cdkConnectedOverlayWidth]="overlayWidth()"
+    [cdkConnectedOverlayMinWidth]="overlayMinWidth()"
     [cdkConnectedOverlayLockPosition]="false"
   >
     <org-combobox-options />

@@ -2,8 +2,10 @@ import type { Meta, StoryObj } from '@storybook/angular';
 import { DateTime } from 'luxon';
 import { DateFormat, TimeFormat } from '@organization/shared-utils';
 import { DatePipe } from './date-pipe';
-import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
-import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
+import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
+import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
+import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
+import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
 
 const meta: Meta<DatePipe> = {
   title: 'Core/Pipes/Date Pipe',
@@ -92,36 +94,44 @@ export const DateFormats: Story = {
       DateFormat,
     },
     template: `
-      <org-storybook-example-container
-        title="Date Formats"
-        currentState="Comparing different date format options"
-      >
-        <org-storybook-example-container-section label="Standard (M/d/yy)">
-          {{ sampleDate | orgDate: { dateFormat: DateFormat.STANDARD } }}
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Month Year (LLL yyyy)">
-          {{ sampleDate | orgDate: { dateFormat: DateFormat.MONTH_YEAR } }}
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="SQL Format (yyyy-MM-dd)">
-          {{ sampleDate | orgDate: { dateFormat: DateFormat.SQL } }}
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Day Only (d)">
-          {{ sampleDate | orgDate: { dateFormat: DateFormat.DAY } }}
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Date Formats" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Standard (M/d/yy)</div>
+            {{ sampleDate | orgDate: { dateFormat: DateFormat.STANDARD } }}
+          </div>
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Month Year (LLL yyyy)</div>
+            {{ sampleDate | orgDate: { dateFormat: DateFormat.MONTH_YEAR } }}
+          </div>
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">SQL Format (yyyy-MM-dd)</div>
+            {{ sampleDate | orgDate: { dateFormat: DateFormat.SQL } }}
+          </div>
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Day Only (d)</div>
+            {{ sampleDate | orgDate: { dateFormat: DateFormat.DAY } }}
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
           <li><strong>Standard</strong>: Short date format (M/d/yy)</li>
           <li><strong>Month Year</strong>: Displays month name and year</li>
           <li><strong>SQL</strong>: Database-friendly format</li>
           <li><strong>Day</strong>: Shows only the day number</li>
         </ul>
-      </org-storybook-example-container>
+      </org-design-system-demo-expected-behaviour>
     `,
     moduleMetadata: {
-      imports: [DatePipe, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [
+        DatePipe,
+        DesignSystemDemo,
+        DesignSystemDemoHeader,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
+      ],
     },
   }),
 };
@@ -140,36 +150,44 @@ export const TimeFormats: Story = {
       TimeFormat,
     },
     template: `
-      <org-storybook-example-container
-        title="Time Formats"
-        currentState="Comparing date output with and without time"
-      >
-        <org-storybook-example-container-section label="Date Only (no time)">
-          {{ sampleDate | orgDate }}
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="With Standard Time (h:mm a)">
-          {{ sampleDate | orgDate: { timeFormat: TimeFormat.STANDARD } }}
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="With Time and Seconds (h:mm:ss a)">
-          {{ sampleDate | orgDate: { timeFormat: TimeFormat.STANDARD_WITH_SECONDS } }}
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="SQL Time Format (HH:mm:ss)">
-          {{ sampleDate | orgDate: { timeFormat: TimeFormat.SQL } }}
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Time Formats" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Date Only (no time)</div>
+            {{ sampleDate | orgDate }}
+          </div>
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">With Standard Time (h:mm a)</div>
+            {{ sampleDate | orgDate: { timeFormat: TimeFormat.STANDARD } }}
+          </div>
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">With Time and Seconds (h:mm:ss a)</div>
+            {{ sampleDate | orgDate: { timeFormat: TimeFormat.STANDARD_WITH_SECONDS } }}
+          </div>
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">SQL Time Format (HH:mm:ss)</div>
+            {{ sampleDate | orgDate: { timeFormat: TimeFormat.SQL } }}
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
           <li><strong>Date Only</strong>: No time information displayed</li>
           <li><strong>Standard Time</strong>: 12-hour format with AM/PM</li>
           <li><strong>With Seconds</strong>: Includes seconds in the time</li>
           <li><strong>SQL Format</strong>: 24-hour format for databases</li>
         </ul>
-      </org-storybook-example-container>
+      </org-design-system-demo-expected-behaviour>
     `,
     moduleMetadata: {
-      imports: [DatePipe, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [
+        DatePipe,
+        DesignSystemDemo,
+        DesignSystemDemoHeader,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
+      ],
     },
   }),
 };
@@ -188,31 +206,39 @@ export const TimezoneDisplay: Story = {
       TimeFormat,
     },
     template: `
-      <org-storybook-example-container
-        title="Timezone Display"
-        currentState="Comparing with and without timezone"
-      >
-        <org-storybook-example-container-section label="Date Only (timezone not applicable)">
-          {{ sampleDate | orgDate }}
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="With Time, No Timezone">
-          {{ sampleDate | orgDate: { timeFormat: TimeFormat.STANDARD, showTimezone: false } }}
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="With Time and Timezone">
-          {{ sampleDate | orgDate: { timeFormat: TimeFormat.STANDARD, showTimezone: true } }}
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Timezone Display" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Date Only (timezone not applicable)</div>
+            {{ sampleDate | orgDate }}
+          </div>
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">With Time, No Timezone</div>
+            {{ sampleDate | orgDate: { timeFormat: TimeFormat.STANDARD, showTimezone: false } }}
+          </div>
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">With Time and Timezone</div>
+            {{ sampleDate | orgDate: { timeFormat: TimeFormat.STANDARD, showTimezone: true } }}
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
           <li><strong>Date Only</strong>: Timezone is not shown when time is not displayed</li>
           <li><strong>No Timezone</strong>: Time is shown without timezone information</li>
           <li><strong>With Timezone</strong>: Full date, time, and timezone (default)</li>
         </ul>
-      </org-storybook-example-container>
+      </org-design-system-demo-expected-behaviour>
     `,
     moduleMetadata: {
-      imports: [DatePipe, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [
+        DatePipe,
+        DesignSystemDemo,
+        DesignSystemDemoHeader,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
+      ],
     },
   }),
 };
@@ -237,49 +263,57 @@ export const Relative: Story = {
       invalidDate: DateTime.invalid('test invalid'),
     },
     template: `
-      <org-storybook-example-container
-        title="Relative Time"
-        currentState="Comparing relative time output across past, future, and invalid dates"
-      >
-        <org-storybook-example-container-section label="Past Moments (30s ago)">
-          {{ pastMoments | orgDate: { relative: true } }}
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Past Minutes (15 minutes ago)">
-          {{ pastMinutes | orgDate: { relative: true } }}
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Past Hours (3 hours ago)">
-          {{ pastHours | orgDate: { relative: true } }}
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Past Days (5 days ago)">
-          {{ pastDays | orgDate: { relative: true } }}
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Future Moments (30s ahead)">
-          {{ futureMoments | orgDate: { relative: true } }}
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Future Days (5 days ahead)">
-          {{ futureDays | orgDate: { relative: true } }}
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Invalid Date">
-          {{ invalidDate | orgDate: { relative: true } }}
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Relative Time" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Past Moments (30s ago)</div>
+            {{ pastMoments | orgDate: { relative: true } }}
+          </div>
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Past Minutes (15 minutes ago)</div>
+            {{ pastMinutes | orgDate: { relative: true } }}
+          </div>
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Past Hours (3 hours ago)</div>
+            {{ pastHours | orgDate: { relative: true } }}
+          </div>
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Past Days (5 days ago)</div>
+            {{ pastDays | orgDate: { relative: true } }}
+          </div>
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Future Moments (30s ahead)</div>
+            {{ futureMoments | orgDate: { relative: true } }}
+          </div>
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Future Days (5 days ahead)</div>
+            {{ futureDays | orgDate: { relative: true } }}
+          </div>
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Invalid Date</div>
+            {{ invalidDate | orgDate: { relative: true } }}
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
           <li><strong>Past Moments</strong>: Displays "moments ago" when under one minute in the past</li>
           <li><strong>Past Minutes / Hours / Days</strong>: Luxon relative output (e.g. "15 minutes ago")</li>
           <li><strong>Future Moments</strong>: Displays "in moments" when under one minute in the future</li>
           <li><strong>Future Days</strong>: Luxon relative output (e.g. "in 5 days")</li>
           <li><strong>Invalid Date</strong>: Shows "----" placeholder</li>
         </ul>
-      </org-storybook-example-container>
+      </org-design-system-demo-expected-behaviour>
     `,
     moduleMetadata: {
-      imports: [DatePipe, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [
+        DatePipe,
+        DesignSystemDemo,
+        DesignSystemDemoHeader,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
+      ],
     },
   }),
 };
@@ -300,34 +334,42 @@ export const InvalidDate: Story = {
       undefinedDate: undefined,
     },
     template: `
-      <org-storybook-example-container
-        title="Invalid Date Handling"
-        currentState="Comparing valid, invalid, null, and undefined inputs"
-      >
-        <org-storybook-example-container-section label="Valid Date">
-          {{ validDate | orgDate }}
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Invalid Date">
-          {{ invalidDate | orgDate }}
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Null Date">
-          {{ nullDate | orgDate }}
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Undefined Date">
-          {{ undefinedDate | orgDate }}
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Invalid Date Handling" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Valid Date</div>
+            {{ validDate | orgDate }}
+          </div>
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Invalid Date</div>
+            {{ invalidDate | orgDate }}
+          </div>
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Null Date</div>
+            {{ nullDate | orgDate }}
+          </div>
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Undefined Date</div>
+            {{ undefinedDate | orgDate }}
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
           <li><strong>Valid Date</strong>: Displays formatted date normally</li>
           <li><strong>Invalid / Null / Undefined</strong>: Shows "----" placeholder</li>
         </ul>
-      </org-storybook-example-container>
+      </org-design-system-demo-expected-behaviour>
     `,
     moduleMetadata: {
-      imports: [DatePipe, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [
+        DatePipe,
+        DesignSystemDemo,
+        DesignSystemDemoHeader,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
+      ],
     },
   }),
 };

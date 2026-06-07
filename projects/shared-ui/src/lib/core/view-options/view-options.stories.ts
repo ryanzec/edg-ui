@@ -6,11 +6,11 @@ import { CheckboxToggle } from '../checkbox-toggle/checkbox-toggle';
 import { Input } from '../input/input';
 import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
 import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
-import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
+import { DesignSystemDemoControlInput } from '../../example/design-system-demo/design-system-demo-control-input';
+import { DesignSystemDemoControlsGroup } from '../../example/design-system-demo/design-system-demo-controls-group';
 import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
 import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
 import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
-import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
 import { ViewOptions, type ViewField } from './view-options';
 
 const defaultFields: ViewField[] = [
@@ -66,7 +66,6 @@ class ViewOptionsDefaultHostStory {
     DesignSystemDemoHeader,
     DesignSystemDemoCanvas,
     DesignSystemDemoExpectedBehaviour,
-    StorybookExampleContainer,
   ],
   styles: [
     `
@@ -105,123 +104,113 @@ class ViewOptionsDefaultHostStory {
   ],
   template: `
     <div class="flex flex-col gap-4">
-      <org-storybook-example-container title="Default panel">
-        <org-design-system-demo>
-          <org-design-system-demo-header slot="header" title="Default — 9 fields, Name is locked" />
-          <org-design-system-demo-canvas slot="canvas">
-            <div class="panel-frame">
-              <org-view-options [(fields)]="defaultStateFields" />
-            </div>
-          </org-design-system-demo-canvas>
-        </org-design-system-demo>
-        <org-design-system-demo-expected-behaviour>
-          <ul class="list-inside list-disc flex flex-col gap-1">
-            <li><strong>Locked row</strong>: "Name" shows a lock icon, has no toggle, cannot be dragged</li>
-            <li><strong>Toggle</strong>: every unlocked row has a checkbox-toggle bound to its enabled flag</li>
-            <li><strong>Count tag</strong>: shows enabled / total; updates immediately when toggles flip</li>
-            <li><strong>Drag handle</strong>: grip icon at the start of each unlocked row; drag to reorder</li>
-          </ul>
-        </org-design-system-demo-expected-behaviour>
-      </org-storybook-example-container>
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Default — 9 fields, Name is locked" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="panel-frame">
+            <org-view-options [(fields)]="defaultStateFields" />
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="list-inside list-disc flex flex-col gap-1">
+          <li><strong>Locked row</strong>: "Name" shows a lock icon, has no toggle, cannot be dragged</li>
+          <li><strong>Toggle</strong>: every unlocked row has a checkbox-toggle bound to its enabled flag</li>
+          <li><strong>Count tag</strong>: shows enabled / total; updates immediately when toggles flip</li>
+          <li><strong>Drag handle</strong>: grip icon at the start of each unlocked row; drag to reorder</li>
+        </ul>
+      </org-design-system-demo-expected-behaviour>
 
-      <org-storybook-example-container title="All locked">
-        <org-design-system-demo>
-          <org-design-system-demo-header slot="header" title="All rows locked — no toggles, no drag affordance" />
-          <org-design-system-demo-canvas slot="canvas">
-            <div class="panel-frame">
-              <org-view-options [(fields)]="allLockedFields" />
-            </div>
-          </org-design-system-demo-canvas>
-        </org-design-system-demo>
-        <org-design-system-demo-expected-behaviour>
-          <ul class="list-inside list-disc flex flex-col gap-1">
-            <li>Every row shows a lock icon instead of a toggle</li>
-            <li>Drag handles are hidden; nothing can be reordered</li>
-            <li>The count tag still renders, showing all rows are enabled</li>
-          </ul>
-        </org-design-system-demo-expected-behaviour>
-      </org-storybook-example-container>
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="All rows locked — no toggles, no drag affordance" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="panel-frame">
+            <org-view-options [(fields)]="allLockedFields" />
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="list-inside list-disc flex flex-col gap-1">
+          <li>Every row shows a lock icon instead of a toggle</li>
+          <li>Drag handles are hidden; nothing can be reordered</li>
+          <li>The count tag still renders, showing all rows are enabled</li>
+        </ul>
+      </org-design-system-demo-expected-behaviour>
 
-      <org-storybook-example-container title="No locked rows">
-        <org-design-system-demo>
-          <org-design-system-demo-header
-            slot="header"
-            title="No locked rows — everything is toggleable and reorderable"
-          />
-          <org-design-system-demo-canvas slot="canvas">
-            <div class="panel-frame">
-              <org-view-options [(fields)]="noLockedFields" />
-            </div>
-          </org-design-system-demo-canvas>
-        </org-design-system-demo>
-        <org-design-system-demo-expected-behaviour>
-          <ul class="list-inside list-disc flex flex-col gap-1">
-            <li>Every row has a drag handle and a toggle</li>
-            <li>Drag any row above or below another to change the order</li>
-          </ul>
-        </org-design-system-demo-expected-behaviour>
-      </org-storybook-example-container>
+      <org-design-system-demo>
+        <org-design-system-demo-header
+          slot="header"
+          title="No locked rows — everything is toggleable and reorderable"
+        />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="panel-frame">
+            <org-view-options [(fields)]="noLockedFields" />
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="list-inside list-disc flex flex-col gap-1">
+          <li>Every row has a drag handle and a toggle</li>
+          <li>Drag any row above or below another to change the order</li>
+        </ul>
+      </org-design-system-demo-expected-behaviour>
 
-      <org-storybook-example-container title="Custom labels">
-        <org-design-system-demo>
-          <org-design-system-demo-header slot="header" title="Custom panel and section labels" />
-          <org-design-system-demo-canvas slot="canvas">
-            <div class="panel-frame">
-              <org-view-options [(fields)]="customLabelFields" panelLabel="Customize view" sectionLabel="Columns" />
-            </div>
-          </org-design-system-demo-canvas>
-        </org-design-system-demo>
-        <org-design-system-demo-expected-behaviour>
-          <ul class="list-inside list-disc flex flex-col gap-1">
-            <li>The panel header reads "Customize view" instead of the default</li>
-            <li>The section header reads "COLUMNS" (rendered uppercase)</li>
-          </ul>
-        </org-design-system-demo-expected-behaviour>
-      </org-storybook-example-container>
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Custom panel and section labels" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="panel-frame">
+            <org-view-options [(fields)]="customLabelFields" panelLabel="Customize view" sectionLabel="Columns" />
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="list-inside list-disc flex flex-col gap-1">
+          <li>The panel header reads "Customize view" instead of the default</li>
+          <li>The section header reads "COLUMNS" (rendered uppercase)</li>
+        </ul>
+      </org-design-system-demo-expected-behaviour>
 
-      <org-storybook-example-container title="Table usage">
-        <org-design-system-demo>
-          <org-design-system-demo-header slot="header" title="Single fields model drives both the panel AND a table" />
-          <org-design-system-demo-canvas slot="canvas">
-            <div class="table-usage">
-              <div class="panel-frame">
-                <org-view-options [(fields)]="tableFields" />
-              </div>
-              <table class="demo-table" data-testid="view-options-demo-table">
-                <thead>
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Single fields model drives both the panel AND a table" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="table-usage">
+            <div class="panel-frame">
+              <org-view-options [(fields)]="tableFields" />
+            </div>
+            <table class="demo-table" data-testid="view-options-demo-table">
+              <thead>
+                <tr>
+                  @for (field of tableFields(); track field.name) {
+                    @if (field.enabled) {
+                      <th>{{ field.label }}</th>
+                    }
+                  }
+                </tr>
+              </thead>
+              <tbody>
+                @for (row of tableRows; track row.name) {
                   <tr>
                     @for (field of tableFields(); track field.name) {
                       @if (field.enabled) {
-                        <th>{{ field.label }}</th>
+                        <td>{{ row[field.name] }}</td>
                       }
                     }
                   </tr>
-                </thead>
-                <tbody>
-                  @for (row of tableRows; track row.name) {
-                    <tr>
-                      @for (field of tableFields(); track field.name) {
-                        @if (field.enabled) {
-                          <td>{{ row[field.name] }}</td>
-                        }
-                      }
-                    </tr>
-                  }
-                </tbody>
-              </table>
-            </div>
-          </org-design-system-demo-canvas>
-        </org-design-system-demo>
-        <org-design-system-demo-expected-behaviour>
-          <ul class="list-inside list-disc flex flex-col gap-1">
-            <li>Toggling a field in the panel hides or shows its column in the table</li>
-            <li>Reordering rows in the panel reorders the table columns to match</li>
-            <li>
-              The same <code>fields</code> signal is bound to both — the panel mutates it via <code>[(fields)]</code>
-            </li>
-          </ul>
-        </org-design-system-demo-expected-behaviour>
-      </org-storybook-example-container>
+                }
+              </tbody>
+            </table>
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="list-inside list-disc flex flex-col gap-1">
+          <li>Toggling a field in the panel hides or shows its column in the table</li>
+          <li>Reordering rows in the panel reorders the table columns to match</li>
+          <li>
+            The same <code>fields</code> signal is bound to both — the panel mutates it via <code>[(fields)]</code>
+          </li>
+        </ul>
+      </org-design-system-demo-expected-behaviour>
     </div>
   `,
 })
@@ -362,7 +351,8 @@ export const Default: Story = {
     DesignSystemDemo,
     DesignSystemDemoHeader,
     DesignSystemDemoControls,
-    DesignSystemDemoControlGroup,
+    DesignSystemDemoControlsGroup,
+    DesignSystemDemoControlInput,
     DesignSystemDemoCanvas,
   ],
   styles: [
@@ -392,28 +382,32 @@ export const Default: Story = {
           description="Tweak inputs and toggle the closable affordance. The panel reacts immediately."
         />
         <org-design-system-demo-controls slot="controls">
-          <org-design-system-demo-control-group label="Panel label">
-            <org-input name="live-demo-panel-label" formControlName="panelLabel" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Section label">
-            <org-input name="live-demo-section-label" formControlName="sectionLabel" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Closable">
-            <org-checkbox-toggle name="live-demo-closable" value="closable" formControlName="closable">
-              {{ liveDemoForm.controls.closable.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label='Lock the "Name" row'>
-            <org-checkbox-toggle name="live-demo-name-locked" value="name-locked" formControlName="nameLocked">
-              {{ liveDemoForm.controls.nameLocked.value ? 'locked' : 'unlocked' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Closed event count">
-            <span>{{ closedCount() }}</span>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Enabled count">
-            <span>{{ enabledCount() }} / {{ fields().length }}</span>
-          </org-design-system-demo-control-group>
+          <org-design-system-demo-controls-group label="Configuration">
+            <org-design-system-demo-control-input label="Panel label">
+              <org-input name="live-demo-panel-label" formControlName="panelLabel" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Section label">
+              <org-input name="live-demo-section-label" formControlName="sectionLabel" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Closable">
+              <org-checkbox-toggle name="live-demo-closable" value="closable" formControlName="closable">
+                {{ liveDemoForm.controls.closable.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label='Lock the "Name" row'>
+              <org-checkbox-toggle name="live-demo-name-locked" value="name-locked" formControlName="nameLocked">
+                {{ liveDemoForm.controls.nameLocked.value ? 'locked' : 'unlocked' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
+          <org-design-system-demo-controls-group label="Readouts">
+            <org-design-system-demo-control-input label="Closed event count">
+              <span>{{ closedCount() }}</span>
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Enabled count">
+              <span>{{ enabledCount() }} / {{ fields().length }}</span>
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
         </org-design-system-demo-controls>
         <org-design-system-demo-canvas slot="canvas">
           <div class="canvas-stage">

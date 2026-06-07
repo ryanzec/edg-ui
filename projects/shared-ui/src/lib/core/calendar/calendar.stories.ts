@@ -9,7 +9,8 @@ import { ButtonToggle, type ButtonToggleItem } from '../button-toggle/button-tog
 import { CheckboxToggle } from '../checkbox-toggle/checkbox-toggle';
 import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
 import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
-import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
+import { DesignSystemDemoControlInput } from '../../example/design-system-demo/design-system-demo-control-input';
+import { DesignSystemDemoControlsGroup } from '../../example/design-system-demo/design-system-demo-controls-group';
 import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
 import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
 import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
@@ -47,7 +48,8 @@ const allowedRangeItems: ButtonToggleItem[] = [
     DesignSystemDemo,
     DesignSystemDemoHeader,
     DesignSystemDemoControls,
-    DesignSystemDemoControlGroup,
+    DesignSystemDemoControlsGroup,
+    DesignSystemDemoControlInput,
     DesignSystemDemoCanvas,
   ],
   styles: [
@@ -72,53 +74,59 @@ const allowedRangeItems: ButtonToggleItem[] = [
           description="A working calendar — click cells to pick, switch modes to see how range build vs. partial mode behave. In range mode, a hovered cell after the start previews the range with an animated soft fill."
         />
         <org-design-system-demo-controls slot="controls">
-          <org-design-system-demo-control-group label="Allow range selection">
-            <org-checkbox-toggle
-              name="live-demo-allow-range"
-              value="allowRangeSelection"
-              formControlName="allowRangeSelection"
-            >
-              {{ liveDemoForm.controls.allowRangeSelection.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Allow partial range">
-            <org-checkbox-toggle
-              name="live-demo-allow-partial"
-              value="allowPartialRangeSelection"
-              formControlName="allowPartialRangeSelection"
-            >
-              {{ liveDemoForm.controls.allowPartialRangeSelection.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Partial range type">
-            <org-button-toggle
-              [items]="partialRangeTypeItems"
-              formControlName="partialRangeSelectionType"
-              buttonSize="sm"
-            />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Allowed range (days)">
-            <org-button-toggle [items]="allowedRangeItems" formControlName="allowedDateRange" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Enable deselection">
-            <org-checkbox-toggle
-              name="live-demo-deselect"
-              value="enableDeselection"
-              formControlName="enableDeselection"
-            >
-              {{ liveDemoForm.controls.enableDeselection.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Show footer">
-            <org-checkbox-toggle name="live-demo-show-footer" value="showFooter" formControlName="showFooter">
-              {{ liveDemoForm.controls.showFooter.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Disabled">
-            <org-checkbox-toggle name="live-demo-disabled" value="disabled" formControlName="disabled">
-              {{ liveDemoForm.controls.disabled.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
+          <org-design-system-demo-controls-group label="Selection mode">
+            <org-design-system-demo-control-input label="Allow range selection">
+              <org-checkbox-toggle
+                name="live-demo-allow-range"
+                value="allowRangeSelection"
+                formControlName="allowRangeSelection"
+              >
+                {{ liveDemoForm.controls.allowRangeSelection.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Allow partial range">
+              <org-checkbox-toggle
+                name="live-demo-allow-partial"
+                value="allowPartialRangeSelection"
+                formControlName="allowPartialRangeSelection"
+              >
+                {{ liveDemoForm.controls.allowPartialRangeSelection.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Partial range type">
+              <org-button-toggle
+                [items]="partialRangeTypeItems"
+                formControlName="partialRangeSelectionType"
+                buttonSize="sm"
+              />
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
+          <org-design-system-demo-controls-group label="Constraints">
+            <org-design-system-demo-control-input label="Allowed range (days)">
+              <org-button-toggle [items]="allowedRangeItems" formControlName="allowedDateRange" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Enable deselection">
+              <org-checkbox-toggle
+                name="live-demo-deselect"
+                value="enableDeselection"
+                formControlName="enableDeselection"
+              >
+                {{ liveDemoForm.controls.enableDeselection.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
+          <org-design-system-demo-controls-group label="State">
+            <org-design-system-demo-control-input label="Show footer">
+              <org-checkbox-toggle name="live-demo-show-footer" value="showFooter" formControlName="showFooter">
+                {{ liveDemoForm.controls.showFooter.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Disabled">
+              <org-checkbox-toggle name="live-demo-disabled" value="disabled" formControlName="disabled">
+                {{ liveDemoForm.controls.disabled.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
         </org-design-system-demo-controls>
         <org-design-system-demo-canvas slot="canvas">
           <div class="canvas-stage">

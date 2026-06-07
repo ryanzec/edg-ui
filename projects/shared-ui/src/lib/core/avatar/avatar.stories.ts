@@ -5,7 +5,8 @@ import { ButtonToggle, ButtonToggleItem } from '../button-toggle/button-toggle';
 import { CheckboxToggle } from '../checkbox-toggle/checkbox-toggle';
 import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
 import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
-import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
+import { DesignSystemDemoControlInput } from '../../example/design-system-demo/design-system-demo-control-input';
+import { DesignSystemDemoControlsGroup } from '../../example/design-system-demo/design-system-demo-controls-group';
 import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
 import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
 import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
@@ -43,7 +44,8 @@ const liveDemoImageItems: ButtonToggleItem[] = (['none', 'gravatar', 'custom'] a
     DesignSystemDemo,
     DesignSystemDemoHeader,
     DesignSystemDemoControls,
-    DesignSystemDemoControlGroup,
+    DesignSystemDemoControlsGroup,
+    DesignSystemDemoControlInput,
     DesignSystemDemoCanvas,
   ],
   styles: [
@@ -74,54 +76,60 @@ const liveDemoImageItems: ButtonToggleItem[] = (['none', 'gravatar', 'custom'] a
           description="Edit the label, toggle the image, sub-label, shape, clickable, and status pip — every visual axis updates against a single live avatar."
         />
         <org-design-system-demo-controls slot="controls">
-          <org-design-system-demo-control-group label="Label">
-            <input class="text-input" type="text" formControlName="label" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Sub-label">
-            <input class="text-input" type="text" formControlName="subLabel" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Size">
-            <org-button-toggle [items]="sizeItems" formControlName="size" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Shape">
-            <org-button-toggle [items]="shapeItems" formControlName="shape" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Image">
-            <org-button-toggle [items]="imageItems" formControlName="image" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Show label">
-            <org-checkbox-toggle name="live-demo-show-label" value="show-label" formControlName="showLabel">
-              {{ liveDemoForm.controls.showLabel.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Show sub-label">
-            <org-checkbox-toggle name="live-demo-show-sub" value="show-sub" formControlName="showSubLabel">
-              {{ liveDemoForm.controls.showSubLabel.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Clickable">
-            <org-checkbox-toggle name="live-demo-clickable" value="clickable" formControlName="clickable">
-              {{ liveDemoForm.controls.clickable.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Disabled">
-            <org-checkbox-toggle name="live-demo-disabled" value="disabled" formControlName="disabled">
-              {{ liveDemoForm.controls.disabled.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Status pip">
-            <org-checkbox-toggle name="live-demo-status" value="status" formControlName="statusPip">
-              {{ liveDemoForm.controls.statusPip.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Overflow">
-            <org-checkbox-toggle name="live-demo-overflow" value="overflow" formControlName="isOverflow">
-              {{ liveDemoForm.controls.isOverflow.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Count">
-            <input class="text-input" type="number" min="0" formControlName="count" />
-          </org-design-system-demo-control-group>
+          <org-design-system-demo-controls-group label="Content">
+            <org-design-system-demo-control-input label="Label">
+              <input class="text-input" type="text" formControlName="label" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Sub-label">
+              <input class="text-input" type="text" formControlName="subLabel" />
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
+          <org-design-system-demo-controls-group label="Appearance">
+            <org-design-system-demo-control-input label="Size">
+              <org-button-toggle [items]="sizeItems" formControlName="size" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Shape">
+              <org-button-toggle [items]="shapeItems" formControlName="shape" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Image">
+              <org-button-toggle [items]="imageItems" formControlName="image" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
+          <org-design-system-demo-controls-group label="State">
+            <org-design-system-demo-control-input label="Show label">
+              <org-checkbox-toggle name="live-demo-show-label" value="show-label" formControlName="showLabel">
+                {{ liveDemoForm.controls.showLabel.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Show sub-label">
+              <org-checkbox-toggle name="live-demo-show-sub" value="show-sub" formControlName="showSubLabel">
+                {{ liveDemoForm.controls.showSubLabel.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Clickable">
+              <org-checkbox-toggle name="live-demo-clickable" value="clickable" formControlName="clickable">
+                {{ liveDemoForm.controls.clickable.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Disabled">
+              <org-checkbox-toggle name="live-demo-disabled" value="disabled" formControlName="disabled">
+                {{ liveDemoForm.controls.disabled.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Status pip">
+              <org-checkbox-toggle name="live-demo-status" value="status" formControlName="statusPip">
+                {{ liveDemoForm.controls.statusPip.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Overflow">
+              <org-checkbox-toggle name="live-demo-overflow" value="overflow" formControlName="isOverflow">
+                {{ liveDemoForm.controls.isOverflow.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Count">
+              <input class="text-input" type="number" min="0" formControlName="count" />
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
         </org-design-system-demo-controls>
         <org-design-system-demo-canvas slot="canvas">
           <div class="canvas-stage">

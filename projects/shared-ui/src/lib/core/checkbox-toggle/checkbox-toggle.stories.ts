@@ -11,7 +11,8 @@ import { FormField } from '../form-fields/form-field';
 import { FormFields } from '../form-fields/form-fields';
 import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
 import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
-import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
+import { DesignSystemDemoControlInput } from '../../example/design-system-demo/design-system-demo-control-input';
+import { DesignSystemDemoControlsGroup } from '../../example/design-system-demo/design-system-demo-controls-group';
 import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
 import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
 import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
@@ -106,7 +107,7 @@ const meta: Meta<CheckboxToggle> = {
   </org-checkbox-toggle>
 
   <!-- Card-tile pattern: wrap with org-box, set [isClickable]="true", and forward (clicked) to a toggle handler -->
-  <org-box layout="stack" [isClickable]="true" (clicked)="autosaveOn.set(!autosaveOn())">
+  <org-box [isClickable]="true" (clicked)="autosaveOn.set(!autosaveOn())">
     <org-checkbox-toggle
       name="autosave"
       value="on"
@@ -243,7 +244,8 @@ export const Default: Story = {
     DesignSystemDemo,
     DesignSystemDemoHeader,
     DesignSystemDemoControls,
-    DesignSystemDemoControlGroup,
+    DesignSystemDemoControlsGroup,
+    DesignSystemDemoControlInput,
     DesignSystemDemoCanvas,
   ],
   styles: [
@@ -268,37 +270,45 @@ export const Default: Story = {
           description="Toggle the inputs to walk every documented combination — label, description, size, color, label-position, optional icon-off / icon-on, checked, disabled."
         />
         <org-design-system-demo-controls slot="controls">
-          <org-design-system-demo-control-group label="Label">
-            <org-input name="live-demo-label" formControlName="label" ariaLabel="Toggle label" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Description">
-            <org-input name="live-demo-description" formControlName="description" ariaLabel="Toggle description" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Size">
-            <org-button-toggle [items]="sizeItems" formControlName="size" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Color">
-            <org-button-toggle [items]="colorItems" formControlName="color" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Label position">
-            <org-button-toggle [items]="labelPositionItems" formControlName="labelPosition" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Icon off">
-            <org-button-toggle [items]="iconOffItems" formControlName="iconOff" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Icon on">
-            <org-button-toggle [items]="iconOnItems" formControlName="iconOn" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Checked">
-            <org-checkbox-toggle name="live-demo-checked" value="checked" formControlName="checked">
-              {{ liveDemoForm.controls.checked.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Disabled">
-            <org-checkbox-toggle name="live-demo-disabled" value="disabled" formControlName="disabled">
-              {{ liveDemoForm.controls.disabled.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
+          <org-design-system-demo-controls-group label="Content">
+            <org-design-system-demo-control-input label="Label">
+              <org-input name="live-demo-label" formControlName="label" ariaLabel="Toggle label" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Description">
+              <org-input name="live-demo-description" formControlName="description" ariaLabel="Toggle description" />
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
+          <org-design-system-demo-controls-group label="Appearance">
+            <org-design-system-demo-control-input label="Size">
+              <org-button-toggle [items]="sizeItems" formControlName="size" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Color">
+              <org-button-toggle [items]="colorItems" formControlName="color" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Label position">
+              <org-button-toggle [items]="labelPositionItems" formControlName="labelPosition" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
+          <org-design-system-demo-controls-group label="Icon">
+            <org-design-system-demo-control-input label="Icon off">
+              <org-button-toggle [items]="iconOffItems" formControlName="iconOff" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Icon on">
+              <org-button-toggle [items]="iconOnItems" formControlName="iconOn" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
+          <org-design-system-demo-controls-group label="State">
+            <org-design-system-demo-control-input label="Checked">
+              <org-checkbox-toggle name="live-demo-checked" value="checked" formControlName="checked">
+                {{ liveDemoForm.controls.checked.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Disabled">
+              <org-checkbox-toggle name="live-demo-disabled" value="disabled" formControlName="disabled">
+                {{ liveDemoForm.controls.disabled.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
         </org-design-system-demo-controls>
         <org-design-system-demo-canvas slot="canvas">
           <div class="canvas-stage">
@@ -384,7 +394,7 @@ export const LiveDemo: Story = {
       />
       <org-design-system-demo-canvas slot="canvas">
         <div class="flex flex-col gap-2 w-full">
-          <org-box layout="stack" [isClickable]="true" (clicked)="toggle('autosave')">
+          <org-box [isClickable]="true" (clicked)="toggle('autosave')">
             <org-checkbox-toggle
               name="card-autosave"
               value="autosave"
@@ -397,7 +407,7 @@ export const LiveDemo: Story = {
               Autosave
             </org-checkbox-toggle>
           </org-box>
-          <org-box layout="stack" [isClickable]="true" (clicked)="toggle('slack')">
+          <org-box [isClickable]="true" (clicked)="toggle('slack')">
             <org-checkbox-toggle
               name="card-slack"
               value="slack"
@@ -410,7 +420,7 @@ export const LiveDemo: Story = {
               Slack notifications
             </org-checkbox-toggle>
           </org-box>
-          <org-box layout="stack" [isClickable]="true" (clicked)="toggle('public')">
+          <org-box [isClickable]="true" (clicked)="toggle('public')">
             <org-checkbox-toggle
               name="card-public"
               value="public"

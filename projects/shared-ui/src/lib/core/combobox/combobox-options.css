@@ -4,12 +4,13 @@
   }
 
   .combobox-panel {
+    /* fill the overlay pane so the dropDownWidthMode-driven pane width controls the panel width in every mode */
+    width: 100%;
     background-color: var(--combobox-panel-bg);
     border: var(--combobox-panel-border-width) solid var(--combobox-panel-border-color);
     border-radius: var(--combobox-panel-radius);
     box-shadow: var(--combobox-panel-shadow);
     padding: var(--combobox-panel-padding);
-    max-width: var(--combobox-panel-max-width);
     max-height: var(--combobox-panel-max-height);
     color: var(--combobox-panel-fg);
     overflow: hidden;
@@ -37,6 +38,17 @@
     padding: var(--combobox-empty-padding-block) var(--combobox-option-padding-inline);
     font-size: var(--combobox-empty-font-size);
     color: var(--combobox-empty-fg);
+    text-align: center;
+  }
+
+  .combobox-status {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--combobox-status-gap);
+    padding: var(--combobox-status-padding-block) var(--combobox-option-padding-inline);
+    font-size: var(--combobox-status-font-size);
+    color: var(--combobox-status-fg);
     text-align: center;
   }
 }

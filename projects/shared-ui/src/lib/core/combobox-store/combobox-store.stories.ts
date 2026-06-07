@@ -3,8 +3,10 @@ import { Component, ChangeDetectionStrategy, inject, signal } from '@angular/cor
 import { ComboboxStore, ComboboxOption, ComboboxOptionInput } from './combobox-store';
 import { Button } from '../button/button';
 import { Input } from '../input/input';
-import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
-import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
+import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
+import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
+import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
+import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
 
 const simpleOptions: ComboboxOptionInput[] = [
   { label: 'Option 1', value: 'option-1' },
@@ -32,75 +34,84 @@ const fruitOptions: ComboboxOptionInput[] = [
 @Component({
   selector: 'story-combobox-store-single-select-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Button, Input, StorybookExampleContainer, StorybookExampleContainerSection],
+  imports: [
+    Button,
+    Input,
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoCanvas,
+    DesignSystemDemoExpectedBehaviour,
+  ],
   providers: [ComboboxStore],
   template: `
-    <org-storybook-example-container
-      title="Single Select Combobox"
-      [currentState]="'Selected: ' + (store.selectedOptions().length > 0 ? store.selectedOptions()[0].label : 'None')"
-    >
-      <org-storybook-example-container-section label="Input & Options">
-        <div class="flex flex-col gap-3 max-w-lg">
-          <org-input
-            name="combobox-input"
-            [value]="store.inputValue()"
-            (input)="inputChange($event)"
-            placeholder="Type to filter options..."
-          />
+    <org-design-system-demo>
+      <org-design-system-demo-header slot="header" title="Single Select Combobox" />
+      <org-design-system-demo-canvas slot="canvas">
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Input & Options</div>
+          <div class="flex flex-col gap-3 max-w-lg">
+            <org-input
+              name="combobox-input"
+              [value]="store.inputValue()"
+              (input)="inputChange($event)"
+              placeholder="Type to filter options..."
+            />
 
-          <div class="flex flex-col gap-2 max-h-2xs overflow-y-auto border rounded p-2">
-            @if (store.filteredOptions().length === 0) {
-              <div class="text-sm text-neutral p-2">No options available</div>
-            }
-            @for (option of store.filteredOptions(); track option.value) {
-              <button
-                class="px-3 py-2 text-sm text-left border rounded cursor-pointer hover:bg-neutral-soft"
-                [class.bg-info-soft]="store.selectedValues().includes(option.value)"
-                [class.ring-2]="store.focusedOption()?.value === option.value"
-                [class.ring-primary-border]="store.focusedOption()?.value === option.value"
-                [disabled]="option.disabled"
-                (click)="selectOption(option)"
-                (mouseenter)="store.setFocusedOption(option)"
-              >
-                <span [class.opacity-50]="option.disabled">{{ option.label }}</span>
-                @if (option.groupLabel !== 'Uncategorized') {
-                  <span class="text-xs text-neutral ml-2">({{ option.groupLabel }})</span>
-                }
-              </button>
-            }
+            <div class="flex flex-col gap-2 max-h-2xs overflow-y-auto border rounded p-2">
+              @if (store.filteredOptions().length === 0) {
+                <div class="text-sm text-neutral p-2">No options available</div>
+              }
+              @for (option of store.filteredOptions(); track option.value) {
+                <button
+                  class="px-3 py-2 text-sm text-left border rounded cursor-pointer hover:bg-neutral-soft"
+                  [class.bg-info-soft]="store.selectedValues().includes(option.value)"
+                  [class.ring-2]="store.focusedOption()?.value === option.value"
+                  [class.ring-primary-border]="store.focusedOption()?.value === option.value"
+                  [disabled]="option.disabled"
+                  (click)="selectOption(option)"
+                  (mouseenter)="store.setFocusedOption(option)"
+                >
+                  <span [class.opacity-50]="option.disabled">{{ option.label }}</span>
+                  @if (option.groupLabel !== 'Uncategorized') {
+                    <span class="text-xs text-neutral ml-2">({{ option.groupLabel }})</span>
+                  }
+                </button>
+              }
+            </div>
           </div>
         </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Controls">
-        <div class="flex flex-wrap gap-2">
-          <org-button color="primary" size="sm" label="Focus Next" (click)="store.focusNext()" />
-          <org-button color="primary" size="sm" label="Focus Previous" (click)="store.focusPrevious()" />
-          <org-button color="primary" size="sm" label="Focus First" (click)="store.focusFirst()" />
-          <org-button color="primary" size="sm" label="Focus Last" (click)="store.focusLast()" />
-          <org-button color="secondary" size="sm" label="Clear Selection" (click)="store.setSelectedValues([])" />
-          <org-button color="secondary" size="sm" label="Clear Input" (click)="store.clearInputValue()" />
-        </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="State">
-        <div class="text-sm flex flex-col gap-1">
-          <div>
-            <strong>Selected Value:</strong>
-            {{ store.selectedValues().length > 0 ? store.selectedValues()[0] : 'None' }}
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Controls</div>
+          <div class="flex flex-wrap gap-2">
+            <org-button color="primary" size="sm" label="Focus Next" (click)="store.focusNext()" />
+            <org-button color="primary" size="sm" label="Focus Previous" (click)="store.focusPrevious()" />
+            <org-button color="primary" size="sm" label="Focus First" (click)="store.focusFirst()" />
+            <org-button color="primary" size="sm" label="Focus Last" (click)="store.focusLast()" />
+            <org-button color="secondary" size="sm" label="Clear Selection" (click)="store.setSelectedValues([])" />
+            <org-button color="secondary" size="sm" label="Clear Input" (click)="store.clearInputValue()" />
           </div>
-          <div><strong>Input Value:</strong> "{{ store.inputValue() }}"</div>
-          <div><strong>Focused Option:</strong> {{ store.focusedOption()?.label ?? 'None' }}</div>
-          <div><strong>Filtered Options Count:</strong> {{ store.filteredOptions().length }}</div>
-          <div><strong>Total Options Count:</strong> {{ store.options().length }}</div>
         </div>
-        <div class="mt-3">
-          <div class="text-sm font-semibold mb-1">Selected Options (JSON):</div>
-          <pre class="text-xs bg-neutral-soft p-2 rounded border overflow-x-auto">{{ getSelectedOptionsJson() }}</pre>
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">State</div>
+          <div class="text-sm flex flex-col gap-1">
+            <div>
+              <strong>Selected Value:</strong>
+              {{ store.selectedValues().length > 0 ? store.selectedValues()[0] : 'None' }}
+            </div>
+            <div><strong>Input Value:</strong> "{{ store.inputValue() }}"</div>
+            <div><strong>Focused Option:</strong> {{ store.focusedOption()?.label ?? 'None' }}</div>
+            <div><strong>Filtered Options Count:</strong> {{ store.filteredOptions().length }}</div>
+            <div><strong>Total Options Count:</strong> {{ store.options().length }}</div>
+          </div>
+          <div class="mt-3">
+            <div class="text-sm font-semibold mb-1">Selected Options (JSON):</div>
+            <pre class="text-xs bg-neutral-soft p-2 rounded border overflow-x-auto">{{ getSelectedOptionsJson() }}</pre>
+          </div>
         </div>
-      </org-storybook-example-container-section>
-
-      <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+      </org-design-system-demo-canvas>
+    </org-design-system-demo>
+    <org-design-system-demo-expected-behaviour>
+      <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
         <li>Single selection mode - only one option can be selected at a time</li>
         <li>Input value updates to match selected option label</li>
         <li>Options can be filtered by typing in the input</li>
@@ -108,7 +119,7 @@ const fruitOptions: ComboboxOptionInput[] = [
         <li>Focused option is highlighted with a ring</li>
         <li>Options are grouped and sorted alphabetically</li>
       </ul>
-    </org-storybook-example-container>
+    </org-design-system-demo-expected-behaviour>
   `,
 })
 class ComboboxStoreSingleSelectDemo {
@@ -155,98 +166,107 @@ class ComboboxStoreSingleSelectDemo {
 @Component({
   selector: 'story-combobox-store-multi-select-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Button, Input, StorybookExampleContainer, StorybookExampleContainerSection],
+  imports: [
+    Button,
+    Input,
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoCanvas,
+    DesignSystemDemoExpectedBehaviour,
+  ],
   providers: [ComboboxStore],
   template: `
-    <org-storybook-example-container
-      title="Multi Select Combobox"
-      [currentState]="'Selected: ' + store.selectedValues().length + ' items'"
-    >
-      <org-storybook-example-container-section label="Selected Items">
-        <div class="flex flex-wrap gap-2 min-h-9xs">
-          @if (store.selectedOptions().length === 0) {
-            <div class="text-sm text-neutral">No items selected</div>
-          }
-          @for (option of store.selectedOptions(); track option.value) {
-            <div class="flex items-center gap-2 px-3 py-1 text-sm border rounded bg-info-soft">
-              <span>{{ option.label }}</span>
-              @if (option.isNew) {
-                <span class="text-xs text-success-text">(New)</span>
-              }
-              <button class="text-danger hover:text-danger" (click)="removeSelection(option.value)">×</button>
-            </div>
-          }
-        </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Input & Options">
-        <div class="flex flex-col gap-3 max-w-lg">
-          <org-input
-            name="combobox-store-multi-select-demo-input"
-            [value]="store.inputValue()"
-            (input)="inputChange($event)"
-            (keydown.enter)="enterKey()"
-            placeholder="Type to filter or add new options..."
-          />
-
-          <div class="flex flex-col gap-2 max-h-2xs overflow-y-auto border rounded p-2">
-            @if (store.filteredOptions().length === 0 && store.inputValue()) {
-              <div class="text-sm text-neutral p-2">
-                No matching options. Press Enter to add "{{ store.inputValue() }}"
-              </div>
+    <org-design-system-demo>
+      <org-design-system-demo-header slot="header" title="Multi Select Combobox" />
+      <org-design-system-demo-canvas slot="canvas">
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Selected Items</div>
+          <div class="flex flex-wrap gap-2 min-h-9xs">
+            @if (store.selectedOptions().length === 0) {
+              <div class="text-sm text-neutral">No items selected</div>
             }
-            @for (option of store.filteredOptions(); track option.value) {
-              <button
-                class="px-3 py-2 text-sm text-left border rounded cursor-pointer hover:bg-neutral-soft"
-                [class.bg-info-soft]="store.selectedValues().includes(option.value)"
-                [class.ring-2]="store.focusedOption()?.value === option.value"
-                [class.ring-primary-border]="store.focusedOption()?.value === option.value"
-                [disabled]="option.disabled"
-                (click)="toggleOption(option)"
-                (mouseenter)="store.setFocusedOption(option)"
-              >
-                <span [class.opacity-50]="option.disabled">{{ option.label }}</span>
-                @if (option.groupLabel !== 'Uncategorized') {
-                  <span class="text-xs text-neutral ml-2">({{ option.groupLabel }})</span>
+            @for (option of store.selectedOptions(); track option.value) {
+              <div class="flex items-center gap-2 px-3 py-1 text-sm border rounded bg-info-soft">
+                <span>{{ option.label }}</span>
+                @if (option.isNew) {
+                  <span class="text-xs text-success-text">(New)</span>
                 }
-              </button>
+                <button class="text-danger hover:text-danger" (click)="removeSelection(option.value)">×</button>
+              </div>
             }
           </div>
         </div>
-      </org-storybook-example-container-section>
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Input & Options</div>
+          <div class="flex flex-col gap-3 max-w-lg">
+            <org-input
+              name="combobox-store-multi-select-demo-input"
+              [value]="store.inputValue()"
+              (input)="inputChange($event)"
+              (keydown.enter)="enterKey()"
+              placeholder="Type to filter or add new options..."
+            />
 
-      <org-storybook-example-container-section label="Controls">
-        <div class="flex flex-wrap gap-2">
-          <org-button color="primary" size="sm" label="Group Focus Next" (click)="store.groupFocusNext()" />
-          <org-button color="primary" size="sm" label="Group Focus Previous" (click)="store.groupFocusPrevious()" />
-          <org-button color="primary" size="sm" label="Group Focus First" (click)="store.groupFocusFirst()" />
-          <org-button color="primary" size="sm" label="Group Focus Last" (click)="store.groupFocusLast()" />
-          <org-button color="secondary" size="sm" label="Clear All" (click)="store.setSelectedValues([])" />
-          <org-button
-            color="secondary"
-            size="sm"
-            [label]="(store.config().filterSelectedOptions ? 'Show' : 'Hide') + ' Selected'"
-            (click)="store.setFilterSelectedOptions(!store.config().filterSelectedOptions)"
-          />
+            <div class="flex flex-col gap-2 max-h-2xs overflow-y-auto border rounded p-2">
+              @if (store.filteredOptions().length === 0 && store.inputValue()) {
+                <div class="text-sm text-neutral p-2">
+                  No matching options. Press Enter to add "{{ store.inputValue() }}"
+                </div>
+              }
+              @for (option of store.filteredOptions(); track option.value) {
+                <button
+                  class="px-3 py-2 text-sm text-left border rounded cursor-pointer hover:bg-neutral-soft"
+                  [class.bg-info-soft]="store.selectedValues().includes(option.value)"
+                  [class.ring-2]="store.focusedOption()?.value === option.value"
+                  [class.ring-primary-border]="store.focusedOption()?.value === option.value"
+                  [disabled]="option.disabled"
+                  (click)="toggleOption(option)"
+                  (mouseenter)="store.setFocusedOption(option)"
+                >
+                  <span [class.opacity-50]="option.disabled">{{ option.label }}</span>
+                  @if (option.groupLabel !== 'Uncategorized') {
+                    <span class="text-xs text-neutral ml-2">({{ option.groupLabel }})</span>
+                  }
+                </button>
+              }
+            </div>
+          </div>
         </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="State">
-        <div class="text-sm flex flex-col gap-1">
-          <div><strong>Selected Count:</strong> {{ store.selectedValues().length }}</div>
-          <div><strong>Input Value:</strong> "{{ store.inputValue() }}"</div>
-          <div><strong>Focused Option:</strong> {{ store.focusedOption()?.label ?? 'None' }}</div>
-          <div><strong>Filter Selected:</strong> {{ store.config().filterSelectedOptions }}</div>
-          <div><strong>Allow New Options:</strong> {{ store.allowNewOptions() }}</div>
-          <div><strong>Filtered Options Count:</strong> {{ store.filteredOptions().length }}</div>
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Controls</div>
+          <div class="flex flex-wrap gap-2">
+            <org-button color="primary" size="sm" label="Group Focus Next" (click)="store.groupFocusNext()" />
+            <org-button color="primary" size="sm" label="Group Focus Previous" (click)="store.groupFocusPrevious()" />
+            <org-button color="primary" size="sm" label="Group Focus First" (click)="store.groupFocusFirst()" />
+            <org-button color="primary" size="sm" label="Group Focus Last" (click)="store.groupFocusLast()" />
+            <org-button color="secondary" size="sm" label="Clear All" (click)="store.setSelectedValues([])" />
+            <org-button
+              color="secondary"
+              size="sm"
+              [label]="(store.config().filterSelectedOptions ? 'Show' : 'Hide') + ' Selected'"
+              (click)="store.setFilterSelectedOptions(!store.config().filterSelectedOptions)"
+            />
+          </div>
         </div>
-        <div class="mt-3">
-          <div class="text-sm font-semibold mb-1">Selected Options (JSON):</div>
-          <pre class="text-xs bg-neutral-soft p-2 rounded border overflow-x-auto">{{ getSelectedOptionsJson() }}</pre>
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">State</div>
+          <div class="text-sm flex flex-col gap-1">
+            <div><strong>Selected Count:</strong> {{ store.selectedValues().length }}</div>
+            <div><strong>Input Value:</strong> "{{ store.inputValue() }}"</div>
+            <div><strong>Focused Option:</strong> {{ store.focusedOption()?.label ?? 'None' }}</div>
+            <div><strong>Filter Selected:</strong> {{ store.config().filterSelectedOptions }}</div>
+            <div><strong>Allow New Options:</strong> {{ store.allowNewOptions() }}</div>
+            <div><strong>Filtered Options Count:</strong> {{ store.filteredOptions().length }}</div>
+          </div>
+          <div class="mt-3">
+            <div class="text-sm font-semibold mb-1">Selected Options (JSON):</div>
+            <pre class="text-xs bg-neutral-soft p-2 rounded border overflow-x-auto">{{ getSelectedOptionsJson() }}</pre>
+          </div>
         </div>
-      </org-storybook-example-container-section>
-
-      <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+      </org-design-system-demo-canvas>
+    </org-design-system-demo>
+    <org-design-system-demo-expected-behaviour>
+      <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
         <li>Multi-selection mode - multiple options can be selected</li>
         <li>Input clears after each selection</li>
         <li>New options can be added by typing and pressing Enter</li>
@@ -255,7 +275,7 @@ class ComboboxStoreSingleSelectDemo {
         <li>Group-aware focus navigation</li>
         <li>New options are marked with "(New)" badge</li>
       </ul>
-    </org-storybook-example-container>
+    </org-design-system-demo-expected-behaviour>
   `,
 })
 class ComboboxStoreMultiSelectDemo {
@@ -320,83 +340,92 @@ class ComboboxStoreMultiSelectDemo {
 @Component({
   selector: 'story-combobox-store-grouped-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Button, Input, StorybookExampleContainer, StorybookExampleContainerSection],
+  imports: [
+    Button,
+    Input,
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoCanvas,
+    DesignSystemDemoExpectedBehaviour,
+  ],
   providers: [ComboboxStore],
   template: `
-    <org-storybook-example-container
-      title="Grouped Options"
-      [currentState]="'Groups: ' + store.groupedOptions().length"
-    >
-      <org-storybook-example-container-section label="Input">
-        <div class="max-w-lg">
-          <org-input
-            name="combobox-store-grouped-demo-input"
-            [value]="store.inputValue()"
-            (input)="inputChange($event)"
-            placeholder="Type to filter options..."
-          />
-        </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Grouped Options">
-        <div class="flex flex-col gap-4 max-h-sm overflow-y-auto max-w-lg">
-          @for (group of store.filteredGroupedOptions(); track group.groupLabel) {
-            <div class="border rounded p-3">
-              <div class="text-sm font-semibold mb-2 text-neutral">
-                {{ group.groupLabel }} ({{ group.options.length }})
-              </div>
-              <div class="flex flex-col gap-1">
-                @for (option of group.options; track option.value) {
-                  <button
-                    class="px-3 py-2 text-sm text-left border rounded cursor-pointer hover:bg-neutral-soft"
-                    [class.bg-info-soft]="store.selectedValues().includes(option.value)"
-                    [class.ring-2]="store.focusedOption()?.value === option.value"
-                    [class.ring-primary-border]="store.focusedOption()?.value === option.value"
-                    [disabled]="option.disabled"
-                    (click)="toggleOption(option)"
-                    (mouseenter)="store.setFocusedOption(option)"
-                  >
-                    {{ option.label }}
-                  </button>
-                }
-              </div>
-            </div>
-          }
-        </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Focus Navigation">
-        <div class="flex flex-wrap gap-2">
-          <org-button color="primary" size="sm" label="Next in Group" (click)="store.groupFocusNext()" />
-          <org-button color="primary" size="sm" label="Previous in Group" (click)="store.groupFocusPrevious()" />
-          <org-button color="primary" size="sm" label="First Option" (click)="store.groupFocusFirst()" />
-          <org-button color="primary" size="sm" label="Last Option" (click)="store.groupFocusLast()" />
-        </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Group Index Info">
-        <div class="text-sm flex flex-col gap-1">
-          <div><strong>Focused Group Index:</strong> {{ store.getFocusedOptionGroupIndex().groupIndex }}</div>
-          <div>
-            <strong>Focused Option Index in Group:</strong> {{ store.getFocusedOptionGroupIndex().optionIndex }}
+    <org-design-system-demo>
+      <org-design-system-demo-header slot="header" title="Grouped Options" />
+      <org-design-system-demo-canvas slot="canvas">
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Input</div>
+          <div class="max-w-lg">
+            <org-input
+              name="combobox-store-grouped-demo-input"
+              [value]="store.inputValue()"
+              (input)="inputChange($event)"
+              placeholder="Type to filter options..."
+            />
           </div>
-          <div><strong>Focused Option:</strong> {{ store.focusedOption()?.label ?? 'None' }}</div>
-          <div><strong>Total Groups:</strong> {{ store.filteredGroupedOptions().length }}</div>
         </div>
-        <div class="mt-3">
-          <div class="text-sm font-semibold mb-1">Selected Options (JSON):</div>
-          <pre class="text-xs bg-neutral-soft p-2 rounded border overflow-x-auto">{{ getSelectedOptionsJson() }}</pre>
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Grouped Options</div>
+          <div class="flex flex-col gap-4 max-h-sm overflow-y-auto max-w-lg">
+            @for (group of store.filteredGroupedOptions(); track group.groupLabel) {
+              <div class="border rounded p-3">
+                <div class="text-sm font-semibold mb-2 text-neutral">
+                  {{ group.groupLabel }} ({{ group.options.length }})
+                </div>
+                <div class="flex flex-col gap-1">
+                  @for (option of group.options; track option.value) {
+                    <button
+                      class="px-3 py-2 text-sm text-left border rounded cursor-pointer hover:bg-neutral-soft"
+                      [class.bg-info-soft]="store.selectedValues().includes(option.value)"
+                      [class.ring-2]="store.focusedOption()?.value === option.value"
+                      [class.ring-primary-border]="store.focusedOption()?.value === option.value"
+                      [disabled]="option.disabled"
+                      (click)="toggleOption(option)"
+                      (mouseenter)="store.setFocusedOption(option)"
+                    >
+                      {{ option.label }}
+                    </button>
+                  }
+                </div>
+              </div>
+            }
+          </div>
         </div>
-      </org-storybook-example-container-section>
-
-      <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Focus Navigation</div>
+          <div class="flex flex-wrap gap-2">
+            <org-button color="primary" size="sm" label="Next in Group" (click)="store.groupFocusNext()" />
+            <org-button color="primary" size="sm" label="Previous in Group" (click)="store.groupFocusPrevious()" />
+            <org-button color="primary" size="sm" label="First Option" (click)="store.groupFocusFirst()" />
+            <org-button color="primary" size="sm" label="Last Option" (click)="store.groupFocusLast()" />
+          </div>
+        </div>
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Group Index Info</div>
+          <div class="text-sm flex flex-col gap-1">
+            <div><strong>Focused Group Index:</strong> {{ store.getFocusedOptionGroupIndex().groupIndex }}</div>
+            <div>
+              <strong>Focused Option Index in Group:</strong> {{ store.getFocusedOptionGroupIndex().optionIndex }}
+            </div>
+            <div><strong>Focused Option:</strong> {{ store.focusedOption()?.label ?? 'None' }}</div>
+            <div><strong>Total Groups:</strong> {{ store.filteredGroupedOptions().length }}</div>
+          </div>
+          <div class="mt-3">
+            <div class="text-sm font-semibold mb-1">Selected Options (JSON):</div>
+            <pre class="text-xs bg-neutral-soft p-2 rounded border overflow-x-auto">{{ getSelectedOptionsJson() }}</pre>
+          </div>
+        </div>
+      </org-design-system-demo-canvas>
+    </org-design-system-demo>
+    <org-design-system-demo-expected-behaviour>
+      <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
         <li>Options are organized by group labels</li>
         <li>Groups are sorted alphabetically</li>
         <li>Focus navigation respects group boundaries</li>
         <li>Group index tracking for keyboard navigation</li>
         <li>Options within groups maintain alphabetical order</li>
       </ul>
-    </org-storybook-example-container>
+    </org-design-system-demo-expected-behaviour>
   `,
 })
 class ComboboxStoreGroupedDemo {
@@ -441,72 +470,80 @@ class ComboboxStoreGroupedDemo {
 @Component({
   selector: 'story-combobox-store-dynamic-options-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Button, StorybookExampleContainer, StorybookExampleContainerSection],
+  imports: [
+    Button,
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoCanvas,
+    DesignSystemDemoExpectedBehaviour,
+  ],
   providers: [ComboboxStore],
   template: `
-    <org-storybook-example-container
-      title="Dynamic Options Management"
-      [currentState]="'Options: ' + store.options().length"
-    >
-      <org-storybook-example-container-section label="Current Selection">
-        <div class="flex flex-wrap gap-2 min-h-9xs">
-          @if (store.selectedOptions().length === 0) {
-            <div class="text-sm text-neutral">No items selected</div>
-          }
-          @for (option of store.selectedOptions(); track option.value) {
-            <div class="px-3 py-1 text-sm border rounded bg-info-soft">
-              {{ option.label }}
-            </div>
-          }
-        </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Available Options">
-        <div class="flex flex-col gap-2 max-h-5xs overflow-y-auto border rounded p-2 max-w-lg">
-          @for (option of store.options(); track option.value) {
-            <button
-              class="px-3 py-2 text-sm text-left border rounded cursor-pointer hover:bg-neutral-soft"
-              [class.bg-info-soft]="store.selectedValues().includes(option.value)"
-              (click)="toggleOption(option)"
-            >
-              {{ option.label }} ({{ option.groupLabel }})
-            </button>
-          }
-        </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Dynamic Updates">
-        <div class="flex flex-wrap gap-2">
-          <org-button color="primary" size="sm" label="Load Fruits Only" (click)="loadFruitsOnly()" />
-          <org-button color="primary" size="sm" label="Load Vegetables Only" (click)="loadVegetablesOnly()" />
-          <org-button color="primary" size="sm" label="Load All Options" (click)="loadAllOptions()" />
-          <org-button color="secondary" size="sm" label="Add Random Option" (click)="addRandomOption()" />
-        </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="State">
-        <div class="text-sm flex flex-col gap-1">
-          <div><strong>Total Options:</strong> {{ store.options().length }}</div>
-          <div><strong>Selected Count:</strong> {{ store.selectedValues().length }}</div>
-          <div>
-            <strong>Maintained Selections:</strong>
-            {{ maintainedSelectionsMessage() }}
+    <org-design-system-demo>
+      <org-design-system-demo-header slot="header" title="Dynamic Options Management" />
+      <org-design-system-demo-canvas slot="canvas">
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Current Selection</div>
+          <div class="flex flex-wrap gap-2 min-h-9xs">
+            @if (store.selectedOptions().length === 0) {
+              <div class="text-sm text-neutral">No items selected</div>
+            }
+            @for (option of store.selectedOptions(); track option.value) {
+              <div class="px-3 py-1 text-sm border rounded bg-info-soft">
+                {{ option.label }}
+              </div>
+            }
           </div>
         </div>
-        <div class="mt-3">
-          <div class="text-sm font-semibold mb-1">Selected Options (JSON):</div>
-          <pre class="text-xs bg-neutral-soft p-2 rounded border overflow-x-auto">{{ getSelectedOptionsJson() }}</pre>
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Available Options</div>
+          <div class="flex flex-col gap-2 max-h-5xs overflow-y-auto border rounded p-2 max-w-lg">
+            @for (option of store.options(); track option.value) {
+              <button
+                class="px-3 py-2 text-sm text-left border rounded cursor-pointer hover:bg-neutral-soft"
+                [class.bg-info-soft]="store.selectedValues().includes(option.value)"
+                (click)="toggleOption(option)"
+              >
+                {{ option.label }} ({{ option.groupLabel }})
+              </button>
+            }
+          </div>
         </div>
-      </org-storybook-example-container-section>
-
-      <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Dynamic Updates</div>
+          <div class="flex flex-wrap gap-2">
+            <org-button color="primary" size="sm" label="Load Fruits Only" (click)="loadFruitsOnly()" />
+            <org-button color="primary" size="sm" label="Load Vegetables Only" (click)="loadVegetablesOnly()" />
+            <org-button color="primary" size="sm" label="Load All Options" (click)="loadAllOptions()" />
+            <org-button color="secondary" size="sm" label="Add Random Option" (click)="addRandomOption()" />
+          </div>
+        </div>
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">State</div>
+          <div class="text-sm flex flex-col gap-1">
+            <div><strong>Total Options:</strong> {{ store.options().length }}</div>
+            <div><strong>Selected Count:</strong> {{ store.selectedValues().length }}</div>
+            <div>
+              <strong>Maintained Selections:</strong>
+              {{ maintainedSelectionsMessage() }}
+            </div>
+          </div>
+          <div class="mt-3">
+            <div class="text-sm font-semibold mb-1">Selected Options (JSON):</div>
+            <pre class="text-xs bg-neutral-soft p-2 rounded border overflow-x-auto">{{ getSelectedOptionsJson() }}</pre>
+          </div>
+        </div>
+      </org-design-system-demo-canvas>
+    </org-design-system-demo>
+    <org-design-system-demo-expected-behaviour>
+      <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
         <li>Options can be dynamically updated at runtime</li>
         <li>Selections are maintained if options still exist after update</li>
         <li>Selections are cleared if options no longer exist</li>
         <li>New options are automatically sorted alphabetically</li>
         <li>Store handles option updates gracefully</li>
       </ul>
-    </org-storybook-example-container>
+    </org-design-system-demo-expected-behaviour>
   `,
 })
 class ComboboxStoreDynamicOptionsDemo {
@@ -579,77 +616,86 @@ class ComboboxStoreDynamicOptionsDemo {
 @Component({
   selector: 'story-combobox-store-opened-state-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Button, Input, StorybookExampleContainer, StorybookExampleContainerSection],
+  imports: [
+    Button,
+    Input,
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoCanvas,
+    DesignSystemDemoExpectedBehaviour,
+  ],
   providers: [ComboboxStore],
   template: `
-    <org-storybook-example-container
-      title="Opened State Management"
-      [currentState]="'Combobox is ' + (store.isOpened() ? 'opened' : 'closed')"
-    >
-      <org-storybook-example-container-section label="Combobox Dropdown">
-        <div class="max-w-lg">
-          <org-input
-            name="combobox-store-opened-state-demo-input"
-            [value]="store.inputValue()"
-            (input)="inputChange($event)"
-            (click)="store.open()"
-            placeholder="Click to open or type to filter..."
-          />
+    <org-design-system-demo>
+      <org-design-system-demo-header slot="header" title="Opened State Management" />
+      <org-design-system-demo-canvas slot="canvas">
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Combobox Dropdown</div>
+          <div class="max-w-lg">
+            <org-input
+              name="combobox-store-opened-state-demo-input"
+              [value]="store.inputValue()"
+              (input)="inputChange($event)"
+              (click)="store.open()"
+              placeholder="Click to open or type to filter..."
+            />
 
-          @if (store.isOpened()) {
-            <div class="mt-2 flex flex-col gap-2 max-h-2xs overflow-y-auto border rounded p-2 bg-white shadow-lg">
-              @if (store.filteredOptions().length === 0) {
-                <div class="text-sm text-neutral p-2">No options available</div>
-              }
-              @for (option of store.filteredOptions(); track option.value) {
-                <button
-                  class="px-3 py-2 text-sm text-left border rounded cursor-pointer hover:bg-neutral-soft"
-                  [class.bg-info-soft]="store.selectedValues().includes(option.value)"
-                  (click)="selectOption(option)"
-                >
-                  {{ option.label }}
-                </button>
-              }
-            </div>
-          }
-        </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Controls">
-        <div class="flex flex-wrap gap-2">
-          <org-button color="primary" size="sm" label="Open" (click)="store.open()" />
-          <org-button color="primary" size="sm" label="Close" (click)="store.close()" />
-          <org-button color="primary" size="sm" label="Toggle" (click)="store.toggle()" />
-          <org-button color="secondary" size="sm" label="Set Opened (true)" (click)="store.setIsOpened(true)" />
-          <org-button color="secondary" size="sm" label="Set Opened (false)" (click)="store.setIsOpened(false)" />
-        </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="State">
-        <div class="text-sm flex flex-col gap-1">
-          <div><strong>Is Opened:</strong> {{ store.isOpened() }}</div>
-          <div>
-            <strong>Selected Value:</strong>
-            {{ store.selectedValues().length > 0 ? store.selectedValues()[0] : 'None' }}
-          </div>
-          <div><strong>Input Value:</strong> "{{ store.inputValue() }}"</div>
-          <div><strong>Event Log:</strong></div>
-          <div class="text-xs bg-neutral-soft p-2 rounded border max-h-8xs overflow-y-auto">
-            @for (event of _eventLog(); track $index) {
-              <div>{{ event }}</div>
+            @if (store.isOpened()) {
+              <div class="mt-2 flex flex-col gap-2 max-h-2xs overflow-y-auto border rounded p-2 bg-white shadow-lg">
+                @if (store.filteredOptions().length === 0) {
+                  <div class="text-sm text-neutral p-2">No options available</div>
+                }
+                @for (option of store.filteredOptions(); track option.value) {
+                  <button
+                    class="px-3 py-2 text-sm text-left border rounded cursor-pointer hover:bg-neutral-soft"
+                    [class.bg-info-soft]="store.selectedValues().includes(option.value)"
+                    (click)="selectOption(option)"
+                  >
+                    {{ option.label }}
+                  </button>
+                }
+              </div>
             }
           </div>
         </div>
-      </org-storybook-example-container-section>
-
-      <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Controls</div>
+          <div class="flex flex-wrap gap-2">
+            <org-button color="primary" size="sm" label="Open" (click)="store.open()" />
+            <org-button color="primary" size="sm" label="Close" (click)="store.close()" />
+            <org-button color="primary" size="sm" label="Toggle" (click)="store.toggle()" />
+            <org-button color="secondary" size="sm" label="Set Opened (true)" (click)="store.setIsOpened(true)" />
+            <org-button color="secondary" size="sm" label="Set Opened (false)" (click)="store.setIsOpened(false)" />
+          </div>
+        </div>
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">State</div>
+          <div class="text-sm flex flex-col gap-1">
+            <div><strong>Is Opened:</strong> {{ store.isOpened() }}</div>
+            <div>
+              <strong>Selected Value:</strong>
+              {{ store.selectedValues().length > 0 ? store.selectedValues()[0] : 'None' }}
+            </div>
+            <div><strong>Input Value:</strong> "{{ store.inputValue() }}"</div>
+            <div><strong>Event Log:</strong></div>
+            <div class="text-xs bg-neutral-soft p-2 rounded border max-h-8xs overflow-y-auto">
+              @for (event of _eventLog(); track $index) {
+                <div>{{ event }}</div>
+              }
+            </div>
+          </div>
+        </div>
+      </org-design-system-demo-canvas>
+    </org-design-system-demo>
+    <org-design-system-demo-expected-behaviour>
+      <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
         <li>Combobox tracks opened/closed state</li>
         <li>Provides open(), close(), toggle() convenience methods</li>
         <li>Emits isOpenedChanged$ events when state changes</li>
         <li>Dropdown visibility controlled by isOpened state</li>
         <li>Can be opened by clicking input or programmatically</li>
       </ul>
-    </org-storybook-example-container>
+    </org-design-system-demo-expected-behaviour>
   `,
 })
 class ComboboxStoreOpenedStateDemo {
@@ -688,33 +734,44 @@ class ComboboxStoreOpenedStateDemo {
 @Component({
   selector: 'story-combobox-store-default-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Button, StorybookExampleContainer, StorybookExampleContainerSection],
+  imports: [
+    Button,
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoCanvas,
+    DesignSystemDemoExpectedBehaviour,
+  ],
   providers: [ComboboxStore],
   template: `
-    <org-storybook-example-container title="Default" [currentState]="'Options: ' + store.options().length">
-      <org-storybook-example-container-section label="State">
-        <div class="text-sm flex flex-col gap-1">
-          <div><strong>Selected Values:</strong> {{ store.selectedValues().join(', ') || 'None' }}</div>
-          <div><strong>Input Value:</strong> "{{ store.inputValue() }}"</div>
-          <div><strong>Is Opened:</strong> {{ store.isOpened() }}</div>
-          <div><strong>Options Count:</strong> {{ store.options().length }}</div>
+    <org-design-system-demo>
+      <org-design-system-demo-header slot="header" title="Default" />
+      <org-design-system-demo-canvas slot="canvas">
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">State</div>
+          <div class="text-sm flex flex-col gap-1">
+            <div><strong>Selected Values:</strong> {{ store.selectedValues().join(', ') || 'None' }}</div>
+            <div><strong>Input Value:</strong> "{{ store.inputValue() }}"</div>
+            <div><strong>Is Opened:</strong> {{ store.isOpened() }}</div>
+            <div><strong>Options Count:</strong> {{ store.options().length }}</div>
+          </div>
         </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Controls">
-        <div class="flex flex-wrap gap-2">
-          <org-button color="primary" size="sm" label="Open" (clicked)="store.open()" />
-          <org-button color="primary" size="sm" label="Close" (clicked)="store.close()" />
-          <org-button color="secondary" size="sm" label="Clear" (clicked)="store.setSelectedValues([])" />
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Controls</div>
+          <div class="flex flex-wrap gap-2">
+            <org-button color="primary" size="sm" label="Open" (clicked)="store.open()" />
+            <org-button color="primary" size="sm" label="Close" (clicked)="store.close()" />
+            <org-button color="secondary" size="sm" label="Clear" (clicked)="store.setSelectedValues([])" />
+          </div>
         </div>
-      </org-storybook-example-container-section>
-
-      <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+      </org-design-system-demo-canvas>
+    </org-design-system-demo>
+    <org-design-system-demo-expected-behaviour>
+      <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
         <li>Store initialized with basic options</li>
         <li>Tracks selected values, input value, and opened state</li>
         <li>Use open/close to control dropdown state</li>
       </ul>
-    </org-storybook-example-container>
+    </org-design-system-demo-expected-behaviour>
   `,
 })
 class ComboboxStoreDefaultDemo {

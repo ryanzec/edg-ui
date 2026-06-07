@@ -5,6 +5,11 @@
   /* padding slot */
   --box-padding: var(--spacing-3);
 
+  /* region padding slot — the padding each slotted region applies to itself in the 'inner-items' application
+     mode (inline padding on its content + leading/trailing edge padding when first/last). defaults to 0 and is
+     armed to the padding amount by each region via host-context (see the region css files). */
+  --box-region-padding: 0rem;
+
   /* unified border width / color slots */
   --box-border-width: var(--border-width);
   --box-border-color: var(--color-border);
@@ -28,13 +33,15 @@
   /* one-off design value */
   --box-border-emphasize-left-width: 0.4375rem; /* 7px */
 
-  /* stack layout — vertical gap between slotted regions when layout is 'stack' */
-  --box-stack-gap: var(--spacing-2);
+  /* gap between the box's slotted regions in its flex layout */
+  --box-gap: var(--box-padding);
 
   /* header layout */
   --box-header-gap: var(--spacing-3);
   --box-header-titles-gap: var(--spacing-0_5);
   --box-header-actions-gap: var(--spacing-1_5);
+  /* gap between the header content and its optional divider — matches the box main gap between sections */
+  --box-header-divider-gap: var(--box-gap);
 
   /* header title */
   --box-header-title-font-size: var(--font-size-lg);
@@ -42,6 +49,7 @@
   --box-header-title-line-height: var(--line-height-tight);
   --box-header-title-letter-spacing: var(--letter-spacing-tight);
   --box-header-title-fg: var(--color-fg);
+  --box-header-title-text-transform: none;
 
   /* header subtitle */
   --box-header-subtitle-font-size: var(--font-size-base);
@@ -55,11 +63,12 @@
 
   /* footer */
   --box-footer-gap: var(--spacing-1_5);
+  /* gap between the footer's optional divider and its button row — matches the box main gap between sections */
+  --box-footer-divider-gap: var(--box-gap);
 
   /* image */
   --box-image-inset-radius: var(--radius-sm);
   --box-image-fill-aspect-ratio: 16 / 9;
-  --box-image-padding-inline: 0;
   --box-image-img-radius: 0;
   --box-image-position: static;
   --box-image-aspect-ratio: auto;

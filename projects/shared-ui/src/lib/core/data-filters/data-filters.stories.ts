@@ -4,8 +4,6 @@ import { DesignSystemDemo } from '../../example/design-system-demo/design-system
 import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
 import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
 import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
-import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
-import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
 import { Table } from '../table/table';
 import { TableCell } from '../table/table-cell';
 import { TableHeader } from '../table/table-header';
@@ -364,8 +362,6 @@ class DataFiltersAddRemoveStory {
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     DataFilters,
-    StorybookExampleContainer,
-    StorybookExampleContainerSection,
     DesignSystemDemo,
     DesignSystemDemoHeader,
     DesignSystemDemoCanvas,
@@ -384,176 +380,149 @@ class DataFiltersAddRemoveStory {
     `,
   ],
   template: `
-    <org-storybook-example-container>
-      <org-storybook-example-container-section label="Text only">
-        <org-design-system-demo>
-          <org-design-system-demo-header slot="header" title="Text only" />
-          <org-design-system-demo-canvas slot="canvas">
-            <org-data-filters [availableFilters]="textOnly" [activeFilters]="textOnlyActive" />
-          </org-design-system-demo-canvas>
-        </org-design-system-demo>
-      </org-storybook-example-container-section>
+    <div class="flex flex-col gap-4">
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Text only" />
+        <org-design-system-demo-canvas slot="canvas">
+          <org-data-filters [availableFilters]="textOnly" [activeFilters]="textOnlyActive" />
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
 
-      <org-storybook-example-container-section label="Toggle only">
-        <org-design-system-demo>
-          <org-design-system-demo-header slot="header" title="Toggle only" />
-          <org-design-system-demo-canvas slot="canvas">
-            <org-data-filters [availableFilters]="toggleOnly" [activeFilters]="toggleOnlyActive" />
-          </org-design-system-demo-canvas>
-        </org-design-system-demo>
-      </org-storybook-example-container-section>
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Toggle only" />
+        <org-design-system-demo-canvas slot="canvas">
+          <org-data-filters [availableFilters]="toggleOnly" [activeFilters]="toggleOnlyActive" />
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
 
-      <org-storybook-example-container-section label="Array only">
-        <org-design-system-demo>
-          <org-design-system-demo-header slot="header" title="Array only" />
-          <org-design-system-demo-canvas slot="canvas">
-            <org-data-filters [availableFilters]="arrayOnly" [activeFilters]="arrayOnlyActive" />
-          </org-design-system-demo-canvas>
-        </org-design-system-demo>
-      </org-storybook-example-container-section>
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Array only" />
+        <org-design-system-demo-canvas slot="canvas">
+          <org-data-filters [availableFilters]="arrayOnly" [activeFilters]="arrayOnlyActive" />
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
 
-      <org-storybook-example-container-section label="Mixed">
-        <org-design-system-demo>
-          <org-design-system-demo-header slot="header" title="Mixed (all three types)" />
-          <org-design-system-demo-canvas slot="canvas">
-            <org-data-filters [availableFilters]="mixed" [activeFilters]="mixedActive" />
-          </org-design-system-demo-canvas>
-        </org-design-system-demo>
-      </org-storybook-example-container-section>
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Mixed (all three types)" />
+        <org-design-system-demo-canvas slot="canvas">
+          <org-data-filters [availableFilters]="mixed" [activeFilters]="mixedActive" />
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
 
-      <org-storybook-example-container-section label="Empty state">
-        <org-design-system-demo>
-          <org-design-system-demo-header
-            slot="header"
-            title="Empty active filters"
-            description="availableFilters is populated but activeFilters is empty — only the Add Filter trigger renders, and its overlay menu lists every available filter."
-          />
-          <org-design-system-demo-canvas slot="canvas">
-            <org-data-filters [availableFilters]="largeList" [activeFilters]="emptyActiveList" />
-          </org-design-system-demo-canvas>
-          <org-design-system-demo-expected-behaviour>
-            <ul class="list-inside list-disc flex flex-col gap-1">
-              <li>No filter rows render and no payload is emitted on first display.</li>
-              <li>
-                The Add Filter button is the only interactive element and its overlay menu lists every available filter
-                by label.
-              </li>
-              <li>
-                Picking any item from the menu activates that filter — covered visually by the Add / Remove filters
-                section below.
-              </li>
-            </ul>
-          </org-design-system-demo-expected-behaviour>
-        </org-design-system-demo>
-      </org-storybook-example-container-section>
+      <org-design-system-demo>
+        <org-design-system-demo-header
+          slot="header"
+          title="Empty active filters"
+          description="availableFilters is populated but activeFilters is empty — only the Add Filter trigger renders, and its overlay menu lists every available filter."
+        />
+        <org-design-system-demo-canvas slot="canvas">
+          <org-data-filters [availableFilters]="largeList" [activeFilters]="emptyActiveList" />
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="list-inside list-disc flex flex-col gap-1">
+          <li>No filter rows render and no payload is emitted on first display.</li>
+          <li>
+            The Add Filter button is the only interactive element and its overlay menu lists every available filter by
+            label.
+          </li>
+          <li>
+            Picking any item from the menu activates that filter — covered visually by the Add / Remove filters section
+            below.
+          </li>
+        </ul>
+      </org-design-system-demo-expected-behaviour>
 
-      <org-storybook-example-container-section label="Disabled state">
-        <org-design-system-demo>
-          <org-design-system-demo-header slot="header" title="Disabled state per type" />
-          <org-design-system-demo-canvas slot="canvas">
-            <org-data-filters [availableFilters]="disabled" [activeFilters]="disabledActive" />
-          </org-design-system-demo-canvas>
-        </org-design-system-demo>
-      </org-storybook-example-container-section>
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Disabled state per type" />
+        <org-design-system-demo-canvas slot="canvas">
+          <org-data-filters [availableFilters]="disabled" [activeFilters]="disabledActive" />
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
 
-      <org-storybook-example-container-section label="All filters disabled">
-        <org-design-system-demo>
-          <org-design-system-demo-header
-            slot="header"
-            title="Every available filter disabled simultaneously"
-            description="Each filter sets disabled=true; the X remove button and Add Filter trigger remain interactive because disabled is forwarded to the underlying input only."
-          />
-          <org-design-system-demo-canvas slot="canvas">
-            <org-data-filters [availableFilters]="allDisabled" [activeFilters]="allDisabledActive" />
-          </org-design-system-demo-canvas>
-          <org-design-system-demo-expected-behaviour>
-            <ul class="list-inside list-disc flex flex-col gap-1">
-              <li>
-                Every text, toggle, and array input is rendered in its disabled visual state and ignores user input.
-              </li>
-              <li>disabled is a per-filter flag — the data-filters component itself has no global disabled input.</li>
-              <li>
-                The X remove buttons and the Add Filter trigger stay interactive, so the active set can still be mutated
-                even when every active filter's input is disabled.
-              </li>
-            </ul>
-          </org-design-system-demo-expected-behaviour>
-        </org-design-system-demo>
-      </org-storybook-example-container-section>
+      <org-design-system-demo>
+        <org-design-system-demo-header
+          slot="header"
+          title="Every available filter disabled simultaneously"
+          description="Each filter sets disabled=true; the X remove button and Add Filter trigger remain interactive because disabled is forwarded to the underlying input only."
+        />
+        <org-design-system-demo-canvas slot="canvas">
+          <org-data-filters [availableFilters]="allDisabled" [activeFilters]="allDisabledActive" />
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="list-inside list-disc flex flex-col gap-1">
+          <li>Every text, toggle, and array input is rendered in its disabled visual state and ignores user input.</li>
+          <li>disabled is a per-filter flag — the data-filters component itself has no global disabled input.</li>
+          <li>
+            The X remove buttons and the Add Filter trigger stay interactive, so the active set can still be mutated
+            even when every active filter's input is disabled.
+          </li>
+        </ul>
+      </org-design-system-demo-expected-behaviour>
 
-      <org-storybook-example-container-section label="Readonly text">
-        <org-design-system-demo>
-          <org-design-system-demo-header slot="header" title="Readonly text input" />
-          <org-design-system-demo-canvas slot="canvas">
-            <org-data-filters [availableFilters]="readonlyText" [activeFilters]="readonlyTextActive" />
-          </org-design-system-demo-canvas>
-        </org-design-system-demo>
-      </org-storybook-example-container-section>
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Readonly text input" />
+        <org-design-system-demo-canvas slot="canvas">
+          <org-data-filters [availableFilters]="readonlyText" [activeFilters]="readonlyTextActive" />
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
 
-      <org-storybook-example-container-section label="Wrap behavior">
-        <org-design-system-demo>
-          <org-design-system-demo-header
-            slot="header"
-            title="Large list in a height-constrained container"
-            description="The form-fields container is capped to a fixed height so the flex column wraps into a second visual column."
-          />
-          <org-design-system-demo-canvas slot="canvas">
-            <div class="height-constrained">
-              <org-data-filters [availableFilters]="largeList" [activeFilters]="largeListActive" />
-            </div>
-          </org-design-system-demo-canvas>
-        </org-design-system-demo>
-      </org-storybook-example-container-section>
+      <org-design-system-demo>
+        <org-design-system-demo-header
+          slot="header"
+          title="Large list in a height-constrained container"
+          description="The form-fields container is capped to a fixed height so the flex column wraps into a second visual column."
+        />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="height-constrained">
+            <org-data-filters [availableFilters]="largeList" [activeFilters]="largeListActive" />
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
 
-      <org-storybook-example-container-section label="Add / Remove filters">
-        <org-design-system-demo>
-          <org-design-system-demo-header
-            slot="header"
-            title="Active filters model with add + remove"
-            description="Starts with no active filters. Use the Add Filter menu to add filters one at a time; click the X next to a filter to remove it. The active-filters model panel below the form reflects the two-way state."
-          />
-          <org-design-system-demo-canvas slot="canvas">
-            <story-data-filters-add-remove />
-          </org-design-system-demo-canvas>
-          <org-design-system-demo-expected-behaviour>
-            <ul class="list-inside list-disc flex flex-col gap-1">
-              <li>On load the filter bar is empty and the Add Filter menu lists every available filter by label.</li>
-              <li>
-                Clicking a menu item renders the matching input with its default value and removes it from the menu.
-              </li>
-              <li>Clicking the X next to a filter removes the input and the name re-appears in the menu.</li>
-              <li>When every available filter is active the Add Filter button disappears.</li>
-              <li>
-                Adding a filter renders its input at the default value; other active filters preserve their current
-                values.
-              </li>
-            </ul>
-          </org-design-system-demo-expected-behaviour>
-        </org-design-system-demo>
-      </org-storybook-example-container-section>
+      <org-design-system-demo>
+        <org-design-system-demo-header
+          slot="header"
+          title="Active filters model with add + remove"
+          description="Starts with no active filters. Use the Add Filter menu to add filters one at a time; click the X next to a filter to remove it. The active-filters model panel below the form reflects the two-way state."
+        />
+        <org-design-system-demo-canvas slot="canvas">
+          <story-data-filters-add-remove />
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="list-inside list-disc flex flex-col gap-1">
+          <li>On load the filter bar is empty and the Add Filter menu lists every available filter by label.</li>
+          <li>Clicking a menu item renders the matching input with its default value and removes it from the menu.</li>
+          <li>Clicking the X next to a filter removes the input and the name re-appears in the menu.</li>
+          <li>When every available filter is active the Add Filter button disappears.</li>
+          <li>
+            Adding a filter renders its input at the default value; other active filters preserve their current values.
+          </li>
+        </ul>
+      </org-design-system-demo-expected-behaviour>
 
-      <org-storybook-example-container-section label="Integration with org-table">
-        <org-design-system-demo>
-          <org-design-system-demo-header
-            slot="header"
-            title="Integration with org-table"
-            description="Filter changes drive a computed signal that filters the table data input."
-          />
-          <org-design-system-demo-canvas slot="canvas">
-            <story-data-filters-table-integration />
-          </org-design-system-demo-canvas>
-        </org-design-system-demo>
-        <org-design-system-demo-expected-behaviour>
-          <ul class="list-inside list-disc flex flex-col gap-1">
-            <li>Typing in the search field filters the table after ~250 ms.</li>
-            <li>Toggling <strong>Active only</strong> immediately removes inactive rows.</li>
-            <li>Selecting one or more roles immediately narrows the table; clearing restores all rows.</li>
-            <li>An empty result set renders the <code>#empty</code> template.</li>
-            <li>Removing a filter via its X resets that filter's contribution and the table updates accordingly.</li>
-          </ul>
-        </org-design-system-demo-expected-behaviour>
-      </org-storybook-example-container-section>
-    </org-storybook-example-container>
+      <org-design-system-demo>
+        <org-design-system-demo-header
+          slot="header"
+          title="Integration with org-table"
+          description="Filter changes drive a computed signal that filters the table data input."
+        />
+        <org-design-system-demo-canvas slot="canvas">
+          <story-data-filters-table-integration />
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="list-inside list-disc flex flex-col gap-1">
+          <li>Typing in the search field filters the table after ~250 ms.</li>
+          <li>Toggling <strong>Active only</strong> immediately removes inactive rows.</li>
+          <li>Selecting one or more roles immediately narrows the table; clearing restores all rows.</li>
+          <li>An empty result set renders the <code>#empty</code> template.</li>
+          <li>Removing a filter via its X resets that filter's contribution and the table updates accordingly.</li>
+        </ul>
+      </org-design-system-demo-expected-behaviour>
+    </div>
   `,
 })
 class DataFiltersShowcaseStory {

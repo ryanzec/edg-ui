@@ -58,6 +58,18 @@ export const COMBOBOX_DISABLED_DEFAULT = false;
 /** default value for the containerClass input */
 export const COMBOBOX_CONTAINER_CLASS_DEFAULT = '';
 
+/** default value for the enableFiltering input */
+export const COMBOBOX_ENABLE_FILTERING_DEFAULT = true;
+
+/** all available drop-down width modes for the combobox */
+export const allComboboxDropDownWidthModes = ['match', 'minimum', 'minimum-match'] as const;
+
+/** union type of all available drop-down width modes */
+export type ComboboxDropDownWidthMode = (typeof allComboboxDropDownWidthModes)[number];
+
+/** default value for the dropDownWidthMode input */
+export const COMBOBOX_DROP_DOWN_WIDTH_MODE_DEFAULT: ComboboxDropDownWidthMode = 'minimum';
+
 /**
  * combobox component for single/multi-select autocomplete functionality
  */
@@ -77,7 +89,16 @@ export const COMBOBOX_CONTAINER_CLASS_DEFAULT = '';
   hostDirectives: [
     {
       directive: ComboboxBrainDirective,
-      inputs: ['autoShowOption', 'allowNewOptions', 'isMultiSelect', 'isGroupingEnabled', 'disabled', 'name'],
+      inputs: [
+        'autoShowOption',
+        'allowNewOptions',
+        'isMultiSelect',
+        'isGroupingEnabled',
+        'disabled',
+        'isLoading',
+        'characterThreshold',
+        'name',
+      ],
       outputs: ['focused', 'blurred'],
     },
   ],
@@ -107,6 +128,9 @@ export class Combobox implements AfterViewInit, ControlValueAccessor {
   @ViewChild(CdkConnectedOverlay)
   protected readonly connectedOverlayDirective?: CdkConnectedOverlay;
 
+  @ViewChild('trigger')
+  protected readonly triggerOrigin?: CdkOverlayOrigin;
+
   // input properties
   public readonly autoShowOption = input<boolean>(COMBOBOX_AUTO_SHOW_OPTION_DEFAULT);
   public readonly allowNewOptions = input<boolean>(COMBOBOX_ALLOW_NEW_OPTIONS_DEFAULT);
@@ -121,6 +145,8 @@ export class Combobox implements AfterViewInit, ControlValueAccessor {
   public readonly options = input<ComboboxOptionInput[]>(COMBOBOX_OPTIONS_DEFAULT);
   public readonly disabled = input<boolean>(COMBOBOX_DISABLED_DEFAULT);
   public readonly containerClass = input<string>(COMBOBOX_CONTAINER_CLASS_DEFAULT);
+  public readonly enableFiltering = input<boolean>(COMBOBOX_ENABLE_FILTERING_DEFAULT);
+  public readonly dropDownWidthMode = input<ComboboxDropDownWidthMode>(COMBOBOX_DROP_DOWN_WIDTH_MODE_DEFAULT);
   public readonly name = input.required<string>();
 
   // output events - proxy from store
@@ -145,6 +171,15 @@ export class Combobox implements AfterViewInit, ControlValueAccessor {
 
   /** synthetic option to display when allowNewOptions is true and input doesn't exactly match any existing option (proxied from brain) */
   public readonly newOptionSuggestion = computed<ComboboxOption | null>(() => this.brain.newOptionSuggestion());
+
+  /** consumer-managed loading state (proxied from brain) */
+  public readonly isLoading = computed<boolean>(() => this.brain.isLoading());
+
+  /** whether the current input value is below the required character threshold (proxied from brain) */
+  public readonly isBelowCharacterThreshold = computed<boolean>(() => this.brain.isBelowCharacterThreshold());
+
+  /** the required character threshold (proxied from brain) */
+  public readonly characterThreshold = computed<number>(() => this.brain.characterThreshold());
 
   /**
    * inline items for multi-select display
@@ -186,6 +221,7 @@ export class Combobox implements AfterViewInit, ControlValueAccessor {
         allowNewOptions: this.allowNewOptions(),
         optionFilter: this.optionFilter() ?? null,
         filterSelectedOptions: this.filterSelectedOptions(),
+        enableFiltering: this.enableFiltering(),
       });
     });
 
@@ -204,6 +240,7 @@ export class Combobox implements AfterViewInit, ControlValueAccessor {
         allowNewOptions: this.allowNewOptions(),
         optionFilter: this.optionFilter() ?? null,
         filterSelectedOptions: this.filterSelectedOptions(),
+        enableFiltering: this.enableFiltering(),
       };
       untracked(() => {
         this._store.setConfig(config);
@@ -350,6 +387,29 @@ export class Combobox implements AfterViewInit, ControlValueAccessor {
 
   public setDisabledState(isDisabled: boolean): void {
     this.brain.setFormDisabled(isDisabled);
+  }
+
+  /**
+   * resolves the overlay width binding: only constrained when matching the trigger width exactly (an empty string
+   * leaves the panel content-determined)
+   */
+  protected overlayWidth(): string | number {
+    return this.dropDownWidthMode() === 'match' ? this._triggerWidth() || '' : '';
+  }
+
+  /**
+   * resolves the overlay min-width binding: only constrained when the trigger width is the minimum (an empty string
+   * applies no minimum)
+   */
+  protected overlayMinWidth(): string | number {
+    return this.dropDownWidthMode() === 'minimum-match' ? this._triggerWidth() || '' : '';
+  }
+
+  /**
+   * the rendered width of the trigger container (the element the overlay is anchored to)
+   */
+  private _triggerWidth(): number {
+    return this.triggerOrigin?.elementRef.nativeElement.offsetWidth ?? 0;
   }
 
   /**

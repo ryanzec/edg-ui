@@ -1,7 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/angular';
 import { ScrollArea, allScrollAreaDirections } from './scroll-area';
-import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
-import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
+import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
+import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
+import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
+import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
 
 const meta: Meta<ScrollArea> = {
   title: 'Core/Components/Scroll Area',
@@ -211,11 +213,11 @@ export const Enabled: Story = {
   },
   render: () => ({
     template: `
-      <org-storybook-example-container
-        title="Enabled Variants"
-        currentState="Comparing enabled and disabled scrollbar"
-      >
-        <org-storybook-example-container-section label="Enabled (default)">
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Enabled Variants" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Enabled (default)</div>
           <org-scroll-area
             containerClass="rounded-lg border border-default-color"
             scrollClass="h-6xs"
@@ -233,9 +235,10 @@ export const Enabled: Story = {
             <div>Eaque ipsa quae ab illo inventore veritatis et quasi architecto.</div>
             <div>Beatae vitae dicta sunt explicabo nemo enim ipsam voluptatem.</div>
           </org-scroll-area>
-        </org-storybook-example-container-section>
+          </div>
 
-        <org-storybook-example-container-section label="Disabled">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Disabled</div>
           <org-scroll-area
             [enabled]="false"
             containerClass="rounded-lg border border-default-color"
@@ -254,16 +257,24 @@ export const Enabled: Story = {
             <div>Eaque ipsa quae ab illo inventore veritatis et quasi architecto.</div>
             <div>Beatae vitae dicta sunt explicabo nemo enim ipsam voluptatem.</div>
           </org-scroll-area>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
           <li><strong>enabled</strong>: Scrollbar track and thumb are rendered</li>
           <li><strong>disabled</strong>: Scrollbar track and thumb are hidden; scrolling still works</li>
         </ul>
-      </org-storybook-example-container>
+      </org-design-system-demo-expected-behaviour>
     `,
     moduleMetadata: {
-      imports: [ScrollArea, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [
+        ScrollArea,
+        DesignSystemDemo,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
+        DesignSystemDemoHeader,
+      ],
     },
   }),
 };
@@ -278,11 +289,11 @@ export const Directions: Story = {
   },
   render: () => ({
     template: `
-      <org-storybook-example-container
-        title="Scroll Direction Variants"
-        currentState="Comparing vertical, horizontal, and both directions"
-      >
-        <org-storybook-example-container-section label="Vertical (default)">
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Scroll Direction Variants" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Vertical (default)</div>
           <org-scroll-area
             direction="vertical"
             containerClass="rounded-lg border border-default-color"
@@ -301,9 +312,10 @@ export const Directions: Story = {
             <div>Eaque ipsa quae ab illo inventore veritatis et quasi architecto.</div>
             <div>Beatae vitae dicta sunt explicabo nemo enim ipsam voluptatem.</div>
           </org-scroll-area>
-        </org-storybook-example-container-section>
+          </div>
 
-        <org-storybook-example-container-section label="Horizontal">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Horizontal</div>
           <org-scroll-area
             direction="horizontal"
             containerClass="rounded-lg border border-default-color"
@@ -312,9 +324,10 @@ export const Directions: Story = {
           >
             <span>Horizontal scrolling only. This is a very long line of text that will require horizontal scrolling to see all of it. Keep reading to see more content that extends beyond the visible area.</span>
           </org-scroll-area>
-        </org-storybook-example-container-section>
+          </div>
 
-        <org-storybook-example-container-section label="Both">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Both</div>
           <org-scroll-area
             direction="both"
             containerClass="rounded-lg border border-default-color"
@@ -333,17 +346,25 @@ export const Directions: Story = {
             <div>Eaque ipsa quae ab illo inventore veritatis et quasi architecto.</div>
             <div>Beatae vitae dicta sunt explicabo nemo enim ipsam voluptatem.</div>
           </org-scroll-area>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
           <li><strong>vertical</strong>: Only y-axis scrolling, x-axis hidden</li>
           <li><strong>horizontal</strong>: Only x-axis scrolling, y-axis hidden</li>
           <li><strong>both</strong>: Both axes can scroll independently</li>
         </ul>
-      </org-storybook-example-container>
+      </org-design-system-demo-expected-behaviour>
     `,
     moduleMetadata: {
-      imports: [ScrollArea, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [
+        ScrollArea,
+        DesignSystemDemo,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
+        DesignSystemDemoHeader,
+      ],
     },
   }),
 };
@@ -358,11 +379,11 @@ export const VisibilityModes: Story = {
   },
   render: () => ({
     template: `
-      <org-storybook-example-container
-        title="Scrollbar Visibility Modes"
-        currentState="Comparing always visible and hover-only modes"
-      >
-        <org-storybook-example-container-section label="Always Visible (default)">
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Scrollbar Visibility Modes" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Always Visible (default)</div>
           <org-scroll-area
             direction="vertical"
             [onlyShowOnHover]="false"
@@ -382,9 +403,10 @@ export const VisibilityModes: Story = {
             <div>Eaque ipsa quae ab illo inventore veritatis et quasi architecto.</div>
             <div>Beatae vitae dicta sunt explicabo nemo enim ipsam voluptatem.</div>
           </org-scroll-area>
-        </org-storybook-example-container-section>
+          </div>
 
-        <org-storybook-example-container-section label="Hover Only">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Hover Only</div>
           <org-scroll-area
             direction="both"
             [onlyShowOnHover]="true"
@@ -404,17 +426,25 @@ export const VisibilityModes: Story = {
             <div>Eaque ipsa quae ab illo inventore veritatis et quasi architecto.</div>
             <div>Beatae vitae dicta sunt explicabo nemo enim ipsam voluptatem.</div>
           </org-scroll-area>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
           <li><strong>Always visible</strong>: Scrollbar shown whenever content is scrollable</li>
           <li><strong>Hover only</strong>: Scrollbar hidden by default, appears on mouse hover</li>
           <li>Both modes use smooth transitions for a polished experience</li>
         </ul>
-      </org-storybook-example-container>
+      </org-design-system-demo-expected-behaviour>
     `,
     moduleMetadata: {
-      imports: [ScrollArea, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [
+        ScrollArea,
+        DesignSystemDemo,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
+        DesignSystemDemoHeader,
+      ],
     },
   }),
 };
@@ -429,13 +459,14 @@ export const SafariSizingBugHandling: Story = {
   },
   render: () => ({
     template: `
-      <org-storybook-example-container
-        title="Safari Sizing Bug Handling"
-      >
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Safari Sizing Bug Handling" />
+        <org-design-system-demo-canvas slot="canvas">
         <div>
           INSTRUCTIONS: Navigate to the page from another page and hover over the examples to make sure there is no content shift.
         </div>
-        <org-storybook-example-container-section label="Both Directions">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Both Directions</div>
           <org-scroll-area
             direction="both"
             [onlyShowOnHover]="true"
@@ -456,9 +487,10 @@ export const SafariSizingBugHandling: Story = {
             <div>Eaque ipsa quae ab illo inventore veritatis et quasi architecto.</div>
             <div>Beatae vitae dicta sunt explicabo nemo enim ipsam voluptatem.</div>
           </org-scroll-area>
-        </org-storybook-example-container-section>
+          </div>
 
-        <org-storybook-example-container-section label="Vertical Direction">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Vertical Direction</div>
           <org-scroll-area
             direction="vertical"
             [onlyShowOnHover]="true"
@@ -482,9 +514,10 @@ export const SafariSizingBugHandling: Story = {
             <div>Test 14</div>
             <div>Test 15</div>
           </org-scroll-area>
-        </org-storybook-example-container-section>
+          </div>
 
-        <org-storybook-example-container-section label="Horizontal Direction">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Horizontal Direction</div>
           <org-scroll-area
             direction="horizontal"
             [onlyShowOnHover]="true"
@@ -508,17 +541,25 @@ export const SafariSizingBugHandling: Story = {
             <span>Test 14 </span>
             <span>Test 15 </span>
           </org-scroll-area>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
           <li><strong>Both Directions</strong>: Scrollbar space is reserved, preventing layout shift when scrollbar appears/disappears</li>
           <li><strong>Vertical Direction</strong>: Scrollbar space is reserved, preventing layout shift when scrollbar appears/disappears</li>
           <li><strong>Horizontal Direction</strong>: Scrollbar space is reserved, preventing layout shift when scrollbar appears/disappears</li>
         </ul>
-      </org-storybook-example-container>
+      </org-design-system-demo-expected-behaviour>
     `,
     moduleMetadata: {
-      imports: [ScrollArea, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [
+        ScrollArea,
+        DesignSystemDemo,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
+        DesignSystemDemoHeader,
+      ],
     },
   }),
 };

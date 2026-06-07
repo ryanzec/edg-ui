@@ -244,7 +244,7 @@
 
   --border-width: 0.0625rem; /* 1px  */
   --border-width-thick: 0.125rem; /* 2px  */
-  --border-width-emphasize: 0.5rem; /* 8px */
+  --border-width-emphasize: 0.25rem; /* 4px */
 
   --shadow-xs: 0 0.0625rem 0.125rem rgba(0, 0, 0, 0.04);
   --shadow-sm: 0 0.0625rem 0.125rem rgba(0, 0, 0, 0.04), 0 0.0625rem 0.0625rem rgba(0, 0, 0, 0.02);
@@ -260,6 +260,56 @@
   --motion-ease-exit: cubic-bezier(0.55, 0, 1, 0.45);
 
   --motion-spinner-duration: 0.9s;
+
+  /*
+   * gradient background tokens — each semantic color fading into the app background (--color-bg-app) in 4
+   * directions. the colored end uses the soft ramp (--color-{color}-soft) so foreground text stays readable
+   * across the whole sweep. consumed by the .gradient-{color}-{direction} utility classes in
+   * gradient-utility.css. per request, every color/direction combination is exposed as its own named token
+   * rather than the single-driving-token shortcut in .claude/rules/patterns/css-local-variables.md. the tokens
+   * reference --color-*-soft / --color-bg-app, both of which have .dark overrides below, so the gradients adapt
+   * to dark mode automatically. direction = the colored end sits on the named side and fades toward
+   * --color-bg-app on the opposite side (e.g. left-to-right = color on the left, --color-bg-app on the right).
+   */
+  --gradient-primary-left-to-right: linear-gradient(to right, var(--color-primary-soft), var(--color-bg-app) 70%);
+  --gradient-primary-top-to-bottom: linear-gradient(to bottom, var(--color-primary-soft), var(--color-bg-app) 70%);
+  --gradient-primary-right-to-left: linear-gradient(to left, var(--color-primary-soft), var(--color-bg-app) 70%);
+  --gradient-primary-bottom-to-top: linear-gradient(to top, var(--color-primary-soft), var(--color-bg-app) 70%);
+
+  --gradient-secondary-left-to-right: linear-gradient(to right, var(--color-secondary-soft), var(--color-bg-app) 70%);
+  --gradient-secondary-top-to-bottom: linear-gradient(to bottom, var(--color-secondary-soft), var(--color-bg-app) 70%);
+  --gradient-secondary-right-to-left: linear-gradient(to left, var(--color-secondary-soft), var(--color-bg-app) 70%);
+  --gradient-secondary-bottom-to-top: linear-gradient(to top, var(--color-secondary-soft), var(--color-bg-app) 70%);
+
+  --gradient-neutral-left-to-right: linear-gradient(to right, var(--color-neutral-soft), var(--color-bg-app) 70%);
+  --gradient-neutral-top-to-bottom: linear-gradient(to bottom, var(--color-neutral-soft), var(--color-bg-app) 70%);
+  --gradient-neutral-right-to-left: linear-gradient(to left, var(--color-neutral-soft), var(--color-bg-app) 70%);
+  --gradient-neutral-bottom-to-top: linear-gradient(to top, var(--color-neutral-soft), var(--color-bg-app) 70%);
+
+  --gradient-safe-left-to-right: linear-gradient(to right, var(--color-safe-soft), var(--color-bg-app) 70%);
+  --gradient-safe-top-to-bottom: linear-gradient(to bottom, var(--color-safe-soft), var(--color-bg-app) 70%);
+  --gradient-safe-right-to-left: linear-gradient(to left, var(--color-safe-soft), var(--color-bg-app) 70%);
+  --gradient-safe-bottom-to-top: linear-gradient(to top, var(--color-safe-soft), var(--color-bg-app) 70%);
+
+  --gradient-info-left-to-right: linear-gradient(to right, var(--color-info-soft), var(--color-bg-app) 70%);
+  --gradient-info-top-to-bottom: linear-gradient(to bottom, var(--color-info-soft), var(--color-bg-app) 70%);
+  --gradient-info-right-to-left: linear-gradient(to left, var(--color-info-soft), var(--color-bg-app) 70%);
+  --gradient-info-bottom-to-top: linear-gradient(to top, var(--color-info-soft), var(--color-bg-app) 70%);
+
+  --gradient-caution-left-to-right: linear-gradient(to right, var(--color-caution-soft), var(--color-bg-app) 70%);
+  --gradient-caution-top-to-bottom: linear-gradient(to bottom, var(--color-caution-soft), var(--color-bg-app) 70%);
+  --gradient-caution-right-to-left: linear-gradient(to left, var(--color-caution-soft), var(--color-bg-app) 70%);
+  --gradient-caution-bottom-to-top: linear-gradient(to top, var(--color-caution-soft), var(--color-bg-app) 70%);
+
+  --gradient-warning-left-to-right: linear-gradient(to right, var(--color-warning-soft), var(--color-bg-app) 70%);
+  --gradient-warning-top-to-bottom: linear-gradient(to bottom, var(--color-warning-soft), var(--color-bg-app) 70%);
+  --gradient-warning-right-to-left: linear-gradient(to left, var(--color-warning-soft), var(--color-bg-app) 70%);
+  --gradient-warning-bottom-to-top: linear-gradient(to top, var(--color-warning-soft), var(--color-bg-app) 70%);
+
+  --gradient-danger-left-to-right: linear-gradient(to right, var(--color-danger-soft), var(--color-bg-app) 70%);
+  --gradient-danger-top-to-bottom: linear-gradient(to bottom, var(--color-danger-soft), var(--color-bg-app) 70%);
+  --gradient-danger-right-to-left: linear-gradient(to left, var(--color-danger-soft), var(--color-bg-app) 70%);
+  --gradient-danger-bottom-to-top: linear-gradient(to top, var(--color-danger-soft), var(--color-bg-app) 70%);
 }
 
 .dark {

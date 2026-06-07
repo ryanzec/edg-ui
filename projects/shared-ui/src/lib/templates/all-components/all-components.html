@@ -75,7 +75,7 @@
 
   <div class="component-block">
     <h3 class="component-block-name">Card</h3>
-    <org-box layout="stack">
+    <org-box>
       <org-box-header title="Project Aurora" subtitle="Mobile redesign" />
       <org-box-content>A short body of card content.</org-box-content>
       <org-box-footer alignment="end">
@@ -266,17 +266,21 @@
   <div class="component-block">
     <h3 class="component-block-name">List</h3>
     <org-list size="sm" border="list-only">
-      <org-list-item label="Home">
-        <org-list-item-icon name="house" />
+      <org-list-item>
+        <org-list-item-icon pre name="house" />
+        Home
       </org-list-item>
-      <org-list-item label="Settings">
-        <org-list-item-icon name="settings" />
+      <org-list-item>
+        <org-list-item-icon pre name="settings" />
+        Settings
       </org-list-item>
-      <org-list-item label="Team" [isSelected]="true">
-        <org-list-item-icon name="users" />
+      <org-list-item [isSelected]="true">
+        <org-list-item-icon pre name="users" />
+        Team
       </org-list-item>
-      <org-list-item label="Logout" [disabled]="true">
-        <org-list-item-icon name="log-out" />
+      <org-list-item [disabled]="true">
+        <org-list-item-icon pre name="log-out" />
+        Logout
       </org-list-item>
     </org-list>
   </div>

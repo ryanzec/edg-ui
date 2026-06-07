@@ -74,6 +74,11 @@
     text-align: left;
   }
 
+  /* hide the content wrapper when nothing is projected so the empty flex-1 span does not affect row layout */
+  .list-item-content > .flex-1:empty {
+    display: none;
+  }
+
   :host([data-size='sm']) {
     --list-item-padding-block: var(--spacing-1);
     --list-item-padding-inline: var(--spacing-1_5);

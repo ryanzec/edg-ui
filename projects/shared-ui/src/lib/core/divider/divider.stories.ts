@@ -5,7 +5,7 @@ import { ButtonToggle, ButtonToggleItem } from '../button-toggle/button-toggle';
 import { allComponentColors, type ComponentColor } from '../types/component-types';
 import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
 import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
-import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
+import { DesignSystemDemoControlInput } from '../../example/design-system-demo/design-system-demo-control-input';
 import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
 import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
 import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
@@ -65,7 +65,7 @@ const liveDemoColorItems: ButtonToggleItem[] = allLiveDemoColorChoices.map((colo
     DesignSystemDemo,
     DesignSystemDemoHeader,
     DesignSystemDemoControls,
-    DesignSystemDemoControlGroup,
+    DesignSystemDemoControlInput,
     DesignSystemDemoCanvas,
   ],
   styles: [
@@ -101,21 +101,21 @@ const liveDemoColorItems: ButtonToggleItem[] = allLiveDemoColorChoices.map((colo
           description="The divider below is real and reacts to every input. Toggle direction, style, weight, padding, and color to see each axis in isolation."
         />
         <org-design-system-demo-controls slot="controls">
-          <org-design-system-demo-control-group label="Direction">
+          <org-design-system-demo-control-input label="Direction">
             <org-button-toggle [items]="directionItems" formControlName="direction" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Line style">
+          </org-design-system-demo-control-input>
+          <org-design-system-demo-control-input label="Line style">
             <org-button-toggle [items]="lineStyleItems" formControlName="lineStyle" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Weight">
+          </org-design-system-demo-control-input>
+          <org-design-system-demo-control-input label="Weight">
             <org-button-toggle [items]="weightItems" formControlName="weight" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Padding">
+          </org-design-system-demo-control-input>
+          <org-design-system-demo-control-input label="Padding">
             <org-button-toggle [items]="paddingItems" formControlName="padding" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Color">
+          </org-design-system-demo-control-input>
+          <org-design-system-demo-control-input label="Color">
             <org-button-toggle [items]="colorItems" formControlName="color" buttonSize="sm" />
-          </org-design-system-demo-control-group>
+          </org-design-system-demo-control-input>
         </org-design-system-demo-controls>
         <org-design-system-demo-canvas slot="canvas">
           <div class="canvas-stage">

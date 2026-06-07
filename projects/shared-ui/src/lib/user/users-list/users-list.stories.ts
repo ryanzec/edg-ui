@@ -6,8 +6,10 @@ import { UsersList } from './users-list';
 import { UsersDataStore } from '../users-data-store/users-data-store';
 import { UsersApi } from '../users-api/users-api';
 import { ApplicationFrame } from '../../layout/application-frame/application-frame';
-import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
-import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
+import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
+import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
+import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
+import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
 
 const sampleUsers: User[] = [
   {
@@ -464,31 +466,36 @@ export const States: Story = {
   },
   render: () => ({
     template: `
-      <org-storybook-example-container
-        title="Users List States"
-        currentState="Comparing data, empty, and filtered-empty states"
-      >
-        <org-storybook-example-container-section label="With Data">
-          <story-users-list-host />
-        </org-storybook-example-container-section>
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Users List States" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">With Data</div>
+            <story-users-list-host />
+          </div>
 
-        <org-storybook-example-container-section label="No Members Yet (truly empty)">
-          <story-users-list-empty-host />
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">No Members Yet (truly empty)</div>
+            <story-users-list-empty-host />
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
           <li><strong>With Data</strong>: Full table, count display, pagination</li>
           <li><strong>No Members Yet</strong>: Empty state shown when there is no data and no filters</li>
           <li><strong>No Matches</strong>: Empty state changes when filters are active but yield no results — exercise this by typing in the search box of the With Data example with text that does not match</li>
         </ul>
-      </org-storybook-example-container>
+      </org-design-system-demo-expected-behaviour>
     `,
     moduleMetadata: {
       imports: [
         UsersListHostStory,
         UsersListEmptyHostStory,
-        StorybookExampleContainer,
-        StorybookExampleContainerSection,
+        DesignSystemDemo,
+        DesignSystemDemoHeader,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
       ],
     },
   }),

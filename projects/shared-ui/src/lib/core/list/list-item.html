@@ -1,10 +1,6 @@
 <ng-template #contentTemplate>
   <ng-content select="[pre]" />
-  @if (label() !== undefined) {
-    <span [class]="hideLabel() ? 'sr-only' : 'flex-1'">{{ label() }}</span>
-  } @else {
-    <span class="flex-1"><ng-content select="[content]" /></span>
-  }
+  <span class="flex-1"><ng-content /></span>
   <ng-content select="[post]" />
   @if (showAsExternal()) {
     <org-list-item-icon class="external-href-icon" [name]="externalHrefIconName" />

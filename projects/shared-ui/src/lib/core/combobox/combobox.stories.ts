@@ -1,8 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/angular';
 import { Component, ChangeDetectionStrategy, signal, computed } from '@angular/core';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { JsonPipe } from '@angular/common';
-import { Combobox } from './combobox';
+import { delay, filter, of, switchMap, tap } from 'rxjs';
+import { Combobox, allComboboxDropDownWidthModes, type ComboboxDropDownWidthMode } from './combobox';
 import { type ComboboxOptionInput } from '../combobox-store/combobox-store';
 import { Button } from '../button/button';
 import { ButtonToggle, type ButtonToggleItem } from '../button-toggle/button-toggle';
@@ -13,7 +15,8 @@ import { DesignSystemDemo } from '../../example/design-system-demo/design-system
 import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
 import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
 import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
-import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
+import { DesignSystemDemoControlInput } from '../../example/design-system-demo/design-system-demo-control-input';
+import { DesignSystemDemoControlsGroup } from '../../example/design-system-demo/design-system-demo-controls-group';
 import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
 
 const fruitOptions: ComboboxOptionInput[] = [
@@ -46,10 +49,56 @@ const largeDatasetOptions: ComboboxOptionInput[] = Array.from({ length: 100 }, (
   value: `option-${index + 1}`,
 }));
 
+const widthDemoOptions: ComboboxOptionInput[] = [
+  { label: 'Short', value: 'short' },
+  { label: 'Medium length option', value: 'medium' },
+  { label: 'A considerably longer option label than the trigger input itself', value: 'long' },
+];
+
+/** simulated latency (ms) for the async-simulation story's fake request */
+const ASYNC_SIMULATION_DELAY_MS = 2000;
+
+/** minimum characters before the async-simulation story issues a request */
+const ASYNC_SIMULATION_CHARACTER_THRESHOLD = 2;
+
+const asyncNamePool = [
+  'Avery',
+  'Blake',
+  'Cameron',
+  'Drew',
+  'Emerson',
+  'Finley',
+  'Gray',
+  'Harper',
+  'Indie',
+  'Jordan',
+  'Kai',
+  'Logan',
+  'Morgan',
+  'Noah',
+  'Oakley',
+  'Parker',
+  'Quinn',
+  'Riley',
+  'Sage',
+  'Tatum',
+];
+
+const asyncDatasetOptions: ComboboxOptionInput[] = Array.from({ length: 100 }, (_, index) => ({
+  label: `${asyncNamePool[index % asyncNamePool.length]} ${index + 1}`,
+  value: `async-${index + 1}`,
+}));
+
 const liveDemoSelectionItems: ButtonToggleItem[] = [
   { label: 'single', value: 'single', buttonColor: 'primary' },
   { label: 'multi', value: 'multi', buttonColor: 'primary' },
 ];
+
+const liveDemoWidthModeItems: ButtonToggleItem[] = allComboboxDropDownWidthModes.map((mode) => ({
+  label: mode,
+  value: mode,
+  buttonColor: 'primary',
+}));
 
 const meta: Meta<Combobox> = {
   title: 'Core/Components/Combobox',
@@ -103,6 +152,7 @@ export const Default: Story = {
     isGroupingEnabled: false,
     disabled: false,
     containerClass: '',
+    dropDownWidthMode: 'minimum',
   },
   argTypes: {
     name: {
@@ -141,6 +191,12 @@ export const Default: Story = {
       control: 'text',
       description: 'Additional CSS classes for the container',
     },
+    dropDownWidthMode: {
+      control: 'select',
+      options: allComboboxDropDownWidthModes,
+      description:
+        'How the drop-down panel width relates to the trigger input: "minimum" (content-determined), "match" (equals the input width), or "minimum-match" (at least the input width, growing with content)',
+    },
   },
   parameters: {
     docs: {
@@ -163,6 +219,7 @@ export const Default: Story = {
           [isGroupingEnabled]="isGroupingEnabled"
           [disabled]="disabled"
           [containerClass]="containerClass"
+          [dropDownWidthMode]="dropDownWidthMode"
         />
       </div>
     `,
@@ -183,7 +240,8 @@ export const Default: Story = {
     DesignSystemDemo,
     DesignSystemDemoHeader,
     DesignSystemDemoControls,
-    DesignSystemDemoControlGroup,
+    DesignSystemDemoControlsGroup,
+    DesignSystemDemoControlInput,
     DesignSystemDemoCanvas,
   ],
   styles: [
@@ -211,38 +269,49 @@ export const Default: Story = {
           description="A real, focusable Combobox. Click the trigger to open, type to filter, ArrowUp/ArrowDown to move the cursor, Enter to pick, Esc to close. Toggle the controls to walk every state."
         />
         <org-design-system-demo-controls slot="controls">
-          <org-design-system-demo-control-group label="Selection">
-            <org-button-toggle [items]="selectionItems" formControlName="selection" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Auto show options">
-            <org-checkbox-toggle name="live-demo-auto-show" value="auto-show" formControlName="autoShowOption">
-              {{ liveDemoForm.controls.autoShowOption.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Allow new options">
-            <org-checkbox-toggle name="live-demo-allow-new" value="allow-new" formControlName="allowNewOptions">
-              {{ liveDemoForm.controls.allowNewOptions.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Grouping">
-            <org-checkbox-toggle name="live-demo-grouping" value="grouping" formControlName="isGroupingEnabled">
-              {{ liveDemoForm.controls.isGroupingEnabled.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Filter selected">
-            <org-checkbox-toggle
-              name="live-demo-filter-selected"
-              value="filter-selected"
-              formControlName="filterSelectedOptions"
-            >
-              {{ liveDemoForm.controls.filterSelectedOptions.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Disabled">
-            <org-checkbox-toggle name="live-demo-disabled" value="disabled" formControlName="disabled">
-              {{ liveDemoForm.controls.disabled.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
+          <org-design-system-demo-controls-group label="Selection">
+            <org-design-system-demo-control-input label="Selection">
+              <org-button-toggle [items]="selectionItems" formControlName="selection" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Filter selected">
+              <org-checkbox-toggle
+                name="live-demo-filter-selected"
+                value="filter-selected"
+                formControlName="filterSelectedOptions"
+              >
+                {{ liveDemoForm.controls.filterSelectedOptions.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
+          <org-design-system-demo-controls-group label="Behavior">
+            <org-design-system-demo-control-input label="Auto show options">
+              <org-checkbox-toggle name="live-demo-auto-show" value="auto-show" formControlName="autoShowOption">
+                {{ liveDemoForm.controls.autoShowOption.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Allow new options">
+              <org-checkbox-toggle name="live-demo-allow-new" value="allow-new" formControlName="allowNewOptions">
+                {{ liveDemoForm.controls.allowNewOptions.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Grouping">
+              <org-checkbox-toggle name="live-demo-grouping" value="grouping" formControlName="isGroupingEnabled">
+                {{ liveDemoForm.controls.isGroupingEnabled.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
+          <org-design-system-demo-controls-group label="Layout">
+            <org-design-system-demo-control-input label="Drop-down width">
+              <org-button-toggle [items]="widthModeItems" formControlName="dropDownWidthMode" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
+          <org-design-system-demo-controls-group label="State">
+            <org-design-system-demo-control-input label="Disabled">
+              <org-checkbox-toggle name="live-demo-disabled" value="disabled" formControlName="disabled">
+                {{ liveDemoForm.controls.disabled.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
         </org-design-system-demo-controls>
         <org-design-system-demo-canvas slot="canvas">
           <div class="canvas-stage">
@@ -257,6 +326,7 @@ export const Default: Story = {
                 [isGroupingEnabled]="liveDemoForm.controls.isGroupingEnabled.value"
                 [filterSelectedOptions]="liveDemoForm.controls.filterSelectedOptions.value"
                 [disabled]="liveDemoForm.controls.disabled.value"
+                [dropDownWidthMode]="liveDemoForm.controls.dropDownWidthMode.value"
               />
             </div>
           </div>
@@ -268,6 +338,7 @@ export const Default: Story = {
 class ComboboxLiveDemoStory {
   protected readonly options = fruitOptions;
   protected readonly selectionItems = liveDemoSelectionItems;
+  protected readonly widthModeItems = liveDemoWidthModeItems;
 
   protected readonly liveDemoForm = new FormGroup({
     selection: new FormControl<'single' | 'multi'>('single', { nonNullable: true }),
@@ -276,6 +347,7 @@ class ComboboxLiveDemoStory {
     isGroupingEnabled: new FormControl<boolean>(false, { nonNullable: true }),
     filterSelectedOptions: new FormControl<boolean>(true, { nonNullable: true }),
     disabled: new FormControl<boolean>(false, { nonNullable: true }),
+    dropDownWidthMode: new FormControl<ComboboxDropDownWidthMode>('minimum', { nonNullable: true }),
   });
 
   protected readonly isMultiSelect = computed<boolean>(() => this.liveDemoForm.controls.selection.value === 'multi');
@@ -333,6 +405,43 @@ export const Showcase: Story = {
             <li><strong>Single</strong>: Selecting a row stamps its label back into the trigger and closes the panel</li>
             <li><strong>Multi</strong>: Selected values render as removable inline tags; the panel stays open after each pick</li>
             <li><strong>Check gutter</strong>: Reserved on every row so labels never shift between selected and unselected states</li>
+          </ul>
+        </org-design-system-demo-expected-behaviour>
+
+        <org-design-system-demo>
+          <org-design-system-demo-header
+            slot="header"
+            title="Drop-down width mode"
+            description="dropDownWidthMode controls how the panel width relates to the trigger input: minimum (content-determined), match (equals the trigger), or minimum-match (at least the trigger, growing with content)."
+          />
+          <org-design-system-demo-canvas slot="canvas">
+            <div class="flex flex-col gap-4 max-w-sm">
+              <org-combobox
+                name="showcase-width-minimum"
+                [options]="widthDemoOptions"
+                dropDownWidthMode="minimum"
+                placeholder="minimum — panel sized to content"
+              />
+              <org-combobox
+                name="showcase-width-match"
+                [options]="widthDemoOptions"
+                dropDownWidthMode="match"
+                placeholder="match — panel equals the trigger width"
+              />
+              <org-combobox
+                name="showcase-width-minimum-match"
+                [options]="widthDemoOptions"
+                dropDownWidthMode="minimum-match"
+                placeholder="minimum-match — at least the trigger, grows with content"
+              />
+            </div>
+          </org-design-system-demo-canvas>
+        </org-design-system-demo>
+        <org-design-system-demo-expected-behaviour>
+          <ul class="list-inside list-disc flex flex-col gap-1">
+            <li><strong>minimum</strong>: Panel hugs its content — can be narrower than the trigger</li>
+            <li><strong>match</strong>: Panel width is locked to the trigger width</li>
+            <li><strong>minimum-match</strong>: Panel is at least the trigger width but grows wider for long options</li>
           </ul>
         </org-design-system-demo-expected-behaviour>
 
@@ -605,6 +714,7 @@ export const Showcase: Story = {
       fruitOptions,
       simpleOptions,
       largeDatasetOptions,
+      widthDemoOptions,
       customFilter: (inputValue: string, option: { label: string }): boolean =>
         option.label.toLowerCase().startsWith(inputValue.toLowerCase()),
     },
@@ -799,6 +909,104 @@ export const ReactiveFormIntegration: Story = {
     template: '<story-combobox-reactive-form-integration />',
     moduleMetadata: {
       imports: [ComboboxReactiveFormIntegrationStory],
+    },
+  }),
+};
+
+@Component({
+  selector: 'story-combobox-async-simulation',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    Combobox,
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoCanvas,
+    DesignSystemDemoExpectedBehaviour,
+  ],
+  template: `
+    <div class="flex flex-col gap-4">
+      <org-design-system-demo>
+        <org-design-system-demo-header
+          slot="header"
+          title="Async simulation"
+          description="Simulates a server-driven autocomplete over a 100-item dataset. The consumer owns the request: each input change (once the character threshold is met) issues a fake 2s request, toggles isLoading, and feeds the filtered results back in. Setting enableFiltering to false keeps the combobox from re-filtering the already-filtered results."
+        />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="max-w-sm">
+            <org-combobox
+              name="async-simulation"
+              placeholder="Type at least 2 characters..."
+              [options]="options()"
+              [isLoading]="isLoading()"
+              [characterThreshold]="characterThreshold"
+              [enableFiltering]="false"
+              (inputValueChanged)="onInputValueChanged($event)"
+            />
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="list-inside list-disc flex flex-col gap-1">
+          <li>
+            Typing fewer than {{ characterThreshold }} characters shows "{{ characterThreshold }} characters needed for
+            results" and emits no request
+          </li>
+          <li>Once the threshold is met, a loading spinner shows for ~2s while the simulated request runs</li>
+          <li>Results stream back filtered against the typed text; rapid typing cancels stale in-flight requests</li>
+          <li>
+            <code>enableFiltering</code> set to false prevents the combobox from re-filtering the consumer-supplied
+            results
+          </li>
+        </ul>
+      </org-design-system-demo-expected-behaviour>
+    </div>
+  `,
+})
+class ComboboxAsyncSimulationStory {
+  private readonly _allOptions = asyncDatasetOptions;
+  private readonly _query = signal<string>('');
+
+  protected readonly characterThreshold = ASYNC_SIMULATION_CHARACTER_THRESHOLD;
+  protected readonly options = signal<ComboboxOptionInput[]>([]);
+  protected readonly isLoading = signal<boolean>(false);
+
+  constructor() {
+    // simulate a debounced, server-driven request — switchMap drops stale in-flight responses
+    toObservable(this._query)
+      .pipe(
+        takeUntilDestroyed(),
+        filter((query) => query.length >= ASYNC_SIMULATION_CHARACTER_THRESHOLD),
+        tap(() => this.isLoading.set(true)),
+        switchMap((query) =>
+          of(this._allOptions.filter((option) => option.label.toLowerCase().includes(query.toLowerCase()))).pipe(
+            delay(ASYNC_SIMULATION_DELAY_MS)
+          )
+        )
+      )
+      .subscribe((results) => {
+        this.options.set(results);
+        this.isLoading.set(false);
+      });
+  }
+
+  protected onInputValueChanged(query: string): void {
+    this._query.set(query);
+  }
+}
+
+export const AsyncSimulation: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Simulates async/server-driven autocomplete. The consumer manages the request lifecycle (loading state + fetching), gates requests behind a character threshold, and sets enableFiltering to false so the combobox renders the externally-filtered results as-is.',
+      },
+    },
+  },
+  render: () => ({
+    template: '<story-combobox-async-simulation />',
+    moduleMetadata: {
+      imports: [ComboboxAsyncSimulationStory],
     },
   }),
 };

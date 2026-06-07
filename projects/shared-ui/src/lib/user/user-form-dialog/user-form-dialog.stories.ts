@@ -2,8 +2,10 @@ import { type Meta, type StoryObj } from '@storybook/angular';
 import { Component, ViewChild, signal } from '@angular/core';
 import { UserFormDialog } from './user-form-dialog';
 import { type User } from '@organization/shared-utils';
-import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
-import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
+import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
+import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
+import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
+import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
 import { Button } from '../../core/button/button';
 import { type UserFormData } from '../user-form/user-form';
 
@@ -112,31 +114,36 @@ export const CreateAndEditUser: Story = {
   },
   render: () => ({
     template: `
-      <org-storybook-example-container
-        title="Create vs Edit User Dialog"
-        currentState="Comparing dialog title and form behavior"
-      >
-        <org-storybook-example-container-section label="Create New User Dialog">
-          <story-user-form-dialog-create-story />
-        </org-storybook-example-container-section>
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Create vs Edit User Dialog" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Create New User Dialog</div>
+            <story-user-form-dialog-create-story />
+          </div>
 
-        <org-storybook-example-container-section label="Edit Existing User Dialog">
-          <story-user-form-dialog-edit-story />
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="flex flex-col gap-1 mt-1 list-inside list-disc">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Edit Existing User Dialog</div>
+            <story-user-form-dialog-edit-story />
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="flex flex-col gap-1 mt-1 list-inside list-disc">
           <li><strong>Create Dialog</strong>: Shows "Create User" title with empty form</li>
           <li><strong>Edit Dialog</strong>: Shows "Edit User" title with pre-populated form data</li>
           <li>Dialog does not close automatically on submission</li>
           <li>Click outside dialog is disabled to prevent accidental closure</li>
           <li>Form validation and submission work the same as standalone UserForm</li>
         </ul>
-      </org-storybook-example-container>
+      </org-design-system-demo-expected-behaviour>
     `,
     moduleMetadata: {
       imports: [
-        StorybookExampleContainer,
-        StorybookExampleContainerSection,
+        DesignSystemDemo,
+        DesignSystemDemoHeader,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
         UserFormDialogCreateStory,
         UserFormDialogEditStory,
       ],

@@ -37,6 +37,7 @@ Utility css classes **MUST** be used for all other styles:
 # Design Token / CSS Variables Patterns:
 - any component that can have variants that effect css property must **ALWAYS** use design tokens (css variables) for that as a placeholder value in a component design token file in `projects/shared-ui/src/lib/styles/animations.css`.
 - the css code **MUST** implement all variants (even whatever the default values are) as the default css variables are more placeholders than values to be used.
+- design tokens that are used in the utility css class files **MUST** be defined in `projects/shared-ui/src/lib/styles/base-tokens.css`.
 
 # CSS Layer Patterns
 - **ALWAYS** wrap css in general component css files (NOT variables component cssfiles) in `@layer components {...}` for components in `projects/shared-ui/src/lib/core`.

@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, Component, signal, viewChild } from '@angular/core';
 import type { Meta, StoryObj } from '@storybook/angular';
-import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
-import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
+import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
+import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
+import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
 import { Button } from '../button/button';
 import { Box } from '../box/box';
 import { SlideContainer, allSlideContainerOrientations, allSlideContainerSizes } from './slide-container';
@@ -242,22 +243,25 @@ export const Stable: Story = {
   },
   render: () => ({
     template: `
-      <org-storybook-example-container
-        title="Stable"
-        currentState="Container size stays fixed at the largest slide"
-      >
-        <org-storybook-example-container-section label="Horizontal">
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Stable" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Horizontal</div>
           <story-slide-container-stable-horizontal-demo />
-        </org-storybook-example-container-section>
-        <org-storybook-example-container-section label="Vertical">
+          </div>
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Vertical</div>
           <story-slide-container-stable-vertical-demo />
-        </org-storybook-example-container-section>
-      </org-storybook-example-container>
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
     `,
     moduleMetadata: {
       imports: [
-        StorybookExampleContainer,
-        StorybookExampleContainerSection,
+        DesignSystemDemo,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoHeader,
         SlideContainerStableHorizontalDemo,
         SlideContainerStableVerticalDemo,
       ],
@@ -508,22 +512,25 @@ export const Looping: Story = {
   },
   render: () => ({
     template: `
-      <org-storybook-example-container
-        title="Looping"
-        currentState="Slides wrap around with correct animation direction"
-      >
-        <org-storybook-example-container-section label="Horizontal">
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Looping" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Horizontal</div>
           <story-slide-container-looping-horizontal-demo />
-        </org-storybook-example-container-section>
-        <org-storybook-example-container-section label="Vertical">
+          </div>
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Vertical</div>
           <story-slide-container-looping-vertical-demo />
-        </org-storybook-example-container-section>
-      </org-storybook-example-container>
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
     `,
     moduleMetadata: {
       imports: [
-        StorybookExampleContainer,
-        StorybookExampleContainerSection,
+        DesignSystemDemo,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoHeader,
         SlideContainerLoopingHorizontalDemo,
         SlideContainerLoopingVerticalDemo,
       ],
@@ -542,22 +549,25 @@ export const Dynamic: Story = {
   },
   render: () => ({
     template: `
-      <org-storybook-example-container
-        title="Dynamic"
-        currentState="Container resizes to fit the active slide content"
-      >
-        <org-storybook-example-container-section label="Horizontal">
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Dynamic" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Horizontal</div>
           <story-slide-container-dynamic-horizontal-demo />
-        </org-storybook-example-container-section>
-        <org-storybook-example-container-section label="Vertical">
+          </div>
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Vertical</div>
           <story-slide-container-dynamic-vertical-demo />
-        </org-storybook-example-container-section>
-      </org-storybook-example-container>
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
     `,
     moduleMetadata: {
       imports: [
-        StorybookExampleContainer,
-        StorybookExampleContainerSection,
+        DesignSystemDemo,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoHeader,
         SlideContainerDynamicHorizontalDemo,
         SlideContainerDynamicVerticalDemo,
       ],
@@ -696,22 +706,25 @@ export const LoopingDynamic: Story = {
   },
   render: () => ({
     template: `
-      <org-storybook-example-container
-        title="Looping Dynamic"
-        currentState="Container resizes to active slide and wraps around with correct animation direction"
-      >
-        <org-storybook-example-container-section label="Horizontal">
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Looping Dynamic" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Horizontal</div>
           <story-slide-container-looping-dynamic-horizontal-demo />
-        </org-storybook-example-container-section>
-        <org-storybook-example-container-section label="Vertical">
+          </div>
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Vertical</div>
           <story-slide-container-looping-dynamic-vertical-demo />
-        </org-storybook-example-container-section>
-      </org-storybook-example-container>
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
     `,
     moduleMetadata: {
       imports: [
-        StorybookExampleContainer,
-        StorybookExampleContainerSection,
+        DesignSystemDemo,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoHeader,
         SlideContainerLoopingDynamicHorizontalDemo,
         SlideContainerLoopingDynamicVerticalDemo,
       ],

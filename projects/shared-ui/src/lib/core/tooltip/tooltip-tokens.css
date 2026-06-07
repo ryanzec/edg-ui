@@ -1,8 +1,8 @@
 :root {
   /* surface */
-  --tooltip-bg: var(--color-bg-inverse);
-  --tooltip-fg: var(--color-fg-inverse);
-  --tooltip-border: var(--color-border-inverse);
+  --tooltip-bg: var(--color-bg-app);
+  --tooltip-fg: var(--color-fg);
+  --tooltip-border: var(--color-border);
   --tooltip-border-width: var(--border-width);
   --tooltip-radius: var(--radius-base);
   --tooltip-shadow: var(--shadow-base);
@@ -34,20 +34,20 @@
   --tooltip-rich-width: max-content;
 
   /* title */
-  --tooltip-title-color: var(--color-fg-inverse);
+  --tooltip-title-color: var(--color-fg);
   --tooltip-title-font-size: var(--font-size-sm);
   --tooltip-title-font-weight: var(--font-weight-semibold);
   --tooltip-title-line-height: var(--tooltip-line-height);
 
   /* body */
-  --tooltip-body-color: var(--color-fg-inverse-muted);
+  --tooltip-body-color: var(--color-fg-muted);
   --tooltip-body-font-size: var(--font-size-xs);
   --tooltip-body-font-weight: var(--font-weight-regular);
   --tooltip-body-line-height: var(--line-height-normal);
   --tooltip-body-margin: 0;
 
   /* action */
-  --tooltip-action-color: var(--color-fg-inverse);
+  --tooltip-action-color: var(--color-fg);
   --tooltip-action-font-size: var(--font-size-xs);
   --tooltip-action-font-weight: var(--font-weight-medium);
   --tooltip-action-text-decoration: underline;

@@ -21,6 +21,7 @@ Update the existing section in the Showcase story with the new value.
 - **ALWAYS** create live story demo using the `projects/shared-ui/src/lib/example/design-system-demo` components that allows the single section to control all input that have an effect on the visual / functionality of the component.
 - The controls for the Live Demo story must **ALWAYS** use custom input components, NEVER native ones.
 - **ALWAYS** make sure that the live demo has controls for any input that effect the visual output of the component.
+- **ALWAYS** make sure the related control groups are groups with the control section.
 
 # Showcase Story
 
@@ -40,3 +41,4 @@ Update the existing section in the Showcase story with the new value.
 - **ALWAYS** use `.toISO()` when rendering dates for debugging in stories.
 - **ALWAYS** define `moduleMetadata` when creating a storybook stories that uses the Story's render method
 - **NEVER** export component created in storybook files
+- Angular services **MUST** always be mcoked for stories.

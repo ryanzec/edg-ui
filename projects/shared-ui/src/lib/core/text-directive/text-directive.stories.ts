@@ -1,7 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/angular';
 import { TextDirective, textColors, textSizes } from './text-directive';
-import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
-import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
+import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
+import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
+import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
+import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
 
 const meta: Meta<TextDirective> = {
   title: 'Core/Directives/Text',
@@ -112,47 +114,57 @@ export const Colors: Story = {
   },
   render: () => ({
     template: `
-      <org-storybook-example-container
-        title="Color Variants"
-        currentState="Comparing all 8 semantic color options"
-      >
-        <org-storybook-example-container-section label="Default">
-          <div orgText>Default text color</div>
-        </org-storybook-example-container-section>
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Color Variants" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Default</div>
+            <div orgText>Default text color</div>
+          </div>
 
-        <org-storybook-example-container-section label="Primary">
-          <div orgText textColor="primary">Primary text color</div>
-        </org-storybook-example-container-section>
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Primary</div>
+            <div orgText textColor="primary">Primary text color</div>
+          </div>
 
-        <org-storybook-example-container-section label="Secondary">
-          <div orgText textColor="secondary">Secondary text color</div>
-        </org-storybook-example-container-section>
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Secondary</div>
+            <div orgText textColor="secondary">Secondary text color</div>
+          </div>
 
-        <org-storybook-example-container-section label="Neutral">
-          <div orgText textColor="neutral">Neutral text color</div>
-        </org-storybook-example-container-section>
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Neutral</div>
+            <div orgText textColor="neutral">Neutral text color</div>
+          </div>
 
-        <org-storybook-example-container-section label="Safe">
-          <div orgText textColor="safe">Safe text color</div>
-        </org-storybook-example-container-section>
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Safe</div>
+            <div orgText textColor="safe">Safe text color</div>
+          </div>
 
-        <org-storybook-example-container-section label="Info">
-          <div orgText textColor="info">Info text color</div>
-        </org-storybook-example-container-section>
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Info</div>
+            <div orgText textColor="info">Info text color</div>
+          </div>
 
-        <org-storybook-example-container-section label="Caution">
-          <div orgText textColor="caution">Caution text color</div>
-        </org-storybook-example-container-section>
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Caution</div>
+            <div orgText textColor="caution">Caution text color</div>
+          </div>
 
-        <org-storybook-example-container-section label="Warning">
-          <div orgText textColor="warning">Warning text color</div>
-        </org-storybook-example-container-section>
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Warning</div>
+            <div orgText textColor="warning">Warning text color</div>
+          </div>
 
-        <org-storybook-example-container-section label="Danger">
-          <div orgText textColor="danger">Danger text color</div>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Danger</div>
+            <div orgText textColor="danger">Danger text color</div>
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
           <li><strong>primary</strong>: Primary color</li>
           <li><strong>secondary</strong>: Secondary accent color</li>
           <li><strong>neutral</strong>: Neutral color</li>
@@ -162,10 +174,16 @@ export const Colors: Story = {
           <li><strong>warning</strong>: Warning state (orange)</li>
           <li><strong>danger</strong>: Error/danger state (red)</li>
         </ul>
-      </org-storybook-example-container>
+      </org-design-system-demo-expected-behaviour>
     `,
     moduleMetadata: {
-      imports: [TextDirective, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [
+        TextDirective,
+        DesignSystemDemo,
+        DesignSystemDemoHeader,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
+      ],
     },
   }),
 };
@@ -180,39 +198,47 @@ export const Sizes: Story = {
   },
   render: () => ({
     template: `
-      <org-storybook-example-container
-        title="Size Variants"
-        currentState="Comparing all 7 size options"
-      >
-        <org-storybook-example-container-section label="2x Extra Small (2xs)">
-          <div orgText textSize="2xs">2x extra small text (0.625rem / 10px)</div>
-        </org-storybook-example-container-section>
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Size Variants" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">2x Extra Small (2xs)</div>
+            <div orgText textSize="2xs">2x extra small text (0.625rem / 10px)</div>
+          </div>
 
-        <org-storybook-example-container-section label="Extra Small (xs)">
-          <div orgText textSize="xs">Extra small text (0.75rem / 12px)</div>
-        </org-storybook-example-container-section>
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Extra Small (xs)</div>
+            <div orgText textSize="xs">Extra small text (0.75rem / 12px)</div>
+          </div>
 
-        <org-storybook-example-container-section label="Small (sm)">
-          <div orgText textSize="sm">Small text (0.875rem / 14px)</div>
-        </org-storybook-example-container-section>
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Small (sm)</div>
+            <div orgText textSize="sm">Small text (0.875rem / 14px)</div>
+          </div>
 
-        <org-storybook-example-container-section label="Large (lg)">
-          <div orgText textSize="lg">Large text (1rem / 16px)</div>
-        </org-storybook-example-container-section>
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Large (lg)</div>
+            <div orgText textSize="lg">Large text (1rem / 16px)</div>
+          </div>
 
-        <org-storybook-example-container-section label="Extra Large (xl)">
-          <div orgText textSize="xl">Extra large text (1.125rem / 18px)</div>
-        </org-storybook-example-container-section>
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Extra Large (xl)</div>
+            <div orgText textSize="xl">Extra large text (1.125rem / 18px)</div>
+          </div>
 
-        <org-storybook-example-container-section label="2x Extra Large (2xl)">
-          <div orgText textSize="2xl">2xl text (1.25rem / 20px)</div>
-        </org-storybook-example-container-section>
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">2x Extra Large (2xl)</div>
+            <div orgText textSize="2xl">2xl text (1.25rem / 20px)</div>
+          </div>
 
-        <org-storybook-example-container-section label="3x Extra Large (3xl)">
-          <div orgText textSize="3xl">3xl text (1.5rem / 24px)</div>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">3x Extra Large (3xl)</div>
+            <div orgText textSize="3xl">3xl text (1.5rem / 24px)</div>
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
           <li><strong>2xs</strong>: 0.625rem / 10px</li>
           <li><strong>xs</strong>: 0.75rem / 12px</li>
           <li><strong>sm</strong>: 0.875rem / 14px</li>
@@ -221,10 +247,16 @@ export const Sizes: Story = {
           <li><strong>2xl</strong>: 1.25rem / 20px</li>
           <li><strong>3xl</strong>: 1.5rem / 24px</li>
         </ul>
-      </org-storybook-example-container>
+      </org-design-system-demo-expected-behaviour>
     `,
     moduleMetadata: {
-      imports: [TextDirective, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [
+        TextDirective,
+        DesignSystemDemo,
+        DesignSystemDemoHeader,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
+      ],
     },
   }),
 };
@@ -239,47 +271,61 @@ export const Combined: Story = {
   },
   render: () => ({
     template: `
-      <org-storybook-example-container
-        title="Combined Color and Size"
-        currentState="Demonstrating color and size combinations"
-      >
-        <org-storybook-example-container-section label="Primary + Large">
-          <div orgText textColor="primary" textSize="xl">Primary large text</div>
-        </org-storybook-example-container-section>
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Combined Color and Size" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Primary + Large</div>
+            <div orgText textColor="primary" textSize="xl">Primary large text</div>
+          </div>
 
-        <org-storybook-example-container-section label="Danger + Extra Large">
-          <div orgText textColor="danger" textSize="2xl">Danger extra large text</div>
-        </org-storybook-example-container-section>
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Danger + Extra Large</div>
+            <div orgText textColor="danger" textSize="2xl">Danger extra large text</div>
+          </div>
 
-        <org-storybook-example-container-section label="Safe + Small">
-          <div orgText textColor="safe" textSize="sm">Safe small text</div>
-        </org-storybook-example-container-section>
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Safe + Small</div>
+            <div orgText textColor="safe" textSize="sm">Safe small text</div>
+          </div>
 
-        <org-storybook-example-container-section label="Neutral + Large">
-          <div orgText textColor="neutral" textSize="xl">Neutral large text</div>
-        </org-storybook-example-container-section>
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Neutral + Large</div>
+            <div orgText textColor="neutral" textSize="xl">Neutral large text</div>
+          </div>
 
-        <org-storybook-example-container-section label="Info + 2xl">
-          <div orgText textColor="info" textSize="3xl">Info 2xl text</div>
-        </org-storybook-example-container-section>
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Info + 2xl</div>
+            <div orgText textColor="info" textSize="3xl">Info 2xl text</div>
+          </div>
 
-        <org-storybook-example-container-section label="Warning + Extra Small">
-          <div orgText textColor="warning" textSize="xs">Warning extra small text</div>
-        </org-storybook-example-container-section>
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Warning + Extra Small</div>
+            <div orgText textColor="warning" textSize="xs">Warning extra small text</div>
+          </div>
 
-        <org-storybook-example-container-section label="Secondary + Medium">
-          <div orgText textColor="secondary" textSize="lg">Secondary medium text</div>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Secondary + Medium</div>
+            <div orgText textColor="secondary" textSize="lg">Secondary medium text</div>
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
           <li>Color and size can be used independently or together</li>
           <li>Both properties are optional and default to null</li>
           <li>When null, the element uses its inherited or default styling</li>
         </ul>
-      </org-storybook-example-container>
+      </org-design-system-demo-expected-behaviour>
     `,
     moduleMetadata: {
-      imports: [TextDirective, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [
+        TextDirective,
+        DesignSystemDemo,
+        DesignSystemDemoHeader,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
+      ],
     },
   }),
 };

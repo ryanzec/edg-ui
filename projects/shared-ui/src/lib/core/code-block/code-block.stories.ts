@@ -6,7 +6,8 @@ import { CheckboxToggle } from '../checkbox-toggle/checkbox-toggle';
 import { Input } from '../input/input';
 import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
 import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
-import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
+import { DesignSystemDemoControlInput } from '../../example/design-system-demo/design-system-demo-control-input';
+import { DesignSystemDemoControlsGroup } from '../../example/design-system-demo/design-system-demo-controls-group';
 import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
 import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
 import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
@@ -234,7 +235,8 @@ export const Default: Story = {
     DesignSystemDemo,
     DesignSystemDemoHeader,
     DesignSystemDemoControls,
-    DesignSystemDemoControlGroup,
+    DesignSystemDemoControlsGroup,
+    DesignSystemDemoControlInput,
     DesignSystemDemoCanvas,
   ],
   styles: [
@@ -262,54 +264,58 @@ export const Default: Story = {
           description="Toggle the variant, header, copy affordance, ellipsis, collapsible, wrap, scroll, syntax highlight, and inline tone to see every combination."
         />
         <org-design-system-demo-controls slot="controls">
-          <org-design-system-demo-control-group label="Variant">
-            <org-button-toggle [items]="variantItems" formControlName="variant" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          @if (liveDemoForm.controls.variant.value === 'block') {
-            <org-design-system-demo-control-group label="Header">
-              <org-checkbox-toggle name="live-demo-header" value="header" formControlName="header">
-                {{ liveDemoForm.controls.header.value ? 'on' : 'off' }}
-              </org-checkbox-toggle>
-            </org-design-system-demo-control-group>
-            @if (liveDemoForm.controls.header.value) {
-              <org-design-system-demo-control-group label="Header label">
-                <org-input name="live-demo-header-label" formControlName="headerLabel" ariaLabel="Header label" />
-              </org-design-system-demo-control-group>
+          <org-design-system-demo-controls-group label="Variant">
+            <org-design-system-demo-control-input label="Variant">
+              <org-button-toggle [items]="variantItems" formControlName="variant" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            @if (liveDemoForm.controls.variant.value === 'inline') {
+              <org-design-system-demo-control-input label="Tone">
+                <org-button-toggle [items]="toneItems" formControlName="tone" buttonSize="sm" />
+              </org-design-system-demo-control-input>
             }
-            <org-design-system-demo-control-group label="Copy">
-              <org-checkbox-toggle name="live-demo-copy" value="copy" formControlName="allowCopy">
-                {{ liveDemoForm.controls.allowCopy.value ? 'on' : 'off' }}
-              </org-checkbox-toggle>
-            </org-design-system-demo-control-group>
-            <org-design-system-demo-control-group label="Clamp">
-              <org-checkbox-toggle name="live-demo-clamp" value="clamp" formControlName="clamp">
-                {{ liveDemoForm.controls.clamp.value ? '4 lines' : 'off' }}
-              </org-checkbox-toggle>
-            </org-design-system-demo-control-group>
-            <org-design-system-demo-control-group label="Collapsible">
-              <org-checkbox-toggle name="live-demo-collapsable" value="collapsable" formControlName="collapsable">
-                {{ liveDemoForm.controls.collapsable.value ? 'on' : 'off' }}
-              </org-checkbox-toggle>
-            </org-design-system-demo-control-group>
-            <org-design-system-demo-control-group label="Wrap">
-              <org-checkbox-toggle name="live-demo-wrap" value="wrap" formControlName="wrap">
-                {{ liveDemoForm.controls.wrap.value ? 'on' : 'off' }}
-              </org-checkbox-toggle>
-            </org-design-system-demo-control-group>
-            <org-design-system-demo-control-group label="Scroll">
-              <org-checkbox-toggle name="live-demo-scroll" value="scroll" formControlName="scroll">
-                {{ liveDemoForm.controls.scroll.value ? 'overflowing' : 'off' }}
-              </org-checkbox-toggle>
-            </org-design-system-demo-control-group>
-            <org-design-system-demo-control-group label="Highlight">
-              <org-button-toggle [items]="highlightItems" formControlName="highlight" buttonSize="sm" />
-            </org-design-system-demo-control-group>
-          }
-          @if (liveDemoForm.controls.variant.value === 'inline') {
-            <org-design-system-demo-control-group label="Tone">
-              <org-button-toggle [items]="toneItems" formControlName="tone" buttonSize="sm" />
-            </org-design-system-demo-control-group>
-          }
+          </org-design-system-demo-controls-group>
+          <org-design-system-demo-controls-group label="Block features">
+            @if (liveDemoForm.controls.variant.value === 'block') {
+              <org-design-system-demo-control-input label="Header">
+                <org-checkbox-toggle name="live-demo-header" value="header" formControlName="header">
+                  {{ liveDemoForm.controls.header.value ? 'on' : 'off' }}
+                </org-checkbox-toggle>
+              </org-design-system-demo-control-input>
+              @if (liveDemoForm.controls.header.value) {
+                <org-design-system-demo-control-input label="Header label">
+                  <org-input name="live-demo-header-label" formControlName="headerLabel" ariaLabel="Header label" />
+                </org-design-system-demo-control-input>
+              }
+              <org-design-system-demo-control-input label="Copy">
+                <org-checkbox-toggle name="live-demo-copy" value="copy" formControlName="allowCopy">
+                  {{ liveDemoForm.controls.allowCopy.value ? 'on' : 'off' }}
+                </org-checkbox-toggle>
+              </org-design-system-demo-control-input>
+              <org-design-system-demo-control-input label="Clamp">
+                <org-checkbox-toggle name="live-demo-clamp" value="clamp" formControlName="clamp">
+                  {{ liveDemoForm.controls.clamp.value ? '4 lines' : 'off' }}
+                </org-checkbox-toggle>
+              </org-design-system-demo-control-input>
+              <org-design-system-demo-control-input label="Collapsible">
+                <org-checkbox-toggle name="live-demo-collapsable" value="collapsable" formControlName="collapsable">
+                  {{ liveDemoForm.controls.collapsable.value ? 'on' : 'off' }}
+                </org-checkbox-toggle>
+              </org-design-system-demo-control-input>
+              <org-design-system-demo-control-input label="Wrap">
+                <org-checkbox-toggle name="live-demo-wrap" value="wrap" formControlName="wrap">
+                  {{ liveDemoForm.controls.wrap.value ? 'on' : 'off' }}
+                </org-checkbox-toggle>
+              </org-design-system-demo-control-input>
+              <org-design-system-demo-control-input label="Scroll">
+                <org-checkbox-toggle name="live-demo-scroll" value="scroll" formControlName="scroll">
+                  {{ liveDemoForm.controls.scroll.value ? 'overflowing' : 'off' }}
+                </org-checkbox-toggle>
+              </org-design-system-demo-control-input>
+              <org-design-system-demo-control-input label="Highlight">
+                <org-button-toggle [items]="highlightItems" formControlName="highlight" buttonSize="sm" />
+              </org-design-system-demo-control-input>
+            }
+          </org-design-system-demo-controls-group>
         </org-design-system-demo-controls>
         <org-design-system-demo-canvas slot="canvas">
           <div class="canvas-stage">

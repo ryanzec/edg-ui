@@ -1,5 +1,5 @@
 @layer components {
-  /* the host is the unstyled outer wrapper — it only lays the outer header above the box surface as blocks */
+  /* the host is the unstyled outer wrapper, not hte main content */
   :host {
     display: block;
   }
@@ -7,12 +7,15 @@
   .box-outer-container {
     display: flex;
     flex-direction: column;
-    gap: var(--box-stack-gap);
+    gap: var(--box-gap);
+    height: 100%;
   }
 
-  /* the box surface carries every visual treatment; it is removed entirely when expandedState is 'none' */
   .box-surface {
-    display: block;
+    /* column (default) layout — vertical flex spacing the slotted regions; row flips the direction below */
+    display: flex;
+    flex-direction: column;
+    gap: var(--box-gap);
     overflow: hidden;
     border-style: solid;
     border-color: var(--box-border-color);
@@ -22,6 +25,7 @@
     background-color: var(--box-bg);
     color: var(--box-fg);
     padding: var(--box-padding);
+    height: 100%;
   }
 
   /* padding variants */
@@ -41,17 +45,23 @@
     --box-padding: var(--spacing-4);
   }
 
+  /* padding application: 'inner-items' removes the surface padding so each region owns it instead. the regions
+     consume --box-padding via host-context (see each region css) — applying it as inline padding on their content
+     so their dividers render full-bleed, and as leading / trailing edge padding when first / last. styling the
+     projected region hosts from here is not possible (they carry their declarer's view-encapsulation attribute,
+     not the box's), so all of that lives in the region css. */
+  :host([data-padding-application='inner-items']) .box-surface {
+    padding: 0rem;
+  }
+
   /* shape variants — rounded (default) keeps --box-radius; square drops it to 0 */
   :host([data-shape='square']) .box-surface {
     --box-radius: 0rem;
   }
 
-  /* layout variants — block (default) is a normal block; stack becomes a vertical flex container that spaces
-     its slotted regions (header / image / content / footer) with the shared stack gap */
-  :host([data-layout='stack']) .box-surface {
-    display: flex;
-    flex-direction: column;
-    gap: var(--box-stack-gap);
+  /* row layout — flips the default column surface into a horizontal flex container (same shared gap) */
+  :host([data-layout='row']) .box-surface {
+    flex-direction: row;
   }
 
   /* color variants — border color + background */

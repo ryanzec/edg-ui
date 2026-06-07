@@ -7,19 +7,19 @@
             [orgOverlayMenuTrigger]="organizationMenu"
             overlayMenuTriggerPosition="after"
             asTag="button"
-            [label]="currentOrganization().name"
-            [hideLabel]="true"
             [forceClickable]="true"
           >
             @if (currentOrganization().imageUrl; as imageUrl) {
               <org-list-item-image pre [src]="imageUrl" [alt]="currentOrganization().name" />
             }
+            <span class="sr-only">{{ currentOrganization().name }}</span>
           </org-list-item>
         } @else {
-          <org-list-item [label]="currentOrganization().name" [hideLabel]="true">
+          <org-list-item>
             @if (currentOrganization().imageUrl; as imageUrl) {
               <org-list-item-image pre [src]="imageUrl" [alt]="currentOrganization().name" />
             }
+            <span class="sr-only">{{ currentOrganization().name }}</span>
           </org-list-item>
         }
         <ng-template #tooltipContent>
@@ -32,19 +32,20 @@
           [orgOverlayMenuTrigger]="organizationMenu"
           overlayMenuTriggerPosition="after"
           asTag="button"
-          [label]="currentOrganization().name"
           [forceClickable]="true"
         >
           @if (currentOrganization().imageUrl; as imageUrl) {
             <org-list-item-image pre [src]="imageUrl" [alt]="currentOrganization().name" />
           }
+          {{ currentOrganization().name }}
           <org-icon post class="organization-chevron" name="chevron-right" />
         </org-list-item>
       } @else {
-        <org-list-item [label]="currentOrganization().name">
+        <org-list-item>
           @if (currentOrganization().imageUrl; as imageUrl) {
             <org-list-item-image pre [src]="imageUrl" [alt]="currentOrganization().name" />
           }
+          {{ currentOrganization().name }}
         </org-list-item>
       }
     }
@@ -118,11 +119,10 @@
           [orgOverlayMenuTrigger]="settingsMenu"
           overlayMenuTriggerPosition="after"
           asTag="button"
-          label="Settings"
-          [hideLabel]="true"
           [forceClickable]="true"
         >
           <org-list-item-icon pre name="cog" />
+          <span class="sr-only">Settings</span>
         </org-list-item>
         <ng-template #tooltipContent>
           <org-tooltip-content>Settings</org-tooltip-content>
@@ -133,10 +133,10 @@
         [orgOverlayMenuTrigger]="settingsMenu"
         overlayMenuTriggerPosition="after"
         asTag="button"
-        label="Settings"
         [forceClickable]="true"
       >
         <org-list-item-icon pre name="cog" />
+        Settings
         <org-icon post class="settings-chevron" name="chevron-right" />
       </org-list-item>
     }

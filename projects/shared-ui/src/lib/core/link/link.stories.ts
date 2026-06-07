@@ -9,7 +9,7 @@ import { CheckboxToggle } from '../checkbox-toggle/checkbox-toggle';
 import { allLinkTargets, type LinkTarget } from '../link/link-brain';
 import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
 import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
-import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
+import { DesignSystemDemoControlInput } from '../../example/design-system-demo/design-system-demo-control-input';
 import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
 import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
 import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
@@ -132,7 +132,7 @@ export const Default: Story = {
     DesignSystemDemo,
     DesignSystemDemoHeader,
     DesignSystemDemoControls,
-    DesignSystemDemoControlGroup,
+    DesignSystemDemoControlInput,
     DesignSystemDemoCanvas,
   ],
   styles: [
@@ -157,27 +157,27 @@ export const Default: Story = {
           description="All links below are real and interactive — hover, focus, press, or tab through them to see every state."
         />
         <org-design-system-demo-controls slot="controls">
-          <org-design-system-demo-control-group label="Link text">
+          <org-design-system-demo-control-input label="Link text">
             <org-input name="live-demo-text" formControlName="text" placeholder="Read the documentation" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Target">
+          </org-design-system-demo-control-input>
+          <org-design-system-demo-control-input label="Target">
             <org-button-toggle [items]="targetItems" formControlName="target" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Download">
+          </org-design-system-demo-control-input>
+          <org-design-system-demo-control-input label="Download">
             <org-checkbox-toggle name="live-demo-download" value="download" formControlName="download">
               {{ liveDemoForm.controls.download.value ? 'on' : 'off' }}
             </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Disabled">
+          </org-design-system-demo-control-input>
+          <org-design-system-demo-control-input label="Disabled">
             <org-checkbox-toggle name="live-demo-disabled" value="disabled" formControlName="disabled">
               {{ liveDemoForm.controls.disabled.value ? 'on' : 'off' }}
             </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Affordance">
+          </org-design-system-demo-control-input>
+          <org-design-system-demo-control-input label="Affordance">
             <org-checkbox-toggle name="live-demo-affordance" value="affordance" formControlName="affordance">
               {{ liveDemoForm.controls.affordance.value ? 'on' : 'off' }}
             </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
+          </org-design-system-demo-control-input>
         </org-design-system-demo-controls>
         <org-design-system-demo-canvas slot="canvas">
           <div class="canvas-stage">

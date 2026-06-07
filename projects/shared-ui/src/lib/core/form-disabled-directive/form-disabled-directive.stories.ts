@@ -4,8 +4,9 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { FormDisabledDirective } from './form-disabled-directive';
 import { Input } from '../input/input';
 import { Button } from '../button/button';
-import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
-import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
+import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
+import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
+import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
 
 @Component({
   selector: 'story-form-disabled-default-demo',
@@ -15,36 +16,38 @@ import { StorybookExampleContainerSection } from '../../private/storybook-exampl
     FormDisabledDirective,
     Input,
     Button,
-    StorybookExampleContainer,
-    StorybookExampleContainerSection,
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoCanvas,
   ],
   template: `
-    <org-storybook-example-container
-      title="Form Disabled Directive"
-      currentState="Toggle the button to drive the reactive form control's disabled state from the template"
-    >
-      <org-storybook-example-container-section label="Reactive Form">
-        <form [formGroup]="form" class="flex flex-col gap-2">
-          <org-input name="first-name" formControlName="firstName" [orgFormDisabled]="isDisabled()" />
-        </form>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Control State">
-        <div class="flex flex-col gap-1">
-          <div><strong>Disabled Input Value:</strong> {{ isDisabled() }}</div>
-          <div><strong>FormControl.disabled:</strong> {{ form.controls.firstName.disabled }}</div>
-          <div><strong>FormControl.value:</strong> {{ form.controls.firstName.value || 'empty' }}</div>
+    <org-design-system-demo>
+      <org-design-system-demo-header slot="header" title="Form Disabled Directive" />
+      <org-design-system-demo-canvas slot="canvas">
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Reactive Form</div>
+          <form [formGroup]="form" class="flex flex-col gap-2">
+            <org-input name="first-name" formControlName="firstName" [orgFormDisabled]="isDisabled()" />
+          </form>
         </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Controls">
-        <org-button
-          buttonVariant="outline"
-          [label]="(isDisabled() ? 'Enable' : 'Disable') + ' Field'"
-          (clicked)="toggleDisabled()"
-        />
-      </org-storybook-example-container-section>
-    </org-storybook-example-container>
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Control State</div>
+          <div class="flex flex-col gap-1">
+            <div><strong>Disabled Input Value:</strong> {{ isDisabled() }}</div>
+            <div><strong>FormControl.disabled:</strong> {{ form.controls.firstName.disabled }}</div>
+            <div><strong>FormControl.value:</strong> {{ form.controls.firstName.value || 'empty' }}</div>
+          </div>
+        </div>
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Controls</div>
+          <org-button
+            buttonVariant="outline"
+            [label]="(isDisabled() ? 'Enable' : 'Disable') + ' Field'"
+            (clicked)="toggleDisabled()"
+          />
+        </div>
+      </org-design-system-demo-canvas>
+    </org-design-system-demo>
   `,
 })
 class FormDisabledDefaultDemo {
@@ -66,26 +69,28 @@ class FormDisabledDefaultDemo {
     ReactiveFormsModule,
     FormDisabledDirective,
     Input,
-    StorybookExampleContainer,
-    StorybookExampleContainerSection,
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoCanvas,
   ],
   template: `
-    <org-storybook-example-container
-      title="Initial Disabled State"
-      currentState="The directive applies the disabled state on mount"
-    >
-      <org-storybook-example-container-section label="Reactive Form">
-        <form [formGroup]="form" class="flex flex-col gap-2">
-          <org-input name="email" formControlName="email" [orgFormDisabled]="true" />
-        </form>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Control State">
-        <div class="flex flex-col gap-1">
-          <div><strong>FormControl.disabled:</strong> {{ form.controls.email.disabled }}</div>
+    <org-design-system-demo>
+      <org-design-system-demo-header slot="header" title="Initial Disabled State" />
+      <org-design-system-demo-canvas slot="canvas">
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Reactive Form</div>
+          <form [formGroup]="form" class="flex flex-col gap-2">
+            <org-input name="email" formControlName="email" [orgFormDisabled]="true" />
+          </form>
         </div>
-      </org-storybook-example-container-section>
-    </org-storybook-example-container>
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Control State</div>
+          <div class="flex flex-col gap-1">
+            <div><strong>FormControl.disabled:</strong> {{ form.controls.email.disabled }}</div>
+          </div>
+        </div>
+      </org-design-system-demo-canvas>
+    </org-design-system-demo>
   `,
 })
 class FormDisabledInitialDemo {

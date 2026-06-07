@@ -1,8 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/angular';
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { IntegrationCardAvailable, type AvailableIntegration } from './integration-card-available';
-import { StorybookExampleContainer } from '../../../private/storybook-example-container/storybook-example-container';
-import { StorybookExampleContainerSection } from '../../../private/storybook-example-container-section/storybook-example-container-section';
+import { DesignSystemDemo } from '../../../example/design-system-demo/design-system-demo';
+import { DesignSystemDemoCanvas } from '../../../example/design-system-demo/design-system-demo-canvas';
+import { DesignSystemDemoExpectedBehaviour } from '../../../example/design-system-demo/design-system-demo-expected-behaviour';
+import { DesignSystemDemoHeader } from '../../../example/design-system-demo/design-system-demo-header';
 
 const baseIntegration: AvailableIntegration = {
   id: 'integration-google-calendar',
@@ -35,29 +37,37 @@ const coloredTagsIntegration: AvailableIntegration = {
 @Component({
   selector: 'story-integration-card-available-actions',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [IntegrationCardAvailable, StorybookExampleContainer, StorybookExampleContainerSection],
+  imports: [
+    IntegrationCardAvailable,
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoCanvas,
+    DesignSystemDemoExpectedBehaviour,
+  ],
   template: `
-    <org-storybook-example-container
-      title="Add Action Output"
-      currentState="Click the Add button to observe the emitted output"
-    >
-      <org-storybook-example-container-section label="Click the Add button">
-        <div class="flex flex-col gap-4">
-          <div class="w-lg">
-            <org-integration-card-available [integration]="integration" (add)="onAdd($event)" />
+    <org-design-system-demo>
+      <org-design-system-demo-header slot="header" title="Add Action Output" />
+      <org-design-system-demo-canvas slot="canvas">
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Click the Add button</div>
+          <div class="flex flex-col gap-4">
+            <div class="w-lg">
+              <org-integration-card-available [integration]="integration" (add)="onAdd($event)" />
+            </div>
+            @if (lastAction(); as action) {
+              <p>
+                Last action: <strong>add</strong> on <strong>{{ action.name }}</strong>
+              </p>
+            }
           </div>
-          @if (lastAction(); as action) {
-            <p>
-              Last action: <strong>add</strong> on <strong>{{ action.name }}</strong>
-            </p>
-          }
         </div>
-      </org-storybook-example-container-section>
-
-      <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+      </org-design-system-demo-canvas>
+    </org-design-system-demo>
+    <org-design-system-demo-expected-behaviour>
+      <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
         <li><strong>Add</strong> emits the integration via the <strong>add</strong> output</li>
       </ul>
-    </org-storybook-example-container>
+    </org-design-system-demo-expected-behaviour>
   `,
 })
 class IntegrationCardAvailableActionsStory {
@@ -142,23 +152,31 @@ export const WithoutTags: Story = {
       integration: noTagsIntegration,
     },
     template: `
-      <org-storybook-example-container
-        title="No Tags"
-        currentState="Integration record with an empty tags array"
-      >
-        <org-storybook-example-container-section label="No tags">
-          <div class="w-lg">
-            <org-integration-card-available [integration]="integration" />
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="No Tags" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">No tags</div>
+            <div class="w-lg">
+              <org-integration-card-available [integration]="integration" />
+            </div>
           </div>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
           <li>The tag row is not rendered when the <strong>tags</strong> array is empty</li>
         </ul>
-      </org-storybook-example-container>
+      </org-design-system-demo-expected-behaviour>
     `,
     moduleMetadata: {
-      imports: [IntegrationCardAvailable, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [
+        IntegrationCardAvailable,
+        DesignSystemDemo,
+        DesignSystemDemoHeader,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
+      ],
     },
   }),
 };
@@ -177,30 +195,38 @@ export const ColoredTags: Story = {
       coloredIntegration: coloredTagsIntegration,
     },
     template: `
-      <org-storybook-example-container
-        title="Tag Colors"
-        currentState="Comparing neutral (default) tag color vs. semantic tag colors"
-      >
-        <org-storybook-example-container-section label="Default (neutral)">
-          <div class="w-lg">
-            <org-integration-card-available [integration]="defaultIntegration" />
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Tag Colors" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Default (neutral)</div>
+            <div class="w-lg">
+              <org-integration-card-available [integration]="defaultIntegration" />
+            </div>
           </div>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Semantic colors">
-          <div class="w-lg">
-            <org-integration-card-available [integration]="coloredIntegration" />
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Semantic colors</div>
+            <div class="w-lg">
+              <org-integration-card-available [integration]="coloredIntegration" />
+            </div>
           </div>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
           <li>Tags without a <strong>color</strong> render with the <strong>neutral</strong> color</li>
           <li>Tags with a <strong>color</strong> render with the configured semantic color</li>
         </ul>
-      </org-storybook-example-container>
+      </org-design-system-demo-expected-behaviour>
     `,
     moduleMetadata: {
-      imports: [IntegrationCardAvailable, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [
+        IntegrationCardAvailable,
+        DesignSystemDemo,
+        DesignSystemDemoHeader,
+        DesignSystemDemoCanvas,
+        DesignSystemDemoExpectedBehaviour,
+      ],
     },
   }),
 };

@@ -3,10 +3,10 @@ import { type ComponentFixture } from '@angular/core/testing';
 import { userEvent } from 'vitest/browser';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { vitestBrowserUtils } from '../../../../../../vitest-browser-utils';
-import { Box, type BoxExpandedState } from './box';
+import { Box, type BoxExpandedState, type BoxPaddingApplication } from './box';
 import { BoxContent } from './box-content';
 import { BoxFooter, type BoxFooterAlignment } from './box-footer';
-import { BoxHeader } from './box-header';
+import { BoxHeader, type BoxHeaderVariant } from './box-header';
 import { BoxImage, type BoxImageMode } from './box-image';
 import { BoxOuterHeader } from './box-outer-header';
 
@@ -16,7 +16,7 @@ import { BoxOuterHeader } from './box-outer-header';
   imports: [Box, BoxContent],
   host: { class: 'block' },
   template: `
-    <org-box layout="stack" [isExpandable]="isExpandable()" [(expandedState)]="expandedState">
+    <org-box [isExpandable]="isExpandable()" [(expandedState)]="expandedState">
       <org-box-content data-testid="content">
         <span data-testid="content-child">body</span>
       </org-box-content>
@@ -34,8 +34,16 @@ class BoxContentHost {
   imports: [Box, BoxHeader],
   host: { class: 'block' },
   template: `
-    <org-box layout="stack" [isExpandable]="isExpandable()" [(expandedState)]="expandedState">
-      <org-box-header [title]="title()" [subtitle]="subtitle()" [headingLevel]="headingLevel()" data-testid="header">
+    <org-box [isExpandable]="isExpandable()" [(expandedState)]="expandedState">
+      <org-box-header
+        [title]="title()"
+        [subtitle]="subtitle()"
+        [headingLevel]="headingLevel()"
+        [hasDivider]="hasDivider()"
+        [variant]="variant()"
+        [isEmphasized]="isEmphasized()"
+        data-testid="header"
+      >
         @if (showPre()) {
           <span pre data-testid="pre-content">pre</span>
         }
@@ -55,6 +63,9 @@ class BoxHeaderHost {
   public readonly title = signal<string | undefined>('Project settings');
   public readonly subtitle = signal<string | undefined>(undefined);
   public readonly headingLevel = signal<number>(3);
+  public readonly hasDivider = signal<boolean>(false);
+  public readonly variant = signal<BoxHeaderVariant>('default');
+  public readonly isEmphasized = signal<boolean>(false);
   public readonly isExpandable = signal<boolean>(false);
   public readonly expandedState = signal<BoxExpandedState>('full');
   public readonly showActions = signal<boolean>(false);
@@ -68,7 +79,7 @@ class BoxHeaderHost {
   imports: [Box, BoxHeader],
   host: { class: 'block' },
   template: `
-    <org-box layout="stack">
+    <org-box>
       <org-box-header [title]="title()" data-testid="header">
         <ng-template #actions>
           <span data-testid="actions">action</span>
@@ -87,7 +98,7 @@ class BoxHeaderActionsOnlyHost {
   imports: [Box, BoxImage],
   host: { class: 'block' },
   template: `
-    <org-box layout="stack" [isExpandable]="isExpandable()" [(expandedState)]="expandedState">
+    <org-box [isExpandable]="isExpandable()" [(expandedState)]="expandedState">
       <org-box-image
         [mode]="mode()"
         [src]="src()"
@@ -119,8 +130,8 @@ class BoxImageHost {
   imports: [Box, BoxFooter],
   host: { class: 'block' },
   template: `
-    <org-box layout="stack" [isExpandable]="isExpandable()" [(expandedState)]="expandedState">
-      <org-box-footer [alignment]="alignment()" data-testid="footer">
+    <org-box [isExpandable]="isExpandable()" [(expandedState)]="expandedState">
+      <org-box-footer [alignment]="alignment()" [hasDivider]="hasDivider()" data-testid="footer">
         <span data-testid="footer-child">action</span>
       </org-box-footer>
     </org-box>
@@ -128,6 +139,7 @@ class BoxImageHost {
 })
 class BoxFooterHost {
   public readonly alignment = signal<BoxFooterAlignment>('end');
+  public readonly hasDivider = signal<boolean>(false);
   public readonly isExpandable = signal<boolean>(false);
   public readonly expandedState = signal<BoxExpandedState>('full');
 }
@@ -138,7 +150,7 @@ class BoxFooterHost {
   imports: [Box, BoxOuterHeader, BoxContent],
   host: { class: 'block' },
   template: `
-    <org-box layout="stack" [isExpandable]="isExpandable()" [(expandedState)]="expandedState">
+    <org-box [isExpandable]="isExpandable()" [(expandedState)]="expandedState">
       <org-box-outer-header [title]="title()" [subtitle]="subtitle()" data-testid="outer-header">
         @if (showPre()) {
           <span pre data-testid="outer-pre-content">pre</span>
@@ -168,10 +180,47 @@ class BoxOuterHeaderHost {
   public readonly showPost = signal<boolean>(false);
 }
 
+@Component({
+  selector: 'test-box-padding-application-host',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [Box, BoxHeader, BoxContent, BoxFooter, BoxImage],
+  host: { class: 'block' },
+  template: `
+    <!--
+      the headless test harness does not load the global design-token stylesheets, so var(--spacing-3) (which the
+      default padding='base' resolves --box-padding to) would compute to 0. pin --spacing-3 here so the padding
+      chain resolves to a real value and the relative assertions below are meaningful.
+    -->
+    <org-box
+      style="--spacing-3: 1rem"
+      [paddingApplication]="paddingApplication()"
+      [isExpandable]="isExpandable()"
+      [(expandedState)]="expandedState"
+      data-testid="box"
+    >
+      <org-box-header title="Title" [hasDivider]="true" data-testid="pa-header" />
+      <org-box-content data-testid="pa-content">body</org-box-content>
+      <org-box-image src="https://example.com/inset.png" alt="inset" [fullWidth]="false" data-testid="pa-image-inset" />
+      <org-box-image src="https://example.com/full.png" alt="full" data-testid="pa-image-full" />
+      <org-box-footer [hasDivider]="true" data-testid="pa-footer">
+        <span>action</span>
+      </org-box-footer>
+    </org-box>
+  `,
+})
+class BoxPaddingApplicationHost {
+  public readonly paddingApplication = signal<BoxPaddingApplication>('container');
+  public readonly isExpandable = signal<boolean>(false);
+  public readonly expandedState = signal<BoxExpandedState>('full');
+}
+
 type BoxHeaderConfig = {
   title?: string;
   subtitle?: string;
   headingLevel?: number;
+  hasDivider?: boolean;
+  variant?: BoxHeaderVariant;
+  isEmphasized?: boolean;
   isExpandable?: boolean;
   expandedState?: BoxExpandedState;
   showActions?: boolean;
@@ -207,6 +256,18 @@ describe('Box composition (browser)', () => {
 
       if (config.headingLevel !== undefined) {
         instance.headingLevel.set(config.headingLevel);
+      }
+
+      if (config.hasDivider !== undefined) {
+        instance.hasDivider.set(config.hasDivider);
+      }
+
+      if (config.variant !== undefined) {
+        instance.variant.set(config.variant);
+      }
+
+      if (config.isEmphasized !== undefined) {
+        instance.isEmphasized.set(config.isEmphasized);
       }
 
       if (config.isExpandable !== undefined) {
@@ -476,6 +537,88 @@ describe('Box composition (browser)', () => {
 
       expect(header.querySelector('[data-testid="post-content"]')).not.toBeNull();
     });
+
+    it('does not render a divider by default', () => {
+      const fixture = createBoxHeader();
+      const header = queryByTestId(fixture, 'header');
+
+      expect(header.querySelector('org-divider')).toBeNull();
+    });
+
+    it('renders a divider with no padding when hasDivider is true', () => {
+      const fixture = createBoxHeader({ hasDivider: true });
+      const header = queryByTestId(fixture, 'header');
+      const divider = header.querySelector('org-divider') as HTMLElement;
+
+      expect(divider).not.toBeNull();
+      expect(divider.getAttribute('data-padding')).toBe('none');
+    });
+
+    it('toggles the divider when hasDivider changes', async () => {
+      const fixture = createBoxHeader({ hasDivider: true });
+      const header = queryByTestId(fixture, 'header');
+
+      expect(header.querySelector('org-divider')).not.toBeNull();
+
+      fixture.componentInstance.hasDivider.set(false);
+      await flush(fixture);
+
+      expect(header.querySelector('org-divider')).toBeNull();
+    });
+
+    it('reflects the default variant on the host', () => {
+      const fixture = createBoxHeader();
+      const header = queryByTestId(fixture, 'header');
+
+      expect(header.getAttribute('data-variant')).toBe('default');
+    });
+
+    it('reflects the muted variant on the host', () => {
+      const fixture = createBoxHeader({ variant: 'muted' });
+      const header = queryByTestId(fixture, 'header');
+
+      expect(header.getAttribute('data-variant')).toBe('muted');
+    });
+
+    it('updates the variant when the input changes', async () => {
+      const fixture = createBoxHeader();
+      const header = queryByTestId(fixture, 'header');
+
+      fixture.componentInstance.variant.set('muted');
+      await flush(fixture);
+
+      expect(header.getAttribute('data-variant')).toBe('muted');
+    });
+
+    it('omits data-emphasized by default', () => {
+      const fixture = createBoxHeader();
+      const header = queryByTestId(fixture, 'header');
+
+      expect(header.getAttribute('data-emphasized')).toBeNull();
+    });
+
+    it('applies data-emphasized and uppercases the title visually while leaving the text unchanged', () => {
+      const fixture = createBoxHeader({ isEmphasized: true });
+      const header = queryByTestId(fixture, 'header');
+      const heading = header.querySelector('h3.header-title') as HTMLElement;
+
+      expect(header.getAttribute('data-emphasized')).toBe('');
+      // uppercasing is purely visual — the underlying text content stays mixed-case for assistive tech
+      expect(heading.textContent?.trim()).toBe('Project settings');
+      expect(getComputedStyle(heading).textTransform).toBe('uppercase');
+    });
+
+    it('toggles data-emphasized when the input changes', async () => {
+      const fixture = createBoxHeader({ isEmphasized: true });
+      const header = queryByTestId(fixture, 'header');
+
+      expect(header.getAttribute('data-emphasized')).toBe('');
+
+      fixture.componentInstance.isEmphasized.set(false);
+      await flush(fixture);
+
+      expect(header.getAttribute('data-emphasized')).toBeNull();
+    });
   });
 
   describe('box-image', () => {
@@ -581,6 +724,41 @@ describe('Box composition (browser)', () => {
       const footer = queryByTestId(fixture, 'footer');
 
       expect(footer.querySelector('[data-testid="footer-child"]')).not.toBeNull();
+    });
+
+    it('does not render a divider by default', () => {
+      const fixture = createFixture(BoxFooterHost);
+      const footer = queryByTestId(fixture, 'footer');
+
+      expect(footer.querySelector('org-divider')).toBeNull();
+    });
+
+    it('renders a no-padding divider above the button row when hasDivider is true', () => {
+      const fixture = createFixture(BoxFooterHost, (instance) => {
+        instance.hasDivider.set(true);
+      });
+      const footer = queryByTestId(fixture, 'footer');
+      const divider = footer.querySelector('org-divider') as HTMLElement;
+      const actions = footer.querySelector('.footer-actions') as HTMLElement;
+
+      expect(divider).not.toBeNull();
+      expect(divider.getAttribute('data-padding')).toBe('none');
+      // the divider sits at the top, so it precedes the button row in document order
+      expect(divider.compareDocumentPosition(actions) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    });
+
+    it('toggles the divider when hasDivider changes', async () => {
+      const fixture = createFixture(BoxFooterHost, (instance) => {
+        instance.hasDivider.set(true);
+      });
+      const footer = queryByTestId(fixture, 'footer');
+
+      expect(footer.querySelector('org-divider')).not.toBeNull();
+
+      fixture.componentInstance.hasDivider.set(false);
+      await flush(fixture);
+
+      expect(footer.querySelector('org-divider')).toBeNull();
     });
 
     it('reflects the alignment input', () => {
@@ -717,6 +895,55 @@ describe('Box composition (browser)', () => {
       const header = queryByTestId(fixture, 'outer-header');
 
       expect(header.querySelector('[data-testid="outer-post-content"]')).not.toBeNull();
+    });
+  });
+
+  describe('padding application', () => {
+    const paddingLeftOf = (element: Element): number => parseFloat(getComputedStyle(element).paddingLeft);
+    const paddingBottomOf = (element: Element): number => parseFloat(getComputedStyle(element).paddingBottom);
+
+    it('pads the box surface and not the header content in container mode', () => {
+      const fixture = createFixture(BoxPaddingApplicationHost);
+      const surface = fixture.nativeElement.querySelector('.box-surface') as HTMLElement;
+      const headerTitles = queryByTestId(fixture, 'pa-header').querySelector('.header-titles') as HTMLElement;
+
+      expect(paddingLeftOf(surface)).toBeGreaterThan(0);
+      expect(paddingLeftOf(headerTitles)).toBe(0);
+    });
+
+    it('moves the padding off the surface and onto the region content in inner-items mode', () => {
+      const fixture = createFixture(BoxPaddingApplicationHost, (instance) => {
+        instance.paddingApplication.set('inner-items');
+      });
+      const surface = fixture.nativeElement.querySelector('.box-surface') as HTMLElement;
+      const headerTitles = queryByTestId(fixture, 'pa-header').querySelector('.header-titles') as HTMLElement;
+
+      expect(paddingLeftOf(surface)).toBe(0);
+      expect(paddingLeftOf(headerTitles)).toBeGreaterThan(0);
+    });
+
+    it('insets a constrained image but bleeds a full-width image in inner-items mode', () => {
+      const fixture = createFixture(BoxPaddingApplicationHost, (instance) => {
+        instance.paddingApplication.set('inner-items');
+      });
+      const insetImage = queryByTestId(fixture, 'pa-image-inset');
+      const fullImage = queryByTestId(fixture, 'pa-image-full');
+
+      expect(paddingLeftOf(insetImage)).toBeGreaterThan(0);
+      expect(paddingLeftOf(fullImage)).toBe(0);
+    });
+
+    it('gives the collapsed header trailing padding in inner-items mode', async () => {
+      const fixture = createFixture(BoxPaddingApplicationHost, (instance) => {
+        instance.paddingApplication.set('inner-items');
+        instance.isExpandable.set(true);
+      });
+      const header = queryByTestId(fixture, 'pa-header');
+
+      fixture.componentInstance.expandedState.set('header-only');
+      await flush(fixture);
+
+      expect(paddingBottomOf(header)).toBeGreaterThan(0);
     });
   });
 });

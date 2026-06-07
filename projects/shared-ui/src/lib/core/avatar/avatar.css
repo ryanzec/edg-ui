@@ -20,19 +20,19 @@
   /* size variants — set every size-derived avatar variable on the avatar host so it inherits down to sub-components (base matches slot defaults) */
   :host([data-size='sm']) {
     --avatar-gap: var(--spacing-2);
-    --avatar-shape-size: var(--spacing-8);
+    --avatar-shape-size: var(--spacing-7);
     --avatar-initials-font-size: var(--font-size-xs);
     --avatar-label-name-font-size: var(--font-size-sm);
   }
 
   :host([data-size='base']) {
-    --avatar-shape-size: var(--spacing-12);
+    --avatar-shape-size: var(--spacing-10);
     --avatar-initials-font-size: var(--font-size-lg);
   }
 
   :host([data-size='lg']) {
     --avatar-gap: var(--spacing-3);
-    --avatar-shape-size: var(--spacing-16);
+    --avatar-shape-size: var(--spacing-12);
     --avatar-initials-font-size: var(--font-size-2xl);
     --avatar-label-name-font-size: var(--font-size-lg);
     --avatar-label-sub-font-size: var(--font-size-sm);

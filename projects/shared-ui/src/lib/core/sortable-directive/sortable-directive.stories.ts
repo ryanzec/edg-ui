@@ -2,33 +2,39 @@ import type { Meta, StoryObj } from '@storybook/angular';
 import { Component, ChangeDetectionStrategy, inject, signal } from '@angular/core';
 import { SortableDirective } from './sortable-directive';
 import { SortingStore } from '../sorting-store/sorting-store';
-import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
-import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
+import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
+import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
+import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
 
 @Component({
   selector: 'story-sortable-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [SortableDirective, StorybookExampleContainer, StorybookExampleContainerSection],
+  imports: [SortableDirective, DesignSystemDemo, DesignSystemDemoCanvas, DesignSystemDemoHeader],
   providers: [SortingStore],
   template: `
-    <org-storybook-example-container title="Sortable Directive">
-      <org-storybook-example-container-section label="State">
-        <div class="flex flex-col gap-2">
-          <div class="text-sm"><strong>Current Sort Key:</strong> {{ sortingStore.key() ?? 'null' }}</div>
-          <div class="text-sm"><strong>Current Direction:</strong> {{ sortingStore.direction() ?? 'null' }}</div>
-          <div class="text-sm"><strong>Is Sorting:</strong> {{ sortingStore.isSorting() }}</div>
+    <org-design-system-demo>
+      <org-design-system-demo-header slot="header" title="Sortable Directive" />
+      <org-design-system-demo-canvas slot="canvas">
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">State</div>
+          <div class="flex flex-col gap-2">
+            <div class="text-sm"><strong>Current Sort Key:</strong> {{ sortingStore.key() ?? 'null' }}</div>
+            <div class="text-sm"><strong>Current Direction:</strong> {{ sortingStore.direction() ?? 'null' }}</div>
+            <div class="text-sm"><strong>Is Sorting:</strong> {{ sortingStore.isSorting() }}</div>
+          </div>
         </div>
-      </org-storybook-example-container-section>
 
-      <org-storybook-example-container-section label="Click to Sort">
-        <div class="flex gap-4 p-4 border rounded-base">
-          <span class="font-medium" [orgSortableKey]="'name'">Name</span>
-          <span class="font-medium" [orgSortableKey]="'email'">Email</span>
-          <span class="font-medium" [orgSortableKey]="'status'">Status</span>
-          <span class="font-medium" [orgSortableKey]="'date'">Date</span>
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Click to Sort</div>
+          <div class="flex gap-4 p-4 border rounded-base">
+            <span class="font-medium" [orgSortableKey]="'name'">Name</span>
+            <span class="font-medium" [orgSortableKey]="'email'">Email</span>
+            <span class="font-medium" [orgSortableKey]="'status'">Status</span>
+            <span class="font-medium" [orgSortableKey]="'date'">Date</span>
+          </div>
         </div>
-      </org-storybook-example-container-section>
-    </org-storybook-example-container>
+      </org-design-system-demo-canvas>
+    </org-design-system-demo>
   `,
 })
 class SortableDemo {
@@ -38,37 +44,43 @@ class SortableDemo {
 @Component({
   selector: 'story-sortable-enabled-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [SortableDirective, StorybookExampleContainer, StorybookExampleContainerSection],
+  imports: [SortableDirective, DesignSystemDemo, DesignSystemDemoCanvas, DesignSystemDemoHeader],
   providers: [SortingStore],
   template: `
-    <org-storybook-example-container title="Dynamic Enable/Disable">
-      <org-storybook-example-container-section label="State">
-        <div class="flex flex-col gap-2">
-          <div class="text-sm"><strong>Current Sort Key:</strong> {{ sortingStore.key() ?? 'null' }}</div>
-          <div class="text-sm"><strong>Current Direction:</strong> {{ sortingStore.direction() ?? 'null' }}</div>
-          <div class="text-sm"><strong>Is Sorting:</strong> {{ sortingStore.isSorting() }}</div>
-          <div class="text-sm"><strong>Sorting Enabled:</strong> {{ enabled() }}</div>
+    <org-design-system-demo>
+      <org-design-system-demo-header slot="header" title="Dynamic Enable/Disable" />
+      <org-design-system-demo-canvas slot="canvas">
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">State</div>
+          <div class="flex flex-col gap-2">
+            <div class="text-sm"><strong>Current Sort Key:</strong> {{ sortingStore.key() ?? 'null' }}</div>
+            <div class="text-sm"><strong>Current Direction:</strong> {{ sortingStore.direction() ?? 'null' }}</div>
+            <div class="text-sm"><strong>Is Sorting:</strong> {{ sortingStore.isSorting() }}</div>
+            <div class="text-sm"><strong>Sorting Enabled:</strong> {{ enabled() }}</div>
+          </div>
         </div>
-      </org-storybook-example-container-section>
 
-      <org-storybook-example-container-section label="Controls">
-        <div class="flex gap-2">
-          <button orgButton buttonVariant="outline" (click)="toggleEnabled()">
-            {{ enabled() ? 'Disable' : 'Enable' }} Sorting
-          </button>
-          <button orgButton buttonVariant="outline" (click)="sortingStore.clearSort()">Clear Sort</button>
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Controls</div>
+          <div class="flex gap-2">
+            <button orgButton buttonVariant="outline" (click)="toggleEnabled()">
+              {{ enabled() ? 'Disable' : 'Enable' }} Sorting
+            </button>
+            <button orgButton buttonVariant="outline" (click)="sortingStore.clearSort()">Clear Sort</button>
+          </div>
         </div>
-      </org-storybook-example-container-section>
 
-      <org-storybook-example-container-section label="Sortable Headers ({{ enabled() ? 'Enabled' : 'Disabled' }})">
-        <div class="flex gap-4 p-4 border rounded-base">
-          <span class="font-medium" [orgSortableKey]="'name'" [sortableEnabled]="enabled()">Name</span>
-          <span class="font-medium" [orgSortableKey]="'email'" [sortableEnabled]="enabled()">Email</span>
-          <span class="font-medium" [orgSortableKey]="'status'" [sortableEnabled]="enabled()">Status</span>
-          <span class="font-medium" [orgSortableKey]="'date'" [sortableEnabled]="enabled()">Date</span>
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Sortable Headers ({{ enabled() ? 'Enabled' : 'Disabled' }})</div>
+          <div class="flex gap-4 p-4 border rounded-base">
+            <span class="font-medium" [orgSortableKey]="'name'" [sortableEnabled]="enabled()">Name</span>
+            <span class="font-medium" [orgSortableKey]="'email'" [sortableEnabled]="enabled()">Email</span>
+            <span class="font-medium" [orgSortableKey]="'status'" [sortableEnabled]="enabled()">Status</span>
+            <span class="font-medium" [orgSortableKey]="'date'" [sortableEnabled]="enabled()">Date</span>
+          </div>
         </div>
-      </org-storybook-example-container-section>
-    </org-storybook-example-container>
+      </org-design-system-demo-canvas>
+    </org-design-system-demo>
   `,
 })
 class SortableEnabledDemo {
@@ -83,27 +95,32 @@ class SortableEnabledDemo {
 @Component({
   selector: 'story-sortable-mixed-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [SortableDirective, StorybookExampleContainer, StorybookExampleContainerSection],
+  imports: [SortableDirective, DesignSystemDemo, DesignSystemDemoCanvas, DesignSystemDemoHeader],
   providers: [SortingStore],
   template: `
-    <org-storybook-example-container title="Mixed Enabled/Disabled Headers">
-      <org-storybook-example-container-section label="State">
-        <div class="flex flex-col gap-2">
-          <div class="text-sm"><strong>Current Sort Key:</strong> {{ sortingStore.key() ?? 'null' }}</div>
-          <div class="text-sm"><strong>Current Direction:</strong> {{ sortingStore.direction() ?? 'null' }}</div>
-          <div class="text-sm"><strong>Is Sorting:</strong> {{ sortingStore.isSorting() }}</div>
+    <org-design-system-demo>
+      <org-design-system-demo-header slot="header" title="Mixed Enabled/Disabled Headers" />
+      <org-design-system-demo-canvas slot="canvas">
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">State</div>
+          <div class="flex flex-col gap-2">
+            <div class="text-sm"><strong>Current Sort Key:</strong> {{ sortingStore.key() ?? 'null' }}</div>
+            <div class="text-sm"><strong>Current Direction:</strong> {{ sortingStore.direction() ?? 'null' }}</div>
+            <div class="text-sm"><strong>Is Sorting:</strong> {{ sortingStore.isSorting() }}</div>
+          </div>
         </div>
-      </org-storybook-example-container-section>
 
-      <org-storybook-example-container-section label="Headers">
-        <div class="flex gap-4 p-4 border rounded-base">
-          <span class="font-medium" [orgSortableKey]="'name'" [sortableEnabled]="true">Name (Enabled)</span>
-          <span class="font-medium" [orgSortableKey]="'email'" [sortableEnabled]="false">Email (Disabled)</span>
-          <span class="font-medium" [orgSortableKey]="'status'" [sortableEnabled]="true">Status (Enabled)</span>
-          <span class="font-medium" [orgSortableKey]="'date'" [sortableEnabled]="false">Date (Disabled)</span>
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Headers</div>
+          <div class="flex gap-4 p-4 border rounded-base">
+            <span class="font-medium" [orgSortableKey]="'name'" [sortableEnabled]="true">Name (Enabled)</span>
+            <span class="font-medium" [orgSortableKey]="'email'" [sortableEnabled]="false">Email (Disabled)</span>
+            <span class="font-medium" [orgSortableKey]="'status'" [sortableEnabled]="true">Status (Enabled)</span>
+            <span class="font-medium" [orgSortableKey]="'date'" [sortableEnabled]="false">Date (Disabled)</span>
+          </div>
         </div>
-      </org-storybook-example-container-section>
-    </org-storybook-example-container>
+      </org-design-system-demo-canvas>
+    </org-design-system-demo>
   `,
 })
 class SortableMixedDemo {
@@ -113,27 +130,32 @@ class SortableMixedDemo {
 @Component({
   selector: 'story-sortable-preset-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [SortableDirective, StorybookExampleContainer, StorybookExampleContainerSection],
+  imports: [SortableDirective, DesignSystemDemo, DesignSystemDemoCanvas, DesignSystemDemoHeader],
   providers: [SortingStore],
   template: `
-    <org-storybook-example-container title="Preset Sort State">
-      <org-storybook-example-container-section label="State">
-        <div class="flex flex-col gap-2">
-          <div class="text-sm"><strong>Current Sort Key:</strong> {{ sortingStore.key() ?? 'null' }}</div>
-          <div class="text-sm"><strong>Current Direction:</strong> {{ sortingStore.direction() ?? 'null' }}</div>
-          <div class="text-sm"><strong>Is Sorting:</strong> {{ sortingStore.isSorting() }}</div>
+    <org-design-system-demo>
+      <org-design-system-demo-header slot="header" title="Preset Sort State" />
+      <org-design-system-demo-canvas slot="canvas">
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">State</div>
+          <div class="flex flex-col gap-2">
+            <div class="text-sm"><strong>Current Sort Key:</strong> {{ sortingStore.key() ?? 'null' }}</div>
+            <div class="text-sm"><strong>Current Direction:</strong> {{ sortingStore.direction() ?? 'null' }}</div>
+            <div class="text-sm"><strong>Is Sorting:</strong> {{ sortingStore.isSorting() }}</div>
+          </div>
         </div>
-      </org-storybook-example-container-section>
 
-      <org-storybook-example-container-section label="Headers (Name is preset to asc)">
-        <div class="flex gap-4 p-4 border rounded-base">
-          <span class="font-medium" [orgSortableKey]="'name'">Name</span>
-          <span class="font-medium" [orgSortableKey]="'email'">Email</span>
-          <span class="font-medium" [orgSortableKey]="'status'">Status</span>
-          <span class="font-medium" [orgSortableKey]="'date'">Date</span>
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Headers (Name is preset to asc)</div>
+          <div class="flex gap-4 p-4 border rounded-base">
+            <span class="font-medium" [orgSortableKey]="'name'">Name</span>
+            <span class="font-medium" [orgSortableKey]="'email'">Email</span>
+            <span class="font-medium" [orgSortableKey]="'status'">Status</span>
+            <span class="font-medium" [orgSortableKey]="'date'">Date</span>
+          </div>
         </div>
-      </org-storybook-example-container-section>
-    </org-storybook-example-container>
+      </org-design-system-demo-canvas>
+    </org-design-system-demo>
   `,
 })
 class SortablePresetDemo {
@@ -309,19 +331,23 @@ export const Disabled: Story = {
   },
   render: () => ({
     template: `
-      <org-storybook-example-container title="Disabled Sorting">
-        <org-storybook-example-container-section label="Headers">
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Disabled Sorting" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Headers</div>
           <div class="flex gap-4 p-4 border rounded-base">
             <span class="font-medium" [orgSortableKey]="'name'" [sortableEnabled]="false">Name</span>
             <span class="font-medium" [orgSortableKey]="'email'" [sortableEnabled]="false">Email</span>
             <span class="font-medium" [orgSortableKey]="'status'" [sortableEnabled]="false">Status</span>
             <span class="font-medium" [orgSortableKey]="'date'" [sortableEnabled]="false">Date</span>
           </div>
-        </org-storybook-example-container-section>
-      </org-storybook-example-container>
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
     `,
     moduleMetadata: {
-      imports: [SortableDirective, StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [SortableDirective, DesignSystemDemo, DesignSystemDemoCanvas, DesignSystemDemoHeader],
       providers: [SortingStore],
     },
   }),

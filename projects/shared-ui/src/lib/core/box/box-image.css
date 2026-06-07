@@ -4,7 +4,24 @@
     width: 100%;
     position: var(--box-image-position);
     aspect-ratio: var(--box-image-aspect-ratio);
-    /*padding-inline: var(--box-image-padding-inline);*/
+  }
+
+  /* inner-items application mode: arm the region padding to the box padding amount. only a constrained image
+     consumes it (inline + leading/trailing edge); a full-width image has no consumer so it bleeds to all edges. */
+  :host-context(org-box[data-padding-application='inner-items']) {
+    --box-region-padding: var(--box-padding);
+  }
+
+  :host([data-full-width='0']) {
+    padding-inline: var(--box-region-padding);
+  }
+
+  :host([data-full-width='0']:first-child) {
+    padding-top: var(--box-region-padding);
+  }
+
+  :host([data-full-width='0']:last-child) {
+    padding-bottom: var(--box-region-padding);
   }
 
   :host img {

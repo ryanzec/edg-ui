@@ -1,19 +1,42 @@
 @layer components {
+  /* column wrapper stacking the optional divider above the button row at the box main gap */
   :host {
+    display: flex;
+    flex-direction: column;
+    gap: var(--box-footer-divider-gap);
+  }
+
+  .footer-actions {
     display: flex;
     align-items: center;
     gap: var(--box-footer-gap);
+    /* inline padding insets the button row while leaving the sibling divider full-bleed (inner-items mode) */
+    padding-inline: var(--box-region-padding);
   }
 
-  :host([data-alignment='start']) {
+  /* inner-items application mode: arm the region padding to the box padding amount */
+  :host-context(org-box[data-padding-application='inner-items']) {
+    --box-region-padding: var(--box-padding);
+  }
+
+  /* the first / last region gets the leading / trailing edge padding on its host (resolves to 0 otherwise) */
+  :host(:first-child) {
+    padding-top: var(--box-region-padding);
+  }
+
+  :host(:last-child) {
+    padding-bottom: var(--box-region-padding);
+  }
+
+  :host([data-alignment='start']) .footer-actions {
     justify-content: flex-start;
   }
 
-  :host([data-alignment='center']) {
+  :host([data-alignment='center']) .footer-actions {
     justify-content: center;
   }
 
-  :host([data-alignment='end']) {
+  :host([data-alignment='end']) .footer-actions {
     justify-content: flex-end;
   }
 

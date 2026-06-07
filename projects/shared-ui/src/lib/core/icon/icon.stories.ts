@@ -5,7 +5,7 @@ import type { Meta, StoryObj } from '@storybook/angular';
 import { allIconNames, type IconName } from '../icon/icon-brain';
 import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
 import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
-import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
+import { DesignSystemDemoControlInput } from '../../example/design-system-demo/design-system-demo-control-input';
 import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
 import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
 import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
@@ -40,7 +40,7 @@ const validIconNames = new Set<string>(allIconNames);
     DesignSystemDemo,
     DesignSystemDemoHeader,
     DesignSystemDemoControls,
-    DesignSystemDemoControlGroup,
+    DesignSystemDemoControlInput,
     DesignSystemDemoCanvas,
   ],
   styles: [
@@ -69,20 +69,20 @@ const validIconNames = new Set<string>(allIconNames);
           description="Pick an icon and tune it. Use the controls to drive every visual input on the icon (name, size, color, label) and observe the live result in the canvas."
         />
         <org-design-system-demo-controls slot="controls">
-          <org-design-system-demo-control-group label="Icon">
+          <org-design-system-demo-control-input label="Icon">
             <org-input name="live-demo-icon-name" formControlName="name" placeholder="icon name…" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Size">
+          </org-design-system-demo-control-input>
+          <org-design-system-demo-control-input label="Size">
             <org-button-toggle [items]="sizeItems" formControlName="size" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Color">
+          </org-design-system-demo-control-input>
+          <org-design-system-demo-control-input label="Color">
             <org-button-toggle [items]="colorItems" formControlName="color" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Labeled (a11y)">
+          </org-design-system-demo-control-input>
+          <org-design-system-demo-control-input label="Labeled (a11y)">
             <org-checkbox-toggle name="live-demo-labeled" value="labeled" formControlName="labeled">
               {{ liveDemoForm.controls.labeled.value ? 'on' : 'off' }}
             </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
+          </org-design-system-demo-control-input>
         </org-design-system-demo-controls>
         <org-design-system-demo-canvas slot="canvas">
           <div class="canvas-stage">
@@ -148,7 +148,7 @@ class IconLiveDemoStory {
     DesignSystemDemo,
     DesignSystemDemoHeader,
     DesignSystemDemoControls,
-    DesignSystemDemoControlGroup,
+    DesignSystemDemoControlInput,
     DesignSystemDemoCanvas,
   ],
   template: `
@@ -160,9 +160,9 @@ class IconLiveDemoStory {
           description="Every icon in the curated set. Click any icon card to copy its name to the clipboard."
         />
         <org-design-system-demo-controls slot="controls">
-          <org-design-system-demo-control-group label="Filter">
+          <org-design-system-demo-control-input label="Filter">
             <org-input name="catalogue-filter" formControlName="search" placeholder="search by name…" />
-          </org-design-system-demo-control-group>
+          </org-design-system-demo-control-input>
         </org-design-system-demo-controls>
         <org-design-system-demo-canvas slot="canvas">
           <div class="flex flex-col gap-4">

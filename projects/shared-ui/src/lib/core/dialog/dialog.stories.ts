@@ -19,7 +19,7 @@ import { Icon } from '../icon/icon';
 import { TypedContextDirective } from '../typed-context-directive/typed-context-directive';
 import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
 import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
-import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
+import { DesignSystemDemoControlInput } from '../../example/design-system-demo/design-system-demo-control-input';
 import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
 import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
 import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
@@ -291,7 +291,7 @@ export const Default: Story = {
     DesignSystemDemo,
     DesignSystemDemoHeader,
     DesignSystemDemoControls,
-    DesignSystemDemoControlGroup,
+    DesignSystemDemoControlInput,
     DesignSystemDemoCanvas,
     EXAMPLEDialog,
   ],
@@ -321,26 +321,26 @@ export const Default: Story = {
           description="Every input on the dialog is driven by the controls below. The inline preview reflects the panel; click the button to open the same configuration in a real cdk overlay."
         />
         <org-design-system-demo-controls slot="controls">
-          <org-design-system-demo-control-group label="Position">
+          <org-design-system-demo-control-input label="Position">
             <org-button-toggle [items]="positionItems" formControlName="position" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Footer alignment">
+          </org-design-system-demo-control-input>
+          <org-design-system-demo-control-input label="Footer alignment">
             <org-button-toggle [items]="footerAlignmentItems" formControlName="footerAlignment" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Header icon">
+          </org-design-system-demo-control-input>
+          <org-design-system-demo-control-input label="Header icon">
             <org-button-toggle [items]="headerIconItems" formControlName="headerIcon" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Rounded corners">
+          </org-design-system-demo-control-input>
+          <org-design-system-demo-control-input label="Rounded corners">
             <org-checkbox-toggle name="live-demo-rounded" value="rounded" formControlName="hasRoundedCorners">
               {{ liveDemoForm.controls.hasRoundedCorners.value ? 'on' : 'off' }}
             </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Backdrop">
+          </org-design-system-demo-control-input>
+          <org-design-system-demo-control-input label="Backdrop">
             <org-checkbox-toggle name="live-demo-backdrop" value="backdrop" formControlName="hasBackdrop">
               {{ liveDemoForm.controls.hasBackdrop.value ? 'on' : 'off' }}
             </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Close on click outside">
+          </org-design-system-demo-control-input>
+          <org-design-system-demo-control-input label="Close on click outside">
             <org-checkbox-toggle
               name="live-demo-close-outside"
               value="close-outside"
@@ -348,17 +348,17 @@ export const Default: Story = {
             >
               {{ liveDemoForm.controls.enableCloseOnClickOutside.value ? 'on' : 'off' }}
             </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Escape key">
+          </org-design-system-demo-control-input>
+          <org-design-system-demo-control-input label="Escape key">
             <org-checkbox-toggle name="live-demo-escape" value="escape" formControlName="enableEscapeKey">
               {{ liveDemoForm.controls.enableEscapeKey.value ? 'on' : 'off' }}
             </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Close icon">
+          </org-design-system-demo-control-input>
+          <org-design-system-demo-control-input label="Close icon">
             <org-checkbox-toggle name="live-demo-close-icon" value="close-icon" formControlName="showCloseIcon">
               {{ liveDemoForm.controls.showCloseIcon.value ? 'on' : 'off' }}
             </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
+          </org-design-system-demo-control-input>
         </org-design-system-demo-controls>
         <org-design-system-demo-canvas slot="canvas">
           <div class="canvas-stage">

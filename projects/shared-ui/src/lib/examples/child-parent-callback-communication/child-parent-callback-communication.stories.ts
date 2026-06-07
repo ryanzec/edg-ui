@@ -1,7 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/angular';
 import { EXAMPLEChildParentCallbackCommunication } from './child-parent-callback-communication';
-import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
-import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
+import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
+import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
+import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
+import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
 import { Button } from '../../core/button/button';
 import { Component, output, input, signal } from '@angular/core';
 
@@ -61,38 +63,47 @@ class ChildWithCallback {
 @Component({
   selector: 'story-example-output-vs-callback-demo',
   standalone: true,
-  imports: [StorybookExampleContainer, StorybookExampleContainerSection, ChildWithOutput, ChildWithCallback],
+  imports: [
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoCanvas,
+    DesignSystemDemoExpectedBehaviour,
+    ChildWithOutput,
+    ChildWithCallback,
+  ],
   template: `
-    <org-storybook-example-container
-      title="Communication Patterns"
-      currentState="Comparing output() vs callback approaches"
-    >
-      <org-storybook-example-container-section label="Using output() (Recommended)">
-        <div class="flex flex-col gap-4">
-          <story-example-child-with-output (messageEmitted)="onOutputMessage($event)" />
-          <div class="rounded border border-safe bg-safe-soft p-3">
-            <div class="text-sm font-medium text-fg">Message Received:</div>
-            <div class="text-sm text-fg">{{ outputMessage() }}</div>
+    <org-design-system-demo>
+      <org-design-system-demo-header slot="header" title="Communication Patterns" />
+      <org-design-system-demo-canvas slot="canvas">
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Using output() (Recommended)</div>
+          <div class="flex flex-col gap-4">
+            <story-example-child-with-output (messageEmitted)="onOutputMessage($event)" />
+            <div class="rounded border border-safe bg-safe-soft p-3">
+              <div class="text-sm font-medium text-fg">Message Received:</div>
+              <div class="text-sm text-fg">{{ outputMessage() }}</div>
+            </div>
           </div>
         </div>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Using Callback (Not Recommended)">
-        <div class="flex flex-col gap-4">
-          <story-example-child-with-callback [onMessageCallback]="onCallbackMessage" />
-          <div class="rounded border border-caution bg-caution-soft p-3">
-            <div class="text-sm font-medium text-fg">Message Received:</div>
-            <div class="text-sm text-fg">{{ callbackMessage() }}</div>
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Using Callback (Not Recommended)</div>
+          <div class="flex flex-col gap-4">
+            <story-example-child-with-callback [onMessageCallback]="onCallbackMessage" />
+            <div class="rounded border border-caution bg-caution-soft p-3">
+              <div class="text-sm font-medium text-fg">Message Received:</div>
+              <div class="text-sm text-fg">{{ callbackMessage() }}</div>
+            </div>
           </div>
         </div>
-      </org-storybook-example-container-section>
-
-      <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+      </org-design-system-demo-canvas>
+    </org-design-system-demo>
+    <org-design-system-demo-expected-behaviour>
+      <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
         <li><strong>output()</strong>: Better decoupling, no need for arrow functions or 'this' binding</li>
         <li><strong>Callback</strong>: Requires arrow functions to maintain 'this' context, tighter coupling</li>
         <li>Use callbacks only in complex situations where the event system is not practical</li>
       </ul>
-    </org-storybook-example-container>
+    </org-design-system-demo-expected-behaviour>
   `,
 })
 class OutputVsCallbackDemo {
@@ -130,24 +141,30 @@ export const OutputVsCallback: Story = {
 @Component({
   selector: 'story-example-output-pattern-demo',
   standalone: true,
-  imports: [StorybookExampleContainer, StorybookExampleContainerSection, ChildWithOutput],
+  imports: [
+    DesignSystemDemo,
+    DesignSystemDemoHeader,
+    DesignSystemDemoCanvas,
+    DesignSystemDemoExpectedBehaviour,
+    ChildWithOutput,
+  ],
   template: `
-    <org-storybook-example-container
-      title="Output Pattern (Recommended)"
-      currentState="Using signal-based output() for child-to-parent communication"
-    >
-      <org-storybook-example-container-section label="Child Component Code">
-        <pre class="rounded border border-default-color bg-backgrond p-4 text-xs"><code>@Component({{ '{' }}
+    <org-design-system-demo>
+      <org-design-system-demo-header slot="header" title="Output Pattern (Recommended)" />
+      <org-design-system-demo-canvas slot="canvas">
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Child Component Code</div>
+          <pre class="rounded border border-default-color bg-backgrond p-4 text-xs"><code>@Component({{ '{' }}
   selector: 'child-component',
   template: &#96;&lt;button (click)="messageEmitted.emit('Hello!')"&gt;Send&lt;/button&gt;&#96;
 {{ '}' }})
 class ChildComponent {{ '{' }}
   messageEmitted = output&lt;string&gt;();
 {{ '}' }}</code></pre>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Parent Component Code">
-        <pre class="rounded border border-default-color bg-backgrond p-4 text-xs"><code>@Component({{ '{' }}
+        </div>
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Parent Component Code</div>
+          <pre class="rounded border border-default-color bg-backgrond p-4 text-xs"><code>@Component({{ '{' }}
   selector: 'parent-component',
   template: &#96;&lt;child-component (messageEmitted)="onMessage($event)" /&gt;&#96;
 {{ '}' }})
@@ -156,32 +173,34 @@ class ParentComponent {{ '{' }}
     console.log(message);
   {{ '}' }}
 {{ '}' }}</code></pre>
-      </org-storybook-example-container-section>
-
-      <org-storybook-example-container-section label="Live Example">
-        <div class="flex flex-col gap-4">
-          <story-example-child-with-output (messageEmitted)="onMessage($event)" />
-          <div class="rounded border border-default-color bg-app p-3">
-            <div class="text-sm font-medium text-fg">Message Received:</div>
-            <div class="text-sm text-fg">{{ message() }}</div>
-            <div class="mt-2 text-sm font-medium text-fg">Benefits:</div>
-            <ul class="mt-2 list-inside list-disc flex flex-col gap-1 text-sm text-fg">
-              <li>No need to worry about 'this' context</li>
-              <li>Better type safety</li>
-              <li>Cleaner separation of concerns</li>
-              <li>Follows Angular best practices</li>
-            </ul>
+        </div>
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Live Example</div>
+          <div class="flex flex-col gap-4">
+            <story-example-child-with-output (messageEmitted)="onMessage($event)" />
+            <div class="rounded border border-default-color bg-app p-3">
+              <div class="text-sm font-medium text-fg">Message Received:</div>
+              <div class="text-sm text-fg">{{ message() }}</div>
+              <div class="mt-2 text-sm font-medium text-fg">Benefits:</div>
+              <ul class="mt-2 list-inside list-disc flex flex-col gap-1 text-sm text-fg">
+                <li>No need to worry about 'this' context</li>
+                <li>Better type safety</li>
+                <li>Cleaner separation of concerns</li>
+                <li>Follows Angular best practices</li>
+              </ul>
+            </div>
           </div>
         </div>
-      </org-storybook-example-container-section>
-
-      <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+      </org-design-system-demo-canvas>
+    </org-design-system-demo>
+    <org-design-system-demo-expected-behaviour>
+      <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
         <li>Use <strong>output()</strong> to create type-safe event emitters</li>
         <li>Parent listens to events using standard Angular event binding syntax</li>
         <li>No arrow functions or 'this' binding required</li>
         <li>Promotes better component decoupling</li>
       </ul>
-    </org-storybook-example-container>
+    </org-design-system-demo-expected-behaviour>
   `,
 })
 class OutputPatternDemo {
@@ -220,12 +239,12 @@ export const CallbackPattern: Story = {
   },
   render: () => ({
     template: `
-      <org-storybook-example-container
-        title="Callback Pattern (Not Recommended)"
-        currentState="Using callback functions for child-to-parent communication"
-      >
-        <org-storybook-example-container-section label="Child Component Code">
-          <pre class="rounded border border-default-color bg-backgrond p-4 text-xs"><code>@Component({{ '{' }}
+      <org-design-system-demo>
+        <org-design-system-demo-header slot="header" title="Callback Pattern (Not Recommended)" />
+        <org-design-system-demo-canvas slot="canvas">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Child Component Code</div>
+            <pre class="rounded border border-default-color bg-backgrond p-4 text-xs"><code>@Component({{ '{' }}
   selector: 'child-component',
   template: &#96;&lt;button (click)="onSendMessage()"&gt;Send&lt;/button&gt;&#96;
 {{ '}' }})
@@ -238,10 +257,10 @@ class ChildComponent {{ '{' }}
     {{ '}' }}
   {{ '}' }}
 {{ '}' }}</code></pre>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Parent Component Code (Incorrect)">
-          <pre class="rounded border border-danger bg-danger-soft p-4 text-xs"><code>@Component({{ '{' }}
+          </div>
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Parent Component Code (Incorrect)</div>
+            <pre class="rounded border border-danger bg-danger-soft p-4 text-xs"><code>@Component({{ '{' }}
   selector: 'parent-component',
   template: &#96;&lt;child-component [onMessageCallback]="onMessage" /&gt;&#96;
 {{ '}' }})
@@ -251,10 +270,10 @@ class ParentComponent {{ '{' }}
     console.log(this.someProperty); // undefined
   {{ '}' }}
 {{ '}' }}</code></pre>
-        </org-storybook-example-container-section>
-
-        <org-storybook-example-container-section label="Parent Component Code (Correct but Awkward)">
-          <pre class="rounded border border-default-color bg-app p-4 text-xs"><code>@Component({{ '{' }}
+          </div>
+          <div class="flex flex-col gap-2 items-start">
+            <div class="text-sm font-medium">Parent Component Code (Correct but Awkward)</div>
+            <pre class="rounded border border-default-color bg-app p-4 text-xs"><code>@Component({{ '{' }}
   selector: 'parent-component',
   template: &#96;&lt;child-component [onMessageCallback]="onMessage" /&gt;&#96;
 {{ '}' }})
@@ -264,19 +283,21 @@ class ParentComponent {{ '{' }}
     console.log(this.someProperty); // works but feels odd in class
   {{ '}' }}
 {{ '}' }}</code></pre>
-        </org-storybook-example-container-section>
-
-        <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+          </div>
+        </org-design-system-demo-canvas>
+      </org-design-system-demo>
+      <org-design-system-demo-expected-behaviour>
+        <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
           <li><strong>Problem 1</strong>: Requires arrow functions to maintain 'this' context</li>
           <li><strong>Problem 2</strong>: Easy to forget and leads to bugs</li>
           <li><strong>Problem 3</strong>: Tighter coupling between parent and child</li>
           <li><strong>Problem 4</strong>: Doesn't follow Angular conventions</li>
           <li>Only use callbacks in complex scenarios where output() is not practical</li>
         </ul>
-      </org-storybook-example-container>
+      </org-design-system-demo-expected-behaviour>
     `,
     moduleMetadata: {
-      imports: [StorybookExampleContainer, StorybookExampleContainerSection],
+      imports: [DesignSystemDemo, DesignSystemDemoHeader, DesignSystemDemoCanvas, DesignSystemDemoExpectedBehaviour],
     },
   }),
 };

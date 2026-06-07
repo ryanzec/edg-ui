@@ -11,6 +11,7 @@ import { NgTemplateOutlet } from '@angular/common';
 import { angularUtils } from '@organization/shared-utils';
 import { BoxHeaderBrainDirective } from '../box/box-header-brain';
 import { Button } from '../button/button';
+import { Divider } from '../divider/divider';
 import { Box } from './box';
 
 /** default value for the box header title input */
@@ -19,10 +20,25 @@ export const BOX_HEADER_TITLE_DEFAULT: string | undefined = undefined;
 /** default value for the box header subtitle input */
 export const BOX_HEADER_SUBTITLE_DEFAULT: string | undefined = undefined;
 
+/** default value for the box header hasDivider input */
+export const BOX_HEADER_HAS_DIVIDER_DEFAULT = false;
+
+/** all available box header variant values */
+export const allBoxHeaderVariants = ['default', 'muted'] as const;
+
+/** the visual style variant for the box header title */
+export type BoxHeaderVariant = (typeof allBoxHeaderVariants)[number];
+
+/** default value for the box header variant input */
+export const BOX_HEADER_VARIANT_DEFAULT: BoxHeaderVariant = 'default';
+
+/** default value for the box header isEmphasized input */
+export const BOX_HEADER_IS_EMPHASIZED_DEFAULT = false;
+
 @Component({
   selector: 'org-box-header',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [NgTemplateOutlet, Button],
+  imports: [NgTemplateOutlet, Button, Divider],
   templateUrl: './box-header.html',
   styleUrl: './box-header.css',
   hostDirectives: [
@@ -34,6 +50,8 @@ export const BOX_HEADER_SUBTITLE_DEFAULT: string | undefined = undefined;
   host: {
     '[attr.data-actions-only]': 'actionsOnly() ? "" : null',
     '[attr.data-expandable]': 'isExpandable() ? "" : null',
+    '[attr.data-variant]': 'variant()',
+    '[attr.data-emphasized]': 'isEmphasized() ? "" : null',
     '[class.hidden]': '!hasContent()',
   },
 })
@@ -52,6 +70,15 @@ export class BoxHeader {
   public subtitle = input<string | undefined, string | null | undefined>(BOX_HEADER_SUBTITLE_DEFAULT, {
     transform: angularUtils.transformNullToUndefined,
   });
+
+  /** whether to render a divider below the header content, separated by the box main gap */
+  public hasDivider = input<boolean>(BOX_HEADER_HAS_DIVIDER_DEFAULT);
+
+  /** the visual style variant for the title; 'muted' renders the title text in the muted foreground color */
+  public variant = input<BoxHeaderVariant>(BOX_HEADER_VARIANT_DEFAULT);
+
+  /** when true, the title text is visually transformed to uppercase (the underlying title string is unchanged) */
+  public isEmphasized = input<boolean>(BOX_HEADER_IS_EMPHASIZED_DEFAULT);
 
   /** consumer-supplied template (referenced via #actions) projected into the header's trailing actions slot */
   protected readonly actionsTemplate = contentChild<TemplateRef<unknown>>('actions');

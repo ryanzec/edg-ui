@@ -85,10 +85,11 @@
               (click)="brain.selectItem(item)"
               class="menu-item-button"
             >
-              <org-list-item [forceClickable]="true" [isSelected]="isItemSelected" [label]="item.display">
+              <org-list-item [forceClickable]="true" [isSelected]="isItemSelected">
                 <!--@if (getItemPreIcon(isItemSelected); as preIconName) {
                   <org-list-item-icon pre [name]="preIconName" />
                 }-->
+                {{ item.display }}
               </org-list-item>
             </button>
           }
@@ -103,7 +104,7 @@
         <org-overlay-menu-divider />
         <org-list listRole="none">
           <button type="button" (click)="brain.clearAndClose()" class="menu-item-button menu-item-clear">
-            <org-list-item [forceClickable]="true" label="Clear selection" />
+            <org-list-item [forceClickable]="true">Clear selection</org-list-item>
           </button>
         </org-list>
       </div>

@@ -3,9 +3,8 @@
   --combobox-width: 100%;
 
   /* panel */
-  --combobox-panel-padding: var(--spacing-1);
+  --combobox-panel-padding: var(--spacing-0);
   --combobox-panel-max-height: var(--sizing-xs);
-  --combobox-panel-max-width: var(--overlay-menu-max-width);
   --combobox-panel-bg: var(--overlay-menu-bg);
   --combobox-panel-border-width: var(--border-width);
   --combobox-panel-border-color: var(--overlay-menu-border);
@@ -37,4 +36,10 @@
   --combobox-empty-padding-block: var(--spacing-3);
   --combobox-empty-font-size: var(--font-size-sm);
   --combobox-empty-fg: var(--color-fg-muted);
+
+  /* status (loading / character-threshold messages) */
+  --combobox-status-padding-block: var(--spacing-3);
+  --combobox-status-font-size: var(--font-size-sm);
+  --combobox-status-fg: var(--color-fg-muted);
+  --combobox-status-gap: var(--spacing-2);
 }

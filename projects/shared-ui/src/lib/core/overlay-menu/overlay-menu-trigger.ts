@@ -14,6 +14,19 @@ export const OVERLAY_MENU_TRIGGER_POSITION_DEFAULT: OverlayMenuTriggerPosition =
 /** default value for the overlayMenuTriggerCloseOnEscape input */
 export const OVERLAY_MENU_TRIGGER_CLOSE_ON_ESCAPE_DEFAULT = true;
 
+/** default value for the overlayMenuTriggerHover input */
+export const OVERLAY_MENU_TRIGGER_HOVER_DEFAULT = false;
+
+/** default value (in milliseconds) for the overlayMenuTriggerOpenDelay input */
+export const OVERLAY_MENU_TRIGGER_OPEN_DELAY_DEFAULT = 200;
+
+/**
+ * default value (in milliseconds) for the overlayMenuTriggerCloseDelay input — the grace period that
+ * lets the pointer travel from the trigger to the panel (across the position offset gap) without the
+ * menu closing
+ */
+export const OVERLAY_MENU_TRIGGER_CLOSE_DELAY_DEFAULT = 150;
+
 /**
  * cdk overlay position candidates for each supported overlay menu trigger position. each entry lists
  * the primary position first followed by fallback candidates so the cdk overlay can flip on the primary
@@ -63,6 +76,10 @@ const POSITION_CONFIGURATIONS: Record<OverlayMenuTriggerPosition, ConnectedPosit
       inputs: ['cdkMenuTriggerFor: orgOverlayMenuTrigger'],
     },
   ],
+  host: {
+    '(mouseenter)': '_onTriggerMouseEnter()',
+    '(mouseleave)': '_onTriggerMouseLeave()',
+  },
 })
 export class OverlayMenuTriggerDirective {
   private readonly _cdkMenuTrigger = inject(CdkMenuTrigger);
@@ -70,11 +87,35 @@ export class OverlayMenuTriggerDirective {
 
   private _onDocumentEscape: ((event: KeyboardEvent) => void) | null = null;
 
+  private _openTimeoutId: number | null = null;
+  private _closeTimeoutId: number | null = null;
+
+  private _isHoveringTrigger = false;
+  private _isHoveringPanel = false;
+
+  private _panelElement: HTMLElement | null = null;
+
   /** the position of the overlay menu panel relative to the trigger element */
   public readonly overlayMenuTriggerPosition = input<OverlayMenuTriggerPosition>(OVERLAY_MENU_TRIGGER_POSITION_DEFAULT);
 
   /** when true, pressing Escape while the menu is open dismisses the overlay */
   public readonly overlayMenuTriggerCloseOnEscape = input<boolean>(OVERLAY_MENU_TRIGGER_CLOSE_ON_ESCAPE_DEFAULT);
+
+  /**
+   * when true, the menu also opens when the pointer hovers the trigger (after `overlayMenuTriggerOpenDelay`)
+   * and stays open while the pointer is over the trigger or the panel. this is purely additive — click and
+   * keyboard activation remain fully functional regardless of this value
+   */
+  public readonly overlayMenuTriggerHover = input<boolean>(OVERLAY_MENU_TRIGGER_HOVER_DEFAULT);
+
+  /** delay (in milliseconds) before the menu opens after the pointer begins hovering the trigger */
+  public readonly overlayMenuTriggerOpenDelay = input<number>(OVERLAY_MENU_TRIGGER_OPEN_DELAY_DEFAULT);
+
+  /**
+   * grace period (in milliseconds) before the menu closes after the pointer leaves both the trigger and the
+   * panel — lets the pointer travel across the gap between them without the menu closing
+   */
+  public readonly overlayMenuTriggerCloseDelay = input<number>(OVERLAY_MENU_TRIGGER_CLOSE_DELAY_DEFAULT);
 
   constructor() {
     // forward our resolved position fallback matrix into cdk menu trigger's menuPosition so the cdk
@@ -92,7 +133,6 @@ export class OverlayMenuTriggerDirective {
     const openedSubscription = this._cdkMenuTrigger.opened.subscribe(() => {
       this._attachEscapeListener();
 
-      // the mircotask is needed as angualr cdk set the `overlayRef` property after `opened` is emitted
       queueMicrotask(() => {
         const overlayRef = (this._cdkMenuTrigger as unknown as { overlayRef: OverlayRef | null }).overlayRef;
 
@@ -105,18 +145,137 @@ export class OverlayMenuTriggerDirective {
         if (positionStrategy instanceof FlexibleConnectedPositionStrategy) {
           positionStrategy.withLockedPosition(false);
         }
+
+        // bridge the trigger→panel gap so the menu stays open while the pointer is over the panel (not just
+        // the trigger). only relevant when hover is enabled
+        if (this.overlayMenuTriggerHover()) {
+          this._attachPanelHoverListeners(overlayRef.overlayElement);
+        }
       });
     });
 
     const closedSubscription = this._cdkMenuTrigger.closed.subscribe(() => {
       this._detachEscapeListener();
+      this._detachPanelHoverListeners();
+      this._clearOpenTimeout();
+      this._clearCloseTimeout();
+      this._isHoveringTrigger = false;
+      this._isHoveringPanel = false;
     });
 
     this._destroyRef.onDestroy(() => {
       openedSubscription.unsubscribe();
       closedSubscription.unsubscribe();
       this._detachEscapeListener();
+      this._detachPanelHoverListeners();
+      this._clearOpenTimeout();
+      this._clearCloseTimeout();
     });
+  }
+
+  protected _onTriggerMouseEnter(): void {
+    if (!this.overlayMenuTriggerHover()) {
+      return;
+    }
+
+    this._isHoveringTrigger = true;
+    this._scheduleOpen();
+  }
+
+  protected _onTriggerMouseLeave(): void {
+    if (!this.overlayMenuTriggerHover()) {
+      return;
+    }
+
+    this._isHoveringTrigger = false;
+    this._scheduleClose();
+  }
+
+  private _scheduleOpen(): void {
+    this._clearCloseTimeout();
+
+    if (this._cdkMenuTrigger.isOpen()) {
+      return;
+    }
+
+    this._clearOpenTimeout();
+
+    this._openTimeoutId = window.setTimeout(() => {
+      this._openTimeoutId = null;
+
+      if (!this._cdkMenuTrigger.isOpen()) {
+        this._cdkMenuTrigger.open();
+      }
+    }, this.overlayMenuTriggerOpenDelay());
+  }
+
+  private _scheduleClose(): void {
+    this._clearOpenTimeout();
+
+    if (!this._cdkMenuTrigger.isOpen()) {
+      return;
+    }
+
+    this._clearCloseTimeout();
+
+    this._closeTimeoutId = window.setTimeout(() => {
+      this._closeTimeoutId = null;
+
+      // keep the menu open while the pointer is still over either the trigger or the panel
+      if (this._isHoveringTrigger || this._isHoveringPanel) {
+        return;
+      }
+
+      this._cdkMenuTrigger.close();
+    }, this.overlayMenuTriggerCloseDelay());
+  }
+
+  private _clearOpenTimeout(): void {
+    if (this._openTimeoutId === null) {
+      return;
+    }
+
+    window.clearTimeout(this._openTimeoutId);
+    this._openTimeoutId = null;
+  }
+
+  private _clearCloseTimeout(): void {
+    if (this._closeTimeoutId === null) {
+      return;
+    }
+
+    window.clearTimeout(this._closeTimeoutId);
+    this._closeTimeoutId = null;
+  }
+
+  private _onPanelMouseEnter = (): void => {
+    this._clearCloseTimeout();
+    this._isHoveringPanel = true;
+  };
+
+  private _onPanelMouseLeave = (): void => {
+    this._isHoveringPanel = false;
+    this._scheduleClose();
+  };
+
+  private _attachPanelHoverListeners(overlayElement: HTMLElement): void {
+    if (this._panelElement) {
+      return;
+    }
+
+    overlayElement.addEventListener('mouseenter', this._onPanelMouseEnter);
+    overlayElement.addEventListener('mouseleave', this._onPanelMouseLeave);
+    this._panelElement = overlayElement;
+  }
+
+  private _detachPanelHoverListeners(): void {
+    if (!this._panelElement) {
+      return;
+    }
+
+    this._panelElement.removeEventListener('mouseenter', this._onPanelMouseEnter);
+    this._panelElement.removeEventListener('mouseleave', this._onPanelMouseLeave);
+    this._panelElement = null;
   }
 
   private _attachEscapeListener(): void {

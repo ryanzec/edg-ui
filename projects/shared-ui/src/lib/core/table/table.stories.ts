@@ -18,7 +18,8 @@ import { Link } from '../link/link';
 import { TypedContextDirective } from '../typed-context-directive/typed-context-directive';
 import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
 import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
-import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
+import { DesignSystemDemoControlInput } from '../../example/design-system-demo/design-system-demo-control-input';
+import { DesignSystemDemoControlsGroup } from '../../example/design-system-demo/design-system-demo-controls-group';
 import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
 import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
 import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
@@ -102,7 +103,8 @@ const liveDemoStateItems: ButtonToggleItem[] = allLiveDemoStates.map((state) => 
     DesignSystemDemo,
     DesignSystemDemoHeader,
     DesignSystemDemoControls,
-    DesignSystemDemoControlGroup,
+    DesignSystemDemoControlsGroup,
+    DesignSystemDemoControlInput,
     DesignSystemDemoCanvas,
   ],
   providers: [SortingStore],
@@ -127,57 +129,69 @@ const liveDemoStateItems: ButtonToggleItem[] = allLiveDemoStates.map((state) => 
           description="Toggle the modifiers. Density swaps the row min-height and cell padding scale; striping, hover, selectable rows, sortable headers, the sticky first column, the sticky header, and a trailing row-actions cell guarded by [orgTableActions] are independent flags that compose freely."
         />
         <org-design-system-demo-controls slot="controls">
-          <org-design-system-demo-control-group label="Size">
-            <org-button-toggle [items]="sizeItems" formControlName="size" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="State">
-            <org-button-toggle [items]="stateItems" formControlName="state" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Striped">
-            <org-checkbox-toggle name="live-demo-striped" value="striped" formControlName="striped">
-              {{ liveDemoForm.controls.striped.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Hover">
-            <org-checkbox-toggle name="live-demo-hover" value="hover" formControlName="hover">
-              {{ liveDemoForm.controls.hover.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Selectable rows">
-            <org-checkbox-toggle name="live-demo-selectable" value="selectable" formControlName="selectable">
-              {{ liveDemoForm.controls.selectable.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Expandable rows">
-            <org-checkbox-toggle name="live-demo-expandable" value="expandable" formControlName="expandable">
-              {{ liveDemoForm.controls.expandable.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Clickable rows">
-            <org-checkbox-toggle name="live-demo-clickable" value="clickable" formControlName="clickable">
-              {{ liveDemoForm.controls.clickable.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Sortable">
-            <org-checkbox-toggle name="live-demo-sortable" value="sortable" formControlName="sortable">
-              {{ liveDemoForm.controls.sortable.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Sticky 1st col">
-            <org-checkbox-toggle name="live-demo-sticky-first" value="sticky-first" formControlName="stickyFirstColumn">
-              {{ liveDemoForm.controls.stickyFirstColumn.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Sticky header">
-            <org-checkbox-toggle name="live-demo-sticky-header" value="sticky-header" formControlName="stickyHeader">
-              {{ liveDemoForm.controls.stickyHeader.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Row actions">
-            <org-checkbox-toggle name="live-demo-row-actions" value="row-actions" formControlName="rowActions">
-              {{ liveDemoForm.controls.rowActions.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
+          <org-design-system-demo-controls-group label="Layout">
+            <org-design-system-demo-control-input label="Size">
+              <org-button-toggle [items]="sizeItems" formControlName="size" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Sticky 1st col">
+              <org-checkbox-toggle
+                name="live-demo-sticky-first"
+                value="sticky-first"
+                formControlName="stickyFirstColumn"
+              >
+                {{ liveDemoForm.controls.stickyFirstColumn.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Sticky header">
+              <org-checkbox-toggle name="live-demo-sticky-header" value="sticky-header" formControlName="stickyHeader">
+                {{ liveDemoForm.controls.stickyHeader.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
+          <org-design-system-demo-controls-group label="Features">
+            <org-design-system-demo-control-input label="Striped">
+              <org-checkbox-toggle name="live-demo-striped" value="striped" formControlName="striped">
+                {{ liveDemoForm.controls.striped.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Hover">
+              <org-checkbox-toggle name="live-demo-hover" value="hover" formControlName="hover">
+                {{ liveDemoForm.controls.hover.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Selectable rows">
+              <org-checkbox-toggle name="live-demo-selectable" value="selectable" formControlName="selectable">
+                {{ liveDemoForm.controls.selectable.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Expandable rows">
+              <org-checkbox-toggle name="live-demo-expandable" value="expandable" formControlName="expandable">
+                {{ liveDemoForm.controls.expandable.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Clickable rows">
+              <org-checkbox-toggle name="live-demo-clickable" value="clickable" formControlName="clickable">
+                {{ liveDemoForm.controls.clickable.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Sortable">
+              <org-checkbox-toggle name="live-demo-sortable" value="sortable" formControlName="sortable">
+                {{ liveDemoForm.controls.sortable.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
+          <org-design-system-demo-controls-group label="Actions">
+            <org-design-system-demo-control-input label="Row actions">
+              <org-checkbox-toggle name="live-demo-row-actions" value="row-actions" formControlName="rowActions">
+                {{ liveDemoForm.controls.rowActions.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
+          <org-design-system-demo-controls-group label="State">
+            <org-design-system-demo-control-input label="State">
+              <org-button-toggle [items]="stateItems" formControlName="state" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
         </org-design-system-demo-controls>
         <org-design-system-demo-canvas slot="canvas">
           <div class="canvas-stage">

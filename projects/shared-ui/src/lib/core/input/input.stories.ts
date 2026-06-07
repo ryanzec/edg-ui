@@ -12,7 +12,8 @@ import { Label } from '../label/label';
 import { Tag } from '../tags/tag';
 import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
 import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
-import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
+import { DesignSystemDemoControlInput } from '../../example/design-system-demo/design-system-demo-control-input';
+import { DesignSystemDemoControlsGroup } from '../../example/design-system-demo/design-system-demo-controls-group';
 import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
 import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
 import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
@@ -248,7 +249,8 @@ export const Default: Story = {
     DesignSystemDemo,
     DesignSystemDemoHeader,
     DesignSystemDemoControls,
-    DesignSystemDemoControlGroup,
+    DesignSystemDemoControlsGroup,
+    DesignSystemDemoControlInput,
     DesignSystemDemoCanvas,
     FormField,
   ],
@@ -274,48 +276,54 @@ export const Default: Story = {
           description="Real, focusable input — every state is live. Toggle the controls to walk every input on the page."
         />
         <org-design-system-demo-controls slot="controls">
-          <org-design-system-demo-control-group label="Variant">
-            <org-button-toggle [items]="variantItems" formControlName="variant" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Type">
-            <org-button-toggle [items]="typeItems" formControlName="type" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="State">
-            <org-button-toggle [items]="stateItems" formControlName="state" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="ShowClear">
-            <org-button-toggle [items]="showClearItems" formControlName="showClear" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Pre">
-            <org-checkbox-toggle name="live-demo-pre" value="pre" formControlName="pre">
-              {{ liveDemoForm.controls.pre.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Post">
-            <org-checkbox-toggle name="live-demo-post" value="post" formControlName="post">
-              {{ liveDemoForm.controls.post.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Disabled">
-            <org-checkbox-toggle name="live-demo-disabled" value="disabled" formControlName="disabled">
-              {{ liveDemoForm.controls.disabled.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Readonly">
-            <org-checkbox-toggle name="live-demo-readonly" value="readonly" formControlName="readonly">
-              {{ liveDemoForm.controls.readonly.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Loading">
-            <org-checkbox-toggle name="live-demo-loading" value="loading" formControlName="loading">
-              {{ liveDemoForm.controls.loading.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="AsTrigger">
-            <org-checkbox-toggle name="live-demo-as-trigger" value="asTrigger" formControlName="asTrigger">
-              {{ liveDemoForm.controls.asTrigger.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
+          <org-design-system-demo-controls-group label="Configuration">
+            <org-design-system-demo-control-input label="Variant">
+              <org-button-toggle [items]="variantItems" formControlName="variant" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Type">
+              <org-button-toggle [items]="typeItems" formControlName="type" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="State">
+              <org-button-toggle [items]="stateItems" formControlName="state" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
+          <org-design-system-demo-controls-group label="Adornments">
+            <org-design-system-demo-control-input label="Pre">
+              <org-checkbox-toggle name="live-demo-pre" value="pre" formControlName="pre">
+                {{ liveDemoForm.controls.pre.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Post">
+              <org-checkbox-toggle name="live-demo-post" value="post" formControlName="post">
+                {{ liveDemoForm.controls.post.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
+          <org-design-system-demo-controls-group label="Behavior">
+            <org-design-system-demo-control-input label="ShowClear">
+              <org-button-toggle [items]="showClearItems" formControlName="showClear" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Disabled">
+              <org-checkbox-toggle name="live-demo-disabled" value="disabled" formControlName="disabled">
+                {{ liveDemoForm.controls.disabled.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Readonly">
+              <org-checkbox-toggle name="live-demo-readonly" value="readonly" formControlName="readonly">
+                {{ liveDemoForm.controls.readonly.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Loading">
+              <org-checkbox-toggle name="live-demo-loading" value="loading" formControlName="loading">
+                {{ liveDemoForm.controls.loading.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="AsTrigger">
+              <org-checkbox-toggle name="live-demo-as-trigger" value="asTrigger" formControlName="asTrigger">
+                {{ liveDemoForm.controls.asTrigger.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
         </org-design-system-demo-controls>
         <org-design-system-demo-canvas slot="canvas">
           <div class="canvas-stage">

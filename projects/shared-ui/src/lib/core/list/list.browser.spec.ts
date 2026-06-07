@@ -24,7 +24,6 @@ import { ListItemImage } from './list-item-image';
     >
       <org-list-item
         data-testid="item"
-        [label]="label()"
         [asTag]="asTag()"
         [isSelected]="isSelected()"
         [disabled]="disabled()"
@@ -33,10 +32,11 @@ import { ListItemImage } from './list-item-image';
         [overrideSize]="overrideSize()"
         [forceClickable]="forceClickable()"
         [isClickable]="isClickable()"
-        [hideLabel]="hideLabel()"
         [emphasizeColor]="emphasizeColor()"
         (clicked)="handleClicked()"
-      />
+      >
+        {{ label() }}
+      </org-list-item>
     </org-list>
     <pre data-testid="readout">{{ readout() }}</pre>
   `,
@@ -55,7 +55,6 @@ class ListInteractiveHost {
   public readonly overrideSize = signal<ListSize | null | undefined>(undefined);
   public readonly forceClickable = signal<boolean>(false);
   public readonly isClickable = signal<boolean>(true);
-  public readonly hideLabel = signal<boolean>(false);
   public readonly emphasizeColor = signal<ListItemEmphasizeColor>('none');
 
   protected readonly clickCount = signal<number>(0);
@@ -76,10 +75,12 @@ class ListInteractiveHost {
   host: { class: 'block' },
   template: `
     <org-list>
-      <org-list-item data-testid="anchor-no-link" label="anchor-no-link" asTag="a" />
-      <org-list-item data-testid="anchor-with-href" label="anchor-with-href" asTag="a" href="https://example.com" />
-      <org-list-item data-testid="fallback" label="fallback" />
-      <org-list-item data-testid="button-item" label="button" asTag="button" />
+      <org-list-item data-testid="anchor-no-link" asTag="a">anchor-no-link</org-list-item>
+      <org-list-item data-testid="anchor-with-href" asTag="a" href="https://example.com"
+        >anchor-with-href</org-list-item
+      >
+      <org-list-item data-testid="fallback">fallback</org-list-item>
+      <org-list-item data-testid="button-item" asTag="button">button</org-list-item>
     </org-list>
   `,
 })
@@ -92,15 +93,18 @@ class ListNoObserverHost {}
   host: { class: 'block' },
   template: `
     <org-list>
-      <org-list-item data-testid="item-icons" label="With icons">
+      <org-list-item data-testid="item-icons">
         <org-list-item-icon pre name="check" />
+        With icons
         <org-list-item-icon post name="chevron-right" />
       </org-list-item>
-      <org-list-item data-testid="item-image" label="With image">
+      <org-list-item data-testid="item-image">
         <org-list-item-image pre src="https://example.com/avatar.png" alt="profile" />
+        With image
       </org-list-item>
-      <org-list-item data-testid="item-projected" label="Custom slots">
+      <org-list-item data-testid="item-projected">
         <span pre data-testid="custom-pre">custom-pre</span>
+        Custom slots
         <span post data-testid="custom-post">custom-post</span>
       </org-list-item>
     </org-list>
@@ -116,10 +120,7 @@ class ListProjectionHost {}
   template: `
     <org-list>
       <org-list-item data-testid="content-only">
-        <span content data-testid="content-only-text">Custom content</span>
-      </org-list-item>
-      <org-list-item data-testid="label-wins" label="Label text">
-        <span content data-testid="label-wins-content">Custom content</span>
+        <span data-testid="content-only-text">Custom content</span>
       </org-list-item>
     </org-list>
   `,
@@ -133,8 +134,12 @@ class ListContentSlotHost {}
   host: { class: 'block' },
   template: `
     <org-list>
-      <org-list-item data-testid="subset" label="subset" asTag="a" routerLink="/products" [routerMatchExact]="false" />
-      <org-list-item data-testid="exact" label="exact" asTag="a" routerLink="/products" [routerMatchExact]="true" />
+      <org-list-item data-testid="subset" asTag="a" routerLink="/products" [routerMatchExact]="false"
+        >subset</org-list-item
+      >
+      <org-list-item data-testid="exact" asTag="a" routerLink="/products" [routerMatchExact]="true"
+        >exact</org-list-item
+      >
     </org-list>
   `,
 })
@@ -160,7 +165,6 @@ type ListHostConfig = {
   overrideSize?: ListSize | null;
   forceClickable?: boolean;
   isClickable?: boolean;
-  hideLabel?: boolean;
   emphasizeColor?: ListItemEmphasizeColor;
 };
 
@@ -220,10 +224,6 @@ describe('List (browser)', () => {
 
       if (config.isClickable !== undefined) {
         instance.isClickable.set(config.isClickable);
-      }
-
-      if (config.hideLabel !== undefined) {
-        instance.hideLabel.set(config.hideLabel);
       }
 
       if (config.emphasizeColor !== undefined) {
@@ -518,27 +518,13 @@ describe('List (browser)', () => {
       expect(innerButton.type).toBe('button');
     });
 
-    it('renders the label inside a span', () => {
+    it('renders the projected text inside the flex-1 content span', () => {
       const fixture = createInteractiveList();
       const item = queryByTestId(fixture, 'item');
-      const labelSpan = item.querySelector('span') as HTMLSpanElement;
+      const contentSpan = item.querySelector('span.flex-1') as HTMLSpanElement;
 
-      expect(labelSpan.textContent?.trim()).toBe('Item');
-      expect(labelSpan.classList.contains('flex-1')).toBe(true);
-      expect(labelSpan.classList.contains('sr-only')).toBe(false);
-    });
-
-    it('applies sr-only to the label when hideLabel is set', async () => {
-      const fixture = createInteractiveList();
-      const item = queryByTestId(fixture, 'item');
-
-      fixture.componentInstance.hideLabel.set(true);
-      await flush(fixture);
-
-      const labelSpan = item.querySelector('span') as HTMLSpanElement;
-
-      expect(labelSpan.classList.contains('sr-only')).toBe(true);
-      expect(labelSpan.classList.contains('flex-1')).toBe(false);
+      expect(contentSpan).not.toBeNull();
+      expect(contentSpan.textContent?.trim()).toBe('Item');
     });
   });
 
@@ -778,7 +764,7 @@ describe('List (browser)', () => {
   });
 
   describe('list-item content slot', () => {
-    it('renders the projected content slot inside a flex-1 span when the label is omitted', () => {
+    it('renders projected content inside the flex-1 content span', () => {
       const fixture = createFixture(ListContentSlotHost);
       const item = queryByTestId(fixture, 'content-only');
       const projected = item.querySelector('[data-testid="content-only-text"]') as HTMLElement;
@@ -786,15 +772,6 @@ describe('List (browser)', () => {
       expect(projected).not.toBeNull();
       expect(projected.textContent?.trim()).toBe('Custom content');
       expect(projected.closest('span.flex-1')).not.toBeNull();
-    });
-
-    it('renders the label and ignores the content slot when both are provided', () => {
-      const fixture = createFixture(ListContentSlotHost);
-      const item = queryByTestId(fixture, 'label-wins');
-      const labelSpan = item.querySelector('span.flex-1') as HTMLSpanElement;
-
-      expect(labelSpan.textContent?.trim()).toBe('Label text');
-      expect(item.querySelector('[data-testid="label-wins-content"]')).toBeNull();
     });
   });
 

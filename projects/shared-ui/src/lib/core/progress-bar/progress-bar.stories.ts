@@ -6,7 +6,7 @@ import { SliderInput } from '../slider-input/slider-input';
 import { allComponentColors } from '../types/component-types';
 import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
 import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
-import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
+import { DesignSystemDemoControlInput } from '../../example/design-system-demo/design-system-demo-control-input';
 import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
 import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
 import {
@@ -153,7 +153,7 @@ export const Default: Story = {
     DesignSystemDemo,
     DesignSystemDemoHeader,
     DesignSystemDemoControls,
-    DesignSystemDemoControlGroup,
+    DesignSystemDemoControlInput,
     DesignSystemDemoCanvas,
   ],
   styles: [
@@ -183,16 +183,16 @@ export const Default: Story = {
           description="Drag the fill slider and toggle the color, shape, and size to walk every combination. The track stays neutral while the fill takes the chosen color."
         />
         <org-design-system-demo-controls slot="controls">
-          <org-design-system-demo-control-group label="Color">
+          <org-design-system-demo-control-input label="Color">
             <org-button-toggle [items]="colorItems" formControlName="color" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Shape">
+          </org-design-system-demo-control-input>
+          <org-design-system-demo-control-input label="Shape">
             <org-button-toggle [items]="shapeItems" formControlName="shape" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Size">
+          </org-design-system-demo-control-input>
+          <org-design-system-demo-control-input label="Size">
             <org-button-toggle [items]="sizeItems" formControlName="size" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Fill">
+          </org-design-system-demo-control-input>
+          <org-design-system-demo-control-input label="Fill">
             <org-slider-input
               formControlName="percentage"
               direction="horizontal"
@@ -201,7 +201,7 @@ export const Default: Story = {
               [step]="1"
               ariaLabel="Fill percentage"
             />
-          </org-design-system-demo-control-group>
+          </org-design-system-demo-control-input>
         </org-design-system-demo-controls>
         <org-design-system-demo-canvas slot="canvas">
           <div class="canvas-stage">

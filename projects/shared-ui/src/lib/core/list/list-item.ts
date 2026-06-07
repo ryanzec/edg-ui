@@ -35,12 +35,6 @@ export const LIST_ITEM_OVERRIDE_SIZE_DEFAULT: ListSize | undefined = undefined;
 /** the default force clickable state of the list item */
 export const LIST_ITEM_FORCE_CLICKABLE_DEFAULT = false;
 
-/** the default hide-label state of the list item */
-export const LIST_ITEM_HIDE_LABEL_DEFAULT = false;
-
-/** the default label of the list item */
-export const LIST_ITEM_LABEL_DEFAULT: string | undefined = undefined;
-
 /** all available list item emphasize-color values */
 export const allListItemEmphasizeColors = ['none', ...allComponentColors] as const;
 
@@ -119,17 +113,6 @@ export class ListItem {
    * itself the click target (button render in the no-tag case + clicked emission), use isClickable instead.
    */
   public readonly forceClickable = input<boolean>(LIST_ITEM_FORCE_CLICKABLE_DEFAULT);
-
-  /** the main text content of the list item; when omitted, the projected `content` slot is rendered instead */
-  public readonly label = input<string | undefined, string | null | undefined>(LIST_ITEM_LABEL_DEFAULT, {
-    transform: angularUtils.transformNullToUndefined,
-  });
-
-  /**
-   * visually hides the label while keeping it in the dom for screen readers; useful when only the
-   * projected pre content conveys the visible meaning (e.g. collapsed navigation rows)
-   */
-  public readonly hideLabel = input<boolean>(LIST_ITEM_HIDE_LABEL_DEFAULT);
 
   /** the emphasize accent color rendered as a thick left border; 'none' renders no accent */
   public readonly emphasizeColor = input<ListItemEmphasizeColor>(LIST_ITEM_EMPHASIZE_COLOR_DEFAULT);

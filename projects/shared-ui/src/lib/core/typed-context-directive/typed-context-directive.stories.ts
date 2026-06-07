@@ -2,8 +2,9 @@ import type { Meta, StoryObj } from '@storybook/angular';
 import { ChangeDetectionStrategy, Component, TemplateRef, ViewChild } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { TypedContextDirective } from './typed-context-directive';
-import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
-import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
+import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
+import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
+import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
 
 type DemoUser = {
   id: string;
@@ -20,26 +21,27 @@ const SAMPLE_USERS: DemoUser[] = [
 @Component({
   selector: 'story-typed-context-object-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [TypedContextDirective, NgTemplateOutlet, StorybookExampleContainer, StorybookExampleContainerSection],
+  imports: [TypedContextDirective, NgTemplateOutlet, DesignSystemDemo, DesignSystemDemoCanvas, DesignSystemDemoHeader],
   template: `
-    <org-storybook-example-container
-      title="Object Item Type"
-      currentState="Template '$implicit' is narrowed to 'DemoUser' via the directive"
-    >
-      <org-storybook-example-container-section label="Rendered List">
-        <ul class="flex flex-col gap-1">
-          @for (user of users; track user.id) {
-            <li>
-              <ng-container [ngTemplateOutlet]="rowTemplateRef" [ngTemplateOutletContext]="{ $implicit: user }" />
-            </li>
-          }
-        </ul>
-      </org-storybook-example-container-section>
+    <org-design-system-demo>
+      <org-design-system-demo-header slot="header" title="Object Item Type" />
+      <org-design-system-demo-canvas slot="canvas">
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Rendered List</div>
+          <ul class="flex flex-col gap-1">
+            @for (user of users; track user.id) {
+              <li>
+                <ng-container [ngTemplateOutlet]="rowTemplateRef" [ngTemplateOutletContext]="{ $implicit: user }" />
+              </li>
+            }
+          </ul>
+        </div>
 
-      <ng-template [orgTypedContext]="users" #rowTemplateRef let-user>
-        <strong>{{ user.name }}</strong> &mdash; {{ user.email }}
-      </ng-template>
-    </org-storybook-example-container>
+        <ng-template [orgTypedContext]="users" #rowTemplateRef let-user>
+          <strong>{{ user.name }}</strong> &mdash; {{ user.email }}
+        </ng-template>
+      </org-design-system-demo-canvas>
+    </org-design-system-demo>
   `,
 })
 class TypedContextObjectDemo {
@@ -52,26 +54,27 @@ class TypedContextObjectDemo {
 @Component({
   selector: 'story-typed-context-primitive-demo',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [TypedContextDirective, NgTemplateOutlet, StorybookExampleContainer, StorybookExampleContainerSection],
+  imports: [TypedContextDirective, NgTemplateOutlet, DesignSystemDemo, DesignSystemDemoCanvas, DesignSystemDemoHeader],
   template: `
-    <org-storybook-example-container
-      title="Primitive Item Type"
-      currentState="Template '$implicit' is narrowed to 'string' via the directive"
-    >
-      <org-storybook-example-container-section label="Rendered List">
-        <ul class="flex flex-col gap-1">
-          @for (label of labels; track label) {
-            <li>
-              <ng-container [ngTemplateOutlet]="labelTemplateRef" [ngTemplateOutletContext]="{ $implicit: label }" />
-            </li>
-          }
-        </ul>
-      </org-storybook-example-container-section>
+    <org-design-system-demo>
+      <org-design-system-demo-header slot="header" title="Primitive Item Type" />
+      <org-design-system-demo-canvas slot="canvas">
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Rendered List</div>
+          <ul class="flex flex-col gap-1">
+            @for (label of labels; track label) {
+              <li>
+                <ng-container [ngTemplateOutlet]="labelTemplateRef" [ngTemplateOutletContext]="{ $implicit: label }" />
+              </li>
+            }
+          </ul>
+        </div>
 
-      <ng-template [orgTypedContext]="labels" #labelTemplateRef let-label>
-        {{ label.toUpperCase() }}
-      </ng-template>
-    </org-storybook-example-container>
+        <ng-template [orgTypedContext]="labels" #labelTemplateRef let-label>
+          {{ label.toUpperCase() }}
+        </ng-template>
+      </org-design-system-demo-canvas>
+    </org-design-system-demo>
   `,
 })
 class TypedContextPrimitiveDemo {

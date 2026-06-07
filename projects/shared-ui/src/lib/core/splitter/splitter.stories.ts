@@ -2,13 +2,21 @@ import { Component, ChangeDetectionStrategy, signal, computed } from '@angular/c
 import type { Meta, StoryObj } from '@storybook/angular';
 import { Splitter, type SplitterCollapsedSide } from './splitter';
 import { Button } from '../button/button';
-import { StorybookExampleContainer } from '../../private/storybook-example-container/storybook-example-container';
-import { StorybookExampleContainerSection } from '../../private/storybook-example-container-section/storybook-example-container-section';
+import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
+import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
+import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
+import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
 
 @Component({
   selector: 'story-splitter-direction',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Splitter, StorybookExampleContainer, StorybookExampleContainerSection],
+  imports: [
+    Splitter,
+    DesignSystemDemo,
+    DesignSystemDemoCanvas,
+    DesignSystemDemoHeader,
+    DesignSystemDemoExpectedBehaviour,
+  ],
   styles: [
     `
       .splitter-demo {
@@ -18,31 +26,37 @@ import { StorybookExampleContainerSection } from '../../private/storybook-exampl
     `,
   ],
   template: `
-    <org-storybook-example-container title="Direction" currentState="Comparing horizontal and vertical split layouts">
-      <org-storybook-example-container-section label="Horizontal">
-        <div class="splitter-demo">
-          <org-splitter direction="horizontal">
-            <ng-template #section><div class="bg-safe-soft w-full h-full"></div></ng-template>
-            <ng-template #section><div class="bg-danger-soft w-full h-full"></div></ng-template>
-          </org-splitter>
+    <org-design-system-demo>
+      <org-design-system-demo-header slot="header" title="Direction" />
+      <org-design-system-demo-canvas slot="canvas">
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Horizontal</div>
+          <div class="splitter-demo">
+            <org-splitter direction="horizontal">
+              <ng-template #section><div class="bg-safe-soft w-full h-full"></div></ng-template>
+              <ng-template #section><div class="bg-danger-soft w-full h-full"></div></ng-template>
+            </org-splitter>
+          </div>
         </div>
-      </org-storybook-example-container-section>
 
-      <org-storybook-example-container-section label="Vertical">
-        <div class="splitter-demo">
-          <org-splitter direction="vertical">
-            <ng-template #section><div class="bg-safe-soft w-full h-full"></div></ng-template>
-            <ng-template #section><div class="bg-danger-soft w-full h-full"></div></ng-template>
-          </org-splitter>
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Vertical</div>
+          <div class="splitter-demo">
+            <org-splitter direction="vertical">
+              <ng-template #section><div class="bg-safe-soft w-full h-full"></div></ng-template>
+              <ng-template #section><div class="bg-danger-soft w-full h-full"></div></ng-template>
+            </org-splitter>
+          </div>
         </div>
-      </org-storybook-example-container-section>
-
-      <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+      </org-design-system-demo-canvas>
+    </org-design-system-demo>
+    <org-design-system-demo-expected-behaviour>
+      <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
         <li><strong>horizontal</strong>: left/right split; drag the divider left or right to resize</li>
         <li><strong>vertical</strong>: top/bottom split; drag the divider up or down to resize</li>
         <li>keyboard: focus the divider and use arrow keys; Home/End jump to extremes</li>
       </ul>
-    </org-storybook-example-container>
+    </org-design-system-demo-expected-behaviour>
   `,
 })
 class SplitterDirectionStory {}
@@ -50,7 +64,13 @@ class SplitterDirectionStory {}
 @Component({
   selector: 'story-splitter-minimum-size',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Splitter, StorybookExampleContainer, StorybookExampleContainerSection],
+  imports: [
+    Splitter,
+    DesignSystemDemo,
+    DesignSystemDemoCanvas,
+    DesignSystemDemoHeader,
+    DesignSystemDemoExpectedBehaviour,
+  ],
   styles: [
     `
       .splitter-demo {
@@ -60,57 +80,60 @@ class SplitterDirectionStory {}
     `,
   ],
   template: `
-    <org-storybook-example-container
-      title="Minimum Size"
-      currentState="Drag the divider to the edge to see minimum sizes enforced"
-    >
-      <org-storybook-example-container-section label="Horizontal">
-        <div class="splitter-demo">
-          <org-splitter direction="horizontal" [minimumSize]="minimumSize()">
-            <ng-template #section><div class="bg-safe-soft w-full h-full"></div></ng-template>
-            <ng-template #section><div class="bg-danger-soft w-full h-full"></div></ng-template>
-          </org-splitter>
+    <org-design-system-demo>
+      <org-design-system-demo-header slot="header" title="Minimum Size" />
+      <org-design-system-demo-canvas slot="canvas">
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Horizontal</div>
+          <div class="splitter-demo">
+            <org-splitter direction="horizontal" [minimumSize]="minimumSize()">
+              <ng-template #section><div class="bg-safe-soft w-full h-full"></div></ng-template>
+              <ng-template #section><div class="bg-danger-soft w-full h-full"></div></ng-template>
+            </org-splitter>
+          </div>
         </div>
-      </org-storybook-example-container-section>
 
-      <org-storybook-example-container-section label="Vertical">
-        <div class="splitter-demo">
-          <org-splitter direction="vertical" [minimumSize]="minimumSize()">
-            <ng-template #section><div class="bg-safe-soft w-full h-full"></div></ng-template>
-            <ng-template #section><div class="bg-danger-soft w-full h-full"></div></ng-template>
-          </org-splitter>
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Vertical</div>
+          <div class="splitter-demo">
+            <org-splitter direction="vertical" [minimumSize]="minimumSize()">
+              <ng-template #section><div class="bg-safe-soft w-full h-full"></div></ng-template>
+              <ng-template #section><div class="bg-danger-soft w-full h-full"></div></ng-template>
+            </org-splitter>
+          </div>
         </div>
-      </org-storybook-example-container-section>
 
-      <div class="flex flex-col gap-2 mt-2">
-        <label class="flex gap-2 items-center">
-          <input type="checkbox" [checked]="useSeparateMinimums()" (change)="onUseSeparateMinimumsChange($event)" />
-          Use separate minimums for each section
-        </label>
+        <div class="flex flex-col gap-2 mt-2">
+          <label class="flex gap-2 items-center">
+            <input type="checkbox" [checked]="useSeparateMinimums()" (change)="onUseSeparateMinimumsChange($event)" />
+            Use separate minimums for each section
+          </label>
 
-        <label class="flex gap-2 items-center">
-          First section minimum (px):
-          <input type="number" [value]="firstMinimum()" min="0" (change)="onFirstMinimumChange($event)" />
-        </label>
+          <label class="flex gap-2 items-center">
+            First section minimum (px):
+            <input type="number" [value]="firstMinimum()" min="0" (change)="onFirstMinimumChange($event)" />
+          </label>
 
-        <label class="flex gap-2 items-center">
-          Second section minimum (px):
-          <input
-            type="number"
-            [value]="secondMinimum()"
-            [attr.disabled]="!useSeparateMinimums() ? '' : null"
-            min="0"
-            (change)="onSecondMinimumChange($event)"
-          />
-        </label>
-      </div>
-
-      <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+          <label class="flex gap-2 items-center">
+            Second section minimum (px):
+            <input
+              type="number"
+              [value]="secondMinimum()"
+              [attr.disabled]="!useSeparateMinimums() ? '' : null"
+              min="0"
+              (change)="onSecondMinimumChange($event)"
+            />
+          </label>
+        </div>
+      </org-design-system-demo-canvas>
+    </org-design-system-demo>
+    <org-design-system-demo-expected-behaviour>
+      <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
         <li>drag the divider past the minimum to see it snap back to the minimum boundary</li>
         <li>with separate minimums unchecked, a single value applies to both sections</li>
         <li>with separate minimums checked, each section can have its own minimum</li>
       </ul>
-    </org-storybook-example-container>
+    </org-design-system-demo-expected-behaviour>
   `,
 })
 class SplitterMinimumSizeStory {
@@ -144,7 +167,13 @@ class SplitterMinimumSizeStory {
 @Component({
   selector: 'story-splitter-is-enabled',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Splitter, StorybookExampleContainer, StorybookExampleContainerSection],
+  imports: [
+    Splitter,
+    DesignSystemDemo,
+    DesignSystemDemoCanvas,
+    DesignSystemDemoHeader,
+    DesignSystemDemoExpectedBehaviour,
+  ],
   styles: [
     `
       .splitter-demo {
@@ -154,40 +183,43 @@ class SplitterMinimumSizeStory {
     `,
   ],
   template: `
-    <org-storybook-example-container
-      title="Is Enabled"
-      currentState="Toggle the checkbox to enable or disable the divider"
-    >
-      <org-storybook-example-container-section label="Horizontal">
-        <div class="splitter-demo">
-          <org-splitter direction="horizontal" [isEnabled]="isEnabled()">
-            <ng-template #section><div class="bg-safe-soft w-full h-full"></div></ng-template>
-            <ng-template #section><div class="bg-danger-soft w-full h-full"></div></ng-template>
-          </org-splitter>
+    <org-design-system-demo>
+      <org-design-system-demo-header slot="header" title="Is Enabled" />
+      <org-design-system-demo-canvas slot="canvas">
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Horizontal</div>
+          <div class="splitter-demo">
+            <org-splitter direction="horizontal" [isEnabled]="isEnabled()">
+              <ng-template #section><div class="bg-safe-soft w-full h-full"></div></ng-template>
+              <ng-template #section><div class="bg-danger-soft w-full h-full"></div></ng-template>
+            </org-splitter>
+          </div>
         </div>
-      </org-storybook-example-container-section>
 
-      <org-storybook-example-container-section label="Vertical">
-        <div class="splitter-demo">
-          <org-splitter direction="vertical" [isEnabled]="isEnabled()">
-            <ng-template #section><div class="bg-safe-soft w-full h-full"></div></ng-template>
-            <ng-template #section><div class="bg-danger-soft w-full h-full"></div></ng-template>
-          </org-splitter>
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Vertical</div>
+          <div class="splitter-demo">
+            <org-splitter direction="vertical" [isEnabled]="isEnabled()">
+              <ng-template #section><div class="bg-safe-soft w-full h-full"></div></ng-template>
+              <ng-template #section><div class="bg-danger-soft w-full h-full"></div></ng-template>
+            </org-splitter>
+          </div>
         </div>
-      </org-storybook-example-container-section>
 
-      <div class="flex flex-col gap-2 mt-2">
-        <label class="flex gap-2 items-center">
-          <input type="checkbox" [checked]="isEnabled()" (change)="onIsEnabledChange($event)" />
-          Enabled
-        </label>
-      </div>
-
-      <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+        <div class="flex flex-col gap-2 mt-2">
+          <label class="flex gap-2 items-center">
+            <input type="checkbox" [checked]="isEnabled()" (change)="onIsEnabledChange($event)" />
+            Enabled
+          </label>
+        </div>
+      </org-design-system-demo-canvas>
+    </org-design-system-demo>
+    <org-design-system-demo-expected-behaviour>
+      <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
         <li><strong>enabled</strong>: 2px divider with hover highlight; drag or use keyboard to resize</li>
         <li><strong>disabled</strong>: 1px static border; no hover effect; sections cannot be resized</li>
       </ul>
-    </org-storybook-example-container>
+    </org-design-system-demo-expected-behaviour>
   `,
 })
 class SplitterIsEnabledStory {
@@ -201,7 +233,13 @@ class SplitterIsEnabledStory {
 @Component({
   selector: 'story-splitter-collapsed-side',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Splitter, StorybookExampleContainer, StorybookExampleContainerSection],
+  imports: [
+    Splitter,
+    DesignSystemDemo,
+    DesignSystemDemoCanvas,
+    DesignSystemDemoHeader,
+    DesignSystemDemoExpectedBehaviour,
+  ],
   styles: [
     `
       .splitter-demo {
@@ -211,65 +249,71 @@ class SplitterIsEnabledStory {
     `,
   ],
   template: `
-    <org-storybook-example-container title="Collapsed Side" currentState="Select a radio option to collapse a section">
-      <org-storybook-example-container-section label="Horizontal">
-        <div class="splitter-demo">
-          <org-splitter direction="horizontal" [collapsedSide]="collapsedSide()">
-            <ng-template #section><div class="bg-safe-soft w-full h-full"></div></ng-template>
-            <ng-template #section><div class="bg-danger-soft w-full h-full"></div></ng-template>
-          </org-splitter>
+    <org-design-system-demo>
+      <org-design-system-demo-header slot="header" title="Collapsed Side" />
+      <org-design-system-demo-canvas slot="canvas">
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Horizontal</div>
+          <div class="splitter-demo">
+            <org-splitter direction="horizontal" [collapsedSide]="collapsedSide()">
+              <ng-template #section><div class="bg-safe-soft w-full h-full"></div></ng-template>
+              <ng-template #section><div class="bg-danger-soft w-full h-full"></div></ng-template>
+            </org-splitter>
+          </div>
         </div>
-      </org-storybook-example-container-section>
 
-      <org-storybook-example-container-section label="Vertical">
-        <div class="splitter-demo">
-          <org-splitter direction="vertical" [collapsedSide]="collapsedSide()">
-            <ng-template #section><div class="bg-safe-soft w-full h-full"></div></ng-template>
-            <ng-template #section><div class="bg-danger-soft w-full h-full"></div></ng-template>
-          </org-splitter>
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Vertical</div>
+          <div class="splitter-demo">
+            <org-splitter direction="vertical" [collapsedSide]="collapsedSide()">
+              <ng-template #section><div class="bg-safe-soft w-full h-full"></div></ng-template>
+              <ng-template #section><div class="bg-danger-soft w-full h-full"></div></ng-template>
+            </org-splitter>
+          </div>
         </div>
-      </org-storybook-example-container-section>
 
-      <div class="flex gap-4 mt-2">
-        <label class="flex gap-2 items-center">
-          <input
-            type="radio"
-            name="collapsed-side"
-            value="none"
-            [checked]="collapsedSideValue() === 'none'"
-            (change)="onCollapsedSideChange('none')"
-          />
-          None
-        </label>
-        <label class="flex gap-2 items-center">
-          <input
-            type="radio"
-            name="collapsed-side"
-            value="first"
-            [checked]="collapsedSideValue() === 'first'"
-            (change)="onCollapsedSideChange('first')"
-          />
-          First
-        </label>
-        <label class="flex gap-2 items-center">
-          <input
-            type="radio"
-            name="collapsed-side"
-            value="second"
-            [checked]="collapsedSideValue() === 'second'"
-            (change)="onCollapsedSideChange('second')"
-          />
-          Second
-        </label>
-      </div>
-
-      <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+        <div class="flex gap-4 mt-2">
+          <label class="flex gap-2 items-center">
+            <input
+              type="radio"
+              name="collapsed-side"
+              value="none"
+              [checked]="collapsedSideValue() === 'none'"
+              (change)="onCollapsedSideChange('none')"
+            />
+            None
+          </label>
+          <label class="flex gap-2 items-center">
+            <input
+              type="radio"
+              name="collapsed-side"
+              value="first"
+              [checked]="collapsedSideValue() === 'first'"
+              (change)="onCollapsedSideChange('first')"
+            />
+            First
+          </label>
+          <label class="flex gap-2 items-center">
+            <input
+              type="radio"
+              name="collapsed-side"
+              value="second"
+              [checked]="collapsedSideValue() === 'second'"
+              (change)="onCollapsedSideChange('second')"
+            />
+            Second
+          </label>
+        </div>
+      </org-design-system-demo-canvas>
+    </org-design-system-demo>
+    <org-design-system-demo-expected-behaviour>
+      <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
         <li><strong>none</strong>: both sections visible; divider is draggable</li>
         <li><strong>first</strong>: first section (green) takes all available space; second (red) is hidden</li>
         <li><strong>second</strong>: second section (red) takes all available space; first (green) is hidden</li>
         <li>resize is disabled when any section is collapsed</li>
       </ul>
-    </org-storybook-example-container>
+    </org-design-system-demo-expected-behaviour>
   `,
 })
 class SplitterCollapsedSideStory {
@@ -289,7 +333,14 @@ class SplitterCollapsedSideStory {
 @Component({
   selector: 'story-splitter-programmatic-resize',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Splitter, Button, StorybookExampleContainer, StorybookExampleContainerSection],
+  imports: [
+    Splitter,
+    Button,
+    DesignSystemDemo,
+    DesignSystemDemoCanvas,
+    DesignSystemDemoHeader,
+    DesignSystemDemoExpectedBehaviour,
+  ],
   styles: [
     `
       .splitter-demo {
@@ -299,34 +350,37 @@ class SplitterCollapsedSideStory {
     `,
   ],
   template: `
-    <org-storybook-example-container
-      title="Programmatic Resize"
-      currentState="Click the button to swap the current section sizes"
-    >
-      <org-storybook-example-container-section label="Horizontal">
-        <div class="splitter-demo">
-          <org-splitter direction="horizontal" [size]="size()" (sizeChanged)="onSizeChanged($event)">
-            <ng-template #section><div class="bg-safe-soft w-full h-full"></div></ng-template>
-            <ng-template #section><div class="bg-danger-soft w-full h-full"></div></ng-template>
-          </org-splitter>
+    <org-design-system-demo>
+      <org-design-system-demo-header slot="header" title="Programmatic Resize" />
+      <org-design-system-demo-canvas slot="canvas">
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Horizontal</div>
+          <div class="splitter-demo">
+            <org-splitter direction="horizontal" [size]="size()" (sizeChanged)="onSizeChanged($event)">
+              <ng-template #section><div class="bg-safe-soft w-full h-full"></div></ng-template>
+              <ng-template #section><div class="bg-danger-soft w-full h-full"></div></ng-template>
+            </org-splitter>
+          </div>
         </div>
-      </org-storybook-example-container-section>
 
-      <org-storybook-example-container-section label="Vertical">
-        <div class="splitter-demo">
-          <org-splitter direction="vertical" [size]="size()" (sizeChanged)="onSizeChanged($event)">
-            <ng-template #section><div class="bg-safe-soft w-full h-full"></div></ng-template>
-            <ng-template #section><div class="bg-danger-soft w-full h-full"></div></ng-template>
-          </org-splitter>
+        <div class="flex flex-col gap-2 items-start">
+          <div class="text-sm font-medium">Vertical</div>
+          <div class="splitter-demo">
+            <org-splitter direction="vertical" [size]="size()" (sizeChanged)="onSizeChanged($event)">
+              <ng-template #section><div class="bg-safe-soft w-full h-full"></div></ng-template>
+              <ng-template #section><div class="bg-danger-soft w-full h-full"></div></ng-template>
+            </org-splitter>
+          </div>
         </div>
-      </org-storybook-example-container-section>
 
-      <div class="flex gap-2 items-center mt-2">
-        <org-button label="Flip Sizes" (clicked)="flip()" />
-        <span>Current sizes: [{{ size()[0] }}, {{ size()[1] }}]</span>
-      </div>
-
-      <ul expected-behaviour class="mt-1 list-inside list-disc flex flex-col gap-1">
+        <div class="flex gap-2 items-center mt-2">
+          <org-button label="Flip Sizes" (clicked)="flip()" />
+          <span>Current sizes: [{{ size()[0] }}, {{ size()[1] }}]</span>
+        </div>
+      </org-design-system-demo-canvas>
+    </org-design-system-demo>
+    <org-design-system-demo-expected-behaviour>
+      <ul class="mt-1 list-inside list-disc flex flex-col gap-1">
         <li>starts with first section at 20% and second section at 80%</li>
         <li>clicking <strong>Flip Sizes</strong> reverses the current values regardless of what they are</li>
         <li>both horizontal and vertical splitters update together since they share the same input</li>
@@ -336,7 +390,7 @@ class SplitterCollapsedSideStory {
           working after a drag
         </li>
       </ul>
-    </org-storybook-example-container>
+    </org-design-system-demo-expected-behaviour>
   `,
 })
 class SplitterProgrammaticResizeStory {

@@ -11,7 +11,8 @@ import { Label } from '../label/label';
 import { allComponentColors } from '../types/component-types';
 import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
 import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
-import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
+import { DesignSystemDemoControlInput } from '../../example/design-system-demo/design-system-demo-control-input';
+import { DesignSystemDemoControlsGroup } from '../../example/design-system-demo/design-system-demo-controls-group';
 import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
 import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
 import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
@@ -203,7 +204,8 @@ export const Default: Story = {
     DesignSystemDemo,
     DesignSystemDemoHeader,
     DesignSystemDemoControls,
-    DesignSystemDemoControlGroup,
+    DesignSystemDemoControlsGroup,
+    DesignSystemDemoControlInput,
     DesignSystemDemoCanvas,
   ],
   styles: [
@@ -234,42 +236,52 @@ export const Default: Story = {
           description="Every input is wired to the slider — drag, focus, and use the keyboard arrows / PageUp / PageDown / Home / End to interact."
         />
         <org-design-system-demo-controls slot="controls">
-          <org-design-system-demo-control-group label="Direction">
-            <org-button-toggle [items]="directionItems" formControlName="direction" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Color">
-            <org-button-toggle [items]="colorItems" formControlName="color" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Size">
-            <org-button-toggle [items]="sizeItems" formControlName="size" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Thumbs">
-            <org-button-toggle [items]="thumbItems" formControlName="thumbs" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Disabled">
-            <org-checkbox-toggle name="live-demo-disabled" value="disabled" formControlName="disabled">
-              {{ liveDemoForm.controls.disabled.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Show Ticks">
-            <org-checkbox-toggle name="live-demo-show-ticks" value="show-ticks" formControlName="showTicks">
-              {{ liveDemoForm.controls.showTicks.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Tick Count">
-            <input
-              type="number"
-              min="0"
-              max="10"
-              formControlName="tickCount"
-              class="border border-default-color rounded-base p-1 w-16"
-            />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Allow Crossing">
-            <org-checkbox-toggle name="live-demo-allow-crossing" value="allow-crossing" formControlName="allowCrossing">
-              {{ liveDemoForm.controls.allowCrossing.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
+          <org-design-system-demo-controls-group label="Presentation">
+            <org-design-system-demo-control-input label="Direction">
+              <org-button-toggle [items]="directionItems" formControlName="direction" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Color">
+              <org-button-toggle [items]="colorItems" formControlName="color" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Size">
+              <org-button-toggle [items]="sizeItems" formControlName="size" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
+          <org-design-system-demo-controls-group label="Behavior">
+            <org-design-system-demo-control-input label="Thumbs">
+              <org-button-toggle [items]="thumbItems" formControlName="thumbs" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Disabled">
+              <org-checkbox-toggle name="live-demo-disabled" value="disabled" formControlName="disabled">
+                {{ liveDemoForm.controls.disabled.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Allow Crossing">
+              <org-checkbox-toggle
+                name="live-demo-allow-crossing"
+                value="allow-crossing"
+                formControlName="allowCrossing"
+              >
+                {{ liveDemoForm.controls.allowCrossing.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
+          <org-design-system-demo-controls-group label="Ticks">
+            <org-design-system-demo-control-input label="Show Ticks">
+              <org-checkbox-toggle name="live-demo-show-ticks" value="show-ticks" formControlName="showTicks">
+                {{ liveDemoForm.controls.showTicks.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Tick Count">
+              <input
+                type="number"
+                min="0"
+                max="10"
+                formControlName="tickCount"
+                class="border border-default-color rounded-base p-1 w-16"
+              />
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
         </org-design-system-demo-controls>
         <org-design-system-demo-canvas slot="canvas">
           <div class="canvas-stage">

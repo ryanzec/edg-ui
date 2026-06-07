@@ -14,7 +14,8 @@ import { FormField } from '../form-fields/form-field';
 import { FormFields } from '../form-fields/form-fields';
 import { DesignSystemDemo } from '../../example/design-system-demo/design-system-demo';
 import { DesignSystemDemoCanvas } from '../../example/design-system-demo/design-system-demo-canvas';
-import { DesignSystemDemoControlGroup } from '../../example/design-system-demo/design-system-demo-control-group';
+import { DesignSystemDemoControlInput } from '../../example/design-system-demo/design-system-demo-control-input';
+import { DesignSystemDemoControlsGroup } from '../../example/design-system-demo/design-system-demo-controls-group';
 import { DesignSystemDemoControls } from '../../example/design-system-demo/design-system-demo-controls';
 import { DesignSystemDemoExpectedBehaviour } from '../../example/design-system-demo/design-system-demo-expected-behaviour';
 import { DesignSystemDemoHeader } from '../../example/design-system-demo/design-system-demo-header';
@@ -63,7 +64,8 @@ const liveDemoPartialTypeItems: ButtonToggleItem[] = [
     DesignSystemDemo,
     DesignSystemDemoHeader,
     DesignSystemDemoControls,
-    DesignSystemDemoControlGroup,
+    DesignSystemDemoControlsGroup,
+    DesignSystemDemoControlInput,
     DesignSystemDemoCanvas,
   ],
   styles: [
@@ -91,51 +93,59 @@ const liveDemoPartialTypeItems: ButtonToggleItem[] = [
           description="All date picker inputs below are real and interactive — open the popover, switch modes, toggle Apply/Cancel, and watch every visual axis."
         />
         <org-design-system-demo-controls slot="controls">
-          <org-design-system-demo-control-group label="Mode">
-            <org-button-toggle [items]="modeItems" formControlName="mode" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Commit mode">
-            <org-button-toggle [items]="commitModeItems" formControlName="commitMode" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Date format">
-            <org-button-toggle [items]="dateFormatItems" formControlName="dateFormat" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Time format">
-            <org-button-toggle [items]="timeFormatItems" formControlName="timeFormat" buttonSize="sm" />
-          </org-design-system-demo-control-group>
-          @if (mode() === 'partial-range') {
-            <org-design-system-demo-control-group label="Partial type">
-              <org-button-toggle [items]="partialTypeItems" formControlName="partialRangeType" buttonSize="sm" />
-            </org-design-system-demo-control-group>
-          }
-          <org-design-system-demo-control-group label="Disabled">
-            <org-checkbox-toggle name="live-demo-disabled" value="disabled" formControlName="disabled">
-              {{ liveDemoForm.controls.disabled.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Allow popover clear">
-            <org-checkbox-toggle name="live-demo-allow-clear" value="allow-clear" formControlName="allowClear">
-              {{ liveDemoForm.controls.allowClear.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Allow trigger clear">
-            <org-checkbox-toggle
-              name="live-demo-allow-trigger-clear"
-              value="allow-trigger-clear"
-              formControlName="allowTriggerClear"
-            >
-              {{ liveDemoForm.controls.allowTriggerClear.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
-          <org-design-system-demo-control-group label="Reset on mode change">
-            <org-checkbox-toggle
-              name="live-demo-reset-on-mode-change"
-              value="reset-on-mode-change"
-              formControlName="resetOnModeChange"
-            >
-              {{ liveDemoForm.controls.resetOnModeChange.value ? 'on' : 'off' }}
-            </org-checkbox-toggle>
-          </org-design-system-demo-control-group>
+          <org-design-system-demo-controls-group label="Selection">
+            <org-design-system-demo-control-input label="Mode">
+              <org-button-toggle [items]="modeItems" formControlName="mode" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Commit mode">
+              <org-button-toggle [items]="commitModeItems" formControlName="commitMode" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            @if (mode() === 'partial-range') {
+              <org-design-system-demo-control-input label="Partial type">
+                <org-button-toggle [items]="partialTypeItems" formControlName="partialRangeType" buttonSize="sm" />
+              </org-design-system-demo-control-input>
+            }
+          </org-design-system-demo-controls-group>
+          <org-design-system-demo-controls-group label="Format">
+            <org-design-system-demo-control-input label="Date format">
+              <org-button-toggle [items]="dateFormatItems" formControlName="dateFormat" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Time format">
+              <org-button-toggle [items]="timeFormatItems" formControlName="timeFormat" buttonSize="sm" />
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
+          <org-design-system-demo-controls-group label="Affordances">
+            <org-design-system-demo-control-input label="Allow popover clear">
+              <org-checkbox-toggle name="live-demo-allow-clear" value="allow-clear" formControlName="allowClear">
+                {{ liveDemoForm.controls.allowClear.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Allow trigger clear">
+              <org-checkbox-toggle
+                name="live-demo-allow-trigger-clear"
+                value="allow-trigger-clear"
+                formControlName="allowTriggerClear"
+              >
+                {{ liveDemoForm.controls.allowTriggerClear.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
+          <org-design-system-demo-controls-group label="State">
+            <org-design-system-demo-control-input label="Disabled">
+              <org-checkbox-toggle name="live-demo-disabled" value="disabled" formControlName="disabled">
+                {{ liveDemoForm.controls.disabled.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+            <org-design-system-demo-control-input label="Reset on mode change">
+              <org-checkbox-toggle
+                name="live-demo-reset-on-mode-change"
+                value="reset-on-mode-change"
+                formControlName="resetOnModeChange"
+              >
+                {{ liveDemoForm.controls.resetOnModeChange.value ? 'on' : 'off' }}
+              </org-checkbox-toggle>
+            </org-design-system-demo-control-input>
+          </org-design-system-demo-controls-group>
         </org-design-system-demo-controls>
         <org-design-system-demo-canvas slot="canvas">
           <div class="canvas-stage">
